@@ -2,97 +2,109 @@ Return-Path: <audit-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 18DA3C7618A
-	for <audit@archiver.kernel.org>; Mon, 20 Mar 2023 16:01:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 84A2EC76196
+	for <audit@archiver.kernel.org>; Thu, 23 Mar 2023 15:41:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233433AbjCTQB1 (ORCPT <rfc822;audit@archiver.kernel.org>);
-        Mon, 20 Mar 2023 12:01:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49858 "EHLO
+        id S231945AbjCWPlW (ORCPT <rfc822;audit@archiver.kernel.org>);
+        Thu, 23 Mar 2023 11:41:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233585AbjCTQAZ (ORCPT <rfc822;audit@vger.kernel.org>);
-        Mon, 20 Mar 2023 12:00:25 -0400
-Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8D343E0BD
-        for <audit@vger.kernel.org>; Mon, 20 Mar 2023 08:50:37 -0700 (PDT)
-Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-54184571389so231888787b3.4
-        for <audit@vger.kernel.org>; Mon, 20 Mar 2023 08:50:37 -0700 (PDT)
+        with ESMTP id S231949AbjCWPlT (ORCPT <rfc822;audit@vger.kernel.org>);
+        Thu, 23 Mar 2023 11:41:19 -0400
+Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3611320579
+        for <audit@vger.kernel.org>; Thu, 23 Mar 2023 08:41:06 -0700 (PDT)
+Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-5445009c26bso401602537b3.8
+        for <audit@vger.kernel.org>; Thu, 23 Mar 2023 08:41:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1679327434;
+        d=paul-moore.com; s=google; t=1679586065;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=XhjG4ZM6bbphuME8qaGD16strmVMS/zUs25lWRzLtgA=;
-        b=dlozo6eDyj+uKp8vllmx4CyQVtNo/1tF0nzhKwsifzKUEIu1zPG2t0WjTdp0eHsn7O
-         J0Hwvar8Www3EhOSZVMxEHUKlIqP0NVVYhrYKbT0eo0JrddUJ6YG2m1XpozStFjl9p6G
-         phvBXrB7k0HQGL/OIE1bsOIz13QEjU6oghreLdTUBBLIVqgKI/vBCFdyjP8MQog+wF6G
-         jnaMT5wU73RkLpLgiZQpQ9TG2l0Tl6dOC+7ktSl6wmt9CvqCuotslYCfschaL7gKP9G7
-         ZfE0DN7y3dokkiiNFy8DOXyoAnn6RQgRntfI/Srcw7eE1Fkzh0k0stT8SCIIpRP1lMBD
-         cVYw==
+        bh=aOyaF+gGSN9Akn8RPiykCCXnGXj+bPsBBzE63MFeUT0=;
+        b=PcqEt6tMp0xjQlClBpC72hn2b3nPWVJFe2AWqBc7b1W3X9xj5mlfKca/F1KERRgZ2L
+         5qcL8OFoILfnuQ/nkpd6y0lhuukuerHTl+tuhbu9wfJOHqrL+O14aikeCRONDt4Hw57f
+         NYu4E7n80awW932FdvAZCmqC3DzzJ5g9rm08joZhrTIdEHa81feZQ+qgu4Eho2gck+z/
+         SszGmb7x17Zv5HVjQUe9n2IaA3YUalrsBirO1NcQXxri1Q7ytaOdCiwNNvF1iO6GgGAQ
+         sVnzQ7wLOufPqRSHKmp4I41G+9gGWCC3mjVvSPwbVDTQ3rfylnIdHOaIVq0G9TFSsay0
+         /n+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679327434;
+        d=1e100.net; s=20210112; t=1679586065;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=XhjG4ZM6bbphuME8qaGD16strmVMS/zUs25lWRzLtgA=;
-        b=pu52zbQffz2dahM5f/7ld18hXqjuvFvjNdNiHKbTNXAUHwkLEmat2S1R7N05fdMeTU
-         nwcXsH1g27Hi5+bLsdzd26fF9yQO+ddJ2Tvhg9D/vtLt47aZeDv7OfPRE1G47PXgQ7U7
-         idcHhb6VeV4lcNnfBoCaRLLl87EV5+pEhrlMAwbvxQ2CP70g+GgqQKFcLM/2D/dkjNQK
-         qldmHDup89VWLJ52Z6zn2mfUincBhsKp6U6P9Eu8+D0N5rJoG4EWoAk/PUjI4uctElFn
-         K9pwYIdIPlL+11UgSNF269+DIbBSGgOcuab1yCg8+PfECfRY/g3u9gi3qFUKAusjB4tW
-         N/xg==
-X-Gm-Message-State: AO0yUKWmYNpmc1Rnz8FbZQbVoG5358CaTyqlqnNjyDKYAO367ZFlRc33
-        +JRVr2m28YHQ6saOYu+jCSN1jg1scrJCDFX1qcsvVAfWkUCfVJTNKw==
-X-Google-Smtp-Source: AK7set8EHCVdzLcDk90+JtEnsZChSS0fog0skAl1a9UITDtzyJdC8DccLgmPj+vA2ozpkmyfwYaErzOdzIqRO9ANpzc=
-X-Received: by 2002:a81:d302:0:b0:541:359c:103a with SMTP id
- y2-20020a81d302000000b00541359c103amr10221044ywi.8.1679327434420; Mon, 20 Mar
- 2023 08:50:34 -0700 (PDT)
+        bh=aOyaF+gGSN9Akn8RPiykCCXnGXj+bPsBBzE63MFeUT0=;
+        b=AOqi5g3VOSTsDMfZL+4oHNI09+xNQrbum3WvxCbJvuObuUY8zSCcx0JMEHhDgmN8Ke
+         Y52/jEW3cqrEDxDOWLQ+a1qHr7T5o/GANsnxu+Xarr3EnwpqmmvkY/x6LzX74DexTyH4
+         o3gONCJdjJ4nLVIc3Vp2GitRedJXLaYxomxqdmRznJNUWaSKmAyb7wgiEWrtKWrSftJJ
+         0IprcjBIs3d1JAeVqzb1+Hk374BwKOhU7Gm+7YF6ntM3m6FdFZdzYgi6Vtsve/5oj6sa
+         D9uQ6zUjzccmEy5Y60CgsdUZV+MG3ZMWGaugJmgDplle9+DGGm7xq28kkLMNlcYl7JJP
+         pAqA==
+X-Gm-Message-State: AAQBX9fX+q7GzD0PM87mYeLiwjVPg9b0K5hqwzNu/+Fx/O3tLwnGlO0e
+        vJ1aHgkysVqzBsx3nrODol3vLTUXfyxNxEAMtpfD
+X-Google-Smtp-Source: AKy350boiOKWMqFPwkW/HxnLayUF70c7EaL/DyOQve15sUlREYRrYMz087FAeAvDMIvGBxdGZo+l8gvHxZ8XqfTCS6s=
+X-Received: by 2002:a81:e20d:0:b0:541:8c77:93b1 with SMTP id
+ p13-20020a81e20d000000b005418c7793b1mr1993199ywl.8.1679586065284; Thu, 23 Mar
+ 2023 08:41:05 -0700 (PDT)
 MIME-Version: 1.0
-References: <CAPoNrtsy+ckCHQZGYM-8DW3S3FckABGyZtvVG3LJPDT8PLzMUQ@mail.gmail.com>
- <CAHC9VhTPYw_YprXkZ2h-XAg3WGsqkTxBVzZiyo0XOaRmmeC71w@mail.gmail.com> <CAPoNrturZV58xESCvCOg5PQbHkf0reJvAbbLJ6-fJa003xxnjw@mail.gmail.com>
-In-Reply-To: <CAPoNrturZV58xESCvCOg5PQbHkf0reJvAbbLJ6-fJa003xxnjw@mail.gmail.com>
+References: <20230317033733.1450702-1-cuigaosheng1@huawei.com>
+In-Reply-To: <20230317033733.1450702-1-cuigaosheng1@huawei.com>
 From:   Paul Moore <paul@paul-moore.com>
-Date:   Mon, 20 Mar 2023 11:50:23 -0400
-Message-ID: <CAHC9VhSBbvE0GuLbrWmCgQyJc0KY_-MYrXYG08SjMp_7QYJnpg@mail.gmail.com>
-Subject: Re: Help with setting up Auditd kernel repository
-To:     Anurag Aggarwal <anurag19aggarwal@gmail.com>
-Cc:     Linux-audit@redhat.com, audit@vger.kernel.org
+Date:   Thu, 23 Mar 2023 11:40:54 -0400
+Message-ID: <CAHC9VhS1Q9Ks_TYjxRe=S8L7kOXS5tuhLV59OA=fnAXN3q3fJg@mail.gmail.com>
+Subject: Re: [PATCH -next] audit: let the caller of audit_get_sk() ensure that
+ net is valid
+To:     Gaosheng Cui <cuigaosheng1@huawei.com>
+Cc:     eparis@redhat.com, audit@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <audit.vger.kernel.org>
 X-Mailing-List: audit@vger.kernel.org
 
-On Mon, Mar 20, 2023 at 11:09=E2=80=AFAM Anurag Aggarwal
-<anurag19aggarwal@gmail.com> wrote:
-> >
-> > Can you be more specific about the exact repository?  There is a
-> > repository which contains the development code for the Linux Kernel's
-> > audit subsystem, and there is a second repository which contains
-> > Steve's audit userspace code (which contains auditd as a component).
-> > There is no combined "auditd-kernel" repository.
+On Thu, Mar 16, 2023 at 11:38=E2=80=AFPM Gaosheng Cui <cuigaosheng1@huawei.=
+com> wrote:
 >
-> Yes Paul, the repository that I am talking about is:
-> https://github.com/linux-audit/audit-kernel
+> The caller of audit_get_sk() must ensure that net is valid, otherwise
+> there will be null-prt-defer, for example, in the netlink_unicast().
+>
+> Signed-off-by: Gaosheng Cui <cuigaosheng1@huawei.com>
+> ---
+>  kernel/audit.c | 7 ++-----
+>  1 file changed, 2 insertions(+), 5 deletions(-)
+>
+> diff --git a/kernel/audit.c b/kernel/audit.c
+> index 9bc0b0301198..6a42a3801d01 100644
+> --- a/kernel/audit.c
+> +++ b/kernel/audit.c
+> @@ -285,16 +285,13 @@ static pid_t auditd_pid_vnr(void)
+>   * @net: the destination network namespace
+>   *
+>   * Description:
+> - * Returns the sock pointer if valid, NULL otherwise.  The caller must e=
+nsure
+> - * that a reference is held for the network namespace while the sock is =
+in use.
+> + * Returns the sock pointer. The caller must ensure than net is valid an=
+d
+> + * a reference is held for the network namespace while the sock is in us=
+e.
+>   */
+>  static struct sock *audit_get_sk(const struct net *net)
+>  {
+>         struct audit_net *aunet;
+>
+> -       if (!net)
+> -               return NULL;
 
-[NOTE: The upstream Linux Kernel discussion has moved to
-audit@vger.kernel.org, CC'd on this email]
+I'd prefer to keep this check in place, and I think it may be required
+to ensure proper behavior in kauditd_thread()/kauditd_send_queue().
 
-Thanks for the clarification.
-
-If you aren't already aware of the Kernel Newbies site, it's a good
-resource for getting familiar with the Linux Kernel.  There are a
-couple of pages which I believe might be helpful here, the first is
-the guide on building the Linux Kernel:
-
-* https://kernelnewbies.org/KernelBuild
-
-... the second page is a general landing page which has links to other
-kernel related guides and resources:
-
-* https://kernelnewbies.org/KernelHacking
-
-These info on these pages should help you get started but if you have
-any additional questions let us know.
+>         aunet =3D net_generic(net, audit_net_id);
+>         return aunet->sk;
+>  }
+> --
+> 2.25.1
 
 --=20
 paul-moore.com
