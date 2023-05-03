@@ -2,105 +2,111 @@ Return-Path: <audit-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6C0F8C77B61
-	for <audit@archiver.kernel.org>; Fri, 28 Apr 2023 20:33:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8514AC77B75
+	for <audit@archiver.kernel.org>; Wed,  3 May 2023 21:27:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346688AbjD1UdD (ORCPT <rfc822;audit@archiver.kernel.org>);
-        Fri, 28 Apr 2023 16:33:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52400 "EHLO
+        id S229610AbjECV10 (ORCPT <rfc822;audit@archiver.kernel.org>);
+        Wed, 3 May 2023 17:27:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346664AbjD1Ucw (ORCPT
-        <rfc822;audit@vger.kernel.org>); Fri, 28 Apr 2023 16:32:52 -0400
-Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C3881FDD
-        for <audit@vger.kernel.org>; Fri, 28 Apr 2023 13:32:16 -0700 (PDT)
-Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-552d64d1d2eso4564817b3.1
-        for <audit@vger.kernel.org>; Fri, 28 Apr 2023 13:32:16 -0700 (PDT)
+        with ESMTP id S229449AbjECV10 (ORCPT <rfc822;audit@vger.kernel.org>);
+        Wed, 3 May 2023 17:27:26 -0400
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BB424C24
+        for <audit@vger.kernel.org>; Wed,  3 May 2023 14:27:24 -0700 (PDT)
+Received: by mail-yb1-xb36.google.com with SMTP id 3f1490d57ef6-b9a6f17f2b6so5730976276.1
+        for <audit@vger.kernel.org>; Wed, 03 May 2023 14:27:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1682713935; x=1685305935;
-        h=content-transfer-encoding:to:subject:message-id:date:from
+        d=paul-moore.com; s=google; t=1683149243; x=1685741243;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=pHhiJldyAU9CB5C2yY0Y6C22LzUDclV05l5l/CDs2wQ=;
-        b=fTg0otBIRL0I1iKj8EZY5jTYL6865p+WLycjm3WPpj0UdoTL41jtIQSV8Lgp4+kR4v
-         IQyuRqMgb33VBaC6z9J6SCq2EfWfTUmuEFpfzjqRG+YkrfiztLKjvihGZ+oBtvwKmMhz
-         J98d+R7AXjzEUAdyUeLXm57RO0MQM2ojbAO8T4wNUdAbjNy3Hx2CXREVym3ihx8+pfCQ
-         1VJqdmREr1WV54hOO9hIWcLU79//OIjab1jGDp1/jUvCQAoPDp4+SWoResB9l2lIVMHh
-         MuZHe3yCFGQ1uT/T/PG5hESHIWYXLqaBcgTtiLbNNx+BWdATdRv1TiTC2/qon3HCeOJs
-         ItLg==
+        bh=yKn+jrgf5ZZ4kjsMO+s/G7W8oD90MsZ6Rc9QWtHf4+c=;
+        b=POEgpk0ZXldlHAPzkEdTescNSf+MuuPJ4r3A1Rui5lOdJ7Vq4YDchapw/yd4ddnMBc
+         k5zBaaeu+gdhG5ic1AvROP9l3aqprEJxgtc3xutuEJ5b+UxwW9PKGv4WE+sTnFfUSeVZ
+         oUAIFWytMamTDEaPh+y3RMYSPMgA3qB1eL5zt5Y/TJfeJZnBuGYnt2PgQGXgsay0/S1B
+         Bnuv5SIymd/zs5awLHfeCqEX0SK/t4RGGc1gZfH2PAlAJJjJLVuGf0fpx4ZnZyhXemuM
+         02V0QEgVAndZmQU3aDgy1/378dTLzksCeziAijdmoSW3NlFKHpY1QL/NWRWy3l/LOcJc
+         uJoA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682713935; x=1685305935;
-        h=content-transfer-encoding:to:subject:message-id:date:from
+        d=1e100.net; s=20221208; t=1683149243; x=1685741243;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=pHhiJldyAU9CB5C2yY0Y6C22LzUDclV05l5l/CDs2wQ=;
-        b=Q2NzGg2DNYOpcI3W47H9VMQwFoLE2bdgOUTGDi/xxPyh6lZd5TGwGW6zGdfftYf7nA
-         nDnH/fRH8MXWR53NrrfkwTxUUFGBGgT8upaAS6vwUIUXQVl8zK1cfgjPhKhzaqjf2jPQ
-         mEySySvjZ8+BfLlNGvpKRpyMyxOJLWEQRO0ApTtn0FS6hLAYx7XJ53PWhiN+S/jzEH5T
-         At4unEBPgEm5q9CsueWkqmES/Z2eP0Oa5cH/ezrY2iGHezbs6DFtP6jm9sPcPx4+j4qv
-         hf1JleDBNh4DPVxKV7NXLigFw2xbs4hyykck8RE9OPafnY5kzzPWPdRmZMCD092L1Tus
-         ZF8w==
-X-Gm-Message-State: AC+VfDzPuuLZ1GKF3t5+WJH5g+WMbZqq1Z0m+gCdtopgGkeL2dQbc5Dm
-        1XHcr23FD8oCrA93GrfdK2rvrVo1I5zWlLzroyJgnl0wCkrFw0o=
-X-Google-Smtp-Source: ACHHUZ7IyujZgDo19YnXrzNdSyty5RiiNjuJFjSXu5yI0STKfDSGMMYYGNXnM2egCVO8/xqDuHMDNBj1QG9SWcFPw04=
-X-Received: by 2002:a0d:d68d:0:b0:552:9fc5:ebb4 with SMTP id
- y135-20020a0dd68d000000b005529fc5ebb4mr4535577ywd.42.1682713935067; Fri, 28
- Apr 2023 13:32:15 -0700 (PDT)
+        bh=yKn+jrgf5ZZ4kjsMO+s/G7W8oD90MsZ6Rc9QWtHf4+c=;
+        b=RvyFY70fqn3Xjnlwl0n+FUiKlK72lk8xeLvL9llgSiJt6VTr3/WSyhiww9UcWrMjTe
+         +rI3fUkni2UhLwj+Y5V33RYfA2+1H4+EOcFCiC8mxJExkSgF6SvyIqlyVnluXVBy91/J
+         vEXfbJZtVQmRjWnhfpwBPVu+Zv46shJK8gvypncZRqZm/OcvmTaTj2/n1D1I4oucIa0e
+         yGTPG/IcDwwQWhuBE0zIVBmgA86RJkva/hEgAUQXNDJ4UZdZUZz9mCvQm3FMq1pTZW57
+         cwameYV2oY2XcSzFB/eq2qkcFYeTemAnBZwvCm7PPDubFNob3qUhUdLkdktGhii4iypx
+         l7KA==
+X-Gm-Message-State: AC+VfDyHAaBtfyOyJI6ct/ueeS0M+cbtJkyaR4hMpU0ggJp8/5RCqImS
+        Y2S5OmQ6R2dS/NKSiIGNW/a2JmMWXJvPHNArkjnilhV7G1mrIPI+9g==
+X-Google-Smtp-Source: ACHHUZ5Au2ecBwsk2/a2XW6nh7EbkJUnX+5vYeJ4vdHMe0++N7uH9a+Afe24IcmFTNIykkzGU7atqXctsrSTKpNbUq0=
+X-Received: by 2002:a81:505:0:b0:55a:5323:2801 with SMTP id
+ 5-20020a810505000000b0055a53232801mr3600764ywf.23.1683149243701; Wed, 03 May
+ 2023 14:27:23 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230428203007.651380-1-paul@paul-moore.com>
-In-Reply-To: <20230428203007.651380-1-paul@paul-moore.com>
+References: <ecd4bf68-3bf1-a1d8-4da5-5fbd28c51a6b@gmail.com>
+In-Reply-To: <ecd4bf68-3bf1-a1d8-4da5-5fbd28c51a6b@gmail.com>
 From:   Paul Moore <paul@paul-moore.com>
-Date:   Fri, 28 Apr 2023 16:32:04 -0400
-Message-ID: <CAHC9VhRqALJq+-L2Q9TFuqJ7FTu8rJSFwAD53dNZDiqh=fOMXw@mail.gmail.com>
-Subject: Re: [PATCH] tools: update astyle config for astyle v3.2.x
-To:     audit@vger.kernel.org
+Date:   Wed, 3 May 2023 17:27:13 -0400
+Message-ID: <CAHC9VhTXHLS7bsDJ8-dSp4dQSQRcKRLiTMRYJOJVCY11G5D85A@mail.gmail.com>
+Subject: Re: Can AUDIT_LIST_RULES causes kthreadd-spam?
+To:     Rinat Gadelshin <rgadelsh@gmail.com>
+Cc:     audit@vger.kernel.org, linux-audit@redhat.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <audit.vger.kernel.org>
 X-Mailing-List: audit@vger.kernel.org
 
-On Fri, Apr 28, 2023 at 4:30=E2=80=AFPM Paul Moore <paul@paul-moore.com> wr=
-ote:
+On Wed, May 3, 2023 at 5:14=E2=80=AFPM Rinat Gadelshin <rgadelsh@gmail.com>=
+ wrote:
+> Hello there =3D)
 >
-> It appears that '--indent-preprocessor' and
-> '--max-instatement-indent' are no longer supported command line
-> options, remove them.
+> My name is Rinat.
+> I'm a newbie here (at Linux kernel developer community).
 >
-> Signed-off-by: Paul Moore <paul@paul-moore.com>
-> ---
->  tools/check-syntax | 3 ---
->  1 file changed, 3 deletions(-)
+> My current job is to work with audit subsystem on different
+> versions of Linux (and different kernel versions from 3.10 to the latest)
+> with and without auditd.
 >
-> diff --git a/tools/check-syntax b/tools/check-syntax
-> index 03bca8a..eacd92d 100755
-> --- a/tools/check-syntax
-> +++ b/tools/check-syntax
-> @@ -69,17 +69,14 @@ function tool_c_style() {
->         astyle --options=3Dnone --lineend=3Dlinux --mode=3Dc \
->                 --style=3Dlinux \
->                 --indent=3Dforce-tab=3D8 \
-> -               --indent-preprocessor \
->                 --indent-col1-comments \
->                 --min-conditional-indent=3D0 \
-> -               --max-instatement-indent=3D80 \
->                 --pad-oper \
->                 --align-pointer=3Dname \
->                 --align-reference=3Dname \
->                 --max-code-length=3D80 \
->                 --break-after-logical < "$1"
->  }
-> -
+> My program works behalf of root account and uses netlink
+> (unicast or multicast depends of  the kernel's version)
+> to communicate with audit subsystem of the kernel.
+>
+> If actual audit rule list has been changed
+> then my program should restore the configured audit rule list.
+>
+> To do it the program periodically (with 60 seconds interval)
+> requests the actual rule list be sending AUDIT_LIST_RULES.
+>
+> All rules are receiving perfectly.
+>
+> But I've noticed that there are many (2K+ for 5 minutes test)
+> kthreadd process have been spawned after that request
+> (I've stubbed the poll code and compare logs).
 
-Ooops, I forgot to refresh my patch after fixing that whitespace removal.
+Hi Rinat,
 
-Regardless, I've merged this patch.
+First, a quick note that audit discussions involving the upstream
+Linux Kernel have moved to the audit@vger.kernel.org list (CC'd),
+please direct future emails there.
 
->  #
->  # Generate a properly formatted Perl source file
->  # $1 - source file
-> --
-> 2.40.1
+Can you be more specific about the kernel threads you are seeing, are
+you seeing multiple "kauditd" threads?
+
+% ps -fC kauditd
+UID          PID    PPID  C STIME TTY          TIME CMD
+root          89       2  0 Apr28 ?        00:00:00 [kauditd]
+
+> Please, can you point me, what can I do to avoid this kthreadd-spam.
+>
+> Thank you.
+>
+> Best regards
+> Rinath
 
 --=20
 paul-moore.com
