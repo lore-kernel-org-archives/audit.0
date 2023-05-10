@@ -2,183 +2,193 @@ Return-Path: <audit-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 30387C77B7D
-	for <audit@archiver.kernel.org>; Wed, 10 May 2023 08:09:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 63EF4C77B7D
+	for <audit@archiver.kernel.org>; Wed, 10 May 2023 12:12:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235609AbjEJIJM (ORCPT <rfc822;audit@archiver.kernel.org>);
-        Wed, 10 May 2023 04:09:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57094 "EHLO
+        id S236086AbjEJMM4 (ORCPT <rfc822;audit@archiver.kernel.org>);
+        Wed, 10 May 2023 08:12:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229617AbjEJIJL (ORCPT <rfc822;audit@vger.kernel.org>);
-        Wed, 10 May 2023 04:09:11 -0400
-Received: from mx0b-002c1b01.pphosted.com (mx0b-002c1b01.pphosted.com [148.163.155.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70B0F2122;
-        Wed, 10 May 2023 01:09:10 -0700 (PDT)
-Received: from pps.filterd (m0127843.ppops.net [127.0.0.1])
-        by mx0b-002c1b01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34A4w9Fg031015;
-        Wed, 10 May 2023 01:09:07 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nutanix.com; h=from : to : cc :
- subject : date : message-id : references : in-reply-to : content-type :
- content-id : content-transfer-encoding : mime-version;
- s=proofpoint20171006; bh=UHwrhcP+kSpB45UBZ1RgRE59D1G6Q9ENcD5CF0Hu4Zc=;
- b=x7zLFjd796wwP1qNB239w8i0+SRtl45JIXAzxhh2sM79KHkElJO4/hMxgGwt5PYmRcMu
- TwRUSqqcFG55uCf9qVYpLKMyAuMfwv7Qd3YOwM2oMh5bPJMflr7SoZEHyTsMrMZX+THO
- qa28ArN81GGtEALhhRQ+KKBUKzz5PXflXJhTO6aeazWJ0WGCkLqiMDGkoprv4u4Sk5fQ
- x1VfE608N5bPZdewzzzNtwxIeLm3hrvauBcTsdl1i07gSCXNVtKt/BQqM/C5m8IIWPmL
- IVp0TqBzgYab4fruzKs23wEOi9PIPclpCeKVxtpkLvlaz1reCNAKd/M9Ai/DrXlBE+xv DA== 
-Received: from nam11-co1-obe.outbound.protection.outlook.com (mail-co1nam11lp2168.outbound.protection.outlook.com [104.47.56.168])
-        by mx0b-002c1b01.pphosted.com (PPS) with ESMTPS id 3qf7tbkv3u-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 10 May 2023 01:09:07 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=LuleXXkcnccr9wFVEEhZ6Ne85J+2ponnhKgnF+t062QsWxAhEYYiLTWdoPJAmBUCDQSWaIzUPjgs5FqM0S1hhWWDGAWevYczAgGP8KdNdT9A1eNeWC4Mr74jFn9UQyn9B1s8QlkS4gPbIKWyhSeusQ4L8CHu+pDNuuNdYlWqWim3sJTtxIzGcq//fmFxpuBNxv6QtsEgDeLSmBt9ecrmHp3Yxcu/72IFSQ4zU6T1tpAp8wt/MaFvhmsV07KMqCgfI9jliwTNAEF8DF976DuoMIMxIJarKVSlSDdvHPu3mziNR95UER4d6oh+Cgy2WkvrDwXt9LKsImHeyOMb72/Gbw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=UHwrhcP+kSpB45UBZ1RgRE59D1G6Q9ENcD5CF0Hu4Zc=;
- b=hvhmNJ12Ryr1ZQEXxmay7BBXL7DGOx5gtCNv4EmxBz4h6RdNnPgeQyitGJNy4SlaI4MXlzquiGYYlr3SEddt6Ma66S8PjPXgB+p44W3GPSxFFMh64cKExoG2Mxkir/uSO8phmqT0/XCUcbwERhPCCmO3xF7m9LViqnAaeouqOn7CuWaOL2VLO7q4iPzuU5sJlYzxvVDjWggGvJDdZObcoYDD1SPHLLme0EN4peSKtT6NojAXoE3cfsyNGHQhyTRz4RlU4Q2UHH3hlMbuWgYUjeeAM5kZPUWyZsvCI6fadn3JpMrkVGJ38CbI3lasve/ZiaxMo2zbjJsiA5Z5fJ7muw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nutanix.com; dmarc=pass action=none header.from=nutanix.com;
- dkim=pass header.d=nutanix.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nutanix.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=UHwrhcP+kSpB45UBZ1RgRE59D1G6Q9ENcD5CF0Hu4Zc=;
- b=ZwMJ6wqax4VcRUfd/vU0hHtv96lO9qM+kABAcLWuUMcf02W0Zjx1HZkCo4ipItLDBPOd4BYJH4+2LwoQ3LNg8kx3hyzX5MKKYDG7MVYn15lBlZPBHeCFJR7FkjRNBoS69Pl/JRUFGTdxSpHMBcAvoigL+kJEx5pfWU5jPp8edUXqJg9zSMt8gumevseeBhqFKO1Pn68lW9aPLigJTqsEp0pUG0ktIeyXMMuXj9rC/y3QDpC4oFp5JDgAZWyTFFk0Es0l0AkbynpPX0WOTQY+AeSFfrpUOfLv7FtriDUB905fqVqF7yf+bRI4zz4gqaUwU14TU5PIZ/CaN20y++AfHQ==
-Received: from CH0PR02MB8041.namprd02.prod.outlook.com (2603:10b6:610:106::10)
- by IA1PR02MB9467.namprd02.prod.outlook.com (2603:10b6:208:3f1::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.32; Wed, 10 May
- 2023 08:09:05 +0000
-Received: from CH0PR02MB8041.namprd02.prod.outlook.com
- ([fe80::e48:dd5d:b7e4:4d54]) by CH0PR02MB8041.namprd02.prod.outlook.com
- ([fe80::e48:dd5d:b7e4:4d54%2]) with mapi id 15.20.6387.019; Wed, 10 May 2023
- 08:09:05 +0000
-From:   Eiichi Tsukata <eiichi.tsukata@nutanix.com>
-To:     Paul Moore <paul@paul-moore.com>
-CC:     "eparis@redhat.com" <eparis@redhat.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "audit@vger.kernel.org" <audit@vger.kernel.org>
-Subject: Re: [PATCH 0/4] audit: refactor and fix for potential deadlock
-Thread-Topic: [PATCH 0/4] audit: refactor and fix for potential deadlock
-Thread-Index: AQHZgYLqBTlbVO45nUiARiTa6bZEZ69QadWAgAC/3ACAAgCcAA==
-Date:   Wed, 10 May 2023 08:09:05 +0000
-Message-ID: <0BA588DC-1E53-4BCE-B124-77C5C730C267@nutanix.com>
-References: <20230508075812.76077-1-eiichi.tsukata@nutanix.com>
- <CAHC9VhSh3_hiwzKN_YPKyO-s2tE5V0URTMrg_tbR5=cKkjzLrw@mail.gmail.com>
- <506299C8-B1D0-457D-881B-BF639224A3AD@nutanix.com>
-In-Reply-To: <506299C8-B1D0-457D-881B-BF639224A3AD@nutanix.com>
-Accept-Language: ja-JP, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Apple Mail (2.3731.500.231)
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: CH0PR02MB8041:EE_|IA1PR02MB9467:EE_
-x-ms-office365-filtering-correlation-id: 61c3ccba-7e5c-4352-9807-08db512dd2cd
-x-proofpoint-crosstenant: true
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: E2mTmXFnhHw3GQhIQ/0FJkWfwN6xwmxSzlCNYOONN2jsg9noHpnTHMG9fUeZMA3GbeHeaZDccR1kz1P4RTOOmbWt7moPzRls7xolyMCQrjfUId0QLXNcMCp6f1gccFmRyuy4nM6y/GaDuK5jZrEJG04zUNDFLeztf24w41eHlnp7oUtDi2JuSDABa4Dht/dV8CDWsA44ce0IZjD1yt+pvqNS1NeHpaF6zuXO/8S09Sou7SWt2Z0+m0vTxBssOlvhXDF6OyOkX9xACCbgnMKmqg34VETzrgSR7WD+5HvGG9jrDb9a3jHlQLwDgE2l3x2R3Hn16h7yzxAwxnyXmHDvu6b41eROZWc6gtdSSWplMblbS213l/a1jVaVWPJ8uUOgiV3BN4L1BxRxheNWemyqLkkuXkc1+FbRYUNAdiV5Sjmgq4l6z4FdIDWQjrU1R3/lX30anWXNINfWZo+OD0oAhypg6HGGDLtFjWFARt8Q8pwv0jq+Vclq/M/9RfND5eiwe2gpoCbcIyUWzRLL/AauozyxnJu51kHDt8LqUCW8gSxCANtIsj6MAe7AJpROY+pLLGCBMTmu1rkkDiUjGMU+2Ae6YvkQh4NBCuwZB5l2BS9KcmpZoX0fJqkX0IcIMcVhVzFoKo/xbY/Rty+JjIBQhg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH0PR02MB8041.namprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(136003)(39860400002)(376002)(396003)(366004)(346002)(451199021)(6486002)(8676002)(71200400001)(66556008)(6916009)(66946007)(91956017)(36756003)(76116006)(8936002)(66446008)(64756008)(66476007)(54906003)(2906002)(44832011)(4326008)(41300700001)(86362001)(38070700005)(122000001)(316002)(33656002)(38100700002)(5660300002)(478600001)(186003)(53546011)(6506007)(26005)(6512007)(2616005)(83380400001)(45980500001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?TTFHcWQzTVFCOHhYNll5Wm51SGJtNmRUbWt2T3pSSnBpOXQxVUpDRWZtc1Fj?=
- =?utf-8?B?RlJRNnhRY2k1V3k0NHpnVWpCM1ZGMlVsWHBuSzdibUVMaVRYeFlMSy9EY0tL?=
- =?utf-8?B?azhZUjJXMGFIZXpvTkpCVVVPYkNyQVd4bUhjRWRDMjFhcTBEZDZ4WjZYZFdu?=
- =?utf-8?B?bGdtaExQeFpHYS81c3ZINkRma3JtTHNzbEpOMEhqY0l0WHJiVmZoc2FPWGgy?=
- =?utf-8?B?ZVRpbUIrVEFkeUJBTzdRVTB2c2VUSlpkU00rWFNON2JmbitsTDYvQ1BhdXYx?=
- =?utf-8?B?R2E4YUF5MkZrLzBFdWlpcENhU1NGK1lJMjU5R0lKcVV2WlNUZ2JtNWtIQnJD?=
- =?utf-8?B?VnRHUHd1TUNKWmdTd21FNFIvMWZ2OTVtOGo0blR1OWJkeHc5MERjOXZvTmRN?=
- =?utf-8?B?VmluMjd2NU9TcHlVSDE0YUZaUmlhMTBXSCtpVFZZNmlKOWtqa0ZXSVNOOW1J?=
- =?utf-8?B?VUFRMDg3ZjZKNW1qSkZ6V3dhRUppS245dmI0R2p1S0h2OVdzUUZrTHJidkk4?=
- =?utf-8?B?UjFTUTVBdS9DS241VGZFZE9UUUI2eTRLcCtXM083WDJpRjc1enJDZ052VG83?=
- =?utf-8?B?Sk8zZWt2VnhCbDN0dDJiYWdQb2NUMUNCcEs4cjgxOTduamlkTWFFUGs2QWNL?=
- =?utf-8?B?cVNJb0pjZVBrMkd0eEd4RndFVmd1UlFlWWNNOGpST3RYTCtXSEdmeEFiUDRq?=
- =?utf-8?B?dk9hSjlCMUdWYnR3RjV0K0pxYXl0cXZiZmtIUjk2RFJaNkpKN0lvWTY1Z2Rz?=
- =?utf-8?B?aXNReXBVSU9YcGVIRENHeEt1ZVcrRGwrOW9MYzl3YldEOTBodG9tUGVIMmc5?=
- =?utf-8?B?Ly9WNG42Q2E3L3l2dmM4WVEvcXA5RVh3VmFyTEVFNlJMdnJtdWVTdTl6aDZr?=
- =?utf-8?B?TG5VbnVpck11dENqY3A5SGNqZklKdWYxa3B5YWpFNEJjak1NdXVhYSs4c0RP?=
- =?utf-8?B?UkQyV0cvRnYyRDFIcWZpbXJKOGpmbU5iUTlBNE9NOVg3d3BxVGxNZjlzR0pu?=
- =?utf-8?B?UERQdDJJMnpvYmwvcktjckcwcDVvL3l1ZTJBVm1UdHIrQURsVUJWa3h6Vmpm?=
- =?utf-8?B?eWJNc1RUQlluWXFyT3B5MXRsWDkxclc1enZPVTFYVFYrRkNYWW8xbTd1cURv?=
- =?utf-8?B?NFUwUGt1aC9vajNPVlJQdTdWQlQzYURkTlBML0dWUTBwbEdtbkkzUDFGdUZD?=
- =?utf-8?B?YWxtRURreEJlU0h2NEszNk9EOTE1R05sUVFpbmpwYk51NGVRYVR2MXdnYnNE?=
- =?utf-8?B?RXZiUG1wMDlxMGIxUnRndWtYZmNZSzRDZTBsZkU0QzB0dHpaUGNlUkNERjV2?=
- =?utf-8?B?UjlxS01mZXRsVjdoRThqYXJpZnYvZys2emZVcmlHei9rUlAzeFk5amxXQUY5?=
- =?utf-8?B?TjdlU2VHdGlYTDRyMlFmMFJXalF2L2pTTGdZNUVqWUphWTlQaTYwdS82ZE43?=
- =?utf-8?B?aU9JRkhZQjNtUWNXL01mUWRXZWc3OEp3M1lwRDBpbmVXYW9lSFNOUW5KYVZP?=
- =?utf-8?B?K2lxRzkvd21ac2xOZ0hXQ1hFS3daQ00xSzRXdkw3OTFKNnRYdWV3MTZpSlZH?=
- =?utf-8?B?US9ocVAza3oxcmgxaGp3MFZaZFBacWJDWGdSbkE0aGFDU1BXV2dTMTlkYUt6?=
- =?utf-8?B?VEZTZk5nanNEZVRaY2tLT2dycTlUaFlob2VSTEl5TWlJZ2JPV3ZKb3FpaHlR?=
- =?utf-8?B?bTZwTTFhV0tsbEdiZ0ZBczJRWVQ1elJIbGRhY2UwK0YxTmVHS2swL3Y0eFox?=
- =?utf-8?B?YU1QRkZjbWZaQ1RXaE55dHlYK29HYklIWXFJVVo0NnV1MWxIS2ZqUFRSV2lF?=
- =?utf-8?B?L2xmZldSclRIOUhxd2VDT3hTanZ4dEtodFY5WjlhOExsUnJsYmpOcWphQXFr?=
- =?utf-8?B?RzB5SWhJL3FWSnM4dHRVaTYyQzBUMGJiTVlJK0pneTVKY21Zb0lMaUo3dGhn?=
- =?utf-8?B?UERVcEcwN3BtbDRDZUIyVll2eTVDNnhVUTZBU3pVWER3TWJjdi9WdDBmczMx?=
- =?utf-8?B?TXFQSWhOU2VOcStRUVZHaVpPRUE3bzg0bUF2aWVQMWRNU0c3M01VaDVEc2E0?=
- =?utf-8?B?eG1kK2xOWU1aWU5SN0FldERQVEVMVFYwWHdEZ1o4YTVDaUtBRW5FeFE3aGc4?=
- =?utf-8?B?N3QxZmZxWDRRWk9POFN3ZTg0WWQvdXgvSFJyTys0YjV5NEc2R1BuTGdQN2N4?=
- =?utf-8?B?b2c9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <2A7B682BA5701341A569E4195E1592F6@namprd02.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        with ESMTP id S231355AbjEJMMz (ORCPT <rfc822;audit@vger.kernel.org>);
+        Wed, 10 May 2023 08:12:55 -0400
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C4A65FD2
+        for <audit@vger.kernel.org>; Wed, 10 May 2023 05:12:54 -0700 (PDT)
+Received: by mail-lj1-x236.google.com with SMTP id 38308e7fff4ca-2ad89c7a84fso46476581fa.2
+        for <audit@vger.kernel.org>; Wed, 10 May 2023 05:12:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683720772; x=1686312772;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=T0AZ2WR1sgJtd+4MNio4ClHfbROcFaWDkZ1fPB/VSB0=;
+        b=lZcy0UXLtNUtsvaKu2NE7LkBlj/BUMCGczrxs7XpNYAm9bhOmHCfKIECB7J/WCeyeE
+         D/Bvd4K6nkL4S7PAGFRdFCjrAYZY2GrY8xdyA0w94HjQRzrr/MgcRk1b1T2jNJxs+SUv
+         tMJmqLy9+v+0TSKf5O4KnbpW4roBTVUVelM7c4l3GFa/cE47e4URX+QDXoOMxXluS4rU
+         +kz2TXLNgBjE9eewNhPlZdJRaf2HQjzrxf9XXh6ZCQNGGaPGql6qbPzMW/4Pmj94eNxs
+         NSKhc0ap8mwIbwLnNvwJbQeRaeu01fyoaUfS3PwehKJSSleG42vOe032Sa2lcOaQ2hgv
+         bdkQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683720772; x=1686312772;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=T0AZ2WR1sgJtd+4MNio4ClHfbROcFaWDkZ1fPB/VSB0=;
+        b=dKmY9Mr1n9cERUtj9EvlsHgIA7kzLTvbpuMj2GRiM1smhlonujz3jvek0lQrz+Pr2M
+         0vdNIsksU0lbEDqhUdkrcPwiQx2CrPcar8+2AlVD0xhZ1HjpM70vp+l/KVn3oJFpML5w
+         J2iN2QDvpOeNT8X+mgKb5I23TNZ0uf4fqAWnVnRe4BBXGKs2tSNZp5ZG41y7lDBv/bXM
+         oc3qvaNisHm/z+lieQodGJ0qDZLrSlu5g3hTi7UbcBx1l8AF5YEewzp4fXCGxoFlc0Pf
+         HYXD5y/KdhLIPUMkWnU2o+RD5F1YKLAdW0czAjeg3ORERIK8YDmMPOuJlWcG4o+J6KDr
+         41cQ==
+X-Gm-Message-State: AC+VfDxS84MoY/Kb/xQhyMzY3rcSw2cHxeenXM/a2rwTAYyjzvmWJJNo
+        ++LB+p3g7+pzZO/fa1VvHbVDTwrxNjzDsW3b
+X-Google-Smtp-Source: ACHHUZ5pfkcrY6RsZ+cbJqucDC6oMiMwmqlMaoA3dGh1T0ycOK9MDch6w729yiRp0IHcCYv99FYxvA==
+X-Received: by 2002:a2e:9916:0:b0:2ac:689e:241b with SMTP id v22-20020a2e9916000000b002ac689e241bmr2008919lji.47.1683720772413;
+        Wed, 10 May 2023 05:12:52 -0700 (PDT)
+Received: from [192.168.0.31] ([94.242.171.95])
+        by smtp.gmail.com with ESMTPSA id u10-20020a2e2e0a000000b002ad9df0586bsm762382lju.132.2023.05.10.05.12.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 10 May 2023 05:12:52 -0700 (PDT)
+Message-ID: <dcb7759f-ffd9-b414-f68b-44707a879312@gmail.com>
+Date:   Wed, 10 May 2023 15:12:51 +0300
 MIME-Version: 1.0
-X-OriginatorOrg: nutanix.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CH0PR02MB8041.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 61c3ccba-7e5c-4352-9807-08db512dd2cd
-X-MS-Exchange-CrossTenant-originalarrivaltime: 10 May 2023 08:09:05.5060
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: bb047546-786f-4de1-bd75-24e5b6f79043
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: sphxfo73jmYLfreTg1DyIyFF9Bjjs1Xl1OMthYT7gvASkRCVuhxydnXN1pG+qjzFeNWAcXnu1eFnlNJgdsdAVwC+cRjihzqa3VIX/xDUeMY=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR02MB9467
-X-Proofpoint-ORIG-GUID: AzjHipQdjHz5lGPXJuKmF9Wm6I_GeIsR
-X-Proofpoint-GUID: AzjHipQdjHz5lGPXJuKmF9Wm6I_GeIsR
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-10_04,2023-05-05_01,2023-02-09_01
-X-Proofpoint-Spam-Reason: safe
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: Can AUDIT_LIST_RULES causes kthreadd-spam?
+To:     Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
+        Paul Moore <paul@paul-moore.com>
+Cc:     audit@vger.kernel.org, linux-audit@redhat.com
+References: <ecd4bf68-3bf1-a1d8-4da5-5fbd28c51a6b@gmail.com>
+ <CAHC9VhTXHLS7bsDJ8-dSp4dQSQRcKRLiTMRYJOJVCY11G5D85A@mail.gmail.com>
+ <e5713a91-37b0-d32f-a0d2-eb668122c9e4@gmail.com>
+ <9ae2c1df-1f20-a40b-35ed-1dc76b122a4f@I-love.SAKURA.ne.jp>
+ <CAHC9VhTfxqrWaJrBccDY9LJR+Fggr__zufD-Wd=0VZwN5bBU6g@mail.gmail.com>
+ <415a4871-4d84-a31f-5417-e850a98bbffd@I-love.SAKURA.ne.jp>
+ <7c4caf66-a0ae-4999-172e-437d6cfc8ff3@gmail.com>
+ <0e748195-d3ba-88c5-1b1e-5a9c447bea57@I-love.SAKURA.ne.jp>
+Content-Language: en-US, ru-RU
+From:   Rinat Gadelshin <rgadelsh@gmail.com>
+In-Reply-To: <0e748195-d3ba-88c5-1b1e-5a9c447bea57@I-love.SAKURA.ne.jp>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <audit.vger.kernel.org>
 X-Mailing-List: audit@vger.kernel.org
 
-DQoNCj4gT24gTWF5IDksIDIwMjMsIGF0IDEwOjM0LCBFaWljaGkgVHN1a2F0YSA8ZWlpY2hpLnRz
-dWthdGFAbnV0YW5peC5jb20+IHdyb3RlOg0KPiANCj4gDQo+IA0KPj4gT24gTWF5IDgsIDIwMjMs
-IGF0IDIzOjA3LCBQYXVsIE1vb3JlIDxwYXVsQHBhdWwtbW9vcmUuY29tPiB3cm90ZToNCj4+IA0K
-Pj4gT24gTW9uLCBNYXkgOCwgMjAyMyBhdCAzOjU44oCvQU0gRWlpY2hpIFRzdWthdGENCj4+IDxl
-aWljaGkudHN1a2F0YUBudXRhbml4LmNvbT4gd3JvdGU6DQo+Pj4gQ29tbWl0IDdmZmI4ZTMxN2Jh
-ZSAoImF1ZGl0OiB3ZSBkb24ndCBuZWVkIHRvDQo+Pj4gX19zZXRfY3VycmVudF9zdGF0ZShUQVNL
-X1JVTk5JTkcpIikgYWNjaWRlbnRhbGx5IG1vdmVkIHF1ZXVlIGZ1bGwgY2hlY2sNCj4+PiBiZWZv
-cmUgYWRkX3dhaXRfcXVldWVfZXhjbHVzaXZlKCkgd2hpY2ggaW50cm9kdWNlZCB0aGUgZm9sbG93
-aW5nIHJhY2U6DQo+Pj4gDQo+Pj4gICBDUFUxICAgICAgICAgICAgICAgICAgICAgICAgICAgQ1BV
-Mg0KPj4+ID09PT09PT09ICAgICAgICAgICAgICAgICAgICAgICA9PT09PT09PQ0KPj4+IChpbiBh
-dWRpdF9sb2dfc3RhcnQoKSkgICAgICAgICAoaW4ga2F1ZGl0ZF90aHJlYWQoKSkNCj4+PiANCj4+
-PiBxdWV1ZSBpcyBmdWxsDQo+Pj4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHdha2Vf
-dXAoJmF1ZGl0X2JhY2tsb2dfd2FpdCkNCj4+PiAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgd2FpdF9ldmVudF9mcmVlemFibGUoKQ0KPj4+IGFkZF93YWl0X3F1ZXVlX2V4Y2x1c2l2ZSgp
-DQo+Pj4gLi4uDQo+Pj4gc2NoZWR1bGVfdGltZW91dCgpDQo+Pj4gDQo+Pj4gT25jZSB0aGlzIGhh
-cHBlbnMsIGJvdGggYXVkaXRfbG9nX3N0YXJ0KCkgYW5kIGthdWRpdGRfdGhyZWFkKCkgY2FuIGNh
-dXNlDQo+Pj4gZGVhZGxvY2sgZm9yIHVwIHRvIGJhY2tsb2dfd2FpdF90aW1lIHdhaXRpbmcgZm9y
-IGVhY2ggb3RoZXIuIFRvIHByZXZlbnQNCj4+PiB0aGUgcmFjZSwgdGhpcyBwYXRjaCBhZGRzIHF1
-ZXVlIGZ1bGwgY2hlY2sgYWZ0ZXINCj4+PiBwcmVwYXJlX3RvX3dhaXRfZXhjbHVzaXZlKCkuDQo+
-PiANCj4+IEhhdmUgeW91IHNlZW4gdGhpcyBvY2N1ciBpbiBwcmFjdGljZT8gIA0KPiANCj4gWWVz
-LCB3ZSBoaXQgdGhpcyBpc3N1ZSBtdWx0aXBsZSB0aW1lcywgdGhvdWdoIGl04oCZcyBwcmV0dHkg
-cmFyZSBhcyB5b3UgYXJlIG1lbnRpb25pbmcuDQo+IEluIG91ciBjYXNlLCBzc2hkIGdvdCBzdHVj
-ayBpbiBhdWRpdF9sb2dfdXNlcl9tZXNzYWdlKCksIHdoaWNoIGNhdXNlZCBTU0ggY29ubmVjdGlv
-bg0KPiB0aW1lb3V0Lg0KPiANCg0KSSBmb3VuZCBhbm90aGVyIGNhc2UuDQoNCmthdWRpdGRfdGhy
-ZWFkIGlzc3VlcyB3YWtlX3VwKCZhdWRpdF9iYWNrbG9nX3dhaXQpIG9uY2UgYWZ0ZXIgd2FrZSB1
-cC4NCkFzIHdhaXRlciBzaWRlIGlzIHVzaW5nIGFkZF93YWl0X3F1ZXVlX2V4Y2x1c2l2ZSgpIGl0
-IG9ubHkgd2FrZXMgdXAgb25lIHByb2Nlc3MgYXQgb25jZS4NCg0KSWYga2F1ZGl0ZCB3YWtlcyB1
-cCBhIHByb2Nlc3Mgd2hpY2ggaXMgc2xlZXBpbmcgaW4gYXVkaXRfbG9nX3N0YXJ0KCksIHRoZW4g
-dGhlIHByb2Nlc3Mgd2lsbA0KcXVldWUgc2tiIGFuZCBpc3N1ZSB3YWtlX3VwX2ludGVycnVwdGli
-bGUoJmthdWRpdGRfd2FpdCkuIE5vIHByb2JsZW0uDQpCdXQgaWYga2F1ZGl0ZCB3YWtlcyB1cCBh
-IHByb2Nlc3Mgd2hpY2ggaXMgc2xlZXBpbmcgaW4gYXVkaXRfcmVjZWl2ZSgpLCB0aGVuIHRoZSBw
-cm9jZXNzDQp3b27igJl0IHRyeSB0byB3YWtlIHVwIGthdWRpdGQuIEluIHRoaXMgY2FzZSBvdGhl
-ciBwcm9jZXNzZXMgc2xlZXBpbmcgaW4gYXVkaXRfbG9nX3N0YXJ0KCkNCmtlZXAgc2xlZXBpbmcg
-ZXZlbiBpZiBrYXVkaXRkIGhhdmUgZmx1c2hlZCB0aGUgcXVldWUuDQoNCkF0IHRoaXMgcG9pbnQg
-SeKAmW0gcGxhbm5pbmcgdG8gdXNlIG5vbi1leGNsdXNpdmUgd2FpdCBpbiBhdWRpdF9yZWNlaXZl
-KCkgaW4gdjIuDQpMZXQgbWUga25vdyBpZiB3ZSBzaG91bGQgdXNlIHdha2VfdXBfYWxsKCkgaW4g
-a2F1ZGl0ZCBvciB5b3UgaGF2ZSBiZXR0ZXIgc29sdXRpb24uDQoNCkVpaWNoaQ==
+
+On 06.05.2023 09:50, Tetsuo Handa wrote:
+> On 2023/05/06 7:12, Rinat Gadelshin wrote:
+>> The only one `auditctl -l` request was performed.
+>> I see the following response in syslog for the request:
+> Thanks for rules.
+>
+> I tried "auditctl -l" with these rules, and I got only
+>
+>    audit: Started audit_send_list_thread
+>    audit: Calling netlink_unicast (repeated for 32 times)
+>    audit: Finished audit_send_list_thread
+>
+> as output; audit_send_reply_thread is not called in my environment.
+>
+> That is, for some reason (maybe some process is interfering each other)
+> audit_send_reply_thread is needlessly called in your environment?
+> In that case, fixing the cause of audit_send_reply_thread being called
+> could reduce the spam.
+>
+> Please try to find who is calling audit_send_reply_thread for many times.
+>
+> diff --git a/kernel/audit.c b/kernel/audit.c
+> index 9bc0b0301198..bf4fef7da692 100644
+> --- a/kernel/audit.c
+> +++ b/kernel/audit.c
+> @@ -1006,6 +1011,7 @@ static void audit_send_reply(struct sk_buff *request_skb, int seq, int type, int
+>   	tsk = kthread_run(audit_send_reply_thread, reply, "audit_send_reply");
+>   	if (IS_ERR(tsk))
+>   		goto err;
+> +	dump_stack();
+>   
+>   	return;
+
+Hi Tetsuo,
+
+I've rebuilt the kernel with 'dump stack()'.
+
+I've got 7 call stacks for the same test (`auditctl -l` and the same 
+audit rule list), they are all similar to:
+
+May 10 14:51:52 gadelshin-ri-nb kernel: [ 9381.025922] audit: Started 
+audit_send_reply_thread
+May 10 14:51:52 gadelshin-ri-nb kernel: [ 9381.025924] Hardware name: 
+LENOVO 21AH00BPUS/21AH00BPUS, BIOS N3MET11W (1.10 ) 12/07/2022
+May 10 14:51:52 gadelshin-ri-nb kernel: [ 9381.025926] Call Trace:
+May 10 14:51:52 gadelshin-ri-nb kernel: [ 9381.025928]  <TASK>
+May 10 14:51:52 gadelshin-ri-nb kernel: [ 9381.025929] 
+dump_stack_lvl+0x4c/0x70
+May 10 14:51:52 gadelshin-ri-nb kernel: [ 9381.025935] dump_stack+0x14/0x20
+May 10 14:51:52 gadelshin-ri-nb kernel: [ 9381.025936] 
+audit_send_reply.constprop.0+0xcc/0x120
+May 10 14:51:52 gadelshin-ri-nb kernel: [ 9381.025939] 
+audit_receive_msg+0x26d/0x1070
+May 10 14:51:52 gadelshin-ri-nb kernel: [ 9381.025940]  ? 
+string_nocheck+0x4f/0x60
+May 10 14:51:52 gadelshin-ri-nb kernel: [ 9381.025942]  ? string+0x4e/0x60
+May 10 14:51:52 gadelshin-ri-nb kernel: [ 9381.025943] 
+audit_receive+0xb9/0x180
+May 10 14:51:52 gadelshin-ri-nb kernel: [ 9381.025944]  ? 
+netlink_deliver_tap+0x49/0x250
+May 10 14:51:52 gadelshin-ri-nb kernel: [ 9381.025947] 
+netlink_unicast+0x1b2/0x260
+May 10 14:51:52 gadelshin-ri-nb kernel: [ 9381.025948] 
+netlink_sendmsg+0x254/0x4d0
+May 10 14:51:52 gadelshin-ri-nb kernel: [ 9381.025950] 
+sock_sendmsg+0x9d/0xb0
+May 10 14:51:52 gadelshin-ri-nb kernel: [ 9381.025952] 
+__sys_sendto+0x122/0x1b0
+May 10 14:51:52 gadelshin-ri-nb kernel: [ 9381.025954]  ? 
+__handle_mm_fault+0xac0/0xd10
+May 10 14:51:52 gadelshin-ri-nb kernel: [ 9381.025956]  ? 
+__audit_syscall_entry+0xd2/0x140
+May 10 14:51:52 gadelshin-ri-nb kernel: [ 9381.025958] 
+__x64_sys_sendto+0x2d/0x40
+May 10 14:51:52 gadelshin-ri-nb kernel: [ 9381.025959] 
+do_syscall_64+0x5d/0x90
+May 10 14:51:52 gadelshin-ri-nb kernel: [ 9381.025962]  ? 
+exit_to_user_mode_prepare+0x3d/0x190
+May 10 14:51:52 gadelshin-ri-nb kernel: [ 9381.025965]  ? 
+do_user_addr_fault+0x1bc/0x8a0
+May 10 14:51:52 gadelshin-ri-nb kernel: [ 9381.025967]  ? 
+irqentry_exit_to_user_mode+0xd/0x20
+May 10 14:51:52 gadelshin-ri-nb kernel: [ 9381.025969]  ? 
+irqentry_exit+0x3f/0x50
+May 10 14:51:52 gadelshin-ri-nb kernel: [ 9381.025970]  ? 
+exc_page_fault+0x8e/0x190
+May 10 14:51:52 gadelshin-ri-nb kernel: [ 9381.025971] 
+entry_SYSCALL_64_after_hwframe+0x72/0xdc
+May 10 14:51:52 gadelshin-ri-nb kernel: [ 9381.025974] RIP: 
+0033:0x7fe97af368a4
+May 10 14:51:52 gadelshin-ri-nb kernel: [ 9381.025976] Code: c2 f7 ff ff 
+44 8b 4c 24 2c 4c 8b 44 24 20 89 c5 44 8b 54 24 28 48 8b 54 24 18 b8 2c 
+00 00 00 48 8b 74 24 10 8b 7c 24 08 0f 05 <48> 3d 00 f0 ff ff 77 30 89 
+ef 48 89 44 24 08 e8 e8 f7 ff ff 48 8b
+May 10 14:51:52 gadelshin-ri-nb kernel: [ 9381.025977] RSP: 
+002b:00007ffdfc78af50 EFLAGS: 00000293 ORIG_RAX: 000000000000002c
+May 10 14:51:52 gadelshin-ri-nb kernel: [ 9381.025979] RAX: 
+ffffffffffffffda RBX: 00007fe90900aee0 RCX: 00007fe97af368a4
+May 10 14:51:52 gadelshin-ri-nb kernel: [ 9381.025980] RDX: 
+0000000000000010 RSI: 00007fe90900aff8 RDI: 0000000000000008
+May 10 14:51:52 gadelshin-ri-nb kernel: [ 9381.025981] RBP: 
+0000000000000000 R08: 00007ffdfc78afd4 R09: 000000000000000c
+May 10 14:51:52 gadelshin-ri-nb kernel: [ 9381.025981] R10: 
+0000000000000000 R11: 0000000000000293 R12: 00007fe944461920
+May 10 14:51:52 gadelshin-ri-nb kernel: [ 9381.025982] R13: 
+00007fe905b31be0 R14: 00007fe905b31bf0 R15: 0000000000000000
+May 10 14:51:52 gadelshin-ri-nb kernel: [ 9381.025984] </TASK>
+May 10 14:51:52 gadelshin-ri-nb kernel: [ 9381.025989] audit: Finished 
+audit_send_reply_thread
+
+
+As far as I can see, it's the exit of `sendto` syscall.
+It seems that the kernel just creates a new kthreadd for each sendto 
+syscall.
+But I think that I'm wrong and just missing something.
+
