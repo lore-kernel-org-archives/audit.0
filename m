@@ -2,263 +2,180 @@ Return-Path: <audit-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8D0BCC77B7D
-	for <audit@archiver.kernel.org>; Mon, 15 May 2023 14:21:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7CB4CC77B7F
+	for <audit@archiver.kernel.org>; Wed, 17 May 2023 13:11:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240087AbjEOOVZ (ORCPT <rfc822;audit@archiver.kernel.org>);
-        Mon, 15 May 2023 10:21:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49810 "EHLO
+        id S230064AbjEQNLl (ORCPT <rfc822;audit@archiver.kernel.org>);
+        Wed, 17 May 2023 09:11:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239804AbjEOOVV (ORCPT <rfc822;audit@vger.kernel.org>);
-        Mon, 15 May 2023 10:21:21 -0400
-Received: from mail-ua1-x934.google.com (mail-ua1-x934.google.com [IPv6:2607:f8b0:4864:20::934])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B33403A9B;
-        Mon, 15 May 2023 07:20:58 -0700 (PDT)
-Received: by mail-ua1-x934.google.com with SMTP id a1e0cc1a2514c-783b92ddbb0so358937241.1;
-        Mon, 15 May 2023 07:20:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684160458; x=1686752458;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ppVyFGTleG0uV5qrwyuyzbwOGiTPSdwv0HSD6ZTUdHA=;
-        b=Vqpf0hY1OSXAfbyCkLaVdobIWRo+Ylc5gQ58cvxZijNGVqy8NZM26ONjavWlaIj8hl
-         sxcsZRJDABMIpaHJtnlARir32khiKKlG4bvjIOHJe/Hk4C1CDX2jn84SrtqCxoWMNarW
-         q/2i5Z5oBi4g1qbcXj+EK8G5Xzmh0sC/0gV89Jbq8olaU7IMMr+WDbD7r7gR1VtmK7DU
-         uGvxAodrVsfFlTwT21Qxe6t5xmtzIrWAFCYy8Zknj8Rek+hZGWboK5eXK2+WiI9rirFq
-         6m/16Or+wveWdYVe/dB93HEJAWHq6dgKyfGyLvKPRjhzudSVn5kFdi/E9rW75B2A1HJV
-         hI6w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684160458; x=1686752458;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ppVyFGTleG0uV5qrwyuyzbwOGiTPSdwv0HSD6ZTUdHA=;
-        b=SKxxrHhqib2SeVw/Mt7k4wd3R3sbuUrt61HOvTkW/WM3f44KzCy7Kq5BV7YAWVVRrE
-         KNzxtYUmc6BWSccL3R3etzEcFRSfygCyUiFozQKqIDv9xjDUz7YzPZwQdObBTZCky5c5
-         2dhr8YqINUggswPmbYuiNfJqHB8CbJWptO4n6Ien9APCfEGgSlnKo1nNwrRmT2soPUak
-         ax4i/C080Xg+eUWhJjUawuGY8cb4LBgEilsNqNPcZWwka602+3ia35jlfCOxjI619T7r
-         shnUZOO/HCKSZ3BlEoeD7aixPRjh7YzE0ldv+ozpmf63u8nb2fo0umRctnrvNAtUMKnc
-         RcGQ==
-X-Gm-Message-State: AC+VfDy0NnDkWgqD17Kv62qr+RGcoOaWuPMHY6u8T3lBkqMqIu1gPLVQ
-        tREwbHaIjgXAXL9rjmvSZHOt+8qSp7MPZpaXPgg=
-X-Google-Smtp-Source: ACHHUZ6gafXJQ8R8vy9moJv7MoFwvSmxkXVjguC8wfPwjCRFz0YCIACDk7Z7a3hTxsiInEzIZYlnjfi57rUcM02kT7g=
-X-Received: by 2002:a05:6102:3cd:b0:430:ce0:ae90 with SMTP id
- n13-20020a05610203cd00b004300ce0ae90mr12150065vsq.14.1684160457669; Mon, 15
- May 2023 07:20:57 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230511150802.737477-1-cgzones@googlemail.com>
- <20230515-kopfgeld-umkurven-f27be4b68a26@brauner> <CAOQ4uxgtxLLfBuVUAT7+N7cox+03wJA3ACGEu76dZd5RqGWXTQ@mail.gmail.com>
- <20230515-banal-vergab-a7abb53169b5@brauner>
-In-Reply-To: <20230515-banal-vergab-a7abb53169b5@brauner>
-From:   Amir Goldstein <amir73il@gmail.com>
-Date:   Mon, 15 May 2023 17:20:46 +0300
-Message-ID: <CAOQ4uxgLT8aae7zo3vNRTO+XKr4Xm5j=yUYPS0L1Fm751RS00A@mail.gmail.com>
-Subject: Re: [RFC PATCH v2] fs/xattr: add *at family syscalls
-To:     Christian Brauner <brauner@kernel.org>
-Cc:     =?UTF-8?Q?Christian_G=C3=B6ttsche?= <cgzones@googlemail.com>,
-        x86@kernel.org, linux-alpha@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        with ESMTP id S229560AbjEQNLk (ORCPT <rfc822;audit@vger.kernel.org>);
+        Wed, 17 May 2023 09:11:40 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB0B2114;
+        Wed, 17 May 2023 06:11:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 477F7646F9;
+        Wed, 17 May 2023 13:11:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76A30C433EF;
+        Wed, 17 May 2023 13:11:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684329098;
+        bh=Kl24PXPpp3YYxyqhSLbqSf3q6HFW4Damtq3CSDCskSI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=ZvzxaL6miwnra1zIxCrPjbAaZ1S77jiTGPi+TWHY99GZHeuIe7t1zDn5PBjrO3aCc
+         +d603Lljcw85VawWja8nf6gaVWqRpl9Nj7tZzRXkzY5DkbE/NOQHT5JDlBFMhSRcbN
+         awDudFpa43agxm5K7LEfe328a3TXgVCRPNgQPIxdX1MMxEhTwcwBzOmH304yaQOTEA
+         LAQ8CsSDBiyW+7ihNfrrYmE6bhtk+vaAzUlnNGRodoqU+/ltoPSxqzWVfnBSDhDAve
+         m3pzvoi4G5qi9TF3RdkL/eQ12VTNlGpm/zby+dxVvfvof+Jx9Ig7iudo7tccKBreR5
+         3KVJ0fYIn0zfQ==
+From:   Arnd Bergmann <arnd@kernel.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-mm@kvack.org, Arnd Bergmann <arnd@arndb.de>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Paul Moore <paul@paul-moore.com>,
+        Eric Paris <eparis@redhat.com>,
+        Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>,
+        Christoph Lameter <cl@linux.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, audit@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        Jan Kara <jack@suse.cz>, jlayton@kernel.org, cyphar@cyphar.com,
-        Arnd Bergmann <arnd@arndb.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        audit@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
+Subject: [PATCH 00/14] mm/init/kernel: missing-prototypes warnings
+Date:   Wed, 17 May 2023 15:10:48 +0200
+Message-Id: <20230517131102.934196-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <audit.vger.kernel.org>
 X-Mailing-List: audit@vger.kernel.org
 
-On Mon, May 15, 2023 at 4:52=E2=80=AFPM Christian Brauner <brauner@kernel.o=
-rg> wrote:
->
-> On Mon, May 15, 2023 at 04:04:21PM +0300, Amir Goldstein wrote:
-> > On Mon, May 15, 2023 at 1:33=E2=80=AFPM Christian Brauner <brauner@kern=
-el.org> wrote:
-> > >
-> > > On Thu, May 11, 2023 at 05:08:02PM +0200, Christian G=C3=B6ttsche wro=
-te:
-> > > > Add the four syscalls setxattrat(), getxattrat(), listxattrat() and
-> > > > removexattrat().  Those can be used to operate on extended attribut=
-es,
-> > > > especially security related ones, either relative to a pinned direc=
-tory
-> > > > or on a file descriptor without read access, avoiding a
-> > > > /proc/<pid>/fd/<fd> detour, requiring a mounted procfs.
-> > > >
-> > > > One use case will be setfiles(8) setting SELinux file contexts
-> > > > ("security.selinux") without race conditions.
-> > > >
-> > > > Add XATTR flags to the private namespace of AT_* flags.
-> > > >
-> > > > Use the do_{name}at() pattern from fs/open.c.
-> > > >
-> > > > Use a single flag parameter for extended attribute flags (currently
-> > > > XATTR_CREATE and XATTR_REPLACE) and *at() flags to not exceed six
-> > > > syscall arguments in setxattrat().
-> > > >
-> > > > Previous approach ("f*xattr: allow O_PATH descriptors"): https://lo=
-re.kernel.org/all/20220607153139.35588-1-cgzones@googlemail.com/
-> > > > v1 discussion: https://lore.kernel.org/all/20220830152858.14866-2-c=
-gzones@googlemail.com/
-> > > >
-> > > > Signed-off-by: Christian G=C3=B6ttsche <cgzones@googlemail.com>
-> > > > CC: x86@kernel.org
-> > > > CC: linux-alpha@vger.kernel.org
-> > > > CC: linux-kernel@vger.kernel.org
-> > > > CC: linux-arm-kernel@lists.infradead.org
-> > > > CC: linux-ia64@vger.kernel.org
-> > > > CC: linux-m68k@lists.linux-m68k.org
-> > > > CC: linux-mips@vger.kernel.org
-> > > > CC: linux-parisc@vger.kernel.org
-> > > > CC: linuxppc-dev@lists.ozlabs.org
-> > > > CC: linux-s390@vger.kernel.org
-> > > > CC: linux-sh@vger.kernel.org
-> > > > CC: sparclinux@vger.kernel.org
-> > > > CC: linux-fsdevel@vger.kernel.org
-> > > > CC: audit@vger.kernel.org
-> > > > CC: linux-arch@vger.kernel.org
-> > > > CC: linux-api@vger.kernel.org
-> > > > CC: linux-security-module@vger.kernel.org
-> > > > CC: selinux@vger.kernel.org
-> > > > ---
-> > >
-> > > Fwiw, your header doesn't let me see who the mail was directly sent t=
-o
-> > > so I'm only able to reply to lists which is a bit pointless...
-> > >
-> > > > v2:
-> > > >   - squash syscall introduction and wire up commits
-> > > >   - add AT_XATTR_CREATE and AT_XATTR_REPLACE constants
-> > >
-> > > > +#define AT_XATTR_CREATE              0x1     /* setxattrat(2): set=
- value, fail if attr already exists */
-> > > > +#define AT_XATTR_REPLACE     0x2     /* setxattrat(2): set value, =
-fail if attr does not exist */
-> > >
-> > > We really shouldn't waste any AT_* flags for this. Otherwise we'll ru=
-n
-> > > out of them rather quickly. Two weeks ago we added another AT_* flag
-> > > which is up for merging for v6.5 iirc and I've glimpsed another AT_*
-> > > flag proposal in one of the talks at last weeks Vancouver conference
-> > > extravaganza.
-> > >
-> > > Even if we reuse 0x200 for AT_XATTR_CREATE (like we did for AT_EACCES=
-S
-> > > and AT_REMOVEDIR) we still need another bit for AT_XATTR_REPLACE.
-> > >
-> > > Plus, this is really ugly since AT_XATTR_{CREATE,REPLACE} really isn'=
-t
-> > > in any way related to lookup and we're mixing it in with lookup
-> > > modifying flags.
-> > >
-> > > So my proposal for {g,s}etxattrat() would be:
-> > >
-> > > struct xattr_args {
-> > >         __aligned_u64 value;
-> > >         __u32 size;
-> > >         __u32 cmd;
-> > > };
-> > >
-> > > So everything's nicely 64bit aligned in the struct. Use the @cmd memb=
-er
-> > > to set either XATTR_REPLACE or XATTR_CREATE and treat it as a proper
-> > > enum and not as a flag argument like the old calls did.
-> > >
-> > > So then we'd have:
-> > >
-> > > setxattrat(int dfd, const char *path, const char __user *name,
-> > >            struct xattr_args __user *args, size_t size, unsigned int =
-flags)
-> > > getxattrat(int dfd, const char *path, const char __user *name,
-> > >            struct xattr_args __user *args, size_t size, unsigned int =
-flags)
-> > >
-> > > The current in-kernel struct xattr_ctx would be renamed to struct
-> > > kernel_xattr_args and then we do the usual copy_struct_from_user()
-> > > dance:
-> > >
-> > > struct xattr_args args;
-> > > err =3D copy_struct_from_user(&args, sizeof(args), uargs, usize);
-> > >
-> > > and then go on to handle value/size for setxattrat()/getxattrat()
-> > > accordingly.
-> > >
-> > > getxattr()/setxattr() aren't meaningfully filterable by seccomp alrea=
-dy
-> > > so there's not point in not using a struct.
-> > >
-> > > If that isn't very appealing then another option is to add a new flag
-> > > namespace just for setxattrat() similar to fspick() and move_mount()
-> > > duplicating the needed lookup modifying flags.
-> > > Thoughts?
-> >
-> > Here is a thought: I am not sure if I am sorry we did not discuss this =
-API
-> > issue in LSFMM or happy that we did not waste our time on this... :-/
-> >
-> > I must say that I dislike redefined flag namespace like FSPICK_*
-> > just as much as I dislike overloading the AT_* namespace and TBH,
-> > I am not crazy about avoiding this problem with xattr_args either.
-> >
-> > A more sane solution IMO could have been:
-> > - Use lower word of flags for generic AT_ flags
-> > - Use the upper word of flags for syscall specific flags
->
-> We'd have 16 lower bits for AT_* flags and upper 16 bits for non-AT_*
-> flags. That might be ok but it isn't great because if we ever extend
-> AT_* flags into the upper 16 bits that are generally useful for all
-> AT_* flag taking system calls we'd not be able to use them. And at the
-> rate people keep suggesting new AT_* flags that issue might arise
-> quicker than we might think.
->
-> And we really don't want 64 bit flag arguments because of 32 bit
-> architectures as that gets really ugly to handle cleanly (Arnd has
-> talked a lot about issues in this area before).
->
-> >
-> > So if it were up to me, I would vote starting this practice:
-> >
-> > + /* Start of syscall specific range */
-> > + #define AT_XATTR_CREATE       0x10000     /* setxattrat(2): set
-> > value, fail if attr already exists */
-> > + #define AT_XATTR_REPLACE     0x20000     /* setxattrat(2): set
-> > value, fail if attr does not exist */
-> >
-> > Which coincidentally happens to be inline with my AT_HANDLE_FID patch..=
-.
->
-> This is different though. The reason AT_HANDLE_FID is acceptable is
-> because we need the ability to extend an existing system call and we're
-> reusing a bit that is already used in two other system calls. So we
-> avoid adding a new system call just to add another flag argument and
-> we're also not using up an additional AT_* bit. This makes it bearable
-> imho. But here we're talking about new system calls where we can avoid
-> this problem arising in the first place.
->
-> >
-> > Sure, we will have some special cases like MOVE_MOUNT_* and
-> > legacy pollution to the lower AT_ flags word, but as a generic solution
-> > for syscalls that need the common AT_ lookup flags and just a few
-> > private flags, that seems like the lesser evil to me.
->
-> It is fine to do this in some cases but we shouldn't encourage mixing
-> distinct flag namespaces let alone advertising this as a generic
-> solution imho. The AT_XATTR_* flags aren't even flags they behave like
-> an enum.
+From: Arnd Bergmann <arnd@arndb.de>
 
-OK. I see your point.
-Also, wrt struct xattr_args, there is sort of a precedent with
-XFS_IOC_ATTRMULTI_BY_HANDLE ioctl, struct xfs_attr_multiop
-and flags XFS_IOC_ATTR_{CREATE,REPLACE}.
+These are patches addressing -Wmissing-prototypes warnings in common
+kernel code and memory management code files that usually get merged
+through the -mm tree.
 
-Just a nit, I would use xattr_args field names that are the
-same as setxattr() arg names, so s/cmd/flags.
+Andrew, can you pick these up in the -mm tree?
 
-Thanks,
-Amir.
+     Arnd
+
+Arnd Bergmann (14):
+  mm: percpu: unhide pcpu_embed_first_chunk prototype
+  mm: page_poison: always declare __kernel_map_pages() function
+  mm: sparse: mark populate_section_memmap() static
+  audit: avoid missing-prototype warnings
+  lib: devmem_is_allowed: include linux/io.h
+  locking: add lockevent_read() prototype
+  panic: hide unused global functions
+  panic: make function declarations visible
+  kunit: include debugfs header file
+  suspend: add a arch_resume_nosmt() prototype
+  init: consolidate prototypes in linux/init.h
+  init: move cifs_root_data() prototype into linux/mount.h
+  thread_info: move function declarations to linux/thread_info.h
+  time_namespace: always provide arch_get_vdso_data() prototype for vdso
+
+ arch/arm/include/asm/irq.h           |  1 -
+ arch/arm64/include/asm/thread_info.h |  4 ----
+ arch/microblaze/include/asm/setup.h  |  2 --
+ arch/mips/include/asm/irq.h          |  1 -
+ arch/parisc/kernel/smp.c             |  1 -
+ arch/powerpc/include/asm/irq.h       |  1 -
+ arch/riscv/include/asm/irq.h         |  2 --
+ arch/riscv/include/asm/timex.h       |  2 --
+ arch/s390/include/asm/thread_info.h  |  3 ---
+ arch/s390/kernel/entry.h             |  2 --
+ arch/sh/include/asm/irq.h            |  1 -
+ arch/sh/include/asm/rtc.h            |  2 --
+ arch/sh/include/asm/thread_info.h    |  3 ---
+ arch/sparc/include/asm/irq_32.h      |  1 -
+ arch/sparc/include/asm/irq_64.h      |  1 -
+ arch/sparc/include/asm/timer_64.h    |  1 -
+ arch/sparc/kernel/kernel.h           |  4 ----
+ arch/x86/include/asm/irq.h           |  2 --
+ arch/x86/include/asm/mem_encrypt.h   |  3 ---
+ arch/x86/include/asm/thread_info.h   |  3 ---
+ arch/x86/include/asm/time.h          |  1 -
+ arch/x86/include/asm/tsc.h           |  1 -
+ include/asm-generic/bug.h            |  5 +++--
+ include/linux/acpi.h                 |  3 ++-
+ include/linux/audit.h                |  2 --
+ include/linux/audit_arch.h           |  2 ++
+ include/linux/delay.h                |  1 +
+ include/linux/init.h                 | 20 ++++++++++++++++++++
+ include/linux/mm.h                   |  3 +--
+ include/linux/mount.h                |  2 ++
+ include/linux/panic.h                |  3 +++
+ include/linux/percpu.h               |  2 --
+ include/linux/suspend.h              |  2 ++
+ include/linux/thread_info.h          |  5 +++++
+ include/linux/time_namespace.h       |  3 ++-
+ init/do_mounts.c                     |  2 --
+ init/main.c                          | 18 ------------------
+ kernel/audit.h                       |  2 +-
+ kernel/locking/lock_events.h         |  4 ++++
+ kernel/panic.c                       |  3 +--
+ lib/devmem_is_allowed.c              |  1 +
+ lib/kunit/debugfs.c                  |  1 +
+ mm/sparse.c                          |  2 +-
+ 43 files changed, 52 insertions(+), 76 deletions(-)
+
+-- 
+2.39.2
+
+
+Cc: Russell King <linux@armlinux.org.uk>
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Will Deacon <will@kernel.org>
+Cc: Michal Simek <monstr@monstr.eu>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: Helge Deller <deller@gmx.de>
+Cc: Michael Ellerman <mpe@ellerman.id.au>
+Cc: Palmer Dabbelt <palmer@dabbelt.com>
+Cc: Heiko Carstens <hca@linux.ibm.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: x86@kernel.org
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Paul Moore <paul@paul-moore.com>
+Cc: Eric Paris <eparis@redhat.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Dennis Zhou <dennis@kernel.org>
+Cc: Tejun Heo <tj@kernel.org>
+Cc: Christoph Lameter <cl@linux.com>
+Cc: Pavel Machek <pavel@ucw.cz>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Waiman Long <longman@redhat.com>
+Cc: Boqun Feng <boqun.feng@gmail.com>
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-mips@vger.kernel.org
+Cc: linux-parisc@vger.kernel.org
+Cc: linuxppc-dev@lists.ozlabs.org
+Cc: linux-riscv@lists.infradead.org
+Cc: linux-s390@vger.kernel.org
+Cc: linux-sh@vger.kernel.org
+Cc: audit@vger.kernel.org
+Cc: linux-mm@kvack.org
+Cc: linux-pm@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org
+Cc: kunit-dev@googlegroups.com
