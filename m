@@ -2,106 +2,112 @@ Return-Path: <audit-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9A14FC7EE23
-	for <audit@archiver.kernel.org>; Wed, 17 May 2023 15:52:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6F5AAC77B75
+	for <audit@archiver.kernel.org>; Wed, 17 May 2023 16:03:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232176AbjEQPwj (ORCPT <rfc822;audit@archiver.kernel.org>);
-        Wed, 17 May 2023 11:52:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50130 "EHLO
+        id S230282AbjEQQD5 (ORCPT <rfc822;audit@archiver.kernel.org>);
+        Wed, 17 May 2023 12:03:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232101AbjEQPwV (ORCPT <rfc822;audit@vger.kernel.org>);
-        Wed, 17 May 2023 11:52:21 -0400
-Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A619D86A
-        for <audit@vger.kernel.org>; Wed, 17 May 2023 08:51:17 -0700 (PDT)
-Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-5617d793160so10748957b3.2
-        for <audit@vger.kernel.org>; Wed, 17 May 2023 08:51:17 -0700 (PDT)
+        with ESMTP id S229966AbjEQQD4 (ORCPT <rfc822;audit@vger.kernel.org>);
+        Wed, 17 May 2023 12:03:56 -0400
+Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29F181BC7
+        for <audit@vger.kernel.org>; Wed, 17 May 2023 09:03:53 -0700 (PDT)
+Received: by mail-yb1-xb2d.google.com with SMTP id 3f1490d57ef6-ba8151a744fso1271668276.2
+        for <audit@vger.kernel.org>; Wed, 17 May 2023 09:03:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1684338674; x=1686930674;
+        d=paul-moore.com; s=google; t=1684339432; x=1686931432;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=f/BiToevvpXZU69/oSETGaqYlCzMkDhIUSch995c2x4=;
-        b=PxKg2pRCl/MeEqp5uvc8FI6+YOF8ZQ0EzboQ7hpfbuFJX3IIqChekL0/PSY6f6ZBkZ
-         urHQTw8B9Qu+ZY/1vJzTnbXCr75YfIhdSyy686/eLISuhgZHB6UQ3EVsl6FD9v625A/w
-         tjxES+HrRzg6bCh5g/2aKxK6aL5WAXk6n5hL6cNQ4DLvHOdkJN6i/f12VZINOcSbVDWY
-         Ht8TqiZDvyXTZ0hs/EBmu3kHn7bK+REyjKbHcdjwjITX645yBU2SclzoGsnZb8Qs2uwx
-         3eg3Vv2wpF9jKUnxeZFE5DWnz2u2DGzEAq8Ck0m/CDBEkeEBn1RCKj2gBMDNc7cK4SzS
-         DFJA==
+        bh=hLN4hR+vf8IV6dL3Yiybxphtk3K6xzfKOo/BEcKtKBw=;
+        b=Yq9wGZwPNMMn7yE/Yf6dY6pidAcCw00N2b3QmZC4+PN9CqWT6VmtZzgyg1CNAnrgNp
+         LAzlMPfReQpA12tjyEYpoTW9f3AqNuKdwlTpjc5QEO8m6TeH98PMHnfih1q/5APngpFb
+         igUsbbGctuHXRZF+wpWQbZw9diz3Cab2JEvy8YkRL/Fs5Qh97lnkCvoDKKZ+moON6O6m
+         MP4E84Et5yR3ZX780yrZ2fMflKsBZZSnCscNhFXdv7ZCF+2HslTC+B95mGFVLThW6mGW
+         4rHGOSJDACw5BeIUr/LcqwuVKtGc4kIoIQEcpHl4QwmB0XtBEXtf+kq1dF8LfEqVHgMC
+         IhYw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684338674; x=1686930674;
+        d=1e100.net; s=20221208; t=1684339432; x=1686931432;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=f/BiToevvpXZU69/oSETGaqYlCzMkDhIUSch995c2x4=;
-        b=Ds5Zi1ry3282eXhOulReQjla/6WKQ9lQEkDoOEsF+yTq0NpkYnLt3Q3KnYKsVBff4u
-         sIo/r6L9TcyetNKdnmHm62ixn6dO+Kuc07ooysi118mMNBDVbmeRlkx5C6JTFhROGbcD
-         bzE5tNCQipb9A331Lq8QHr74b4blFcoSlLOBCv+9SD2kkX+u547qNi+li7CHYOGhXnn9
-         aGeoh8F3D05UvbpcCN3jfzB/YBAMvIEX95rFRkwrWaVygFNXsb69vLheOQYaJwfg4Ov0
-         n/Gz7XmMJ/2tEwQVLuG30x2918XArXwNS+d5oleBKwbcl/EnSYsOlPgUik/xayfGFQjq
-         zQqw==
-X-Gm-Message-State: AC+VfDykEoTN7xrHJaA+BY5iQidd3AFkj8ro63dMtw+RB5vpa1Hj8Eyd
-        Zp77k3HdSlrB11+qIxL3wbokAUATz/s7IvKwsOSt
-X-Google-Smtp-Source: ACHHUZ7m7iuWUD5omxnx19xTgvLnN/+5Wgfo2oM56GLLAkTkIZomD+UUzUvvSVfeDFHavflonxguaAqx7fdYrFqY+DA=
-X-Received: by 2002:a81:53c5:0:b0:55d:c2c3:fbb8 with SMTP id
- h188-20020a8153c5000000b0055dc2c3fbb8mr34245755ywb.40.1684338674184; Wed, 17
- May 2023 08:51:14 -0700 (PDT)
+        bh=hLN4hR+vf8IV6dL3Yiybxphtk3K6xzfKOo/BEcKtKBw=;
+        b=J6j0qKcROnQNcxaCTf4gTGWkpPIe46saldFCYGIc/2NwY1uFK0qBBmtbxMP9LAZkq9
+         Wf3d6cmqdTT2pcwL0LcenHwTU+N+VpHpNjseM2xRFMCkG8uI23NhVNPgU7Eyi6DKTuYC
+         QLbKoo5rITpC9T52Ff2ZnaEfU2K15fXVi+P5g1yp3ozH4YHOAoENaQGBjxfKDpjuXw/k
+         iXCRmrRYWDEVf+1mfVpf31UHJ3wjXa4zmGhMA6YfPhPyqcY0BvgPvbZnqwM4J3F/GOZM
+         nA05NMC9fbU6mLf2ptRZ6KkHVXOx3blLPCeVgivscvrEOFKVkuNocTffG2o5bQM5mGtJ
+         gbJg==
+X-Gm-Message-State: AC+VfDzhpyJFsNJMYMUNLut1DFWrpqYNV1lt8d6mCoj4FwawFm1dX/5W
+        w3AJsK8kSRKlWobe1smJdOUi0riUolTSBWIiSLe5
+X-Google-Smtp-Source: ACHHUZ4+IsvnlJEX2APNGtVxoy8mXlTEJbRZACJCN1aFcwjRqrckilVZgTSgsbJNap+PfCiYLX0Zgk5BP8qfmOjvE/k=
+X-Received: by 2002:a25:31c2:0:b0:ba8:1d2a:8096 with SMTP id
+ x185-20020a2531c2000000b00ba81d2a8096mr4859580ybx.31.1684339432131; Wed, 17
+ May 2023 09:03:52 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230517131102.934196-5-arnd@kernel.org> <e1a07eed22cb33af2733bdffe42b09f0.paul@paul-moore.com>
- <83422cf8-5d77-4e2f-a854-c2b9a9a94d75@app.fastmail.com>
-In-Reply-To: <83422cf8-5d77-4e2f-a854-c2b9a9a94d75@app.fastmail.com>
+References: <20230508075812.76077-1-eiichi.tsukata@nutanix.com>
+ <CAHC9VhSh3_hiwzKN_YPKyO-s2tE5V0URTMrg_tbR5=cKkjzLrw@mail.gmail.com> <506299C8-B1D0-457D-881B-BF639224A3AD@nutanix.com>
+In-Reply-To: <506299C8-B1D0-457D-881B-BF639224A3AD@nutanix.com>
 From:   Paul Moore <paul@paul-moore.com>
-Date:   Wed, 17 May 2023 11:51:03 -0400
-Message-ID: <CAHC9VhQZyxVhDb0uB-+q7H=e++yq0qEAZGssPjepgnZ3i3_pnA@mail.gmail.com>
-Subject: Re: [PATCH 4/14] audit: avoid missing-prototype warnings
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Arnd Bergmann <arnd@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Eric Paris <eparis@redhat.com>,
-        Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>,
-        Christoph Lameter <cl@linux.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        audit@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
+Date:   Wed, 17 May 2023 12:03:41 -0400
+Message-ID: <CAHC9VhQg6aF_MKgkfY5RxgBgfVpUrU=xOTHenob++nmW5=aWug@mail.gmail.com>
+Subject: Re: [PATCH 0/4] audit: refactor and fix for potential deadlock
+To:     Eiichi Tsukata <eiichi.tsukata@nutanix.com>
+Cc:     "eparis@redhat.com" <eparis@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "audit@vger.kernel.org" <audit@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <audit.vger.kernel.org>
 X-Mailing-List: audit@vger.kernel.org
 
-On Wed, May 17, 2023 at 10:51=E2=80=AFAM Arnd Bergmann <arnd@arndb.de> wrot=
-e:
-> On Wed, May 17, 2023, at 16:33, Paul Moore wrote:
-> > On May 17, 2023 Arnd Bergmann <arnd@kernel.org> wrote:
->
-> > We probably should move the audit_serial() and auditsc_get_stamp()
-> > away from the watch/mark/tree functions, but that isn't your problem.
+On Mon, May 8, 2023 at 9:49=E2=80=AFPM Eiichi Tsukata
+<eiichi.tsukata@nutanix.com> wrote:
+> > On May 8, 2023, at 23:07, Paul Moore <paul@paul-moore.com> wrote:
+> > On Mon, May 8, 2023 at 3:58=E2=80=AFAM Eiichi Tsukata
+> > <eiichi.tsukata@nutanix.com> wrote:
+> >> Commit 7ffb8e317bae ("audit: we don't need to
+> >> __set_current_state(TASK_RUNNING)") accidentally moved queue full chec=
+k
+> >> before add_wait_queue_exclusive() which introduced the following race:
+> >>
+> >>    CPU1                           CPU2
+> >>  =3D=3D=3D=3D=3D=3D=3D=3D                       =3D=3D=3D=3D=3D=3D=3D=
+=3D
+> >>  (in audit_log_start())         (in kauditd_thread())
+> >>
+> >>  queue is full
+> >>                                 wake_up(&audit_backlog_wait)
+> >>                                 wait_event_freezable()
+> >>  add_wait_queue_exclusive()
+> >>  ...
+> >>  schedule_timeout()
+> >>
+> >> Once this happens, both audit_log_start() and kauditd_thread() can cau=
+se
+> >> deadlock for up to backlog_wait_time waiting for each other. To preven=
+t
+> >> the race, this patch adds queue full check after
+> >> prepare_to_wait_exclusive().
 > >
-> > Anyway, this looks okay to me; do you have a problem if I merge this
-> > via the audit/next branch or were you hoping to have this go in
-> > through a different tree?
+> > Have you seen this occur in practice?
 >
-> Merging it through your tree is probably best, Andrew can either
-> pick the ones that nobody else took, or I can resend the rest.
+> Yes, we hit this issue multiple times, though it=E2=80=99s pretty rare as=
+ you are mentioning.
+> In our case, sshd got stuck in audit_log_user_message(), which caused SSH=
+ connection
+> timeout.
 
-Easy enough, merged to audit/next, thanks.
+Sorry for the delay, I was away at a conference last week.
 
---=20
+Regardless of how we tweak the wait, there is always going to be a
+chance that rescheduling the task with a timeout is going to impact
+the application.  If you have sensitive applications where this is
+proving to be a problem I would suggest tuning your backlog size, the
+wait time, or removing the backlog limit entirely.
+
+--
 paul-moore.com
