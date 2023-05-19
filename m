@@ -2,213 +2,90 @@ Return-Path: <audit-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AC5C7C7EE2A
-	for <audit@archiver.kernel.org>; Thu, 18 May 2023 03:55:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6210AC7EE29
+	for <audit@archiver.kernel.org>; Fri, 19 May 2023 20:54:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229923AbjERDzD (ORCPT <rfc822;audit@archiver.kernel.org>);
-        Wed, 17 May 2023 23:55:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56066 "EHLO
+        id S230430AbjESUyk (ORCPT <rfc822;audit@archiver.kernel.org>);
+        Fri, 19 May 2023 16:54:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229924AbjERDy7 (ORCPT <rfc822;audit@vger.kernel.org>);
-        Wed, 17 May 2023 23:54:59 -0400
-Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 494071720
-        for <audit@vger.kernel.org>; Wed, 17 May 2023 20:54:57 -0700 (PDT)
-Received: by mail-il1-x12d.google.com with SMTP id e9e14a558f8ab-338458a9304so56505ab.1
-        for <audit@vger.kernel.org>; Wed, 17 May 2023 20:54:57 -0700 (PDT)
+        with ESMTP id S230405AbjESUyk (ORCPT <rfc822;audit@vger.kernel.org>);
+        Fri, 19 May 2023 16:54:40 -0400
+Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E39EA18F
+        for <audit@vger.kernel.org>; Fri, 19 May 2023 13:54:38 -0700 (PDT)
+Received: by mail-qk1-x736.google.com with SMTP id af79cd13be357-74e4f839ae4so201618785a.0
+        for <audit@vger.kernel.org>; Fri, 19 May 2023 13:54:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684382096; x=1686974096;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=P3IAz1W8qxkBwshZFMhKGkzrtWM7zX9oZVwhK/wyzqk=;
-        b=mwLaKU+/oFsGa3KXhv6l6MCXPVbS8KkwYgS83BfZ6EyxEIvn1sI+i34gtuoyvV0Bft
-         3Tx8BaJDwoq3RSfxa6tvt8HfeN7itnLFlrYUVU9Sr+YZVYQgxWVdrWtbsK6bcX+zBkvF
-         vCtU8z73k3zEMM7EXFNP79g63HTsyxBDou0hFMEAPZuxKLmxjX33RdJSsGFuw4x25qb5
-         knB79qiyjbCDJzEheoG5QawbLnescXL4N4pChJMBLDIUVhKkWA8JtK81BTAg966D22h7
-         UPB6NVY/7HCQvqOZlhJIZBCkWxhllSQC/pZ59ytkCsjExJ/DPNWglba178NjVxPHBdez
-         ivBg==
+        d=paul-moore.com; s=google; t=1684529678; x=1687121678;
+        h=in-reply-to:references:subject:to:from:message-id:date:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=EftTN48XIscLx2uPCkmTyhD/m2bm/FDn6sy7vahCgjE=;
+        b=T7FKOsXM1ouz72HThuuahoyILhW+FggCWQ0iUHvRy8NX46GoZO1s1XPgTMD5+zu8yW
+         H8gd+7zo2OMD0QOAtOZUJRfxtC3qvcCU4fHiqXCWGLATXerO86WECoCIcyVV3WYjBYMA
+         Ar4QUVBJY+kZVggbjC2kTWOLtwA14A0xp2txTBgBzH0/TIATr4dz5NYHOPtmtmMMZrdT
+         hwUhCyxerV44prjl1aOLDuao9IXmhbj2vbnG2RlNvW1w+65GgO1KcKI0p5TdE8p23Irq
+         ftdl+yICQ4jqVm4f6dRhcODUemWe/hn8o61kZBSS/VuymVpryo0fwpX3zhZLJiLiqLw4
+         vnQA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684382096; x=1686974096;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=P3IAz1W8qxkBwshZFMhKGkzrtWM7zX9oZVwhK/wyzqk=;
-        b=L0HA5whXGMmf48a9M9dpwt5x7RPMxSMwQ/tXFtIDCtqpg0BZ2U6aofixI5u2Bpied2
-         C+Z5TzwNEdultO/gItDnGiSAcBysAVJRAdoeFd8Hxv4HNVuLiF08mOJv6RXMCoLU+Ln9
-         m8qTuLEDAG3+EPuHGoJHJbVgKmiafg6+cX30C+3z9Zjdhogm9mK4L3sYXShrNR3eyJbd
-         rCri23QQ6bcFbkXr3g6jyTDDB1JfM6k4Iwo3IjJXBjMaIN0XdwdF8vBLSOadgi+Mv3EA
-         sFggqK2Mq6sRo5Y7Haa1niEpBrz3+YJEztL7sp7/+JAsjo/GjwrWsYxY7dOsss0ivr70
-         qRzQ==
-X-Gm-Message-State: AC+VfDyAAN1AcCiy4LDHXiWlNHOUB5ON6yDaK8cJoseB+7ZlZcFXiQsK
-        bnx2qyWhP3kpjH30PLe0jX1fyrOzCOZiHQNyeaR71A==
-X-Google-Smtp-Source: ACHHUZ717zmrczolPQ87hbWdJhPbrvKwtnmjQulUOZnWQ5Q0uegRkL12ChK1bcl526dLzNN00CxdtF2jaAUwZjfOdVw=
-X-Received: by 2002:a05:6e02:2145:b0:331:4d3c:db55 with SMTP id
- d5-20020a056e02214500b003314d3cdb55mr133492ilv.4.1684382096471; Wed, 17 May
- 2023 20:54:56 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230517131102.934196-1-arnd@kernel.org> <20230517131102.934196-10-arnd@kernel.org>
-In-Reply-To: <20230517131102.934196-10-arnd@kernel.org>
-From:   David Gow <davidgow@google.com>
-Date:   Thu, 18 May 2023 11:54:44 +0800
-Message-ID: <CABVgOSnu4B2O49O012=ywvmskso3cfbYRbdhX2RXA1C1v-ymSw@mail.gmail.com>
-Subject: Re: [PATCH 09/14] kunit: include debugfs header file
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Paul Moore <paul@paul-moore.com>,
-        Eric Paris <eparis@redhat.com>,
-        Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>,
-        Christoph Lameter <cl@linux.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        audit@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000008d3ad205fbefc468"
+        d=1e100.net; s=20221208; t=1684529678; x=1687121678;
+        h=in-reply-to:references:subject:to:from:message-id:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=EftTN48XIscLx2uPCkmTyhD/m2bm/FDn6sy7vahCgjE=;
+        b=QAq76p0MpKJ6LQOZoSFfBw3IcdbaxKr6X4+mWoTpU58JYLyWR3GRyJsI/eAOwEcgnh
+         yNZ+czlNZNyQET5ts4wHE81/GYY+r2jgZSVIr3oRYu/hu5aunsyOAYUvcuCLaP8fqW8S
+         3+Dy/appQSgoVJ2Z7dXf8wQTRVBwE50wCr9UP4AHQt5CDdomkeVK/olexqiEXVQkjo1g
+         WYaa7RaDLLdYJnFZP5Xxd0ckwYUQr4rRLbW9j2wY9ZCfjHSD76Q1jLE5tY4S6FOs78M5
+         jq+W2bKg/pIk6JTct9J5C9JtZ6hEwVrujhqbVOFgoMrTNEZsZ29eptW3tzlH9In2reJu
+         O5Xw==
+X-Gm-Message-State: AC+VfDyUv0aSEEGtb664qtsQTI++TWdFuvrcotboRa4JX3Pfjox4aZVx
+        KBrwyFrx6l8gp1hBf1VNDO5ZOarMegd+2s47DA==
+X-Google-Smtp-Source: ACHHUZ68wdbTYWzckk23nVLTX5UsgqPNSlaIiYcdUsFAJJ5/q/X/NUngCpJuNjGWGwrpc6B8K/Chsg==
+X-Received: by 2002:a05:622a:4ca:b0:3f2:1778:813c with SMTP id q10-20020a05622a04ca00b003f21778813cmr5339882qtx.31.1684529678042;
+        Fri, 19 May 2023 13:54:38 -0700 (PDT)
+Received: from localhost (pool-108-26-161-203.bstnma.fios.verizon.net. [108.26.161.203])
+        by smtp.gmail.com with ESMTPSA id g8-20020ac84688000000b003e3918f350dsm123813qto.25.2023.05.19.13.54.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 19 May 2023 13:54:37 -0700 (PDT)
+Date:   Fri, 19 May 2023 16:54:36 -0400
+Message-ID: <1be99c1ede70b5c385acc16b59347d02.paul@paul-moore.com>
+From:   Paul Moore <paul@paul-moore.com>
+To:     Eiichi Tsukata <eiichi.tsukata@nutanix.com>, eparis@redhat.com,
+        linux-kernel@vger.kernel.org, audit@vger.kernel.org
+Subject: Re: [PATCH v2 1/5] audit: refactor queue full checks
+References: <20230511052116.19452-2-eiichi.tsukata@nutanix.com>
+In-Reply-To: <20230511052116.19452-2-eiichi.tsukata@nutanix.com>
 Precedence: bulk
 List-ID: <audit.vger.kernel.org>
 X-Mailing-List: audit@vger.kernel.org
 
---0000000000008d3ad205fbefc468
-Content-Type: text/plain; charset="UTF-8"
-
-On Wed, 17 May 2023 at 21:12, Arnd Bergmann <arnd@kernel.org> wrote:
->
-> From: Arnd Bergmann <arnd@arndb.de>
->
-> An extra #include statement is needed to ensure the prototypes
-> for debugfs interfaces are visible, avoiding this warning:
->
-> lib/kunit/debugfs.c:28:6: error: no previous prototype for 'kunit_debugfs_cleanup' [-Werror=missing-prototypes]
-> lib/kunit/debugfs.c:33:6: error: no previous prototype for 'kunit_debugfs_init' [-Werror=missing-prototypes]
-> lib/kunit/debugfs.c:102:6: error: no previous prototype for 'kunit_debugfs_create_suite' [-Werror=missing-prototypes]
-> lib/kunit/debugfs.c:118:6: error: no previous prototype for 'kunit_debugfs_destroy_suite' [-Werror=missing-prototypes]
->
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+On May 11, 2023 Eiichi Tsukata <eiichi.tsukata@nutanix.com> wrote:
+> 
+> Currently audit queue full checks are done in multiple places.
+> Consolidate them into one audit_queue_full().
+> 
+> Signed-off-by: Eiichi Tsukata <eiichi.tsukata@nutanix.com>
 > ---
+>  kernel/audit.c | 21 +++++++++++----------
+>  1 file changed, 11 insertions(+), 10 deletions(-)
+> 
+> diff --git a/kernel/audit.c b/kernel/audit.c
+> index 9bc0b0301198..c15694e1a76b 100644
+> --- a/kernel/audit.c
+> +++ b/kernel/audit.c
+> @@ -341,6 +341,12 @@ static inline int audit_rate_check(void)
+>  	return retval;
+>  }
+>  
+> +static inline int audit_queue_full(const struct sk_buff_head *queue)
+> +{
+> +	return audit_backlog_limit &&
+> +	       (skb_queue_len(queue) > audit_backlog_limit);
+> +}
 
-Nice catch, thanks. I'm fine with this going in via -mm, but if you'd
-prefer it to go via kselftest/kunit, let me know.
+Regardless of the other patches in this series, this seems like a
+good candidate to merge, but could you make it return a 'bool'
+instead of an 'int'?
 
-Reviewed-by: David Gow <davidgow@google.com>
-
-Cheers,
--- David
-
->  lib/kunit/debugfs.c | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/lib/kunit/debugfs.c b/lib/kunit/debugfs.c
-> index b08bb1fba106..22c5c496a68f 100644
-> --- a/lib/kunit/debugfs.c
-> +++ b/lib/kunit/debugfs.c
-> @@ -10,6 +10,7 @@
->  #include <kunit/test.h>
->
->  #include "string-stream.h"
-> +#include "debugfs.h"
->
->  #define KUNIT_DEBUGFS_ROOT             "kunit"
->  #define KUNIT_DEBUGFS_RESULTS          "results"
-> --
-> 2.39.2
->
-> --
-> You received this message because you are subscribed to the Google Groups "KUnit Development" group.
-> To unsubscribe from this group and stop receiving emails from it, send an email to kunit-dev+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgid/kunit-dev/20230517131102.934196-10-arnd%40kernel.org.
-
---0000000000008d3ad205fbefc468
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
-IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
-dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
-6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
-c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
-I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
-AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
-BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
-CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
-AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
-MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
-My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
-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
-9IGQSBx2i4m+hGXJpET+MEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
-dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
-AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
-c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
-LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
-LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
-Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQCRI3Z4cAidgFcv
-Usqdz765x6KMZSfg/WtFrYg8ewsP2NpCxVM2+EhPyyEQ0k0DhtzdtGoI/Ug+jdFDyCKB9P2+EPLh
-iMjMnFILp7Zs4r18ECHlvZuDZfH9m0BchXIxu5jLIuQyKUWrCRDZZEDNr510ZhhVfYSFPA8ms1nk
-jyzYFOHYQyv5IfML/3IBFKlON5OZa+V8EZYULYcNkp03DdWglafj7SXZ1/XgAbVYrC381UvrsYN8
-jndVvoa1GWwe+NVlIIK7Q3uAjV3qLEDQpaNPg1rr0oAn6YmvTccjVMqj2YNwN+RHhKNzgRGxY5ct
-FaN+8fXZhRhpv3bVbAWuPZXoMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
-R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABAz5xDls09r2CKyYRqnNbMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCDy
-NkOhXvFQzVSUzEL0U7yvjVToTpRRBqjD19aTuf2q2DAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMzA1MTgwMzU0NTZaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
-BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEASZj0gEQ+5lxvkjrq4q9q
-5mjjTag80+oStNj31xLxqT9znMHS6iSot1ydtlpdvi9KdzvHQkJ5IfDglO7zxa85QP3Lhwohu3HQ
-1cbrnbPsqFIuxwtIedSAC+CdtmId3fIoU+8q92Zza/gTeeyK3s8SRAEIR+zVMTo6nht+KGLmnbjS
-jDw7GiibXzfchEqEe8JdqMANIZ8AcQHWuSZ38ur+pCivS7W1SNK9aGCYOOnal1mK/1wdBSpcih2H
-Vn7dKVT/tdMUCJlrZroJgr8RVfnmuLzPayYKnQyrYyEvM41vYYv6cMaW24VTXfFEaf5srz2yzOhq
-zEItkzXw9MlVZ+tLJA==
---0000000000008d3ad205fbefc468--
+--
+paul-moore.com
