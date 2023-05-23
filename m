@@ -2,125 +2,102 @@ Return-Path: <audit-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6A961C7EE26
-	for <audit@archiver.kernel.org>; Tue, 23 May 2023 21:07:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 76357C7EE26
+	for <audit@archiver.kernel.org>; Tue, 23 May 2023 21:51:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233678AbjEWVHl (ORCPT <rfc822;audit@archiver.kernel.org>);
-        Tue, 23 May 2023 17:07:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53408 "EHLO
+        id S238602AbjEWVu7 (ORCPT <rfc822;audit@archiver.kernel.org>);
+        Tue, 23 May 2023 17:50:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230310AbjEWVHl (ORCPT <rfc822;audit@vger.kernel.org>);
-        Tue, 23 May 2023 17:07:41 -0400
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EAC6FA
-        for <audit@vger.kernel.org>; Tue, 23 May 2023 14:07:40 -0700 (PDT)
-Received: by mail-yb1-xb33.google.com with SMTP id 3f1490d57ef6-ba865ac594bso322116276.0
-        for <audit@vger.kernel.org>; Tue, 23 May 2023 14:07:40 -0700 (PDT)
+        with ESMTP id S238543AbjEWVu6 (ORCPT <rfc822;audit@vger.kernel.org>);
+        Tue, 23 May 2023 17:50:58 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9419EE5A
+        for <audit@vger.kernel.org>; Tue, 23 May 2023 14:50:40 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id ffacd0b85a97d-30789a4c537so20065f8f.0
+        for <audit@vger.kernel.org>; Tue, 23 May 2023 14:50:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1684876059; x=1687468059;
+        d=cloudflare.com; s=google; t=1684878639; x=1687470639;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=bVP5LzI/ve6jH4tK/34zZWM+53m2j3w2mH0VmjtpPeA=;
-        b=BfOSh5wSWWFyUGOELRl6BA8JloMrd9gWi6XndKWHrmOVB5kj5WEP34HTYQDJ9svaJl
-         TCBbGCVgjgvMYBYMZRpiYR2GyoNTtlbh2ZI+2FYb+Us3BFX5qwLFUfBqzJ1uVw3HRgWv
-         rsOAQWREV1qadXXmHnJIrlCZRJV2Wdg5RDl2tF4Nb6qtELTj0Z5noRMAIEhD6CoCRAzl
-         SH1VMw49JC4YVgu6nut/Gz/9U8JH/90UEKQMV8GBQBSNy/sZ96uT6dxGr+KztfWC9kTn
-         yw+N8XIxDkbtkOvC4ZkqNxhbH68wTiYNDOcyDUppC5EgSdSllj7ipLr1kudbcR0W6Fjr
-         Bs1w==
+        bh=6J6tMHyvFrOcwG0jlhJO8dd6aDQxsBeyHtoQoAF3lB8=;
+        b=mzhpbjdw1OSIUhqFFtQGUP/6Jyij6fJOYZ32o2BNK8tezWHzLOxA7m856Zib1HkW86
+         RcbBSwkYCL6gg54LGBF4jnz8aa61CtX17MvQi3tV3oigRpmosKghef2D3QGkW8hA6XKO
+         zF1WRY8NOMmtZ2nF+8WZZ25zJ0rzL1dH32Nk0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684876059; x=1687468059;
+        d=1e100.net; s=20221208; t=1684878639; x=1687470639;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=bVP5LzI/ve6jH4tK/34zZWM+53m2j3w2mH0VmjtpPeA=;
-        b=GURYmK6cMWvL+0wUymCGznyrsfr/7mtBkRG6QTELGe++/VIKHy5FKfpD/nx8VefqXB
-         dnb8HLNBQMkjhMyIRfZfDgkR1cJxEwWdGlhuAy06Lr+ed52XolXNw2DylP2nbeYqVMZz
-         PwmNs4TSLCsFkJFvobpIm9asogRX4bHoydR/tY9awyPBmz+rv29YBjv7MYbwJ6KaB3QC
-         z+6aq4xst+a1eM3mXJtdA/ceaKYMkhnM8auF/bF8LSAnKQwqRK/0E9Y9gELP5MbqH1HH
-         rzjFLliTQdZ1g9hueBc7YAE5R6/aNNTuXnAveFcM5EJXD+CgCpCoo5WFUTYt8izxRrVC
-         ci8A==
-X-Gm-Message-State: AC+VfDyIE1RvYTB8RmvsfwrDrQL4cPvycB45IiW8PPrB3lJk4oSJe3v3
-        QDdW1dFYnU8RBLh43613ZVJ3ZFnJ+BPbfpaVzypKht2t9KPFeJY=
-X-Google-Smtp-Source: ACHHUZ5rK3Ve6yCeCDSShfAm6OgVIhvIZmYYhAR1Cqf2UEFL4h8UfkO54aX2mwgZ58gCQ2Lrv0I6QYLEffpa3imx3Rk=
-X-Received: by 2002:a81:9206:0:b0:55a:2ce1:2353 with SMTP id
- j6-20020a819206000000b0055a2ce12353mr15770843ywg.2.1684876059326; Tue, 23 May
- 2023 14:07:39 -0700 (PDT)
+        bh=6J6tMHyvFrOcwG0jlhJO8dd6aDQxsBeyHtoQoAF3lB8=;
+        b=IKwfWFk+F1viTd1jaYW5wku08nlFNhJxhwwH1FC/U+T75kqf5J06QP+19EBr/jWP1R
+         ezrL2yuBNY8rIIEGqxw9vQWgcApj1yZZO46XbT1ma+RylHg4YMRnm6EqOIJtDLApUhfJ
+         XT+D3FADtIxEINb33uraCyIbSmZBJh4Jkj7GH6RMVJre4atjlu5hyKiC6hb8nIa4cbja
+         W69A3gyCZjhD5Cfto+RGZ6cN/ro7dwSCmBCrRJuNdZinYKFijdd6/uCWKWGnQaNM8aOU
+         7kze5mqlrvNeY1oW71rQwASpo6eVTYmRAzOD5e9obLGty/FpNG9r/HnO9yXZmCHmDdaj
+         fjRg==
+X-Gm-Message-State: AC+VfDz6s/IaojfzLmx3qOsyNJdVzCUG8SPOlBHEF9oSvee/5YaJDmhu
+        3jsDxwLSjr9P09rwWZPA8coFAaxItg07D4pTgOcwJsuUYTs7zQcz9J4=
+X-Google-Smtp-Source: ACHHUZ77ktq2SZqtw0VOQD9K5mXATk8+8O9mStErD1qNFrmPGlSLofDwqDj1JpXjweKSZfnTpsQ7WVrhfRXOS4B83QM=
+X-Received: by 2002:a5d:43cb:0:b0:306:2c39:5d52 with SMTP id
+ v11-20020a5d43cb000000b003062c395d52mr11022072wrr.57.1684878639084; Tue, 23
+ May 2023 14:50:39 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230511052116.19452-6-eiichi.tsukata@nutanix.com>
- <e9edf9db340cbf753fce43772abdef4e.paul@paul-moore.com> <CB4B209E-8931-4FEC-A967-F3D50C0D7B1C@nutanix.com>
- <F900B719-7760-4E22-82A2-933ED775AA19@nutanix.com>
-In-Reply-To: <F900B719-7760-4E22-82A2-933ED775AA19@nutanix.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Tue, 23 May 2023 17:07:28 -0400
-Message-ID: <CAHC9VhQ73CcDtO7DAaRaN3aJiSBn_XQLAO83iGuGchky5hOvDg@mail.gmail.com>
-Subject: Re: [PATCH v2 5/5] audit: do not use exclusive wait in audit_receive()
-To:     Eiichi Tsukata <eiichi.tsukata@nutanix.com>
-Cc:     "eparis@redhat.com" <eparis@redhat.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "audit@vger.kernel.org" <audit@vger.kernel.org>
+References: <20230523181624.19932-1-ivan@cloudflare.com> <CAHC9VhTtbbiwyOqiFfveWF6hV-Wb5cuhk0r8EdUi0kVb0v4P_Q@mail.gmail.com>
+In-Reply-To: <CAHC9VhTtbbiwyOqiFfveWF6hV-Wb5cuhk0r8EdUi0kVb0v4P_Q@mail.gmail.com>
+From:   Ivan Babrou <ivan@cloudflare.com>
+Date:   Tue, 23 May 2023 14:50:27 -0700
+Message-ID: <CABWYdi2A8ZfVJjmDpwiNhvYD8m-+PC5MsNRzofX7SXn2TTyY9Q@mail.gmail.com>
+Subject: Re: [PATCH] audit: check syscall bitmap on entry to avoid extra work
+To:     Paul Moore <paul@paul-moore.com>
+Cc:     audit@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@cloudflare.com, Eric Paris <eparis@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <audit.vger.kernel.org>
 X-Mailing-List: audit@vger.kernel.org
 
-On Mon, May 22, 2023 at 11:58=E2=80=AFPM Eiichi Tsukata
-<eiichi.tsukata@nutanix.com> wrote:
-> > On May 22, 2023, at 13:44, Eiichi Tsukata <eiichi.tsukata@nutanix.com> =
-wrote:
-> >> On May 20, 2023, at 5:54, Paul Moore <paul@paul-moore.com> wrote:
-> >> On May 11, 2023 Eiichi Tsukata <eiichi.tsukata@nutanix.com> wrote:
-> >>>
-> >>> kauditd thread issues wake_up() before it goes to sleep. The wake_up(=
-)
-> >>> call wakes up only one process as waiter side uses exclusive wait.
-> >>> This can be problematic when there are multiple processes (one is in
-> >>> audit_receive() and others are in audit_log_start()) waiting on
-> >>> audit_backlog_wait queue.
-> >>>
-> >>> For example, if there are two processes waiting:
-> >>>
-> >>> Process (A): in audit_receive()
-> >>> Process (B): in audit_log_start()
-> >>>
-> >>> And (A) is at the head of the wait queue. Then kauditd's wake_up() on=
-ly
-> >>> wakes up (A) leaving (B) as it is even if @audit_queue is drained. As=
- a
-> >>> result, (B) can be blocked for up to backlog_wait_time.
-> >>>
-> >>> To prevent the issue, use non-exclusive wait in audit_receive() so th=
-at
-> >>> kauditd can wake up all waiters in audit_receive().
-> >>>
-> >>> Fixes: 8f110f530635 ("audit: ensure userspace is penalized the same a=
-s the kernel when under pressure")
-> >>> Signed-off-by: Eiichi Tsukata <eiichi.tsukata@nutanix.com>
-> >>> ---
-> >>> kernel/audit.c | 17 +++++++++++------
-> >>> 1 file changed, 11 insertions(+), 6 deletions(-)
-> >>
-> >> This was also discussed in the last patchset.
-> >
-> > This bug is much easily reproducible on real environments and can cause=
- problematic
-> > user space failure like SSH connection timeout.
-> > Let=E2=80=99s not keep the bug unfixed.
-> > (Of course we=E2=80=99ve already carefully tuned audit related params a=
-nd user space auditd config so that our product won=E2=80=99t hit backlog f=
-ull.)
+On Tue, May 23, 2023 at 12:59=E2=80=AFPM Paul Moore <paul@paul-moore.com> w=
+rote:
+> Before seriously considering something like this, I would really like
+> to see some time put into profiling the original overhead and some
+> designs on how that could be improved.  Without that, patches like
+> this look like drive-by band-aids which have already caused enough
+> headaches for audit maintenance.
 
-Good.  Resolving your issues through audit runtime configuration is
-the proper solution to this.
+Hello Paul,
 
-> > BTW, the default backlog_wait_time is 60 * HZ which seems pretty large.
-> > I=E2=80=99d appreciate if you could tell me the reason behind that valu=
-e.
+Could you elaborate on what exactly you would like to see added? It's
+not clear to me what is missing.
 
-I do not recall the original logic behind that value.  It is likely
-that the original value predated my maintenance of the audit
-subsystem.
+There's a benchmark in the commit description with the numbers
+attached, which quantifies and explains the existing overhead. In my
+experience, people on Linux mailing lists frown upon external links to
+images, but if it helps to visualize the effects, I have some
+flamegraphs for the benchmark from the commit message:
 
---=20
-paul-moore.com
+* 10 rules, before:
+https://r2.ivan.computer/audit-syscall-bitmap/flamegraph-before.svg?s=3Daud=
+it
+* 10 rules, with patch applied:
+https://r2.ivan.computer/audit-syscall-bitmap/flamegraph-after.svg?s=3Daudi=
+t
+
+Here's a couple extra:
+
+* 0 rules, auditd running:
+https://r2.ivan.computer/audit-syscall-bitmap/flamegraph-after.svg?s=3Daudi=
+t
+* 11 rules (extra rule matching the running syscalls):
+https://r2.ivan.computer/audit-syscall-bitmap/flamegraph-after-match.svg?s=
+=3Daudit
+
+The bitmap design mirrors what tracepoints implement for syscall entry/exit=
+:
+
+* https://elixir.bootlin.com/linux/v6.4-rc1/source/kernel/trace/trace_sysca=
+lls.c#L585
+
+I am happy to consider a different design if you have one in mind.
