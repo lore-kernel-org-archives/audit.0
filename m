@@ -2,99 +2,101 @@ Return-Path: <audit-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 40613C7EE2D
-	for <audit@archiver.kernel.org>; Wed, 24 May 2023 17:33:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B2801C77B7C
+	for <audit@archiver.kernel.org>; Wed, 24 May 2023 18:05:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234958AbjEXRdU convert rfc822-to-8bit (ORCPT
-        <rfc822;audit@archiver.kernel.org>); Wed, 24 May 2023 13:33:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50024 "EHLO
+        id S235564AbjEXSFN (ORCPT <rfc822;audit@archiver.kernel.org>);
+        Wed, 24 May 2023 14:05:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235060AbjEXRdT (ORCPT <rfc822;audit@vger.kernel.org>);
-        Wed, 24 May 2023 13:33:19 -0400
-Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65FF812E;
-        Wed, 24 May 2023 10:33:18 -0700 (PDT)
-Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-51097a4f330so311391a12.0;
-        Wed, 24 May 2023 10:33:18 -0700 (PDT)
+        with ESMTP id S234534AbjEXSFM (ORCPT <rfc822;audit@vger.kernel.org>);
+        Wed, 24 May 2023 14:05:12 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43B28E7
+        for <audit@vger.kernel.org>; Wed, 24 May 2023 11:05:08 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id ffacd0b85a97d-306dbad5182so846287f8f.1
+        for <audit@vger.kernel.org>; Wed, 24 May 2023 11:05:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google; t=1684951506; x=1687543506;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=nGNgbJnX0tVJRsKgUg1OydGKxpSLVGxD0LmlnA5I/bM=;
+        b=T3bmdGNXzv6F/ZNJVh0QwRzqZQCki3KwhMEXYoFLZNVZ5sc0qmYH8Fw8Tzu+29lruu
+         yEXlDnvHD/EQop4XIpBtPbjIHYvfCVyHtfiVhOtp22z5Nuk0mjwClPsGrymFR4Dlcz5i
+         kC+uv1iA7XZSuF5J3ShKIQMHCCh4rd5bTUStI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684949597; x=1687541597;
+        d=1e100.net; s=20221208; t=1684951506; x=1687543506;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=LCSKoj+QaYMGiALxKIVygFGEfEGQMG7Gw+jdrUBXjYI=;
-        b=QjmIs1SU39Gf2T4z3QvfIc/ApguHIhSJ13yhSoq2Z2Z491ppcXJa/1Do1+O55SZ2Rc
-         ZyKbgbX7jUNe06FYYeOKsM3k2E+2Gw+l/Z+PbhVyBzYtQNAyDpOM2j8PBYMHZjLfj+dP
-         eNPtk544mJteUsEpVixGQ5FNkyx05edYhqmN/yzNyq4aNouXS2vyxD03ATiqft/Q1wAI
-         7tzAb98CNu+ASWudQfpUjR8Cj596jFEiS333QjZK+i8C4CJgbZ/b/e7JZ6FY32eD1gMs
-         ViFhfpr8R8U4Wd5MYGI7MMja7skAYBCiKIw8rYz8fIBYW2tOdypvdvSKhb77vo88QeXH
-         Nu1w==
-X-Gm-Message-State: AC+VfDz6xnZ4fu0Be/1bShT3ZJ2zPG6phusACDzxBLqD9V4H0MAjdvJB
-        0pIpEdblBPjHNbRzmvUg+UAph5oGHnd78R5BDZI=
-X-Google-Smtp-Source: ACHHUZ75t5LOoP5fPEw1B3B8AOZ5QAW3p/uA3PR3RjFQ63NrJQ3bU0l+qjgSiV2WQ1zsptMKJ1KiCOsk0UIwyQ0utjI=
-X-Received: by 2002:a17:906:2218:b0:96f:4c38:4b1a with SMTP id
- s24-20020a170906221800b0096f4c384b1amr16403004ejs.5.1684949596574; Wed, 24
- May 2023 10:33:16 -0700 (PDT)
+        bh=nGNgbJnX0tVJRsKgUg1OydGKxpSLVGxD0LmlnA5I/bM=;
+        b=VdRTl23GO7F27QftlfSQ6NUQ3XRiqNP39t9nquW9XumeZ2KcEs0lZQU0t972sOBd/K
+         oQfC4GY1P9qdUbYyCCFlIsj+6RBBI/Ug2sRGJ8wVloJGLj0RSjmb3+EN5v/92Bvehckt
+         ohnDamcVg0AiNUTJhgUM1GzTP6wB/GuC7e5smnHW+Kc1/T6A/4QBRzZh/BVuggUDH95I
+         nDdo59T8lGhp1oOIVP97jaa61NQkx540lGeAYsjwFb0/69puVZEbZDkuL5UOS2Pge3si
+         pcFmbh72rFn874bwUEaNUE2skGlA0miPD+Bw/ZKOm+N3JsdEksu22xJwYS/FcCttNqmd
+         zBFw==
+X-Gm-Message-State: AC+VfDyiqb+XW/bnhVxniFkQ0vQ3S3TwnAzlz+WbqlziQTF1AJ+v4GL/
+        BuU6lCTDovUaUSFjfv3cxKBcz4qITNVRElk7mW9ekUvVicLf+QwJ
+X-Google-Smtp-Source: ACHHUZ6ALmCPhK5rkszARkB26zQAaXHx/UD16iJSre39FqEv+jJsUXS7DYivRjjrf/EemoUmrobXzoF8NaU0TSLh2OI=
+X-Received: by 2002:adf:f58a:0:b0:307:a7af:402c with SMTP id
+ f10-20020adff58a000000b00307a7af402cmr422705wro.41.1684951506392; Wed, 24 May
+ 2023 11:05:06 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230517131102.934196-1-arnd@kernel.org> <20230517131102.934196-11-arnd@kernel.org>
- <CAJZ5v0h0spuxK-7LBJSU9BK2TEOUeMjf7hhKScadkxFN_RwStQ@mail.gmail.com> <6b7f6f66-7890-47a3-a22d-e29f2944823a@app.fastmail.com>
-In-Reply-To: <6b7f6f66-7890-47a3-a22d-e29f2944823a@app.fastmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 24 May 2023 19:33:05 +0200
-Message-ID: <CAJZ5v0h+HNTMcfxFuOeO92D__NzJSTHfjzP5VQG4D+WuNmHpdw@mail.gmail.com>
-Subject: Re: [PATCH 10/14] suspend: add a arch_resume_nosmt() prototype
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Arnd Bergmann <arnd@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
-        Paul Moore <paul@paul-moore.com>,
-        Eric Paris <eparis@redhat.com>,
-        Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>,
-        Christoph Lameter <cl@linux.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        audit@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
+References: <20230523181624.19932-1-ivan@cloudflare.com> <CAHC9VhTtbbiwyOqiFfveWF6hV-Wb5cuhk0r8EdUi0kVb0v4P_Q@mail.gmail.com>
+ <CABWYdi2A8ZfVJjmDpwiNhvYD8m-+PC5MsNRzofX7SXn2TTyY9Q@mail.gmail.com> <CAHC9VhQm9JEFozFMvNuBc_dx+XAqvJCY_Z8Dyf7q_RyDcNu=QA@mail.gmail.com>
+In-Reply-To: <CAHC9VhQm9JEFozFMvNuBc_dx+XAqvJCY_Z8Dyf7q_RyDcNu=QA@mail.gmail.com>
+From:   Ivan Babrou <ivan@cloudflare.com>
+Date:   Wed, 24 May 2023 11:04:55 -0700
+Message-ID: <CABWYdi3_zAVpeTRBou_Br-n6VXeM1xWTCSvu==QWdG4sd+nnnw@mail.gmail.com>
+Subject: Re: [PATCH] audit: check syscall bitmap on entry to avoid extra work
+To:     Paul Moore <paul@paul-moore.com>
+Cc:     audit@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@cloudflare.com, Eric Paris <eparis@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <audit.vger.kernel.org>
 X-Mailing-List: audit@vger.kernel.org
 
-On Wed, May 17, 2023 at 4:52 PM Arnd Bergmann <arnd@arndb.de> wrote:
+On Tue, May 23, 2023 at 7:03=E2=80=AFPM Paul Moore <paul@paul-moore.com> wr=
+ote:
+> > Could you elaborate on what exactly you would like to see added? It's
+> > not clear to me what is missing.
 >
-> On Wed, May 17, 2023, at 15:48, Rafael J. Wysocki wrote:
-> > On Wed, May 17, 2023 at 3:12 PM Arnd Bergmann <arnd@kernel.org> wrote:
-> >>
-> >> From: Arnd Bergmann <arnd@arndb.de>
-> >>
-> >> The arch_resume_nosmt() has a __weak definition, plus an x86
-> >> specific override, but no prototype that ensures the two have
-> >> the same arguments. This causes a W=1 warning:
-> >>
-> >> arch/x86/power/hibernate.c:189:5: error: no previous prototype for 'arch_resume_nosmt' [-Werror=missing-prototypes]
-> >>
-> >> Add the prototype in linux/suspend.h, which is included in
-> >> both places.
-> >>
-> >> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> >
-> > Do you want me to pick this up?
+> I should have been more clear, let me try again ...
 >
-> Yes, please do. Thanks,
+> From my perspective, this patch adds code and complexity to deal with
+> the performance impact of auditing.  In some cases that is the right
+> thing to do, but I would much rather see a more in-depth analysis of
+> where the audit hot spots are in this benchmark, and some thoughts on
+> how we might improve that.  In other words, don't just add additional
+> processing to bypass (slower, more involved) processing; look at the
+> processing that is currently being done and see if you can find a way
+> to make it faster.  It will likely take longer, but the results will
+> be much more useful.
 
-Done, thanks!
+The fastest way to do something is to not do it to begin with. The
+next best thing I could think of is checking a trivial condition (int
+equality + bit check) to bypass the work in the hot path, which is
+what this patch does. I'm not even adding a new condition for this,
+I'm using the existing context->dummy. It is also 100% transparent for
+end users, which get the benefits as long as they don't have any rules
+that target all syscalls.
+
+It's not very useful to see futex() and stat() syscalls being audited
+when we have no rules that target those. The processing of rules in
+exit is already fast for a reasonable set of rules, but we don't have
+to do it to begin with. List iteration is not going to be faster than
+a bit check. For VFS related things we also have to collect paths
+accessed during processing and it's just not useful when we know that
+there is no way these are going to be used.
+
+We started with a ruleset that was matching all syscalls and this was
+very expensive. We reduced it to targeting specific syscalls, which
+made it a lot cheaper, but it's still a very noticeable fraction of
+overall CPU usage (the benchmark in the commit is the evidence of
+that). Not enabling auditing on syscall entry is the next logical step
+in making audit cheap enough to not feel guilty about using it in the
+first place.
