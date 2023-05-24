@@ -2,95 +2,129 @@ Return-Path: <audit-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6C824C7EE23
-	for <audit@archiver.kernel.org>; Wed, 24 May 2023 02:03:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CCE23C7EE2C
+	for <audit@archiver.kernel.org>; Wed, 24 May 2023 10:38:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238529AbjEXCDu (ORCPT <rfc822;audit@archiver.kernel.org>);
-        Tue, 23 May 2023 22:03:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45798 "EHLO
+        id S233506AbjEXKiR (ORCPT <rfc822;audit@archiver.kernel.org>);
+        Wed, 24 May 2023 06:38:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238712AbjEXCDu (ORCPT <rfc822;audit@vger.kernel.org>);
-        Tue, 23 May 2023 22:03:50 -0400
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A41213E
-        for <audit@vger.kernel.org>; Tue, 23 May 2023 19:03:48 -0700 (PDT)
-Received: by mail-yb1-xb32.google.com with SMTP id 3f1490d57ef6-ba8afcc82c0so863677276.2
-        for <audit@vger.kernel.org>; Tue, 23 May 2023 19:03:48 -0700 (PDT)
+        with ESMTP id S233328AbjEXKiM (ORCPT <rfc822;audit@vger.kernel.org>);
+        Wed, 24 May 2023 06:38:12 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7436A13E
+        for <audit@vger.kernel.org>; Wed, 24 May 2023 03:38:05 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id 2adb3069b0e04-4f00c33c3d6so729556e87.2
+        for <audit@vger.kernel.org>; Wed, 24 May 2023 03:38:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1684893828; x=1687485828;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XOon+WJOJI8+JwO5uO9f8iJb1ORFwlHFloJ3UvTpfgc=;
-        b=UFEAXGWkCrWSSfXmpcK4Hs6xsXEnrzSBJxTqWM4F7szWa9/aDVp1VjCZ+UKcK+xoHM
-         PmAOLGT5LfEuMIEKnBZ4wabefUZ+LVmIUFHWn5xPd/bykUkGQPp9j+LZxAlUxONq5uk7
-         yRSm5vIBLRm+wpD08KvTiIaL4QxV9z3DUzne98cb8hqRzh8ZjvRvYreYH6IzQBrEz9eu
-         2UY4MdNfRRyWRFSHaJzQdppmy0L4PtosL8GWXlVCnaPSeXr+e1FJhuwhAiy12y8ENowQ
-         39b1yiQnYgOliG3KAI1y99BlfHwmgGwiStE3PaSK8nM90UWnO9Pg2d6fCU5FbkcPbjrL
-         8vkQ==
+        d=gmail.com; s=20221208; t=1684924683; x=1687516683;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=8aIc+W4jRozyQKjGPCOdblhKfCTo6UqCtNr9GJSvrD0=;
+        b=GbgY+QuZZIfe5ye3TrXEwZKBOH0vJi4aI9jtXMkNotSfy30bvQaJV74qvKZaKmS06V
+         a6wcO7GRTp67LnT+4FBtLhUybuV85ZYgUtsfcJJnWhk9ybGbi7lmEP/CRUKHwmAPamre
+         8speVllNKnGUs8FuZkQvqP5WijdriZdIXX8p3JhuT8jEpK8w8mw7QP9X8/GFjc8ve+fQ
+         1eME5Gjf15pvEzW5g/XOp2xhDJUOTNnSkRmAX1xuwWsrHUusINNvyP3oQ+Ngmp2SsUiF
+         eTjr/w9Lq0AzfKa1Iu0f+3B8XYbTe9Uu4TTB63ySoblGWf3Dk6FhBGArCHLYy/pT7vMA
+         QP+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684893828; x=1687485828;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=XOon+WJOJI8+JwO5uO9f8iJb1ORFwlHFloJ3UvTpfgc=;
-        b=jLI5dF3pOgwhJpxzL+0LLF57E6E5Og7jK3QAu+al8sFZCGXBaNc9ZdzqkBvHVpIomI
-         k++WnvheushEtNe/ptnMB1tMQX7Xued1F+/u0ZPPzocytmKQkDtPvHskTb4zN1PyMe9g
-         bdVL/bfZde9IUQ8oY7MX2ytCkDu1xQ2BJ9wkW7YAj4K8uMJjGmEPmgiFvqLP2XgSnPCK
-         YtlNMZOY4G9Av0xXKedkrKrctoYPiwqR+x03HuCnJxKsUgiS9g4qPlUbzUiX9+mAOf+k
-         7n2UlXTerKmA71u2zejrRrTZ2Ra8/Ro1zse1cQ0nT/FJ0yU+O+mm7PKnwWk4B6WgFBde
-         Xbtg==
-X-Gm-Message-State: AC+VfDzwXFshxd2m8sgnxbeuq7nRT2790DEQ6rjp4OxApxenGOVsqE0N
-        1iDruGD+fzN7OU/pCmE2gft3Pe12m4Q7phcEYM/X
-X-Google-Smtp-Source: ACHHUZ7gejpbuXJwcXtecq2tYyFg25U/Vh6AH2Ix5ntTdGeydgt5znEovV4qhhLIpcEdd+FNyhP4IJNOMr/SKEzPnpg=
-X-Received: by 2002:a25:b120:0:b0:ba6:f32b:28e3 with SMTP id
- g32-20020a25b120000000b00ba6f32b28e3mr17242402ybj.6.1684893827701; Tue, 23
- May 2023 19:03:47 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1684924683; x=1687516683;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=8aIc+W4jRozyQKjGPCOdblhKfCTo6UqCtNr9GJSvrD0=;
+        b=PRMbvcPPJEh6zh2wbM0YYEQhsliL26Ak/kdnIyrV6vnV8+hAXm9MnuPEqHtVatWarn
+         zJR1/NWOZhMLK9BwlASFdavdqfIzQMzEaYIm2W+2XjD6uqGYBITmeWGN4wf96CCIUcaG
+         pX6fWqwBq8a0Jy4UwxyKra9HtkdyiU1XAq1dB5ZHrvQXWCqTmW5aGJ2R2N1GXZbCZDnJ
+         9xTvIpG4ZvUXXPAni2XPF1GsOSp6SskFfaZWpyY9IrySKaUOZBdgxMuMWQmny37XZrKy
+         n7zkP+QteP7hVDLubH+H7DQnIiGa8pWv7rgj6Zq6531MH5JOItCXeHD4bE2DfKzkSr4l
+         iYnw==
+X-Gm-Message-State: AC+VfDwNAJ7IDHOby9HMq1ADgSwxsg+Mo12DsEovTJeUoD3XilzUmz+9
+        U/UEBtaFnF7+JpNgRk9c/0SCTvoE4vTZRA==
+X-Google-Smtp-Source: ACHHUZ7g7cPceUMikyYVFWz/WlBSc4fZEWypRDBoGCo+aCDkVp8a3751hHLICOTYJfkAW8YcXV1isQ==
+X-Received: by 2002:a05:6512:489:b0:4f2:7c91:93f with SMTP id v9-20020a056512048900b004f27c91093fmr5649928lfq.21.1684924683061;
+        Wed, 24 May 2023 03:38:03 -0700 (PDT)
+Received: from [192.168.0.31] ([94.242.171.185])
+        by smtp.gmail.com with ESMTPSA id z4-20020ac25de4000000b004efee5841b9sm1656965lfq.290.2023.05.24.03.38.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 24 May 2023 03:38:02 -0700 (PDT)
+Message-ID: <8406cb9d-0654-b41c-64f9-01aba486b849@gmail.com>
+Date:   Wed, 24 May 2023 13:38:01 +0300
 MIME-Version: 1.0
-References: <20230523181624.19932-1-ivan@cloudflare.com> <CAHC9VhTtbbiwyOqiFfveWF6hV-Wb5cuhk0r8EdUi0kVb0v4P_Q@mail.gmail.com>
- <CABWYdi2A8ZfVJjmDpwiNhvYD8m-+PC5MsNRzofX7SXn2TTyY9Q@mail.gmail.com>
-In-Reply-To: <CABWYdi2A8ZfVJjmDpwiNhvYD8m-+PC5MsNRzofX7SXn2TTyY9Q@mail.gmail.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Tue, 23 May 2023 22:03:36 -0400
-Message-ID: <CAHC9VhQm9JEFozFMvNuBc_dx+XAqvJCY_Z8Dyf7q_RyDcNu=QA@mail.gmail.com>
-Subject: Re: [PATCH] audit: check syscall bitmap on entry to avoid extra work
-To:     Ivan Babrou <ivan@cloudflare.com>
-Cc:     audit@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@cloudflare.com, Eric Paris <eparis@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: Can AUDIT_LIST_RULES causes kthreadd-spam?
+To:     Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+Cc:     audit@vger.kernel.org, linux-audit@redhat.com
+References: <ecd4bf68-3bf1-a1d8-4da5-5fbd28c51a6b@gmail.com>
+ <CAHC9VhTXHLS7bsDJ8-dSp4dQSQRcKRLiTMRYJOJVCY11G5D85A@mail.gmail.com>
+ <e5713a91-37b0-d32f-a0d2-eb668122c9e4@gmail.com>
+ <9ae2c1df-1f20-a40b-35ed-1dc76b122a4f@I-love.SAKURA.ne.jp>
+ <CAHC9VhTfxqrWaJrBccDY9LJR+Fggr__zufD-Wd=0VZwN5bBU6g@mail.gmail.com>
+ <415a4871-4d84-a31f-5417-e850a98bbffd@I-love.SAKURA.ne.jp>
+ <7c4caf66-a0ae-4999-172e-437d6cfc8ff3@gmail.com>
+ <0e748195-d3ba-88c5-1b1e-5a9c447bea57@I-love.SAKURA.ne.jp>
+ <dcb7759f-ffd9-b414-f68b-44707a879312@gmail.com>
+ <f2c12d41-95bb-6e56-4d68-8a4b50ca59fd@I-love.SAKURA.ne.jp>
+Content-Language: en-US, ru-RU
+From:   Rinat Gadelshin <rgadelsh@gmail.com>
+In-Reply-To: <f2c12d41-95bb-6e56-4d68-8a4b50ca59fd@I-love.SAKURA.ne.jp>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <audit.vger.kernel.org>
 X-Mailing-List: audit@vger.kernel.org
 
-On Tue, May 23, 2023 at 5:50=E2=80=AFPM Ivan Babrou <ivan@cloudflare.com> w=
-rote:
-> On Tue, May 23, 2023 at 12:59=E2=80=AFPM Paul Moore <paul@paul-moore.com>=
- wrote:
-> > Before seriously considering something like this, I would really like
-> > to see some time put into profiling the original overhead and some
-> > designs on how that could be improved.  Without that, patches like
-> > this look like drive-by band-aids which have already caused enough
-> > headaches for audit maintenance.
+Hi Tetsuo.
+
+Sorry for my log absence.
+The kthread-spam problem has gone when I've switched to using 
+unicast-netlink connection (like auditd does).
+
+Do we need to make another test with the additional pr_info() ?
+
+On 10.05.2023 16:30, Tetsuo Handa wrote:
+> On 2023/05/10 21:12, Rinat Gadelshin wrote:
+>>> Please try to find who is calling audit_send_reply_thread for many times.
+>>>
+>> I've rebuilt the kernel with 'dump stack()'.
+> Oops, I thought dump_stack() shows pid and comm name, but
+> it is dump_stack_print_info() that shows pid and comm name.
 >
-> Hello Paul,
+>> As far as I can see, it's the exit of `sendto` syscall.
+>> It seems that the kernel just creates a new kthreadd for each sendto syscall.
+>> But I think that I'm wrong and just missing something.
+> Yes, sendto() on netlink socket calls netlink_sendmsg().
+> For some reason, audit_send_reply() is called for many times.
+> audit_send_reply() is called by audit_receive_msg() for the following types.
 >
-> Could you elaborate on what exactly you would like to see added? It's
-> not clear to me what is missing.
-
-I should have been more clear, let me try again ...
-
-From my perspective, this patch adds code and complexity to deal with
-the performance impact of auditing.  In some cases that is the right
-thing to do, but I would much rather see a more in-depth analysis of
-where the audit hot spots are in this benchmark, and some thoughts on
-how we might improve that.  In other words, don't just add additional
-processing to bypass (slower, more involved) processing; look at the
-processing that is currently being done and see if you can find a way
-to make it faster.  It will likely take longer, but the results will
-be much more useful.
-
-Does that make sense?
-
---=20
-paul-moore.com
+>    AUDIT_GET
+>    AUDIT_SIGNAL_INFO
+>    AUDIT_TTY_GET
+>    AUDIT_GET_FEATURE
+>
+> Would you re-caputure with
+>
+> -	dump_stack();
+> +	pr_info("%s %s:%d type=%d\n", __func__, current->comm, current->pid, type);
+>
+> ?
+>
+> Regardless of the result of re-caputure, it seems there is no switch that can
+> prevent audit_send_reply() from calling kthread_run(audit_send_reply_thread).
+>
+> But since kthreadd runs with PID=2 and PPID=0, you might be able to use
+> PID=2 and/or PPID=0 in your rules in order to let kernel audit subsystem
+> ignore kthreadd. (I can't test because I haven't found how to reproduce
+> audit_receive_msg() in my environment...)
+>
+> # cat /proc/2/status
+> Name:   kthreadd
+> Umask:  0000
+> State:  S (sleeping)
+> Tgid:   2
+> Ngid:   0
+> Pid:    2
+> PPid:   0
+>
