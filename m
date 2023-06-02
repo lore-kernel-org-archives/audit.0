@@ -2,102 +2,141 @@ Return-Path: <audit-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1CFEBC77B7A
-	for <audit@archiver.kernel.org>; Thu, 25 May 2023 02:16:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 895E7C77B7A
+	for <audit@archiver.kernel.org>; Fri,  2 Jun 2023 11:09:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236656AbjEYCQS (ORCPT <rfc822;audit@archiver.kernel.org>);
-        Wed, 24 May 2023 22:16:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37216 "EHLO
+        id S235378AbjFBLJ2 (ORCPT <rfc822;audit@archiver.kernel.org>);
+        Fri, 2 Jun 2023 07:09:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236232AbjEYCQM (ORCPT <rfc822;audit@vger.kernel.org>);
-        Wed, 24 May 2023 22:16:12 -0400
-Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15F751B1
-        for <audit@vger.kernel.org>; Wed, 24 May 2023 19:15:50 -0700 (PDT)
-Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-562191bcfb9so244487b3.3
-        for <audit@vger.kernel.org>; Wed, 24 May 2023 19:15:50 -0700 (PDT)
+        with ESMTP id S229452AbjFBLJ1 (ORCPT <rfc822;audit@vger.kernel.org>);
+        Fri, 2 Jun 2023 07:09:27 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A369010D2
+        for <audit@vger.kernel.org>; Fri,  2 Jun 2023 04:08:58 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id 98e67ed59e1d1-25676b4fb78so972564a91.2
+        for <audit@vger.kernel.org>; Fri, 02 Jun 2023 04:08:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1684980944; x=1687572944;
+        d=cloudflare.com; s=google; t=1685704134; x=1688296134;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=f+ykmbunbSMTavDYm2cC5wCQ70/w+yrfqKokU2pUa/E=;
-        b=ZQPTv5nvfUy0tCUe+PyijpeyjNtyS3t+oE375SI9VbLxJTzUtZpvxT6GmIulV45OaJ
-         PgQC/pMRoePHBFKps1iaVohDrCxsU8JB02eBZXGzQ0gM0xRR80OuDBX+yFu9sacRwhwP
-         oSLuU0L5IeSwu4JUbV3atF8Soje0Fo0VrGvqpX86Fw/I1kkzbFiZk/uuTehU0BXftsjW
-         EiCRWkJWN65/Me1pgLNoHu/EXQs8RGc1f3uVqLDaJ24EozLuP75f3r2O7MNl7ExsyzEd
-         KqxfJjMC09sYG0+froE8i35zKiyqug9kr4xIEEsiPbQ61FxN6gz6DpjDRaNG1AatejKD
-         mFLA==
+        bh=CHcwCqmT88QjWYOy6xvs+vHpO7CsG0sAa7G35jZvfsI=;
+        b=OA5XaZY4vmBg0Xt3T0oTbQ5FBUYjYpGRRJSQYv9h48q5t7Dkf3jqL2Wh+VEERk7NaF
+         sKJG0bfTuW3mhSEW9NU6xonNpX6mAnxRubNbYC2CPLTVVHOnOB/toTTXLu5lB83VulJi
+         t592ZJdjDAYP1TAze1mKLCSlRVXfMyExYcMsU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684980944; x=1687572944;
+        d=1e100.net; s=20221208; t=1685704134; x=1688296134;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=f+ykmbunbSMTavDYm2cC5wCQ70/w+yrfqKokU2pUa/E=;
-        b=hOdJDIc7wMKauTQFLXqylj5mHPQKiU82yeldb/kFFEZF5mUI94aBOCd/bOBYliy4i2
-         TGNNzNKksV0UDJaI9w6dprAOW8KLwQX1tEQ5YTMQLFFBlj/9H80B58mMbQ+QxnqV8yke
-         2ybrvJWj9UDOBE6IGXcMz+FivjSfns3kIMF5AwnTRACYW1McVfz27qOA/X/sHqgGH2Wp
-         CvI1GrLlG7g36UftPpJaVDr5sYM53GccYir7rZ/je9tWOZjf7e/Z3rKBXTSzn6EOwpjR
-         dBg+g0tEODIq8eCSynXL4DAE0yQKx59EQT3jDnZJ/GoCIo4ULyHewIRfOdrLKhPg876w
-         0FAg==
-X-Gm-Message-State: AC+VfDxTxF4r0oqiDtnsIo16FX2VVZL6kth9kpvcZV6MXE3WiFALxf8d
-        2gUJtBZE5DKBAwa3H+UveGFsiDUosZBaW954n3Zq
-X-Google-Smtp-Source: ACHHUZ7DBGKRnzGPMn8pKO1h24akzMY7IvEQlCqulZs21z3hu3zLql0mOGpOGcNJWDfCq2t0t+xz5dFsHHENC31W2XE=
-X-Received: by 2002:a0d:cc92:0:b0:561:c184:6568 with SMTP id
- o140-20020a0dcc92000000b00561c1846568mr21324234ywd.18.1684980944143; Wed, 24
- May 2023 19:15:44 -0700 (PDT)
+        bh=CHcwCqmT88QjWYOy6xvs+vHpO7CsG0sAa7G35jZvfsI=;
+        b=b9kh4NgMpjfhayBh5/Wk2V3dpSw5k+mmX76ieLJj/DhODal+XwNheuZtyohsTn407m
+         OfG+NbnctkdcFDyv8FVvC0JL+A+mE4vyaSbs6aBghS8cbXDFzlAXD9Cr+RdGYIZvwqPO
+         tCQp1CsctYg5XPSeWQqkPg83U019c2ZDbTWVLcJeQLOnmU2eMFV51x04K5omtQ7jQjtK
+         jjLlrbXQ8TaBHXUAEdLgSy+jZKUe/kQZjhadiOsor/tTJKQip/mPQymaZgYDY+/DYpVD
+         Q4S3AuN/6wDrVd1vvwoe/t99D5NZhm6YW+LOo4UUKF26GTO+b7PlHDjxTT5AaOLkmGIs
+         XkrA==
+X-Gm-Message-State: AC+VfDxt+pFZ5p/GGViwESFPEJwXOxlwEVxUKpODkjMOmj7SC52Bj6Zw
+        obwaZvoFxbwpD+rrLW1WMy0bbD9yHsJ3PUFiZCqF/Q==
+X-Google-Smtp-Source: ACHHUZ7ixeLRADYE+lRIK1uEgWAVmeFH+PZWdDf7mrNHGv0Y69eO+muKda/HM0JiFvBivGCy5EYJVzsN0ojd+b0ukuY=
+X-Received: by 2002:a17:90b:241:b0:256:b190:2733 with SMTP id
+ fz1-20020a17090b024100b00256b1902733mr995529pjb.33.1685704134531; Fri, 02 Jun
+ 2023 04:08:54 -0700 (PDT)
 MIME-Version: 1.0
 References: <20230523181624.19932-1-ivan@cloudflare.com> <CAHC9VhTtbbiwyOqiFfveWF6hV-Wb5cuhk0r8EdUi0kVb0v4P_Q@mail.gmail.com>
  <CABWYdi2A8ZfVJjmDpwiNhvYD8m-+PC5MsNRzofX7SXn2TTyY9Q@mail.gmail.com>
- <CAHC9VhQm9JEFozFMvNuBc_dx+XAqvJCY_Z8Dyf7q_RyDcNu=QA@mail.gmail.com> <CABWYdi3_zAVpeTRBou_Br-n6VXeM1xWTCSvu==QWdG4sd+nnnw@mail.gmail.com>
-In-Reply-To: <CABWYdi3_zAVpeTRBou_Br-n6VXeM1xWTCSvu==QWdG4sd+nnnw@mail.gmail.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Wed, 24 May 2023 22:15:33 -0400
-Message-ID: <CAHC9VhReahw8G4Vc0eMdhQMLhGYE53=X48akC13rN4EPkiF3tQ@mail.gmail.com>
+ <CAHC9VhQm9JEFozFMvNuBc_dx+XAqvJCY_Z8Dyf7q_RyDcNu=QA@mail.gmail.com>
+ <CABWYdi3_zAVpeTRBou_Br-n6VXeM1xWTCSvu==QWdG4sd+nnnw@mail.gmail.com> <CAHC9VhReahw8G4Vc0eMdhQMLhGYE53=X48akC13rN4EPkiF3tQ@mail.gmail.com>
+In-Reply-To: <CAHC9VhReahw8G4Vc0eMdhQMLhGYE53=X48akC13rN4EPkiF3tQ@mail.gmail.com>
+From:   Ignat Korchagin <ignat@cloudflare.com>
+Date:   Fri, 2 Jun 2023 12:08:43 +0100
+Message-ID: <CALrw=nFdnSOyfd9X9qzpbTT8R_-m3uBM==FFkNSQ2XZsxUz0Fg@mail.gmail.com>
 Subject: Re: [PATCH] audit: check syscall bitmap on entry to avoid extra work
-To:     Ivan Babrou <ivan@cloudflare.com>
-Cc:     audit@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@cloudflare.com, Eric Paris <eparis@redhat.com>
+To:     Paul Moore <paul@paul-moore.com>
+Cc:     Ivan Babrou <ivan@cloudflare.com>, audit@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@cloudflare.com,
+        Eric Paris <eparis@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <audit.vger.kernel.org>
 X-Mailing-List: audit@vger.kernel.org
 
-On Wed, May 24, 2023 at 2:05=E2=80=AFPM Ivan Babrou <ivan@cloudflare.com> w=
-rote:
+On Thu, May 25, 2023 at 3:15=E2=80=AFAM Paul Moore <paul@paul-moore.com> wr=
+ote:
 >
-> On Tue, May 23, 2023 at 7:03=E2=80=AFPM Paul Moore <paul@paul-moore.com> =
-wrote:
-> > > Could you elaborate on what exactly you would like to see added? It's
-> > > not clear to me what is missing.
+> On Wed, May 24, 2023 at 2:05=E2=80=AFPM Ivan Babrou <ivan@cloudflare.com>=
+ wrote:
 > >
-> > I should have been more clear, let me try again ...
+> > On Tue, May 23, 2023 at 7:03=E2=80=AFPM Paul Moore <paul@paul-moore.com=
+> wrote:
+> > > > Could you elaborate on what exactly you would like to see added? It=
+'s
+> > > > not clear to me what is missing.
+> > >
+> > > I should have been more clear, let me try again ...
+> > >
+> > > From my perspective, this patch adds code and complexity to deal with
+> > > the performance impact of auditing.  In some cases that is the right
+> > > thing to do, but I would much rather see a more in-depth analysis of
+> > > where the audit hot spots are in this benchmark, and some thoughts on
+> > > how we might improve that.  In other words, don't just add additional
+> > > processing to bypass (slower, more involved) processing; look at the
+> > > processing that is currently being done and see if you can find a way
+> > > to make it faster.  It will likely take longer, but the results will
+> > > be much more useful.
 > >
-> > From my perspective, this patch adds code and complexity to deal with
-> > the performance impact of auditing.  In some cases that is the right
-> > thing to do, but I would much rather see a more in-depth analysis of
-> > where the audit hot spots are in this benchmark, and some thoughts on
-> > how we might improve that.  In other words, don't just add additional
-> > processing to bypass (slower, more involved) processing; look at the
-> > processing that is currently being done and see if you can find a way
-> > to make it faster.  It will likely take longer, but the results will
-> > be much more useful.
+> > The fastest way to do something is to not do it to begin with.
 >
-> The fastest way to do something is to not do it to begin with.
+> While you are not wrong, I believe you and I are focusing on different
+> things.  From my perspective, you appear primarily concerned with
+> improving performance by reducing the overhead of auditing.  I too am
+> interested in reducing the audit overhead, but I also place a very
+> high value on maintainable code, perhaps more than performance simply
+> because the current audit code quality is so very poor.
+> Unfortunately, the patch you posted appears to me as yet another
+> bolt-on performance tweak that doesn't make an attempt at analyzing
+> the current hot spots of syscall auditing, and ideally offering
+> solutions.  Perhaps ultimately this approach is the only sane thing
+> that can be done, but I'd like to see some analysis first of the
+> syscall auditing path.
 
-While you are not wrong, I believe you and I are focusing on different
-things.  From my perspective, you appear primarily concerned with
-improving performance by reducing the overhead of auditing.  I too am
-interested in reducing the audit overhead, but I also place a very
-high value on maintainable code, perhaps more than performance simply
-because the current audit code quality is so very poor.
-Unfortunately, the patch you posted appears to me as yet another
-bolt-on performance tweak that doesn't make an attempt at analyzing
-the current hot spots of syscall auditing, and ideally offering
-solutions.  Perhaps ultimately this approach is the only sane thing
-that can be done, but I'd like to see some analysis first of the
-syscall auditing path.
+Ivan is out of office, but I would like to keep the discussion going.
+We do understand your position and we're actually doing a project
+right now to investigate audit performance better and this patch is
+only the first thing which came up. Perhaps, we would have some other
+improvements in the future.
 
---=20
-paul-moore.com
+But the way I see it - the audit subsystem performance and the way how
+that subsystem plugs into the rest of the kernel code are two somewhat
+independent things with the patch proposed here addressing the latter
+(with full understanding that the former might be improved as well). I
+think the fundamental issue we're trying to address here is that the
+audit subsystem plugs into the kernel in a way, which is different
+from conceptually similar systems, like netfilter, LSM,
+kprobes/tracepoints etc, thus potentially breaking user expectations.
+For example, when I use netfilter or LSMs - I see it as a system of
+hooks: my code/rules/inspection plugs into some hooks of interest and
+I fully understand that the kernel codepaths, where these hooks are
+located, might be affected due to additional processing attached. Thus
+I can adjust my code/rules/inspection to plug into only the minimum
+required hooks to get the visibility or the effect I need without too
+much affecting system performance.
+
+So I (and most of us here really) had the same expectation from audit:
+we thought that when you have a rule, which "monitors" a certain
+system call, only that system call performance would be affected. IOW
+we thought that system calls are a kind of a hook for audit rules and
+it was a surprise for us to learn that when having a rule, which
+monitors execve() for example, we can impact other unrelated system
+calls in totally different workloads. I think this behaviour
+fundamentally limits the ability of the audit users to optimise their
+rules to monitor/collect only the minimum required information,
+because as long as they need to monitor at least one system call -
+they effectively monitor all of them. I do strongly suspect that most
+Linux users would have a similar (mis-)expectation from the audit
+subsystem, hence I think this patch will align the audit subsystem
+better with the expectations from users.
+
+Ignat
