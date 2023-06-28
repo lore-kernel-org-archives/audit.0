@@ -2,94 +2,68 @@ Return-Path: <audit-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8B386EB64DC
-	for <audit@archiver.kernel.org>; Mon, 26 Jun 2023 20:57:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A6C85EB64D9
+	for <audit@archiver.kernel.org>; Wed, 28 Jun 2023 01:01:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229738AbjFZU5i (ORCPT <rfc822;audit@archiver.kernel.org>);
-        Mon, 26 Jun 2023 16:57:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51554 "EHLO
+        id S230093AbjF1BBj (ORCPT <rfc822;audit@archiver.kernel.org>);
+        Tue, 27 Jun 2023 21:01:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbjFZU5h (ORCPT <rfc822;audit@vger.kernel.org>);
-        Mon, 26 Jun 2023 16:57:37 -0400
-Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6036012A
-        for <audit@vger.kernel.org>; Mon, 26 Jun 2023 13:57:35 -0700 (PDT)
-Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-570808d8ddeso42215467b3.0
-        for <audit@vger.kernel.org>; Mon, 26 Jun 2023 13:57:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1687813054; x=1690405054;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=kfxo+qeDQtE6pfqX2pSVRn4Ktm5TmTSx9jMdiyp1OT4=;
-        b=XpIIXT1JP95o4USFFOxXJXcoIrgMALNoGaOpjXNUYPtNxL7AVGgjNT6tncC8SlNk8a
-         CnOjClmdLziA56k70SuTLjis8gL0y+NTFNoRD/lyp/e1Q6RLilOSBu9xwRv0TKPTFYr3
-         P2Cq9DNnieb5kUuX/V+XO8r0C5u4fMJKtAFhl74uh4Ki56mSMca6ZrnGh8B6Z7suZlrA
-         Z64D+gn2ajp29P3YJ0aoDE75vvLTMtQz9kNcR8nsqOlRMrt6kcDXERIsIEy986yU/daH
-         gPo91Efo56Z73JxuTvfrRwedHJT15lWBCDgcNbNcuTY61aqTSV7eikyJig1lQAluz3ZH
-         GfQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687813054; x=1690405054;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=kfxo+qeDQtE6pfqX2pSVRn4Ktm5TmTSx9jMdiyp1OT4=;
-        b=XG6vpFu4wmZ+N/TP+xOueL3YidgpoZwvkiWLsVwEtsSocqF5APZYfd10rJ++epETR4
-         fiCH2jgxVWC9u/baQXyo7Z1Gby1BGJGPhPyxuicDJyL6gUC6+ANGr2hRFrnxffKP6utU
-         gk7WabEkmZ+Au/fw7aZ8OvAqnmgPGJYQukQL7MRlceD6MAkeb8kg9oO/+A+RjjfmgoD5
-         6S8/i8X1MNVa8+bd2Fko5YMKLmTbwx4LMktWGWFbEK+H3OoUh6ULGCLfMmIC626ihs4/
-         /HKAvahKWOwacj5HyhBhDKcWZgxesYLWzTTYoSdguiWrDwm5J68sgfPaNYylnKnxn2hc
-         alfg==
-X-Gm-Message-State: AC+VfDx0OrNGiuwl/P/M1FAztOlx5I40ljatDy1pJ/p/3bORpuP+w+ve
-        xXBtd8B2MzATCy3mrHwZjcN0jQtjoHXcAuI2EccxLXzkERqT0wg2ug==
-X-Google-Smtp-Source: ACHHUZ6ZyOU0JoT8cNBcFBcx5J+DrrL8BN+fGLFUQjVOnsFRFC3jsF+bemFQsyMFGAHKSXzDBI4TNpCJZCtTZ1xUNZI=
-X-Received: by 2002:a81:e943:0:b0:576:916d:96b with SMTP id
- e3-20020a81e943000000b00576916d096bmr9971637ywm.36.1687813054539; Mon, 26 Jun
- 2023 13:57:34 -0700 (PDT)
-MIME-Version: 1.0
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Mon, 26 Jun 2023 16:57:23 -0400
-Message-ID: <CAHC9VhTcPVRAoxWn+EpMcGPThgtfhB=z3LM3BkMtxKv6aQYPFw@mail.gmail.com>
-Subject: [GIT PULL] Audit patches for v6.5
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     audit@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        with ESMTP id S230447AbjF1BB1 (ORCPT <rfc822;audit@vger.kernel.org>);
+        Tue, 27 Jun 2023 21:01:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5091A296D;
+        Tue, 27 Jun 2023 18:01:26 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DA45561251;
+        Wed, 28 Jun 2023 01:01:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 4E25CC43397;
+        Wed, 28 Jun 2023 01:01:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687914085;
+        bh=3xwm+OnEeWUcBEa00kXJpj5zuv7nhIRIBsV1z1yJYGc=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=DpY30CDQZqgi24G/D2oIwkWsMzQ2Ay7Uk/hKpbGxVzQ/O9EbCxEjXSE2+izZDJCls
+         rwWoW2XKBG1/HF2gPyUenU5h2Z1qD9OqJaHsomxpildbOUWHIwExXfMNARCh0b7eJF
+         L3NYVchp5St7QYicx/VHXzK7WhyDDiWcSBG45LnMK976oGa1Z3i9JU9DHDcKcbUiXP
+         fkO33dhhIS4BKJfUa0aOeMoO+Nz23mXZrN5FSebu1z4Mh746navC/PyggV6dDMW9J4
+         FFbMudNHW+3F7fVYfyfNKbfj1z0TXqHVBS+nhMM52OvtASIoT5gA3RtiheCqsmXsOC
+         UdOh8kTrWVXYQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 3A419E53800;
+        Wed, 28 Jun 2023 01:01:25 +0000 (UTC)
+Subject: Re: [GIT PULL] Audit patches for v6.5
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <CAHC9VhTcPVRAoxWn+EpMcGPThgtfhB=z3LM3BkMtxKv6aQYPFw@mail.gmail.com>
+References: <CAHC9VhTcPVRAoxWn+EpMcGPThgtfhB=z3LM3BkMtxKv6aQYPFw@mail.gmail.com>
+X-PR-Tracked-List-Id: <audit.vger.kernel.org>
+X-PR-Tracked-Message-Id: <CAHC9VhTcPVRAoxWn+EpMcGPThgtfhB=z3LM3BkMtxKv6aQYPFw@mail.gmail.com>
+X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/audit.git tags/audit-pr-20230626
+X-PR-Tracked-Commit-Id: e455ca40dbcf2cd50d1e59bf4b2752b300bcdad4
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: cae72026b5ecf059687ccb431cb0e5965e863fea
+Message-Id: <168791408523.14121.16768196063703848992.pr-tracker-bot@kernel.org>
+Date:   Wed, 28 Jun 2023 01:01:25 +0000
+To:     Paul Moore <paul@paul-moore.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        audit@vger.kernel.org, linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <audit.vger.kernel.org>
 X-Mailing-List: audit@vger.kernel.org
 
-Hi Linus,
+The pull request you sent on Mon, 26 Jun 2023 16:57:23 -0400:
 
-A single audit patch for the Linux v6.5 merge window that resolves two
-compiler warnings regarding missing function prototypes.  Please
-merge.
+> https://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/audit.git tags/audit-pr-20230626
 
-Thanks,
--Paul
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/cae72026b5ecf059687ccb431cb0e5965e863fea
 
---
-The following changes since commit ac9a78681b921877518763ba0e89202254349d1b:
-
- Linux 6.4-rc1 (2023-05-07 13:34:35 -0700)
-
-are available in the Git repository at:
-
- https://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/audit.git
-   tags/audit-pr-20230626
-
-for you to fetch changes up to e455ca40dbcf2cd50d1e59bf4b2752b300bcdad4:
-
- audit: avoid missing-prototype warnings (2023-05-17 11:34:55 -0400)
-
-----------------------------------------------------------------
-audit/stable-6.5 PR 20230626
-
-----------------------------------------------------------------
-Arnd Bergmann (1):
-     audit: avoid missing-prototype warnings
-
-include/linux/audit.h      | 2 --
-include/linux/audit_arch.h | 2 ++
-kernel/audit.h             | 2 +-
-3 files changed, 3 insertions(+), 3 deletions(-)
+Thank you!
 
 -- 
-paul-moore.com
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
