@@ -2,25 +2,25 @@ Return-Path: <audit-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 82675C0015E
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A6319C001DD
 	for <audit@archiver.kernel.org>; Wed, 28 Jun 2023 21:10:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232155AbjF1VKH (ORCPT <rfc822;audit@archiver.kernel.org>);
-        Wed, 28 Jun 2023 17:10:07 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:39494 "EHLO
+        id S232180AbjF1VKI (ORCPT <rfc822;audit@archiver.kernel.org>);
+        Wed, 28 Jun 2023 17:10:08 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:39272 "EHLO
         linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232324AbjF1VJv (ORCPT <rfc822;audit@vger.kernel.org>);
-        Wed, 28 Jun 2023 17:09:51 -0400
+        with ESMTP id S232301AbjF1VJt (ORCPT <rfc822;audit@vger.kernel.org>);
+        Wed, 28 Jun 2023 17:09:49 -0400
 Received: by linux.microsoft.com (Postfix, from userid 1052)
-        id 55EAC20ABD61; Wed, 28 Jun 2023 14:09:48 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 55EAC20ABD61
+        id 38B3720C08FE; Wed, 28 Jun 2023 14:09:48 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 38B3720C08FE
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
         s=default; t=1687986588;
-        bh=XPZSzWrVq6r0tq5bbCrHed+mA5ObRtgkHqZt7M8XEfc=;
+        bh=LHnS3KBCE9CXxf/tUzfRiFyBlBvtWWxrCNQ8gimP4Os=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sdpAvmx0yvspZhrqoJv2M6Ozq/s4UzKwx+TKS9+rk+Br1H3QuxemE1gj8ZUDPasYa
-         /O4mWAdFLUegYoE5RenFKO3GJK/RvFXeUePYdWV+aXisXswvm5Qrqi1+uKXw+t8Z8R
-         WhmBqin6qMHKnIEBb7fS+8ZugnGU4HLQxpbQWFSs=
+        b=Cp6ytnenRVVtbqo4U+QJESf/vIZQgWIMk0BCw0HV6jbQUyblfIrrKLT5w/s01rA3x
+         E0c3/cnQQlUuxwXTbvIBh/Vbzfke3rSOzphSni1KgevmSqsNOWXIFOGQ0wjHl5Ri5Y
+         W+D7KSn0AKfvX0GUxPJEpLfIz8rg4YnZK/TqLZ5k=
 From:   Fan Wu <wufan@linux.microsoft.com>
 To:     corbet@lwn.net, zohar@linux.ibm.com, jmorris@namei.org,
         serge@hallyn.com, tytso@mit.edu, ebiggers@kernel.org,
@@ -31,10 +31,11 @@ Cc:     linux-doc@vger.kernel.org, linux-integrity@vger.kernel.org,
         linux-fscrypt@vger.kernel.org, linux-block@vger.kernel.org,
         dm-devel@redhat.com, audit@vger.kernel.org,
         roberto.sassu@huawei.com, linux-kernel@vger.kernel.org,
+        Deven Bowers <deven.desai@linux.microsoft.com>,
         Fan Wu <wufan@linux.microsoft.com>
-Subject: [RFC PATCH v10 06/17] security: add new securityfs delete function
-Date:   Wed, 28 Jun 2023 14:09:20 -0700
-Message-Id: <1687986571-16823-7-git-send-email-wufan@linux.microsoft.com>
+Subject: [RFC PATCH v10 04/17] ipe: add LSM hooks on execution and kernel read
+Date:   Wed, 28 Jun 2023 14:09:18 -0700
+Message-Id: <1687986571-16823-5-git-send-email-wufan@linux.microsoft.com>
 X-Mailer: git-send-email 1.8.3.1
 In-Reply-To: <1687986571-16823-1-git-send-email-wufan@linux.microsoft.com>
 References: <1687986571-16823-1-git-send-email-wufan@linux.microsoft.com>
@@ -42,80 +43,353 @@ Precedence: bulk
 List-ID: <audit.vger.kernel.org>
 X-Mailing-List: audit@vger.kernel.org
 
-When deleting a directory in the security file system, the existing
-securityfs_remove requires the directory to be empty, otherwise
-it will do nothing. This leads to a potential risk that the security
-file system might be in an unclean state when the intentded deletion
-did not happen.
+From: Deven Bowers <deven.desai@linux.microsoft.com>
 
-This commit introduces a new function securityfs_recursive_remove
-to recursively delete a directory without leaving an unclean state.
+IPE's initial goal is to control both execution and the loading of
+kernel modules based on the system's definition of trust. It
+accomplishes this by plugging into the security hooks for
+bprm_check_security, file_mprotect, mmap_file, kernel_load_data,
+and kernel_read_data.
 
-Co-developed-by: Christian Brauner (Microsoft) <brauner@kernel.org>
+Signed-off-by: Deven Bowers <deven.desai@linux.microsoft.com>
 Signed-off-by: Fan Wu <wufan@linux.microsoft.com>
-
 ---
-v1-v8:
-  + Not present
+v2:
+  + Split evaluation loop, access control hooks,
+    and evaluation loop from policy parser and userspace
+    interface to pass mailing list character limit
+
+v3:
+  + Move ipe_load_properties to patch 04.
+  + Remove useless 0-initializations
+  + Prefix extern variables with ipe_
+  + Remove kernel module parameters, as these are
+    exposed through sysctls.
+  + Add more prose to the IPE base config option
+    help text.
+  + Use GFP_KERNEL for audit_log_start.
+  + Remove unnecessary caching system.
+  + Remove comments from headers
+  + Use rcu_access_pointer for rcu-pointer null check
+  + Remove usage of reqprot; use prot only.
+  + Move policy load and activation audit event to 03/12
+
+v4:
+  + Remove sysctls in favor of securityfs nodes
+  + Re-add kernel module parameters, as these are now
+    exposed through securityfs.
+  + Refactor property audit loop to a separate function.
+
+v5:
+  + fix minor grammatical errors
+  + do not group rule by curly-brace in audit record,
+    reconstruct the exact rule.
+
+v6:
+  + No changes
+
+v7:
+  + Further split lsm creation, the audit system, the evaluation loop
+    and access control hooks into separate commits.
+
+v8:
+  + Rename hook functions to follow the lsmname_hook_name convention
+  + Remove ipe_hook enumeration, can be derived from correlation with
+    syscall audit record.
 
 v9:
-  + Introduced
+  + Minor changes for adapting to the new parser
 
 v10:
-  + No changes
+  + Remove @reqprot part
 ---
- include/linux/security.h |  1 +
- security/inode.c         | 25 +++++++++++++++++++++++++
- 2 files changed, 26 insertions(+)
+ security/ipe/eval.c  |  14 ++++
+ security/ipe/eval.h  |   1 +
+ security/ipe/hooks.c | 182 +++++++++++++++++++++++++++++++++++++++++++
+ security/ipe/hooks.h |  25 ++++++
+ security/ipe/ipe.c   |   6 ++
+ 5 files changed, 228 insertions(+)
+ create mode 100644 security/ipe/hooks.c
+ create mode 100644 security/ipe/hooks.h
 
-diff --git a/include/linux/security.h b/include/linux/security.h
-index e2734e9e44d5..a88076ebc7b1 100644
---- a/include/linux/security.h
-+++ b/include/linux/security.h
-@@ -1971,6 +1971,7 @@ struct dentry *securityfs_create_symlink(const char *name,
- 					 const char *target,
- 					 const struct inode_operations *iops);
- extern void securityfs_remove(struct dentry *dentry);
-+extern void securityfs_recursive_remove(struct dentry *dentry);
+diff --git a/security/ipe/eval.c b/security/ipe/eval.c
+index 59144b2ecdda..8d0ec7c80f8f 100644
+--- a/security/ipe/eval.c
++++ b/security/ipe/eval.c
+@@ -17,6 +17,20 @@
  
- #else /* CONFIG_SECURITYFS */
+ struct ipe_policy __rcu *ipe_active_policy;
  
-diff --git a/security/inode.c b/security/inode.c
-index 6c326939750d..13358e8547e8 100644
---- a/security/inode.c
-+++ b/security/inode.c
-@@ -313,6 +313,31 @@ void securityfs_remove(struct dentry *dentry)
- }
- EXPORT_SYMBOL_GPL(securityfs_remove);
- 
-+static void remove_one(struct dentry *victim)
++/**
++ * build_eval_ctx - Build an evaluation context.
++ * @ctx: Supplies a pointer to the context to be populdated.
++ * @file: Supplies a pointer to the file to associated with the evaluation.
++ * @op: Supplies the IPE policy operation associated with the evaluation.
++ */
++void build_eval_ctx(struct ipe_eval_ctx *ctx,
++		    const struct file *file,
++		    enum ipe_op_type op)
 +{
-+	simple_release_fs(&mount, &mount_count);
++	ctx->file = file;
++	ctx->op = op;
++}
++
+ /**
+  * evaluate_property - Analyze @ctx against a property.
+  * @ctx: Supplies a pointer to the context to be evaluated.
+diff --git a/security/ipe/eval.h b/security/ipe/eval.h
+index 972580dfec15..5abb845d5c4e 100644
+--- a/security/ipe/eval.h
++++ b/security/ipe/eval.h
+@@ -20,6 +20,7 @@ struct ipe_eval_ctx {
+ 	const struct file *file;
+ };
+ 
++void build_eval_ctx(struct ipe_eval_ctx *ctx, const struct file *file, enum ipe_op_type op);
+ int ipe_evaluate_event(const struct ipe_eval_ctx *const ctx);
+ 
+ #endif /* _IPE_EVAL_H */
+diff --git a/security/ipe/hooks.c b/security/ipe/hooks.c
+new file mode 100644
+index 000000000000..d896a5a474bc
+--- /dev/null
++++ b/security/ipe/hooks.c
+@@ -0,0 +1,182 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (C) Microsoft Corporation. All rights reserved.
++ */
++
++#include <linux/fs.h>
++#include <linux/types.h>
++#include <linux/binfmts.h>
++#include <linux/mman.h>
++
++#include "ipe.h"
++#include "hooks.h"
++#include "eval.h"
++
++/**
++ * ipe_bprm_check_security - ipe security hook function for bprm check.
++ * @bprm: Supplies a pointer to a linux_binprm structure to source the file
++ *	  being evaluated.
++ *
++ * This LSM hook is called when a binary is loaded through the exec
++ * family of system calls.
++ * Return:
++ * *0	- OK
++ * *!0	- Error
++ */
++int ipe_bprm_check_security(struct linux_binprm *bprm)
++{
++	struct ipe_eval_ctx ctx = { 0 };
++
++	build_eval_ctx(&ctx, bprm->file, __IPE_OP_EXEC);
++	return ipe_evaluate_event(&ctx);
 +}
 +
 +/**
-+ * securityfs_recursive_remove - recursively removes a file or directory from the securityfs filesystem
++ * ipe_mmap_file - ipe security hook function for mmap check.
++ * @f: File being mmap'd. Can be NULL in the case of anonymous memory.
++ * @reqprot: The requested protection on the mmap, passed from usermode.
++ * @prot: The effective protection on the mmap, resolved from reqprot and
++ *	  system configuration.
++ * @flags: Unused.
 + *
-+ * @dentry: a pointer to a the dentry of the file or directory to be removed.
++ * This hook is called when a file is loaded through the mmap
++ * family of system calls.
 + *
-+ * This function recursively removes a file or directory in securityfs that was
-+ * previously created with a call to another securityfs function (like
-+ * securityfs_create_file() or variants thereof.)
++ * Return:
++ * * 0	- OK
++ * * !0	- Error
 + */
-+void securityfs_recursive_remove(struct dentry *dentry)
++int ipe_mmap_file(struct file *f, unsigned long reqprot, unsigned long prot,
++		  unsigned long flags)
 +{
-+	if (IS_ERR_OR_NULL(dentry))
-+		return;
++	struct ipe_eval_ctx ctx = { 0 };
 +
-+	simple_pin_fs(&fs_type, &mount, &mount_count);
-+	simple_recursive_removal(dentry, remove_one);
-+	simple_release_fs(&mount, &mount_count);
++	if (prot & PROT_EXEC) {
++		build_eval_ctx(&ctx, f, __IPE_OP_EXEC);
++		return ipe_evaluate_event(&ctx);
++	}
++
++	return 0;
 +}
-+EXPORT_SYMBOL_GPL(securityfs_recursive_remove);
 +
- #ifdef CONFIG_SECURITY
- static struct dentry *lsm_dentry;
- static ssize_t lsm_read(struct file *filp, char __user *buf, size_t count,
++/**
++ * ipe_file_mprotect - ipe security hook function for mprotect check.
++ * @vma: Existing virtual memory area created by mmap or similar.
++ * @reqprot: The requested protection on the mmap, passed from usermode.
++ * @prot: The effective protection on the mmap, resolved from reqprot and
++ *	  system configuration.
++ *
++ * This LSM hook is called when a mmap'd region of memory is changing
++ * its protections via mprotect.
++ *
++ * Return:
++ * * 0	- OK
++ * * !0	- Error
++ */
++int ipe_file_mprotect(struct vm_area_struct *vma, unsigned long reqprot,
++		      unsigned long prot)
++{
++	struct ipe_eval_ctx ctx = { 0 };
++
++	/* Already Executable */
++	if (vma->vm_flags & VM_EXEC)
++		return 0;
++
++	if (prot & PROT_EXEC) {
++		build_eval_ctx(&ctx, vma->vm_file, __IPE_OP_EXEC);
++		return ipe_evaluate_event(&ctx);
++	}
++
++	return 0;
++}
++
++/**
++ * ipe_kernel_read_file - ipe security hook function for kernel read.
++ * @file: Supplies a pointer to the file structure being read in from disk.
++ * @id: Supplies the enumeration identifying the purpose of the read.
++ * @contents: Unused.
++ *
++ * This LSM hook is called when a file is being read in from disk from
++ * the kernel.
++ *
++ * Return:
++ * 0 - OK
++ * !0 - Error
++ */
++int ipe_kernel_read_file(struct file *file, enum kernel_read_file_id id,
++			 bool contents)
++{
++	enum ipe_op_type op;
++	struct ipe_eval_ctx ctx;
++
++	switch (id) {
++	case READING_FIRMWARE:
++		op = __IPE_OP_FIRMWARE;
++		break;
++	case READING_MODULE:
++		op = __IPE_OP_KERNEL_MODULE;
++		break;
++	case READING_KEXEC_INITRAMFS:
++		op = __IPE_OP_KEXEC_INITRAMFS;
++		break;
++	case READING_KEXEC_IMAGE:
++		op = __IPE_OP_KEXEC_IMAGE;
++		break;
++	case READING_POLICY:
++		op = __IPE_OP_IMA_POLICY;
++		break;
++	case READING_X509_CERTIFICATE:
++		op = __IPE_OP_IMA_X509;
++		break;
++	default:
++		op = __IPE_OP_INVALID;
++		WARN(op == __IPE_OP_INVALID, "no rule setup for enum %d", id);
++	}
++
++	build_eval_ctx(&ctx, file, op);
++	return ipe_evaluate_event(&ctx);
++}
++
++/**
++ * ipe_kernel_load_data - ipe security hook function for kernel load data.
++ * @id: Supplies the enumeration identifying the purpose of the read.
++ * @contents: Unused.
++ *
++ * This LSM hook is called when a buffer is being read in from disk.
++ *
++ * Return:
++ * * 0	- OK
++ * * !0	- Error
++ */
++int ipe_kernel_load_data(enum kernel_load_data_id id, bool contents)
++{
++	enum ipe_op_type op;
++	struct ipe_eval_ctx ctx = { 0 };
++
++	switch (id) {
++	case LOADING_FIRMWARE:
++		op = __IPE_OP_FIRMWARE;
++		break;
++	case LOADING_MODULE:
++		op = __IPE_OP_KERNEL_MODULE;
++		break;
++	case LOADING_KEXEC_INITRAMFS:
++		op = __IPE_OP_KEXEC_INITRAMFS;
++		break;
++	case LOADING_KEXEC_IMAGE:
++		op = __IPE_OP_KEXEC_IMAGE;
++		break;
++	case LOADING_POLICY:
++		op = __IPE_OP_IMA_POLICY;
++		break;
++	case LOADING_X509_CERTIFICATE:
++		op = __IPE_OP_IMA_X509;
++		break;
++	default:
++		op = __IPE_OP_INVALID;
++		WARN(op == __IPE_OP_INVALID, "no rule setup for enum %d", id);
++	}
++
++	build_eval_ctx(&ctx, NULL, op);
++	return ipe_evaluate_event(&ctx);
++}
+diff --git a/security/ipe/hooks.h b/security/ipe/hooks.h
+new file mode 100644
+index 000000000000..23205452f758
+--- /dev/null
++++ b/security/ipe/hooks.h
+@@ -0,0 +1,25 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Copyright (C) Microsoft Corporation. All rights reserved.
++ */
++#ifndef _IPE_HOOKS_H
++#define _IPE_HOOKS_H
++
++#include <linux/fs.h>
++#include <linux/binfmts.h>
++#include <linux/security.h>
++
++int ipe_bprm_check_security(struct linux_binprm *bprm);
++
++int ipe_mmap_file(struct file *f, unsigned long reqprot, unsigned long prot,
++		  unsigned long flags);
++
++int ipe_file_mprotect(struct vm_area_struct *vma, unsigned long reqprot,
++		      unsigned long prot);
++
++int ipe_kernel_read_file(struct file *file, enum kernel_read_file_id id,
++			 bool contents);
++
++int ipe_kernel_load_data(enum kernel_load_data_id id, bool contents);
++
++#endif /* _IPE_HOOKS_H */
+diff --git a/security/ipe/ipe.c b/security/ipe/ipe.c
+index 2ee0f5de29d7..29bedc0b2ad6 100644
+--- a/security/ipe/ipe.c
++++ b/security/ipe/ipe.c
+@@ -4,11 +4,17 @@
+  */
+ 
+ #include "ipe.h"
++#include "hooks.h"
+ 
+ static struct lsm_blob_sizes ipe_blobs __ro_after_init = {
+ };
+ 
+ static struct security_hook_list ipe_hooks[] __ro_after_init = {
++	LSM_HOOK_INIT(bprm_check_security, ipe_bprm_check_security),
++	LSM_HOOK_INIT(mmap_file, ipe_mmap_file),
++	LSM_HOOK_INIT(file_mprotect, ipe_file_mprotect),
++	LSM_HOOK_INIT(kernel_read_file, ipe_kernel_read_file),
++	LSM_HOOK_INIT(kernel_load_data, ipe_kernel_load_data),
+ };
+ 
+ /**
 -- 
 2.25.1
 
