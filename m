@@ -2,25 +2,25 @@ Return-Path: <audit-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D0BCFC16B13
-	for <audit@archiver.kernel.org>; Wed, 28 Jun 2023 21:10:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B9ED3C25B4F
+	for <audit@archiver.kernel.org>; Wed, 28 Jun 2023 21:10:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232501AbjF1VKN (ORCPT <rfc822;audit@archiver.kernel.org>);
-        Wed, 28 Jun 2023 17:10:13 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:39252 "EHLO
+        id S232624AbjF1VKP (ORCPT <rfc822;audit@archiver.kernel.org>);
+        Wed, 28 Jun 2023 17:10:15 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:39528 "EHLO
         linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232297AbjF1VJt (ORCPT <rfc822;audit@vger.kernel.org>);
-        Wed, 28 Jun 2023 17:09:49 -0400
+        with ESMTP id S232378AbjF1VJw (ORCPT <rfc822;audit@vger.kernel.org>);
+        Wed, 28 Jun 2023 17:09:52 -0400
 Received: by linux.microsoft.com (Postfix, from userid 1052)
-        id 2A50F20C08F5; Wed, 28 Jun 2023 14:09:48 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 2A50F20C08F5
+        id BC25920ABD8B; Wed, 28 Jun 2023 14:09:48 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com BC25920ABD8B
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
         s=default; t=1687986588;
-        bh=F0uJ5eyJo3LYOyg4D0HXxOlZcJrEKyyXfBbdQHvI218=;
+        bh=wRhA6T1K0rmws6t2UffrMk+s+gndM5chNgTBDkspz9U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eip8RjzP2VR+U/Tj0mijiWJqhp3Ef7m1mmdjIC6JfSkwi5O837SrouCnr/F1mdvMl
-         jOT4pVM6MZIdqsV3MXfMQ4MSl64xLbewCtc+JMzRiM8brDAop9FEu/vYMhVn/RGdbr
-         Hjuvbl/G6OzWmvW7l0lc+aTdXl53RF8GtAW5RZM4=
+        b=r9c1nPtrZfxwt38hQiji7ANeJ57LWy0J6HK3+3JSCAVwytV/NIRk6SaeIAvT/MmOs
+         vM2m2nm7fMTsEzKhEfDF64fRNbZ2s6fUDV3UXyME87ROtHb8OOZ61UX5zUbuvcmKw1
+         T1OJxY8P1KtyA6eT+m1KgRxQV2O6ioR3TRKSGF6U=
 From:   Fan Wu <wufan@linux.microsoft.com>
 To:     corbet@lwn.net, zohar@linux.ibm.com, jmorris@namei.org,
         serge@hallyn.com, tytso@mit.edu, ebiggers@kernel.org,
@@ -31,11 +31,11 @@ Cc:     linux-doc@vger.kernel.org, linux-integrity@vger.kernel.org,
         linux-fscrypt@vger.kernel.org, linux-block@vger.kernel.org,
         dm-devel@redhat.com, audit@vger.kernel.org,
         roberto.sassu@huawei.com, linux-kernel@vger.kernel.org,
-        Deven Bowers <deven.desai@linux.microsoft.com>,
-        Fan Wu <wufan@linux.microsoft.com>
-Subject: [RFC PATCH v10 03/17] ipe: add evaluation loop
-Date:   Wed, 28 Jun 2023 14:09:17 -0700
-Message-Id: <1687986571-16823-4-git-send-email-wufan@linux.microsoft.com>
+        Fan Wu <wufan@linux.microsoft.com>,
+        Deven Bowers <deven.desai@linux.microsoft.com>
+Subject: [RFC PATCH v10 13/17] fsverity: consume builtin signature via LSM hook
+Date:   Wed, 28 Jun 2023 14:09:27 -0700
+Message-Id: <1687986571-16823-14-git-send-email-wufan@linux.microsoft.com>
 X-Mailer: git-send-email 1.8.3.1
 In-Reply-To: <1687986571-16823-1-git-send-email-wufan@linux.microsoft.com>
 References: <1687986571-16823-1-git-send-email-wufan@linux.microsoft.com>
@@ -43,207 +43,140 @@ Precedence: bulk
 List-ID: <audit.vger.kernel.org>
 X-Mailing-List: audit@vger.kernel.org
 
-From: Deven Bowers <deven.desai@linux.microsoft.com>
+fsverity represents a mechanism to support both integrity and
+authenticity protection of a file, supporting both signed and unsigned
+digests.
 
-IPE must have a centralized function to evaluate incoming callers
-against IPE's policy. This iteration of the policy for against the rules
-for that specific caller is known as the evaluation loop.
+An LSM which controls access to a resource based on authenticity and
+integrity of said resource, can then use this data to make an informed
+decision on the authorization (provided by the LSM's policy) of said
+claim.
+
+This effectively allows the extension of a policy enforcement layer in
+LSM for fsverity, allowing for more granular control of how a
+particular authenticity claim can be used. For example, "all (built-in)
+signed fsverity files should be allowed to execute, but only these
+hashes are allowed to be loaded as kernel modules".
+
+This enforcement must be done in kernel space, as a userspace only
+solution would fail a simple litmus test: Download a self-contained
+malicious binary that never touches the userspace stack. This
+binary would still be able to execute.
 
 Signed-off-by: Deven Bowers <deven.desai@linux.microsoft.com>
 Signed-off-by: Fan Wu <wufan@linux.microsoft.com>
-
 ---
-v2:
-+ Split evaluation loop, access control hooks, and evaluation loop from policy parser and userspace interface to pass mailing list character limit
-
-v3:
-+ Move ipe_load_properties to patch 04.
-+ Remove useless 0-initializations Prefix extern variables with ipe_
-+ Remove kernel module parameters, as these are exposed through sysctls.
-+ Add more prose to the IPE base config option help text.
-+ Use GFP_KERNEL for audit_log_start.
-+ Remove unnecessary caching system.
-+ Remove comments from headers
-+ Use rcu_access_pointer for rcu-pointer null check
-+ Remove usage of reqprot; use prot only.
-+Move policy load and activation audit event to 03/12
-
-v4:
-+ Remove sysctls in favor of securityfs nodes
-+ Re-add kernel module parameters, as these are now exposed through securityfs.
-+ Refactor property audit loop to a separate function.
-
-v5:
-+ fix minor grammatical errors
-+ do not group rule by curly-brace in audit record,
-+ reconstruct the exact rule.
-
-v6:
-+ No changes
+v1-v6:
+  + Not present
 
 v7:
-+ Further split lsm creation into a separate commit from the evaluation loop and audit system, for easier review.
-+ Propagating changes to support the new ipe_context structure in the evaluation loop.
+  Introduced
 
 v8:
-+ Remove ipe_hook enumeration; hooks can be correlated via syscall record.
+  + Split fs/verity/ changes and security/ changes into separate patches
+  + Change signature of fsverity_create_info to accept non-const inode
+  + Change signature of fsverity_verify_signature to accept non-const inode
+  + Don't cast-away const from inode.
+  + Digest functionality dropped in favor of:
+    ("fs-verity: define a function to return the integrity protected
+      file digest")
+  + Reworded commit description and title to match changes.
+  + Fix a bug wherein no LSM implements the particular fsverity @name
+    (or LSM is disabled), and returns -EOPNOTSUPP, causing errors.
 
 v9:
-+ Remove ipe_context related code and simplify the evaluation loop.
+  + No changes
 
 v10:
-+ Split eval part and boot_verified part
+  + Rename the signature blob key
+  + Cleanup redundant code
+  + Make the hook call depends on CONFIG_FS_VERITY_BUILTIN_SIGNATURES
 ---
- security/ipe/Makefile |  1 +
- security/ipe/eval.c   | 94 +++++++++++++++++++++++++++++++++++++++++++
- security/ipe/eval.h   | 25 ++++++++++++
- 3 files changed, 120 insertions(+)
- create mode 100644 security/ipe/eval.c
- create mode 100644 security/ipe/eval.h
+ fs/verity/fsverity_private.h |  2 +-
+ fs/verity/open.c             | 26 +++++++++++++++++++++++++-
+ include/linux/fsverity.h     |  2 ++
+ 3 files changed, 28 insertions(+), 2 deletions(-)
 
-diff --git a/security/ipe/Makefile b/security/ipe/Makefile
-index 16bbe80991f1..d7f2870d7c09 100644
---- a/security/ipe/Makefile
-+++ b/security/ipe/Makefile
-@@ -6,6 +6,7 @@
- #
+diff --git a/fs/verity/fsverity_private.h b/fs/verity/fsverity_private.h
+index 49bf3a1eb2a0..1f06dd6b1c6e 100644
+--- a/fs/verity/fsverity_private.h
++++ b/fs/verity/fsverity_private.h
+@@ -108,7 +108,7 @@ int fsverity_init_merkle_tree_params(struct merkle_tree_params *params,
+ 				     unsigned int log_blocksize,
+ 				     const u8 *salt, size_t salt_size);
  
- obj-$(CONFIG_SECURITY_IPE) += \
-+	eval.o \
- 	hooks.o \
- 	ipe.o \
- 	policy.o \
-diff --git a/security/ipe/eval.c b/security/ipe/eval.c
-new file mode 100644
-index 000000000000..59144b2ecdda
---- /dev/null
-+++ b/security/ipe/eval.c
-@@ -0,0 +1,94 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (C) Microsoft Corporation. All rights reserved.
-+ */
-+
-+#include <linux/fs.h>
-+#include <linux/types.h>
-+#include <linux/slab.h>
-+#include <linux/file.h>
-+#include <linux/sched.h>
-+#include <linux/rcupdate.h>
-+
-+#include "ipe.h"
-+#include "eval.h"
-+#include "hooks.h"
-+#include "policy.h"
-+
-+struct ipe_policy __rcu *ipe_active_policy;
-+
-+/**
-+ * evaluate_property - Analyze @ctx against a property.
-+ * @ctx: Supplies a pointer to the context to be evaluated.
-+ * @p: Supplies a pointer to the property to be evaluated.
-+ *
-+ * Return:
-+ * * true	- The current @ctx match the @p
-+ * * false	- The current @ctx doesn't match the @p
-+ */
-+static bool evaluate_property(const struct ipe_eval_ctx *const ctx,
-+			      struct ipe_prop *p)
+-struct fsverity_info *fsverity_create_info(const struct inode *inode,
++struct fsverity_info *fsverity_create_info(struct inode *inode,
+ 					   struct fsverity_descriptor *desc);
+ 
+ void fsverity_set_info(struct inode *inode, struct fsverity_info *vi);
+diff --git a/fs/verity/open.c b/fs/verity/open.c
+index 1db5106a9c38..91f632df08b8 100644
+--- a/fs/verity/open.c
++++ b/fs/verity/open.c
+@@ -8,6 +8,7 @@
+ #include "fsverity_private.h"
+ 
+ #include <linux/mm.h>
++#include <linux/security.h>
+ #include <linux/slab.h>
+ 
+ static struct kmem_cache *fsverity_info_cachep;
+@@ -172,12 +173,28 @@ static int compute_file_digest(const struct fsverity_hash_alg *hash_alg,
+ 	return err;
+ }
+ 
++#ifdef CONFIG_FS_VERITY_BUILTIN_SIGNATURES
++static int fsverity_inode_setsecurity(struct inode *inode,
++				      struct fsverity_descriptor *desc)
 +{
-+	return false;
++	return security_inode_setsecurity(inode, FS_VERITY_INODE_SEC_NAME,
++					  desc->signature,
++					  le32_to_cpu(desc->sig_size), 0);
 +}
-+
-+/**
-+ * ipe_evaluate_event - Analyze @ctx against the current active policy.
-+ * @ctx: Supplies a pointer to the context to be evaluated.
-+ *
-+ * This is the loop where all policy evaluation happens against IPE policy.
-+ *
-+ * Return:
-+ * * 0		- OK
-+ * * -EACCES	- @ctx did not pass evaluation.
-+ * * !0		- Error
-+ */
-+int ipe_evaluate_event(const struct ipe_eval_ctx *const ctx)
++#else
++static inline int fsverity_inode_setsecurity(struct inode *inode,
++					     struct fsverity_descriptor *desc)
 +{
-+	int rc = 0;
-+	bool match = false;
-+	enum ipe_action_type action;
-+	struct ipe_policy *pol = NULL;
-+	const struct ipe_rule *rule = NULL;
-+	const struct ipe_op_table *rules = NULL;
-+	struct ipe_prop *prop = NULL;
-+
-+	rcu_read_lock();
-+
-+	pol = rcu_dereference(ipe_active_policy);
-+	if (!pol) {
-+		rcu_read_unlock();
-+		return 0;
-+	}
-+
-+	if (ctx->op == __IPE_OP_INVALID) {
-+		action = pol->parsed->global_default_action;
-+		goto eval;
-+	}
-+
-+	rules = &pol->parsed->rules[ctx->op];
-+
-+	list_for_each_entry(rule, &rules->rules, next) {
-+		match = true;
-+
-+		list_for_each_entry(prop, &rule->props, next)
-+			match = match && evaluate_property(ctx, prop);
-+
-+		if (match)
-+			break;
-+	}
-+
-+	if (match)
-+		action = rule->action;
-+	else if (rules->default_action != __IPE_ACTION_INVALID)
-+		action = rules->default_action;
-+	else
-+		action = pol->parsed->global_default_action;
-+
-+	rcu_read_unlock();
-+eval:
-+	if (action == __IPE_ACTION_DENY)
-+		rc = -EACCES;
-+
-+	return rc;
++	return 0;
 +}
-diff --git a/security/ipe/eval.h b/security/ipe/eval.h
-new file mode 100644
-index 000000000000..972580dfec15
---- /dev/null
-+++ b/security/ipe/eval.h
-@@ -0,0 +1,25 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (C) Microsoft Corporation. All rights reserved.
-+ */
++#endif /* CONFIG_IPE_PROP_FS_VERITY*/
 +
-+#ifndef _IPE_EVAL_H
-+#define _IPE_EVAL_H
+ /*
+  * Create a new fsverity_info from the given fsverity_descriptor (with optional
+  * appended builtin signature), and check the signature if present.  The
+  * fsverity_descriptor must have already undergone basic validation.
+  */
+-struct fsverity_info *fsverity_create_info(const struct inode *inode,
++struct fsverity_info *fsverity_create_info(struct inode *inode,
+ 					   struct fsverity_descriptor *desc)
+ {
+ 	struct fsverity_info *vi;
+@@ -242,6 +259,13 @@ struct fsverity_info *fsverity_create_info(const struct inode *inode,
+ 		spin_lock_init(&vi->hash_page_init_lock);
+ 	}
+ 
++	err = fsverity_inode_setsecurity(inode, desc);
++	if (err == -EOPNOTSUPP)
++		err = 0;
 +
-+#include <linux/file.h>
-+#include <linux/types.h>
++	if (err)
++		goto fail;
 +
-+#include "hooks.h"
-+#include "policy.h"
+ 	return vi;
+ 
+ fail:
+diff --git a/include/linux/fsverity.h b/include/linux/fsverity.h
+index 1eb7eae580be..9666721baf15 100644
+--- a/include/linux/fsverity.h
++++ b/include/linux/fsverity.h
+@@ -319,4 +319,6 @@ static inline int fsverity_prepare_setattr(struct dentry *dentry,
+ 	return 0;
+ }
+ 
++#define FS_VERITY_INODE_SEC_NAME "fsverity.builtin-sig"
 +
-+extern struct ipe_policy __rcu *ipe_active_policy;
-+
-+struct ipe_eval_ctx {
-+	enum ipe_op_type op;
-+
-+	const struct file *file;
-+};
-+
-+int ipe_evaluate_event(const struct ipe_eval_ctx *const ctx);
-+
-+#endif /* _IPE_EVAL_H */
+ #endif	/* _LINUX_FSVERITY_H */
 -- 
 2.25.1
 
