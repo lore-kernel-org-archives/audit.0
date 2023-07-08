@@ -2,184 +2,186 @@ Return-Path: <audit-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 823EEC001DE
-	for <audit@archiver.kernel.org>; Fri,  7 Jul 2023 14:54:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CB665C04A6A
+	for <audit@archiver.kernel.org>; Sat,  8 Jul 2023 05:37:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232732AbjGGOyh (ORCPT <rfc822;audit@archiver.kernel.org>);
-        Fri, 7 Jul 2023 10:54:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38452 "EHLO
+        id S232944AbjGHFhL (ORCPT <rfc822;audit@archiver.kernel.org>);
+        Sat, 8 Jul 2023 01:37:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232408AbjGGOyg (ORCPT <rfc822;audit@vger.kernel.org>);
-        Fri, 7 Jul 2023 10:54:36 -0400
-Received: from mail-qk1-f172.google.com (mail-qk1-f172.google.com [209.85.222.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CE562110
-        for <audit@vger.kernel.org>; Fri,  7 Jul 2023 07:53:48 -0700 (PDT)
-Received: by mail-qk1-f172.google.com with SMTP id af79cd13be357-765a311a7a9so98483285a.0
-        for <audit@vger.kernel.org>; Fri, 07 Jul 2023 07:53:48 -0700 (PDT)
+        with ESMTP id S232904AbjGHFhA (ORCPT <rfc822;audit@vger.kernel.org>);
+        Sat, 8 Jul 2023 01:37:00 -0400
+Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DD8F210B
+        for <audit@vger.kernel.org>; Fri,  7 Jul 2023 22:36:56 -0700 (PDT)
+Received: by mail-qt1-x832.google.com with SMTP id d75a77b69052e-40398ccdaeeso10074431cf.3
+        for <audit@vger.kernel.org>; Fri, 07 Jul 2023 22:36:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1688794615; x=1691386615;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=/6X+3H1ljfy7IjsbLjk8teqFst7rLlyJv0xIACsaZ2M=;
+        b=YTtOX0w+o9n/CPVzXDv1lowkOGTsW9kVS4l1u0GlN+P4+Pe6TRMgaq+o7QEeDp1B1f
+         7vM6U77MpQ9uceQKGo0/a+NnWjsimwHU6ohZpZeFLkemHDBGS0frgwzmdlyfUOOBAbxU
+         ET+4I+z7GIBzMBcsWS/933I401edCFOFcHQNgUzaGht1OEi7TIAKdIBtTQz9Kzgb2tiU
+         tw5cc4FxstdLt4ipYhJ9ZMkYCPe29jz+lLQa4scUKCUFk/nlfJ+gnP1h7/hQnqFLSwvv
+         /cA8qPKZNBaudKaHEGn+LQXo3rJzTpV5iLzFhKIQjljhwcsODwxFNmwiIbD6qae1PQVx
+         1cdA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688741627; x=1691333627;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CPovcDx0Jp7p0rxc31G4K4rf+RSfD3YoQjrCZo8Rivs=;
-        b=gJt4V116Jrge/jFgfXwE92HrFaTJffzZy+ESjkylQbHNNKdZpGBYJn3flrWBf+YHX/
-         q5p6WNZYNrQEyQz2gaIlL4ErOLv0JDm9ndIR4gS3ZOWyBO1mLiG8avFPJrbpZc3+P90L
-         R8KNp3WdM1DmnAqEp3pYoQqcNYrUpXDlEJYSXBtWRPxv89BpMIAAOSgnLECLpkNVI/6G
-         Vg7B5O8Opd/fIjXi6K8CEiX9oG/qp6/bs4bSvSatTiN5m+7hdlUicbmLTkQsaYCSTYgJ
-         VhXtC2HR/AJHSZfMfg7DCa+jrBrosnBu0TeWPhVd12SAonLHHQ1M2Oh6S7i3UqUMEX6Z
-         C41Q==
-X-Gm-Message-State: ABy/qLY3QIZ1HRKPO+xqnyteTYrVy0yAqnAqmRlH+QeBqaMyf0Tc3SLR
-        WHoZp8myAP1c3fuQVBBIcOxZ
-X-Google-Smtp-Source: APBJJlEcjwiB2P+G5P63povz9uFukN13UGlV0N1GEkdF3fsvn89XgwLKb03K3Qu7uI65bbZcCd9ADQ==
-X-Received: by 2002:a05:620a:3944:b0:765:44c2:826d with SMTP id qs4-20020a05620a394400b0076544c2826dmr6230550qkn.27.1688741627214;
-        Fri, 07 Jul 2023 07:53:47 -0700 (PDT)
-Received: from localhost (pool-68-160-166-30.bstnma.fios.verizon.net. [68.160.166.30])
-        by smtp.gmail.com with ESMTPSA id m21-20020a05620a13b500b0076219ec1fbesm1900772qki.42.2023.07.07.07.53.46
+        d=1e100.net; s=20221208; t=1688794615; x=1691386615;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/6X+3H1ljfy7IjsbLjk8teqFst7rLlyJv0xIACsaZ2M=;
+        b=lSwuuo4WcyClt6+qAZoi6VwNNtUv7yEAsM7x5WD7QQ7X3WrqwpU5fSg/TEWQUnvtCR
+         Skvhjojoo4ulnjkEpSuDuKC5TjGvEigDHjsMtZBAlShAbF22WLuVwg8ZZnUdZyK3e9Az
+         /BB4mrFMlX0U0WneRK5cEzniBtS7kCv1vNsgkJSn0y2h+g5qa0d0sL3NgPDCiiDaQcQV
+         CmHNS1pbz7jU+RlD3x0nhTdVSGDR1YVUdS0vejNyzoD6wFnT+6IduWwOVWHazJyA9fKP
+         m+0dgpRIIWRLuPOvE1pvTe+z6HpaTT2MHtznUiD6OE7x0M/K4tLmSscq+fYvA2tQWgLH
+         lDcA==
+X-Gm-Message-State: ABy/qLZ0/mUKXsi++uCR4BZ+0tAhYvrwLxQmy8XvSmZCmdMuLC8uJVYd
+        sHMDpHkM97Yo2u107KDQUiBL
+X-Google-Smtp-Source: APBJJlG+a1EKnj+jvMEDInNdvc1r1W/hz+0/12Nwm+mpbZz0DyPSVNjr9MqOf37m7Bq8n/2COLAfQA==
+X-Received: by 2002:a05:620a:4051:b0:767:923:48d8 with SMTP id i17-20020a05620a405100b00767092348d8mr6721872qko.27.1688794615250;
+        Fri, 07 Jul 2023 22:36:55 -0700 (PDT)
+Received: from localhost ([70.22.175.108])
+        by smtp.gmail.com with ESMTPSA id c11-20020ae9e20b000000b0075cebaa1540sm2479491qkc.58.2023.07.07.22.36.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Jul 2023 07:53:46 -0700 (PDT)
-Date:   Fri, 7 Jul 2023 10:53:45 -0400
-From:   Mike Snitzer <snitzer@kernel.org>
-To:     Fan Wu <wufan@linux.microsoft.com>
-Cc:     corbet@lwn.net, zohar@linux.ibm.com, jmorris@namei.org,
-        serge@hallyn.com, tytso@mit.edu, ebiggers@kernel.org,
-        axboe@kernel.dk, agk@redhat.com, eparis@redhat.com,
-        paul@paul-moore.com, linux-doc@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
+        Fri, 07 Jul 2023 22:36:54 -0700 (PDT)
+Date:   Sat, 08 Jul 2023 01:36:54 -0400
+Message-ID: <b460c0317dfbd5b4668015e104ea3e92.paul@paul-moore.com>
+From:   Paul Moore <paul@paul-moore.com>
+To:     Fan Wu <wufan@linux.microsoft.com>, corbet@lwn.net,
+        zohar@linux.ibm.com, jmorris@namei.org, serge@hallyn.com,
+        tytso@mit.edu, ebiggers@kernel.org, axboe@kernel.dk,
+        agk@redhat.com, snitzer@kernel.org, eparis@redhat.com
+Cc:     linux-doc@vger.kernel.org, linux-integrity@vger.kernel.org,
         linux-security-module@vger.kernel.org,
         linux-fscrypt@vger.kernel.org, linux-block@vger.kernel.org,
         dm-devel@redhat.com, audit@vger.kernel.org,
         roberto.sassu@huawei.com, linux-kernel@vger.kernel.org,
-        Deven Bowers <deven.desai@linux.microsoft.com>
-Subject: Re: [RFC PATCH v10 11/17] dm-verity: consume root hash digest and
- signature data via LSM hook
-Message-ID: <ZKgm+ffQbdDTxrg9@redhat.com>
-References: <1687986571-16823-1-git-send-email-wufan@linux.microsoft.com>
- <1687986571-16823-12-git-send-email-wufan@linux.microsoft.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1687986571-16823-12-git-send-email-wufan@linux.microsoft.com>
+        Deven Bowers <deven.desai@linux.microsoft.com>,
+        Fan Wu <wufan@linux.microsoft.com>
+Subject: Re: [PATCH RFC v10 1/17] security: add ipe lsm
+References: <1687986571-16823-2-git-send-email-wufan@linux.microsoft.com>
+In-Reply-To: <1687986571-16823-2-git-send-email-wufan@linux.microsoft.com>
 Precedence: bulk
 List-ID: <audit.vger.kernel.org>
 X-Mailing-List: audit@vger.kernel.org
 
-On Wed, Jun 28 2023 at  5:09P -0400,
-Fan Wu <wufan@linux.microsoft.com> wrote:
-
-> From: Deven Bowers <deven.desai@linux.microsoft.com>
+On Jun 28, 2023 Fan Wu <wufan@linux.microsoft.com> wrote:
 > 
-> dm-verity provides a strong guarantee of a block device's integrity. As
-> a generic way to check the integrity of a block device, it provides
-> those integrity guarantees to its higher layers, including the filesystem
-> level.
+> Integrity Policy Enforcement (IPE) is an LSM that provides an
+> complimentary approach to Mandatory Access Control than existing LSMs
+> today.
 > 
-> An LSM that control access to a resource on the system based on the
-> available integrity claims can use this transitive property of
-> dm-verity, by querying the underlying block_device of a particular
-> file.
+> Existing LSMs have centered around the concept of access to a resource
+> should be controlled by the current user's credentials. IPE's approach,
+> is that access to a resource should be controlled by the system's trust
+> of a current resource.
 > 
-> The digest and signature information need to be stored in the block
-> device to fulfill the next requirement of authorization via LSM policy.
-> This will enable the LSM to perform revocation of devices that are still
-> mounted, prohibiting execution of files that are no longer authorized
-> by the LSM in question.
-> 
-> This patch added two security hook calls in dm-verity to save the
-> dm-verity roothash and the roothash signature to LSM blobs.
+> The basis of this approach is defining a global policy to specify which
+> resource can be trusted.
 > 
 > Signed-off-by: Deven Bowers <deven.desai@linux.microsoft.com>
 > Signed-off-by: Fan Wu <wufan@linux.microsoft.com>
 > ---
+>  MAINTAINERS           |  7 +++++++
+>  security/Kconfig      | 11 ++++++-----
+>  security/Makefile     |  1 +
+>  security/ipe/Kconfig  | 17 +++++++++++++++++
+>  security/ipe/Makefile | 10 ++++++++++
+>  security/ipe/ipe.c    | 37 +++++++++++++++++++++++++++++++++++++
+>  security/ipe/ipe.h    | 16 ++++++++++++++++
+>  7 files changed, 94 insertions(+), 5 deletions(-)
+>  create mode 100644 security/ipe/Kconfig
+>  create mode 100644 security/ipe/Makefile
+>  create mode 100644 security/ipe/ipe.c
+>  create mode 100644 security/ipe/ipe.h
 
-> diff --git a/drivers/md/dm-verity-target.c b/drivers/md/dm-verity-target.c
-> index 26adcfea0302..54d46b2f2723 100644
-> --- a/drivers/md/dm-verity-target.c
-> +++ b/drivers/md/dm-verity-target.c
-> @@ -1440,6 +1453,15 @@ static int verity_ctr(struct dm_target *ti, unsigned int argc, char **argv)
->  	ti->per_io_data_size = roundup(ti->per_io_data_size,
->  				       __alignof__(struct dm_verity_io));
+...
+
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index a82795114ad4..ad00887d38ea 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -10278,6 +10278,13 @@ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git
+>  F:	security/integrity/
+>  F:	security/integrity/ima/
 >  
-> +	root_digest.digest = v->root_digest;
-> +	root_digest.digest_len = v->digest_size;
-> +	root_digest.algo = v->alg_name;
+> +INTEGRITY POLICY ENFORCEMENT (IPE)
+> +M:	Fan Wu <wufan@linux.microsoft.com>
+> +L:	linux-security-module@vger.kernel.org
+> +S:	Supported
+> +T:	git git://github.com/microsoft/ipe.git
+
+Using the raw git protocol doesn't seem to work with GH, I think you
+need to refernce the git/https URL:
+
+ https://github.com/microsoft/ipe.git
+
+> +F:	security/ipe/
 > +
-> +	r = security_bdev_setsecurity(bdev, DM_VERITY_ROOTHASH_SEC_NAME, &root_digest,
-> +				      sizeof(root_digest));
-> +	if (r)
-> +		goto bad;
+>  INTEL 810/815 FRAMEBUFFER DRIVER
+>  M:	Antonino Daplas <adaplas@gmail.com>
+>  L:	linux-fbdev@vger.kernel.org
+> diff --git a/security/Kconfig b/security/Kconfig
+> index 97abeb9b9a19..daa4626ea99c 100644
+> --- a/security/Kconfig
+> +++ b/security/Kconfig
+> @@ -202,6 +202,7 @@ source "security/yama/Kconfig"
+>  source "security/safesetid/Kconfig"
+>  source "security/lockdown/Kconfig"
+>  source "security/landlock/Kconfig"
+> +source "security/ipe/Kconfig"
+>  
+>  source "security/integrity/Kconfig"
+>  
+> @@ -241,11 +242,11 @@ endchoice
+>  
+>  config LSM
+>  	string "Ordered list of enabled LSMs"
+> -	default "landlock,lockdown,yama,loadpin,safesetid,smack,selinux,tomoyo,apparmor,bpf" if DEFAULT_SECURITY_SMACK
+> -	default "landlock,lockdown,yama,loadpin,safesetid,apparmor,selinux,smack,tomoyo,bpf" if DEFAULT_SECURITY_APPARMOR
+> -	default "landlock,lockdown,yama,loadpin,safesetid,tomoyo,bpf" if DEFAULT_SECURITY_TOMOYO
+> -	default "landlock,lockdown,yama,loadpin,safesetid,bpf" if DEFAULT_SECURITY_DAC
+> -	default "landlock,lockdown,yama,loadpin,safesetid,selinux,smack,tomoyo,apparmor,bpf"
+> +	default "landlock,lockdown,yama,loadpin,safesetid,smack,selinux,tomoyo,apparmor,bpf,ipe" if DEFAULT_SECURITY_SMACK
+> +	default "landlock,lockdown,yama,loadpin,safesetid,apparmor,selinux,smack,tomoyo,bpf,ipe" if DEFAULT_SECURITY_APPARMOR
+> +	default "landlock,lockdown,yama,loadpin,safesetid,tomoyo,bpf,ipe" if DEFAULT_SECURITY_TOMOYO
+> +	default "landlock,lockdown,yama,loadpin,safesetid,bpf,ipe" if DEFAULT_SECURITY_DAC
+> +	default "landlock,lockdown,yama,loadpin,safesetid,selinux,smack,tomoyo,apparmor,bpf,ipe"
+
+Generally speaking the BPF LSM should be the last entry in the LSM
+list to help prevent issues caused by a BPF LSM returning an improper
+error and shortcutting a LSM after it.
+
+>  	help
+>  	  A comma-separated list of LSMs, in initialization order.
+>  	  Any LSMs left off this list, except for those with order
+
+...
+
+> diff --git a/security/ipe/Makefile b/security/ipe/Makefile
+> new file mode 100644
+> index 000000000000..571648579991
+> --- /dev/null
+> +++ b/security/ipe/Makefile
+> @@ -0,0 +1,10 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +#
+> +# Copyright (C) Microsoft Corporation. All rights reserved.
+> +#
+> +# Makefile for building the IPE module as part of the kernel tree.
+> +#
 > +
->  	verity_verify_sig_opts_cleanup(&verify_args);
->  
->  	dm_audit_log_ctr(DM_MSG_PREFIX, ti, 1);
-> diff --git a/drivers/md/dm-verity-verify-sig.c b/drivers/md/dm-verity-verify-sig.c
-> index 4836508ea50c..33165dd7470f 100644
-> --- a/drivers/md/dm-verity-verify-sig.c
-> +++ b/drivers/md/dm-verity-verify-sig.c
-> @@ -9,6 +9,9 @@
->  #include <linux/verification.h>
->  #include <keys/user-type.h>
->  #include <linux/module.h>
-> +#include <linux/security.h>
-> +#include <linux/dm-verity.h>
-> +#include "dm-core.h"
+> +obj-$(CONFIG_SECURITY_IPE) += \
+> +	hooks.o \
+> +	ipe.o \
 
-Why are you including dm-core.h here?
+It doesn't look like security/ipe/hook.c is included in this patch.
 
->  #include "dm-verity.h"
->  #include "dm-verity-verify-sig.h"
->  
-> @@ -97,14 +100,17 @@ int verity_verify_sig_parse_opt_args(struct dm_arg_set *as,
->   * verify_verify_roothash - Verify the root hash of the verity hash device
->   *			     using builtin trusted keys.
->   *
-> + * @bdev: block_device representing the device-mapper created block device.
-> + *	  Used by the security hook, to set information about the block_device.
->   * @root_hash: For verity, the roothash/data to be verified.
->   * @root_hash_len: Size of the roothash/data to be verified.
->   * @sig_data: The trusted signature that verifies the roothash/data.
->   * @sig_len: Size of the signature.
->   *
->   */
-> -int verity_verify_root_hash(const void *root_hash, size_t root_hash_len,
-> -			    const void *sig_data, size_t sig_len)
-> +int verity_verify_root_hash(struct block_device *bdev, const void *root_hash,
-> +			    size_t root_hash_len, const void *sig_data,
-> +			    size_t sig_len)
->  {
->  	int ret;
->  
-> @@ -126,8 +132,12 @@ int verity_verify_root_hash(const void *root_hash, size_t root_hash_len,
->  				NULL,
->  #endif
->  				VERIFYING_UNSPECIFIED_SIGNATURE, NULL, NULL);
-> +	if (ret)
-> +		return ret;
->  
-> -	return ret;
-> +	return security_bdev_setsecurity(bdev,
-> +					 DM_VERITY_SIGNATURE_SEC_NAME,
-> +					 sig_data, sig_len);
->  }
->  
->  void verity_verify_sig_opts_cleanup(struct dm_verity_sig_opts *sig_opts)
+It is important to ensure that each patch compiles after it is
+applied.
 
-Both of your calls to security_bdev_setsecurity() to set your blobs in
-the bdev are suspect because you're doing so from the verity_ctr().
-The mapped_device has 2 dm_table slots (active and inactive).  The
-verity_ctr() becomes part of the inactive slot, there is an extra step
-to bind the inactive table to the active table.
-
-This leads to you changing the blobs in the global bdev _before_ the
-table is actually active.  It is possible that the inactive table will
-simply be removed and the DM verity device put back in service;
-leaving your blob(s) in the bdev inconsistent.
-
-This issue has parallels to how we need to defer changing the global
-queue_limits associated with a request_queue until _after_ all table
-loading is settled and then the update is done just before resuming
-the DM device (mapped_device) -- see dm_table_set_restrictions().
-
-Unfortunately, this feels like it may require a new hook in the
-target_type struct (e.g. ->finalize())
-
-Mike
+--
+paul-moore.com
