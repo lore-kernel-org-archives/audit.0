@@ -2,53 +2,53 @@ Return-Path: <audit-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 46D48EB64DD
-	for <audit@archiver.kernel.org>; Sat,  8 Jul 2023 05:37:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7966EC001E0
+	for <audit@archiver.kernel.org>; Sat,  8 Jul 2023 05:38:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233089AbjGHFh4 (ORCPT <rfc822;audit@archiver.kernel.org>);
-        Sat, 8 Jul 2023 01:37:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43876 "EHLO
+        id S233008AbjGHFh7 (ORCPT <rfc822;audit@archiver.kernel.org>);
+        Sat, 8 Jul 2023 01:37:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232926AbjGHFhU (ORCPT <rfc822;audit@vger.kernel.org>);
-        Sat, 8 Jul 2023 01:37:20 -0400
-Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDFF12690
-        for <audit@vger.kernel.org>; Fri,  7 Jul 2023 22:37:00 -0700 (PDT)
-Received: by mail-qt1-x82b.google.com with SMTP id d75a77b69052e-403713e7344so20952781cf.2
-        for <audit@vger.kernel.org>; Fri, 07 Jul 2023 22:37:00 -0700 (PDT)
+        with ESMTP id S233011AbjGHFh3 (ORCPT <rfc822;audit@vger.kernel.org>);
+        Sat, 8 Jul 2023 01:37:29 -0400
+Received: from mail-qv1-xf35.google.com (mail-qv1-xf35.google.com [IPv6:2607:f8b0:4864:20::f35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F19C268B
+        for <audit@vger.kernel.org>; Fri,  7 Jul 2023 22:36:59 -0700 (PDT)
+Received: by mail-qv1-xf35.google.com with SMTP id 6a1803df08f44-63719ad32e7so18116116d6.1
+        for <audit@vger.kernel.org>; Fri, 07 Jul 2023 22:36:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1688794619; x=1691386619;
+        d=paul-moore.com; s=google; t=1688794618; x=1691386618;
         h=in-reply-to:references:subject:cc:to:from:message-id:date:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=tGA1GMuiBFLQbBC9Kx/aFBaGS7w0xHkPHFkJJNA2iSI=;
-        b=H4OjjGgTuSgh0ERbXj1XvS/xTBxkB7UvM7Vfkrh52Yu8LpFcioo23H7LN2pCGL4LW1
-         c0C5P5QmvB1fXe5I8JHSW7o4g1Ajl1MF/4+jjGWAydjxfqGvPpeQnueqoJppxuYX4Tib
-         6hoyeiTFlWTndTuwvK6ZBpbmb3kDElpYHJNNeVJBjWMXxzLWOzeNN55RmVFRtgUieiJS
-         n9eYbXhSBN+H4R2tcet2YEN9vvVt5VousOwqJlNxxiBZVJ8WFLL0sPVVImmpWJYvuSnT
-         MhL7JtJsQDdw8I3gZFN5WtS2gjWSOchAsKTG4rNTzlHCYSShijuEZjZzESlquH/iq7kj
-         ueNg==
+        bh=dLpzT15vthbUVO0k71raasVu18kKS27blTVJmNCp9qw=;
+        b=TJeqWacjduwbP6Y+SlQmoAGQHi1lphT6UAEvJNfG8M7m/0FnuH4lofD3tvQHae013R
+         g+kAwyHtWpHISigG4/rbyEzd6fpSmCmFdpqI3eUvmpIpr9NDiKwyDsB7p2lRdYY/qAkP
+         PkrukE7Z5dEBDUbVtA75oqvybWd1JV9qnpP6SM3Zr5QebCmjbU68jnvQbRl0WDdQJ/8C
+         WClvUbL6oPSan2AXFMETYxTuwPuBbRiUYf0EyknQ60FgP+dNrijlvPFt1pax4Az2PMpM
+         6gd3Z0UQjg5Ba4axeUMQN9xQ3CHwGy2GsMJYkmBRfLzybyCLDgybzBWGa37xu+RyDfXa
+         sxWg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688794619; x=1691386619;
+        d=1e100.net; s=20221208; t=1688794618; x=1691386618;
         h=in-reply-to:references:subject:cc:to:from:message-id:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=tGA1GMuiBFLQbBC9Kx/aFBaGS7w0xHkPHFkJJNA2iSI=;
-        b=CxBDCxkv5luV2EwdMqssPNx8S9uqBNsMXkSU8yoh2fhtmzYpIIvir+bBATUA33pvQL
-         qxO1C9k+ETH6W0RE94fpfkbpz/wZu469K2qLsEV7/eht3RpZAvIR+IRrkUuwEgD/8t8s
-         diLJjQPT34OM88XXSxRQwXOheQFzDKKe9HN+3PshXhhNRO4VNvoPle2Q7E/0KqJbnCPe
-         CAJs1yx+5+yYSUpi81pvU+s7ox8JIemCDPpF5SdYbOeVk2BwBwetK7S4+YTdl+U0sWqi
-         /zzZhGtRjHDuxltx8UFSXCHhvys9zH++B2OiGeZ4ykqn1OUNWttmckqzkG9iiQJq99Fo
-         550Q==
-X-Gm-Message-State: ABy/qLanpqAlu8Uij6r3t1Ws1RLuyFEq/57E24YWvIjyaVSfs6rXVHUL
-        3UMV1LyFaqddRzjUw+c0Wygh
-X-Google-Smtp-Source: APBJJlFF68xKBlrT8ZUzDF7hUpibBBTXCy89LqgKEgf14OWs8qrR4aAL2DMHEseMAEOpXtlRbrYnOQ==
-X-Received: by 2002:ac8:7dc6:0:b0:3ff:2088:79d8 with SMTP id c6-20020ac87dc6000000b003ff208879d8mr9453816qte.4.1688794619449;
-        Fri, 07 Jul 2023 22:36:59 -0700 (PDT)
+        bh=dLpzT15vthbUVO0k71raasVu18kKS27blTVJmNCp9qw=;
+        b=ehJctLLf579O/iK90zzp+uLgT94Hakmr4/lYlA872sWbcgVxvvvH9dmFEKaXZndlCv
+         EDczPc1L4rWQOQ/At2d5fgnHZhapRmm8MUwMaFETBiGKBz1tGrpSkk+aYCKxIUzkkvV+
+         ZCWHA2/+Yfz/kKb2hhSc7NWExsNBSivD2sR2l6u7yMof5u5H2JVZHwjqXGAGfdPdyC1j
+         COujUe3/kTZ2p+TzDAnlyJP5FYAxfpMAuQOuVZI6ekdNSzsZ06hWB7XHVdpFzPcdEyGE
+         oTQ/dzSXsn9wvSvmnjppTj8s1bekUVFYy3jO0NHvU2Owp+AxuikayP4UqIOD4N3DORqN
+         gQxg==
+X-Gm-Message-State: ABy/qLbflkaBHE1prKMFoq4VkvGOc9mg2AFQB/B5ugChUBaWWOjLsPvA
+        MB3o0pMjkcqrGLH20604q6hk
+X-Google-Smtp-Source: APBJJlGlLmfhTVjB4mohkDIyT1aO06AiFpA+DVrG9bmKubtLHJbdM9WNxESZ9ZiNvJziNKwf2PnzYA==
+X-Received: by 2002:a0c:df07:0:b0:635:dfe1:c203 with SMTP id g7-20020a0cdf07000000b00635dfe1c203mr6459539qvl.64.1688794618672;
+        Fri, 07 Jul 2023 22:36:58 -0700 (PDT)
 Received: from localhost ([70.22.175.108])
-        by smtp.gmail.com with ESMTPSA id a6-20020a0cca86000000b0062df126ca11sm2943696qvk.21.2023.07.07.22.36.59
+        by smtp.gmail.com with ESMTPSA id o20-20020a0cf4d4000000b0063007ccaf42sm2971617qvm.57.2023.07.07.22.36.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Jul 2023 22:36:59 -0700 (PDT)
-Date:   Sat, 08 Jul 2023 01:36:58 -0400
-Message-ID: <2edaa73fc9457f4a051115863d94b4ff.paul@paul-moore.com>
+        Fri, 07 Jul 2023 22:36:58 -0700 (PDT)
+Date:   Sat, 08 Jul 2023 01:36:57 -0400
+Message-ID: <2308135fa59ff970ca88649872acf35d.paul@paul-moore.com>
 From:   Paul Moore <paul@paul-moore.com>
 To:     Fan Wu <wufan@linux.microsoft.com>, corbet@lwn.net,
         zohar@linux.ibm.com, jmorris@namei.org, serge@hallyn.com,
@@ -59,85 +59,111 @@ Cc:     linux-doc@vger.kernel.org, linux-integrity@vger.kernel.org,
         linux-fscrypt@vger.kernel.org, linux-block@vger.kernel.org,
         dm-devel@redhat.com, audit@vger.kernel.org,
         roberto.sassu@huawei.com, linux-kernel@vger.kernel.org,
+        Deven Bowers <deven.desai@linux.microsoft.com>,
         Fan Wu <wufan@linux.microsoft.com>
-Subject: Re: [PATCH RFC v10 6/17] security: add new securityfs delete function
-References: <1687986571-16823-7-git-send-email-wufan@linux.microsoft.com>
-In-Reply-To: <1687986571-16823-7-git-send-email-wufan@linux.microsoft.com>
+Subject: Re: [PATCH RFC v10 5/17] ipe: introduce 'boot_verified' as a trust  provider
+References: <1687986571-16823-6-git-send-email-wufan@linux.microsoft.com>
+In-Reply-To: <1687986571-16823-6-git-send-email-wufan@linux.microsoft.com>
 Precedence: bulk
 List-ID: <audit.vger.kernel.org>
 X-Mailing-List: audit@vger.kernel.org
 
 On Jun 28, 2023 Fan Wu <wufan@linux.microsoft.com> wrote:
 > 
-> When deleting a directory in the security file system, the existing
-> securityfs_remove requires the directory to be empty, otherwise
-> it will do nothing. This leads to a potential risk that the security
-> file system might be in an unclean state when the intentded deletion
-> did not happen.
+> IPE is designed to provide system level trust guarantees, this usually
+> implies that trust starts from bootup with a hardware root of trust,
+> which validates the bootloader. After this, the bootloader verifies the
+> kernel and the initramfs.
 > 
-> This commit introduces a new function securityfs_recursive_remove
-> to recursively delete a directory without leaving an unclean state.
+> As there's no currently supported integrity method for initramfs, and
+> it's typically already verified by the bootloader, introduce a property
+> that causes the first superblock to have an execution to be "pinned",
+> which is typically initramfs.
 > 
-> Co-developed-by: "Christian Brauner (Microsoft)" <brauner@kernel.org>
+> When the "pinned" device is unmounted, it will be "unpinned" and
+> `boot_verified` property will always evaluate to false afterward.
+> 
+> We use a pointer with a spin_lock to "pin" the device instead of rcu
+> because rcu synchronization may sleep, which is not allowed when
+> unmounting a device.
+> 
+> Signed-off-by: Deven Bowers <deven.desai@linux.microsoft.com>
 > Signed-off-by: Fan Wu <wufan@linux.microsoft.com>
 > ---
->  include/linux/security.h |  1 +
->  security/inode.c         | 25 +++++++++++++++++++++++++
->  2 files changed, 26 insertions(+)
-> 
-> diff --git a/include/linux/security.h b/include/linux/security.h
-> index e2734e9e44d5..a88076ebc7b1 100644
-> --- a/include/linux/security.h
-> +++ b/include/linux/security.h
-> @@ -1971,6 +1971,7 @@ struct dentry *securityfs_create_symlink(const char *name,
->  					 const char *target,
->  					 const struct inode_operations *iops);
->  extern void securityfs_remove(struct dentry *dentry);
-> +extern void securityfs_recursive_remove(struct dentry *dentry);
->  
->  #else /* CONFIG_SECURITYFS */
->  
-> diff --git a/security/inode.c b/security/inode.c
-> index 6c326939750d..13358e8547e8 100644
-> --- a/security/inode.c
-> +++ b/security/inode.c
-> @@ -313,6 +313,31 @@ void securityfs_remove(struct dentry *dentry)
+>  security/ipe/eval.c          | 72 +++++++++++++++++++++++++++++++++++-
+>  security/ipe/eval.h          |  2 +
+>  security/ipe/hooks.c         | 12 ++++++
+>  security/ipe/hooks.h         |  2 +
+>  security/ipe/ipe.c           |  1 +
+>  security/ipe/policy.h        |  2 +
+>  security/ipe/policy_parser.c | 37 +++++++++++++++++-
+>  7 files changed, 126 insertions(+), 2 deletions(-)
+
+The compilation errors continue into this patch.
+
+> diff --git a/security/ipe/policy_parser.c b/security/ipe/policy_parser.c
+> index 27e5767480b0..28c14adfe6d2 100644
+> --- a/security/ipe/policy_parser.c
+> +++ b/security/ipe/policy_parser.c
+> @@ -265,6 +265,12 @@ static enum ipe_action_type parse_action(char *t)
+>  	return match_token(t, action_tokens, args);
 >  }
->  EXPORT_SYMBOL_GPL(securityfs_remove);
 >  
-> +static void remove_one(struct dentry *victim)
-> +{
-> +	simple_release_fs(&mount, &mount_count);
-> +}
+> +static const match_table_t property_tokens = {
+> +	{__IPE_PROP_BOOT_VERIFIED_FALSE,	"boot_verified=FALSE"},
+> +	{__IPE_PROP_BOOT_VERIFIED_TRUE,		"boot_verified=TRUE"},
+> +	{__IPE_PROP_INVALID,			NULL}
+> +};
 > +
-> +/**
-> + * securityfs_recursive_remove - recursively removes a file or directory from the securityfs filesystem
-
-I really want to see lines less than or equal to 80 characters; I
-would suggest this:
-
-"securityfs_recursive_remove - recursively removes a file or directory"
-
-> + * @dentry: a pointer to a the dentry of the file or directory to be removed.
-> + *
-> + * This function recursively removes a file or directory in securityfs that was
-> + * previously created with a call to another securityfs function (like
-> + * securityfs_create_file() or variants thereof.)
-> + */
-> +void securityfs_recursive_remove(struct dentry *dentry)
-> +{
-> +	if (IS_ERR_OR_NULL(dentry))
-> +		return;
+>  /**
+>   * parse_property - Parse the property type given a token string.
+>   * @t: Supplies the token string to be parsed.
+> @@ -277,7 +283,36 @@ static enum ipe_action_type parse_action(char *t)
+>   */
+>  static int parse_property(char *t, struct ipe_rule *r)
+>  {
+> -	return -EBADMSG;
+> +	substring_t args[MAX_OPT_ARGS];
+> +	struct ipe_prop *p = NULL;
+> +	int rc = 0;
+> +	int token;
 > +
-> +	simple_pin_fs(&fs_type, &mount, &mount_count);
-> +	simple_recursive_removal(dentry, remove_one);
-> +	simple_release_fs(&mount, &mount_count);
-> +}
-> +EXPORT_SYMBOL_GPL(securityfs_recursive_remove);
+> +	p = kzalloc(sizeof(*p), GFP_KERNEL);
+> +	if (!p)
+> +		return -ENOMEM;
 > +
->  #ifdef CONFIG_SECURITY
->  static struct dentry *lsm_dentry;
->  static ssize_t lsm_read(struct file *filp, char __user *buf, size_t count,
+> +	token = match_token(t, property_tokens, args);
+> +
+> +	switch (token) {
+> +	case __IPE_PROP_BOOT_VERIFIED_FALSE:
+> +	case __IPE_PROP_BOOT_VERIFIED_TRUE:
+> +		p->type = token;
+> +		break;
+> +	case __IPE_PROP_INVALID:
+
+You generally don't need to explicitly specify a case if the code
+immediately falls through to 'default'.
+
+> +	default:
+> +		rc = -EBADMSG;
+> +		break;
+> +	}
+> +	if (rc)
+> +		goto err;
+> +	list_add_tail(&p->next, &r->props);
+> +
+> +out:
+> +	return rc;
+> +err:
+> +	kfree(p);
+> +	goto out;
+
+Once again, don't use a goto when the jump destination simply does a
+return, do the return directly.
+
+>  }
+>  
+>  /**
 > -- 
 > 2.25.1
 
