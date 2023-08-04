@@ -2,194 +2,79 @@ Return-Path: <audit-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 88E6FC04FDF
-	for <audit@archiver.kernel.org>; Tue,  1 Aug 2023 19:29:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E891CC001DF
+	for <audit@archiver.kernel.org>; Fri,  4 Aug 2023 09:43:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232459AbjHAT34 (ORCPT <rfc822;audit@archiver.kernel.org>);
-        Tue, 1 Aug 2023 15:29:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56396 "EHLO
+        id S231142AbjHDJnf (ORCPT <rfc822;audit@archiver.kernel.org>);
+        Fri, 4 Aug 2023 05:43:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232442AbjHAT3z (ORCPT <rfc822;audit@vger.kernel.org>);
-        Tue, 1 Aug 2023 15:29:55 -0400
-Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAA8F19A8
-        for <audit@vger.kernel.org>; Tue,  1 Aug 2023 12:29:52 -0700 (PDT)
-Received: by mail-ot1-x32e.google.com with SMTP id 46e09a7af769-6bcaa6d5e2cso1667848a34.3
-        for <audit@vger.kernel.org>; Tue, 01 Aug 2023 12:29:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1690918192; x=1691522992;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9VoATP9NhH/kSJB8+YTj7ST63aExW0zMTg/FlvDeldU=;
-        b=SdoGE7ZGizDXbJRqNSzPFByd7neKDRG8vgDHG8wWrDk7Z7/KTjH2TS4QYzOvia6RNR
-         jSo187iZ1Y0P8fLXtxglQLJKCFUv7Kxsuv/9iavDmMLeprd+m+/YvCjNymHL8zq+iQ0j
-         DnKq58d2TsOX4iAzqQBRe8Hp1rZN6nyb9fpsoraZUicbFh9DHb/uzlKqyndedlb/nJRy
-         Bo0lKCsI77WBEpBlgXAEOJOmejm2HoJwSS2B7jJejSgrYS+hiVbwBYzWxiMGmUorhK4r
-         TSgxWS9DbAIJ9OnnXTRHeSKzq+qvZhxOUrB+K+5yVY2hS2EksqdgvxGeHATBviCI8YKY
-         xNlA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690918192; x=1691522992;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9VoATP9NhH/kSJB8+YTj7ST63aExW0zMTg/FlvDeldU=;
-        b=FqP9yzT7PrHG2hh4prFh32U298NGX+1GK0tGZjqVEI96ITKISuj8GC9arDn0E8m0AR
-         967kkY+WyFcJ3b5U4onO57ZLbe7bEcnFCHovUP1HVBGhZ08H/PgA0gWAW9zCSg89XK+q
-         e995oJ2fHB3d0VeMQ1Ztzkjy769wWEb4YWpHDtg0XNcR/b/RKGuLhW60g2czJNdjFXDG
-         zCv91pby3iIgQie9SKg2ju42sfu03lMZd4rjKoiKCTidwjUKw6TT+wIMjiRM7DFZXhHy
-         5UM3rk1eSyZVrVh13eLcPthdzHsOjMqvaZQkCsz9M6RPXcJa3LidL7dhBZgIyCSCtToO
-         hI9w==
-X-Gm-Message-State: ABy/qLZRo/N4h7DlXuYDd9+n/WkC4p5/+ek+HeEcrJyAkG4YvBFHasyU
-        /wgAsmXxUPIQi4oDq93MgNc5ACYTdyz6MSUK/zgj
-X-Google-Smtp-Source: APBJJlFeosTdRRNCzhw56R7pSQbCNwevBbiNXiMElbuinfE7oB7aWtWCFN6s8eGVLK4C+bFbpQT0m3cUoqudXbEH1L0=
-X-Received: by 2002:a05:6830:10e:b0:6b9:1af3:3307 with SMTP id
- i14-20020a056830010e00b006b91af33307mr13348963otp.17.1690918192119; Tue, 01
- Aug 2023 12:29:52 -0700 (PDT)
+        with ESMTP id S230519AbjHDJnd (ORCPT <rfc822;audit@vger.kernel.org>);
+        Fri, 4 Aug 2023 05:43:33 -0400
+Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EBF130EA
+        for <audit@vger.kernel.org>; Fri,  4 Aug 2023 02:43:32 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.143])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4RHLPX0NsWz4f3pFP
+        for <audit@vger.kernel.org>; Fri,  4 Aug 2023 17:43:28 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.67.174.26])
+        by APP2 (Coremail) with SMTP id Syh0CgAnCNY_yMxkvWbiPQ--.12730S4;
+        Fri, 04 Aug 2023 17:43:29 +0800 (CST)
+From:   Xiu Jianfeng <xiujianfeng@huaweicloud.com>
+To:     paul@paul-moore.com, eparis@redhat.com
+Cc:     audit@vger.kernel.org, xiujianfeng@huawei.com
+Subject: [PATCH -next] audit: remove out-of-date comment in auditd_reset()
+Date:   Fri,  4 Aug 2023 09:41:55 +0000
+Message-Id: <20230804094155.283766-1-xiujianfeng@huaweicloud.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <1687986571-16823-8-git-send-email-wufan@linux.microsoft.com>
- <fcc5de3f153eb60b5acf799c159e6ec8.paul@paul-moore.com> <20230715032644.GF15267@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
-In-Reply-To: <20230715032644.GF15267@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Tue, 1 Aug 2023 15:29:40 -0400
-Message-ID: <CAHC9VhQryLtJZ1W1ogyVuojnq0-ZAU-hfZLwpzUb=bobko9LsA@mail.gmail.com>
-Subject: Re: [PATCH RFC v10 7/17] ipe: add userspace interface
-To:     Fan Wu <wufan@linux.microsoft.com>
-Cc:     corbet@lwn.net, zohar@linux.ibm.com, jmorris@namei.org,
-        serge@hallyn.com, tytso@mit.edu, ebiggers@kernel.org,
-        axboe@kernel.dk, agk@redhat.com, snitzer@kernel.org,
-        eparis@redhat.com, linux-doc@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-fscrypt@vger.kernel.org, linux-block@vger.kernel.org,
-        dm-devel@redhat.com, audit@vger.kernel.org,
-        roberto.sassu@huawei.com, linux-kernel@vger.kernel.org,
-        Deven Bowers <deven.desai@linux.microsoft.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: Syh0CgAnCNY_yMxkvWbiPQ--.12730S4
+X-Coremail-Antispam: 1UD129KBjvdXoW7GryxAryktw4UGFy8Jr1DZFb_yoWfZrc_Wa
+        18urWkWr1ftr9Ivw1rAw4fWF1Yqw18ZF1xu34FyFWUWw1DX3s5t3Z7CF1rtr95tayqqr4D
+        CF909FWjyw12yjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUboAYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20E
+        Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwV
+        A0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x02
+        67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
+        0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Y
+        z7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zV
+        AF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4l
+        IxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s
+        0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBI
+        daVFxhVjvjDU0xZFpf9x07UE-erUUUUU=
+X-CM-SenderInfo: x0lxyxpdqiv03j6k3tpzhluzxrxghudrp/
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <audit.vger.kernel.org>
 X-Mailing-List: audit@vger.kernel.org
 
-On Fri, Jul 14, 2023 at 11:26=E2=80=AFPM Fan Wu <wufan@linux.microsoft.com>=
- wrote:
-> On Sat, Jul 08, 2023 at 12:23:04AM -0400, Paul Moore wrote:
-> > On Jun 28, 2023 Fan Wu <wufan@linux.microsoft.com> wrote:
-> > >
-> > > As is typical with LSMs, IPE uses securityfs as its interface with
-> > > userspace. for a complete list of the interfaces and the respective
-> > > inputs/outputs, please see the documentation under
-> > > admin-guide/LSM/ipe.rst
-> > >
-> > > Signed-off-by: Deven Bowers <deven.desai@linux.microsoft.com>
-> > > Signed-off-by: Fan Wu <wufan@linux.microsoft.com>
-> > > ---
-> > >  security/ipe/Makefile    |   2 +
-> > >  security/ipe/fs.c        | 101 ++++++++
-> > >  security/ipe/fs.h        |  16 ++
-> > >  security/ipe/ipe.c       |   3 +
-> > >  security/ipe/ipe.h       |   2 +
-> > >  security/ipe/policy.c    | 111 +++++++++
-> > >  security/ipe/policy.h    |   9 +
-> > >  security/ipe/policy_fs.c | 481 +++++++++++++++++++++++++++++++++++++=
-++
-> > >  8 files changed, 725 insertions(+)
-> > >  create mode 100644 security/ipe/fs.c
-> > >  create mode 100644 security/ipe/fs.h
-> > >  create mode 100644 security/ipe/policy_fs.c
+From: Xiu Jianfeng <xiujianfeng@huawei.com>
 
-...
+Since commit 48d0e023af97 ("audit: fix the RCU locking for the
+auditd_connection structure"), auditd_conn is changed to a global
+pointor protected by RCU, and doesn't call auditd_set() here, which
+makes the comment don't match the code, so remove it.
 
-> > > @@ -39,6 +67,65 @@ static int set_pkcs7_data(void *ctx, const void *d=
-ata, size_t len,
-> > >     return 0;
-> > >  }
-> > >
-> > > +/**
-> > > + * ipe_update_policy - parse a new policy and replace @old with it.
-> >
-> > What does "@old" refer to?  I'm guessing you want to drop the "@".
-> >
-> Yes it shouldn't be here, sorry confusion.
->
-> > > + * @root: Supplies a pointer to the securityfs inode saved the polic=
-y.
-> > > + * @text: Supplies a pointer to the plain text policy.
-> > > + * @textlen: Supplies the length of @text.
-> > > + * @pkcs7: Supplies a pointer to a buffer containing a pkcs7 message=
-.
-> > > + * @pkcs7len: Supplies the length of @pkcs7len.
-> > > + *
-> > > + * @text/@textlen is mutually exclusive with @pkcs7/@pkcs7len - see
-> > > + * ipe_new_policy.
-> > > + *
-> > > + * Return:
-> > > + * * !IS_ERR       - The old policy
-> >
-> > "The old policy" is what?
-> >
-> Let me try to pharse it in another way, how about the existing policy
-> saved in the inode before update?
+Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
+---
+ kernel/audit.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-That sounds better, thanks.
+diff --git a/kernel/audit.c b/kernel/audit.c
+index 45b2fb1e45af..0905750779a4 100644
+--- a/kernel/audit.c
++++ b/kernel/audit.c
+@@ -640,7 +640,6 @@ static void auditd_reset(const struct auditd_connection *ac)
+ 	struct sk_buff *skb;
+ 	struct auditd_connection *ac_old;
+ 
+-	/* if it isn't already broken, break the connection */
+ 	spin_lock_irqsave(&auditd_conn_lock, flags);
+ 	ac_old = rcu_dereference_protected(auditd_conn,
+ 					   lockdep_is_held(&auditd_conn_lock));
+-- 
+2.34.1
 
-> > > diff --git a/security/ipe/policy_fs.c b/security/ipe/policy_fs.c
-> > > new file mode 100644
-> > > index 000000000000..52a120118cda
-> > > --- /dev/null
-> > > +++ b/security/ipe/policy_fs.c
-> > > @@ -0,0 +1,481 @@
-> >
-> > ...
-> >
-> > > +/**
-> > > + * getactive - Read handler for "ipe/policies/$name/active".
-> > > + * @f: Supplies a file structure representing the securityfs node.
-> > > + * @data: Suppleis a buffer passed to the write syscall.
-> > > + * @len: Supplies the length of @data.
-> > > + * @offset: unused.
-> > > + *
-> > > + * @data will be populated with the 1 or 0 depending on if the
-> > > + * corresponding policy is active.
-> > > + *
-> > > + * Return:
-> > > + * * >0    - Success, Length of buffer written
-> > > + * * <0    - Error
-> > > + */
-> > > +static ssize_t getactive(struct file *f, char __user *data,
-> > > +                    size_t len, loff_t *offset)
-> > > +{
-> > > +   int rc =3D 0;
-> > > +   const char *str;
-> > > +   struct inode *root =3D NULL;
-> > > +   const struct ipe_policy *p =3D NULL;
-> > > +
-> > > +   root =3D d_inode(f->f_path.dentry->d_parent);
-> > > +
-> > > +   inode_lock_shared(root);
-> > > +   p =3D (struct ipe_policy *)root->i_private;
-> > > +   if (!p) {
-> > > +           inode_unlock_shared(root);
-> > > +           return -ENOENT;
-> > > +   }
-> > > +   inode_unlock_shared(root);
-> > > +
-> > > +   str =3D (p =3D=3D rcu_access_pointer(ipe_active_policy)) ? "1" : =
-"0";
-> >
-> > The line above should be wrapped with a RCU lock.
->
-> This call only checks the value inside the pointer but doesn't dereferenc=
-e it.
-> Also from https://lwn.net/Articles/652156/ I found it says "The call to
-> rcu_access_pointer() need not be protected. In contrast, rcu_dereference(=
-) must
-> either be within an RCU read-side critical section", so I didn't add the =
-lock
-> here, is this article outdated?
-
-No, I believe you are correct.  There is always something new to learn
-with RCU, thanks ;)
-
---=20
-paul-moore.com
