@@ -2,79 +2,117 @@ Return-Path: <audit-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E891CC001DF
-	for <audit@archiver.kernel.org>; Fri,  4 Aug 2023 09:43:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B9BC6C00528
+	for <audit@archiver.kernel.org>; Sat,  5 Aug 2023 02:39:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231142AbjHDJnf (ORCPT <rfc822;audit@archiver.kernel.org>);
-        Fri, 4 Aug 2023 05:43:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48614 "EHLO
+        id S229571AbjHECjj (ORCPT <rfc822;audit@archiver.kernel.org>);
+        Fri, 4 Aug 2023 22:39:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230519AbjHDJnd (ORCPT <rfc822;audit@vger.kernel.org>);
-        Fri, 4 Aug 2023 05:43:33 -0400
-Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EBF130EA
-        for <audit@vger.kernel.org>; Fri,  4 Aug 2023 02:43:32 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4RHLPX0NsWz4f3pFP
-        for <audit@vger.kernel.org>; Fri,  4 Aug 2023 17:43:28 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.67.174.26])
-        by APP2 (Coremail) with SMTP id Syh0CgAnCNY_yMxkvWbiPQ--.12730S4;
-        Fri, 04 Aug 2023 17:43:29 +0800 (CST)
-From:   Xiu Jianfeng <xiujianfeng@huaweicloud.com>
-To:     paul@paul-moore.com, eparis@redhat.com
-Cc:     audit@vger.kernel.org, xiujianfeng@huawei.com
-Subject: [PATCH -next] audit: remove out-of-date comment in auditd_reset()
-Date:   Fri,  4 Aug 2023 09:41:55 +0000
-Message-Id: <20230804094155.283766-1-xiujianfeng@huaweicloud.com>
-X-Mailer: git-send-email 2.34.1
+        with ESMTP id S229441AbjHECji (ORCPT <rfc822;audit@vger.kernel.org>);
+        Fri, 4 Aug 2023 22:39:38 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 016A14EDB
+        for <audit@vger.kernel.org>; Fri,  4 Aug 2023 19:39:37 -0700 (PDT)
+Received: from kwepemd500002.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4RHmt23nH8ztRtN;
+        Sat,  5 Aug 2023 10:36:10 +0800 (CST)
+Received: from cgs.huawei.com (10.244.148.83) by
+ kwepemd500002.china.huawei.com (7.221.188.104) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.2.1258.16; Sat, 5 Aug 2023 10:39:34 +0800
+From:   Gaosheng Cui <cuigaosheng1@huawei.com>
+To:     <cuigaosheng1@huawei.com>, <paul@paul-moore.com>,
+        <eparis@redhat.com>
+CC:     <audit@vger.kernel.org>
+Subject: [PATCH] audit: fix possible soft lockup in __audit_inode_child()
+Date:   Sat, 5 Aug 2023 10:39:34 +0800
+Message-ID: <20230805023934.347828-1-cuigaosheng1@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: Syh0CgAnCNY_yMxkvWbiPQ--.12730S4
-X-Coremail-Antispam: 1UD129KBjvdXoW7GryxAryktw4UGFy8Jr1DZFb_yoWfZrc_Wa
-        18urWkWr1ftr9Ivw1rAw4fWF1Yqw18ZF1xu34FyFWUWw1DX3s5t3Z7CF1rtr95tayqqr4D
-        CF909FWjyw12yjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUboAYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20E
-        Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwV
-        A0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x02
-        67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
-        0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Y
-        z7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zV
-        AF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4l
-        IxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s
-        0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBI
-        daVFxhVjvjDU0xZFpf9x07UE-erUUUUU=
-X-CM-SenderInfo: x0lxyxpdqiv03j6k3tpzhluzxrxghudrp/
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.244.148.83]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemd500002.china.huawei.com (7.221.188.104)
 X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <audit.vger.kernel.org>
 X-Mailing-List: audit@vger.kernel.org
 
-From: Xiu Jianfeng <xiujianfeng@huawei.com>
+Tracefs or debugfs maybe cause hundreds to thousands of PATH records,
+too many PATH records maybe cause soft lockup.
 
-Since commit 48d0e023af97 ("audit: fix the RCU locking for the
-auditd_connection structure"), auditd_conn is changed to a global
-pointor protected by RCU, and doesn't call auditd_set() here, which
-makes the comment don't match the code, so remove it.
+For example:
+  1. CONFIG_KASAN=y && CONFIG_PREEMPTION=n
+  2. auditctl -a exit,always -S open -k key
+  3. sysctl -w kernel.watchdog_thresh=5
+  4. mkdir /sys/kernel/debug/tracing/instances/test
 
-Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
+There may be a soft lockup as follows:
+  watchdog: BUG: soft lockup - CPU#45 stuck for 7s! [mkdir:15498]
+  Kernel panic - not syncing: softlockup: hung tasks
+  Call trace:
+   dump_backtrace+0x0/0x30c
+   show_stack+0x20/0x30
+   dump_stack+0x11c/0x174
+   panic+0x27c/0x494
+   watchdog_timer_fn+0x2bc/0x390
+   __run_hrtimer+0x148/0x4fc
+   __hrtimer_run_queues+0x154/0x210
+   hrtimer_interrupt+0x2c4/0x760
+   arch_timer_handler_phys+0x48/0x60
+   handle_percpu_devid_irq+0xe0/0x340
+   __handle_domain_irq+0xbc/0x130
+   gic_handle_irq+0x78/0x460
+   el1_irq+0xb8/0x140
+   __audit_inode_child+0x240/0x7bc
+   tracefs_create_file+0x1b8/0x2a0
+   trace_create_file+0x18/0x50
+   event_create_dir+0x204/0x30c
+   __trace_add_new_event+0xac/0x100
+   event_trace_add_tracer+0xa0/0x130
+   trace_array_create_dir+0x60/0x140
+   trace_array_create+0x1e0/0x370
+   instance_mkdir+0x90/0xd0
+   tracefs_syscall_mkdir+0x68/0xa0
+   vfs_mkdir+0x21c/0x34c
+   do_mkdirat+0x1b4/0x1d4
+   __arm64_sys_mkdirat+0x4c/0x60
+   el0_svc_common.constprop.0+0xa8/0x240
+   do_el0_svc+0x8c/0xc0
+   el0_svc+0x20/0x30
+   el0_sync_handler+0xb0/0xb4
+   el0_sync+0x160/0x180
+
+Therefore, we add cond_resched() to __audit_inode_child() to fix it.
+
+Fixes: 5195d8e217a7 ("audit: dynamically allocate audit_names when not enough space is in the names array")
+Signed-off-by: Gaosheng Cui <cuigaosheng1@huawei.com>
 ---
- kernel/audit.c | 1 -
- 1 file changed, 1 deletion(-)
+ kernel/auditsc.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/kernel/audit.c b/kernel/audit.c
-index 45b2fb1e45af..0905750779a4 100644
---- a/kernel/audit.c
-+++ b/kernel/audit.c
-@@ -640,7 +640,6 @@ static void auditd_reset(const struct auditd_connection *ac)
- 	struct sk_buff *skb;
- 	struct auditd_connection *ac_old;
+diff --git a/kernel/auditsc.c b/kernel/auditsc.c
+index addeed3df15d..fce37545644b 100644
+--- a/kernel/auditsc.c
++++ b/kernel/auditsc.c
+@@ -2454,6 +2454,7 @@ void __audit_inode_child(struct inode *parent,
+ 			found_parent = n;
+ 			break;
+ 		}
++		cond_resched();
+ 	}
  
--	/* if it isn't already broken, break the connection */
- 	spin_lock_irqsave(&auditd_conn_lock, flags);
- 	ac_old = rcu_dereference_protected(auditd_conn,
- 					   lockdep_is_held(&auditd_conn_lock));
+ 	/* is there a matching child entry? */
+@@ -2473,6 +2474,7 @@ void __audit_inode_child(struct inode *parent,
+ 			found_child = n;
+ 			break;
+ 		}
++		cond_resched();
+ 	}
+ 
+ 	if (!found_parent) {
 -- 
-2.34.1
+2.25.1
 
