@@ -2,131 +2,97 @@ Return-Path: <audit-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6886DC04A6A
-	for <audit@archiver.kernel.org>; Mon,  7 Aug 2023 18:55:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E32F5C001B0
+	for <audit@archiver.kernel.org>; Mon,  7 Aug 2023 19:04:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229570AbjHGSzV (ORCPT <rfc822;audit@archiver.kernel.org>);
-        Mon, 7 Aug 2023 14:55:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41234 "EHLO
+        id S229694AbjHGTEP (ORCPT <rfc822;audit@archiver.kernel.org>);
+        Mon, 7 Aug 2023 15:04:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230120AbjHGSzT (ORCPT <rfc822;audit@vger.kernel.org>);
-        Mon, 7 Aug 2023 14:55:19 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ABF810F6
-        for <audit@vger.kernel.org>; Mon,  7 Aug 2023 11:54:29 -0700 (PDT)
+        with ESMTP id S229526AbjHGTEO (ORCPT <rfc822;audit@vger.kernel.org>);
+        Mon, 7 Aug 2023 15:04:14 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71AA610F6
+        for <audit@vger.kernel.org>; Mon,  7 Aug 2023 12:03:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1691434469;
+        s=mimecast20190719; t=1691435007;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=BDfo3tcgZ/JT74PCfOANA1e2dcA36jLEShgAFtwSclU=;
-        b=ES4e94CabgaGUr7W7WX0/KHRLBlskDfZJJgfX05ILT9PYIX2lM3Q3qITgs52vYbHTLCBpE
-        +zPL5cYBrIMGMfmVB9/fWZGm//WjUTEtKtrQwXac65ZykhEAKcCjc+hmZ6JmvW4aphuapS
-        TcwxI4lvBQfLXpmG5an4l/EgZLkrkXU=
+        bh=iTMauSdneX4madkewbm8sDwjJ93dcCFrkuHV7obPu9M=;
+        b=arcPUwqd2JNrQiwQhhQWvNmONzwpOF3S0/3Hw580eGu3fT79MFvzsh5qyFw4gidgkm0TNR
+        1z2+qUt2s6BXpHfNGtIY6IHKZEC7fWeg0HlOCgxBaHenjb53OYI2Zkx/9wxUwnpWR2mr0h
+        Kc5ZFpkgz5DYxHqQwPAsdaG0kjpRSaE=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-15-43r8ficpMnKclSsRdAecHw-1; Mon, 07 Aug 2023 14:54:26 -0400
-X-MC-Unique: 43r8ficpMnKclSsRdAecHw-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+ us-mta-452-FHP16Y3UNgShpPGFUmKiLg-1; Mon, 07 Aug 2023 15:03:24 -0400
+X-MC-Unique: FHP16Y3UNgShpPGFUmKiLg-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B00A9185A791;
-        Mon,  7 Aug 2023 18:54:25 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BF9938DC666;
+        Mon,  7 Aug 2023 19:03:23 +0000 (UTC)
 Received: from x2.localnet (unknown [10.22.17.77])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 3B9E0140E950;
-        Mon,  7 Aug 2023 18:54:25 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 536C42166B25;
+        Mon,  7 Aug 2023 19:03:23 +0000 (UTC)
 From:   Steve Grubb <sgrubb@redhat.com>
-To:     linux-security-module <linux-security-module@vger.kernel.org>,
-        audit@vger.kernel.org, linux-audit@redhat.com,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        linux-audit@redhat.com
+Cc:     audit@vger.kernel.org,
+        linux-security-module <linux-security-module@vger.kernel.org>,
+        linux-audit@redhat.com, Paul Moore <paul@paul-moore.com>
 Subject: Re: [PATCH v2] TaskTracker : Simplified thread information tracker.
-Date:   Mon, 07 Aug 2023 14:54:24 -0400
-Message-ID: <2294714.ElGaqSPkdT@x2>
+Date:   Mon, 07 Aug 2023 15:03:22 -0400
+Message-ID: <2155117.irdbgypaU6@x2>
 Organization: Red Hat
-In-Reply-To: <ab7b4099-d238-e791-6dc2-25be5952798c@I-love.SAKURA.ne.jp>
+In-Reply-To: <CAHC9VhSsDTyfae6f0XvYYcCRH590L1ZEqbHSM4UgUCHRGm7X_g@mail.gmail.com>
 References: <41d03271-ff8a-9888-11de-a7f53da47328@I-love.SAKURA.ne.jp>
- <2029076.tdWV9SEqCh@x2>
- <ab7b4099-d238-e791-6dc2-25be5952798c@I-love.SAKURA.ne.jp>
+ <CAHC9VhSsDTyfae6f0XvYYcCRH590L1ZEqbHSM4UgUCHRGm7X_g@mail.gmail.com>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
 X-Mimecast-Spam-Score: 0
 X-Mimecast-Originator: redhat.com
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <audit.vger.kernel.org>
 X-Mailing-List: audit@vger.kernel.org
 
-On Monday, August 7, 2023 10:24:51 AM EDT Tetsuo Handa wrote:
-> On 2023/08/07 7:01, Steve Grubb wrote:
-> > This is where the problem begins. We like to have normalized audit
-> > records. Meaning that a type of event defines the fields it contains. In
-> > this case subject would be a process label. and there is already a
-> > precedent for what fields belong in a syscall record.
-> 
-> What is the definition of "a process label"? SELinux / Smack / AppArmor are
-> using security_secid_to_secctx() hook for providing string data for the
-> subj= field. I don't think that they are restricting characters that can
-> be included. Then, what is wrong with returning subset of ASCII printable
-> characters from tt_secid_to_secctx() ?
+On Monday, August 7, 2023 2:53:40 PM EDT Paul Moore wrote:
+> On Sun, Aug 6, 2023 at 9:05=E2=80=AFAM Tetsuo Handa
+>=20
+> <penguin-kernel@i-love.sakura.ne.jp> wrote:
+> > When an unexpected system event occurs, the administrator may want to
+> > identify which application triggered the event. For example, unexpected
+> > process termination is still a real concern enough to write articles
+> > like https://access.redhat.com/solutions/165993 . TaskTracker is a
+> > trivial LSM module which emits TOMOYO-like information into the audit
+> > logs for better understanding of unexpected system events.
+>=20
+> Help me understand why all of this information isn't already available
+> via some combination of Audit and TOMOYO, or simply audit itself?
 
-Typically the label is used for access control decisions. But processes have 
-other attributes such as a list of open files. I think adding this information 
-will be useful - I'm not opposed to the idea. I am just thinking about how to 
-present the information where it is more useful. 
-
-<snip>
-
-> > What I would suggest is to make a separate record: AUDIT_PROC_TREE that
-> > describes process tree from the one killed up to the last known parent.
-> > This way you can define your own format and SYSCALL can stay as everyone
-> > expects it to look. In the EXECVE audit record, there is a precedent of
-> > using agv[0]=xx argv[1]=xx argv[2]=yy  and so on. If you want to make
-> > these generally parsable without special knowledge of the record format,
-> > I'd suggest something like it.
-> 
-> Yes,
-> https://lkml.kernel.org/r/201501202220.DJJ34834.OLJOHFMQOFtSVF@I-love.SAKU
-> RA.ne.jp used AUDIT_PROCHISTORY instead of LSM hooks, but that thread died
-> there.
-
-I do not read that mail list. AUDIT_PROC_HIST or AUDIT_PROC_CHAIN or some 
-thing like that would be the better way to go. If someone wanted to see if 
-they have process history for a segfault, how would they do it with the 
-proposed record?
-
-ausearch --subject sshd
-
-That just doesn't seem right. If you had a record dedicated to this 
-information, then you can do:
-
-ausearch -m PROC_HIST
-
-and it would give you that information. And if you had the data split up 
-like: p[0]=xx p[1]=xx p[2]=yy
-
-Then  someone could do this to make a report specific to this:
-
-import auparser as aup
-au = aup.AuParser(aup.AUSOURCE_FILE, "audit.log")
-
-au.search_add_expression("type r= PROC_HIST", aup.AUSEARCH_RULE_CLEAR)
-au.search_set_stop(aup.AUSEARCH_STOP_RECORD)
-while au.search_next_event():
-    print("Call chain: ", end="")
-    while True:
-        print(au.interpret_field(), end = "")
-        if au.next_field() == False:
-            break
-        print("->", end="")
-
-au = None
-sys.exit(0)
-
-This would be more programmer friendly.
+Usually when you want this kind of information, you are investigating an=20
+incident. You wouldn't place a syscall audit for every execve and then=20
+reconstruct the call chain from that. In the case of long running daemons,=
+=20
+the information could have been rotated away. But typically you want to see=
+=20
+what the entry point is. A sudden shell from bind would be suspicious while=
+ a=20
+shell from sshd is not.
 
 -Steve
+
+> In the case of an audit-only design you would likely need to do some
+> processing of the audit log to determine the full historical process
+> tree of the process being killed, but all of the information should be
+> there if you configure audit properly.  I'm less familiar with TOMOYO,
+> but your comment about this LSM recording "TOMOYO-like" information
+> makes me believe that TOMOYO already records this information.
+
+
 
 
