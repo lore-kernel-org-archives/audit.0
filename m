@@ -2,112 +2,82 @@ Return-Path: <audit-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E8B08C05052
-	for <audit@archiver.kernel.org>; Tue,  8 Aug 2023 16:33:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A8C4AC001B0
+	for <audit@archiver.kernel.org>; Tue,  8 Aug 2023 17:26:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232790AbjHHQdW (ORCPT <rfc822;audit@archiver.kernel.org>);
-        Tue, 8 Aug 2023 12:33:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58110 "EHLO
+        id S234512AbjHHR0v (ORCPT <rfc822;audit@archiver.kernel.org>);
+        Tue, 8 Aug 2023 13:26:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233067AbjHHQcJ (ORCPT <rfc822;audit@vger.kernel.org>);
-        Tue, 8 Aug 2023 12:32:09 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 047173100E
-        for <audit@vger.kernel.org>; Tue,  8 Aug 2023 08:51:56 -0700 (PDT)
-Received: from kwepemd500002.china.huawei.com (unknown [172.30.72.56])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4RKsXk2M5Vz1L8xj;
-        Tue,  8 Aug 2023 20:13:26 +0800 (CST)
-Received: from cgs.huawei.com (10.244.148.83) by
- kwepemd500002.china.huawei.com (7.221.188.104) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.2.1258.16; Tue, 8 Aug 2023 20:14:35 +0800
-From:   Gaosheng Cui <cuigaosheng1@huawei.com>
-To:     <cuigaosheng1@huawei.com>, <paul@paul-moore.com>,
-        <eparis@redhat.com>
-CC:     <audit@vger.kernel.org>
-Subject: [PATCH v2] audit: fix possible soft lockup in __audit_inode_child()
-Date:   Tue, 8 Aug 2023 20:14:35 +0800
-Message-ID: <20230808121435.1118761-1-cuigaosheng1@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S229763AbjHHR0W (ORCPT <rfc822;audit@vger.kernel.org>);
+        Tue, 8 Aug 2023 13:26:22 -0400
+Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC1D785287;
+        Tue,  8 Aug 2023 09:11:18 -0700 (PDT)
+Received: from fsav113.sakura.ne.jp (fsav113.sakura.ne.jp [27.133.134.240])
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 378APexv059107;
+        Tue, 8 Aug 2023 19:25:40 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Received: from www262.sakura.ne.jp (202.181.97.72)
+ by fsav113.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav113.sakura.ne.jp);
+ Tue, 08 Aug 2023 19:25:40 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav113.sakura.ne.jp)
+Received: from [192.168.1.6] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+        (authenticated bits=0)
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 378APdoI059104
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
+        Tue, 8 Aug 2023 19:25:40 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Message-ID: <025aa551-7ed7-d413-26e3-222ac12e9345@I-love.SAKURA.ne.jp>
+Date:   Tue, 8 Aug 2023 19:25:39 +0900
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.244.148.83]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemd500002.china.huawei.com (7.221.188.104)
-X-CFilter-Loop: Reflected
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.14.0
+Subject: Re: [PATCH v2] TaskTracker : Simplified thread information tracker.
+Content-Language: en-US
+To:     Steve Grubb <sgrubb@redhat.com>,
+        linux-security-module <linux-security-module@vger.kernel.org>,
+        audit@vger.kernel.org, linux-audit@redhat.com
+References: <41d03271-ff8a-9888-11de-a7f53da47328@I-love.SAKURA.ne.jp>
+ <2029076.tdWV9SEqCh@x2>
+ <ab7b4099-d238-e791-6dc2-25be5952798c@I-love.SAKURA.ne.jp>
+ <2294714.ElGaqSPkdT@x2>
+From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+In-Reply-To: <2294714.ElGaqSPkdT@x2>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <audit.vger.kernel.org>
 X-Mailing-List: audit@vger.kernel.org
 
-Tracefs or debugfs maybe cause hundreds to thousands of PATH records,
-too many PATH records maybe cause soft lockup.
+On 2023/08/08 3:54, Steve Grubb wrote:
+>>> What I would suggest is to make a separate record: AUDIT_PROC_TREE that
+>>> describes process tree from the one killed up to the last known parent.
+>>> This way you can define your own format and SYSCALL can stay as everyone
+>>> expects it to look. In the EXECVE audit record, there is a precedent of
+>>> using agv[0]=xx argv[1]=xx argv[2]=yy  and so on. If you want to make
+>>> these generally parsable without special knowledge of the record format,
+>>> I'd suggest something like it.
+>>
+>> Yes,
+>> https://lkml.kernel.org/r/201501202220.DJJ34834.OLJOHFMQOFtSVF@I-love.SAKU
+>> RA.ne.jp used AUDIT_PROCHISTORY instead of LSM hooks, but that thread died
+>> there.
+> 
+> I do not read that mail list. AUDIT_PROC_HIST or AUDIT_PROC_CHAIN or some 
+> thing like that would be the better way to go. If someone wanted to see if 
+> they have process history for a segfault, how would they do it with the 
+> proposed record?
 
-For example:
-  1. CONFIG_KASAN=y && CONFIG_PREEMPTION=n
-  2. auditctl -a exit,always -S open -k key
-  3. sysctl -w kernel.watchdog_thresh=5
-  4. mkdir /sys/kernel/debug/tracing/instances/test
+Avoid bloating of audit log files could be done when saving into audit log
+files, but avoiding overhead of tracking/recording this history information
+would need to be done using kernel command line options.
 
-There may be a soft lockup as follows:
-  watchdog: BUG: soft lockup - CPU#45 stuck for 7s! [mkdir:15498]
-  Kernel panic - not syncing: softlockup: hung tasks
-  Call trace:
-   dump_backtrace+0x0/0x30c
-   show_stack+0x20/0x30
-   dump_stack+0x11c/0x174
-   panic+0x27c/0x494
-   watchdog_timer_fn+0x2bc/0x390
-   __run_hrtimer+0x148/0x4fc
-   __hrtimer_run_queues+0x154/0x210
-   hrtimer_interrupt+0x2c4/0x760
-   arch_timer_handler_phys+0x48/0x60
-   handle_percpu_devid_irq+0xe0/0x340
-   __handle_domain_irq+0xbc/0x130
-   gic_handle_irq+0x78/0x460
-   el1_irq+0xb8/0x140
-   __audit_inode_child+0x240/0x7bc
-   tracefs_create_file+0x1b8/0x2a0
-   trace_create_file+0x18/0x50
-   event_create_dir+0x204/0x30c
-   __trace_add_new_event+0xac/0x100
-   event_trace_add_tracer+0xa0/0x130
-   trace_array_create_dir+0x60/0x140
-   trace_array_create+0x1e0/0x370
-   instance_mkdir+0x90/0xd0
-   tracefs_syscall_mkdir+0x68/0xa0
-   vfs_mkdir+0x21c/0x34c
-   do_mkdirat+0x1b4/0x1d4
-   __arm64_sys_mkdirat+0x4c/0x60
-   el0_svc_common.constprop.0+0xa8/0x240
-   do_el0_svc+0x8c/0xc0
-   el0_svc+0x20/0x30
-   el0_sync_handler+0xb0/0xb4
-   el0_sync+0x160/0x180
+Is there a kernel command line option that can configure whether to include
+(and what to be included into) this history information or not?
 
-Therefore, we add cond_resched() to __audit_inode_child() to fix it.
-
-Fixes: 5195d8e217a7 ("audit: dynamically allocate audit_names when not enough space is in the names array")
-Signed-off-by: Gaosheng Cui <cuigaosheng1@huawei.com>
----
-v2:
-- Add cond_resched() between the two loops, thanks!
- kernel/auditsc.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/kernel/auditsc.c b/kernel/auditsc.c
-index addeed3df15d..8dfd581cd554 100644
---- a/kernel/auditsc.c
-+++ b/kernel/auditsc.c
-@@ -2456,6 +2456,8 @@ void __audit_inode_child(struct inode *parent,
- 		}
- 	}
- 
-+	cond_resched();
-+
- 	/* is there a matching child entry? */
- 	list_for_each_entry(n, &context->names_list, list) {
- 		/* can only match entries that have a name */
--- 
-2.25.1
+If an LSM is used, a kernel command line option like lsm=tt can be used for
+telling the kernel to include this history information and kernel command
+line options like tt.size=512 tt.fields=name,stamp for telling the kernel
+max history length and fields to include.
 
