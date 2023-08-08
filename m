@@ -2,113 +2,112 @@ Return-Path: <audit-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9C11AC001DB
-	for <audit@archiver.kernel.org>; Tue,  8 Aug 2023 15:48:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E8B08C05052
+	for <audit@archiver.kernel.org>; Tue,  8 Aug 2023 16:33:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229564AbjHHPsG (ORCPT <rfc822;audit@archiver.kernel.org>);
-        Tue, 8 Aug 2023 11:48:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41188 "EHLO
+        id S232790AbjHHQdW (ORCPT <rfc822;audit@archiver.kernel.org>);
+        Tue, 8 Aug 2023 12:33:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229946AbjHHPqt (ORCPT <rfc822;audit@vger.kernel.org>);
-        Tue, 8 Aug 2023 11:46:49 -0400
-Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A7B34210
-        for <audit@vger.kernel.org>; Tue,  8 Aug 2023 08:41:15 -0700 (PDT)
-Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-58419517920so62909107b3.0
-        for <audit@vger.kernel.org>; Tue, 08 Aug 2023 08:41:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1691509255; x=1692114055;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Em0u3rAwfsJ9DADQmbz8jINXwrAXQCvwsoKWZ+kvbag=;
-        b=ajw4w++TgX6o06CBMhKt5iisWThiD9mdiRZQ3WJTCv0yFklskzHy06iZJRsZx/WIth
-         nlUWAljKFkzaCPkk2P170PIyIbXPSlxJgWRHHdhIWVPak6P8RFWArATtonLSPmmKFxhi
-         W6UP2vREcgeIfnfAlEiK1s4w7vlKSsKfZwf5OSjKAajIQY9YaaLFacLjPG14S801mBhl
-         tkJDUFwNY/iP7b6jxBEHvrqajhLHrgTi4rj/jXLrhSaFoKd5Dz2ym/4i5IsPmtHShLEp
-         8yQXQOD8ImlElXuBwTs/TWxJH88iG9Ah/3iGbBIu8rUy1ifBE3+VGwepbwD/oECFEXgS
-         mPZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691509255; x=1692114055;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Em0u3rAwfsJ9DADQmbz8jINXwrAXQCvwsoKWZ+kvbag=;
-        b=BdVMYLGPIm21QJyzkFmwXz9OVPgcviWJaiK95K7wE9mex2vwxxdR72sm0DZ8RJalLG
-         z70XHVEFGW0vFuKvDCY6uIZm8BSb8vjrWKgAPMlJdHBLIHym9GM0djZdc5JZGnbVsu3V
-         8AVcgsA84NNuD23K4VAexHTVk/2S9jPNDhtRpLd19PdPpGP9G6pifB6NrON13ORAL/kw
-         lFSWXV3+Oq5b9+LLHu+VYHtOEaptuqskFwN3sIBH7BJ9ShqhG00v9ogQvAL0/ZO2LW/0
-         3nNV3v2dbD/D226I+LyMXrZ6AyPiHpvgRU+t1Ckaw8eJ3IzG+cPnzQSUr8Aa6qW/Mr3K
-         zGFQ==
-X-Gm-Message-State: AOJu0YxVjf1clryIPE3k+1Z1ehgIvW9gXueRX6dU5rq6eF6bQoHWr5R4
-        3slLlcidHaAez1P33chLMqm6kPR5DBoIxESuVujxHqKKyk1o8bDdTA==
-X-Google-Smtp-Source: AGHT+IGLc34aLVA9ZLIe34W64Ir8n1SwTlr71PLKuPbf1vupgTPfoQCmYXbLiBv77geHjnpKt9FR9UZG6Qiq89sY/1I=
-X-Received: by 2002:a81:7741:0:b0:583:7b49:15dd with SMTP id
- s62-20020a817741000000b005837b4915ddmr13398514ywc.48.1691505497509; Tue, 08
- Aug 2023 07:38:17 -0700 (PDT)
+        with ESMTP id S233067AbjHHQcJ (ORCPT <rfc822;audit@vger.kernel.org>);
+        Tue, 8 Aug 2023 12:32:09 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 047173100E
+        for <audit@vger.kernel.org>; Tue,  8 Aug 2023 08:51:56 -0700 (PDT)
+Received: from kwepemd500002.china.huawei.com (unknown [172.30.72.56])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4RKsXk2M5Vz1L8xj;
+        Tue,  8 Aug 2023 20:13:26 +0800 (CST)
+Received: from cgs.huawei.com (10.244.148.83) by
+ kwepemd500002.china.huawei.com (7.221.188.104) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.2.1258.16; Tue, 8 Aug 2023 20:14:35 +0800
+From:   Gaosheng Cui <cuigaosheng1@huawei.com>
+To:     <cuigaosheng1@huawei.com>, <paul@paul-moore.com>,
+        <eparis@redhat.com>
+CC:     <audit@vger.kernel.org>
+Subject: [PATCH v2] audit: fix possible soft lockup in __audit_inode_child()
+Date:   Tue, 8 Aug 2023 20:14:35 +0800
+Message-ID: <20230808121435.1118761-1-cuigaosheng1@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <41d03271-ff8a-9888-11de-a7f53da47328@I-love.SAKURA.ne.jp>
- <CAHC9VhSsDTyfae6f0XvYYcCRH590L1ZEqbHSM4UgUCHRGm7X_g@mail.gmail.com>
- <2155117.irdbgypaU6@x2> <CAHC9VhRG2aX-_ye7ZRWpZkR7rq8Op7RUVS3cMtxhF8t1bdw5oQ@mail.gmail.com>
- <6f3a90b9-b210-512a-f74a-6003aebf5c30@I-love.SAKURA.ne.jp>
-In-Reply-To: <6f3a90b9-b210-512a-f74a-6003aebf5c30@I-love.SAKURA.ne.jp>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Tue, 8 Aug 2023 10:38:06 -0400
-Message-ID: <CAHC9VhQPROcbN5MfS5pnNDe-YDgLTAY7W9eQkNAJU3kBH43ZEA@mail.gmail.com>
-Subject: Re: [PATCH v2] TaskTracker : Simplified thread information tracker.
-To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-Cc:     Steve Grubb <sgrubb@redhat.com>, linux-audit@redhat.com,
-        audit@vger.kernel.org,
-        linux-security-module <linux-security-module@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.244.148.83]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ kwepemd500002.china.huawei.com (7.221.188.104)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <audit.vger.kernel.org>
 X-Mailing-List: audit@vger.kernel.org
 
-On Tue, Aug 8, 2023 at 6:07=E2=80=AFAM Tetsuo Handa
-<penguin-kernel@i-love.sakura.ne.jp> wrote:
-> On 2023/08/08 5:13, Paul Moore wrote:
-> > On Mon, Aug 7, 2023 at 3:03=E2=80=AFPM Steve Grubb <sgrubb@redhat.com> =
-wrote:
-> >> On Monday, August 7, 2023 2:53:40 PM EDT Paul Moore wrote:
-> >>> On Sun, Aug 6, 2023 at 9:05=E2=80=AFAM Tetsuo Handa
-> >>>
-> >>> <penguin-kernel@i-love.sakura.ne.jp> wrote:
-> >>>> When an unexpected system event occurs, the administrator may want t=
-o
-> >>>> identify which application triggered the event. For example, unexpec=
-ted
-> >>>> process termination is still a real concern enough to write articles
-> >>>> like https://access.redhat.com/solutions/165993 . TaskTracker is a
-> >>>> trivial LSM module which emits TOMOYO-like information into the audi=
-t
-> >>>> logs for better understanding of unexpected system events.
-> >>>
-> >>> Help me understand why all of this information isn't already availabl=
-e
-> >>> via some combination of Audit and TOMOYO, or simply audit itself?
-> >>
-> >> Usually when you want this kind of information, you are investigating =
-an
-> >> incident. You wouldn't place a syscall audit for every execve and then
-> >> reconstruct the call chain from that. In the case of long running daem=
-ons,
-> >> the information could have been rotated away. But typically you want t=
-o see
-> >> what the entry point is. A sudden shell from bind would be suspicious =
-while a
-> >> shell from sshd is not.
-> >
-> > Once again, why not use the existing audit and/or TOMOYO capabilities.
-> >
->
-> Can't, for Fedora/RHEL does not enable TOMOYO.
-> I need a way that can be used by RHEL users running with selinux=3D0.
+Tracefs or debugfs maybe cause hundreds to thousands of PATH records,
+too many PATH records maybe cause soft lockup.
 
-What makes you think your distribution of choice would enable this new
-LSM?  I'm sorry, but this sounds like more of an issue with the
-choices made by a distro rather than something missing upstream.
+For example:
+  1. CONFIG_KASAN=y && CONFIG_PREEMPTION=n
+  2. auditctl -a exit,always -S open -k key
+  3. sysctl -w kernel.watchdog_thresh=5
+  4. mkdir /sys/kernel/debug/tracing/instances/test
 
---=20
-paul-moore.com
+There may be a soft lockup as follows:
+  watchdog: BUG: soft lockup - CPU#45 stuck for 7s! [mkdir:15498]
+  Kernel panic - not syncing: softlockup: hung tasks
+  Call trace:
+   dump_backtrace+0x0/0x30c
+   show_stack+0x20/0x30
+   dump_stack+0x11c/0x174
+   panic+0x27c/0x494
+   watchdog_timer_fn+0x2bc/0x390
+   __run_hrtimer+0x148/0x4fc
+   __hrtimer_run_queues+0x154/0x210
+   hrtimer_interrupt+0x2c4/0x760
+   arch_timer_handler_phys+0x48/0x60
+   handle_percpu_devid_irq+0xe0/0x340
+   __handle_domain_irq+0xbc/0x130
+   gic_handle_irq+0x78/0x460
+   el1_irq+0xb8/0x140
+   __audit_inode_child+0x240/0x7bc
+   tracefs_create_file+0x1b8/0x2a0
+   trace_create_file+0x18/0x50
+   event_create_dir+0x204/0x30c
+   __trace_add_new_event+0xac/0x100
+   event_trace_add_tracer+0xa0/0x130
+   trace_array_create_dir+0x60/0x140
+   trace_array_create+0x1e0/0x370
+   instance_mkdir+0x90/0xd0
+   tracefs_syscall_mkdir+0x68/0xa0
+   vfs_mkdir+0x21c/0x34c
+   do_mkdirat+0x1b4/0x1d4
+   __arm64_sys_mkdirat+0x4c/0x60
+   el0_svc_common.constprop.0+0xa8/0x240
+   do_el0_svc+0x8c/0xc0
+   el0_svc+0x20/0x30
+   el0_sync_handler+0xb0/0xb4
+   el0_sync+0x160/0x180
+
+Therefore, we add cond_resched() to __audit_inode_child() to fix it.
+
+Fixes: 5195d8e217a7 ("audit: dynamically allocate audit_names when not enough space is in the names array")
+Signed-off-by: Gaosheng Cui <cuigaosheng1@huawei.com>
+---
+v2:
+- Add cond_resched() between the two loops, thanks!
+ kernel/auditsc.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/kernel/auditsc.c b/kernel/auditsc.c
+index addeed3df15d..8dfd581cd554 100644
+--- a/kernel/auditsc.c
++++ b/kernel/auditsc.c
+@@ -2456,6 +2456,8 @@ void __audit_inode_child(struct inode *parent,
+ 		}
+ 	}
+ 
++	cond_resched();
++
+ 	/* is there a matching child entry? */
+ 	list_for_each_entry(n, &context->names_list, list) {
+ 		/* can only match entries that have a name */
+-- 
+2.25.1
+
