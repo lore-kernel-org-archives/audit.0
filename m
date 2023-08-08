@@ -2,96 +2,85 @@ Return-Path: <audit-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 79895C001DE
-	for <audit@archiver.kernel.org>; Mon,  7 Aug 2023 20:13:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0DCF5EB64DD
+	for <audit@archiver.kernel.org>; Tue,  8 Aug 2023 00:56:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229770AbjHGUN3 (ORCPT <rfc822;audit@archiver.kernel.org>);
-        Mon, 7 Aug 2023 16:13:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55038 "EHLO
+        id S229669AbjHHA4s (ORCPT <rfc822;audit@archiver.kernel.org>);
+        Mon, 7 Aug 2023 20:56:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229696AbjHGUN3 (ORCPT <rfc822;audit@vger.kernel.org>);
-        Mon, 7 Aug 2023 16:13:29 -0400
-Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2914710CF
-        for <audit@vger.kernel.org>; Mon,  7 Aug 2023 13:13:28 -0700 (PDT)
-Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-5844bb9923eso56595677b3.0
-        for <audit@vger.kernel.org>; Mon, 07 Aug 2023 13:13:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1691439207; x=1692044007;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2BSiKRKC9HfnpxyZNhhglUB5KhJQ++JbCDmWfWXMqA0=;
-        b=Yd3T1cyFKB76NT3ybzQRxhENL0jr27KzwcFkMfwAtiZiC68kXVxZ5Fwpn4X1EnTWg2
-         /+gLge7p+HgOul8wU0o7+9Fe0S+LI1ILR6bU4MDpFfOQJw/LfLLPL7r7R7Wcam9LDIe+
-         rDb2fXWewd0XQqGrY8GCCZrfBJkCcGN9sk5h/D35Qbqvt9lsbc8LDP7F3fH/v35ifSF/
-         FeBCYmK6KhkeED+p7uOdPu07QLG/yNEx3rdS7mrNLLswLolBJYa75Nl/8LNqUsbS0hGU
-         e+bn6GY5umBASGWTXb8fN6hL3lpqhJjTeu48fsQ+nQM7Ohsz/vmqiuvn3VSFvuNGATnU
-         RgYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691439207; x=1692044007;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2BSiKRKC9HfnpxyZNhhglUB5KhJQ++JbCDmWfWXMqA0=;
-        b=j+KJ64HCZmMdjcHvHFYFOMgTiEbLczDhXe1FPvtYEUV/Y6qwFUcegTcHVvhA7hFZUp
-         3sZEOr7TvIWz2znDrEkolObHnZHEy1TPSlq/K705Uzz1XQdI991g5GlKUT7rZgjbdFtK
-         hLYO5qA/iGw8i4IM7TQwCW4mFsh6aFI94aD0zMtUZ50YJjqkOUw9kd9YGIXVKm/E5hAw
-         qFlxzoeK9rRj7vARp2/kAYINdBcQfIxjtrC7PN2+NPQvePCTG20RrprKGpHs+GcZsHDW
-         1XRw7qm0VJAI8MjbDxM6ByG2bYkoYoZjDDn6/OIHQhlrpUqXnriPXX4i0qeeWAYi8jFR
-         8Kng==
-X-Gm-Message-State: AOJu0YxFVgtJFkrbppHBo7rjt0wQLwmXN5l3Ua8rRPizMYpeyg9Jdfe0
-        4yBmD2AUTs7XJinopzHxRK2w37ihSb+ClHhXIYF0jQ70z+NoYGoi2Q==
-X-Google-Smtp-Source: AGHT+IEDEy77xCD9qkQ07ozj1FNjsVU9wqnTnVkAMARkmSMMoED2HhOM4oxaUbEi/gP5JDTBkKCj1fGsjl7m7EssEJI=
-X-Received: by 2002:a0d:ff84:0:b0:573:30c8:6e1d with SMTP id
- p126-20020a0dff84000000b0057330c86e1dmr12665460ywf.44.1691439207362; Mon, 07
- Aug 2023 13:13:27 -0700 (PDT)
+        with ESMTP id S229533AbjHHA4r (ORCPT <rfc822;audit@vger.kernel.org>);
+        Mon, 7 Aug 2023 20:56:47 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45A9AE9
+        for <audit@vger.kernel.org>; Mon,  7 Aug 2023 17:56:46 -0700 (PDT)
+Received: from dggpeml100024.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4RKZVZ1bj6zrS8y;
+        Tue,  8 Aug 2023 08:55:34 +0800 (CST)
+Received: from [10.67.110.112] (10.67.110.112) by
+ dggpeml100024.china.huawei.com (7.185.36.115) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27; Tue, 8 Aug 2023 08:56:44 +0800
+Message-ID: <9f1981e4-596d-729a-cfa6-778d0798846c@huawei.com>
+Date:   Tue, 8 Aug 2023 08:56:43 +0800
 MIME-Version: 1.0
-References: <41d03271-ff8a-9888-11de-a7f53da47328@I-love.SAKURA.ne.jp>
- <CAHC9VhSsDTyfae6f0XvYYcCRH590L1ZEqbHSM4UgUCHRGm7X_g@mail.gmail.com> <2155117.irdbgypaU6@x2>
-In-Reply-To: <2155117.irdbgypaU6@x2>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Mon, 7 Aug 2023 16:13:16 -0400
-Message-ID: <CAHC9VhRG2aX-_ye7ZRWpZkR7rq8Op7RUVS3cMtxhF8t1bdw5oQ@mail.gmail.com>
-Subject: Re: [PATCH v2] TaskTracker : Simplified thread information tracker.
-To:     Steve Grubb <sgrubb@redhat.com>
-Cc:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        linux-audit@redhat.com, audit@vger.kernel.org,
-        linux-security-module <linux-security-module@vger.kernel.org>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH -next] audit: remove out-of-date comment in auditd_reset()
+Content-Language: en-US
+To:     Paul Moore <paul@paul-moore.com>,
+        Xiu Jianfeng <xiujianfeng@huaweicloud.com>
+CC:     <eparis@redhat.com>, <audit@vger.kernel.org>
+References: <20230804094155.283766-1-xiujianfeng@huaweicloud.com>
+ <CAHC9VhRLzd5Qimc-Q3xe8RRXM=6CCFkWbh5=fJObhaZWhPSpcg@mail.gmail.com>
+From:   xiujianfeng <xiujianfeng@huawei.com>
+In-Reply-To: <CAHC9VhRLzd5Qimc-Q3xe8RRXM=6CCFkWbh5=fJObhaZWhPSpcg@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.110.112]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpeml100024.china.huawei.com (7.185.36.115)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <audit.vger.kernel.org>
 X-Mailing-List: audit@vger.kernel.org
 
-On Mon, Aug 7, 2023 at 3:03=E2=80=AFPM Steve Grubb <sgrubb@redhat.com> wrot=
-e:
-> On Monday, August 7, 2023 2:53:40 PM EDT Paul Moore wrote:
-> > On Sun, Aug 6, 2023 at 9:05=E2=80=AFAM Tetsuo Handa
-> >
-> > <penguin-kernel@i-love.sakura.ne.jp> wrote:
-> > > When an unexpected system event occurs, the administrator may want to
-> > > identify which application triggered the event. For example, unexpect=
-ed
-> > > process termination is still a real concern enough to write articles
-> > > like https://access.redhat.com/solutions/165993 . TaskTracker is a
-> > > trivial LSM module which emits TOMOYO-like information into the audit
-> > > logs for better understanding of unexpected system events.
-> >
-> > Help me understand why all of this information isn't already available
-> > via some combination of Audit and TOMOYO, or simply audit itself?
->
-> Usually when you want this kind of information, you are investigating an
-> incident. You wouldn't place a syscall audit for every execve and then
-> reconstruct the call chain from that. In the case of long running daemons=
-,
-> the information could have been rotated away. But typically you want to s=
-ee
-> what the entry point is. A sudden shell from bind would be suspicious whi=
-le a
-> shell from sshd is not.
+Hi,
 
-Once again, why not use the existing audit and/or TOMOYO capabilities.
+On 2023/8/8 2:20, Paul Moore wrote:
+> On Fri, Aug 4, 2023 at 5:43 AM Xiu Jianfeng <xiujianfeng@huaweicloud.com> wrote:
+>>
+>> From: Xiu Jianfeng <xiujianfeng@huawei.com>
+>>
+>> Since commit 48d0e023af97 ("audit: fix the RCU locking for the
+>> auditd_connection structure"), auditd_conn is changed to a global
+>> pointor protected by RCU, and doesn't call auditd_set() here, which
+>> makes the comment don't match the code, so remove it.
+>>
+>> Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
+>> ---
+>>  kernel/audit.c | 1 -
+>>  1 file changed, 1 deletion(-)
+> 
+> The comment is still relevant, look at the
+> `rcu_assign_pointer(auditd_conn, NULL)` call in the auditd_reset()
+> function immediately before the spinlock is unlocked.
 
---=20
-paul-moore.com
+Thanks for your feedback, please ignore this patch.
+
+> 
+>> diff --git a/kernel/audit.c b/kernel/audit.c
+>> index 45b2fb1e45af..0905750779a4 100644
+>> --- a/kernel/audit.c
+>> +++ b/kernel/audit.c
+>> @@ -640,7 +640,6 @@ static void auditd_reset(const struct auditd_connection *ac)
+>>         struct sk_buff *skb;
+>>         struct auditd_connection *ac_old;
+>>
+>> -       /* if it isn't already broken, break the connection */
+>>         spin_lock_irqsave(&auditd_conn_lock, flags);
+>>         ac_old = rcu_dereference_protected(auditd_conn,
+>>                                            lockdep_is_held(&auditd_conn_lock));
+>> --
+>> 2.34.1
+> 
