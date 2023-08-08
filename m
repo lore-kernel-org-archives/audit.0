@@ -2,85 +2,150 @@ Return-Path: <audit-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2DF6BC001B0
-	for <audit@archiver.kernel.org>; Tue,  8 Aug 2023 17:53:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4B35AC04A94
+	for <audit@archiver.kernel.org>; Tue,  8 Aug 2023 18:46:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235016AbjHHRxL (ORCPT <rfc822;audit@archiver.kernel.org>);
-        Tue, 8 Aug 2023 13:53:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34696 "EHLO
+        id S231799AbjHHSqN (ORCPT <rfc822;audit@archiver.kernel.org>);
+        Tue, 8 Aug 2023 14:46:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235073AbjHHRwl (ORCPT <rfc822;audit@vger.kernel.org>);
-        Tue, 8 Aug 2023 13:52:41 -0400
-Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8995728EBB;
-        Tue,  8 Aug 2023 09:23:31 -0700 (PDT)
-Received: from fsav414.sakura.ne.jp (fsav414.sakura.ne.jp [133.242.250.113])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 378A7BCl055363;
-        Tue, 8 Aug 2023 19:07:11 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav414.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav414.sakura.ne.jp);
- Tue, 08 Aug 2023 19:07:11 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav414.sakura.ne.jp)
-Received: from [192.168.1.6] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 378A7BmK055360
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Tue, 8 Aug 2023 19:07:11 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Message-ID: <6f3a90b9-b210-512a-f74a-6003aebf5c30@I-love.SAKURA.ne.jp>
-Date:   Tue, 8 Aug 2023 19:07:10 +0900
+        with ESMTP id S232775AbjHHSpt (ORCPT <rfc822;audit@vger.kernel.org>);
+        Tue, 8 Aug 2023 14:45:49 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CE59B1159BE
+        for <audit@vger.kernel.org>; Tue,  8 Aug 2023 09:47:40 -0700 (PDT)
+Received: from kwepemd500002.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4RKsBd4ltBzrSB9;
+        Tue,  8 Aug 2023 19:57:45 +0800 (CST)
+Received: from [10.67.110.176] (10.67.110.176) by
+ kwepemd500002.china.huawei.com (7.221.188.104) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.2.1258.16; Tue, 8 Aug 2023 19:58:55 +0800
+Subject: Re: [PATCH] audit: fix possible soft lockup in __audit_inode_child()
+To:     Paul Moore <paul@paul-moore.com>
+CC:     <eparis@redhat.com>, <audit@vger.kernel.org>
+References: <20230805023934.347828-1-cuigaosheng1@huawei.com>
+ <CAHC9VhSxFiuNd5uFoZf23GRKMQzLbjaLWZw57B7pO0WcrwMW_A@mail.gmail.com>
+From:   cuigaosheng <cuigaosheng1@huawei.com>
+Message-ID: <638228a6-0dc2-b340-38f4-6676fb714a4f@huawei.com>
+Date:   Tue, 8 Aug 2023 19:58:55 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.14.0
-Subject: Re: [PATCH v2] TaskTracker : Simplified thread information tracker.
-Content-Language: en-US
-To:     Paul Moore <paul@paul-moore.com>, Steve Grubb <sgrubb@redhat.com>
-Cc:     linux-audit@redhat.com, audit@vger.kernel.org,
-        linux-security-module <linux-security-module@vger.kernel.org>
-References: <41d03271-ff8a-9888-11de-a7f53da47328@I-love.SAKURA.ne.jp>
- <CAHC9VhSsDTyfae6f0XvYYcCRH590L1ZEqbHSM4UgUCHRGm7X_g@mail.gmail.com>
- <2155117.irdbgypaU6@x2>
- <CAHC9VhRG2aX-_ye7ZRWpZkR7rq8Op7RUVS3cMtxhF8t1bdw5oQ@mail.gmail.com>
-From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-In-Reply-To: <CAHC9VhRG2aX-_ye7ZRWpZkR7rq8Op7RUVS3cMtxhF8t1bdw5oQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <CAHC9VhSxFiuNd5uFoZf23GRKMQzLbjaLWZw57B7pO0WcrwMW_A@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.110.176]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ kwepemd500002.china.huawei.com (7.221.188.104)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <audit.vger.kernel.org>
 X-Mailing-List: audit@vger.kernel.org
 
-On 2023/08/08 5:13, Paul Moore wrote:
-> On Mon, Aug 7, 2023 at 3:03 PM Steve Grubb <sgrubb@redhat.com> wrote:
->> On Monday, August 7, 2023 2:53:40 PM EDT Paul Moore wrote:
->>> On Sun, Aug 6, 2023 at 9:05 AM Tetsuo Handa
->>>
->>> <penguin-kernel@i-love.sakura.ne.jp> wrote:
->>>> When an unexpected system event occurs, the administrator may want to
->>>> identify which application triggered the event. For example, unexpected
->>>> process termination is still a real concern enough to write articles
->>>> like https://access.redhat.com/solutions/165993 . TaskTracker is a
->>>> trivial LSM module which emits TOMOYO-like information into the audit
->>>> logs for better understanding of unexpected system events.
->>>
->>> Help me understand why all of this information isn't already available
->>> via some combination of Audit and TOMOYO, or simply audit itself?
+Thanks for taking time to review this patch!
+
+> Exactly how many PATH entries were there in audit_context::names_list
+> when you ran into this problem?
+
+In my test environment, the max length of the names_list is 26094, and the
+number of names_list will change with the number of cpus.
+
+> I'm not sure we want to jump immediately into putting a cond_resched()
+> into both loops, especially since tracing/debugfs is a known corner
+> case and the default kernel.watchdog_thresh value appears to work
+> without error.  How about adding *one* cond_resched() between the two
+> loops?
+
+The default kernel.watchdog_thresh value is 12, but some scenarios require
+that the kernel.watchdog_thresh value be set to 5, so we have this problem,
+I enabled kasan to reproduce the problem more easily,I have tested that adding
+cond_resched() between the two loops is ok for us, and I think that's enough
+for most scenarios.
+
+I will submit a patch v2, thanks again!
+
+On 2023/8/8 2:32, Paul Moore wrote:
+> On Fri, Aug 4, 2023 at 10:39 PM Gaosheng Cui <cuigaosheng1@huawei.com> wrote:
+>> Tracefs or debugfs maybe cause hundreds to thousands of PATH records,
+>> too many PATH records maybe cause soft lockup.
 >>
->> Usually when you want this kind of information, you are investigating an
->> incident. You wouldn't place a syscall audit for every execve and then
->> reconstruct the call chain from that. In the case of long running daemons,
->> the information could have been rotated away. But typically you want to see
->> what the entry point is. A sudden shell from bind would be suspicious while a
->> shell from sshd is not.
-> 
-> Once again, why not use the existing audit and/or TOMOYO capabilities.
-> 
-
-Can't, for Fedora/RHEL does not enable TOMOYO.
-I need a way that can be used by RHEL users running with selinux=0.
-
-This history information is expected to become available for those who
-might want to investigate unexpected system events, but should not become
-unconditionally available for those who do not want to bloat audit logs.
-Switching via lsm=tt is a handy way for satisfying both.
-
+>> For example:
+>>    1. CONFIG_KASAN=y && CONFIG_PREEMPTION=n
+>>    2. auditctl -a exit,always -S open -k key
+>>    3. sysctl -w kernel.watchdog_thresh=5
+>>    4. mkdir /sys/kernel/debug/tracing/instances/test
+>>
+>> There may be a soft lockup as follows:
+>>    watchdog: BUG: soft lockup - CPU#45 stuck for 7s! [mkdir:15498]
+>>    Kernel panic - not syncing: softlockup: hung tasks
+>>    Call trace:
+>>     dump_backtrace+0x0/0x30c
+>>     show_stack+0x20/0x30
+>>     dump_stack+0x11c/0x174
+>>     panic+0x27c/0x494
+>>     watchdog_timer_fn+0x2bc/0x390
+>>     __run_hrtimer+0x148/0x4fc
+>>     __hrtimer_run_queues+0x154/0x210
+>>     hrtimer_interrupt+0x2c4/0x760
+>>     arch_timer_handler_phys+0x48/0x60
+>>     handle_percpu_devid_irq+0xe0/0x340
+>>     __handle_domain_irq+0xbc/0x130
+>>     gic_handle_irq+0x78/0x460
+>>     el1_irq+0xb8/0x140
+>>     __audit_inode_child+0x240/0x7bc
+>>     tracefs_create_file+0x1b8/0x2a0
+>>     trace_create_file+0x18/0x50
+>>     event_create_dir+0x204/0x30c
+>>     __trace_add_new_event+0xac/0x100
+>>     event_trace_add_tracer+0xa0/0x130
+>>     trace_array_create_dir+0x60/0x140
+>>     trace_array_create+0x1e0/0x370
+>>     instance_mkdir+0x90/0xd0
+>>     tracefs_syscall_mkdir+0x68/0xa0
+>>     vfs_mkdir+0x21c/0x34c
+>>     do_mkdirat+0x1b4/0x1d4
+>>     __arm64_sys_mkdirat+0x4c/0x60
+>>     el0_svc_common.constprop.0+0xa8/0x240
+>>     do_el0_svc+0x8c/0xc0
+>>     el0_svc+0x20/0x30
+>>     el0_sync_handler+0xb0/0xb4
+>>     el0_sync+0x160/0x180
+>>
+>> Therefore, we add cond_resched() to __audit_inode_child() to fix it.
+>>
+>> Fixes: 5195d8e217a7 ("audit: dynamically allocate audit_names when not enough space is in the names array")
+>> Signed-off-by: Gaosheng Cui <cuigaosheng1@huawei.com>
+>> ---
+>>   kernel/auditsc.c | 2 ++
+>>   1 file changed, 2 insertions(+)
+>>
+>> diff --git a/kernel/auditsc.c b/kernel/auditsc.c
+>> index addeed3df15d..fce37545644b 100644
+>> --- a/kernel/auditsc.c
+>> +++ b/kernel/auditsc.c
+>> @@ -2454,6 +2454,7 @@ void __audit_inode_child(struct inode *parent,
+>>                          found_parent = n;
+>>                          break;
+>>                  }
+>> +               cond_resched();
+>>          }
+>>
+>>          /* is there a matching child entry? */
+>> @@ -2473,6 +2474,7 @@ void __audit_inode_child(struct inode *parent,
+>>                          found_child = n;
+>>                          break;
+>>                  }
+>> +               cond_resched();
+>>          }
+>>
+>>          if (!found_parent) {
+> Exactly how many PATH entries were there in audit_context::names_list
+> when you ran into this problem?
+>
+> I'm not sure we want to jump immediately into putting a cond_resched()
+> into both loops, especially since tracing/debugfs is a known corner
+> case and the default kernel.watchdog_thresh value appears to work
+> without error.  How about adding *one* cond_resched() between the two
+> loops?
+>
