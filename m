@@ -2,46 +2,31 @@ Return-Path: <audit-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E41B4C04A94
-	for <audit@archiver.kernel.org>; Tue,  8 Aug 2023 23:45:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 35D26C001E0
+	for <audit@archiver.kernel.org>; Wed,  9 Aug 2023 18:02:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229702AbjHHXpP (ORCPT <rfc822;audit@archiver.kernel.org>);
-        Tue, 8 Aug 2023 19:45:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42472 "EHLO
+        id S230343AbjHISCz (ORCPT <rfc822;audit@archiver.kernel.org>);
+        Wed, 9 Aug 2023 14:02:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229494AbjHHXpO (ORCPT <rfc822;audit@vger.kernel.org>);
-        Tue, 8 Aug 2023 19:45:14 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20291198D
-        for <audit@vger.kernel.org>; Tue,  8 Aug 2023 16:44:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1691538269;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Uit/uI9wNXL5YCKyEI8jLmeigfyPLrbiOuFoHmEFQCw=;
-        b=FGbvCIKgKg4poIWNTO/UEhBHyIhSCqIf1IC9Wp2Nz55+PkQcL7an9HNsyrJniZHC5gC6Kq
-        3CnEWLUKA8HoCC0ByFS/Y2YjhcnA18RQ3qcLLnw0GizC9nZKd0kBelSpJlTpZU6LhcFVNo
-        7xlyjIvHwAUKQym1NsYamDj5DRn4SPI=
-Received: from mimecast-mx02.redhat.com (66.187.233.73 [66.187.233.73]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-621-Miq98z2KM-2M0qdOh4MIgQ-1; Tue, 08 Aug 2023 19:44:24 -0400
-X-MC-Unique: Miq98z2KM-2M0qdOh4MIgQ-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1DB263C14AA4;
-        Tue,  8 Aug 2023 23:44:23 +0000 (UTC)
-Received: from agk-cloud1.hosts.prod.upshift.rdu2.redhat.com (agk-cloud1.hosts.prod.upshift.rdu2.redhat.com [10.0.13.154])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id A3551492C13;
-        Tue,  8 Aug 2023 23:44:22 +0000 (UTC)
-Received: by agk-cloud1.hosts.prod.upshift.rdu2.redhat.com (Postfix, from userid 3883)
-        id 7C2AE403A55F; Wed,  9 Aug 2023 00:40:23 +0100 (BST)
-Date:   Wed, 9 Aug 2023 00:40:23 +0100
-From:   Alasdair G Kergon <agk@redhat.com>
-To:     Fan Wu <wufan@linux.microsoft.com>
-Cc:     Paul Moore <paul@paul-moore.com>,
+        with ESMTP id S232245AbjHISCp (ORCPT <rfc822;audit@vger.kernel.org>);
+        Wed, 9 Aug 2023 14:02:45 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8FE2E19A1;
+        Wed,  9 Aug 2023 11:02:43 -0700 (PDT)
+Received: by linux.microsoft.com (Postfix, from userid 1052)
+        id F276320FC4C4; Wed,  9 Aug 2023 11:02:42 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com F276320FC4C4
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1691604163;
+        bh=2BAEPHZjC1csVSUp5YiA21kHWYMQI2muR+jIz+ByF+4=;
+        h=Date:From:To:Subject:References:In-Reply-To:From;
+        b=V0JoJpg23L/peNkCEvzn4viDNmOHVq322EXzMIkHlzswJAG/7x2U+HK9aVOM+hySz
+         mbJuWfMNHkSfC5A/dOjdMfskmaecJosfCzIgyyFlwjv23+hsdZtd9zVTW2hG2gpZGJ
+         y6qnuS91reyXsJjl52Mc922yNssoBNVK4a9tvzQs=
+Date:   Wed, 9 Aug 2023 11:02:42 -0700
+From:   Fan Wu <wufan@linux.microsoft.com>
+To:     Paul Moore <paul@paul-moore.com>,
         Mike Snitzer <snitzer@kernel.org>, corbet@lwn.net,
         zohar@linux.ibm.com, jmorris@namei.org, serge@hallyn.com,
         tytso@mit.edu, ebiggers@kernel.org, axboe@kernel.dk,
@@ -54,44 +39,44 @@ Cc:     Paul Moore <paul@paul-moore.com>,
         Deven Bowers <deven.desai@linux.microsoft.com>
 Subject: Re: [RFC PATCH v10 11/17] dm-verity: consume root hash digest and
  signature data via LSM hook
-Message-ID: <20230808234023.GC120054@agk-cloud1.hosts.prod.upshift.rdu2.redhat.com>
-Mail-Followup-To: Fan Wu <wufan@linux.microsoft.com>,
-        Paul Moore <paul@paul-moore.com>, Mike Snitzer <snitzer@kernel.org>,
-        corbet@lwn.net, zohar@linux.ibm.com, jmorris@namei.org,
-        serge@hallyn.com, tytso@mit.edu, ebiggers@kernel.org,
-        axboe@kernel.dk, agk@redhat.com, eparis@redhat.com,
-        linux-doc@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-fscrypt@vger.kernel.org, linux-block@vger.kernel.org,
-        dm-devel@redhat.com, audit@vger.kernel.org,
-        roberto.sassu@huawei.com, linux-kernel@vger.kernel.org,
-        Deven Bowers <deven.desai@linux.microsoft.com>
+Message-ID: <20230809180242.GA23396@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
 References: <1687986571-16823-1-git-send-email-wufan@linux.microsoft.com>
  <1687986571-16823-12-git-send-email-wufan@linux.microsoft.com>
  <ZKgm+ffQbdDTxrg9@redhat.com>
  <20230712034319.GA17642@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
  <CAHC9VhQFxqcfgR0acgdiXKP9LT1KLgGjZd-QHs6O1dEex31HEQ@mail.gmail.com>
  <20230808224503.GA20095@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+ <20230808234023.GC120054@agk-cloud1.hosts.prod.upshift.rdu2.redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230808224503.GA20095@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+In-Reply-To: <20230808234023.GC120054@agk-cloud1.hosts.prod.upshift.rdu2.redhat.com>
 User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
 Precedence: bulk
 List-ID: <audit.vger.kernel.org>
 X-Mailing-List: audit@vger.kernel.org
 
-On Tue, Aug 08, 2023 at 03:45:03PM -0700, Fan Wu wrote:
-> On Tue, Jul 25, 2023 at 04:43:48PM -0400, Paul Moore wrote:
-> > Where would the finalize() hook be called?
+On Wed, Aug 09, 2023 at 12:40:23AM +0100, Alasdair G Kergon wrote:
+> On Tue, Aug 08, 2023 at 03:45:03PM -0700, Fan Wu wrote:
+> > On Tue, Jul 25, 2023 at 04:43:48PM -0400, Paul Moore wrote:
+> > > Where would the finalize() hook be called?
+> > 
+> > It is in the __bind function in drivers/md/dm.c, calling just before 
+> > rcu_assign_pointer(md->map, (void *)t) which activates the inactive table.
+>  
+> That would be after the existing commit point, meaning the table swap
+> cannot be cancelled there, so is the finalize() you are proposing void()
+> i.e. designed so it always succeeds?
 > 
-> It is in the __bind function in drivers/md/dm.c, calling just before 
-> rcu_assign_pointer(md->map, (void *)t) which activates the inactive table.
- 
-That would be after the existing commit point, meaning the table swap
-cannot be cancelled there, so is the finalize() you are proposing void()
-i.e. designed so it always succeeds?
+> Alasdair
 
-Alasdair
+Thanks for the input.
 
+Actually, no, the hook can be failed. I noticed the existing call before rcu_assign_pointer(md->map, (void *)t);
+(https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/md/dm.c#n2255)
+can also be failed so I was following the same pattern.
+
+Could you explain a bit more about the "commit point"? It sounds like it might be better to move
+the hook call just before the commit point instead.
+
+-Fan
