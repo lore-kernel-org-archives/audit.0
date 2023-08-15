@@ -2,103 +2,83 @@ Return-Path: <audit-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B28B2C41513
-	for <audit@archiver.kernel.org>; Tue, 15 Aug 2023 20:49:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CD567C0015E
+	for <audit@archiver.kernel.org>; Tue, 15 Aug 2023 22:10:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229983AbjHOUsl (ORCPT <rfc822;audit@archiver.kernel.org>);
-        Tue, 15 Aug 2023 16:48:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38204 "EHLO
+        id S238946AbjHOWJa (ORCPT <rfc822;audit@archiver.kernel.org>);
+        Tue, 15 Aug 2023 18:09:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239930AbjHOUsV (ORCPT <rfc822;audit@vger.kernel.org>);
-        Tue, 15 Aug 2023 16:48:21 -0400
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E867212A;
-        Tue, 15 Aug 2023 13:48:05 -0700 (PDT)
-Received: by mail-pg1-x536.google.com with SMTP id 41be03b00d2f7-565e54cb93aso455889a12.3;
-        Tue, 15 Aug 2023 13:48:05 -0700 (PDT)
+        with ESMTP id S239009AbjHOWJW (ORCPT <rfc822;audit@vger.kernel.org>);
+        Tue, 15 Aug 2023 18:09:22 -0400
+Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34FAE1FEE
+        for <audit@vger.kernel.org>; Tue, 15 Aug 2023 15:09:21 -0700 (PDT)
+Received: by mail-qk1-x72f.google.com with SMTP id af79cd13be357-76c8dd2ce79so520676685a.1
+        for <audit@vger.kernel.org>; Tue, 15 Aug 2023 15:09:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1692132484; x=1692737284;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=G4IX9/WkCVI7eBjbMqjNOw8oTFgTkITXU+deaPVMnaU=;
-        b=EIxB4xe8sE1jozTdmjFDNVzRWkLCtNuxbVT/R2BWDRQ2z8sh+a11Wwcin4TBjdLtUX
-         u0vv70K/4P7NmwK3agNPwBUc94Dh2fn5ypkLdxcvnf/UeVyhFczVLVjU6eRLQxWiZub1
-         30XBrSOdBjUeDIe7e32ra5t1i0ZxW4x8JvfKDckLopbEbJF8UPvwM+0b4vKTcPC157Gj
-         1wXTwndnDC0p3o/hxAf21ezZXoxRhacZXWSxRwJg+EnTSTVR7MrlNnTfvSHwpTvx0OMK
-         S95+lLX4GA9Rd+/Np8GCTBfo0KCpzf3JxCIfG9SQT7i4f/3Wpshg+TWfB5MWFZBC42yu
-         927Q==
+        d=paul-moore.com; s=google; t=1692137360; x=1692742160;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=P+y8qETZYNAegIOhFR4VJ0g7JbCPf/QOcti2iqgt86Y=;
+        b=U9Srv10FGBxw3+U/yoCZTkKg7qUB6Wd/5rVFj++n6I3KAcE54o2N/rqoPRn1picQwz
+         +pbFzaC4/3tYJZoC8usC0uRgxX3X4QDhsdkBQcRwdDP8A6i41f9xnzWwhOahuDuZskqZ
+         fEQ3fidLQkfF8WpVNoAwaKK8hM/5ADbEIGR5RC4is7Uwa//Xhv4RlYHuAexoTbbV0KFu
+         Dfg6xyUymxBQIeCpBxuQqjQN7M5w5LDFyh2EMsHhF2uWa3LnfG2GWmZ/mWDbBOXC6jn9
+         xTC+5GgTXTahh2Q9E9yN5g/My7qXKDlHUV+niRbXFhtsvQwHXvMi5DTLRuHjaJU7IqA7
+         49bg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692132484; x=1692737284;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=G4IX9/WkCVI7eBjbMqjNOw8oTFgTkITXU+deaPVMnaU=;
-        b=Y5yYsT19Yes0GqmpnF+Y/auphedkAyUL2z80MyXzQhLMMFX4NXe8InnYMHqfxtuQn3
-         jEIbs5bXoTougwt7k3hVhNY+Dr2PqRgD+e1ICdrbkjVovWKCSYrqpJiM0Y++HzUR57V4
-         pfRezGolZaGcXc3dqD/RsxqmScrh3eevsvQG0P2G3Weqs+iQE83mxBnXXeHFO/59SC4d
-         pzLme+JsnZgWam9yBLjmHaWkuOF5jA9vqMW1dhG9GTklpdF6zNhQaUuJ+SoUl/DchyPs
-         oiUecSp8gzGg+lIfx80CFhBBHIj3FSleQ0jP+1LgQp3KBSjNTde567oaQ8DCrNJjlNc4
-         BHPQ==
-X-Gm-Message-State: AOJu0Yxxxw/XQQpC7KNZJycUpVCxgOLxTL7taoBVABKGAqvGr740FTcW
-        2+X2IiUtn36x2tuRR5gIGOc=
-X-Google-Smtp-Source: AGHT+IHmVhVNAXM6fVm7cY98poh/f8N7e7OcOzJjnOdeDyyPf6+we4bwJkx6zCbUbzCSyjzRWfwD4w==
-X-Received: by 2002:a17:90a:e50a:b0:26b:56fa:87d3 with SMTP id t10-20020a17090ae50a00b0026b56fa87d3mr5692619pjy.31.1692132484557;
-        Tue, 15 Aug 2023 13:48:04 -0700 (PDT)
-Received: from localhost.localdomain ([2405:201:c009:58e9:db85:3caf:1429:e455])
-        by smtp.gmail.com with ESMTPSA id b13-20020a170902650d00b001bba3a4888bsm1835828plk.102.2023.08.15.13.47.57
+        d=1e100.net; s=20221208; t=1692137360; x=1692742160;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=P+y8qETZYNAegIOhFR4VJ0g7JbCPf/QOcti2iqgt86Y=;
+        b=dWMeU6c6wrN5OtL8GMd1OXPqhv03OyQLtxHQ5YNNG214jWTPKFZlN67sEM3UMKIR/P
+         SQr2+HQ6JEQRyHdWr9CKyB86e/C2aclEyXE2A4ktMeAbYoFCtZUm3hdDepu7T9146Wwt
+         lmQKDmpomi7mkANWLQYSz5gm2K9PMzObSXlw+YfT+bOhSNrCrA703ZDb2ipiFfbUFu5w
+         lxPBnkn29UiCsXX0bJirOf0XlXRgNsRnoNsVP6zL5GHOqq7ehb4CW2xrZ8lthWcVF+iY
+         vlfvrWq/23Ns3XQHtsixRkJP6yKoscjXrzgrzq5alNFogJgR7Apw4FzbOdCyxnAvd5Yr
+         RbqA==
+X-Gm-Message-State: AOJu0YxPhx1LmnUJTw9G9qEeAmayYQUklMc583rsCumDCetbrJ71ImPX
+        j0vi1K5pFd3/C+M+xptm7v6b
+X-Google-Smtp-Source: AGHT+IEoxf2tOUQFGE1k20XiwUYizctfQkxWty9Jz+mUFWEiy3ZPDKtu4qfbZdOFt39QNXAkQpfg5w==
+X-Received: by 2002:a0c:e0d1:0:b0:641:8c0f:1a3a with SMTP id x17-20020a0ce0d1000000b006418c0f1a3amr13871qvk.53.1692137360168;
+        Tue, 15 Aug 2023 15:09:20 -0700 (PDT)
+Received: from localhost ([70.22.175.108])
+        by smtp.gmail.com with ESMTPSA id r4-20020a0ccc04000000b00631f02c2279sm152277qvk.90.2023.08.15.15.09.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Aug 2023 13:48:04 -0700 (PDT)
-From:   Atul Kumar Pant <atulpant.linux@gmail.com>
-To:     paul@paul-moore.com, eparis@redhat.com
+        Tue, 15 Aug 2023 15:09:19 -0700 (PDT)
+Date:   Tue, 15 Aug 2023 18:09:19 -0400
+Message-ID: <aecb4e94bc65928c674b6a083e7fd489.paul@paul-moore.com>
+From:   Paul Moore <paul@paul-moore.com>
+To:     Atul Kumar Pant <atulpant.linux@gmail.com>, eparis@redhat.com
 Cc:     Atul Kumar Pant <atulpant.linux@gmail.com>, audit@vger.kernel.org,
         linux-kernel@vger.kernel.org, shuah@kernel.org
-Subject: [PATCH v1] kernel: Moves trailing statements to next line
-Date:   Wed, 16 Aug 2023 02:17:51 +0530
-Message-Id: <20230815204751.52481-1-atulpant.linux@gmail.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v1] kernel: Add space before parenthesis and around '=',  "==" and '<'
+References: <20230815204553.52261-1-atulpant.linux@gmail.com>
+In-Reply-To: <20230815204553.52261-1-atulpant.linux@gmail.com>
 Precedence: bulk
 List-ID: <audit.vger.kernel.org>
 X-Mailing-List: audit@vger.kernel.org
 
-Fixes following checkpatch.pl issue:
-ERROR: trailing statements should be on next line
+On Aug 15, 2023 Atul Kumar Pant <atulpant.linux@gmail.com> wrote:
+> 
+> Fixes following checkpatch.pl issue:
+> ERROR: space required before the open parenthesis '('
+> ERROR: spaces required around that '='
+> ERROR: spaces required around that '<'
+> ERROR: spaces required around that '=='
+> 
+> Signed-off-by: Atul Kumar Pant <atulpant.linux@gmail.com>
+> ---
+>  kernel/acct.c        |  2 +-
+>  kernel/auditfilter.c | 16 ++++++++--------
+>  kernel/auditsc.c     |  2 +-
+>  3 files changed, 10 insertions(+), 10 deletions(-)
 
-Signed-off-by: Atul Kumar Pant <atulpant.linux@gmail.com>
----
- kernel/audit.c       | 3 ++-
- kernel/auditfilter.c | 3 ++-
- 2 files changed, 4 insertions(+), 2 deletions(-)
+I changed the subject line to "audit: add space before parenthesis and
+around '=', "==", and '<'" as the "audit:" prefix is more appropriate
+and I'm a believer of the Oxford Comma.  Otherwise it looks fine and I
+just merged it into audit/next, thanks.
 
-diff --git a/kernel/audit.c b/kernel/audit.c
-index 9bc0b0301198..a5393eda7f9d 100644
---- a/kernel/audit.c
-+++ b/kernel/audit.c
-@@ -323,7 +323,8 @@ static inline int audit_rate_check(void)
- 	unsigned long		now;
- 	int			retval	   = 0;
- 
--	if (!audit_rate_limit) return 1;
-+	if (!audit_rate_limit)
-+		return 1;
- 
- 	spin_lock_irqsave(&lock, flags);
- 	if (++messages < audit_rate_limit) {
-diff --git a/kernel/auditfilter.c b/kernel/auditfilter.c
-index 42d99896e7a6..a25757f09255 100644
---- a/kernel/auditfilter.c
-+++ b/kernel/auditfilter.c
-@@ -694,7 +694,8 @@ static struct audit_rule_data *audit_krule_to_data(struct audit_krule *krule)
- 			data->values[i] = f->val;
- 		}
- 	}
--	for (i = 0; i < AUDIT_BITMASK_SIZE; i++) data->mask[i] = krule->mask[i];
-+	for (i = 0; i < AUDIT_BITMASK_SIZE; i++)
-+		data->mask[i] = krule->mask[i];
- 
- 	return data;
- }
--- 
-2.25.1
-
+--
+paul-moore.com
