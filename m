@@ -2,120 +2,119 @@ Return-Path: <audit-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4E0DBC0015E
-	for <audit@archiver.kernel.org>; Sat, 12 Aug 2023 10:08:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 32DD4C41513
+	for <audit@archiver.kernel.org>; Tue, 15 Aug 2023 18:46:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229547AbjHLKI1 (ORCPT <rfc822;audit@archiver.kernel.org>);
-        Sat, 12 Aug 2023 06:08:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50952 "EHLO
+        id S232142AbjHOSqE (ORCPT <rfc822;audit@archiver.kernel.org>);
+        Tue, 15 Aug 2023 14:46:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbjHLKI1 (ORCPT <rfc822;audit@vger.kernel.org>);
-        Sat, 12 Aug 2023 06:08:27 -0400
-Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D445E2132;
-        Sat, 12 Aug 2023 03:08:29 -0700 (PDT)
-Received: from fsav311.sakura.ne.jp (fsav311.sakura.ne.jp [153.120.85.142])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 37CA8B8Y030980;
-        Sat, 12 Aug 2023 19:08:11 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav311.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav311.sakura.ne.jp);
- Sat, 12 Aug 2023 19:08:11 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav311.sakura.ne.jp)
-Received: from [192.168.1.6] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 37CA8BCE030977
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Sat, 12 Aug 2023 19:08:11 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Message-ID: <35fb916d-7233-31a8-8d1f-e64a623de337@I-love.SAKURA.ne.jp>
-Date:   Sat, 12 Aug 2023 19:08:09 +0900
+        with ESMTP id S239300AbjHOSpc (ORCPT <rfc822;audit@vger.kernel.org>);
+        Tue, 15 Aug 2023 14:45:32 -0400
+Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9246E35A5
+        for <audit@vger.kernel.org>; Tue, 15 Aug 2023 11:44:56 -0700 (PDT)
+Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-589f437fd1dso22531297b3.1
+        for <audit@vger.kernel.org>; Tue, 15 Aug 2023 11:44:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1692125094; x=1692729894;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vZps84ysRP0NeVlJT28XZWO+nki5NsVjjdBZ2Y0DhN0=;
+        b=JY8njen4h1XecFvkkWfBdWvexIzjMjfJBUd0Zsm3/1rmCvMVr0VlWBR09W0sZS/621
+         D2DqREf+g/I7hWRrGBE99r7qwAm43Zti/84EqT6lkHbRZNJDREKWO8Xwao0bwRfzDpo/
+         mUc5WH72/XGjrOinL86MH2fiSF47A0Q2YqInm/Vts647Kc5iqGvXkl4lbxnLlCIMxHKC
+         ghmATK/7J+M2FgAEqRZxRNpX3f+eWz+PulVpM3eIUma5PsxeyzaxZBXJ/fDCE2e0gWWq
+         DvJkEMwbPalbZS4QMkhjQvgiNmXd8tM6Rbnjhj/0sO6jc577WzN7ziWQghnwszAGTvA+
+         QbtA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692125094; x=1692729894;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=vZps84ysRP0NeVlJT28XZWO+nki5NsVjjdBZ2Y0DhN0=;
+        b=HUJYlpHrQdJUZXVECmPn4MRMbsdSMt6DLKWkvg3wyBTzjVXTNVZwYktmLFU0QqYp8K
+         /ve97qrav7rGvw/gcevp5Ewiq/ZnZ/bQf9ohXiXb1Jxx5GxFipeO4ybjutyzExwsGd6M
+         uy+1Ced0/Hffw94N4P7MmJtbnktlVr2Pu68szcn719FjDH1b9gHbBm+I+uwIJtq7R06G
+         Tsrp+Iw9mRy4aFw032thG2E1c63AeAE2wLeBdpeh/d428JveApkrGHuzNDwUbgHhLo+/
+         G570f8OHzs/ZkfwZMMhY+7cQybmIx9cigWCY2dwCyeCp5Oq0/7Annpk/jjh4/Hr2mudg
+         qPkw==
+X-Gm-Message-State: AOJu0YwOHMQuDQBcnL8uLbtlUhnzOy1nSPMX+VsNelseXpRzW0rZ1mDB
+        LwrYhCMbzCdHGB/2xWUY/NaJbM0L/fObJuqq8z+5
+X-Google-Smtp-Source: AGHT+IHx8o0tREZgd80T1D1EvXrYw6lYsELJicHooOd7UFD+IsRuzuHRtwAOfNqacGvlfkvvf80IxXfCwrgpjqTabic=
+X-Received: by 2002:a0d:ca8d:0:b0:589:eeb6:b503 with SMTP id
+ m135-20020a0dca8d000000b00589eeb6b503mr5786073ywd.35.1692125094192; Tue, 15
+ Aug 2023 11:44:54 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.14.0
-Subject: Re: [PATCH] audit: add task history record
-Content-Language: en-US
-To:     Richard Guy Briggs <rgb@redhat.com>
-Cc:     linux-audit@redhat.com, audit@vger.kernel.org,
-        Paul Moore <paul@paul-moore.com>,
-        Steve Grubb <sgrubb@redhat.com>,
-        linux-security-module <linux-security-module@vger.kernel.org>
 References: <36b65eb1-ccbf-8b81-468f-b8d88c4be5a3@I-love.SAKURA.ne.jp>
- <ZNZ082CR0oLfuiqo@madcap2.tricolour.ca>
-From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-In-Reply-To: <ZNZ082CR0oLfuiqo@madcap2.tricolour.ca>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <36b65eb1-ccbf-8b81-468f-b8d88c4be5a3@I-love.SAKURA.ne.jp>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Tue, 15 Aug 2023 14:44:43 -0400
+Message-ID: <CAHC9VhTLQjjQ0QMfBDHYCz9LOAuO=rJWSDEUqPsFE+dowFbN=Q@mail.gmail.com>
+Subject: Re: [PATCH] audit: add task history record
+To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+Cc:     linux-audit@redhat.com, audit@vger.kernel.org,
+        Steve Grubb <sgrubb@redhat.com>,
+        linux-security-module <linux-security-module@vger.kernel.org>,
+        Casey Schaufler <casey@schaufler-ca.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <audit.vger.kernel.org>
 X-Mailing-List: audit@vger.kernel.org
 
-On 2023/08/12 2:50, Richard Guy Briggs wrote:
-> On 2023-08-11 19:58, Tetsuo Handa wrote:
->> When an unexpected system event occurs, the administrator may want to
->> identify which application triggered the event. For example, unexpected
->> process termination is still a real concern enough to write articles
->> like https://access.redhat.com/solutions/165993 .
->>
->> This patch adds a record which emits TOMOYO-like task history information
->> into the audit logs for better understanding of unexpected system events.
->>
->>   type=UNKNOWN[1340] msg=audit(1691750738.271:108): history="name=swapper/0;pid=1;start=20230811194329=>name=init;pid=1;start=20230811194343=>name=systemd;pid=1;start=20230811194439=>name=sshd;pid=3660;start=20230811104504=>name=sshd;pid=3767;start=20230811104535"
->>
->> To be able to avoid bloating audit log files due to this information, this
->> patch uses audit_history= kernel command line parameter that controls max
->> length of history in bytes (default is 1024, and setting to 0 disables
->> recording and emitting).
-> 
-> The record length limit is just below 8k.  Is it reasonable to set the
-> default at 4k and cap it around 7.5k to be safe?
+On Fri, Aug 11, 2023 at 6:58=E2=80=AFAM Tetsuo Handa
+<penguin-kernel@i-love.sakura.ne.jp> wrote:
+>
+> When an unexpected system event occurs, the administrator may want to
+> identify which application triggered the event. For example, unexpected
+> process termination is still a real concern enough to write articles
+> like https://access.redhat.com/solutions/165993 .
+>
+> This patch adds a record which emits TOMOYO-like task history information
+> into the audit logs for better understanding of unexpected system events.
+>
+>   type=3DUNKNOWN[1340] msg=3Daudit(1691750738.271:108): history=3D"name=
+=3Dswapper/0;pid=3D1;start=3D20230811194329=3D>name=3Dinit;pid=3D1;start=3D=
+20230811194343=3D>name=3Dsystemd;pid=3D1;start=3D20230811194439=3D>name=3Ds=
+shd;pid=3D3660;start=3D20230811104504=3D>name=3Dsshd;pid=3D3767;start=3D202=
+30811104535"
 
-Below will do it. (I though default at 0 might be better...)
+While I respect your persistence, we've talked about this quite a bit
+already in other threads.  What you are trying to do is already
+possible with audit and/or TOMOYO enabled and configured so I see no
+reason why we want to merge this.  I understand your frustration that
+TOMOYO is not enabled by your prefered distribution, but adding
+additional (and arguably redundant code) code to the upstream kernel
+is not a solution I am willing to support and maintain long term.
 
-+static unsigned int audit_history_size __ro_after_init = 4096;
-+char init_task_audit_history[7680];
-+static int __init audit_history_setup(char *str)
-+{
-+	unsigned int size;
-+
-+	if (kstrtouint(str, 10, &size))
-+		return -EINVAL;
-+	if (size > sizeof(init_task_audit_history))
-+		size = sizeof(init_task_audit_history);
-+	audit_history_size = size;
-+	return 0;
-+}
+> To be able to avoid bloating audit log files due to this information, thi=
+s
+> patch uses audit_history=3D kernel command line parameter that controls m=
+ax
+> length of history in bytes (default is 1024, and setting to 0 disables
+> recording and emitting).
+>
+> Unlike execve()'s argv record, records in this history information is
+> emitted as one string in order to reduce bloat of the audit log files.
+> This information can be split into an array using =3D> as the tokenizer.
+> But don't expect that you can compare array elements throughout the whole
+> audit logs by splitting into an array, for old records get removed from
+> history when history became too long to append the newest record. This
+> history information is meant to be interpreted by humans rather than be
+> analyzed by programs.
+>
+> Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+> ---
+>  fs/exec.c                  |   1 +
+>  include/linux/audit.h      |   5 ++
+>  include/linux/sched.h      |   1 +
+>  include/uapi/linux/audit.h |   1 +
+>  init/init_task.c           |   7 +++
+>  kernel/audit.c             |   1 +
+>  kernel/auditsc.c           | 108 +++++++++++++++++++++++++++++++++++++
+>  7 files changed, 124 insertions(+)
 
-> 
-> Is proctitle also useful here?  It contains the full command line, but
-> is influencible by userspace.
-
-Full pathname is max 4096 bytes. But full command line effectively has no
-limit, which might become very long. Shouldn't full command line arguments
-be retrieved from execve()'s argv[] record? Since this history information
-includes timestamp of execve(), also recording execve() requests will allow
-administrators to find the full command line.
-
->> Unlike execve()'s argv record, records in this history information is
->> emitted as one string in order to reduce bloat of the audit log files.
->> This information can be split into an array using => as the tokenizer.
->> But don't expect that you can compare array elements throughout the whole
->> audit logs by splitting into an array, for old records get removed from
->> history when history became too long to append the newest record. This
->> history information is meant to be interpreted by humans rather than be
->> analyzed by programs.
-> 
-> You say this isn't intended to be analysed by programs, but we all know
-> it will inevitably be attempted...  Would any of the descendants of
-> audit_log_untrustedstring() be of use, in particular
-> audit_string_contains_control()
-
-I couldn't catch what you are suggesting. Are you suggesting something like
-
-  type=UNKNOWN[1340] msg=audit(1691750738.271:108):
-    n[$n]="swapper/0" n[$n+1]="init" n[$n+2]="systemd" n[$n+3]="sshd" n[$n+4]="sshd"
-    p[$n]=1 p[$n+1]=1 p[$n+2]=1 p[$n+3]=3660 p[$n+4]=3767
-    s[$n]=20230811194329 s[$n+1]=20230811194343 s[$n+2]=20230811194439 s[$n+3]=20230811104504 s[$n+4]=20230811104535
-
-so that value for n[$n] is escaped only when control characters are in use?
-
+--=20
+paul-moore.com
