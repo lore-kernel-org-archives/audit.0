@@ -2,119 +2,181 @@ Return-Path: <audit-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 32DD4C41513
-	for <audit@archiver.kernel.org>; Tue, 15 Aug 2023 18:46:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5AEC7C001E0
+	for <audit@archiver.kernel.org>; Tue, 15 Aug 2023 20:47:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232142AbjHOSqE (ORCPT <rfc822;audit@archiver.kernel.org>);
-        Tue, 15 Aug 2023 14:46:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53694 "EHLO
+        id S238379AbjHOUrE (ORCPT <rfc822;audit@archiver.kernel.org>);
+        Tue, 15 Aug 2023 16:47:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239300AbjHOSpc (ORCPT <rfc822;audit@vger.kernel.org>);
-        Tue, 15 Aug 2023 14:45:32 -0400
-Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9246E35A5
-        for <audit@vger.kernel.org>; Tue, 15 Aug 2023 11:44:56 -0700 (PDT)
-Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-589f437fd1dso22531297b3.1
-        for <audit@vger.kernel.org>; Tue, 15 Aug 2023 11:44:56 -0700 (PDT)
+        with ESMTP id S238939AbjHOUqe (ORCPT <rfc822;audit@vger.kernel.org>);
+        Tue, 15 Aug 2023 16:46:34 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D0AAB9;
+        Tue, 15 Aug 2023 13:46:10 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id d2e1a72fcca58-6887b3613e4so153926b3a.3;
+        Tue, 15 Aug 2023 13:46:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1692125094; x=1692729894;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vZps84ysRP0NeVlJT28XZWO+nki5NsVjjdBZ2Y0DhN0=;
-        b=JY8njen4h1XecFvkkWfBdWvexIzjMjfJBUd0Zsm3/1rmCvMVr0VlWBR09W0sZS/621
-         D2DqREf+g/I7hWRrGBE99r7qwAm43Zti/84EqT6lkHbRZNJDREKWO8Xwao0bwRfzDpo/
-         mUc5WH72/XGjrOinL86MH2fiSF47A0Q2YqInm/Vts647Kc5iqGvXkl4lbxnLlCIMxHKC
-         ghmATK/7J+M2FgAEqRZxRNpX3f+eWz+PulVpM3eIUma5PsxeyzaxZBXJ/fDCE2e0gWWq
-         DvJkEMwbPalbZS4QMkhjQvgiNmXd8tM6Rbnjhj/0sO6jc577WzN7ziWQghnwszAGTvA+
-         QbtA==
+        d=gmail.com; s=20221208; t=1692132369; x=1692737169;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=LxLHV47VvqCGBoKoIzEd5FgBxCmSRjG8BjFVFcTiA5w=;
+        b=rZIUgBUmKyzqTvYiev+8cucfssCRe4CGlnzZRmk6C3HQMV2fW5+sQslk64u36XmlbZ
+         xHm7RdzB0ZpVf6az2Vn4QX11JnlsPbWFs+xvAQEu1ltUVz6iFn9Zf4icVtrPEJGm43ya
+         a3LhXjrDQ6CYh697GumSWCqSN9nB/bWZFsGoXbjTfWHKiqzh7zpFiJIDSDv+AbBpMHHc
+         Jwq1SUZDpZsgBHgIzR+y5fmA4hAzTI1yZCMfdzvO+P+6TPDZ5+tEkq8hIEJgQ9lXCWhc
+         j/PMHAAcXd13IXaAsrua6632in+D5u4scwDUU0q1zaEinnJCArXnXR6Zs/2+X5zgtf0x
+         7Uog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692125094; x=1692729894;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vZps84ysRP0NeVlJT28XZWO+nki5NsVjjdBZ2Y0DhN0=;
-        b=HUJYlpHrQdJUZXVECmPn4MRMbsdSMt6DLKWkvg3wyBTzjVXTNVZwYktmLFU0QqYp8K
-         /ve97qrav7rGvw/gcevp5Ewiq/ZnZ/bQf9ohXiXb1Jxx5GxFipeO4ybjutyzExwsGd6M
-         uy+1Ced0/Hffw94N4P7MmJtbnktlVr2Pu68szcn719FjDH1b9gHbBm+I+uwIJtq7R06G
-         Tsrp+Iw9mRy4aFw032thG2E1c63AeAE2wLeBdpeh/d428JveApkrGHuzNDwUbgHhLo+/
-         G570f8OHzs/ZkfwZMMhY+7cQybmIx9cigWCY2dwCyeCp5Oq0/7Annpk/jjh4/Hr2mudg
-         qPkw==
-X-Gm-Message-State: AOJu0YwOHMQuDQBcnL8uLbtlUhnzOy1nSPMX+VsNelseXpRzW0rZ1mDB
-        LwrYhCMbzCdHGB/2xWUY/NaJbM0L/fObJuqq8z+5
-X-Google-Smtp-Source: AGHT+IHx8o0tREZgd80T1D1EvXrYw6lYsELJicHooOd7UFD+IsRuzuHRtwAOfNqacGvlfkvvf80IxXfCwrgpjqTabic=
-X-Received: by 2002:a0d:ca8d:0:b0:589:eeb6:b503 with SMTP id
- m135-20020a0dca8d000000b00589eeb6b503mr5786073ywd.35.1692125094192; Tue, 15
- Aug 2023 11:44:54 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1692132369; x=1692737169;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=LxLHV47VvqCGBoKoIzEd5FgBxCmSRjG8BjFVFcTiA5w=;
+        b=ENFG1Dn3LAEXtPUSlNfGAdu42NUmmBDiTt1zQTPIBE5R7CVckHVsjCq6Ho5eDHiOrF
+         HM8KdkwyO0CnQzRJd8vKMLJoKQ1bqU1WcNpcD2ZvAsBdU6kgg0vKK0Ttn5h53h6h2m+0
+         iQsX5WwzkN+ejlMzPX3ffhgn3OOSCYCo2yD+cDV3krMRNq6iTXirZPNd0FoEbeA4R3/L
+         PLo7Yg+TG7itKIRPUY6LY5kkyWjA615vn7FR/L8vPY+tgei+sh3V79L7aXHeTaavAAaH
+         yAdC4RJcu7vscTFZ5dknA6GDkeuXPXLxXqFzTJE5YuaTmHyrvhCyOSwNQSqJkoARBByJ
+         iRZw==
+X-Gm-Message-State: AOJu0Yz88wtbH0wOB2GEGFAnGCfio99c2YM6uin1XBgeNnCOJtpNN5FX
+        Zw8ffQ1mbz29F1TI/aSA/0c=
+X-Google-Smtp-Source: AGHT+IHq8FlpZroFN1PJvuW3FT13d2oC2QW/nPn+ODt4JGcPy6hwmaw0n6VbNJ7xmvtUbAI+bIiIMA==
+X-Received: by 2002:a05:6a20:431a:b0:13f:9232:fd39 with SMTP id h26-20020a056a20431a00b0013f9232fd39mr19242521pzk.53.1692132369058;
+        Tue, 15 Aug 2023 13:46:09 -0700 (PDT)
+Received: from localhost.localdomain ([2405:201:c009:58e9:db85:3caf:1429:e455])
+        by smtp.gmail.com with ESMTPSA id fk22-20020a056a003a9600b006887c920637sm13579pfb.159.2023.08.15.13.45.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Aug 2023 13:46:08 -0700 (PDT)
+From:   Atul Kumar Pant <atulpant.linux@gmail.com>
+To:     paul@paul-moore.com, eparis@redhat.com
+Cc:     Atul Kumar Pant <atulpant.linux@gmail.com>, audit@vger.kernel.org,
+        linux-kernel@vger.kernel.org, shuah@kernel.org
+Subject: [PATCH v1] kernel: Add space before parenthesis and around '=', "==" and '<'
+Date:   Wed, 16 Aug 2023 02:15:53 +0530
+Message-Id: <20230815204553.52261-1-atulpant.linux@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <36b65eb1-ccbf-8b81-468f-b8d88c4be5a3@I-love.SAKURA.ne.jp>
-In-Reply-To: <36b65eb1-ccbf-8b81-468f-b8d88c4be5a3@I-love.SAKURA.ne.jp>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Tue, 15 Aug 2023 14:44:43 -0400
-Message-ID: <CAHC9VhTLQjjQ0QMfBDHYCz9LOAuO=rJWSDEUqPsFE+dowFbN=Q@mail.gmail.com>
-Subject: Re: [PATCH] audit: add task history record
-To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-Cc:     linux-audit@redhat.com, audit@vger.kernel.org,
-        Steve Grubb <sgrubb@redhat.com>,
-        linux-security-module <linux-security-module@vger.kernel.org>,
-        Casey Schaufler <casey@schaufler-ca.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <audit.vger.kernel.org>
 X-Mailing-List: audit@vger.kernel.org
 
-On Fri, Aug 11, 2023 at 6:58=E2=80=AFAM Tetsuo Handa
-<penguin-kernel@i-love.sakura.ne.jp> wrote:
->
-> When an unexpected system event occurs, the administrator may want to
-> identify which application triggered the event. For example, unexpected
-> process termination is still a real concern enough to write articles
-> like https://access.redhat.com/solutions/165993 .
->
-> This patch adds a record which emits TOMOYO-like task history information
-> into the audit logs for better understanding of unexpected system events.
->
->   type=3DUNKNOWN[1340] msg=3Daudit(1691750738.271:108): history=3D"name=
-=3Dswapper/0;pid=3D1;start=3D20230811194329=3D>name=3Dinit;pid=3D1;start=3D=
-20230811194343=3D>name=3Dsystemd;pid=3D1;start=3D20230811194439=3D>name=3Ds=
-shd;pid=3D3660;start=3D20230811104504=3D>name=3Dsshd;pid=3D3767;start=3D202=
-30811104535"
+Fixes following checkpatch.pl issue:
+ERROR: space required before the open parenthesis '('
+ERROR: spaces required around that '='
+ERROR: spaces required around that '<'
+ERROR: spaces required around that '=='
 
-While I respect your persistence, we've talked about this quite a bit
-already in other threads.  What you are trying to do is already
-possible with audit and/or TOMOYO enabled and configured so I see no
-reason why we want to merge this.  I understand your frustration that
-TOMOYO is not enabled by your prefered distribution, but adding
-additional (and arguably redundant code) code to the upstream kernel
-is not a solution I am willing to support and maintain long term.
+Signed-off-by: Atul Kumar Pant <atulpant.linux@gmail.com>
+---
+ kernel/acct.c        |  2 +-
+ kernel/auditfilter.c | 16 ++++++++--------
+ kernel/auditsc.c     |  2 +-
+ 3 files changed, 10 insertions(+), 10 deletions(-)
 
-> To be able to avoid bloating audit log files due to this information, thi=
-s
-> patch uses audit_history=3D kernel command line parameter that controls m=
-ax
-> length of history in bytes (default is 1024, and setting to 0 disables
-> recording and emitting).
->
-> Unlike execve()'s argv record, records in this history information is
-> emitted as one string in order to reduce bloat of the audit log files.
-> This information can be split into an array using =3D> as the tokenizer.
-> But don't expect that you can compare array elements throughout the whole
-> audit logs by splitting into an array, for old records get removed from
-> history when history became too long to append the newest record. This
-> history information is meant to be interpreted by humans rather than be
-> analyzed by programs.
->
-> Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-> ---
->  fs/exec.c                  |   1 +
->  include/linux/audit.h      |   5 ++
->  include/linux/sched.h      |   1 +
->  include/uapi/linux/audit.h |   1 +
->  init/init_task.c           |   7 +++
->  kernel/audit.c             |   1 +
->  kernel/auditsc.c           | 108 +++++++++++++++++++++++++++++++++++++
->  7 files changed, 124 insertions(+)
+diff --git a/kernel/acct.c b/kernel/acct.c
+index 010667ce6080..c95a9359f209 100644
+--- a/kernel/acct.c
++++ b/kernel/acct.c
+@@ -470,7 +470,7 @@ static void fill_ac(acct_t *ac)
+ 	do_div(elapsed, AHZ);
+ 	btime = ktime_get_real_seconds() - elapsed;
+ 	ac->ac_btime = clamp_t(time64_t, btime, 0, U32_MAX);
+-#if ACCT_VERSION==2
++#if ACCT_VERSION == 2
+ 	ac->ac_ahz = AHZ;
+ #endif
+ 
+diff --git a/kernel/auditfilter.c b/kernel/auditfilter.c
+index a25757f09255..8317a37dea0b 100644
+--- a/kernel/auditfilter.c
++++ b/kernel/auditfilter.c
+@@ -221,7 +221,7 @@ static int audit_match_signal(struct audit_entry *entry)
+ 					       entry->rule.mask));
+ 	}
+ 
+-	switch(audit_classify_arch(arch->val)) {
++	switch (audit_classify_arch(arch->val)) {
+ 	case 0: /* native */
+ 		return (audit_match_class_bits(AUDIT_CLASS_SIGNAL,
+ 					       entry->rule.mask));
+@@ -243,7 +243,7 @@ static inline struct audit_entry *audit_to_entry_common(struct audit_rule_data *
+ 
+ 	err = -EINVAL;
+ 	listnr = rule->flags & ~AUDIT_FILTER_PREPEND;
+-	switch(listnr) {
++	switch (listnr) {
+ 	default:
+ 		goto exit_err;
+ #ifdef CONFIG_AUDITSYSCALL
+@@ -344,7 +344,7 @@ static int audit_field_valid(struct audit_entry *entry, struct audit_field *f)
+ 
+ 	switch (entry->rule.listnr) {
+ 	case AUDIT_FILTER_FS:
+-		switch(f->type) {
++		switch (f->type) {
+ 		case AUDIT_FSTYPE:
+ 		case AUDIT_FILTERKEY:
+ 			break;
+@@ -651,7 +651,7 @@ static struct audit_rule_data *audit_krule_to_data(struct audit_krule *krule)
+ 
+ 		data->fields[i] = f->type;
+ 		data->fieldflags[i] = audit_ops[f->op];
+-		switch(f->type) {
++		switch (f->type) {
+ 		case AUDIT_SUBJ_USER:
+ 		case AUDIT_SUBJ_ROLE:
+ 		case AUDIT_SUBJ_TYPE:
+@@ -718,7 +718,7 @@ static int audit_compare_rule(struct audit_krule *a, struct audit_krule *b)
+ 		    a->fields[i].op != b->fields[i].op)
+ 			return 1;
+ 
+-		switch(a->fields[i].type) {
++		switch (a->fields[i].type) {
+ 		case AUDIT_SUBJ_USER:
+ 		case AUDIT_SUBJ_ROLE:
+ 		case AUDIT_SUBJ_TYPE:
+@@ -947,7 +947,7 @@ static inline int audit_add_rule(struct audit_entry *entry)
+ 	int dont_count = 0;
+ 
+ 	/* If any of these, don't count towards total */
+-	switch(entry->rule.listnr) {
++	switch (entry->rule.listnr) {
+ 	case AUDIT_FILTER_USER:
+ 	case AUDIT_FILTER_EXCLUDE:
+ 	case AUDIT_FILTER_FS:
+@@ -1030,7 +1030,7 @@ int audit_del_rule(struct audit_entry *entry)
+ 	int dont_count = 0;
+ 
+ 	/* If any of these, don't count towards total */
+-	switch(entry->rule.listnr) {
++	switch (entry->rule.listnr) {
+ 	case AUDIT_FILTER_USER:
+ 	case AUDIT_FILTER_EXCLUDE:
+ 	case AUDIT_FILTER_FS:
+@@ -1084,7 +1084,7 @@ static void audit_list_rules(int seq, struct sk_buff_head *q)
+ 
+ 	/* This is a blocking read, so use audit_filter_mutex instead of rcu
+ 	 * iterator to sync with list writers. */
+-	for (i=0; i<AUDIT_NR_FILTERS; i++) {
++	for (i = 0; i < AUDIT_NR_FILTERS; i++) {
+ 		list_for_each_entry(r, &audit_rules_list[i], list) {
+ 			struct audit_rule_data *data;
+ 
+diff --git a/kernel/auditsc.c b/kernel/auditsc.c
+index addeed3df15d..a674039ea9ef 100644
+--- a/kernel/auditsc.c
++++ b/kernel/auditsc.c
+@@ -2124,7 +2124,7 @@ static void handle_path(const struct dentry *dentry)
+ 	d = dentry;
+ 	rcu_read_lock();
+ 	seq = read_seqbegin(&rename_lock);
+-	for(;;) {
++	for (;;) {
+ 		struct inode *inode = d_backing_inode(d);
+ 
+ 		if (inode && unlikely(inode->i_fsnotify_marks)) {
+-- 
+2.25.1
 
---=20
-paul-moore.com
