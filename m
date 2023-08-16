@@ -2,93 +2,98 @@ Return-Path: <audit-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B14F0C001DE
-	for <audit@archiver.kernel.org>; Wed, 16 Aug 2023 02:56:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8C4DEC0015E
+	for <audit@archiver.kernel.org>; Wed, 16 Aug 2023 02:59:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241398AbjHPC4W (ORCPT <rfc822;audit@archiver.kernel.org>);
-        Tue, 15 Aug 2023 22:56:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60510 "EHLO
+        id S241413AbjHPC7F (ORCPT <rfc822;audit@archiver.kernel.org>);
+        Tue, 15 Aug 2023 22:59:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241432AbjHPCz6 (ORCPT <rfc822;audit@vger.kernel.org>);
-        Tue, 15 Aug 2023 22:55:58 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE492212D;
-        Tue, 15 Aug 2023 19:55:56 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id d2e1a72fcca58-6887b3613e4so371190b3a.3;
-        Tue, 15 Aug 2023 19:55:56 -0700 (PDT)
+        with ESMTP id S241452AbjHPC6t (ORCPT <rfc822;audit@vger.kernel.org>);
+        Tue, 15 Aug 2023 22:58:49 -0400
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4158268F;
+        Tue, 15 Aug 2023 19:58:45 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id d9443c01a7336-1bdbbede5d4so39334045ad.2;
+        Tue, 15 Aug 2023 19:58:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1692154556; x=1692759356;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=eMBvumhvLAcNW2VdiOT2JRAO7dR7SftnCzpdqfmYU4w=;
-        b=nmNA1f8ez305if3CHZZYl9Nt1AyL2s/SkqEiWW4k1RWk6fRSrDi6ZCTocFCEAX84Dw
-         g/9MvC4gaDYPbZWsQ+PXcC2OheiFO8r/X0wX1fhKdSYWjaDfEjhIu47Q1Ls1Q722aqzo
-         6nn7DS2Wn1NRXb0S7tOXkVc+VtuOUYB9/bBjyE3XwTQW2fXD80RGUXgnVRc+wl65zrBZ
-         7x0jbSNFh1SMcoZe/HDFJNIYl1R/zC6HkrsIOD0EfjialjBJI0q9ZiFWaO4ZZEdtIjEH
-         8FV+8KRx2p83Nk96BTZ0wbimGQW1VoHTroEAEutB5xpOaM0p6nXhlfESkCLXN5QAYSbJ
-         fovw==
+        d=gmail.com; s=20221208; t=1692154725; x=1692759525;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=2WdeGXX+ZF+x3868G2g3Cg+j+fq+4mIp+LIBbQQhbrM=;
+        b=RAgbZFpx0Vslt2E0eMr8rdl6lNigUNQ5zzuWgVRLv8hzHD/GtGc/y2+aK/E7WlrpLh
+         cwOfCGXO68A7U+nqu94fH65aCJ9wCJACMRTye+tex3NrCMLppfw7blUZKV1LlIHIyaLs
+         CbrrNCPlhfquidZYku8TWQs715S6zlpjPNoR280z3gpESSHeopPSE6EIeGfiV1sgqPnh
+         b7UVMXZXrJuzdz08GoM1c87Cqe7M3Et40G+1GDBWXKx2CjKpxYwkRcJjg8zLQQGqdySZ
+         U5qLWIuKYFJB3ProwgkS3vqR4ftuPtxISQ6w9pNfk7StVuauKIldmgt8TkX145v8OWOL
+         HB4w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692154556; x=1692759356;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=eMBvumhvLAcNW2VdiOT2JRAO7dR7SftnCzpdqfmYU4w=;
-        b=WNA5N0WqQYziM+SWNeoYEiZ4N0S3Wl88M9yNm0K1SELDXQaeul7zC0wjc53KXMSfGS
-         NIFxbttSjwBZ9jtrXJhIZF00OyyzATGHDl8+pG6TXE8fZe4pmhRFCS+bdSyP+kaF8ZgM
-         2auJY4E9CgRcDUi06PsUwyHEH0YAUhygmZ0DVdqjvXt8gyX2KyjxE2FtRlA6kMOeBhM3
-         vZhpUcvYAiOzrj3sJQwlarEgCBqWQ8Pab+hyzGjjBj6C8IfpQMXpsJi+JqZTD3ciOuUa
-         b5/0OoTqqlCzvY4sxNR+avDKooPDhiD7vMBo7mYtBZFKxbzD7jQE6hHRbc8FSY4yop6d
-         41+g==
-X-Gm-Message-State: AOJu0Yw3fB8ZGSUdCPUd4UmOPjhKpbe7Gq2qnSS3ZdWfzkb3nxc7LMRn
-        E0Nb+n29x8FR0Ghn41yE2vU=
-X-Google-Smtp-Source: AGHT+IGMG0b8hw9E9pVqFs67EQ1NHeGnmgKfBzeTjct+uJV5PfxjDRIerS+hy/XTpLU1uN70LuO/oQ==
-X-Received: by 2002:a05:6a20:ce8f:b0:140:3aa:e2ce with SMTP id if15-20020a056a20ce8f00b0014003aae2cemr834476pzb.42.1692154556175;
-        Tue, 15 Aug 2023 19:55:56 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1692154725; x=1692759525;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=2WdeGXX+ZF+x3868G2g3Cg+j+fq+4mIp+LIBbQQhbrM=;
+        b=DOcvAfMypxHGXwEI8p76O2uVtntBq1WXkM7vsUuRkYCmQsBB6PAEK8jgZ+Qqd0q06W
+         EL74gMnWpfv8jTOy/MkiXN1eVUxWfP6mU3MdaxVRYhndLO9OFFgFI9RtZmdGIxoZ+n+P
+         Atw4yMa/I11msI6GNklg3E4uGgMZN3Z1VwCTSbrvpXX+p0btm6zrZJOHvdlYYcJAoPI6
+         3i6zaGgEJS6I8nHn8Pskb71dOMKEdRgQv+2ID3L7CdTNiKU1MU5Ku6At99zGGE7VBoSd
+         Xgw8tQo0AaMBuyO9ZlagmRzoA2dIv/MSzPuUfL6I8X1pvdi0sncwhRvr7HCc4CMxqq81
+         w8Cw==
+X-Gm-Message-State: AOJu0Yy/GM0yk1ysM4zBA2m8uzbCFx0Ex/8NICZv2KwfY3xV/MmBWstW
+        5Xj1pnIf1O4XvL1m0muUxxTIFC+WxrE=
+X-Google-Smtp-Source: AGHT+IFEq4s+iFA8LoTUnd1YvFyxR6w0WXzOR84soBndyUjJIs8LY/IveMGtE/0ijqtWnWmIy5bkXw==
+X-Received: by 2002:a17:902:d507:b0:1b8:971c:b7b7 with SMTP id b7-20020a170902d50700b001b8971cb7b7mr784657plg.56.1692154725136;
+        Tue, 15 Aug 2023 19:58:45 -0700 (PDT)
 Received: from atom0118 ([2405:201:c009:58e9:6a8f:3187:b8c8:1572])
-        by smtp.gmail.com with ESMTPSA id n21-20020aa79055000000b006878c00537bsm9994766pfo.120.2023.08.15.19.55.53
+        by smtp.gmail.com with ESMTPSA id l13-20020a170902d34d00b001bda42a216bsm11465256plk.100.2023.08.15.19.58.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Aug 2023 19:55:55 -0700 (PDT)
-Date:   Wed, 16 Aug 2023 08:25:50 +0530
+        Tue, 15 Aug 2023 19:58:44 -0700 (PDT)
+Date:   Wed, 16 Aug 2023 08:28:39 +0530
 From:   Atul Kumar Pant <atulpant.linux@gmail.com>
 To:     Paul Moore <paul@paul-moore.com>
 Cc:     eparis@redhat.com, audit@vger.kernel.org,
         linux-kernel@vger.kernel.org, shuah@kernel.org
-Subject: Re: [PATCH v1] kernel: Add space before parenthesis and around '=',
- "==" and '<'
-Message-ID: <20230816025550.GD57274@atom0118>
-References: <20230815204553.52261-1-atulpant.linux@gmail.com>
- <aecb4e94bc65928c674b6a083e7fd489.paul@paul-moore.com>
+Subject: Re: [PATCH v1] kernel: auditsc: Removes use of assignment in if
+ condition and moves open brace following function definitions to the next
+ line.
+Message-ID: <20230816025839.GE57274@atom0118>
+References: <20230815204644.52358-1-atulpant.linux@gmail.com>
+ <20b96495d277cb2007541a119bb09def.paul@paul-moore.com>
+ <CAHC9VhSQ9FsxF2rg57B-V5f23OKAA-uCHb1iOkCiTuNeTXHMbg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <aecb4e94bc65928c674b6a083e7fd489.paul@paul-moore.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAHC9VhSQ9FsxF2rg57B-V5f23OKAA-uCHb1iOkCiTuNeTXHMbg@mail.gmail.com>
 Precedence: bulk
 List-ID: <audit.vger.kernel.org>
 X-Mailing-List: audit@vger.kernel.org
 
-On Tue, Aug 15, 2023 at 06:09:19PM -0400, Paul Moore wrote:
-> On Aug 15, 2023 Atul Kumar Pant <atulpant.linux@gmail.com> wrote:
-> > 
-> > Fixes following checkpatch.pl issue:
-> > ERROR: space required before the open parenthesis '('
-> > ERROR: spaces required around that '='
-> > ERROR: spaces required around that '<'
-> > ERROR: spaces required around that '=='
-> > 
-> > Signed-off-by: Atul Kumar Pant <atulpant.linux@gmail.com>
-> > ---
-> >  kernel/acct.c        |  2 +-
-> >  kernel/auditfilter.c | 16 ++++++++--------
-> >  kernel/auditsc.c     |  2 +-
-> >  3 files changed, 10 insertions(+), 10 deletions(-)
+On Tue, Aug 15, 2023 at 06:14:25PM -0400, Paul Moore wrote:
+> On Tue, Aug 15, 2023 at 6:10 PM Paul Moore <paul@paul-moore.com> wrote:
+> >
+> > On Aug 15, 2023 Atul Kumar Pant <atulpant.linux@gmail.com> wrote:
+> > >
+> > > The patch fixes following checkpatch.pl issue:
+> > > ERROR: open brace '{' following function definitions go on the next line
+> > > ERROR: do not use assignment in if condition
+> > >
+> > > Signed-off-by: Atul Kumar Pant <atulpant.linux@gmail.com>
+> > > ---
+> > >  kernel/auditsc.c | 6 ++++--
+> > >  1 file changed, 4 insertions(+), 2 deletions(-)
+> >
+> > Merged into audit/next, thanks.
 > 
-> I changed the subject line to "audit: add space before parenthesis and
-> around '=', "==", and '<'" as the "audit:" prefix is more appropriate
-> and I'm a believer of the Oxford Comma.  Otherwise it looks fine and I
-> just merged it into audit/next, thanks.
-
-	Thank you for your comments. Do I need to change commit message now?
-
+> I also wanted to say that I changed the subject line to "audit:
+> cleanup function braces and assignment-in-if-condition", what you had
+> written was far too long for a subject line.  A subject line should be
+> brief and does not need to be a full sentence, in fact it probably
+> should *not* be a full sentence.
 > 
-> --
+	Thank you for the comments. I agree with your point on subject line
+	and will follow your advice in my next patches.
+
+> -- 
 > paul-moore.com
