@@ -2,152 +2,112 @@ Return-Path: <audit-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 61B35C04E69
-	for <audit@archiver.kernel.org>; Wed, 16 Aug 2023 13:55:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EA500C64EAE
+	for <audit@archiver.kernel.org>; Thu, 17 Aug 2023 20:35:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245707AbjHPNyn (ORCPT <rfc822;audit@archiver.kernel.org>);
-        Wed, 16 Aug 2023 09:54:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40982 "EHLO
+        id S1354852AbjHQUfV (ORCPT <rfc822;audit@archiver.kernel.org>);
+        Thu, 17 Aug 2023 16:35:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244037AbjHPNyM (ORCPT <rfc822;audit@vger.kernel.org>);
-        Wed, 16 Aug 2023 09:54:12 -0400
-Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10AE426B2
-        for <audit@vger.kernel.org>; Wed, 16 Aug 2023 06:54:10 -0700 (PDT)
-Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-58cbdf3eecaso6301517b3.0
-        for <audit@vger.kernel.org>; Wed, 16 Aug 2023 06:54:10 -0700 (PDT)
+        with ESMTP id S1354951AbjHQUfG (ORCPT
+        <rfc822;audit@vger.kernel.org>); Thu, 17 Aug 2023 16:35:06 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A20E2D44
+        for <audit@vger.kernel.org>; Thu, 17 Aug 2023 13:35:05 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id d9443c01a7336-1bbff6b2679so1833365ad.1
+        for <audit@vger.kernel.org>; Thu, 17 Aug 2023 13:35:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1692194049; x=1692798849;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8P8KQwRllSmi1NLwh9WWVFV2msAXlqeZx1gKCUEZWtc=;
-        b=JNrdbub9jg3Rd1vE3Bi1EL+JyaxsfJTWgtAMd6rGkYTORXWJFutZk4/9puhZDee38s
-         n17s1s6D2goi/JaT+FfDJko/LB6+OGmaGs3/tkJzaQajFx0qTcoMcY09nJQUL8vpmF70
-         EuWgt1a98NXZBSQbsOSmPZC6dHo2gBvuD6b7tMH/qrE+kvumyoqgGotBLVzTl79DTf8R
-         qGu5DOa02at1cXJUELd3D5qrv8AlJ/+e/9WnwyAw9CaBzeSb2pe/p6MoU/mvzDH2G3cB
-         wbZ5CWEtzCfQsIJBfgl1IV+y9PyRQo5hfvX0NtVMEsR+auaafKKPo7TJooYpFjL6myUg
-         0asA==
+        d=chromium.org; s=google; t=1692304504; x=1692909304;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZPpoBFJxQV1FmnNA1ExO85wT7EFUumxKCY6/YfojRcg=;
+        b=bn/SNk5ZryeOs6MsIqm2lPBXN41cDb3/QGC5P55X004CdeqSVSCRdatZAzBcEcjYdb
+         stwp4R+ewfJ7JTwLIqwkCV3tJiLzizVt84HuBYcgnJFtcFj0GJQTBLyc7oWoybuMwO8x
+         2fywOflA9vdtzdBg5fkUjF++hib8hmkvldui8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692194049; x=1692798849;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8P8KQwRllSmi1NLwh9WWVFV2msAXlqeZx1gKCUEZWtc=;
-        b=JI2dlnE1Ea2+ukAfMTMnVReO6eWaOqyTgXypxsS6VYvhMZ5zqTPcsv7RDiVK9lpWk1
-         YCLoLoRDoCAhq1mbIsfAsSt9A1oz9NEPjNXbOQ8PNBHw+t6OIIGCIRMmLPnQwodlYmi4
-         TohBxnvF2KeBne88w6S+YGcfNiARFLKwHviAztJEPsO5Zs7Kg/1OJjMtfIt2QUOkPZST
-         1yLdxFOA4mpzvg7oz1pv8PDIYs+JUwDGwhHbZcmEWX9Xkn4vWITh9j692B+j82iCACM+
-         dIIsBsQL+7ybN7U0xK8rZHcb9lfKM6CL+tl4LoH3cnoVBXPv2QcTb4/aAVmoANOtqcXJ
-         JodQ==
-X-Gm-Message-State: AOJu0YwV1MSBWkXOmBvJqB0v3QLwPdASEHhTVCnFBar2ThadmgE6IOBZ
-        ruRZaoZNj8KgYSnGJn7xBT0AMZf6AnyRUm6kFATm
-X-Google-Smtp-Source: AGHT+IHB1ZhaV7FF5rurwVNAWtXSYkk01yX3izFX2omlCKCDMCSWprsPXt5C353QVqz40iBGAzxYwAswjfz2m7BehsA=
-X-Received: by 2002:a81:4e0c:0:b0:58c:4fbb:1bb7 with SMTP id
- c12-20020a814e0c000000b0058c4fbb1bb7mr1465119ywb.5.1692194049253; Wed, 16 Aug
- 2023 06:54:09 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1692304504; x=1692909304;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ZPpoBFJxQV1FmnNA1ExO85wT7EFUumxKCY6/YfojRcg=;
+        b=Ss3mTimtqSuHYrzXm66kL+EFIaE2Ol5tqZ8v0KxBTJrBABCMLxb//4e3eznXdIhYxh
+         otChyNB9L23PVB/llw6bCfoQqYoEs9X6R/Kysq/E01kgeI7FcSuirpO8qRhm9oiah6a8
+         G1suE+yCKtoW82txtDu6ddLL+GsUhecP/BnSXbPzJo7N8e4Q3/AcZEVNuFy297/PDi0D
+         lxtrUzIocVytsCIrJls4FI8zYSMtM6j/egHu8mnHNr+gMixmt2++m+NcyZYUKPmToUWg
+         6P/t/T0AqEdhhGvSkYaXqQgy1lG4/sv5rKz6cD3oiT2lqU1yE/yRUP8oA6j/rjJwNKkQ
+         6RLg==
+X-Gm-Message-State: AOJu0YzoReAAOC6fOEoNGF+YL7jy9nZTCN8Bnnjq1XRaXXcRTBKfs9hU
+        kLrYEUuf/ibazJKL0cLRppmthw==
+X-Google-Smtp-Source: AGHT+IH/wjlRQwIcUDu6P8dS8WNcBHV9BkAXgGNUoicxFSF2suKwOUVA1FxwnyK44BV7mv7sOy9Glg==
+X-Received: by 2002:a17:902:ab49:b0:1bc:50f9:8f20 with SMTP id ij9-20020a170902ab4900b001bc50f98f20mr526235plb.23.1692304504393;
+        Thu, 17 Aug 2023 13:35:04 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id t8-20020a170902bc4800b001bbfa86ca3bsm190173plz.78.2023.08.17.13.35.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Aug 2023 13:35:03 -0700 (PDT)
+From:   Kees Cook <keescook@chromium.org>
+To:     Paul Moore <paul@paul-moore.com>
+Cc:     Kees Cook <keescook@chromium.org>, Eric Paris <eparis@redhat.com>,
+        audit@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, linux-hardening@vger.kernel.org
+Subject: [PATCH] audit: Annotate struct audit_chunk with __counted_by
+Date:   Thu, 17 Aug 2023 13:35:02 -0700
+Message-Id: <20230817203501.never.279-kees@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <36b65eb1-ccbf-8b81-468f-b8d88c4be5a3@I-love.SAKURA.ne.jp>
- <CAHC9VhTLQjjQ0QMfBDHYCz9LOAuO=rJWSDEUqPsFE+dowFbN=Q@mail.gmail.com> <b06dbdd8-d2f6-b190-5635-948c0a966103@I-love.SAKURA.ne.jp>
-In-Reply-To: <b06dbdd8-d2f6-b190-5635-948c0a966103@I-love.SAKURA.ne.jp>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Wed, 16 Aug 2023 09:53:58 -0400
-Message-ID: <CAHC9VhSz=3utr_CigGvkMEb6_avJUQq1Ak2smB7neSd76mzjFw@mail.gmail.com>
-Subject: Re: [PATCH] audit: add task history record
-To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-Cc:     linux-audit@redhat.com, audit@vger.kernel.org,
-        Steve Grubb <sgrubb@redhat.com>,
-        linux-security-module <linux-security-module@vger.kernel.org>,
-        Casey Schaufler <casey@schaufler-ca.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1126; i=keescook@chromium.org;
+ h=from:subject:message-id; bh=iQE6kV9vlsKmBgzVzqmUF6+idqkcwdK1Cb4L82t48W0=;
+ b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBk3oR1DKnpFvGMUs179JIA9Rss1/2X8NIbWK6tU
+ Cp06TDi2MmJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZN6EdQAKCRCJcvTf3G3A
+ JpthEACZY6Pe31vgMRPz5j3xTaeQcZBYjzW4t81pvnkFt09XCmUhXE52Luo096CAIoh/RSN2HBC
+ M99jsYStbgG9+65HFqlLEud091NVpH+BcyJhnPQEhjBu5wgClO93nLn/iHrD7DMUKK96p+Oozt/
+ d01G4YPZ0WyQH4xuCKfdg5Tpp0AsusCwJcKrBTKkbE4+4nPH1jLfiNGA2hBk41cZtMXtobQUqik
+ DnaL7akmF/2Ao3Hun+2GJ/K5eOkJcuuUuqSg2xgsrujou0sDpk5WaeCw9JeyHVQ3io9B5uE37Ub
+ lxfsfQHAnQhfBdN116TutiuE8lyHg8x4D5+g2aUQKEBLWmwSRCS0UgtDh11vXC5A6mW/SEyXw5j
+ G1fdPaxWys+MGFDr8rbC+yXMK5dlQ4lB4lUwULDhyhfnRgCMdsHHuoY6Qc4mLUN4627S9KxJV0g
+ t7V2HNe93Ki9UBhN+WiuJQ+vM4ODPpyXhOVNhnhkrQDP5we6MvSa6f8PAhT0yVELMLk2ZgXT1YU
+ 1TWfa8AwbwPqP/kbMgsfXI4mLjArAv/pVoMMN31Fd/W91MBoJXB0fY4UM0pPj2TARRKBmD9WSdp
+ JyfjvHrUk54mJO6M3ygE84qZElWrMvHvbMBxM4XqFzAkpOj3QgdaFVXw3kCW8ermdyVINeTD8yu
+ pcmHcWm L6nweQag==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <audit.vger.kernel.org>
 X-Mailing-List: audit@vger.kernel.org
 
-On Wed, Aug 16, 2023 at 6:10=E2=80=AFAM Tetsuo Handa
-<penguin-kernel@i-love.sakura.ne.jp> wrote:
-> On 2023/08/16 3:44, Paul Moore wrote:
-> > On Fri, Aug 11, 2023 at 6:58=E2=80=AFAM Tetsuo Handa
-> > <penguin-kernel@i-love.sakura.ne.jp> wrote:
-> >>
-> >> When an unexpected system event occurs, the administrator may want to
-> >> identify which application triggered the event. For example, unexpecte=
-d
-> >> process termination is still a real concern enough to write articles
-> >> like https://access.redhat.com/solutions/165993 .
-> >>
-> >> This patch adds a record which emits TOMOYO-like task history informat=
-ion
-> >> into the audit logs for better understanding of unexpected system even=
-ts.
-> >>
-> >>   type=3DUNKNOWN[1340] msg=3Daudit(1691750738.271:108): history=3D"nam=
-e=3Dswapper/0;pid=3D1;start=3D20230811194329=3D>name=3Dinit;pid=3D1;start=
-=3D20230811194343=3D>name=3Dsystemd;pid=3D1;start=3D20230811194439=3D>name=
-=3Dsshd;pid=3D3660;start=3D20230811104504=3D>name=3Dsshd;pid=3D3767;start=
-=3D20230811104535"
-> >
-> > While I respect your persistence, we've talked about this quite a bit
-> > already in other threads.  What you are trying to do is already
-> > possible with audit
->
-> How?
+Prepare for the coming implementation by GCC and Clang of the __counted_by
+attribute. Flexible array members annotated with __counted_by can have
+their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
+(for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
+functions).
 
-If you configure audit to record exec() and friends you should have a
-proper history of the processes started on the system.
+As found with Coccinelle[1], add __counted_by for struct audit_chunk.
 
-> >                     and/or TOMOYO enabled and configured
->
-> Wrong. Since not all LSM hooks allow sleeping, TOMOYO is unable to
-> check sending signals. Also, TOMOYO is not using audit interface.
+[1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
 
-I said "audit and/or TOMOYO"; I believe the "and/or" is important.  If
-I recall correctly, and perhaps I misunderstood you, you conceded that
-a combination of audit *and/or* TOMOYO would solve this issue.
+Cc: Paul Moore <paul@paul-moore.com>
+Cc: Eric Paris <eparis@redhat.com>
+Cc: audit@vger.kernel.org
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+ kernel/audit_tree.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> >                                                          so I see no
-> > reason why we want to merge this.
->
-> This code makes it possible to record sending signals with TOMOYO-like co=
-ntext,
-> and we can avoid assigning LSM ID for this code if we can merge this code=
- as
-> a part of audit.
+diff --git a/kernel/audit_tree.c b/kernel/audit_tree.c
+index e867c17d3f84..85a5b306733b 100644
+--- a/kernel/audit_tree.c
++++ b/kernel/audit_tree.c
+@@ -34,7 +34,7 @@ struct audit_chunk {
+ 		struct list_head list;
+ 		struct audit_tree *owner;
+ 		unsigned index;		/* index; upper bit indicates 'will prune' */
+-	} owners[];
++	} owners[] __counted_by(count);
+ };
+ 
+ struct audit_tree_mark {
+-- 
+2.34.1
 
-If you want TOMOYO-like information, run TOMOYO.  If your preferred
-distribution doesn't support TOMOYO, you need to either ask them to
-support it, find a new distribution that does, or build your own
-kernel.
-
-> >                                    I understand your frustration that
-> > TOMOYO is not enabled by your prefered distribution, but adding
-> > additional (and arguably redundant code) code to the upstream kernel
-> > is not a solution I am willing to support and maintain long term.
->
-> Never a redundant code. Absolutely no reason we don't want to merge.
-
-At this point in time, I obviously disagree.
-
-> The only choice is which approach (a standalone LSM module or a part of a=
-udit)
-> to go. Casey suggests this code as a part of audit. You must persuade Cas=
-ey
-> if you don't want this code as a part of audit.
-
-To be very clear, it isn't my duty to persuade Casey about anything
-(although if you've followed the LSM stacking saga you know I've
-definitely tried on occasion! <g>).  My role here is to maintain the
-audit subsystem and LSM layer (along with others which aren't relevant
-here) to the best of my ability.  A big part of that is ensuring we
-make "smart decisions" with respect to what code we merge as things
-like new LSMs and new audit records are things that we have to support
-*forever*.  Because of this rather extreme support burden I need to
-make sure that we aren't making our jobs (current developers, current
-maintainers, and those that will follow us) more difficult than
-absolutely necessary.  From my current perspective, the benefits of
-this patch, both in terms of unique functionality and durability of
-the design/code, are not enough to outweigh the support burden.
-
---=20
-paul-moore.com
