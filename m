@@ -2,361 +2,98 @@ Return-Path: <audit-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3F595EE4996
-	for <audit@archiver.kernel.org>; Mon, 21 Aug 2023 17:29:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 10D0CEE49A0
+	for <audit@archiver.kernel.org>; Mon, 21 Aug 2023 22:23:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233625AbjHUR3Y (ORCPT <rfc822;audit@archiver.kernel.org>);
-        Mon, 21 Aug 2023 13:29:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43044 "EHLO
+        id S229866AbjHUWX1 (ORCPT <rfc822;audit@archiver.kernel.org>);
+        Mon, 21 Aug 2023 18:23:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232139AbjHUR3Y (ORCPT <rfc822;audit@vger.kernel.org>);
-        Mon, 21 Aug 2023 13:29:24 -0400
-Received: from mail.hallyn.com (mail.hallyn.com [178.63.66.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A200F7;
-        Mon, 21 Aug 2023 10:29:21 -0700 (PDT)
-Received: from jerom (unknown [128.107.241.188])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: serge)
-        by mail.hallyn.com (Postfix) with ESMTPSA id 49CC7993;
-        Mon, 21 Aug 2023 12:29:16 -0500 (CDT)
-Date:   Mon, 21 Aug 2023 12:29:13 -0500
-From:   Serge Hallyn <serge@hallyn.com>
-To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-Cc:     linux-audit@redhat.com, audit@vger.kernel.org,
-        Paul Moore <paul@paul-moore.com>,
-        Steve Grubb <sgrubb@redhat.com>,
-        linux-security-module <linux-security-module@vger.kernel.org>,
-        Casey Schaufler <casey@schaufler-ca.com>
-Subject: Re: [PATCH] audit: add task history record
-Message-ID: <ZOOe6Tegj0QKpc2w@jerom>
-References: <36b65eb1-ccbf-8b81-468f-b8d88c4be5a3@I-love.SAKURA.ne.jp>
+        with ESMTP id S230493AbjHUWX1 (ORCPT <rfc822;audit@vger.kernel.org>);
+        Mon, 21 Aug 2023 18:23:27 -0400
+Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BBF8130
+        for <audit@vger.kernel.org>; Mon, 21 Aug 2023 15:23:23 -0700 (PDT)
+Received: from fsav414.sakura.ne.jp (fsav414.sakura.ne.jp [133.242.250.113])
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 37LMNKLF047450;
+        Tue, 22 Aug 2023 07:23:20 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Received: from www262.sakura.ne.jp (202.181.97.72)
+ by fsav414.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav414.sakura.ne.jp);
+ Tue, 22 Aug 2023 07:23:20 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav414.sakura.ne.jp)
+Received: from [192.168.1.6] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+        (authenticated bits=0)
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 37LMNKC8047447
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
+        Tue, 22 Aug 2023 07:23:20 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Message-ID: <5db92f8f-44c6-b6da-edeb-d7edf86d7ad3@I-love.SAKURA.ne.jp>
+Date:   Tue, 22 Aug 2023 07:23:16 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <36b65eb1-ccbf-8b81-468f-b8d88c4be5a3@I-love.SAKURA.ne.jp>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.14.0
+Subject: Re: [PATCH] audit: add task history record
+Content-Language: en-US
+To:     "Serge E. Hallyn" <serge@hallyn.com>
+Cc:     Paul Moore <paul@paul-moore.com>, linux-audit@redhat.com,
+        audit@vger.kernel.org, Steve Grubb <sgrubb@redhat.com>,
+        linux-security-module <linux-security-module@vger.kernel.org>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+References: <36b65eb1-ccbf-8b81-468f-b8d88c4be5a3@I-love.SAKURA.ne.jp>
+ <CAHC9VhTLQjjQ0QMfBDHYCz9LOAuO=rJWSDEUqPsFE+dowFbN=Q@mail.gmail.com>
+ <b06dbdd8-d2f6-b190-5635-948c0a966103@I-love.SAKURA.ne.jp>
+ <CAHC9VhSz=3utr_CigGvkMEb6_avJUQq1Ak2smB7neSd76mzjFw@mail.gmail.com>
+ <6957af54-16a2-4c28-56ff-dafe95f4e276@I-love.SAKURA.ne.jp>
+ <CAHC9VhTj-PQ0qPTiphPLXyJx3bWeqgVS_GPCWNgjqFqBgH6Njg@mail.gmail.com>
+ <b0b60fdc-4484-2265-7fdf-8367bf218d18@I-love.SAKURA.ne.jp>
+ <20230821160446.GA1317178@mail.hallyn.com>
+From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+In-Reply-To: <20230821160446.GA1317178@mail.hallyn.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <audit.vger.kernel.org>
 X-Mailing-List: audit@vger.kernel.org
 
-On Fri, Aug 11, 2023 at 07:58:06PM +0900, Tetsuo Handa wrote:
-> When an unexpected system event occurs, the administrator may want to
-
-I think I would at times find this useful, however the audit maintainer
-has said no to this patch, and the reasoning is sound (there are other
-ways to do or approximate this, and maintainer support burden is
-increased - which is why that decision is purely his).  So I'm giving
-some technical feedback here, because the code is still out here :), but
-I am not arguing with Paul's nack.
-
-> identify which application triggered the event. For example, unexpected
-> process termination is still a real concern enough to write articles
-> like https://access.redhat.com/solutions/165993 .
+On 2023/08/22 1:04, Serge E. Hallyn wrote:
+> On Sat, Aug 19, 2023 at 04:09:46PM +0900, Tetsuo Handa wrote:
+>> Anyway, enabling TOMOYO in Fedora/RHEL kernels won't solve the problem
+>> this patch is trying to solve, for TOMOYO cannot utilize TOMOYO's process
+>> history information because LSM hook for sending signals does not allow
+>> TOMOYO to sleep...
 > 
-> This patch adds a record which emits TOMOYO-like task history information
-
-I don't think you should mention TOMOYO here.  Unless I'm expected
-to go read the TOMOYO docs before reviewing this patch.
-
-> into the audit logs for better understanding of unexpected system events.
+> Hang on a tick - I think perhaps you should have led with this.  The
+> main argument against this has been (iiuc) that it is a subset of
+> tomoyo functionality.  In that case, I'm on the fence about whether it
+> should be included.
 > 
->   type=UNKNOWN[1340] msg=audit(1691750738.271:108): history="name=swapper/0;pid=1;start=20230811194329=>name=init;pid=1;start=20230811194343=>name=systemd;pid=1;start=20230811194439=>name=sshd;pid=3660;start=20230811104504=>name=sshd;pid=3767;start=20230811104535"
-> 
-> To be able to avoid bloating audit log files due to this information, this
-> patch uses audit_history= kernel command line parameter that controls max
-> length of history in bytes (default is 1024, and setting to 0 disables
-> recording and emitting).
-> 
-> Unlike execve()'s argv record, records in this history information is
-> emitted as one string in order to reduce bloat of the audit log files.
-> This information can be split into an array using => as the tokenizer.
-> But don't expect that you can compare array elements throughout the whole
-> audit logs by splitting into an array, for old records get removed from
-> history when history became too long to append the newest record. This
-> history information is meant to be interpreted by humans rather than be
-> analyzed by programs.
->
-> Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-> ---
->  fs/exec.c                  |   1 +
->  include/linux/audit.h      |   5 ++
->  include/linux/sched.h      |   1 +
->  include/uapi/linux/audit.h |   1 +
->  init/init_task.c           |   7 +++
->  kernel/audit.c             |   1 +
->  kernel/auditsc.c           | 108 +++++++++++++++++++++++++++++++++++++
->  7 files changed, 124 insertions(+)
-> 
-> diff --git a/fs/exec.c b/fs/exec.c
-> index 1a827d55ba94..5c8776f692c5 100644
-> --- a/fs/exec.c
-> +++ b/fs/exec.c
-> @@ -1381,6 +1381,7 @@ int begin_new_exec(struct linux_binprm * bprm)
->  	commit_creds(bprm->cred);
->  	bprm->cred = NULL;
->  
-> +	audit_update_history();
->  	/*
->  	 * Disable monitoring for regular users
->  	 * when executing setuid binaries. Must
-> diff --git a/include/linux/audit.h b/include/linux/audit.h
-> index 6a3a9e122bb5..6291d0f76541 100644
-> --- a/include/linux/audit.h
-> +++ b/include/linux/audit.h
-> @@ -397,6 +397,8 @@ static inline void audit_ptrace(struct task_struct *t)
->  		__audit_ptrace(t);
->  }
->  
-> +extern void audit_update_history(void);
-> +
->  				/* Private API (for audit.c only) */
->  extern void __audit_ipc_obj(struct kern_ipc_perm *ipcp);
->  extern void __audit_ipc_set_perm(unsigned long qbytes, uid_t uid, gid_t gid, umode_t mode);
-> @@ -701,6 +703,9 @@ static inline void audit_ntp_log(const struct audit_ntp_data *ad)
->  static inline void audit_ptrace(struct task_struct *t)
->  { }
->  
-> +static inline void audit_update_history(void)
-> +{ }
-> +
->  static inline void audit_log_nfcfg(const char *name, u8 af,
->  				   unsigned int nentries,
->  				   enum audit_nfcfgop op, gfp_t gfp)
-> diff --git a/include/linux/sched.h b/include/linux/sched.h
-> index 609bde814cb0..f32076b6b733 100644
-> --- a/include/linux/sched.h
-> +++ b/include/linux/sched.h
-> @@ -1112,6 +1112,7 @@ struct task_struct {
->  #ifdef CONFIG_AUDIT
->  #ifdef CONFIG_AUDITSYSCALL
->  	struct audit_context		*audit_context;
-> +	char				*comm_history;
->  #endif
->  	kuid_t				loginuid;
->  	unsigned int			sessionid;
-> diff --git a/include/uapi/linux/audit.h b/include/uapi/linux/audit.h
-> index d676ed2b246e..186c0b5ca1b6 100644
-> --- a/include/uapi/linux/audit.h
-> +++ b/include/uapi/linux/audit.h
-> @@ -122,6 +122,7 @@
->  #define AUDIT_OPENAT2		1337	/* Record showing openat2 how args */
->  #define AUDIT_DM_CTRL		1338	/* Device Mapper target control */
->  #define AUDIT_DM_EVENT		1339	/* Device Mapper events */
-> +#define AUDIT_PROCHISTORY	1340	/* Commname history emit event */
->  
->  #define AUDIT_AVC		1400	/* SE Linux avc denial or grant */
->  #define AUDIT_SELINUX_ERR	1401	/* Internal SE Linux Errors */
-> diff --git a/init/init_task.c b/init/init_task.c
-> index ff6c4b9bfe6b..e3d481d1b010 100644
-> --- a/init/init_task.c
-> +++ b/init/init_task.c
-> @@ -57,6 +57,10 @@ unsigned long init_shadow_call_stack[SCS_SIZE / sizeof(long)]
->  };
->  #endif
->  
-> +#ifdef CONFIG_AUDITSYSCALL
-> +extern char init_task_audit_history[];
-> +#endif
-> +
->  /*
->   * Set up the first task table, touch at your own risk!. Base=0,
->   * limit=0x1fffff (=2MB)
-> @@ -137,6 +141,9 @@ struct task_struct init_task
->  #ifdef CONFIG_AUDIT
->  	.loginuid	= INVALID_UID,
->  	.sessionid	= AUDIT_SID_UNSET,
-> +#ifdef CONFIG_AUDITSYSCALL
-> +	.comm_history   = init_task_audit_history,
-> +#endif
->  #endif
->  #ifdef CONFIG_PERF_EVENTS
->  	.perf_event_mutex = __MUTEX_INITIALIZER(init_task.perf_event_mutex),
-> diff --git a/kernel/audit.c b/kernel/audit.c
-> index 9bc0b0301198..034952abd83d 100644
-> --- a/kernel/audit.c
-> +++ b/kernel/audit.c
-> @@ -1674,6 +1674,7 @@ static int __init audit_init(void)
->  {
->  	int i;
->  
-> +	audit_update_history();
->  	if (audit_initialized == AUDIT_DISABLED)
->  		return 0;
->  
-> diff --git a/kernel/auditsc.c b/kernel/auditsc.c
-> index addeed3df15d..6f1b124da2fe 100644
-> --- a/kernel/auditsc.c
-> +++ b/kernel/auditsc.c
-> @@ -80,6 +80,9 @@
->  /* max length to print of cmdline/proctitle value during audit */
->  #define MAX_PROCTITLE_AUDIT_LEN 128
->  
-> +/* max length for thread's comm name history */
-> +static unsigned int audit_history_size __ro_after_init = 1024;
-> +
->  /* number of audit rules */
->  int audit_n_rules;
->  
-> @@ -1055,6 +1058,12 @@ int audit_alloc(struct task_struct *tsk)
->  	enum audit_state     state;
->  	char *key = NULL;
->  
-> +	if (audit_history_size) {
-> +		tsk->comm_history = kmemdup(current->comm_history, audit_history_size, GFP_KERNEL);
-> +		if (!tsk->comm_history)
-> +			return -ENOMEM;
-> +	}
-> +
->  	if (likely(!audit_ever_enabled))
->  		return 0;
->  
-> @@ -1065,6 +1074,10 @@ int audit_alloc(struct task_struct *tsk)
->  	}
->  
->  	if (!(context = audit_alloc_context(state))) {
-> +		if (audit_history_size) {
-> +			kfree(tsk->comm_history);
-> +			tsk->comm_history = NULL;
-> +		}
->  		kfree(key);
->  		audit_log_lost("out of memory in audit_alloc");
->  		return -ENOMEM;
-> @@ -1671,6 +1684,18 @@ static void audit_log_uring(struct audit_context *ctx)
->  	audit_log_end(ab);
->  }
->  
-> +static void audit_log_history(struct audit_context *context)
-> +{
-> +	struct audit_buffer *ab;
-> +
-> +	ab = audit_log_start(context, GFP_KERNEL, AUDIT_PROCHISTORY);
-> +	if (!ab)
-> +		return; /* audit_panic or being filtered */
-> +	audit_log_format(ab, "history=");
-> +	audit_log_untrustedstring(ab, current->comm_history);
-> +	audit_log_end(ab);
-> +}
-> +
->  static void audit_log_exit(void)
->  {
->  	int i, call_panic = 0;
-> @@ -1805,6 +1830,8 @@ static void audit_log_exit(void)
->  
->  	if (context->context == AUDIT_CTX_SYSCALL)
->  		audit_log_proctitle();
-> +	if (audit_history_size)
-> +		audit_log_history(context);
->  
->  	/* Send end of event record to help user space know we are finished */
->  	ab = audit_log_start(context, GFP_KERNEL, AUDIT_EOE);
-> @@ -1824,6 +1851,10 @@ void __audit_free(struct task_struct *tsk)
->  {
->  	struct audit_context *context = tsk->audit_context;
->  
-> +	if (audit_history_size) {
-> +		kfree(tsk->comm_history);
-> +		tsk->comm_history = NULL;
-> +	}
->  	if (!context)
->  		return;
->  
-> @@ -3034,3 +3065,80 @@ struct list_head *audit_killed_trees(void)
->  		return NULL;
->  	return &ctx->killed_trees;
->  }
-> +
-> +char init_task_audit_history[4096];
-> +
-> +static int __init audit_history_setup(char *str)
-> +{
-> +	unsigned int size;
-> +
-> +	if (kstrtouint(str, 10, &size))
-> +		return -EINVAL;
-> +	if (size > sizeof(init_task_audit_history))
-> +		size = sizeof(init_task_audit_history);
-> +	audit_history_size = size;
-> +	return 0;
-> +}
-> +early_param("audit_history", audit_history_setup);
-> +
-> +void audit_update_history(void)
-> +{
-> +	int i;
-> +	int required;
-> +	struct tm tm;
-> +	char buf[256];
-> +	char *cp = buf;
-> +
-> +	if (!audit_history_size)
-> +		return;
-> +
-> +	cp += snprintf(buf, sizeof(buf) - 1, "name=");
+> But here you say that tomoyo cannot do this.  If that's the case, and
+> this is simply completely new functionality, that changes things.
 
-(i don't think -1 is really needed here, snprintf(x, 3, "abcd") will
-put 0 into x[2].)
+This information is duplicated upon fork() and updated upon execve().
+That is how TOMOYO defines TOMOYO's process history information.
+Therefore, I'm saying "TOMOYO-like task history information".
+But this information provided by this patch is different from TOMOYO's
+process history information provided by TOMOYO in two ways.
 
-> +	for (i = 0; i < TASK_COMM_LEN; i++) {
+One is that TOMOYO embeds pathname of a program passed to execve() into
+TOMOYO's task history information because it is used for describing access
+control rules, whereas this patch embeds comm name and pid and time of execve()
+into task history information because it is used for helping administrators
+understand system events.
 
-Note that while I think it very unlikely that TASK_COMM_LEN would
-be increased to > 250, this *is* kind of a timebomb.  Better to
-either calculate the size of buf as a fn of TASK_COMM_LEN, or check
-for (cp-buf) not getting too large here.
+The other is that TOMOYO can check and generate logs with TOMOYO's task history
+information for only operations that can sleep (e.g. open()/execve()), whereas
+this patch can check and generate logs with task history information for both
+sleepable (e.g. open()/execve()) and non-sleepable (e.g. kill()) operations.
 
-> +		const unsigned char c = current->comm[i];
-> +
-> +		if (!c)
-> +			break;
-> +		if (isalnum(c) || c == '.' || c == '_' || c == '-' || c == '/') {
-> +			*cp++ = c;
-> +			continue;
-> +		}
-> +		*cp++ = '\\';
-> +		*cp++ = (c >> 6) + '0';
-> +		*cp++ = ((c >> 3) & 7) + '0';
-> +		*cp++ = (c & 7) + '0';
-> +	}
-> +	/* Append PID. */
-> +	cp += snprintf(cp, buf - cp + sizeof(buf) - 1, ";pid=%u",
-> +		       current->pid);
-> +	/* Append timestamp. */
-> +	time64_to_tm(ktime_get_real_seconds(), 0, &tm);
-> +	cp += snprintf(cp, buf - cp + sizeof(buf) - 1,
-> +		       ";start=%04u%02u%02u%02u%02u%02u", (int) tm.tm_year + 1900,
-> +		       tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min,
-> +		       tm.tm_sec);
-> +	/* Terminate the buffer. */
-> +	if (cp >= buf + sizeof(buf))
-> +		cp = buf + sizeof(buf) - 1;
-> +	*cp = '\0';
-> +	required = cp - buf + 1;
-> +	/* Make some room by truncating old history. */
-> +	cp = current->comm_history;
-> +	i = strlen(cp);
-> +	while (i + required >= audit_history_size - 3) {
-> +		char *cp2 = memchr(cp, '>', i);
-> +
-> +		/* Reset history if audit_history_size is too small to truncate. */
-> +		if (!cp2++) {
-> +			*cp = '\0';
-> +			return;
-> +		}
-> +		i -= cp2 - cp;
-> +		memmove(cp, cp2, i + 1);
+Since one of use cases of this task history information is to identify who sent
+a signal that caused an unexpected process termination, TOMOYO cannot be do it.
 
-Would it be better to first calculate the optimal cp2 to use,
-then do the memmove, to avoid repeated calls to memmove?
+Also, system calls are not the only source of sending signals. There are signals
+delivered without security checks via LSM modules. In that case, inserting a
+SystemTap script helps catching such signals. But SystemTap scripts are loaded
+too late to emulate task history information from boot.
 
-> +	}
-> +	/* Emit the buffer. */
-> +	if (i) {
-> +		cp[i++] = '=';
-> +		cp[i++] = '>';
-> +	}
-> +	memcpy(cp + i, buf, required);
-> +}
-> -- 
-> 2.18.4
-> 
-> 
