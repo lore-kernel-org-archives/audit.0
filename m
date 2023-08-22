@@ -2,98 +2,107 @@ Return-Path: <audit-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 10D0CEE49A0
-	for <audit@archiver.kernel.org>; Mon, 21 Aug 2023 22:23:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AF9C7EE4996
+	for <audit@archiver.kernel.org>; Tue, 22 Aug 2023 16:30:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229866AbjHUWX1 (ORCPT <rfc822;audit@archiver.kernel.org>);
-        Mon, 21 Aug 2023 18:23:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59644 "EHLO
+        id S237792AbjHVQaT (ORCPT <rfc822;audit@archiver.kernel.org>);
+        Tue, 22 Aug 2023 12:30:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230493AbjHUWX1 (ORCPT <rfc822;audit@vger.kernel.org>);
-        Mon, 21 Aug 2023 18:23:27 -0400
-Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BBF8130
-        for <audit@vger.kernel.org>; Mon, 21 Aug 2023 15:23:23 -0700 (PDT)
-Received: from fsav414.sakura.ne.jp (fsav414.sakura.ne.jp [133.242.250.113])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 37LMNKLF047450;
-        Tue, 22 Aug 2023 07:23:20 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav414.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav414.sakura.ne.jp);
- Tue, 22 Aug 2023 07:23:20 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav414.sakura.ne.jp)
-Received: from [192.168.1.6] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 37LMNKC8047447
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Tue, 22 Aug 2023 07:23:20 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Message-ID: <5db92f8f-44c6-b6da-edeb-d7edf86d7ad3@I-love.SAKURA.ne.jp>
-Date:   Tue, 22 Aug 2023 07:23:16 +0900
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.14.0
-Subject: Re: [PATCH] audit: add task history record
-Content-Language: en-US
-To:     "Serge E. Hallyn" <serge@hallyn.com>
-Cc:     Paul Moore <paul@paul-moore.com>, linux-audit@redhat.com,
-        audit@vger.kernel.org, Steve Grubb <sgrubb@redhat.com>,
+        with ESMTP id S233468AbjHVQaS (ORCPT <rfc822;audit@vger.kernel.org>);
+        Tue, 22 Aug 2023 12:30:18 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DC2B187
+        for <audit@vger.kernel.org>; Tue, 22 Aug 2023 09:29:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1692721773;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=GFE4JwbJAEfwvheacPafkshB30pxaFOzoBnpl83mRU0=;
+        b=QHrO3GdYZ/115c3YROh8IFyJx6sasPTOClVbMBP63j4UypREsJHnqKZ3imTEnLZCwyNRAP
+        RuFit04kwlZpwqzDO3cLFgeJXD41zbjox2j15PU9zQLItYt9wmkXu/uLpGya+aTs5oEKJf
+        9k4hpJeP5Z/kPU/U2Vbzp1nNmyO+RC4=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-596-bpJSA2T8Pc6MIBgujx41YA-1; Tue, 22 Aug 2023 12:29:30 -0400
+X-MC-Unique: bpJSA2T8Pc6MIBgujx41YA-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E9B16101A5BD;
+        Tue, 22 Aug 2023 16:29:29 +0000 (UTC)
+Received: from x2.localnet (unknown [10.22.33.235])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 8DD6F492C13;
+        Tue, 22 Aug 2023 16:29:29 +0000 (UTC)
+From:   Steve Grubb <sgrubb@redhat.com>
+To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        Paul Moore <paul@paul-moore.com>
+Cc:     linux-audit@redhat.com, audit@vger.kernel.org,
         linux-security-module <linux-security-module@vger.kernel.org>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
+        Casey Schaufler <casey@schaufler-ca.com>
+Subject: Re: [PATCH] audit: add task history record
+Date:   Tue, 22 Aug 2023 12:29:28 -0400
+Message-ID: <4865772.31r3eYUQgx@x2>
+Organization: Red Hat
+In-Reply-To: <CAHC9VhSz=3utr_CigGvkMEb6_avJUQq1Ak2smB7neSd76mzjFw@mail.gmail.com>
 References: <36b65eb1-ccbf-8b81-468f-b8d88c4be5a3@I-love.SAKURA.ne.jp>
- <CAHC9VhTLQjjQ0QMfBDHYCz9LOAuO=rJWSDEUqPsFE+dowFbN=Q@mail.gmail.com>
  <b06dbdd8-d2f6-b190-5635-948c0a966103@I-love.SAKURA.ne.jp>
  <CAHC9VhSz=3utr_CigGvkMEb6_avJUQq1Ak2smB7neSd76mzjFw@mail.gmail.com>
- <6957af54-16a2-4c28-56ff-dafe95f4e276@I-love.SAKURA.ne.jp>
- <CAHC9VhTj-PQ0qPTiphPLXyJx3bWeqgVS_GPCWNgjqFqBgH6Njg@mail.gmail.com>
- <b0b60fdc-4484-2265-7fdf-8367bf218d18@I-love.SAKURA.ne.jp>
- <20230821160446.GA1317178@mail.hallyn.com>
-From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-In-Reply-To: <20230821160446.GA1317178@mail.hallyn.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <audit.vger.kernel.org>
 X-Mailing-List: audit@vger.kernel.org
 
-On 2023/08/22 1:04, Serge E. Hallyn wrote:
-> On Sat, Aug 19, 2023 at 04:09:46PM +0900, Tetsuo Handa wrote:
->> Anyway, enabling TOMOYO in Fedora/RHEL kernels won't solve the problem
->> this patch is trying to solve, for TOMOYO cannot utilize TOMOYO's process
->> history information because LSM hook for sending signals does not allow
->> TOMOYO to sleep...
-> 
-> Hang on a tick - I think perhaps you should have led with this.  The
-> main argument against this has been (iiuc) that it is a subset of
-> tomoyo functionality.  In that case, I'm on the fence about whether it
-> should be included.
-> 
-> But here you say that tomoyo cannot do this.  If that's the case, and
-> this is simply completely new functionality, that changes things.
+On Wednesday, August 16, 2023 9:53:58 AM EDT Paul Moore wrote:
+> On Wed, Aug 16, 2023 at 6:10=E2=80=AFAM Tetsuo Handa
+> <penguin-kernel@i-love.sakura.ne.jp> wrote:
+> > On 2023/08/16 3:44, Paul Moore wrote:
+> > > On Fri, Aug 11, 2023 at 6:58=E2=80=AFAM Tetsuo Handa
+> > > <penguin-kernel@i-love.sakura.ne.jp> wrote:
+> > >> When an unexpected system event occurs, the administrator may want t=
+o
+> > >> identify which application triggered the event. For example,
+> > >> unexpected process termination is still a real concern enough to wri=
+te
+> > >> articles like https://access.redhat.com/solutions/165993 .
+> > >>=20
+> > >> This patch adds a record which emits TOMOYO-like task history
+> > >> information into the audit logs for better understanding of unexpect=
+ed
+> > >> system events.
+> > >>=20
+> > >> type=3DUNKNOWN[1340] msg=3Daudit(1691750738.271:108):
+> > >> history=3D"name=3Dswapper/0;pid=3D1;start=3D20230811194329=3D>name=
+=3Dinit;pid=3D1;s
+> > >> tart=3D20230811194343=3D>name=3Dsystemd;pid=3D1;start=3D202308111944=
+39=3D>name=3Dssh
+> > >> d;pid=3D3660;start=3D20230811104504=3D>name=3Dsshd;pid=3D3767;start=
+=3D202308111045
+> > >> 35"
+> > >
+> > > While I respect your persistence, we've talked about this quite a bit
+> > > already in other threads.  What you are trying to do is already
+> > > possible with audit
+> >=20
+> > How?
+>=20
+> If you configure audit to record exec() and friends you should have a
+> proper history of the processes started on the system.
 
-This information is duplicated upon fork() and updated upon execve().
-That is how TOMOYO defines TOMOYO's process history information.
-Therefore, I'm saying "TOMOYO-like task history information".
-But this information provided by this patch is different from TOMOYO's
-process history information provided by TOMOYO in two ways.
+This is not a practical solution. Yes, technically this could be done. But =
+it=20
+would be a huge burden on the system to keep up with this. And it would bur=
+y=20
+events you truly wanted to see effectively DoS'ing the audit system.
 
-One is that TOMOYO embeds pathname of a program passed to execve() into
-TOMOYO's task history information because it is used for describing access
-control rules, whereas this patch embeds comm name and pid and time of execve()
-into task history information because it is used for helping administrators
-understand system events.
+-Steve
 
-The other is that TOMOYO can check and generate logs with TOMOYO's task history
-information for only operations that can sleep (e.g. open()/execve()), whereas
-this patch can check and generate logs with task history information for both
-sleepable (e.g. open()/execve()) and non-sleepable (e.g. kill()) operations.
-
-Since one of use cases of this task history information is to identify who sent
-a signal that caused an unexpected process termination, TOMOYO cannot be do it.
-
-Also, system calls are not the only source of sending signals. There are signals
-delivered without security checks via LSM modules. In that case, inserting a
-SystemTap script helps catching such signals. But SystemTap scripts are loaded
-too late to emulate task history information from boot.
 
