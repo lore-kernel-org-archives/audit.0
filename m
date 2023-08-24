@@ -2,51 +2,45 @@ Return-Path: <audit-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9CA0FEE49B2
-	for <audit@archiver.kernel.org>; Wed, 23 Aug 2023 14:49:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 59142C6FA8F
+	for <audit@archiver.kernel.org>; Thu, 24 Aug 2023 13:22:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234019AbjHWOtE (ORCPT <rfc822;audit@archiver.kernel.org>);
-        Wed, 23 Aug 2023 10:49:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46288 "EHLO
+        id S239372AbjHXNVs (ORCPT <rfc822;audit@archiver.kernel.org>);
+        Thu, 24 Aug 2023 09:21:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236661AbjHWOtB (ORCPT <rfc822;audit@vger.kernel.org>);
-        Wed, 23 Aug 2023 10:49:01 -0400
-Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCAB5E6A
-        for <audit@vger.kernel.org>; Wed, 23 Aug 2023 07:48:59 -0700 (PDT)
-Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-58d9ba95c78so63837757b3.1
-        for <audit@vger.kernel.org>; Wed, 23 Aug 2023 07:48:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1692802139; x=1693406939;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=V/+ivp6vJDmXpgPPA/3jYksCM8MKkjsRczn9dsLl71s=;
-        b=eNtSHbOfJY2Z2fsX0JPHYlkuIaI71AtZcSzWqN4v8sR2ZxlimDvMhs0uVnfgrexPvV
-         9OKY1tZSridOBeSRnSalWEDPDbbBP81D6pqY79Hrw240cg3FrSeADvPARhQcNow6zAjP
-         R5l/+cANwQqkfwIRuGG/Eh8CSuRNTMA4MyBNcbc+/uFb1HDAUyrtCBWx2ir8zUp2gIzS
-         3RctIBXxMMD/ZKO38oyy2Wu2HJ30H8AgrSq7UtvX7Xh9w7+jugdDr6DWbldtaqvIVfV1
-         Gfk7JP3tF1o3TvjpK2ZYksUIGpDVBujANdxTica1fi7VQykFlUzd/MsXOS4GXZg4TdLw
-         gQmA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692802139; x=1693406939;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=V/+ivp6vJDmXpgPPA/3jYksCM8MKkjsRczn9dsLl71s=;
-        b=gTVqcWX3xyv/cL9kEEtqEhM+owG7Sh7JunrA9lDfq94S0ZeTmq5qELxsPPvWn4htnm
-         C6DiQJd82e2/UghdlTJp1nlph5zqISH0Mjo77xCm5/F5CvrP0SfRbCpWO82lMI3fVnp5
-         gl/XlGU4fybZiMqcMfidFM4AU52Qzm6TxSqJLx46HhoyXt7GuMfNaYpxzBBAQ/Ute4us
-         FLYUC6nZ+TL/01lrpjbqXAcrytV+aHEuW2QfkQY33MJNoRCaVvgq1/TAcUxPMUFm6eI9
-         68/IPcVeZkk2tNWndU9mtbyPfObQj9qziBswQY+vsIPr6QeA/+LgzwAfWMTqHtzAF4/M
-         RVBA==
-X-Gm-Message-State: AOJu0Yw6OCETTJZTN4Xkumw6iqs+FDY2APkMRjQdPQ0zpaFW3LP+KnVl
-        mAPYjPLw52JkeJH+XRvvtUQa07q+57cNzGocVApY
-X-Google-Smtp-Source: AGHT+IGWYAxc/rT9LekKb3CWpl8QjTcpXVvzoIlbFjFdm8dSrgnVA6ibXst0kmh0MuHZkbHN4COAoj6YsSWBvRhbLWQ=
-X-Received: by 2002:a81:8782:0:b0:589:a9fc:ffcd with SMTP id
- x124-20020a818782000000b00589a9fcffcdmr12701700ywf.20.1692802138972; Wed, 23
- Aug 2023 07:48:58 -0700 (PDT)
+        with ESMTP id S241073AbjHXNVi (ORCPT <rfc822;audit@vger.kernel.org>);
+        Thu, 24 Aug 2023 09:21:38 -0400
+Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CAB3198D;
+        Thu, 24 Aug 2023 06:21:36 -0700 (PDT)
+Received: from fsav113.sakura.ne.jp (fsav113.sakura.ne.jp [27.133.134.240])
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 37ODLMiX042500;
+        Thu, 24 Aug 2023 22:21:22 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Received: from www262.sakura.ne.jp (202.181.97.72)
+ by fsav113.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav113.sakura.ne.jp);
+ Thu, 24 Aug 2023 22:21:22 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav113.sakura.ne.jp)
+Received: from [192.168.1.6] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+        (authenticated bits=0)
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 37ODLLoD042496
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
+        Thu, 24 Aug 2023 22:21:22 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Message-ID: <d2557f88-0cda-b0bf-5c76-7c18912798c9@I-love.SAKURA.ne.jp>
+Date:   Thu, 24 Aug 2023 22:21:21 +0900
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.14.0
+Subject: Re: [PATCH] audit: add task history record
+Content-Language: en-US
+To:     Paul Moore <paul@paul-moore.com>
+Cc:     linux-audit@redhat.com, audit@vger.kernel.org,
+        Steve Grubb <sgrubb@redhat.com>,
+        linux-security-module <linux-security-module@vger.kernel.org>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
 References: <36b65eb1-ccbf-8b81-468f-b8d88c4be5a3@I-love.SAKURA.ne.jp>
  <CAHC9VhTLQjjQ0QMfBDHYCz9LOAuO=rJWSDEUqPsFE+dowFbN=Q@mail.gmail.com>
  <b06dbdd8-d2f6-b190-5635-948c0a966103@I-love.SAKURA.ne.jp>
@@ -54,121 +48,52 @@ References: <36b65eb1-ccbf-8b81-468f-b8d88c4be5a3@I-love.SAKURA.ne.jp>
  <6957af54-16a2-4c28-56ff-dafe95f4e276@I-love.SAKURA.ne.jp>
  <CAHC9VhTj-PQ0qPTiphPLXyJx3bWeqgVS_GPCWNgjqFqBgH6Njg@mail.gmail.com>
  <b0b60fdc-4484-2265-7fdf-8367bf218d18@I-love.SAKURA.ne.jp>
- <CAHC9VhRaUxN=oEyKCOrfrGzJeXDGxv2EKbZH3qwAB6AhKcSfog@mail.gmail.com> <68a0ef90-b452-2096-3729-b5c208878ff9@I-love.SAKURA.ne.jp>
-In-Reply-To: <68a0ef90-b452-2096-3729-b5c208878ff9@I-love.SAKURA.ne.jp>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Wed, 23 Aug 2023 10:48:47 -0400
-Message-ID: <CAHC9VhTPgnzdn1tmEmufcbseN_Q1CyzxTEzfvZW7OCBTeAadmA@mail.gmail.com>
-Subject: Re: [PATCH] audit: add task history record
-To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-Cc:     linux-audit@redhat.com, audit@vger.kernel.org,
-        Steve Grubb <sgrubb@redhat.com>,
-        linux-security-module <linux-security-module@vger.kernel.org>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+ <CAHC9VhRaUxN=oEyKCOrfrGzJeXDGxv2EKbZH3qwAB6AhKcSfog@mail.gmail.com>
+ <68a0ef90-b452-2096-3729-b5c208878ff9@I-love.SAKURA.ne.jp>
+ <CAHC9VhTPgnzdn1tmEmufcbseN_Q1CyzxTEzfvZW7OCBTeAadmA@mail.gmail.com>
+From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+In-Reply-To: <CAHC9VhTPgnzdn1tmEmufcbseN_Q1CyzxTEzfvZW7OCBTeAadmA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <audit.vger.kernel.org>
 X-Mailing-List: audit@vger.kernel.org
 
-On Wed, Aug 23, 2023 at 10:18=E2=80=AFAM Tetsuo Handa
-<penguin-kernel@i-love.sakura.ne.jp> wrote:
-> On 2023/08/22 1:35, Paul Moore wrote:
-> >>   "auditctl -D" must not clear rules for tracing fork()/execve()/exit(=
-)
-> >>   system calls. This is impossible because this change will break user=
-space
-> >>   programs expecting that "auditctl -D" clears all rules.
-> >
-> > It's a good thing that 'audtictl -d ...' exists so that one can
-> > selectively delete audit rules from the kernel.  If someone wants to
-> > preserve specific audit rules, that is the way to do it; 'auditctl -D'
-> > is a very coarse tool and not something that is likely very useful for
-> > users with strict auditing requirements.
->
-> In most systems, "auditctl -D" is the first command done via /etc/audit/a=
-udit.rules file.
-> You are asking all administrators who want to emulate this patch's functi=
-onality using
-> auditd to customize that line. We can't afford asking such administrators=
- to become
-> specialist of strict auditing configurations, as well as we can't afford =
-asking
-> every administrator to become specialist of strict SELinux policy configu=
-rations.
+On 2023/08/23 23:48, Paul Moore wrote:
+> We've already discussed this both from a kernel load perspective (it
+> should be able to handle the load, if not that is a separate problem
+> to address) as well as the human perspective (if you want auditing,
+> you need to be able to handle auditing).
 
-If an administrator/user needs to configure the audit subsystem to do
-something, removing one line in a configuration file seems like a very
-reasonable thing to do.  You can expect the default configuration of
-every Linux distribution to fit every conceivable use case.
+No. You haven't shown us audit rules that can satisfy requirements shown below.
 
-> Like Steve Grubb mentions, technically possible and practically affordabl=
-e are
-> different. The audit subsystem could handle the load, but the system admi=
-nistrator
-> can't handle the load.
+  (1) Catch _all_ process creations (both via fork()/clone() system calls and
+      kthread_create() from the kernel), and duplicate the history upon process
+      creation.
 
-If an administrator/user wants this type of information in their audit
-logs they need to be prepared to handle that information.
+  (2) Catch _all_ execve(), and update the history upon successful execve().
 
-> That's why I said
->
->   That is a "No LSM modules other than SELinux is needed because SELinux =
-can do
->   everything" assertion.
+  (3) Catch _all_ process terminations (both exit()/exit_group()/kill() system
+      calls and internal reasons such as OOM killer), and erase the history upon
+      process termination.
 
-What?  That doesn't make any sense following what you said above.
-You're starting to cherry pick quotes and apply them out of context,
-which only hurts your argument further.
+  (4) Do the above things without asking administrators to become a specialist of
+      system management and without asking administrators to drastically change
+      system configurations and without consuming too much CPU and storage.
 
-> and your response
->
->   Except we are not talking SELinux or LSMs here, we are talking about
->   audit and the audit subsystem is very different from the LSM layer.
->   The LSM layer is designed to be pluggable with support for multiple
->   individual LSMs, whereas the audit subsystem is designed to support a
->   single audit implementation.
->
-> is totally missing the point.
+We know we can't satisfy requirements shown above using audit rules. That's why
+this patch maintains process history information without using audit rules.
 
-It makes perfect sense in the original context, see my comment above,
-and perhaps go re-read that original email.
+> 
+> Tetsuo, as should be apparent at this point, I'm finding your
+> arguments unconvincing at best, and confusing at worst.  If you or
+> someone else wants to take a different approach towards arguing for
+> this patch I'll entertain the discussion further, but please do not
+> reply back with the same approach; it simply isn't constructive at
+> this point.
 
-> For example, doing
->
->   auditctl -a exit,always -F arch=3Db64 -S exit,exit_group
->
-> (in order to allow userspace daemon which tries to emulate this patch's
-> functionality) will let auditd to generate process termination logs via e=
-xit()
-> system call. This command alone can generate too much stress on a busy sy=
-stem
-> (performance DoS and storage DoS).
+Although it will be nice if we can fetch this process history information
+directly from "current", I can live with fetching this process history
+information from "current->security" (that is, moving what you call "the
+support burden" from audit subsystem to LSM module authors).
 
-However, in this very same email, a few paragraphs above you conceded
-that "The audit subsystem could handle the load".
-
-> And moreover, this command will not let
-> auditd to generate process termination logs via kill() system call.
->
->   kill -9 $$
->
-> Auditing kill system call may generate more stress than auditing exit sys=
-tem call.
-> Too much noisy logs for catching the exact one event we want to know.
-
-We've already discussed this both from a kernel load perspective (it
-should be able to handle the load, if not that is a separate problem
-to address) as well as the human perspective (if you want auditing,
-you need to be able to handle auditing).
-
-Tetsuo, as should be apparent at this point, I'm finding your
-arguments unconvincing at best, and confusing at worst.  If you or
-someone else wants to take a different approach towards arguing for
-this patch I'll entertain the discussion further, but please do not
-reply back with the same approach; it simply isn't constructive at
-this point.
-
---=20
-paul-moore.com
