@@ -2,45 +2,63 @@ Return-Path: <audit-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B4D06C7113B
-	for <audit@archiver.kernel.org>; Thu, 24 Aug 2023 22:25:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 28401C3DA66
+	for <audit@archiver.kernel.org>; Fri, 25 Aug 2023 03:37:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243877AbjHXWZc (ORCPT <rfc822;audit@archiver.kernel.org>);
-        Thu, 24 Aug 2023 18:25:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49578 "EHLO
+        id S239148AbjHYDhK (ORCPT <rfc822;audit@archiver.kernel.org>);
+        Thu, 24 Aug 2023 23:37:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243873AbjHXWZD (ORCPT <rfc822;audit@vger.kernel.org>);
-        Thu, 24 Aug 2023 18:25:03 -0400
-Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1225B1BF0;
-        Thu, 24 Aug 2023 15:24:55 -0700 (PDT)
-Received: from fsav118.sakura.ne.jp (fsav118.sakura.ne.jp [27.133.134.245])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 37OMOfJq021925;
-        Fri, 25 Aug 2023 07:24:41 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav118.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav118.sakura.ne.jp);
- Fri, 25 Aug 2023 07:24:41 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav118.sakura.ne.jp)
-Received: from [192.168.1.6] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 37OMObZj021910
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Fri, 25 Aug 2023 07:24:41 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Message-ID: <693f623f-76dd-a709-4916-6d78fe29c9b4@I-love.SAKURA.ne.jp>
-Date:   Fri, 25 Aug 2023 07:24:35 +0900
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.14.0
-Subject: Re: [PATCH] audit: add task history record
-Content-Language: en-US
-To:     Paul Moore <paul@paul-moore.com>
-Cc:     linux-audit@redhat.com, audit@vger.kernel.org,
+        with ESMTP id S239920AbjHYDgt (ORCPT <rfc822;audit@vger.kernel.org>);
+        Thu, 24 Aug 2023 23:36:49 -0400
+Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4400B1FEC
+        for <audit@vger.kernel.org>; Thu, 24 Aug 2023 20:36:46 -0700 (PDT)
+Received: by mail-qt1-x832.google.com with SMTP id d75a77b69052e-4121130e7afso451081cf.2
+        for <audit@vger.kernel.org>; Thu, 24 Aug 2023 20:36:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1692934605; x=1693539405;
+        h=content-transfer-encoding:mime-version:subject:user-agent
+         :references:in-reply-to:message-id:date:cc:to:from:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=rUP5xV4ps2qb19CJS7E2ogVi3bHciOLw3ERo752H6f4=;
+        b=HvazmlqPdb+nH9eK8qL8CZ/87mCsMQQXvKqF8t1WviydLZTvW4zDt6H5xynl2GyGqF
+         QeAUzr6bmUX2QoBssb6JICuOc0KcfeWScX1Kctc1tOGqtd2liOLjCY7bRqRhjtINow7B
+         jjeRYotgIsm0IqIOs4CjZWbR03qtEI32o40ck6r5CpfKea8iky6HltGBrCRaFNilW3uE
+         ZnDljAhyzoufN6/pmXvgDhutZDdsI8FlfzajfXQDlqWZNMUbbyf7bbWFf6Db7+OeQdyH
+         fmbqE2VKhAOAksbbpGndGXbNpyU0sL+0lPAa/orIOiHxFFuHI2MbEEmwUfDzPYWzA8SM
+         yyjw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692934605; x=1693539405;
+        h=content-transfer-encoding:mime-version:subject:user-agent
+         :references:in-reply-to:message-id:date:cc:to:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=rUP5xV4ps2qb19CJS7E2ogVi3bHciOLw3ERo752H6f4=;
+        b=Z36XX5Apzx57SP0F9J5eJmtUAN97I6+WdRR6KIQHwENIvsfWDTo4k2NLh68sr5fkTc
+         HgnkzSHeb1EAaSTF6upi7SmXVPTAGTG/2mdYyhkRUZ3I3WZE8+duxcFE/Y6ROD0QXDlG
+         yR9ER2EFnPqFUOVUGD06z/T/d5hx2DaHkBmG3oOZ/f1EyR6J68LNhGWaR8MGTcf0juI5
+         5HZe6fl+SHM/VvcvShfpbVXoAYuU1GZzo2THXmBhFBIeXEGP8MK+DAOLBmU9FBWUA25a
+         hfHEZ4XcQz7QjiUxxWItY2gTEFqwfuXu7i8AcScBn6SkXRZZAJgKXU++JlsOBjJG2yNY
+         RqGA==
+X-Gm-Message-State: AOJu0YyaH7DbxNLvmGrHiOyZvo4B/Os8mxOd3hFJH3vbwrGU1DnoxYYn
+        3AodTXronF24g3tI4TqRfwnh
+X-Google-Smtp-Source: AGHT+IHYNhPJ58sUIqtpETLSUxXc8N0Q61g9Y0d/9tuKjWhOTTm6XvEC6DeBRl6ENKTeyR5n3fSarA==
+X-Received: by 2002:ac8:5c0c:0:b0:403:66f7:ae66 with SMTP id i12-20020ac85c0c000000b0040366f7ae66mr21103271qti.13.1692934605163;
+        Thu, 24 Aug 2023 20:36:45 -0700 (PDT)
+Received: from [192.168.7.16] ([70.22.175.108])
+        by smtp.gmail.com with ESMTPSA id b6-20020ac87fc6000000b00410a91e9f26sm276082qtk.20.2023.08.24.20.36.44
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Thu, 24 Aug 2023 20:36:44 -0700 (PDT)
+From:   Paul Moore <paul@paul-moore.com>
+To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+CC:     <linux-audit@redhat.com>, <audit@vger.kernel.org>,
         Steve Grubb <sgrubb@redhat.com>,
-        linux-security-module <linux-security-module@vger.kernel.org>,
+        "linux-security-module" <linux-security-module@vger.kernel.org>,
         Casey Schaufler <casey@schaufler-ca.com>,
         Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Thu, 24 Aug 2023 23:36:43 -0400
+Message-ID: <18a2ac400f8.28a4.85c95baa4474aabc7814e68940a78392@paul-moore.com>
+In-Reply-To: <693f623f-76dd-a709-4916-6d78fe29c9b4@I-love.SAKURA.ne.jp>
 References: <36b65eb1-ccbf-8b81-468f-b8d88c4be5a3@I-love.SAKURA.ne.jp>
  <CAHC9VhTLQjjQ0QMfBDHYCz9LOAuO=rJWSDEUqPsFE+dowFbN=Q@mail.gmail.com>
  <b06dbdd8-d2f6-b190-5635-948c0a966103@I-love.SAKURA.ne.jp>
@@ -56,67 +74,66 @@ References: <36b65eb1-ccbf-8b81-468f-b8d88c4be5a3@I-love.SAKURA.ne.jp>
  <e9c593d9-6369-2987-ce20-5832dbebd027@I-love.SAKURA.ne.jp>
  <e56ed3a6-9d82-a181-bbc7-e322ea47cb98@I-love.SAKURA.ne.jp>
  <CAHC9VhRTVsoMWhP1+j7RcUqy2EiV=Z7W_00h55PE-WezzLg=Ew@mail.gmail.com>
-From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-In-Reply-To: <CAHC9VhRTVsoMWhP1+j7RcUqy2EiV=Z7W_00h55PE-WezzLg=Ew@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
+ <693f623f-76dd-a709-4916-6d78fe29c9b4@I-love.SAKURA.ne.jp>
+User-Agent: AquaMail/1.46.0 (build: 104600328)
+Subject: Re: [PATCH] audit: add task history record
+MIME-Version: 1.0
+Content-Type: text/plain; format=flowed; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <audit.vger.kernel.org>
 X-Mailing-List: audit@vger.kernel.org
 
-On 2023/08/24 23:26, Paul Moore wrote:
-> On Thu, Aug 24, 2023 at 9:47 AM Tetsuo Handa
-> <penguin-kernel@i-love.sakura.ne.jp> wrote:
->> On 2023/08/24 22:39, Tetsuo Handa wrote:
->>>>>   (1) Catch _all_ process creations (both via fork()/clone() system calls and
->>>>>       kthread_create() from the kernel), and duplicate the history upon process
->>>>>       creation.
+On August 24, 2023 6:24:47 PM Tetsuo Handa 
+<penguin-kernel@I-love.SAKURA.ne.jp> wrote:
+> On 2023/08/24 23:26, Paul Moore wrote:
+>> On Thu, Aug 24, 2023 at 9:47 AM Tetsuo Handa
+>> <penguin-kernel@i-love.sakura.ne.jp> wrote:
+>>> On 2023/08/24 22:39, Tetsuo Handa wrote:
+>>>>>> (1) Catch _all_ process creations (both via fork()/clone() system calls and
+>>>>>>  kthread_create() from the kernel), and duplicate the history upon process
+>>>>>>  creation.
+>>>>>
+>>>>> Create an audit filter rule to record the syscalls you are interested
+>>>>> in logging.
 >>>>
->>>> Create an audit filter rule to record the syscalls you are interested
->>>> in logging.
+>>>> I can't interpret what you are talking about. Please show me using command 
+>>>> line.
 >>>
->>> I can't interpret what you are talking about. Please show me using command line.
+>>> I'm not interested in logging the syscalls just for maintaining process history
+>>> information.
 >>
->> I'm not interested in logging the syscalls just for maintaining process history
->> information.
-> 
-> That's unfortunate because I'm not interested in merging your patch
-> when we already have an audit log which can be used to trace process
-> history information.
-> 
+>> That's unfortunate because I'm not interested in merging your patch
+>> when we already have an audit log which can be used to trace process
+>> history information.
+>
+> It is unfortunate that you continue ignoring the
+>
+>  How can auditd generate logs that are not triggered via syscalls?
+>
+> line. I know how to configure syscall rules using "-S" option. But I do
+> not know how to configure non syscall rules (such as process creation via
+> kthread_create(), process termination due to tty hangup or OOM killer).
 
-It is unfortunate that you continue ignoring the
+At this point you've exhausted my goodwill so I would suggest simply 
+reading the audit code, manages, and experimenting with a running system to 
+understand how things work, especially for non-syscall records.
 
-  How can auditd generate logs that are not triggered via syscalls?
-
-line. I know how to configure syscall rules using "-S" option. But I do
-not know how to configure non syscall rules (such as process creation via
-kthread_create(), process termination due to tty hangup or OOM killer).
-
-It is unfortunate that you continue ignoring the
-
-  What this patch does is to allow people do like
-
-    printk("[%s] some msg comes here\n", current->comm_history);
-
-  for giving hints for identifying a process more precisely.
-  That is, users of this information is not limited to audit. For example,
-  an LSM module can use this information, an audit record can use this
-  information, a SystemTap script can use this information, and so on...
-
-block. The logs generated via system call auditing is just an example.
-I want to use this information from e.g. SystemTap scripts, but you care
-about only system call auditing.
-
-There are cases where the logs generated via system call auditing can solve
-problems. But there are cases we need to hook different locations using e.g.
-SystemTap scripts in order to catch the event.
+> I repeat:
+>
+>  The auditd is not capable of generating _all_ records needed for maintaining
+>  this information.
+>
+>  The logs generated via system call auditing is just an example user
+>  of this information.
 
 I repeat:
 
-  The auditd is not capable of generating _all_ records needed for maintaining
-  this information.
+If you find a place in the code where you believe there should be an audit 
+record, post a patch and we can discuss it.
 
-  The logs generated via system call auditing is just an example user
-  of this information.
+--
+paul-moore.com
+
+
 
