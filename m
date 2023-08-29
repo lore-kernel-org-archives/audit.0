@@ -2,125 +2,122 @@ Return-Path: <audit-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0261AC83F11
-	for <audit@archiver.kernel.org>; Sat, 26 Aug 2023 14:48:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C4851C71153
+	for <audit@archiver.kernel.org>; Tue, 29 Aug 2023 20:41:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230427AbjHZOrz (ORCPT <rfc822;audit@archiver.kernel.org>);
-        Sat, 26 Aug 2023 10:47:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33162 "EHLO
+        id S240528AbjH2UlN (ORCPT <rfc822;audit@archiver.kernel.org>);
+        Tue, 29 Aug 2023 16:41:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231882AbjHZOrv (ORCPT <rfc822;audit@vger.kernel.org>);
-        Sat, 26 Aug 2023 10:47:51 -0400
-Received: from mail-qv1-xf34.google.com (mail-qv1-xf34.google.com [IPv6:2607:f8b0:4864:20::f34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B302BA0
-        for <audit@vger.kernel.org>; Sat, 26 Aug 2023 07:47:48 -0700 (PDT)
-Received: by mail-qv1-xf34.google.com with SMTP id 6a1803df08f44-6490c2c4702so9480526d6.2
-        for <audit@vger.kernel.org>; Sat, 26 Aug 2023 07:47:48 -0700 (PDT)
+        with ESMTP id S240575AbjH2Ukr (ORCPT <rfc822;audit@vger.kernel.org>);
+        Tue, 29 Aug 2023 16:40:47 -0400
+Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E953CCE6
+        for <audit@vger.kernel.org>; Tue, 29 Aug 2023 13:40:30 -0700 (PDT)
+Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-5925e580f12so55882037b3.3
+        for <audit@vger.kernel.org>; Tue, 29 Aug 2023 13:40:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1693061268; x=1693666068;
-        h=content-transfer-encoding:mime-version:subject:user-agent
-         :references:in-reply-to:message-id:date:cc:to:from:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=nViQWLFd9G19TwFRhrWwk6czyiLSpZ+QmjfzziUuEJM=;
-        b=IZ4kCHdnNlpzxveE/XoSIDUjPL9+GjpH4qFOCqerqxTgquSkhesowbiOgxyGx2e3Rw
-         ejX8Rjnoza5jU+l+u4eN+V48j4rDFGWNdoWIzw0lroTKFoBwHeMGhbAdgRi7AQN7ENv4
-         03xPtG1Ah3GZWVsb9qgVvWkMLyd1O20CMK5h+kaJs3x9/yQt1+830JtEeL6RfbPk1HPJ
-         4eKUEaV2CyH3d+vGt+LyVtPCPiAzOYbSqGaqNbBC1PD8mCkhL4yAq2M6kSbooY2Q/zD0
-         Md2OJenVi/kDdVh+I0oP5HKLg3SMIDUZQFxb8Z/mtOoDHYdJvYEnhWPZoVdi8w+9TBvG
-         zxfA==
+        d=paul-moore.com; s=google; t=1693341630; x=1693946430; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=hlfedfVtinUbqmdYFBe/AzCba8CTUSoEdjLTs8STP20=;
+        b=ZZ6a1P+yZcDP7Qf+IzGsOHg/7YrtUAd/EbQBS4xGX9jBg/Ne/8xPgU9yPY0L+8ZPfa
+         plCUh9US41vKc6njuz6QPbuSrMu+lyU7Fh68m2RqHWSIoPbLHMbA1isXeHavCSUlYieY
+         SjpmZDPNJoRbwKkiekdyYIOuaU1TqNxfmgaeitxGdX2B/3mZxVMXaA4mPRC0TDiAubKW
+         2t2h83lh8KytBjkVbMmfRhVR1pbVV+7FKNbLsMdUnqa/fYK9+zM5iYls2fXadzN6AfQC
+         1XA30o2YUs6KFvdZhh6Ecai4uKuGdowufmeXiVzG8QhcmRHFJo3mE39vEOYu64j1xCzI
+         mx8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693061268; x=1693666068;
-        h=content-transfer-encoding:mime-version:subject:user-agent
-         :references:in-reply-to:message-id:date:cc:to:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nViQWLFd9G19TwFRhrWwk6czyiLSpZ+QmjfzziUuEJM=;
-        b=lkybTtnuHvKF6oDFUt/pkFjW22E7EVuCPwNZWgX5+CxtmHFjSUIqKhyLjIlZN6sWDc
-         GhC71eIqmeKcgBsAcIhl6nrBL6zCHiqjNgSpZj7dWSSGps0fKdNC70+HaY9OMb/M0Syp
-         ++2aoKSMnBPkyWMwLjfnhljRT93bWvjNpOFWhMhhSibPMlzvTPQ5vFGUZPyaPlrOWsHN
-         j4l529G16jcyY4lPSXnS8UaRkLrBef2Ukmni1SKaI419dHTV3Qv7pZ46fFOHshKjlygV
-         5+WUMg6bQETJ0t34jaaSfQfK4WmK6BHM6Jtz/XmK6TaDFXYisURr47XKP+RGNZq0gmT4
-         /97Q==
-X-Gm-Message-State: AOJu0YwXBWl29ltclqeMw5czGniC6X0NeEaxmhdqMK1hXq0wntRXrtDd
-        rLjlsjTx6UQuz/9+T3Y7zZJ1lFuHHliokloBKLrp
-X-Google-Smtp-Source: AGHT+IFILZuWdsRqZ8xcfYMqguqfPfxA3pbiq8v+sCn7BGUVwUxFuGx8LTC0kimYIhVaOTkyNrPg2g==
-X-Received: by 2002:a0c:f8d1:0:b0:647:1993:92da with SMTP id h17-20020a0cf8d1000000b00647199392damr20279071qvo.48.1693061267840;
-        Sat, 26 Aug 2023 07:47:47 -0700 (PDT)
-Received: from [192.168.7.16] ([70.22.175.108])
-        by smtp.gmail.com with ESMTPSA id pj47-20020a05620a1daf00b0076cddd12aa4sm1192611qkn.77.2023.08.26.07.47.46
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Sat, 26 Aug 2023 07:47:47 -0700 (PDT)
-From:   Paul Moore <paul@paul-moore.com>
-To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-CC:     <linux-audit@redhat.com>, <audit@vger.kernel.org>,
-        Steve Grubb <sgrubb@redhat.com>,
-        "linux-security-module" <linux-security-module@vger.kernel.org>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Sat, 26 Aug 2023 10:47:45 -0400
-Message-ID: <18a3250b668.28a4.85c95baa4474aabc7814e68940a78392@paul-moore.com>
-In-Reply-To: <6e4603ea-3ce8-5b9e-0ddf-9ec893ddd32e@I-love.SAKURA.ne.jp>
-References: <36b65eb1-ccbf-8b81-468f-b8d88c4be5a3@I-love.SAKURA.ne.jp>
- <CAHC9VhSz=3utr_CigGvkMEb6_avJUQq1Ak2smB7neSd76mzjFw@mail.gmail.com>
- <6957af54-16a2-4c28-56ff-dafe95f4e276@I-love.SAKURA.ne.jp>
- <CAHC9VhTj-PQ0qPTiphPLXyJx3bWeqgVS_GPCWNgjqFqBgH6Njg@mail.gmail.com>
- <b0b60fdc-4484-2265-7fdf-8367bf218d18@I-love.SAKURA.ne.jp>
- <CAHC9VhRaUxN=oEyKCOrfrGzJeXDGxv2EKbZH3qwAB6AhKcSfog@mail.gmail.com>
- <68a0ef90-b452-2096-3729-b5c208878ff9@I-love.SAKURA.ne.jp>
- <CAHC9VhTPgnzdn1tmEmufcbseN_Q1CyzxTEzfvZW7OCBTeAadmA@mail.gmail.com>
- <d2557f88-0cda-b0bf-5c76-7c18912798c9@I-love.SAKURA.ne.jp>
- <CAHC9VhTZE2BinivPRLJ9S_21YcmXA6tMdDtAm5w3nk0dbZ0j1w@mail.gmail.com>
- <e9c593d9-6369-2987-ce20-5832dbebd027@I-love.SAKURA.ne.jp>
- <e56ed3a6-9d82-a181-bbc7-e322ea47cb98@I-love.SAKURA.ne.jp>
- <CAHC9VhRTVsoMWhP1+j7RcUqy2EiV=Z7W_00h55PE-WezzLg=Ew@mail.gmail.com>
- <693f623f-76dd-a709-4916-6d78fe29c9b4@I-love.SAKURA.ne.jp>
- <18a2ac400f8.28a4.85c95baa4474aabc7814e68940a78392@paul-moore.com>
- <6e4603ea-3ce8-5b9e-0ddf-9ec893ddd32e@I-love.SAKURA.ne.jp>
-User-Agent: AquaMail/1.46.0 (build: 104600328)
-Subject: Re: [PATCH] audit: add task history record
+        d=1e100.net; s=20221208; t=1693341630; x=1693946430;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=hlfedfVtinUbqmdYFBe/AzCba8CTUSoEdjLTs8STP20=;
+        b=Ok3UamIwIWIFVQO1lZux42i4hYZEq5lVHKZLYaAzJD9ehx/TkzGwfzTmrBVp8wC7Or
+         Mml/pfSlpLYS5wH1S6fv3fIKso72KIEOPruWQrV/FNnfxytJWvxfZcgTP08MozDhsNjs
+         PVFARkRoEgV9Uwy0qJgzMVYGoz7WLGGrQ3NtKXNq8lKHlgGe0RLbjSbxEong/wDaQbFQ
+         +Hp12oLW3I6ZX2QIz+t2QgyN+2I4huPbGeUl7SkJp1eF3YRyC+PbkUUY2YiqIHNHY2Ot
+         QprA3NkEo5vUf1NLnZxqRqUKCpzrpcGGG+mg9v/7TUZyXBzWQd069Jbrg7pp3xEdBaj6
+         KHYw==
+X-Gm-Message-State: AOJu0YzSMmcf3XuhCrAVto2YwEw7uBmdvLFBbeq5FesQkZ67ZSXlBI/j
+        uzeXz1Due0lt7A6p0wxzHkUMICpLDj5qBVTbIP43
+X-Google-Smtp-Source: AGHT+IFXOpuwCFSd2fhY4qmIlbq10CMpPWUfjIWT4OURSYOScypZCmvsa5GLk1YS6iVQlmutjZ/IjVYiibQAmnsCwpU=
+X-Received: by 2002:a0d:e8c1:0:b0:593:30b4:5d39 with SMTP id
+ r184-20020a0de8c1000000b0059330b45d39mr140782ywe.18.1693341630138; Tue, 29
+ Aug 2023 13:40:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; format=flowed; charset="us-ascii"
-Content-Transfer-Encoding: 8bit
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Tue, 29 Aug 2023 16:40:19 -0400
+Message-ID: <CAHC9VhRBq5jsaDDs5bFy6HR88DQgbu7agjZOBvZfR17LY2GS8A@mail.gmail.com>
+Subject: [GIT PULL] Audit patches for v6.6
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     audit@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <audit.vger.kernel.org>
 X-Mailing-List: audit@vger.kernel.org
 
-On August 26, 2023 2:38:55 AM Tetsuo Handa 
-<penguin-kernel@I-love.SAKURA.ne.jp> wrote:
-> On 2023/08/25 12:36, Paul Moore wrote:
->>> It is unfortunate that you continue ignoring the
->>>
->>> How can auditd generate logs that are not triggered via syscalls?
->>>
->>> line. I know how to configure syscall rules using "-S" option. But I do
->>> not know how to configure non syscall rules (such as process creation via
->>> kthread_create(), process termination due to tty hangup or OOM killer).
->>
->> At this point you've exhausted my goodwill so I would suggest simply reading
->> the audit code, manages, and experimenting with a running system to understand
->> how things work, especially for non-syscall records.
->
-> Are we on the same page that non-syscall records include process creation via
-> kthread_create() and process termination via send_sig() ?
+Hi Linus,
 
-I'm not confident that we are in agreement on many of the issues in this 
-thread, some of that is likely due to disagreements in what functionality 
-is worthwhile, but I believe some of that is due to misunderstandings.  I'm 
-not going to merge the patch you posted at the start of this thread, but as 
-I've mentioned *several* times now, if you find a kernel code path that is 
-missing an audit logging call submit a patch with an explanation of why the 
-audit call is needed and we can discuss it.
+Six audit patches for the Linux v6.6 merge window, the highlights are
+listed below:
 
-My initial thinking is that we do not need, or want, an audit call in 
-kthread_create(). I'm less sure about send_sig(), and as my network access 
-is limited at the moment I don't have the ability to look into it further 
-right now. If you feel we do need an additional audit call, create a patch, 
-test it, write a good commit description explaining why it is necessary and 
-we can review it.
+- Add an explicit cond_resched() call when generating PATH records
+
+Certain tracefs/debugfs operations can generate a *lot* of audit PATH
+entries and if one has an aggressive system configuration (not the
+default) this can cause a soft lockup in the audit code as it works to
+process all of these new entries.  This is in sharp contrast to the
+common case where only one or two PATH entries are logged.  In order
+to fix this corner case without excessively impacting the common case
+we're adding a single cond_rescued() call between two of the most
+intensive loops in the __audit_inode_child() function.
+
+- Various minor cleanups
+
+We removed a conditional header file as the included header already
+had the necessary logic in place, fixed a dummy function's return
+value, and the usual collection of checkpatch.pl noise (whitespace,
+brace, and trailing statement tweaks).
+
+Please merge,
+-Paul
 
 --
+The following changes since commit 06c2afb862f9da8dc5efa4b6076a0e48c3fbaaa5:
+
+ Linux 6.5-rc1 (2023-07-09 13:53:13 -0700)
+
+are available in the Git repository at:
+
+ https://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/audit.git
+   tags/audit-pr-20230829
+
+for you to fetch changes up to b1a0f64cc65ea2ebfaae9e0ce623e993a7d24257:
+
+ audit: move trailing statements to next line (2023-08-15 18:16:14 -0400)
+
+----------------------------------------------------------------
+audit/stable-6.6 PR 20230829
+
+----------------------------------------------------------------
+Atul Kumar Pant (3):
+     audit: add space before parenthesis and around '=', "==", and '<'
+     audit: cleanup function braces and assignment-in-if-condition
+     audit: move trailing statements to next line
+
+Gaosheng Cui (1):
+     audit: fix possible soft lockup in __audit_inode_child()
+
+Xiu Jianfeng (2):
+     audit: include security.h unconditionally
+     audit: correct audit_filter_inodes() definition
+
+kernel/acct.c        |  2 +-
+kernel/audit.c       |  5 ++---
+kernel/audit.h       |  2 +-
+kernel/auditfilter.c | 19 ++++++++++---------
+kernel/auditsc.c     | 10 +++++++---
+5 files changed, 21 insertions(+), 17 deletions(-)
+
+-- 
 paul-moore.com
->
-
-
-
-
