@@ -2,126 +2,128 @@ Return-Path: <audit-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BF749EE14A9
-	for <audit@archiver.kernel.org>; Wed,  6 Sep 2023 23:25:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 97AD9EE14C3
+	for <audit@archiver.kernel.org>; Thu,  7 Sep 2023 01:44:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244841AbjIFXZg (ORCPT <rfc822;audit@archiver.kernel.org>);
-        Wed, 6 Sep 2023 19:25:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57508 "EHLO
+        id S231173AbjIGBoT (ORCPT <rfc822;audit@archiver.kernel.org>);
+        Wed, 6 Sep 2023 21:44:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244835AbjIFXZe (ORCPT <rfc822;audit@vger.kernel.org>);
-        Wed, 6 Sep 2023 19:25:34 -0400
-Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59BC91739
-        for <audit@vger.kernel.org>; Wed,  6 Sep 2023 16:25:31 -0700 (PDT)
-Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-58d41109351so20717267b3.1
-        for <audit@vger.kernel.org>; Wed, 06 Sep 2023 16:25:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1694042730; x=1694647530; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=p2kBOi6TalS0ex+1SxjRU4auFtqoVkK5v83q8840CGQ=;
-        b=HtisTxbg0/jXajMbSUaZGVb2Ex03a07U0XO8yugtpQ3KkpCRALHle3SRN97vmwyKKo
-         D08w0DjWdj1N76/b1PW9reLFp5P4iw3Vg+u1bzo07ilxFvrS1eQmqGrw/kUJ8CMSf4os
-         jU2w8B9F+1DMjyoSFgTAjKDyz45zsA7+rMrHfOtSEGapA78OdA918lfLqc9180/J3mFu
-         o1g9dRAdQ9v6l59xd7e/uVKyw/Z5LpCWt+Uzk08+zP2rZDGhZj45MPkzucnCvrSUc5F7
-         dx7TWZm4Ktx+dgV7V+JoSP0Feyq5HcSglpTWrdNn4H9QSUVLaQjhadijOxuJXqWp4VuE
-         fN9A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1694042730; x=1694647530;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=p2kBOi6TalS0ex+1SxjRU4auFtqoVkK5v83q8840CGQ=;
-        b=J/RDD8h1pC6hSBw3q/d1K7vHAHVYMvZ4KdB9Iq8f+6ZMwhqZaYHuqeBTwKLD7hdlKw
-         eHqOruo4AlNbmM8DXHRzKiU/nva83n44XDw6PgLz7oxKK038hayJ1IZBoJn/XbztTy6M
-         5Aphsl93uiRvhYZtj5c5aL1s8tsOvwgEyMkDBYgDZGycWCIiW4+iVKnUBjFLh2ntrd8H
-         BdELjz4aCZ1vbn4Qe72j4kdUncLPxI31ek+PUZJJWddTtC9wwJUJ004U/ipOa2zj8X15
-         thnfPxJWwQUuZqCzO6nJ0w3kwTI86Gn4wJ+3DxOO7TJr1aJ0siThnFT604IAyVn0JAAc
-         W0BQ==
-X-Gm-Message-State: AOJu0YzsXQtx6C3cyYjaaJIH3xDTio7rj1Ee9Mcz7VegrFl779gcBGpM
-        vu7YzfpAWVYbzR6uAQG9u3CSoY0i/W70rGE3UbSF
-X-Google-Smtp-Source: AGHT+IGirEgrnhB2m61RbZ3m1ra5wEtE6paUBVAAeaCtiB5DDurzRuSARCNaPckFTCq44U4w9iqSZTXu1BGwNnra/Fw=
-X-Received: by 2002:a0d:e249:0:b0:583:821b:603a with SMTP id
- l70-20020a0de249000000b00583821b603amr1175263ywe.20.1694042730594; Wed, 06
- Sep 2023 16:25:30 -0700 (PDT)
+        with ESMTP id S242061AbjIGBoS (ORCPT <rfc822;audit@vger.kernel.org>);
+        Wed, 6 Sep 2023 21:44:18 -0400
+Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2132.outbound.protection.outlook.com [40.107.215.132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B50FB1BC6;
+        Wed,  6 Sep 2023 18:44:12 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ksVPMWSFnYwt6qIQGnusbg9RIVIsvY4gLalWPBif7AAOtqA06NXoh9+ctJyc8IHg7MSEIkERGWXLdw2ofeEnDSKbRvdrDoCb82WzdaCw4cKrEAMP4U5R+5xX/x5jhd+Y6pVXWvzp0NKqoPKXtx8KWsqLqf8z9FUVvRJ1v1CPez0ozhUyiugCxUDHh/REiRYVrYK13h5+iZKsTv8tnDzTa8ZRq79BPNZ4NO3gK18OcLgbTni5HcFFl6z6lhAZp3qkTiP5MiITyw5KdwffYWgqLj3faui0TCObdlm7uDh4Kttsh4G20Xk9D6Ij9DyI83uo8nK5tFhw2Ay0Qm6meKQAnQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=6CySLsg6kxgNaXKBjzcag03x7A/n/bgyFnp3sUDM79U=;
+ b=MvtFqM/TfXOCpKrK/oSeT4mj75BQF6RG3vxv8B2OyIlD52ebem0rdfGeR6oR1eE5ymlMws1bHJuKMqjnbPNkvfLeVCoeqX3gp9YB8UZVQpk3cFC2A42LPA9ncL7VLGhchvEd8PLht6qgY4h7Jg9mqrvhgi+Z18D7DabOHtnu2iNwniZvvJjnEBa1MOdH1EINn9B6gBXmJmqCjNlu4Im/VlJa6BvTRS56L8vbOZNBRbAU/2WjTtjln9IVsK4EdmXBBnm1JTE0PFFwOtmhkradpJJCbsqCt6wJjsJSZ78DcGpfinRsYtvbMF+G6FcyQRSpQ7xHKYbCCIKzET0+2ITNaQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=6CySLsg6kxgNaXKBjzcag03x7A/n/bgyFnp3sUDM79U=;
+ b=Onr8hJ7xEBm5B2f4+8j2o7XSBg6pKBF+UJQ6zHnQJpSucNCzVhed6fobrd+T7wvIpSrnfzSMLDkadP5KgGfZ8sWQpCCKkinTBI0HjcGgjxmjQGxEpdrjFG6u5YYOLad8a9y8Z+kUeDhSMpkD4KeaZK0aKnSANZApPXcywGm96I6wGsXb/mfX4tna4k7va1xWguYt8ikmvyzNG80xbx8IL+d6Z0I90iT/NE8L46LD37cm2o+CVet0NhoySQakaq8899cY4E6FSc7h/FP3a9edPoJe7bFEQC1Aya/AaAvtmE1creJzurCEsxPBnlCL4lqgEpBt5qKtSey5S/HULeSYjQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from SL2PR06MB3017.apcprd06.prod.outlook.com (2603:1096:100:3a::16)
+ by TYSPR06MB6713.apcprd06.prod.outlook.com (2603:1096:400:479::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6745.34; Thu, 7 Sep
+ 2023 01:44:08 +0000
+Received: from SL2PR06MB3017.apcprd06.prod.outlook.com
+ ([fe80::b59:294f:e052:238e]) by SL2PR06MB3017.apcprd06.prod.outlook.com
+ ([fe80::b59:294f:e052:238e%6]) with mapi id 15.20.6745.034; Thu, 7 Sep 2023
+ 01:44:08 +0000
+From:   Wu Bo <bo.wu@vivo.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Paul Moore <paul@paul-moore.com>, Eric Paris <eparis@redhat.com>,
+        audit@vger.kernel.org, Wu Bo <wubo.oduw@gmail.com>,
+        Wu Bo <bo.wu@vivo.com>
+Subject: [PATCH 1/1] audit: remove redundant 'fsnotify_put_mark'
+Date:   Wed,  6 Sep 2023 19:51:52 -0600
+Message-Id: <20230907015152.1388111-1-bo.wu@vivo.com>
+X-Mailer: git-send-email 2.25.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SG3P274CA0020.SGPP274.PROD.OUTLOOK.COM (2603:1096:4:be::32)
+ To SL2PR06MB3017.apcprd06.prod.outlook.com (2603:1096:100:3a::16)
 MIME-Version: 1.0
-References: <20230906094202.1712-1-pablo@netfilter.org> <ZPhjYkRpUvfqPB9F@orbyte.nwl.cc>
- <ZPhm1mf0GaeQUr0e@calendula> <ZPiyGC+TfRgyOabJ@orbyte.nwl.cc>
- <ZPjJAicFFam5AFIq@calendula> <CAHC9VhQ0n8Ezef8wYC7uV-MHccqHobYxoB3VYoC9TaGiFm9noQ@mail.gmail.com>
- <ZPjxnSg3/gDy25r0@orbyte.nwl.cc> <ZPj7cbtvF5SdaWrx@calendula>
- <CAHC9VhR5Mq76TQj-zKn4Y2=ehrsmoXUvq=zaM=zY7E9S-tu3Ug@mail.gmail.com> <ZPkE1VyCX1BNc76q@calendula>
-In-Reply-To: <ZPkE1VyCX1BNc76q@calendula>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Wed, 6 Sep 2023 19:25:19 -0400
-Message-ID: <CAHC9VhTGhTdaRpQj8sQZLeibWAA=2_SyUkSwPQvp2BLSBy3JGg@mail.gmail.com>
-Subject: Re: [PATCH nf] netfilter: nf_tables: Unbreak audit log reset
-To:     Pablo Neira Ayuso <pablo@netfilter.org>
-Cc:     Phil Sutter <phil@nwl.cc>, Florian Westphal <fw@strlen.de>,
-        netfilter-devel@vger.kernel.org, audit@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SL2PR06MB3017:EE_|TYSPR06MB6713:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8d21e59e-018e-46b5-70c4-08dbaf43ed0e
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: AgzpgVCmFUi7626we+0dHperYOR3fdUeOxAHn6nHQfIHdhourTMW6BglbR6N2qL5m525H7sH0Zyf+plm0eK0M7y4+RjwUtb3K9bXc2ZAEbslItbNqua51M4qmTCyr7XMkbXNFp71WP546l+IqLKKZ2q+h+SghdVQPbQUbR/a8dYXfEFYfKQo5oTOKrTjnO67IkeP8XrvmIVW71dbSwDZMQg+U1grEpxgIegHyQ5InB96k69/9LuhhLjw1sW02NT9taUWCM9NCt5s5JfStBASlaZQT0tbQypTwUCNks1AVdLAMXSw7Ow4mzcPKgtm9a1dE0MO1prsQw9/0dJ5p6rPZyBK2npUCanfJjJhzC6kFhyBeeZ66CVAlI7W7rLCX6CR5r1yrtjOp5idgkgzWEthEMP5+yExwPDfIcR9/Pkyq21MqdSEH2ouMo/H2dnY0OTkut7OC8LaC3CP5HN/fexNrvMzHeMqN8abrKYGRWHDyGIxJoShbaMO49T/+ZVcYabJj0+IigsbFqLGwbizjIKIn6o1/FURvHIHF/VgmOULbK8VZN7UVxOixQaeNIjEggLYHCowICLquZrQL/SnD3D8JEOOkhrB5U8HfMSHyL9c8x51vNe7i661B9JZv+kIIF5l
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SL2PR06MB3017.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(366004)(346002)(376002)(396003)(39860400002)(136003)(186009)(1800799009)(451199024)(2906002)(4744005)(38350700002)(38100700002)(36756003)(86362001)(6512007)(41300700001)(6486002)(2616005)(52116002)(6506007)(54906003)(66476007)(66946007)(107886003)(66556008)(4326008)(1076003)(8676002)(8936002)(6916009)(316002)(6666004)(478600001)(83380400001)(5660300002)(26005);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?7GMPPKx7IPPl0YdwmvpdfUTRu+44bHYNjoODKNrg0n+/eVs5nxdGNFQYoyGP?=
+ =?us-ascii?Q?jlQIltqFPxMPOCIdd+G/PaJvjazOY9f3RCyorCvVt6PsvmovDdO1Y10auTQx?=
+ =?us-ascii?Q?LigJ2MTCziM8wcYiBteS6VFTkU780/4rkGfiEyV3EaY40CsVL3Hs2RLIN79e?=
+ =?us-ascii?Q?Oj1/eroTvn2lYguNEC3yrkt9P1W9/p/ACHjxpQKWExfLpoug5WeZs0BTJQnO?=
+ =?us-ascii?Q?FvXwObEx95+MK9NkZthcvqqzhWI3RqF1/FlSssFi05kGl1oY8v3V5Ko7a7Yg?=
+ =?us-ascii?Q?CgrbM+RZxkSeuFnD5CnGaNR7EwZ2QDYda6C3DdDk1YYV0FSiNocMp4bGqK6e?=
+ =?us-ascii?Q?AsVJ28Yt8srUnbiZ8VCqhjceVK8F+dqHZgs6I7hkHrxWE0Y8hwR/wMM8Tk1H?=
+ =?us-ascii?Q?7lQZ02rLfR5oQimbdhunR6CZjqQPmaA0adDj3s5gl83LfdsIA7w//55vrx4M?=
+ =?us-ascii?Q?rQF8KyMkzws04CGmsT9iB3SFKGbOETKasu2892DaLM2ROK69VuANlKHBdQ+W?=
+ =?us-ascii?Q?cxGj6J4IytiVIkdAP2clt/Xa0epPfZMce7oGx8wYERdf4x1SwnfWo3miVSUW?=
+ =?us-ascii?Q?2tGcFPRoGRPXTAuA9dhRH00/2p3sCIkAhEX81K8TrjL52/s1fr8dBRqk9qXI?=
+ =?us-ascii?Q?wy7CekkZvmzIAMELAszO73qPzokF+74v5JG/Xx0m3LB1ADRN9zZ8qgR4yHFF?=
+ =?us-ascii?Q?46BE3seABhGO2rV9n1K86wXwqAYJz2KJib/9wXJgEwMLBGh+Cng7ZG1lAGgL?=
+ =?us-ascii?Q?t/pnfTEnVM7jnYwXhnEDhqKp4BzkoTL0nJU23298uaaIB0Zvx3s54p5CpwAZ?=
+ =?us-ascii?Q?1Uj2XiIubD9YB1woyKf5PggL4JJHPNpMrM3bCuTi//LKoo+K9SuzIbe9bxTV?=
+ =?us-ascii?Q?8nzZln3EgEdgyRp17uRCrDlkOVuuGcJusubyMqlC49QNy2+ObjS6111DGR3D?=
+ =?us-ascii?Q?7JT0S7FO3aR1V1kKCxjmxXnO0tpyTw7syctsaugtQX8t7hwSE909Byfy/IR6?=
+ =?us-ascii?Q?eRFEyBUAYTPC002xGocG54hIjjohWs04QvYOI9GFWoH2ZQ5imT2iM59QISUB?=
+ =?us-ascii?Q?W1bK+/dyrEjHMTFRammS1aC5jbQs+KhSbqC6IZEPXRbu/N5jFZt48dDFyN3u?=
+ =?us-ascii?Q?taHFjyYDxvjqCyafbALRFzBUV9x4JnH9Im3odYB1Ufjs1oSl/rnT7twgqjui?=
+ =?us-ascii?Q?kNTdNQCsMyEI3+4mypkDWUruNbvow+a8TujuvPQ+q6oF3iV8OaET5VrZKV+v?=
+ =?us-ascii?Q?C5JcfzrWcZENnLodzp9qjvzK64q59KErY6zLI7RnauqdnHdWk16QsAjOwVR/?=
+ =?us-ascii?Q?NbjQi32ordChyAmc72wCLt8Ic6SwJLqryAp2ylylovmaPJlhYsMHNuaZB+6f?=
+ =?us-ascii?Q?xKhDam68RCrqCgYkbqVrJlsIVMks3fuLDJ7I1EqAM428oFpTbIwsf50QELzr?=
+ =?us-ascii?Q?M1r6ecLufqtcsyLuG/F56v6dV7x1iWN1LGW4w3DxfmHVRfN8LUSkecfH79tA?=
+ =?us-ascii?Q?Q/HjO1P5IpJXHE+XSQVEfn5+aNOzrDrwirhRBM+vR0ITPNr4hfRWJoWs14CV?=
+ =?us-ascii?Q?QYZ3erx5sumif9IndPkyiptEkl+I+CaFCw6GGqJ9?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8d21e59e-018e-46b5-70c4-08dbaf43ed0e
+X-MS-Exchange-CrossTenant-AuthSource: SL2PR06MB3017.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Sep 2023 01:44:08.2688
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 9+ExICCgZsl3t/JyAlmE3/lJKAU/ljXcG0ZcIu9RDoasKRVl7RgQPVNFOrZY8ZzNGsmxz3G+Fdg6cK18DkJhOw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYSPR06MB6713
 Precedence: bulk
 List-ID: <audit.vger.kernel.org>
 X-Mailing-List: audit@vger.kernel.org
 
-On Wed, Sep 6, 2023 at 7:01=E2=80=AFPM Pablo Neira Ayuso <pablo@netfilter.o=
-rg> wrote:
-> On Wed, Sep 06, 2023 at 06:41:13PM -0400, Paul Moore wrote:
-> > On Wed, Sep 6, 2023 at 6:21=E2=80=AFPM Pablo Neira Ayuso <pablo@netfilt=
-er.org> wrote:
-> > > On Wed, Sep 06, 2023 at 11:39:41PM +0200, Phil Sutter wrote:
-> > > > On Wed, Sep 06, 2023 at 03:56:41PM -0400, Paul Moore wrote:
-> > > [...]
-> > > > > If it is a bug, please submit a fix for this as soon as possible =
-Pablo.
-> > > >
-> > > > Thanks for your support, but I can take over, too. The number of
-> > > > notifications emitted even for a small ruleset is not ideal, also. =
-It's
-> > > > just a bit sad that I ACKed the patch already and so it went out th=
-e
-> > > > door. Florian, can we still put a veto there?
-> > >
-> > > Phil, kernel was crashing after your patch, this was resulting in a
-> > > kernel panic when running tests here. I had to revert your patches
-> > > locally to keep running tests.
-> > >
-> > > Please, just send an incremental fix to adjust the idx, revert will
-> > > leave things in worse state.
-> >
-> > If we can get a fix out soon then I'm fine with that, if we can't get
-> > a fix out soon then a revert may be wise.
->
-> I believe it should be possible to fix this in the next -rc, which
-> should be quick. If Phil is busy I will jump on this and I will keep
-> you on Cc so you and Richard can review.
+'fsnotify_add_inode_mark' has done 'fsnotify_put_mark' if error occurred.
+So here to call 'fsnotify_put_mark' is redundant.
 
-Great, thank you.
+Signed-off-by: Wu Bo <bo.wu@vivo.com>
+---
+ kernel/audit_fsnotify.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-> I apologize for forgetting to Cc you in first place.
+diff --git a/kernel/audit_fsnotify.c b/kernel/audit_fsnotify.c
+index c565fbf66ac8..ff1cdda27653 100644
+--- a/kernel/audit_fsnotify.c
++++ b/kernel/audit_fsnotify.c
+@@ -103,7 +103,6 @@ struct audit_fsnotify_mark *audit_alloc_mark(struct audit_krule *krule, char *pa
+ 	ret = fsnotify_add_inode_mark(&audit_mark->mark, inode, 0);
+ 	if (ret < 0) {
+ 		audit_mark->path = NULL;
+-		fsnotify_put_mark(&audit_mark->mark);
+ 		audit_mark = ERR_PTR(ret);
+ 	}
+ out:
+-- 
+2.35.3
 
-No worries :)
-
-> > > Audit does not show chains either, which is not very useful to locate
-> > > what where exactly the rules have been reset, but that can probably
-> > > discussed in net-next. Richard provided a way to extend this if audit
-> > > maintainer find it useful too.
-> >
-> > Richard was correct in saying that new fields must be added to the end
-> > of the record.  The only correction I would make to Richard's comments
-> > is that we tend to prefer that if a field is present in a record, it
-> > is always present in a record; if there is no useful information to
-> > log in that field, a "?" can be substituted for the value (e.g.
-> > "nftfield=3D?").
->
-> Thanks for clarification, hopefully this will help to explore
-> extensions to include chain information in the logs. I think that
-> might help users to understand better the kind of updated that
-> happened in the Netfilter subsystem.
-
-Great, I'll look forward to the patches.
-
---=20
-paul-moore.com
