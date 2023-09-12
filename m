@@ -2,88 +2,90 @@ Return-Path: <audit-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 09440EE3F28
-	for <audit@archiver.kernel.org>; Tue, 12 Sep 2023 20:09:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3D00FEE3F06
+	for <audit@archiver.kernel.org>; Tue, 12 Sep 2023 20:18:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232747AbjILUJi (ORCPT <rfc822;audit@archiver.kernel.org>);
-        Tue, 12 Sep 2023 16:09:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38602 "EHLO
+        id S230361AbjILUSm (ORCPT <rfc822;audit@archiver.kernel.org>);
+        Tue, 12 Sep 2023 16:18:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230146AbjILUJh (ORCPT <rfc822;audit@vger.kernel.org>);
-        Tue, 12 Sep 2023 16:09:37 -0400
-Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 742A6E4B
-        for <audit@vger.kernel.org>; Tue, 12 Sep 2023 13:09:33 -0700 (PDT)
-Received: by mail-qv1-xf2f.google.com with SMTP id 6a1803df08f44-64cca551ae2so38356556d6.0
-        for <audit@vger.kernel.org>; Tue, 12 Sep 2023 13:09:33 -0700 (PDT)
+        with ESMTP id S230117AbjILUSl (ORCPT <rfc822;audit@vger.kernel.org>);
+        Tue, 12 Sep 2023 16:18:41 -0400
+Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D137E10D3
+        for <audit@vger.kernel.org>; Tue, 12 Sep 2023 13:18:37 -0700 (PDT)
+Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-59b53488f7cso49966397b3.0
+        for <audit@vger.kernel.org>; Tue, 12 Sep 2023 13:18:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1694549372; x=1695154172; darn=vger.kernel.org;
-        h=in-reply-to:references:subject:cc:to:from:message-id:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=8AmbzuBNjG3pvuD2vEMK+EvxK+MhEsb4d21jgaPxZbE=;
-        b=Ga+eexPguoFoOmIE/wJutfdQjQ3YV1AHkxO/Cntys3UfJC9/uQa0bvI+8z3Y/QNDfY
-         XHf/s0pSE4hf+qG5K23F9ZUvgtwfC8oosdkw8omD4AFHVOel7LGR83invPnUqlmdvQj2
-         dq/Q/N1rVlY5YzHohgysyhKzFVf5osmg+KY0Ymr08SVqbRcjZgl9um2PBX+d+CuJB2QP
-         tpE8xeIM2XNROPDmCAVuaIMj3/RLP5nGZDNamIQKHrBHc9nG4Y5B6LSAS74cD2gxmDeD
-         k98V1xI4hsTA4oWrPm6JPRw8AN3Fa+l3W6Ydq7JohUe12Qf6vlckWWS7NnJeZCV5cP4o
-         FZxA==
+        d=paul-moore.com; s=google; t=1694549917; x=1695154717; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=sgQKpDWJMcX2CH0lz3ibW/fl83HYZW+m14Iq5DX18zo=;
+        b=YHsOUcMp9VmP19FLdjWuFicfdJJTxLPvPDwvoBU4wsC1sxOudxm/ixFyITgISKBPMT
+         YhrDLVMd7d0xvwZ9NMQ715ttMn5VfYkXerEmHdmhju6SReIhlfHIf9pcq/N1qYAnEjW6
+         6HKuMPHWOyIjVcVfTC3QP6+xRup4tNAFxqlib0GO3YWynvpPhm32LJt0SJi3aBsjtM7Q
+         0Rzk2RJJUq+xval/4H+c5C+kWVrzucB2QJr1/QPJt+St0XiGr4fy7LxOnwSOacYyzyAx
+         wtpLbEFwmdLVN1+T5ZUc1tPeJlF+kUJZtcGbjwhZuHeLSD6bmPAbnjQYhikDx7KJw4Cz
+         RTJw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694549372; x=1695154172;
-        h=in-reply-to:references:subject:cc:to:from:message-id:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8AmbzuBNjG3pvuD2vEMK+EvxK+MhEsb4d21jgaPxZbE=;
-        b=rVdBIOXE6KgRgkM5noV2WoIVr4qlslCalPm4HPm+3piXa1ifqoY5E9/kZGJlmLSx2g
-         dkC/NZfMOeeHLLdPhpqdmgtohtnEfn/IgSh91B7kGmhR+GHyPM8RzWHJNw6bNmdcaMGu
-         5waIqk8bFA6Io1IXoYnQrI/cjXo1BJsIUUg/yfkXIF/zHbWJi7dxlGrnC6VZ1TXidSV3
-         QtWMmOwpsc8elrUkwwLZp7YIeKB6+H84hZZNWes4Vjlb2jHlOfyQXg7M7UB1jyuweZ1n
-         T6XLnzen6AVMKMOW3xe4YS3+xxCoHab5/H5f+2+m6VLd4mlJLIJ7isB+1Bqu4JMB76fX
-         1v2w==
-X-Gm-Message-State: AOJu0YwiXSurTziG1UzawKOURaDBB5Rhbd2QzjYibRkwoPbvx0q8SlzP
-        8MIe8JYg8cf3U9gzTeWp1z60
-X-Google-Smtp-Source: AGHT+IHhm9amGITUC1dlWWjtweGnOTF6yopgBiECKzU9eaLYygbZQmkBEK0hqu7j/mCxHSZaWII3Vw==
-X-Received: by 2002:a0c:f08e:0:b0:655:db86:6c95 with SMTP id g14-20020a0cf08e000000b00655db866c95mr379534qvk.37.1694549372344;
-        Tue, 12 Sep 2023 13:09:32 -0700 (PDT)
-Received: from localhost ([70.22.175.108])
-        by smtp.gmail.com with ESMTPSA id i3-20020ad44103000000b00655e2d0c268sm2354973qvp.15.2023.09.12.13.09.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Sep 2023 13:09:31 -0700 (PDT)
-Date:   Tue, 12 Sep 2023 16:09:31 -0400
-Message-ID: <16ef84059b3adaafd3bc2d43ba9c1ccd.paul@paul-moore.com>
+        d=1e100.net; s=20230601; t=1694549917; x=1695154717;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=sgQKpDWJMcX2CH0lz3ibW/fl83HYZW+m14Iq5DX18zo=;
+        b=d8wECbvxerwgDOkje84pkaeESdS0vWfEiXdC/mB0hL9tTa+ky00719LzP+lzDuZUga
+         a3wmO4CE7mmhljGzLCjSOzCs0rbYy64VqGbNA/X/torsq0iQ1Qvq9RZHmhDt7S2dNk9W
+         tbcQKHknSxUiwp4Q0Ye4MHMaAgA0SAJgW3dEdadb9my46mLCP4hIt/01xwlJq3b9rQjD
+         GldKTQ6QwlwaFQwOeFawpjFGHlNXwa1DNdBmHGOtZuEKwBlrAJq99lgTNaQWj/SNalSw
+         94iPZ8L38z9UYWXKrSLJG1zOHngQMDtU0xMy0Dw1FHUKKEydZ+ps7tmwY2/D+SZtGn4F
+         mqzQ==
+X-Gm-Message-State: AOJu0Yw6jWoEjXTdrCbjVM3mo98zXFdm9h4RQvGqMB5D7gilggF9dxzv
+        ECX+xihj4J/tAvgJgxHd+a9w0nrDChAU/TUmHeXgds5Wlr56l6c=
+X-Google-Smtp-Source: AGHT+IEGhy7zrnQHrHJOepzhK7eFWOUbib3BHY2AdqSZ/LVOziwyS+X0z8ZzzxW5qeJY+NNPtLw1eXaA0Xhn4TzoA88=
+X-Received: by 2002:a81:490e:0:b0:59b:a08d:cf40 with SMTP id
+ w14-20020a81490e000000b0059ba08dcf40mr518040ywa.49.1694549917008; Tue, 12 Sep
+ 2023 13:18:37 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230908002229.1409-1-phil@nwl.cc> <20230908002229.1409-3-phil@nwl.cc>
+ <ZPs2BX8vrmrrhCX2@calendula>
+In-Reply-To: <ZPs2BX8vrmrrhCX2@calendula>
 From:   Paul Moore <paul@paul-moore.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Eric Paris <eparis@redhat.com>, audit@vger.kernel.org,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] audit: Annotate struct audit_chunk with __counted_by
-References: <20230817203501.never.279-kees@kernel.org>
-In-Reply-To: <20230817203501.never.279-kees@kernel.org>
+Date:   Tue, 12 Sep 2023 16:18:26 -0400
+Message-ID: <CAHC9VhTaCbXFOaPX2WOA0SBOUMh9HqU294P5Msd_xxJSvUY5nQ@mail.gmail.com>
+Subject: Re: [nf-next RFC 2/2] selftests: netfilter: Test nf_tables audit logging
+To:     Pablo Neira Ayuso <pablo@netfilter.org>
+Cc:     Phil Sutter <phil@nwl.cc>, netfilter-devel@vger.kernel.org,
+        Florian Westphal <fw@strlen.de>, audit@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <audit.vger.kernel.org>
 X-Mailing-List: audit@vger.kernel.org
 
-On Aug 17, 2023 Paul Moore <paul@paul-moore.com> wrote:
-> 
-> Prepare for the coming implementation by GCC and Clang of the __counted_by
-> attribute. Flexible array members annotated with __counted_by can have
-> their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
-> (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
-> functions).
-> 
-> As found with Coccinelle[1], add __counted_by for struct audit_chunk.
-> 
-> [1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
-> 
-> Cc: Paul Moore <paul@paul-moore.com>
-> Cc: Eric Paris <eparis@redhat.com>
-> Cc: audit@vger.kernel.org
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> ---
->  kernel/audit_tree.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+On Fri, Sep 8, 2023 at 10:56=E2=80=AFAM Pablo Neira Ayuso <pablo@netfilter.=
+org> wrote:
+> On Fri, Sep 08, 2023 at 02:22:29AM +0200, Phil Sutter wrote:
+> > Perform ruleset modifications and compare the NETFILTER_CFG type
+> > notifications emitted by auditd match expectations.
+> >
+> > Signed-off-by: Phil Sutter <phil@nwl.cc>
+> > ---
+> > Calling auditd means enabling audit logging in kernel for the remaining
+> > uptime. So this test will slow down following ones or even cause
+> > spurious failures due to unexpected kernel log entries, timeouts, etc.
+> >
+> > Is there a way to test this in a less intrusive way? Maybe fence this
+> > test so it does not run automatically (is it any good having it in
+> > kernel then)?
+>
+> I think you could make a small libmnl program to listen to
+> NETLINK_AUDIT events and filter only the logs you need from there. We
+> already have a few programs like this in the selftest folder.
 
-Merged into audit/next, thanks.
+Just a heads-up that the kernel sends the unicast netlink messages
+with a bogus nlmsghdr::nlmsg_len field, see the comments in
+audit_log_end() and kauditd_send_multicast_skb() for the details.
 
---
+--=20
 paul-moore.com
