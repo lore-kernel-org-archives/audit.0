@@ -2,31 +2,30 @@ Return-Path: <audit-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 51095E7D0A6
-	for <audit@archiver.kernel.org>; Thu, 21 Sep 2023 19:03:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C3972E7D0A9
+	for <audit@archiver.kernel.org>; Thu, 21 Sep 2023 20:26:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230458AbjIUTDH (ORCPT <rfc822;audit@archiver.kernel.org>);
-        Thu, 21 Sep 2023 15:03:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42506 "EHLO
+        id S231773AbjIUU0p (ORCPT <rfc822;audit@archiver.kernel.org>);
+        Thu, 21 Sep 2023 16:26:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230352AbjIUTCp (ORCPT <rfc822;audit@vger.kernel.org>);
-        Thu, 21 Sep 2023 15:02:45 -0400
-X-Greylist: delayed 2097 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 21 Sep 2023 10:41:53 PDT
-Received: from smtp-190d.mail.infomaniak.ch (smtp-190d.mail.infomaniak.ch [185.125.25.13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F9A18BD18
-        for <audit@vger.kernel.org>; Thu, 21 Sep 2023 10:41:53 -0700 (PDT)
+        with ESMTP id S231618AbjIUU0Y (ORCPT <rfc822;audit@vger.kernel.org>);
+        Thu, 21 Sep 2023 16:26:24 -0400
+Received: from smtp-42ae.mail.infomaniak.ch (smtp-42ae.mail.infomaniak.ch [84.16.66.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE68C8C62A
+        for <audit@vger.kernel.org>; Thu, 21 Sep 2023 10:42:30 -0700 (PDT)
 Received: from smtp-2-0001.mail.infomaniak.ch (unknown [10.5.36.108])
-        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4RrlYF10fszMpnvZ;
-        Thu, 21 Sep 2023 06:17:05 +0000 (UTC)
-Received: from unknown by smtp-2-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4RrlYD43PYzMppDY;
-        Thu, 21 Sep 2023 08:17:04 +0200 (CEST)
+        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4RrlYD10SYzMpp2X;
+        Thu, 21 Sep 2023 06:17:04 +0000 (UTC)
+Received: from unknown by smtp-2-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4RrlYC4BjrzMppKR;
+        Thu, 21 Sep 2023 08:17:03 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
-        s=20191114; t=1695277025;
-        bh=cinTwRA+WcJIbifJHzOy8LJVvQYuI7/JZgdtZ57GtzM=;
+        s=20191114; t=1695277024;
+        bh=aXxAzAZrVv/AQrM1hbU5eAstfAxS1hqSXWRkrvqIPdw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=up0um0B1XHsyeQkuudhIT3U+5pTFTjDV0n7klWUvkP46xo+7VG6DPTYrZ+EB1ewzb
-         pkHEEkMfvi0v0Vu+/YLb64C0x9i3a9Hm07og2eq4jJz/7pVdStNskZGiAewR1Py4Ye
-         hPTIYrcmWLdYpcX3yAH37Zz0KL/duU1m/sFGabHE=
+        b=NIkVnGqhXST4ff8AXuEDBtYbO577M5gPCcl8ioUJLhFVZ/9MT+b5xSJWdc/Ejx95W
+         34dNrLXehRDfDf4p/H+ylzPrcZHOg03FmLJcrXkmVut5vV/xcwyn7vnt78ptkUEXtC
+         2pLnKDwNZSOXw6R9CHZ5lP7yTTxoAm0ndKQvkLGI=
 From:   =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
 To:     Eric Paris <eparis@redhat.com>, James Morris <jmorris@namei.org>,
         Paul Moore <paul@paul-moore.com>,
@@ -39,9 +38,9 @@ Cc:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
         Konstantin Meskhidze <konstantin.meskhidze@huawei.com>,
         Shervin Oloumi <enlightened@google.com>, audit@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
-Subject: [RFC PATCH v1 7/7] landlock: Log ptrace requests
-Date:   Thu, 21 Sep 2023 08:16:41 +0200
-Message-ID: <20230921061641.273654-8-mic@digikod.net>
+Subject: [RFC PATCH v1 6/7] landlock: Log mount-related requests
+Date:   Thu, 21 Sep 2023 08:16:40 +0200
+Message-ID: <20230921061641.273654-7-mic@digikod.net>
 In-Reply-To: <20230921061641.273654-1-mic@digikod.net>
 References: <20230921061641.273654-1-mic@digikod.net>
 MIME-Version: 1.0
@@ -52,128 +51,229 @@ Precedence: bulk
 List-ID: <audit.vger.kernel.org>
 X-Mailing-List: audit@vger.kernel.org
 
-Add audit support for ptrace and ptrace_traceme requests.
+Add audit support for mount, move_mount, umount, remount, and pivot_root
+requests.
 
 Signed-off-by: Mickaël Salaün <mic@digikod.net>
 ---
- security/landlock/audit.c  |  2 ++
- security/landlock/audit.h  |  4 +++-
- security/landlock/ptrace.c | 47 ++++++++++++++++++++++++++++++++++----
- 3 files changed, 47 insertions(+), 6 deletions(-)
+ security/landlock/audit.c | 26 ++++++++++++-
+ security/landlock/audit.h | 13 ++++++-
+ security/landlock/fs.c    | 82 ++++++++++++++++++++++++++++++++++-----
+ 3 files changed, 109 insertions(+), 12 deletions(-)
 
 diff --git a/security/landlock/audit.c b/security/landlock/audit.c
-index 89bd701d124f..2ec2a00822d2 100644
+index 148fc0fafef4..89bd701d124f 100644
 --- a/security/landlock/audit.c
 +++ b/security/landlock/audit.c
-@@ -18,6 +18,8 @@ static const char *op_to_string(enum landlock_operation operation)
+@@ -18,6 +18,11 @@ static const char *op_to_string(enum landlock_operation operation)
  {
  	const char *const desc[] = {
  		[0] = "",
-+		[LANDLOCK_OP_PTRACE] = "ptrace",
-+		[LANDLOCK_OP_PTRACE_TRACEME] = "ptrace_traceme",
- 		[LANDLOCK_OP_MOUNT] = "mount",
- 		[LANDLOCK_OP_MOVE_MOUNT] = "move_mount",
- 		[LANDLOCK_OP_UMOUNT] = "umount",
++		[LANDLOCK_OP_MOUNT] = "mount",
++		[LANDLOCK_OP_MOVE_MOUNT] = "move_mount",
++		[LANDLOCK_OP_UMOUNT] = "umount",
++		[LANDLOCK_OP_REMOUNT] = "remount",
++		[LANDLOCK_OP_PIVOT_ROOT] = "pivot_root",
+ 		[LANDLOCK_OP_MKDIR] = "mkdir",
+ 		[LANDLOCK_OP_MKNOD] = "mknod",
+ 		[LANDLOCK_OP_SYMLINK] = "symlink",
+@@ -33,6 +38,20 @@ static const char *op_to_string(enum landlock_operation operation)
+ 	return desc[operation];
+ }
+ 
++static const char *perm_to_string(enum landlock_permission permission)
++{
++	const char *const desc[] = {
++		[0] = "",
++		[LANDLOCK_PERM_PTRACE] = "ptrace",
++		[LANDLOCK_PERM_FS_LAYOUT] = "fs_layout",
++	};
++
++	if (WARN_ON_ONCE(permission < 0 || permission > ARRAY_SIZE(desc)))
++		return "unknown";
++
++	return desc[permission];
++}
++
+ #define BIT_INDEX(bit) HWEIGHT(bit - 1)
+ 
+ static void log_accesses(struct audit_buffer *const ab,
+@@ -177,8 +196,11 @@ update_request(struct landlock_request *const request,
+ 	WARN_ON_ONCE(request->youngest_domain);
+ 	WARN_ON_ONCE(request->missing_access);
+ 
+-	if (WARN_ON_ONCE(!access_request))
++	if (!access_request) {
++		/* No missing accesses. */
++		request->youngest_domain = node->id;
+ 		return;
++	}
+ 
+ 	if (WARN_ON_ONCE(!layer_masks))
+ 		return;
+@@ -240,6 +262,8 @@ log_request(const int error, struct landlock_request *const request,
+ 			 request->youngest_domain,
+ 			 op_to_string(request->operation), -error);
+ 	log_accesses(ab, request->missing_access);
++	audit_log_format(ab, " missing-permission=%s",
++			 perm_to_string(request->missing_permission));
+ 	audit_log_lsm_data(ab, &request->audit);
+ 	audit_log_end(ab);
+ }
 diff --git a/security/landlock/audit.h b/security/landlock/audit.h
-index e559fb6a89dd..b69bba7b908c 100644
+index 8edc68b98fca..e559fb6a89dd 100644
 --- a/security/landlock/audit.h
 +++ b/security/landlock/audit.h
-@@ -14,7 +14,9 @@
+@@ -14,7 +14,12 @@
  #include "ruleset.h"
  
  enum landlock_operation {
--	LANDLOCK_OP_MOUNT = 1,
-+	LANDLOCK_OP_PTRACE = 1,
-+	LANDLOCK_OP_PTRACE_TRACEME,
-+	LANDLOCK_OP_MOUNT,
- 	LANDLOCK_OP_MOVE_MOUNT,
- 	LANDLOCK_OP_UMOUNT,
- 	LANDLOCK_OP_REMOUNT,
-diff --git a/security/landlock/ptrace.c b/security/landlock/ptrace.c
-index 8a06d6c492bf..dbe219449a32 100644
---- a/security/landlock/ptrace.c
-+++ b/security/landlock/ptrace.c
-@@ -10,10 +10,12 @@
- #include <linux/cred.h>
- #include <linux/errno.h>
- #include <linux/kernel.h>
-+#include <linux/lsm_audit.h>
- #include <linux/lsm_hooks.h>
- #include <linux/rcupdate.h>
- #include <linux/sched.h>
+-	LANDLOCK_OP_MKDIR = 1,
++	LANDLOCK_OP_MOUNT = 1,
++	LANDLOCK_OP_MOVE_MOUNT,
++	LANDLOCK_OP_UMOUNT,
++	LANDLOCK_OP_REMOUNT,
++	LANDLOCK_OP_PIVOT_ROOT,
++	LANDLOCK_OP_MKDIR,
+ 	LANDLOCK_OP_MKNOD,
+ 	LANDLOCK_OP_SYMLINK,
+ 	LANDLOCK_OP_UNLINK,
+@@ -23,8 +28,14 @@ enum landlock_operation {
+ 	LANDLOCK_OP_OPEN,
+ };
  
-+#include "audit.h"
- #include "common.h"
- #include "cred.h"
- #include "ptrace.h"
-@@ -64,11 +66,9 @@ static bool task_is_scoped(const struct task_struct *const parent,
- static int task_ptrace(const struct task_struct *const parent,
- 		       const struct task_struct *const child)
- {
--	/* Quick return for non-landlocked tasks. */
--	if (!landlocked(parent))
--		return 0;
- 	if (task_is_scoped(parent, child))
- 		return 0;
++enum landlock_permission {
++	LANDLOCK_PERM_PTRACE = 1,
++	LANDLOCK_PERM_FS_LAYOUT,
++};
 +
- 	return -EPERM;
- }
- 
-@@ -88,7 +88,26 @@ static int task_ptrace(const struct task_struct *const parent,
- static int hook_ptrace_access_check(struct task_struct *const child,
- 				    const unsigned int mode)
+ struct landlock_request {
+ 	const enum landlock_operation operation;
++	const enum landlock_permission missing_permission;
+ 	access_mask_t missing_access;
+ 	u64 youngest_domain;
+ 	struct common_audit_data audit;
+diff --git a/security/landlock/fs.c b/security/landlock/fs.c
+index 104dfb2abc32..8600530e304c 100644
+--- a/security/landlock/fs.c
++++ b/security/landlock/fs.c
+@@ -1050,17 +1050,41 @@ static int hook_sb_mount(const char *const dev_name,
+ 			 const struct path *const path, const char *const type,
+ 			 const unsigned long flags, void *const data)
  {
--	return task_ptrace(current, child);
+-	if (!landlock_get_current_domain())
 +	const struct landlock_ruleset *const dom =
 +		landlock_get_current_domain();
 +	struct landlock_request request = {
-+		.operation = LANDLOCK_OP_PTRACE,
-+		.missing_permission = LANDLOCK_PERM_PTRACE,
++		.operation = LANDLOCK_OP_MOUNT,
++		.missing_permission = LANDLOCK_PERM_FS_LAYOUT,
 +		.audit = {
-+			.type = LSM_AUDIT_DATA_TASK,
-+			.u.tsk = child,
++			.type = LSM_AUDIT_DATA_PATH,
++			.u.path = *path,
 +		},
 +	};
-+	int err;
 +
 +	if (!dom)
-+		return 0;
+ 		return 0;
+-	return -EPERM;
 +
-+	err = task_ptrace(current, child);
-+	if (!err)
-+		return 0;
-+
-+	return landlock_log_request(err, &request, dom, 0, NULL);
++	return landlock_log_request(-EPERM, &request, dom, 0, NULL);
  }
  
- /**
-@@ -105,7 +124,25 @@ static int hook_ptrace_access_check(struct task_struct *const child,
-  */
- static int hook_ptrace_traceme(struct task_struct *const parent)
+ static int hook_move_mount(const struct path *const from_path,
+ 			   const struct path *const to_path)
  {
--	return task_ptrace(parent, current);
+-	if (!landlock_get_current_domain())
++	const struct landlock_ruleset *const dom =
++		landlock_get_current_domain();
 +	struct landlock_request request = {
-+		.operation = LANDLOCK_OP_PTRACE_TRACEME,
-+		.missing_permission = LANDLOCK_PERM_PTRACE,
++		.operation = LANDLOCK_OP_MOVE_MOUNT,
++		.missing_permission = LANDLOCK_PERM_FS_LAYOUT,
 +		.audit = {
-+			.type = LSM_AUDIT_DATA_TASK,
-+			.u.tsk = parent,
++			.type = LSM_AUDIT_DATA_PATH,
++			.u.path = *to_path,
 +		},
 +	};
-+	int err;
 +
-+	if (!landlock_get_task_domain(parent))
-+		return 0;
++	if (!dom)
+ 		return 0;
+-	return -EPERM;
 +
-+	err = task_ptrace(parent, current);
-+	if (!err)
-+		return 0;
-+
-+	return landlock_log_request(err, &request,
-+				    landlock_get_current_domain(), 0, NULL);
++	return landlock_log_request(-EPERM, &request, dom, 0, NULL);
  }
  
- static struct security_hook_list landlock_hooks[] __ro_after_init = {
+ /*
+@@ -1069,16 +1093,42 @@ static int hook_move_mount(const struct path *const from_path,
+  */
+ static int hook_sb_umount(struct vfsmount *const mnt, const int flags)
+ {
+-	if (!landlock_get_current_domain())
++	const struct landlock_ruleset *const dom =
++		landlock_get_current_domain();
++	struct landlock_request request = {
++		.operation = LANDLOCK_OP_UMOUNT,
++		.missing_permission = LANDLOCK_PERM_FS_LAYOUT,
++		.audit = {
++			// TODO: try to print the mounted path
++			// cf. dentry_path()
++			.type = LSM_AUDIT_DATA_DENTRY,
++			.u.dentry = mnt->mnt_root,
++		},
++	};
++
++	if (!dom)
+ 		return 0;
+-	return -EPERM;
++
++	return landlock_log_request(-EPERM, &request, dom, 0, NULL);
+ }
+ 
+ static int hook_sb_remount(struct super_block *const sb, void *const mnt_opts)
+ {
+-	if (!landlock_get_current_domain())
++	const struct landlock_ruleset *const dom =
++		landlock_get_current_domain();
++	struct landlock_request request = {
++		.operation = LANDLOCK_OP_REMOUNT,
++		.missing_permission = LANDLOCK_PERM_FS_LAYOUT,
++		.audit = {
++			.type = LSM_AUDIT_DATA_DENTRY,
++			.u.dentry = sb->s_root,
++		},
++	};
++
++	if (!dom)
+ 		return 0;
+-	return -EPERM;
++
++	return landlock_log_request(-EPERM, &request, dom, 0, NULL);
+ }
+ 
+ /*
+@@ -1092,9 +1142,21 @@ static int hook_sb_remount(struct super_block *const sb, void *const mnt_opts)
+ static int hook_sb_pivotroot(const struct path *const old_path,
+ 			     const struct path *const new_path)
+ {
+-	if (!landlock_get_current_domain())
++	const struct landlock_ruleset *const dom =
++		landlock_get_current_domain();
++	struct landlock_request request = {
++		.operation = LANDLOCK_OP_PIVOT_ROOT,
++		.missing_permission = LANDLOCK_PERM_FS_LAYOUT,
++		.audit = {
++			.type = LSM_AUDIT_DATA_PATH,
++			.u.path = *new_path,
++		},
++	};
++
++	if (!dom)
+ 		return 0;
+-	return -EPERM;
++
++	return landlock_log_request(-EPERM, &request, dom, 0, NULL);
+ }
+ 
+ /* Path hooks */
 -- 
 2.42.0
 
