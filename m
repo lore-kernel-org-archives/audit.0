@@ -2,31 +2,31 @@ Return-Path: <audit-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 62CBDE7D0AA
-	for <audit@archiver.kernel.org>; Thu, 21 Sep 2023 20:35:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 73675E7D0AC
+	for <audit@archiver.kernel.org>; Thu, 21 Sep 2023 20:40:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231527AbjIUUfz (ORCPT <rfc822;audit@archiver.kernel.org>);
-        Thu, 21 Sep 2023 16:35:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57536 "EHLO
+        id S231344AbjIUUkT (ORCPT <rfc822;audit@archiver.kernel.org>);
+        Thu, 21 Sep 2023 16:40:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232226AbjIUUeu (ORCPT <rfc822;audit@vger.kernel.org>);
-        Thu, 21 Sep 2023 16:34:50 -0400
-X-Greylist: delayed 2134 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 21 Sep 2023 10:42:30 PDT
-Received: from smtp-42aa.mail.infomaniak.ch (smtp-42aa.mail.infomaniak.ch [84.16.66.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5658E8C628
-        for <audit@vger.kernel.org>; Thu, 21 Sep 2023 10:42:30 -0700 (PDT)
-Received: from smtp-2-0000.mail.infomaniak.ch (unknown [10.5.36.107])
-        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4RrlY82PP8zMqBR2;
-        Thu, 21 Sep 2023 06:17:00 +0000 (UTC)
-Received: from unknown by smtp-2-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4RrlY768ddzMpnPp;
-        Thu, 21 Sep 2023 08:16:59 +0200 (CEST)
+        with ESMTP id S232330AbjIUUjn (ORCPT <rfc822;audit@vger.kernel.org>);
+        Thu, 21 Sep 2023 16:39:43 -0400
+X-Greylist: delayed 2100 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 21 Sep 2023 10:41:53 PDT
+Received: from smtp-1909.mail.infomaniak.ch (smtp-1909.mail.infomaniak.ch [IPv6:2001:1600:3:17::1909])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E4138BD17
+        for <audit@vger.kernel.org>; Thu, 21 Sep 2023 10:41:53 -0700 (PDT)
+Received: from smtp-2-0001.mail.infomaniak.ch (unknown [10.5.36.108])
+        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4RrlY738kszMpnsb;
+        Thu, 21 Sep 2023 06:16:59 +0000 (UTC)
+Received: from unknown by smtp-2-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4RrlY62SQNzMppKT;
+        Thu, 21 Sep 2023 08:16:58 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
-        s=20191114; t=1695277020;
-        bh=BDXkAyV7VKfAr64LJDe20wdFO/sHv02Ha0JAcCm1Kgc=;
+        s=20191114; t=1695277019;
+        bh=C96mByL5VMgKe+z3S4sdB6o2Dq3umyYV2RysHQLeFgI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZplcROJUNZdIJvCz4sSUz6FTBiWpRTWGj5Dcbx+AlXmx1S6SfeuH/IO1a1UKUXuyR
-         +Mi6L3c5RMDFY+YvpvI3UOZvfobOhrV447a7CxqcEJ4GYcKrQZ2qBSSmKhMeK3Csqr
-         bnC6CekX5RKbp3Jv0Mt4+c8z0svoYwb6EWtu5YRQ=
+        b=NIh9AE6iGXfm/w7dRtI3eR/bv26/nMk6QUSrB46LLWPGRDS69Fz10CJeqMYOtM3Jf
+         ptzdpk0XS+wZajN8f6q6NpzX9bYPyCWibReuzVDfHT/HDZAh7GkkTTYCTiZiNYxqj0
+         1xcDI7CD86C3lYgqB/e/ZiQ2kUmJEoNIcZ/oLGME=
 From:   =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
 To:     Eric Paris <eparis@redhat.com>, James Morris <jmorris@namei.org>,
         Paul Moore <paul@paul-moore.com>,
@@ -39,9 +39,9 @@ Cc:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
         Konstantin Meskhidze <konstantin.meskhidze@huawei.com>,
         Shervin Oloumi <enlightened@google.com>, audit@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
-Subject: [RFC PATCH v1 2/7] landlock: Factor out check_access_path()
-Date:   Thu, 21 Sep 2023 08:16:36 +0200
-Message-ID: <20230921061641.273654-3-mic@digikod.net>
+Subject: [RFC PATCH v1 1/7] lsm: Add audit_log_lsm_data() helper
+Date:   Thu, 21 Sep 2023 08:16:35 +0200
+Message-ID: <20230921061641.273654-2-mic@digikod.net>
 In-Reply-To: <20230921061641.273654-1-mic@digikod.net>
 References: <20230921061641.273654-1-mic@digikod.net>
 MIME-Version: 1.0
@@ -52,72 +52,84 @@ Precedence: bulk
 List-ID: <audit.vger.kernel.org>
 X-Mailing-List: audit@vger.kernel.org
 
-Merge check_access_path() into current_check_access_path() and make
-hook_path_mknod() use it. Remove explicit inlining that can be handled
-by the compiler.
+Extract code from common_dump_audit_data() into the audit_log_lsm_data()
+helper. This helps reuse common LSM audit data while not abusing
+AUDIT_AVC records because of the common_lsm_audit() helper.
 
 Signed-off-by: Mickaël Salaün <mic@digikod.net>
 ---
- security/landlock/fs.c | 33 +++++++++++----------------------
- 1 file changed, 11 insertions(+), 22 deletions(-)
+ include/linux/lsm_audit.h |  2 ++
+ security/lsm_audit.c      | 26 +++++++++++++++++---------
+ 2 files changed, 19 insertions(+), 9 deletions(-)
 
-diff --git a/security/landlock/fs.c b/security/landlock/fs.c
-index 1c0c198f6fdb..978e325d8708 100644
---- a/security/landlock/fs.c
-+++ b/security/landlock/fs.c
-@@ -635,28 +635,22 @@ static bool is_access_to_paths_allowed(
- 	return allowed_parent1 && allowed_parent2;
- }
+diff --git a/include/linux/lsm_audit.h b/include/linux/lsm_audit.h
+index 97a8b21eb033..5f9a7ed0e7a5 100644
+--- a/include/linux/lsm_audit.h
++++ b/include/linux/lsm_audit.h
+@@ -122,6 +122,8 @@ int ipv4_skb_to_auditdata(struct sk_buff *skb,
+ int ipv6_skb_to_auditdata(struct sk_buff *skb,
+ 		struct common_audit_data *ad, u8 *proto);
  
--static inline int check_access_path(const struct landlock_ruleset *const domain,
--				    const struct path *const path,
--				    access_mask_t access_request)
--{
--	layer_mask_t layer_masks[LANDLOCK_NUM_ACCESS_FS] = {};
--
--	access_request = init_layer_masks(domain, access_request, &layer_masks);
--	if (is_access_to_paths_allowed(domain, path, access_request,
--				       &layer_masks, NULL, 0, NULL, NULL))
--		return 0;
--	return -EACCES;
--}
--
--static inline int current_check_access_path(const struct path *const path,
--					    const access_mask_t access_request)
-+static int current_check_access_path(const struct path *const path,
-+				     access_mask_t access_request)
- {
- 	const struct landlock_ruleset *const dom =
- 		landlock_get_current_domain();
-+	layer_mask_t layer_masks[LANDLOCK_NUM_ACCESS_FS] = {};
- 
- 	if (!dom)
- 		return 0;
--	return check_access_path(dom, path, access_request);
++void audit_log_lsm_data(struct audit_buffer *ab, struct common_audit_data *a);
 +
-+	access_request = init_layer_masks(dom, access_request, &layer_masks);
-+	if (is_access_to_paths_allowed(dom, path, access_request, &layer_masks,
-+				       NULL, 0, NULL, NULL))
-+		return 0;
-+
-+	return -EACCES;
+ void common_lsm_audit(struct common_audit_data *a,
+ 	void (*pre_audit)(struct audit_buffer *, void *),
+ 	void (*post_audit)(struct audit_buffer *, void *));
+diff --git a/security/lsm_audit.c b/security/lsm_audit.c
+index 849e832719e2..58f9b8bde22a 100644
+--- a/security/lsm_audit.c
++++ b/security/lsm_audit.c
+@@ -189,16 +189,12 @@ static inline void print_ipv4_addr(struct audit_buffer *ab, __be32 addr,
  }
  
- static inline access_mask_t get_mode_access(const umode_t mode)
-@@ -1128,12 +1122,7 @@ static int hook_path_mknod(const struct path *const dir,
- 			   struct dentry *const dentry, const umode_t mode,
- 			   const unsigned int dev)
+ /**
+- * dump_common_audit_data - helper to dump common audit data
++ * audit_log_lsm_data - helper to log common LSM audit data
+  * @ab : the audit buffer
+  * @a : common audit data
+- *
+  */
+-static void dump_common_audit_data(struct audit_buffer *ab,
+-				   struct common_audit_data *a)
++void audit_log_lsm_data(struct audit_buffer *ab, struct common_audit_data *a)
  {
--	const struct landlock_ruleset *const dom =
--		landlock_get_current_domain();
+-	char comm[sizeof(current->comm)];
 -
--	if (!dom)
--		return 0;
--	return check_access_path(dom, dir, get_mode_access(mode));
-+	return current_check_access_path(dir, get_mode_access(mode));
+ 	/*
+ 	 * To keep stack sizes in check force programmers to notice if they
+ 	 * start making this union too large!  See struct lsm_network_audit
+@@ -206,9 +202,6 @@ static void dump_common_audit_data(struct audit_buffer *ab,
+ 	 */
+ 	BUILD_BUG_ON(sizeof(a->u) > sizeof(void *)*2);
+ 
+-	audit_log_format(ab, " pid=%d comm=", task_tgid_nr(current));
+-	audit_log_untrustedstring(ab, memcpy(comm, current->comm, sizeof(comm)));
+-
+ 	switch (a->type) {
+ 	case LSM_AUDIT_DATA_NONE:
+ 		return;
+@@ -428,6 +421,21 @@ static void dump_common_audit_data(struct audit_buffer *ab,
+ 	} /* switch (a->type) */
  }
  
- static int hook_path_symlink(const struct path *const dir,
++/**
++ * dump_common_audit_data - helper to dump common audit data
++ * @ab : the audit buffer
++ * @a : common audit data
++ */
++static void dump_common_audit_data(struct audit_buffer *ab,
++				   struct common_audit_data *a)
++{
++	char comm[sizeof(current->comm)];
++
++	audit_log_format(ab, " pid=%d comm=", task_tgid_nr(current));
++	audit_log_untrustedstring(ab, memcpy(comm, current->comm, sizeof(comm)));
++	audit_log_lsm_data(ab, a);
++}
++
+ /**
+  * common_lsm_audit - generic LSM auditing function
+  * @a:  auxiliary audit data
 -- 
 2.42.0
 
