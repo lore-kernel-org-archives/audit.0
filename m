@@ -2,99 +2,178 @@ Return-Path: <audit-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 95098CD37B0
-	for <audit@archiver.kernel.org>; Mon, 18 Sep 2023 15:23:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 51095E7D0A6
+	for <audit@archiver.kernel.org>; Thu, 21 Sep 2023 19:03:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230307AbjIRPXF (ORCPT <rfc822;audit@archiver.kernel.org>);
-        Mon, 18 Sep 2023 11:23:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43948 "EHLO
+        id S230458AbjIUTDH (ORCPT <rfc822;audit@archiver.kernel.org>);
+        Thu, 21 Sep 2023 15:03:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238837AbjIRPXC (ORCPT <rfc822;audit@vger.kernel.org>);
-        Mon, 18 Sep 2023 11:23:02 -0400
-Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D71AFE
-        for <audit@vger.kernel.org>; Mon, 18 Sep 2023 08:18:26 -0700 (PDT)
-Received: by mail-qt1-x834.google.com with SMTP id d75a77b69052e-4121130e7afso30173011cf.2
-        for <audit@vger.kernel.org>; Mon, 18 Sep 2023 08:18:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1695050305; x=1695655105; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=g+rwWAiyWkYsrlyxNSv91+CBw+J/bXlaoTOByMLCFCM=;
-        b=bMr4y5LcFDlLPuN9QO59/qKWx55tnnmpi+o7MN4F+1hIoo8XnnDjATeaq0qjmb18gu
-         FyNwJRoXs0IalON1b4vlZaEITg/facOkXjMZRkIFm3/HsIwvckZ54Yi2qNOyQPeihopu
-         8IcGYe2FdKaYS418gwITn+7JYp09bURocJZNyS4U6MDvVYOLThTs/QU3tWyECyWlBSE3
-         mTx4jVFw2SZYcui0IC8hmftqauCe9+v61mESCxElsiP2lIgVoFcZRB0dISsLfkJR15oE
-         0rcox0IkEJRlG+92WILiihvV0n8SUebBQozMoXHKoNI0ub39fmaEM5BlFOYJChsCkrQx
-         GjkQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695050305; x=1695655105;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=g+rwWAiyWkYsrlyxNSv91+CBw+J/bXlaoTOByMLCFCM=;
-        b=scVe/uVDFjnYhPrl5ygdlKEIsAebSuK3T/nnn244+nfM7cvCXZYJGVmzpx/gvuaolM
-         qAqvCIFDMP1rl4lTVKTmf6McfA7GDpgqmvZXk90Wgh+PyR1CzgRb9TiIWzXWNIWPiRId
-         EgzVs81jkT2kU/OdMyv0gzOECdiYJ/fYQLyYW3Id13HW7iSKzZaIpErclZcVGbDAijdG
-         gKzP5UXPQF/Tux+dLjljAq3LaIhAc49iwYqzKCgdpqafNlKpczRP18jOPexzys9RJDES
-         lWHIPVc1uvbcrXUXZRNOR2v4DUN4VSie9NETGubN2Ew3o2aOcgsbVKLI0H0tKWTepDSf
-         V5eQ==
-X-Gm-Message-State: AOJu0YzgCrKMg90Y3mxkHWq8m1mj5zoNBwbaMXC2hqwzAH0XvR7Zos3t
-        Nnuam5bBmJBpVzIRvtMtQvoiKZMaVm5fhXWP+hIeX79YnsrxC8A=
-X-Google-Smtp-Source: AGHT+IG/l2EhKA7j6MQ7/zJZOQZAp9ewc4tdE7Y1QLbMN3JUoQ/OgnYbsU9kTtVp6rKLcq9S7ubDJjk0SmaS5L9ikCY=
-X-Received: by 2002:a25:8244:0:b0:d12:1094:2036 with SMTP id
- d4-20020a258244000000b00d1210942036mr8045189ybn.43.1695046628012; Mon, 18 Sep
- 2023 07:17:08 -0700 (PDT)
+        with ESMTP id S230352AbjIUTCp (ORCPT <rfc822;audit@vger.kernel.org>);
+        Thu, 21 Sep 2023 15:02:45 -0400
+X-Greylist: delayed 2097 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 21 Sep 2023 10:41:53 PDT
+Received: from smtp-190d.mail.infomaniak.ch (smtp-190d.mail.infomaniak.ch [185.125.25.13])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F9A18BD18
+        for <audit@vger.kernel.org>; Thu, 21 Sep 2023 10:41:53 -0700 (PDT)
+Received: from smtp-2-0001.mail.infomaniak.ch (unknown [10.5.36.108])
+        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4RrlYF10fszMpnvZ;
+        Thu, 21 Sep 2023 06:17:05 +0000 (UTC)
+Received: from unknown by smtp-2-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4RrlYD43PYzMppDY;
+        Thu, 21 Sep 2023 08:17:04 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
+        s=20191114; t=1695277025;
+        bh=cinTwRA+WcJIbifJHzOy8LJVvQYuI7/JZgdtZ57GtzM=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=up0um0B1XHsyeQkuudhIT3U+5pTFTjDV0n7klWUvkP46xo+7VG6DPTYrZ+EB1ewzb
+         pkHEEkMfvi0v0Vu+/YLb64C0x9i3a9Hm07og2eq4jJz/7pVdStNskZGiAewR1Py4Ye
+         hPTIYrcmWLdYpcX3yAH37Zz0KL/duU1m/sFGabHE=
+From:   =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
+To:     Eric Paris <eparis@redhat.com>, James Morris <jmorris@namei.org>,
+        Paul Moore <paul@paul-moore.com>,
+        "Serge E . Hallyn" <serge@hallyn.com>
+Cc:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
+        Ben Scarlato <akhna@google.com>,
+        =?UTF-8?q?G=C3=BCnther=20Noack?= <gnoack@google.com>,
+        Jeff Xu <jeffxu@google.com>,
+        Jorge Lucangeli Obes <jorgelo@google.com>,
+        Konstantin Meskhidze <konstantin.meskhidze@huawei.com>,
+        Shervin Oloumi <enlightened@google.com>, audit@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
+Subject: [RFC PATCH v1 7/7] landlock: Log ptrace requests
+Date:   Thu, 21 Sep 2023 08:16:41 +0200
+Message-ID: <20230921061641.273654-8-mic@digikod.net>
+In-Reply-To: <20230921061641.273654-1-mic@digikod.net>
+References: <20230921061641.273654-1-mic@digikod.net>
 MIME-Version: 1.0
-References: <CAFQ2z_NsVOwDre+jfcOyWDDaML5VJxudyP1eP_Wucg_vU=iCrA@mail.gmail.com>
-In-Reply-To: <CAFQ2z_NsVOwDre+jfcOyWDDaML5VJxudyP1eP_Wucg_vU=iCrA@mail.gmail.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Mon, 18 Sep 2023 10:16:57 -0400
-Message-ID: <CAHC9VhRytcvW27FEPg+QGaMXbS8Fsz_-YMkJQ7_P1hE=fSm5sg@mail.gmail.com>
-Subject: Re: Reducing security.capability xattr checks in audit subsystem?
-To:     Han-Wen Nienhuys <hanwen@google.com>
-Cc:     audit@vger.kernel.org, Jose Lopes <jabolopes@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Infomaniak-Routing: alpha
 Precedence: bulk
 List-ID: <audit.vger.kernel.org>
 X-Mailing-List: audit@vger.kernel.org
 
-On Mon, Sep 18, 2023 at 7:20=E2=80=AFAM Han-Wen Nienhuys <hanwen@google.com=
-> wrote:
-> Hi there,
->
-> I'm troubleshooting a performance problem in FUSE filesystems. At
-> $DAYJOB, we have a number of FUSE file systems used for development
-> (eg. serving source code), and we have an auditd configuration so the
-> security team can keep tabs on nefarious activity.
->
-> We see that the audit subsystem generates copious xattr reads for
-> "security.capability". For FUSE, those xattr reads are passed back
-> into userspace, which is expensive because of the extra context
-> switch. In our case, the FUSE filesystems universally reply ENODATA to
-> these reads. It looks very straightforward to change FUSE to
-> optionally filter the xattr reads in the FUSE driver, but I wanted to
-> make sure that that is the fundamentally correct approach to solve our
-> problem.
->
-> We can see that the xattr is read for all manner of files, including
-> directories. When I read through the source code, it looks like this
-> originates from get_vfs_caps_from_disk()
-> (https://elixir.bootlin.com/linux/v6.5.3/source/security/commoncap.c#L654=
-),
-> which reads the capabilities regardless of file type or mode.
->
-> Has anyone ever considered making this conditional on the mode or
-> filetype? AFAICT, both are available at this call-site.
+Add audit support for ptrace and ptrace_traceme requests.
 
-I would like someone to double check that the only time the file
-capabilities are used is when it is a regular file and marked as an
-executable, but if that is the case I think it would be okay.  We
-would also want to ensure that we have proper logging when the file
-capabilities are changed, regardless of the mode bits as one could
-modify the file capabilities and then set the executable bit.
+Signed-off-by: Mickaël Salaün <mic@digikod.net>
+---
+ security/landlock/audit.c  |  2 ++
+ security/landlock/audit.h  |  4 +++-
+ security/landlock/ptrace.c | 47 ++++++++++++++++++++++++++++++++++----
+ 3 files changed, 47 insertions(+), 6 deletions(-)
 
---=20
-paul-moore.com
+diff --git a/security/landlock/audit.c b/security/landlock/audit.c
+index 89bd701d124f..2ec2a00822d2 100644
+--- a/security/landlock/audit.c
++++ b/security/landlock/audit.c
+@@ -18,6 +18,8 @@ static const char *op_to_string(enum landlock_operation operation)
+ {
+ 	const char *const desc[] = {
+ 		[0] = "",
++		[LANDLOCK_OP_PTRACE] = "ptrace",
++		[LANDLOCK_OP_PTRACE_TRACEME] = "ptrace_traceme",
+ 		[LANDLOCK_OP_MOUNT] = "mount",
+ 		[LANDLOCK_OP_MOVE_MOUNT] = "move_mount",
+ 		[LANDLOCK_OP_UMOUNT] = "umount",
+diff --git a/security/landlock/audit.h b/security/landlock/audit.h
+index e559fb6a89dd..b69bba7b908c 100644
+--- a/security/landlock/audit.h
++++ b/security/landlock/audit.h
+@@ -14,7 +14,9 @@
+ #include "ruleset.h"
+ 
+ enum landlock_operation {
+-	LANDLOCK_OP_MOUNT = 1,
++	LANDLOCK_OP_PTRACE = 1,
++	LANDLOCK_OP_PTRACE_TRACEME,
++	LANDLOCK_OP_MOUNT,
+ 	LANDLOCK_OP_MOVE_MOUNT,
+ 	LANDLOCK_OP_UMOUNT,
+ 	LANDLOCK_OP_REMOUNT,
+diff --git a/security/landlock/ptrace.c b/security/landlock/ptrace.c
+index 8a06d6c492bf..dbe219449a32 100644
+--- a/security/landlock/ptrace.c
++++ b/security/landlock/ptrace.c
+@@ -10,10 +10,12 @@
+ #include <linux/cred.h>
+ #include <linux/errno.h>
+ #include <linux/kernel.h>
++#include <linux/lsm_audit.h>
+ #include <linux/lsm_hooks.h>
+ #include <linux/rcupdate.h>
+ #include <linux/sched.h>
+ 
++#include "audit.h"
+ #include "common.h"
+ #include "cred.h"
+ #include "ptrace.h"
+@@ -64,11 +66,9 @@ static bool task_is_scoped(const struct task_struct *const parent,
+ static int task_ptrace(const struct task_struct *const parent,
+ 		       const struct task_struct *const child)
+ {
+-	/* Quick return for non-landlocked tasks. */
+-	if (!landlocked(parent))
+-		return 0;
+ 	if (task_is_scoped(parent, child))
+ 		return 0;
++
+ 	return -EPERM;
+ }
+ 
+@@ -88,7 +88,26 @@ static int task_ptrace(const struct task_struct *const parent,
+ static int hook_ptrace_access_check(struct task_struct *const child,
+ 				    const unsigned int mode)
+ {
+-	return task_ptrace(current, child);
++	const struct landlock_ruleset *const dom =
++		landlock_get_current_domain();
++	struct landlock_request request = {
++		.operation = LANDLOCK_OP_PTRACE,
++		.missing_permission = LANDLOCK_PERM_PTRACE,
++		.audit = {
++			.type = LSM_AUDIT_DATA_TASK,
++			.u.tsk = child,
++		},
++	};
++	int err;
++
++	if (!dom)
++		return 0;
++
++	err = task_ptrace(current, child);
++	if (!err)
++		return 0;
++
++	return landlock_log_request(err, &request, dom, 0, NULL);
+ }
+ 
+ /**
+@@ -105,7 +124,25 @@ static int hook_ptrace_access_check(struct task_struct *const child,
+  */
+ static int hook_ptrace_traceme(struct task_struct *const parent)
+ {
+-	return task_ptrace(parent, current);
++	struct landlock_request request = {
++		.operation = LANDLOCK_OP_PTRACE_TRACEME,
++		.missing_permission = LANDLOCK_PERM_PTRACE,
++		.audit = {
++			.type = LSM_AUDIT_DATA_TASK,
++			.u.tsk = parent,
++		},
++	};
++	int err;
++
++	if (!landlock_get_task_domain(parent))
++		return 0;
++
++	err = task_ptrace(parent, current);
++	if (!err)
++		return 0;
++
++	return landlock_log_request(err, &request,
++				    landlock_get_current_domain(), 0, NULL);
+ }
+ 
+ static struct security_hook_list landlock_hooks[] __ro_after_init = {
+-- 
+2.42.0
+
