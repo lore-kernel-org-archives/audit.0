@@ -2,30 +2,31 @@ Return-Path: <audit-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8389BE7D0A8
-	for <audit@archiver.kernel.org>; Thu, 21 Sep 2023 20:27:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 86C2DE7D0AD
+	for <audit@archiver.kernel.org>; Thu, 21 Sep 2023 20:30:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231881AbjIUU1Q (ORCPT <rfc822;audit@archiver.kernel.org>);
-        Thu, 21 Sep 2023 16:27:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56978 "EHLO
+        id S231861AbjIUUap (ORCPT <rfc822;audit@archiver.kernel.org>);
+        Thu, 21 Sep 2023 16:30:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231867AbjIUU0l (ORCPT <rfc822;audit@vger.kernel.org>);
-        Thu, 21 Sep 2023 16:26:41 -0400
-Received: from smtp-190e.mail.infomaniak.ch (smtp-190e.mail.infomaniak.ch [185.125.25.14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDD278C627
+        with ESMTP id S232625AbjIUUa2 (ORCPT <rfc822;audit@vger.kernel.org>);
+        Thu, 21 Sep 2023 16:30:28 -0400
+X-Greylist: delayed 2100 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 21 Sep 2023 10:42:29 PDT
+Received: from smtp-bc0e.mail.infomaniak.ch (smtp-bc0e.mail.infomaniak.ch [45.157.188.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CF198C626
         for <audit@vger.kernel.org>; Thu, 21 Sep 2023 10:42:29 -0700 (PDT)
-Received: from smtp-2-0000.mail.infomaniak.ch (unknown [10.5.36.107])
-        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4RrlYB1SMrzMqhBb;
-        Thu, 21 Sep 2023 06:17:02 +0000 (UTC)
-Received: from unknown by smtp-2-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4RrlY94vr5zMpnPm;
-        Thu, 21 Sep 2023 08:17:01 +0200 (CEST)
+Received: from smtp-3-0000.mail.infomaniak.ch (unknown [10.4.36.107])
+        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4RrlY55m19zMqhBY;
+        Thu, 21 Sep 2023 06:16:57 +0000 (UTC)
+Received: from unknown by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4RrlY35QQvz3f;
+        Thu, 21 Sep 2023 08:16:55 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
-        s=20191114; t=1695277022;
-        bh=pwiClldhXZTIfu2VonXNuU9Opgc7X09SctOzocW98K0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KkZZDXG0h5eg5qf9E5uRpx65dfe7+huAplBMEQEh2rZJAX7DRa8SoWlQwaBZsd4md
-         hMgYWcsBPnorxQyG6aAANU34q5RipSKJIFqxAR4pakJujsnoKb1KohJ9LUfeitYlEv
-         fj+woUen9V4VTxCXcOd9rMxfs3wKs5gaJOOziVXQ=
+        s=20191114; t=1695277017;
+        bh=JPGqIw4NybtPv8UXpkiwD6sCB9HCR+gM6q1qZN9IqXk=;
+        h=From:To:Cc:Subject:Date:From;
+        b=YchhqMwoEcrcTmhUUQ9lpZZ8cs3lJqNM4E1jZL1qt4XqjlAFav6irE0qMM/KUEjor
+         M88gN/aDWfE3sWP2nf+DSZjStURCumnvl9CRZ9cj1Y2e4+jYZTFjqbRgUx3GL5+xMj
+         oNyd2c6uILdSsyYJu/YaEeK46TOeELV0lOaM0bdo=
 From:   =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
 To:     Eric Paris <eparis@redhat.com>, James Morris <jmorris@namei.org>,
         Paul Moore <paul@paul-moore.com>,
@@ -38,11 +39,9 @@ Cc:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
         Konstantin Meskhidze <konstantin.meskhidze@huawei.com>,
         Shervin Oloumi <enlightened@google.com>, audit@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
-Subject: [RFC PATCH v1 4/7] landlock: Log domain creation and enforcement
-Date:   Thu, 21 Sep 2023 08:16:38 +0200
-Message-ID: <20230921061641.273654-5-mic@digikod.net>
-In-Reply-To: <20230921061641.273654-1-mic@digikod.net>
-References: <20230921061641.273654-1-mic@digikod.net>
+Subject: [RFC PATCH v1 0/7] Landlock audit support
+Date:   Thu, 21 Sep 2023 08:16:34 +0200
+Message-ID: <20230921061641.273654-1-mic@digikod.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -51,91 +50,75 @@ Precedence: bulk
 List-ID: <audit.vger.kernel.org>
 X-Mailing-List: audit@vger.kernel.org
 
-Add audit support for domain creation, i.e. task self-restriction.
+Hi,
 
-Signed-off-by: Mickaël Salaün <mic@digikod.net>
----
- security/landlock/audit.c    | 24 ++++++++++++++++++++++++
- security/landlock/audit.h    |  8 ++++++++
- security/landlock/syscalls.c |  4 ++++
- 3 files changed, 36 insertions(+)
+This patch series adds basic audit support to Landlock for most actions.
+Logging denied requests is useful for different use cases:
+* app developers: to ease and speed up sandboxing support
+* power users: to understand denials
+* sysadmins: to look for users' issues
+* tailored distro maintainers: to get usage metrics from their fleet
+* security experts: to detect attack attempts
 
-diff --git a/security/landlock/audit.c b/security/landlock/audit.c
-index f58bd529784a..d9589d07e126 100644
---- a/security/landlock/audit.c
-+++ b/security/landlock/audit.c
-@@ -84,6 +84,30 @@ void landlock_log_create_ruleset(struct landlock_ruleset *const ruleset)
- 	audit_log_end(ab);
- }
- 
-+void landlock_log_restrict_self(struct landlock_ruleset *const domain,
-+				struct landlock_ruleset *const ruleset)
-+{
-+	struct audit_buffer *ab;
-+
-+	WARN_ON_ONCE(domain->id);
-+	WARN_ON_ONCE(!ruleset->id);
-+
-+	ab = audit_log_start(audit_context(), GFP_ATOMIC, AUDIT_LANDLOCK);
-+	if (!ab)
-+		/* audit_log_lost() call */
-+		return;
-+
-+	domain->hierarchy->id =
-+		atomic64_inc_return(&ruleset_and_domain_counter);
-+	log_task(ab);
-+	audit_log_format(ab, " op=restrict-self domain=%llu ruleset=%llu",
-+			 domain->hierarchy->id, ruleset->id);
-+	audit_log_format(
-+		ab, " parent=%llu",
-+		domain->hierarchy->parent ? domain->hierarchy->parent->id : 0);
-+	audit_log_end(ab);
-+}
-+
- /*
-  * This is useful to know when a domain or a ruleset will never show again in
-  * the audit log.
-diff --git a/security/landlock/audit.h b/security/landlock/audit.h
-index 2666e9151627..bc17dc8ca6f1 100644
---- a/security/landlock/audit.h
-+++ b/security/landlock/audit.h
-@@ -16,6 +16,8 @@
- #ifdef CONFIG_AUDIT
- 
- void landlock_log_create_ruleset(struct landlock_ruleset *const ruleset);
-+void landlock_log_restrict_self(struct landlock_ruleset *const domain,
-+				struct landlock_ruleset *const ruleset);
- void landlock_log_release_ruleset(const struct landlock_ruleset *const ruleset);
- 
- #else /* CONFIG_AUDIT */
-@@ -25,6 +27,12 @@ landlock_log_create_ruleset(struct landlock_ruleset *const ruleset)
- {
- }
- 
-+static inline void
-+landlock_log_restrict_self(struct landlock_ruleset *const domain,
-+			   struct landlock_ruleset *const ruleset)
-+{
-+}
-+
- static inline void
- landlock_log_release_ruleset(const struct landlock_ruleset *const ruleset)
- {
-diff --git a/security/landlock/syscalls.c b/security/landlock/syscalls.c
-index 373997a356e7..bfe5417a06c3 100644
---- a/security/landlock/syscalls.c
-+++ b/security/landlock/syscalls.c
-@@ -452,6 +452,10 @@ SYSCALL_DEFINE2(landlock_restrict_self, const int, ruleset_fd, const __u32,
- 	landlock_put_ruleset(new_llcred->domain);
- 	new_llcred->domain = new_dom;
- 
-+	// FIXME: Must be atomic between the ruleset merge and the audit log to
-+	// be sure about the content of the domain.
-+	// -> move mutex_lock() from merge_ruleset() into this function
-+	landlock_log_restrict_self(new_dom, ruleset);
- 	landlock_put_ruleset(ruleset);
- 	return commit_creds(new_cred);
- 
+To make logs useful, they need to contain the most relevant Landlock
+domain that denied an action, and the reason. This translates to the
+latest nested domain and the related missing access rights.
+
+Two "Landlock permissions" are used to describe mandatory restrictions
+enforced on all domains:
+* fs_layout: change the view of filesystem with mount operations.
+* ptrace: tamper with a process.
+
+Here is an example of logs, result of the sandboxer activity:
+tid=267 comm="sandboxer" op=create-ruleset ruleset=1 handled_access_fs=execute,write_file,read_file,read_dir,remove_dir,remove_file,make_char,make_dir,make_reg,make_sock,make_fifo,make_block,make_sym,refer,truncate
+tid=267 comm="sandboxer" op=restrict-self domain=2 ruleset=1 parent=0
+op=release-ruleset ruleset=1
+tid=267 comm="bash" domain=2 op=open errno=13 missing-fs-accesses=write_file,read_file missing-permission= path="/dev/tty" dev="devtmpfs" ino=9
+tid=268 comm="ls" domain=2 op=open errno=13 missing-fs-accesses=read_dir missing-permission= path="/" dev="vda2" ino=256
+tid=269 comm="touch" domain=2 op=mknod errno=13 missing-fs-accesses=make_reg missing-permission= path="/" dev="vda2" ino=256
+tid=270 comm="umount" domain=2 op=umount errno=1 missing-fs-accesses= missing-permission=fs_layout name="/" dev="tmpfs" ino=1
+tid=271 comm="strace" domain=2 op=ptrace errno=1 missing-fs-accesses= missing-permission=ptrace opid=1 ocomm="systemd"
+
+As highlighted in comments, support for audit is not complete yet with
+this series: some actions are not logged (e.g. file reparenting), and
+rule additions are not logged neither.
+
+I'm also not sure if we need to have seccomp-like features such as
+SECCOMP_FILTER_FLAG_LOG, SECCOMP_RET_LOG, and
+/proc/sys/kernel/seccomp/actions_logged
+
+I'd like to get some early feedback on this proposal.
+
+This series is based on v6.6-rc2
+
+Regards,
+
+Mickaël Salaün (7):
+  lsm: Add audit_log_lsm_data() helper
+  landlock: Factor out check_access_path()
+  landlock: Log ruleset creation and release
+  landlock: Log domain creation and enforcement
+  landlock: Log file-related requests
+  landlock: Log mount-related requests
+  landlock: Log ptrace requests
+
+ include/linux/lsm_audit.h    |   2 +
+ include/uapi/linux/audit.h   |   1 +
+ security/landlock/Makefile   |   2 +
+ security/landlock/audit.c    | 283 +++++++++++++++++++++++++++++++++++
+ security/landlock/audit.h    |  88 +++++++++++
+ security/landlock/fs.c       | 169 ++++++++++++++++-----
+ security/landlock/ptrace.c   |  47 +++++-
+ security/landlock/ruleset.c  |   6 +
+ security/landlock/ruleset.h  |  10 ++
+ security/landlock/syscalls.c |  12 ++
+ security/lsm_audit.c         |  26 ++--
+ 11 files changed, 595 insertions(+), 51 deletions(-)
+ create mode 100644 security/landlock/audit.c
+ create mode 100644 security/landlock/audit.h
+
+
+base-commit: ce9ecca0238b140b88f43859b211c9fdfd8e5b70
 -- 
 2.42.0
 
