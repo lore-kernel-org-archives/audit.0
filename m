@@ -2,91 +2,203 @@ Return-Path: <audit-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5B9CDE7F143
-	for <audit@archiver.kernel.org>; Tue, 26 Sep 2023 22:43:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2BAD5E7F150
+	for <audit@archiver.kernel.org>; Wed, 27 Sep 2023 00:53:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231535AbjIZWny (ORCPT <rfc822;audit@archiver.kernel.org>);
-        Tue, 26 Sep 2023 18:43:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41034 "EHLO
+        id S233630AbjI0AxH (ORCPT <rfc822;audit@archiver.kernel.org>);
+        Tue, 26 Sep 2023 20:53:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231667AbjIZWlx (ORCPT <rfc822;audit@vger.kernel.org>);
-        Tue, 26 Sep 2023 18:41:53 -0400
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86FA59EF0
-        for <audit@vger.kernel.org>; Tue, 26 Sep 2023 14:27:59 -0700 (PDT)
-Received: by mail-yb1-xb32.google.com with SMTP id 3f1490d57ef6-d8195078f69so10618655276.3
-        for <audit@vger.kernel.org>; Tue, 26 Sep 2023 14:27:59 -0700 (PDT)
+        with ESMTP id S234225AbjI0AvG (ORCPT <rfc822;audit@vger.kernel.org>);
+        Tue, 26 Sep 2023 20:51:06 -0400
+Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8BDD7DB3
+        for <audit@vger.kernel.org>; Tue, 26 Sep 2023 14:20:28 -0700 (PDT)
+Received: by mail-qt1-x830.google.com with SMTP id d75a77b69052e-414ba610766so127081cf.0
+        for <audit@vger.kernel.org>; Tue, 26 Sep 2023 14:20:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1695763678; x=1696368478; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1695763228; x=1696368028; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=xwboT3wS2a1yBHjDCQ06HZTwGyv2f0/zi3F8PPJditg=;
-        b=Wdre1CXgUDxix66xbAJwHumLtH5lJzKK2jXd5RbWQ675ewAWebuohkoN7zjPXM33Ml
-         Ulfn4SUZcBrr0pbjeCbMKYuEED/316rqwSUW/ETFPlntJf6xixDanBNV6LR8xKdVgMps
-         T5E/HU1vcD0m4o70Lk/EvISFAaPuQT3W7h1zosuJBspdjIdWWbfeoKqgPXgFcud+aKSr
-         DVuVZsDDvF18D/roYVkg04TxNpqc7XnDl/8WbLQhpUYnonMWXZmNJDmB20QASw//coY4
-         WCtE6+K/TCotAAgsF585JnF1hXv9TXantyFcuusBd9D7nzvCxNhe9xfD0DzPLIYlYU10
-         Iztw==
+        bh=+yfCPJ+h1vKT/btr1jZvB3H+pqknpmQhzFvkl0ehzB0=;
+        b=porLy9Nf/CvM4T5KPhRvXoRRB8oCDEt/RP7LAuYpmLeTLjehCEwKDDwpvuL+CYIYsh
+         bIJLw+ulc4DB+fpnh7x+0PwZu2QIUoihAD8jokNQtg/Jkl5kuAyt6p8skqeTA8J8aP67
+         w92qhkFzRDnol7/aT5B4YKrjy6oNBzyUqDdz3YixUHC9ifD/oPCDgXdxHI7cbzwe4xmt
+         Rsp4E13BuVMFJpzyWpnId0t1Qed4PrM70tx8KFMIeD6QuhVvmK1oSirshXsfpWM/wpLi
+         NUiV2rpmUHOmLzQLA1p65+Y59qNPSe9SSVlGnwfao28MnO480AtAqE0h4H1e//Lv4VTu
+         reuw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695763678; x=1696368478;
+        d=1e100.net; s=20230601; t=1695763228; x=1696368028;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=xwboT3wS2a1yBHjDCQ06HZTwGyv2f0/zi3F8PPJditg=;
-        b=QKlomWVTBBbHJQgVjEdhzpvo5bfTe3GzENBPwrguMj44Id3naOrvohRaVtGhsVbm5T
-         dzylukKpeeHvgpFD8A0MuCzNCyH10ym2J8AUROo4LxE9c1KIUes8ZkHobrmgHy+DRDba
-         mMGdSuhvbPQcIBST5GZG5QZLVRQJeUEG57vFcQlwH5xdQjcccFGLO9W08AgvHQyfHgPp
-         mThMkYprOoep7a0WO0ktWGzGQ8+bQvFmwRkBDgVGhfXcN8k5eCIWMXvMiaI/iGAGpB1r
-         MX18TQx7m32cs4ZnKshsZUkxW+FzLHlHOVQ3g0by6AzLNNmNH2OZWiPTg6pg0fm2h8j5
-         UH7A==
-X-Gm-Message-State: AOJu0YwuBpcEXyLxxygM1v07em9A+EsxyuGtw5tbfBjXm3wsqOYrV9rP
-        CDDR8PHUep0VRsMsDA7sgq+GCzX7BV9bCg2mSr5C
-X-Google-Smtp-Source: AGHT+IGEOPatV9DMHgk6ahe+ZNCEftvet7jzAHqC188+LRWLJCUQ62hLSOHIPtTbwO1LBBLGz1+WP4Ij6RfoH/mqsaw=
-X-Received: by 2002:a25:7611:0:b0:d81:7f38:6d64 with SMTP id
- r17-20020a257611000000b00d817f386d64mr133266ybc.4.1695763678663; Tue, 26 Sep
- 2023 14:27:58 -0700 (PDT)
+        bh=+yfCPJ+h1vKT/btr1jZvB3H+pqknpmQhzFvkl0ehzB0=;
+        b=LW+CM7rjiP55v7cTrKbeJpP/v1J8WdF6WQ0mMPptKJH1qs7by57DM+2Vppsd6zEvTy
+         SXBsYREA6nmSQ/hu+WQUewpv4IYMe/Q0m3vSwei+nxPoXVbqDa7w95tarwOzMQst90CP
+         XMYLkF0KScRzsfYsL1vCsTWuWu0s05MuhN0Q8Mm+zdNG9v9Dh5DQwgvpDL1p01hJAHaE
+         GZzEgsgu3crDSCfje8K77KU3vOpxcUL0QKLAQeHzrgx74b6xdrvFH5yoq8SPMeCUShbi
+         +b+wuHkDQERnbkgRKjbEFjuwSL7c4PJ/vcPviKktIq5S6DBlCHDav4mY93qNtfWvtSak
+         Ac2g==
+X-Gm-Message-State: AOJu0YxCt53rv1fHhWDb//NG/+ACpcjZEnEu7QXKtDW+WTIlj8+cSlq4
+        NTOGGFUoGuB5Ji2OMkFwD014fVGhIHg/de8slW+O5A==
+X-Google-Smtp-Source: AGHT+IGlC2Cfe5ksujev4GRMEvbJr3s/cuOJfP0+eExFS0lmCzk+qbaTOLoUEVFab0BBpr3Ih/5JbGIbUb328dtOH0c=
+X-Received: by 2002:a05:622a:5cf:b0:403:e1d1:8b63 with SMTP id
+ d15-20020a05622a05cf00b00403e1d18b63mr447837qtb.24.1695763227794; Tue, 26 Sep
+ 2023 14:20:27 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230922152749.244197-1-chris.riches@nutanix.com>
-In-Reply-To: <20230922152749.244197-1-chris.riches@nutanix.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Tue, 26 Sep 2023 17:27:47 -0400
-Message-ID: <CAHC9VhQYFjRnmC3LTKkhXuKhvjGQG+dTXqL6ExXbNC9M2DZ3ZQ@mail.gmail.com>
-Subject: Re: [RFC PATCH] audit: Send netlink ACK before setting connection in auditd_set
-To:     Chris Riches <chris.riches@nutanix.com>
-Cc:     audit@vger.kernel.org, Eric Paris <eparis@redhat.com>,
-        jonathan.davies@nutanix.com, linux-kernel@vger.kernel.org
+References: <20230921061641.273654-1-mic@digikod.net> <20230921061641.273654-6-mic@digikod.net>
+ <CALmYWFubLv+yd9NWMMwt4FUdYnbghMC=GHeZm4oaSOctqnwbVA@mail.gmail.com> <20230926.di9Esee2xahi@digikod.net>
+In-Reply-To: <20230926.di9Esee2xahi@digikod.net>
+From:   Jeff Xu <jeffxu@google.com>
+Date:   Tue, 26 Sep 2023 14:19:51 -0700
+Message-ID: <CALmYWFuerqvZ3HoUnc9xXYhR8vBgg9qAyA-ncHai4ksN-c-gGQ@mail.gmail.com>
+Subject: Re: [RFC PATCH v1 5/7] landlock: Log file-related requests
+To:     =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>
+Cc:     Eric Paris <eparis@redhat.com>, James Morris <jmorris@namei.org>,
+        Paul Moore <paul@paul-moore.com>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Ben Scarlato <akhna@google.com>,
+        =?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>,
+        Jorge Lucangeli Obes <jorgelo@google.com>,
+        Konstantin Meskhidze <konstantin.meskhidze@huawei.com>,
+        Shervin Oloumi <enlightened@google.com>, audit@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <audit.vger.kernel.org>
 X-Mailing-List: audit@vger.kernel.org
 
-On Fri, Sep 22, 2023 at 11:28=E2=80=AFAM Chris Riches <chris.riches@nutanix=
-.com> wrote:
+On Tue, Sep 26, 2023 at 6:35=E2=80=AFAM Micka=C3=ABl Sala=C3=BCn <mic@digik=
+od.net> wrote:
 >
-> When auditd_set sets the auditd_conn pointer, audit messages can
-> immediately be put on the socket by other kernel threads. If the backlog
-> is large or the rate is high, this can immediately fill the socket
-> buffer. If the audit daemon requested an ACK for this operation, a full
-> socket buffer causes the ACK to get dropped, also setting ENOBUFS on the
-> socket.
+> On Mon, Sep 25, 2023 at 06:26:28PM -0700, Jeff Xu wrote:
+> > On Wed, Sep 20, 2023 at 11:17=E2=80=AFPM Micka=C3=ABl Sala=C3=BCn <mic@=
+digikod.net> wrote:
+> > >
+> > > Add audit support for mkdir, mknod, symlink, unlink, rmdir, truncate,
+> > > and open requests.
+> > >
+> > > Signed-off-by: Micka=C3=ABl Sala=C3=BCn <mic@digikod.net>
+> > > ---
+> > >  security/landlock/audit.c | 114 ++++++++++++++++++++++++++++++++++++=
+++
+> > >  security/landlock/audit.h |  32 +++++++++++
+> > >  security/landlock/fs.c    |  62 ++++++++++++++++++---
+> > >  3 files changed, 199 insertions(+), 9 deletions(-)
+> > >
 >
-> To avoid this race and ensure ACKs get through, fast-track the ACK in
-> this specific case to ensure it is sent before auditd_conn is set.
+> > > +static void
+> > > +log_request(const int error, struct landlock_request *const request,
+> > > +           const struct landlock_ruleset *const domain,
+> > > +           const access_mask_t access_request,
+> > > +           const layer_mask_t (*const layer_masks)[LANDLOCK_NUM_ACCE=
+SS_FS])
+> > > +{
+> > > +       struct audit_buffer *ab;
+> > > +
+> > > +       if (WARN_ON_ONCE(!error))
+> > > +               return;
+> > > +       if (WARN_ON_ONCE(!request))
+> > > +               return;
+> > > +       if (WARN_ON_ONCE(!domain || !domain->hierarchy))
+> > > +               return;
+> > > +
+> > > +       /* Uses GFP_ATOMIC to not sleep. */
+> > > +       ab =3D audit_log_start(audit_context(), GFP_ATOMIC | __GFP_NO=
+WARN,
+> > > +                            AUDIT_LANDLOCK);
+> > > +       if (!ab)
+> > > +               return;
+> > > +
+> > > +       update_request(request, domain, access_request, layer_masks);
+> > > +
+> > > +       log_task(ab);
+> > > +       audit_log_format(ab, " domain=3D%llu op=3D%s errno=3D%d missi=
+ng-fs-accesses=3D",
+> > > +                        request->youngest_domain,
+> > > +                        op_to_string(request->operation), -error);
+> > > +       log_accesses(ab, request->missing_access);
+> > > +       audit_log_lsm_data(ab, &request->audit);
+> > > +       audit_log_end(ab);
+> > > +}
+> > > +
+> > > +// TODO: Make it generic, not FS-centric.
+> > > +int landlock_log_request(
+> > > +       const int error, struct landlock_request *const request,
+> > > +       const struct landlock_ruleset *const domain,
+> > > +       const access_mask_t access_request,
+> > > +       const layer_mask_t (*const layer_masks)[LANDLOCK_NUM_ACCESS_F=
+S])
+> > > +{
+> > > +       /* No need to log the access request, only the missing access=
+es. */
+> > > +       log_request(error, request, domain, access_request, layer_mas=
+ks);
+> > > +       return error;
+> > > +}
 >
-> Signed-off-by: Chris Riches <chris.riches@nutanix.com>
+> > > @@ -636,7 +638,8 @@ static bool is_access_to_paths_allowed(
+> > >  }
+> > >
+> > >  static int current_check_access_path(const struct path *const path,
+> > > -                                    access_mask_t access_request)
+> > > +                                    access_mask_t access_request,
+> > > +                                    struct landlock_request *const r=
+equest)
+> > >  {
+> > >         const struct landlock_ruleset *const dom =3D
+> > >                 landlock_get_current_domain();
+> > > @@ -650,7 +653,10 @@ static int current_check_access_path(const struc=
+t path *const path,
+> > >                                        NULL, 0, NULL, NULL))
+> > >                 return 0;
+> > >
+> > > -       return -EACCES;
+> > > +       request->audit.type =3D LSM_AUDIT_DATA_PATH;
+> > > +       request->audit.u.path =3D *path;
+> > > +       return landlock_log_request(-EACCES, request, dom, access_req=
+uest,
+> > > +                                   &layer_masks);
+> >
+> > It might be more readable to let landlock_log_request return void.
+> > Then the code will look like below.
+> >
+> > landlock_log_request(-EACCES, request, dom, access_request,  &layer_mas=
+ks);
+> > return -EACCES;
+> >
+> > The allow/deny logic will be in this function, i.e. reader
+> > doesn't need to check landlock_log_request's implementation to find
+> > out it never returns 0.
 >
-> ---
->
-> This mail is more of an RFC than a patch, though the included patch is a
-> useful illustation and might even be suitable for inclusion ...
+> I did that in an early version of this patch, but I finally choose to wri=
+te
+> 'return lanlock_log_request();` for mainly two reasons:
+> * to help not forget to call this function at any non-zero return values
+>   (which can easily be checked with grep),
 
-Hi Chris,
+"grep -A 2 landlock_log_request" would serve the same purpose though.
 
-Thanks for the patch and the background information, that's always
-helpful.  Unfortunately I have limited network access at the moment,
-but I'll put this on my list to look at next week.
+> * to do tail calls.
+>
+> I guess compiler should be smart enough to do tail calls with a variable
+> set indirection, but I'd like to check that.
+>
 
---=20
-paul-moore.com
+What are tail calls and what is the benefit of this code pattern ?
+i.e. pass the return value into landlock_log_request() and make it a
+single point of setting return value for all landlock hooks.
+
+> To make it easier to read (and to not forget returning the error), the
+> landlock_log_request() calls a void log_request() helper, and returns
+> the error itself. It is then easy to review and know what's happening
+> without reading log_request().
+>
+> I'd like the compiler to check itself that every LSM hook returned
+> values are either 0 or comming from landlock_log_request() but I think
+> it's not possible right now. Coccinelle might help here though.
+>
+> BTW, in a next version, we might have landlock_log_request() called even
+> for allowed requests (i.e. returned value of 0).
