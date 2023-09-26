@@ -2,180 +2,106 @@ Return-Path: <audit-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 62E9FE7E64B
-	for <audit@archiver.kernel.org>; Tue, 26 Sep 2023 16:24:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E53DEE7F141
+	for <audit@archiver.kernel.org>; Tue, 26 Sep 2023 22:28:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235289AbjIZQYq (ORCPT <rfc822;audit@archiver.kernel.org>);
-        Tue, 26 Sep 2023 12:24:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57754 "EHLO
+        id S229640AbjIZW2I (ORCPT <rfc822;audit@archiver.kernel.org>);
+        Tue, 26 Sep 2023 18:28:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235282AbjIZQYo (ORCPT <rfc822;audit@vger.kernel.org>);
-        Tue, 26 Sep 2023 12:24:44 -0400
-Received: from mail-ej1-x64a.google.com (mail-ej1-x64a.google.com [IPv6:2a00:1450:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DE57E5
-        for <audit@vger.kernel.org>; Tue, 26 Sep 2023 09:24:37 -0700 (PDT)
-Received: by mail-ej1-x64a.google.com with SMTP id a640c23a62f3a-9ae0601d689so773788966b.0
-        for <audit@vger.kernel.org>; Tue, 26 Sep 2023 09:24:37 -0700 (PDT)
+        with ESMTP id S231415AbjIZW0H (ORCPT <rfc822;audit@vger.kernel.org>);
+        Tue, 26 Sep 2023 18:26:07 -0400
+Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 407278A77
+        for <audit@vger.kernel.org>; Tue, 26 Sep 2023 14:25:03 -0700 (PDT)
+Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-59c215f2f4aso125279127b3.1
+        for <audit@vger.kernel.org>; Tue, 26 Sep 2023 14:25:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1695745475; x=1696350275; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:from:subject:references
-         :mime-version:message-id:in-reply-to:date:from:to:cc:subject:date
+        d=paul-moore.com; s=google; t=1695763502; x=1696368302; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=vFkpn2H397KrVSqmEDJx57x47TGFCVVPTN7FsnVWNzE=;
-        b=1hFoAxEOGZbiAoDfKUO45fdAWUEnVPrTBLwCnAr5TndUi/CpxBn4N2Vq1G7Cor+nrS
-         TlakioOk9Tsthn2A54LcuTsp8JDA2B4qaImYYhJ8y8tJv2k705Z349CfRgjJkCFso9b/
-         ihC9g1f0pzKXY/pbEy5j6vbvMVfaG4BDrS0R1cZPB5r5fSeaGnaoPEbVxr/SYTQmZcex
-         M+u2H29QOgUKN2lbH5joPfQMlQazTm9aYcB9SF0Dgn8t8EL5jQSumXFzt2ExdyR04+g4
-         zvUYFoT2XN5GNc8iPiQQv0BDq1LmY60xhNJyYnGij0FXmQZ7+wtrVOdnYJ+5KsoK/Ehx
-         /cmg==
+        bh=hwijluXAJKvne9nyx6goJKnLPUI/1CGCM6T80bPQaYM=;
+        b=LR2FX1f3DDBRQYRdtvnoDE0f+uH+7KoAD6fh0mCa/BXBlGRZ1icvRDPb0kMIE/+e+h
+         mjvU1TMBJmwmU12hmgJnSjO1FE7UivTwxapLI+hC/aEluSvhAYrKYABBFBdKqQS/jPIE
+         quHNW3D8taM3MXVGb9x31zKxBN5LmWXD5aVmb8bwGNy0yr+8CU5oylSa9YxaiE5M8jKC
+         u8VlzGeO5yGikhZgBGgDRJ7vuVdJNjb+ryEgbmTDYA94D4etrotoNKhikjaTzHW7TSon
+         vBZEwmC7ybj0IJXfsTZuMLNZlyAGMBLditaBKy9xbsM6Od9WZT95OQwJ3vlpRscJp+Vp
+         GCSQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695745475; x=1696350275;
-        h=content-transfer-encoding:cc:to:from:subject:references
-         :mime-version:message-id:in-reply-to:date:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=vFkpn2H397KrVSqmEDJx57x47TGFCVVPTN7FsnVWNzE=;
-        b=VjULpXGjthhSGS1uTnTTPs825fuFzQNIBWxi3au3fPR7/HriJDjTnQusOwwVXSGroY
-         PGF4YywuBmbL93jmB7Lvq8Wtvjvf+lFYl+mBZjLFS87d7DWopX2V5SNhHjv0usKZp7K2
-         0ieNpkw318uTlkE5KJHC8c22tu7TF3/vV4VFAaHGZMB2sE533jfW+NoiN+BAcmHEez/7
-         kO+qlrehnQVx+ttsqACn8HyVygzjG/c7r7XkHWaUfAemivx3j1R8X5Al7zTmkWsAq7T/
-         49GUuh+3PxPqorexsTk88y7hb0UBmrdkRILLhypqJllLuvOMn7R44u6zyklPXMy/h76b
-         PQKQ==
-X-Gm-Message-State: AOJu0YzM4dJkHLcLux51Zr/5wOyaIto9/jG773yuua1ZKnwRBFBc/qW8
-        7jyHRjfa/YAy4x1NlM2v5fh4/hOAfxU=
-X-Google-Smtp-Source: AGHT+IHBoakqhkhiVEAsv+mZQ0hK5/qDN1CmFMFNKuR5J4mjx2CZrD8PGaR7oJWeHShb9Petn58MPj8g4wE=
-X-Received: from sport.zrh.corp.google.com ([2a00:79e0:9d:4:dc99:dac4:b719:7cd8])
- (user=gnoack job=sendgmr) by 2002:a17:907:7110:b0:9a1:b087:3bcb with SMTP id
- zr16-20020a170907711000b009a1b0873bcbmr34230ejb.7.1695745475433; Tue, 26 Sep
- 2023 09:24:35 -0700 (PDT)
-Date:   Tue, 26 Sep 2023 18:24:32 +0200
-In-Reply-To: <20230921061641.273654-1-mic@digikod.net>
-Message-Id: <ZRMFwNzBJyyr85hV@google.com>
-Mime-Version: 1.0
-References: <20230921061641.273654-1-mic@digikod.net>
-Subject: Re: [RFC PATCH v1 0/7] Landlock audit support
-From:   "=?iso-8859-1?Q?G=FCnther?= Noack" <gnoack@google.com>
-To:     "=?iso-8859-1?Q?Micka=EBl_Sala=FCn?=" <mic@digikod.net>
-Cc:     Eric Paris <eparis@redhat.com>, James Morris <jmorris@namei.org>,
-        Paul Moore <paul@paul-moore.com>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        Ben Scarlato <akhna@google.com>, Jeff Xu <jeffxu@google.com>,
-        Jorge Lucangeli Obes <jorgelo@google.com>,
-        Konstantin Meskhidze <konstantin.meskhidze@huawei.com>,
-        Shervin Oloumi <enlightened@google.com>, audit@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
-Content-Type: text/plain; charset="utf-8"
+        d=1e100.net; s=20230601; t=1695763502; x=1696368302;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=hwijluXAJKvne9nyx6goJKnLPUI/1CGCM6T80bPQaYM=;
+        b=qpwa8r5672GGjEwTWxStjjeI5hZi21jvkTKkiTfTL9e1Kpa84TZW3L3FANI3+4XSkK
+         Io6/8VstrAEPEqwYgD5ypw40dMf2gOMYUJ0L/zn0jbKuKGo8WYkaQPBqr2TPAv2+7fgx
+         tJhGtJNNNxR0wgM46y8jLcOvE29c9BL4+ScCVkE/Hvb/qqcMsKlWXQTe6PQMGjF/PSHD
+         dZrXqfKp17nBvhJFToHhFHWsHkOcoEJHMEEXJVcdTiOCgaDU2u7SX+TU1AHaShW1ZKcE
+         X3Jdg/TIK/spQa7Vs4c/P9z2AMiDtYeLh6ApOYhNFtE99Lv1bAPqvuPJBcP447/MIo5U
+         gUkA==
+X-Gm-Message-State: AOJu0Yx+Fsm2WXMbqCGztDEdWHgILSy/yMC/0hrieuZe/o2vWC7G63bH
+        h41BCszMw/84eb2hOUcUjN3gBRCxrQ6vyDozOJR4I5u6CWSfA9Rx6w==
+X-Google-Smtp-Source: AGHT+IHWBrVpaEs8oeLeJX4Du6t+Xq/8ntooKfhRzbkI+hrad/LJobEDNuHtrB4FZeMEAvoJSWXS/3Y3U0XqWUf8NlE=
+X-Received: by 2002:a0d:cbd6:0:b0:599:da80:e1eb with SMTP id
+ n205-20020a0dcbd6000000b00599da80e1ebmr287256ywd.24.1695763502468; Tue, 26
+ Sep 2023 14:25:02 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230923015351.15707-1-phil@nwl.cc>
+In-Reply-To: <20230923015351.15707-1-phil@nwl.cc>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Tue, 26 Sep 2023 17:24:51 -0400
+Message-ID: <CAHC9VhQv6dbgbfxEn4EjHhhfu3YDT0Ed76gZQNFyhY2mzeE0bg@mail.gmail.com>
+Subject: Re: [nf PATCH 0/3] Review nf_tables audit logging
+To:     Phil Sutter <phil@nwl.cc>
+Cc:     Pablo Neira Ayuso <pablo@netfilter.org>,
+        netfilter-devel@vger.kernel.org, Florian Westphal <fw@strlen.de>,
+        audit@vger.kernel.org, Richard Guy Briggs <rgb@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <audit.vger.kernel.org>
 X-Mailing-List: audit@vger.kernel.org
 
-Hi Micka=C3=ABl!
+On Fri, Sep 22, 2023 at 9:53=E2=80=AFPM Phil Sutter <phil@nwl.cc> wrote:
+>
+> When working on locking for reset commands, some audit log calls had to
+> be adjusted as well. This series deals with the "fallout" from adding
+> tests for the changed log calls, dealing with the uncovered issues and
+> adding more tests.
+>
+> Patch 1 adds more testing to nft_audit.sh for commands which are
+> unproblematic.
+>
+> Patch 2 deals with (likely) leftovers from audit log flood prevention in
+> commit c520292f29b80 ("audit: log nftables configuration change events
+> once per table").
+>
+> Patch 3 changes logging for object reset requests to happen once per
+> table (if skb size is sufficient) and thereby aligns output with object
+> add requests. As a side-effect, logging is fixed to happen after the
+> actual reset has succeeded, not before.
+>
+> NOTE: This whole series probably depends on the reset locking series[1]
+> submitted earlier, but there's no functional connection and reviews
+> should happen independently.
+>
+> [1] https://lore.kernel.org/netfilter-devel/20230923013807.11398-1-phil@n=
+wl.cc/
+>
+> Phil Sutter (3):
+>   selftests: netfilter: Extend nft_audit.sh
+>   netfilter: nf_tables: Deduplicate nft_register_obj audit logs
+>   netfilter: nf_tables: Audit log object reset once per table
+>
+>  net/netfilter/nf_tables_api.c                 |  95 +++++-----
+>  .../testing/selftests/netfilter/nft_audit.sh  | 163 ++++++++++++++++--
+>  2 files changed, 203 insertions(+), 55 deletions(-)
 
-On Thu, Sep 21, 2023 at 08:16:34AM +0200, Micka=C3=ABl Sala=C3=BCn wrote:
-> This patch series adds basic audit support to Landlock for most actions.
-> Logging denied requests is useful for different use cases:
-> * app developers: to ease and speed up sandboxing support
-> * power users: to understand denials
-> * sysadmins: to look for users' issues
-> * tailored distro maintainers: to get usage metrics from their fleet
-> * security experts: to detect attack attempts
->=20
-> To make logs useful, they need to contain the most relevant Landlock
-> domain that denied an action, and the reason. This translates to the
-> latest nested domain and the related missing access rights.
+Hi Phil,
 
-Is "domain" always the latest nested domain, or is that the domain which ca=
-used
-the check to fail because it denied the requested access right?  (If it is =
-just
-the counter of how many domains are stacked, this could maybe also be queri=
-ed
-through proc instead?)
-
-
-> Two "Landlock permissions" are used to describe mandatory restrictions
-> enforced on all domains:
-> * fs_layout: change the view of filesystem with mount operations.
-> * ptrace: tamper with a process.
-
-I find the term "access" already a bit overloaded, and the term "permission=
-"
-also already appears in other contexts.  Maybe we can avoid the additional
-terminology by grouping these two together in the log format, and calling t=
-hem
-the "cause" or "reason" for the deny decision?  In a sense, the access righ=
-ts
-and the other permissions can already be told apart by their names, so they
-might also both appear under the same key without causing additional confus=
-ion?
-
-
-> Here is an example of logs, result of the sandboxer activity:
-> tid=3D267 comm=3D"sandboxer" op=3Dcreate-ruleset ruleset=3D1 handled_acce=
-ss_fs=3Dexecute,write_file,read_file,read_dir,remove_dir,remove_file,make_c=
-har,make_dir,make_reg,make_sock,make_fifo,make_block,make_sym,refer,truncat=
-e
-> tid=3D267 comm=3D"sandboxer" op=3Drestrict-self domain=3D2 ruleset=3D1 pa=
-rent=3D0
-> op=3Drelease-ruleset ruleset=3D1
-> tid=3D267 comm=3D"bash" domain=3D2 op=3Dopen errno=3D13 missing-fs-access=
-es=3Dwrite_file,read_file missing-permission=3D path=3D"/dev/tty" dev=3D"de=
-vtmpfs" ino=3D9
-> tid=3D268 comm=3D"ls" domain=3D2 op=3Dopen errno=3D13 missing-fs-accesses=
-=3Dread_dir missing-permission=3D path=3D"/" dev=3D"vda2" ino=3D256
-> tid=3D269 comm=3D"touch" domain=3D2 op=3Dmknod errno=3D13 missing-fs-acce=
-sses=3Dmake_reg missing-permission=3D path=3D"/" dev=3D"vda2" ino=3D256
-> tid=3D270 comm=3D"umount" domain=3D2 op=3Dumount errno=3D1 missing-fs-acc=
-esses=3D missing-permission=3Dfs_layout name=3D"/" dev=3D"tmpfs" ino=3D1
-> tid=3D271 comm=3D"strace" domain=3D2 op=3Dptrace errno=3D1 missing-fs-acc=
-esses=3D missing-permission=3Dptrace opid=3D1 ocomm=3D"systemd"
-
-In more complicated cases like "refer" and "open", it is possible that more=
- than
-one access right is missing, and presumably they'll both be listed in
-missing-fs-accesses=3D.  In this case, it is not clear to me whether the do=
-main=3D
-number is referring to the first or the second of these missing rights.
-(Assuming that the domain=3D is about the domain which caused the denial.)
-
-
-> As highlighted in comments, support for audit is not complete yet with
-> this series: some actions are not logged (e.g. file reparenting), and
-> rule additions are not logged neither.
-
-When ftruncate(2) gets denied, it is also not possible to tell which of the
-nested domains is responsible, without additional changes to what we carry
-around in the file's security blob.  (Right now, we calculate the overall
-truncation right in advance at open(2) time, and just store that bit with t=
-he
-newly opened file.)
-
-
-> I'm also not sure if we need to have seccomp-like features such as
-> SECCOMP_FILTER_FLAG_LOG, SECCOMP_RET_LOG, and
-> /proc/sys/kernel/seccomp/actions_logged
->=20
-> I'd like to get some early feedback on this proposal.
-
-If you want to have the full feature set as proposed above for other operat=
-ions
-as well, like file reparenting and truncation, it'll complicate the Landloc=
-k
-logic and increase the amount of data that needs to be kept around just for
-logging.  I'm not convinced that this is worth it.  After all, the simpler =
-the
-Landlock implementation is, the easier it'll be to reason about its logic a=
-nd
-its security guarantees.
-
-A possible simplification would be to omit the domain number which is
-responsible for a "deny" decision.  I feel that for debugging, knowing the =
-fact
-that Landlock denied an operation might already be a big step forward, and =
-the
-exact domain responsible for it might not be that important?
-
-=E2=80=94G=C3=BCnther
+Thanks for continuing to work on this, my network access is limited at
+the moment but I hope to be able to review this next week.
 
 --=20
-Sent using Mutt =F0=9F=90=95 Woof Woof
+paul-moore.com
