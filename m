@@ -2,140 +2,262 @@ Return-Path: <audit-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 35F6EE732E6
-	for <audit@archiver.kernel.org>; Thu, 28 Sep 2023 15:28:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A34A2E732F5
+	for <audit@archiver.kernel.org>; Thu, 28 Sep 2023 17:03:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231488AbjI1P2G (ORCPT <rfc822;audit@archiver.kernel.org>);
-        Thu, 28 Sep 2023 11:28:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47164 "EHLO
+        id S231322AbjI1RDX (ORCPT <rfc822;audit@archiver.kernel.org>);
+        Thu, 28 Sep 2023 13:03:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231384AbjI1P2F (ORCPT <rfc822;audit@vger.kernel.org>);
-        Thu, 28 Sep 2023 11:28:05 -0400
-Received: from smtp-bc0b.mail.infomaniak.ch (smtp-bc0b.mail.infomaniak.ch [IPv6:2001:1600:3:17::bc0b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DBB3AC;
-        Thu, 28 Sep 2023 08:28:02 -0700 (PDT)
-Received: from smtp-2-0000.mail.infomaniak.ch (unknown [10.5.36.107])
-        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4RxHRg6mXXzMr3yF;
-        Thu, 28 Sep 2023 15:27:59 +0000 (UTC)
-Received: from unknown by smtp-2-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4RxHRf70HvzMppDN;
-        Thu, 28 Sep 2023 17:27:58 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
-        s=20191114; t=1695914879;
-        bh=5TbzNnbHjMBaw/hqLYXv0/YPa4xbm8wFAcwV61jhk4M=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=spWoM0mbRhMT5nzVdAn/x+LHYB1Jj7njxIUT6IcE5acIQ30gQlXV+o2IIEzE64pGX
-         6pxI++jHHiSfFtzHTzr8XS7txfAxpFMfUoEvnSGItvez3EgaTB8kteU8Vg2UE93QRW
-         dTTe90yMw7QhhE8jXssngHGNRjxj7mzulpthbxrc=
-Date:   Thu, 28 Sep 2023 17:27:46 +0200
-From:   =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
-To:     Eric Paris <eparis@redhat.com>, James Morris <jmorris@namei.org>,
-        Paul Moore <paul@paul-moore.com>,
-        "Serge E . Hallyn" <serge@hallyn.com>
-Cc:     Ben Scarlato <akhna@google.com>,
-        =?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>,
-        Jeff Xu <jeffxu@google.com>,
-        Jorge Lucangeli Obes <jorgelo@google.com>,
-        Konstantin Meskhidze <konstantin.meskhidze@huawei.com>,
-        Shervin Oloumi <enlightened@google.com>, audit@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
-Subject: Re: [RFC PATCH v1 0/7] Landlock audit support
-Message-ID: <20230928.wae8Caitha7n@digikod.net>
-References: <20230921061641.273654-1-mic@digikod.net>
+        with ESMTP id S231310AbjI1RDW (ORCPT <rfc822;audit@vger.kernel.org>);
+        Thu, 28 Sep 2023 13:03:22 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A589499
+        for <audit@vger.kernel.org>; Thu, 28 Sep 2023 10:02:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1695920560;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=D4jGMheYI/ylOZ/WbaLBSPfRFCuKdZTp++iYBHyAKp4=;
+        b=XpaY0pKMFwq3KBrW+Wz1aP03MVWZCrqRQ4i4/UN6wcnw177WN/OQU/D/vV6LJ/cb8bey9n
+        vvB/9DucqGwXYI67cJg6zFKcE2Rx/3FgkfEEx0EKAuJDpAopQkOtBp+vFKdE0oH8rgavg8
+        wx/KvBLif4tYsarRA06ziBrVhOQNwEE=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-322-MTVpC4n9MseRqyyijGwhbQ-1; Thu, 28 Sep 2023 13:02:33 -0400
+X-MC-Unique: MTVpC4n9MseRqyyijGwhbQ-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 92FDA858281;
+        Thu, 28 Sep 2023 17:02:32 +0000 (UTC)
+Received: from madcap2.tricolour.ca (ovpn-0-7.rdu2.redhat.com [10.22.0.7])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 570F42156702;
+        Thu, 28 Sep 2023 17:02:31 +0000 (UTC)
+Date:   Thu, 28 Sep 2023 13:02:29 -0400
+From:   Richard Guy Briggs <rgb@redhat.com>
+To:     Phil Sutter <phil@nwl.cc>
+Cc:     Pablo Neira Ayuso <pablo@netfilter.org>,
+        netfilter-devel@vger.kernel.org, Florian Westphal <fw@strlen.de>,
+        audit@vger.kernel.org, Paul Moore <paul@paul-moore.com>
+Subject: Re: [nf PATCH 3/3] netfilter: nf_tables: Audit log object reset once
+ per table
+Message-ID: <ZRWxpZJTh0NOwenR@madcap2.tricolour.ca>
+References: <20230923015351.15707-1-phil@nwl.cc>
+ <20230923015351.15707-4-phil@nwl.cc>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230921061641.273654-1-mic@digikod.net>
-X-Infomaniak-Routing: alpha
+In-Reply-To: <20230923015351.15707-4-phil@nwl.cc>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
 Precedence: bulk
 List-ID: <audit.vger.kernel.org>
 X-Mailing-List: audit@vger.kernel.org
 
-I talked about this patch series at the Kernel Recipes conference, and
-you might want to take a look at the future work:
-https://landlock.io/talks/2023-09-25_landlock-audit-kr.pdf
+On 2023-09-23 03:53, Phil Sutter wrote:
+> When resetting multiple objects at once (via dump request), emit a log
+> message per table (or filled skb) and resurrect the 'entries' parameter
+> to contain the number of objects being logged for.
+> 
+> With the above in place, all audit logs for op=nft_register_obj have a
+> predictable value in 'entries', so drop the value zeroing for them in
+> audit_logread.c.
+> 
+> To test the skb exhaustion path, perform some bulk counter and quota
+> adds in the kselftest.
+> 
+> Signed-off-by: Phil Sutter <phil@nwl.cc>
 
-In a nutshell, new syscall flags:
-* For landlock_create_ruleset() to opt-in for logging ruleset-related
-  and domain-related use
-* For landlock_add_rule() to opt-in for logging this rule if it granted
-  the requested access
-* For landlock_restrict_self() to opt-in for:
-  * not log anything
-  * handle a permissive mode to log actions that would have been denied
-    (very useful to build a sandbox)
+(Resend, forgot to include other addressees.)
+Reviewed-by: Richard Guy Briggs <rgb@redhat.com>
 
-
-On Thu, Sep 21, 2023 at 08:16:34AM +0200, Mickaël Salaün wrote:
-> Hi,
+> ---
+>  net/netfilter/nf_tables_api.c                 | 51 ++++++++++---------
+>  .../testing/selftests/netfilter/nft_audit.sh  | 46 +++++++++++++++++
+>  2 files changed, 74 insertions(+), 23 deletions(-)
 > 
-> This patch series adds basic audit support to Landlock for most actions.
-> Logging denied requests is useful for different use cases:
-> * app developers: to ease and speed up sandboxing support
-> * power users: to understand denials
-> * sysadmins: to look for users' issues
-> * tailored distro maintainers: to get usage metrics from their fleet
-> * security experts: to detect attack attempts
-> 
-> To make logs useful, they need to contain the most relevant Landlock
-> domain that denied an action, and the reason. This translates to the
-> latest nested domain and the related missing access rights.
-> 
-> Two "Landlock permissions" are used to describe mandatory restrictions
-> enforced on all domains:
-> * fs_layout: change the view of filesystem with mount operations.
-> * ptrace: tamper with a process.
-> 
-> Here is an example of logs, result of the sandboxer activity:
-> tid=267 comm="sandboxer" op=create-ruleset ruleset=1 handled_access_fs=execute,write_file,read_file,read_dir,remove_dir,remove_file,make_char,make_dir,make_reg,make_sock,make_fifo,make_block,make_sym,refer,truncate
-> tid=267 comm="sandboxer" op=restrict-self domain=2 ruleset=1 parent=0
-> op=release-ruleset ruleset=1
-> tid=267 comm="bash" domain=2 op=open errno=13 missing-fs-accesses=write_file,read_file missing-permission= path="/dev/tty" dev="devtmpfs" ino=9
-> tid=268 comm="ls" domain=2 op=open errno=13 missing-fs-accesses=read_dir missing-permission= path="/" dev="vda2" ino=256
-> tid=269 comm="touch" domain=2 op=mknod errno=13 missing-fs-accesses=make_reg missing-permission= path="/" dev="vda2" ino=256
-> tid=270 comm="umount" domain=2 op=umount errno=1 missing-fs-accesses= missing-permission=fs_layout name="/" dev="tmpfs" ino=1
-> tid=271 comm="strace" domain=2 op=ptrace errno=1 missing-fs-accesses= missing-permission=ptrace opid=1 ocomm="systemd"
-> 
-> As highlighted in comments, support for audit is not complete yet with
-> this series: some actions are not logged (e.g. file reparenting), and
-> rule additions are not logged neither.
-> 
-> I'm also not sure if we need to have seccomp-like features such as
-> SECCOMP_FILTER_FLAG_LOG, SECCOMP_RET_LOG, and
-> /proc/sys/kernel/seccomp/actions_logged
-> 
-> I'd like to get some early feedback on this proposal.
-> 
-> This series is based on v6.6-rc2
-> 
-> Regards,
-> 
-> Mickaël Salaün (7):
->   lsm: Add audit_log_lsm_data() helper
->   landlock: Factor out check_access_path()
->   landlock: Log ruleset creation and release
->   landlock: Log domain creation and enforcement
->   landlock: Log file-related requests
->   landlock: Log mount-related requests
->   landlock: Log ptrace requests
-> 
->  include/linux/lsm_audit.h    |   2 +
->  include/uapi/linux/audit.h   |   1 +
->  security/landlock/Makefile   |   2 +
->  security/landlock/audit.c    | 283 +++++++++++++++++++++++++++++++++++
->  security/landlock/audit.h    |  88 +++++++++++
->  security/landlock/fs.c       | 169 ++++++++++++++++-----
->  security/landlock/ptrace.c   |  47 +++++-
->  security/landlock/ruleset.c  |   6 +
->  security/landlock/ruleset.h  |  10 ++
->  security/landlock/syscalls.c |  12 ++
->  security/lsm_audit.c         |  26 ++--
->  11 files changed, 595 insertions(+), 51 deletions(-)
->  create mode 100644 security/landlock/audit.c
->  create mode 100644 security/landlock/audit.h
-> 
-> 
-> base-commit: ce9ecca0238b140b88f43859b211c9fdfd8e5b70
+> diff --git a/net/netfilter/nf_tables_api.c b/net/netfilter/nf_tables_api.c
+> index 48d50df950a18..e04ef2c451be4 100644
+> --- a/net/netfilter/nf_tables_api.c
+> +++ b/net/netfilter/nf_tables_api.c
+> @@ -7733,6 +7733,16 @@ static int nf_tables_fill_obj_info(struct sk_buff *skb, struct net *net,
+>  	return -1;
+>  }
+>  
+> +static void audit_log_obj_reset(const struct nft_table *table,
+> +				unsigned int base_seq, unsigned int nentries)
+> +{
+> +	char *buf = kasprintf(GFP_ATOMIC, "%s:%u", table->name, base_seq);
+> +
+> +	audit_log_nfcfg(buf, table->family, nentries,
+> +			AUDIT_NFT_OP_OBJ_RESET, GFP_ATOMIC);
+> +	kfree(buf);
+> +}
+> +
+>  struct nft_obj_dump_ctx {
+>  	unsigned int	s_idx;
+>  	char		*table;
+> @@ -7748,8 +7758,10 @@ static int nf_tables_dump_obj(struct sk_buff *skb, struct netlink_callback *cb)
+>  	int family = nfmsg->nfgen_family;
+>  	struct nftables_pernet *nft_net;
+>  	const struct nft_table *table;
+> +	unsigned int entries = 0;
+>  	struct nft_object *obj;
+>  	unsigned int idx = 0;
+> +	int rc = 0;
+>  
+>  	rcu_read_lock();
+>  	nft_net = nft_pernet(net);
+> @@ -7759,6 +7771,7 @@ static int nf_tables_dump_obj(struct sk_buff *skb, struct netlink_callback *cb)
+>  		if (family != NFPROTO_UNSPEC && family != table->family)
+>  			continue;
+>  
+> +		entries = 0;
+>  		list_for_each_entry_rcu(obj, &table->objects, list) {
+>  			if (!nft_is_active(net, obj))
+>  				goto cont;
+> @@ -7769,34 +7782,27 @@ static int nf_tables_dump_obj(struct sk_buff *skb, struct netlink_callback *cb)
+>  			if (ctx->type != NFT_OBJECT_UNSPEC &&
+>  			    obj->ops->type->type != ctx->type)
+>  				goto cont;
+> -			if (ctx->reset) {
+> -				char *buf = kasprintf(GFP_ATOMIC,
+> -						      "%s:%u",
+> -						      table->name,
+> -						      nft_net->base_seq);
+> -
+> -				audit_log_nfcfg(buf,
+> -						family,
+> -						obj->handle,
+> -						AUDIT_NFT_OP_OBJ_RESET,
+> -						GFP_ATOMIC);
+> -				kfree(buf);
+> -			}
+>  
+> -			if (nf_tables_fill_obj_info(skb, net, NETLINK_CB(cb->skb).portid,
+> -						    cb->nlh->nlmsg_seq,
+> -						    NFT_MSG_NEWOBJ,
+> -						    NLM_F_MULTI | NLM_F_APPEND,
+> -						    table->family, table,
+> -						    obj, ctx->reset) < 0)
+> -				goto done;
+> +			rc = nf_tables_fill_obj_info(skb, net,
+> +						     NETLINK_CB(cb->skb).portid,
+> +						     cb->nlh->nlmsg_seq,
+> +						     NFT_MSG_NEWOBJ,
+> +						     NLM_F_MULTI | NLM_F_APPEND,
+> +						     table->family, table,
+> +						     obj, ctx->reset);
+> +			if (rc < 0)
+> +				break;
+>  
+> +			entries++;
+>  			nl_dump_check_consistent(cb, nlmsg_hdr(skb));
+>  cont:
+>  			idx++;
+>  		}
+> +		if (ctx->reset && entries)
+> +			audit_log_obj_reset(table, nft_net->base_seq, entries);
+> +		if (rc < 0)
+> +			break;
+>  	}
+> -done:
+>  	rcu_read_unlock();
+>  
+>  	ctx->s_idx = idx;
+> @@ -7977,8 +7983,7 @@ static int nf_tables_getobj_reset(struct sk_buff *skb,
+>  		return PTR_ERR(skb2);
+>  
+>  	buf = kasprintf(GFP_ATOMIC, "%s:%u", table->name, nft_net->base_seq);
+> -	audit_log_nfcfg(buf, family, obj->handle,
+> -			AUDIT_NFT_OP_OBJ_RESET, GFP_ATOMIC);
+> +	audit_log_nfcfg(buf, family, 1, AUDIT_NFT_OP_OBJ_RESET, GFP_ATOMIC);
+>  	kfree(buf);
+>  
+>  	return nfnetlink_unicast(skb2, net, portid);
+> diff --git a/tools/testing/selftests/netfilter/nft_audit.sh b/tools/testing/selftests/netfilter/nft_audit.sh
+> index bb34329e02a7f..e94a80859bbdb 100755
+> --- a/tools/testing/selftests/netfilter/nft_audit.sh
+> +++ b/tools/testing/selftests/netfilter/nft_audit.sh
+> @@ -93,6 +93,12 @@ do_test 'nft add counter t1 c1' \
+>  do_test 'nft add counter t2 c1; add counter t2 c2' \
+>  'table=t2 family=2 entries=2 op=nft_register_obj'
+>  
+> +for ((i = 3; i <= 500; i++)); do
+> +	echo "add counter t2 c$i"
+> +done >$rulefile
+> +do_test "nft -f $rulefile" \
+> +'table=t2 family=2 entries=498 op=nft_register_obj'
+> +
+>  # adding/updating quotas
+>  
+>  do_test 'nft add quota t1 q1 { 10 bytes }' \
+> @@ -101,6 +107,12 @@ do_test 'nft add quota t1 q1 { 10 bytes }' \
+>  do_test 'nft add quota t2 q1 { 10 bytes }; add quota t2 q2 { 10 bytes }' \
+>  'table=t2 family=2 entries=2 op=nft_register_obj'
+>  
+> +for ((i = 3; i <= 500; i++)); do
+> +	echo "add quota t2 q$i { 10 bytes }"
+> +done >$rulefile
+> +do_test "nft -f $rulefile" \
+> +'table=t2 family=2 entries=498 op=nft_register_obj'
+> +
+>  # changing the quota value triggers obj update path
+>  do_test 'nft add quota t1 q1 { 20 bytes }' \
+>  'table=t1 family=2 entries=1 op=nft_register_obj'
+> @@ -150,6 +162,40 @@ done
+>  do_test 'nft reset set t1 s' \
+>  'table=t1 family=2 entries=3 op=nft_reset_setelem'
+>  
+> +# resetting counters
+> +
+> +do_test 'nft reset counter t1 c1' \
+> +'table=t1 family=2 entries=1 op=nft_reset_obj'
+> +
+> +do_test 'nft reset counters t1' \
+> +'table=t1 family=2 entries=1 op=nft_reset_obj'
+> +
+> +do_test 'nft reset counters t2' \
+> +'table=t2 family=2 entries=342 op=nft_reset_obj
+> +table=t2 family=2 entries=158 op=nft_reset_obj'
+> +
+> +do_test 'nft reset counters' \
+> +'table=t1 family=2 entries=1 op=nft_reset_obj
+> +table=t2 family=2 entries=341 op=nft_reset_obj
+> +table=t2 family=2 entries=159 op=nft_reset_obj'
+> +
+> +# resetting quotas
+> +
+> +do_test 'nft reset quota t1 q1' \
+> +'table=t1 family=2 entries=1 op=nft_reset_obj'
+> +
+> +do_test 'nft reset quotas t1' \
+> +'table=t1 family=2 entries=1 op=nft_reset_obj'
+> +
+> +do_test 'nft reset quotas t2' \
+> +'table=t2 family=2 entries=315 op=nft_reset_obj
+> +table=t2 family=2 entries=185 op=nft_reset_obj'
+> +
+> +do_test 'nft reset quotas' \
+> +'table=t1 family=2 entries=1 op=nft_reset_obj
+> +table=t2 family=2 entries=314 op=nft_reset_obj
+> +table=t2 family=2 entries=186 op=nft_reset_obj'
+> +
+>  # deleting rules
+>  
+>  readarray -t handles < <(nft -a list chain t1 c1 | \
 > -- 
-> 2.42.0
+> 2.41.0
 > 
+
+- RGB
+
+--
+Richard Guy Briggs <rgb@redhat.com>
+Sr. S/W Engineer, Kernel Security, Base Operating Systems
+Remote, Ottawa, Red Hat Canada
+Upstream IRC: SunRaycer
+Voice: +1.613.860 2354 SMS: +1.613.518.6570
+
