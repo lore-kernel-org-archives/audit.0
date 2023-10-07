@@ -2,135 +2,172 @@ Return-Path: <audit-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6BA14E9413B
-	for <audit@archiver.kernel.org>; Sat,  7 Oct 2023 00:07:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 089C8E784AF
+	for <audit@archiver.kernel.org>; Sat,  7 Oct 2023 02:33:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233794AbjJGAHh (ORCPT <rfc822;audit@archiver.kernel.org>);
-        Fri, 6 Oct 2023 20:07:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49626 "EHLO
+        id S234113AbjJGCdB (ORCPT <rfc822;audit@archiver.kernel.org>);
+        Fri, 6 Oct 2023 22:33:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233696AbjJGAHh (ORCPT <rfc822;audit@vger.kernel.org>);
-        Fri, 6 Oct 2023 20:07:37 -0400
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CCD7BD
-        for <audit@vger.kernel.org>; Fri,  6 Oct 2023 17:07:35 -0700 (PDT)
-Received: by mail-yb1-xb2f.google.com with SMTP id 3f1490d57ef6-d86a0c97ae6so3039596276.2
-        for <audit@vger.kernel.org>; Fri, 06 Oct 2023 17:07:35 -0700 (PDT)
+        with ESMTP id S233755AbjJGCcx (ORCPT <rfc822;audit@vger.kernel.org>);
+        Fri, 6 Oct 2023 22:32:53 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D89ACA
+        for <audit@vger.kernel.org>; Fri,  6 Oct 2023 19:32:51 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id d2e1a72fcca58-692af7b641cso448020b3a.1
+        for <audit@vger.kernel.org>; Fri, 06 Oct 2023 19:32:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1696637255; x=1697242055; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qHD+x7Oh+0e4y3jkxNsQUc1AqCuOyOBHea4bJSZQ5Jc=;
-        b=QdTmXTj9GkRqPDqGd9OHXbWCnHpAbaEkvId78QvuecWo79DhoWOFYGOZY4dBlS46to
-         3LBrKannIf4DREUSzq9E7e6scnPzfqYBOBEIYF//eu/8RpDk1fH1ms7eAxyp0rH/EZfi
-         nGU7I7ixpiCKJ+syfTQk2I/K7TUMJF7nmJRKKqMvIO1arotT+8iJ2mbEQ0Y7r9T1PIct
-         IVo3c/6XAQQ3CIJ6b9NYRYmNpmMVfP22teZndtiCJ0RbKKoK4w8oCPh5OHKxAsb7ObRd
-         OBopPI6jNlpxxzPg86rO1HGBstS6Hyy9MpEfxxyPGzcoo6LoVOs1A4BK4ZKx+bIS+0IU
-         cDqA==
+        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1696645970; x=1697250770; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=aE++ezKdN8720LEY7IVJ33vhFnTrqC0qzrEhyMq8nsc=;
+        b=wRG/NNYschSu4Ps9+zTjxeb9fHnBi7SneTWGkY4c/571j0QDN/mg7LhJrN6KzjIvza
+         eeSDT61CRnPcn+oJiScfbjFPa04fkaC796VlOr5pcdCM5wEKjJa+cOBqDK2L+4TneTv0
+         fU6x4kUfFUuTro2n5YgQgIf6EH5NHPCyRtLpTxbJn5jOpJ3IFZ3PoYahn2pPCtDGaona
+         pqvaSPr/K9cm9lN07GSaQaMgm2TIypfr8fqDWCMAh5Wb6Ak+Dfy1yNees1gNSyvJni4B
+         E1n6SifAedvukbTQRvvRSgXZDSHNTNzIiPqu56yxyYC2NjmjwVB4nUUafPdB9XQBKmLD
+         KCjg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696637255; x=1697242055;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qHD+x7Oh+0e4y3jkxNsQUc1AqCuOyOBHea4bJSZQ5Jc=;
-        b=i92kWBF4WXTWU3Aj1QSK2ptPKw32hr022Qq5rUGCUPMAKMVdcPxcnC07YwEti1Qqu6
-         IuClLv3tcbhggIeDZzBfWueCllbFgX5i92tU/zCi7xt3/rNXePKGchNEwl70JEZw7RnG
-         Ztj8dygY8Wqi94CQXXx6BVrjcTv5bOnuL73oyjfsRy9zJ3aV9BvzVi143IxqzwpwV76/
-         h0EddEf32DcdagaLkpQz+KHAAEukhGEwmRzvp4no4LDLtWbM2iVyYsiePIfZjgkVI5vm
-         L0sHhIkD9yMy8P4woqagsAjqLBfbZalAmx7tPfXUrzdK4/MylfPpiuf0myG79edaGXuA
-         QIzA==
-X-Gm-Message-State: AOJu0YwEOFOPbTUltuOToYps6pBV/Uxa1ksNlMtzVqlO06bVhv5aVy66
-        iUD0g+4p6XoD2qiURmNmm25gtZnZYH4fco3p/aOB
-X-Google-Smtp-Source: AGHT+IGMbcbhKR5JWKZAHYDpunJnIyLxNHlcgtMmlQpupe+9la3RMBig2mWSjPeHiH2RjFQs83sxugLVXPbrudQtIXk=
-X-Received: by 2002:a25:1502:0:b0:d81:5d5a:25a3 with SMTP id
- 2-20020a251502000000b00d815d5a25a3mr8294959ybv.43.1696637254733; Fri, 06 Oct
- 2023 17:07:34 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1696645970; x=1697250770;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=aE++ezKdN8720LEY7IVJ33vhFnTrqC0qzrEhyMq8nsc=;
+        b=cSqgzurbAFabFo2G6FXWVYpnoQExEaI4tIwd5OfgofrNAn8HighDr9b2sx9lUOFfMS
+         8VUTUmBx/pvQhi1mg+LwI9C8CEfjrarHMQ97rjAbUoo3cz+75rPG+3ihFCcPt+vpn07q
+         NH0+BjF7gTCuhQoAm9YcjIYyW8xpnAEUjSdfVVZ9BD3yMCDyphLGO3agi5hq2XZiYR7O
+         7Bu1H+wzihjEUnJ6tWCwm4aBocu2zoAXi8Eklad/N1IrjK0YZJYFdOhRu74DICqinLyZ
+         7Mh39FDwYav0ZHotCUxlv8m0fca2RZQWWaY6jxDUQ+V/p3yKz0Yk3cdh3acEks7F3sxl
+         V99g==
+X-Gm-Message-State: AOJu0YzA2XO2qMdnzvZuM2O3rtv6mAdgO3ulAdou+UAjjbuCRezg9NCY
+        MPENNY5D9YS+ybRZP4cldGGr5w==
+X-Google-Smtp-Source: AGHT+IGR8X6ptX3+nEjZ6JSuts+D90XG+BG2spzZdlVNr424PE/dh6kUmay9cpeyTJ2NfkUy7ChUVQ==
+X-Received: by 2002:a05:6a00:1d94:b0:690:d314:38d with SMTP id z20-20020a056a001d9400b00690d314038dmr10732845pfw.1.1696645970427;
+        Fri, 06 Oct 2023 19:32:50 -0700 (PDT)
+Received: from [192.168.1.136] ([198.8.77.194])
+        by smtp.gmail.com with ESMTPSA id c24-20020a637258000000b0055c178a8df1sm417065pgn.94.2023.10.06.19.32.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 06 Oct 2023 19:32:49 -0700 (PDT)
+Message-ID: <ab758860-e51e-409c-8353-6205fbe515dc@kernel.dk>
+Date:   Fri, 6 Oct 2023 20:32:47 -0600
 MIME-Version: 1.0
-References: <CAOTMNwuhq9Fc1PW4Y6ZOyP8H7nCk3+9gsxRapRuScZ2-a+14hA@mail.gmail.com>
- <668dd928-b00d-4f7a-5e6a-b6efc6a9c08f@canonical.com>
-In-Reply-To: <668dd928-b00d-4f7a-5e6a-b6efc6a9c08f@canonical.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Fri, 6 Oct 2023 20:07:23 -0400
-Message-ID: <CAHC9VhSQ2U0jhW5Goa+OTTPtx64viGjFWFJy7Y7CsetOaWs6jg@mail.gmail.com>
-Subject: Re: [apparmor] AppArmor kernel audit locks up system
-To:     John Johansen <john.johansen@canonical.com>
-Cc:     Andreas Steinmetz <anstein99@googlemail.com>,
-        apparmor@lists.ubuntu.com, audit@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: audit: io_uring openat triggers audit reference count underflow
+ in worker thread
+Content-Language: en-US
+To:     Dan Clash <Dan.Clash@microsoft.com>,
+        "audit@vger.kernel.org" <audit@vger.kernel.org>,
+        "io-uring@vger.kernel.org" <io-uring@vger.kernel.org>
+Cc:     "paul@paul-moore.com" <paul@paul-moore.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <MW2PR2101MB1033FFF044A258F84AEAA584F1C9A@MW2PR2101MB1033.namprd21.prod.outlook.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <MW2PR2101MB1033FFF044A258F84AEAA584F1C9A@MW2PR2101MB1033.namprd21.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <audit.vger.kernel.org>
 X-Mailing-List: audit@vger.kernel.org
 
-On Wed, Sep 27, 2023 at 8:20=E2=80=AFAM John Johansen
-<john.johansen@canonical.com> wrote:
->
-> adding paul and the audit list
->
-> On 9/26/23 05:56, Andreas Steinmetz wrote:
-> > Hi,
-> > it happen from time to time while setting up AppArmor properly that
-> > instead of creating an audit message AppArmor locks up the system. In
-> > most cases I couldn't even get any information, but this time I got
-> > some.
-> > I don't yet know if this is the case here but in case of "systemd
-> > --user" it was a missing grant of cap_sys_resource that caused the
-> > lockup. I don't know the exact capability causing the below problem
-> > but granting cap_sys_admin, cap_setuid, cap_setgid and
-> > cap_sys_resource prevents the lockup so it is definitely capability
-> > related. dmesg output follows. Kernel is 6.5.3, distro is Arch Linux.
-> >
->
-> just to double check, you are using auditd and have some audit filters
-> loaded, the code trace indicates yes.
->
-> so at a first pass it appears this come when the task calls prlimit64,
-> the capability check is denied and apparmor (or really any lsm).
-> generates an audit message. The audit message goes into the audit
-> subsystems, and there an exe filter which tries to get the task_exe_file
-> resulting in deadlock.
->
-> do_prlimit()
->         task_lock(tsk->group_leader);
->             ...
->                         if (new_rlim->rlim_max > rlim->rlim_max &&
->                                 !capable(CAP_SYS_RESOURCE))
->                                         ...
->                                         case AUDIT_EXE:
->                                                 result =3D audit_exe_comp=
-are(current, e->rule.exe)
->                                                         ...
->                                                         struct file *get_=
-task_exe_file(struct task_struct *task)
->                                                                 ...
->                                                                 task_lock=
-(task);
->                                                                 ...
->             ...
->         task_unlock(tsk->group_leader);
->
->
-> I am not sure how best to handle this.
+On 10/6/23 2:09 PM, Dan Clash wrote:
+> diff --git a/fs/namei.c b/fs/namei.c
+> index 2a8baa6ce3e8..4f7ac131c9d1 100644
+> --- a/fs/namei.c
+> +++ b/fs/namei.c
+> @@ -187,7 +187,7 @@ getname_flags(const char __user *filename, int flags, int *empty)
+>  		}
+>  	}
+> 
+> -	result->refcnt = 1;
+> +	refcount_set(&result->refcnt, 1);
+>  	/* The empty path is special. */
+>  	if (unlikely(!len)) {
+>  		if (empty)
+> @@ -248,7 +248,7 @@ getname_kernel(const char * filename)
+>  	memcpy((char *)result->name, filename, len);
+>  	result->uptr = NULL;
+>  	result->aname = NULL;
+> -	result->refcnt = 1;
+> +	refcount_set(&result->refcnt, 1);
+>  	audit_getname(result);
+> 
+>  	return result;
+> @@ -259,9 +259,10 @@ void putname(struct filename *name)
+>  	if (IS_ERR(name))
+>  		return;
+> 
+> -	BUG_ON(name->refcnt <= 0);
+> +	BUG_ON(refcount_read(&name->refcnt) == 0);
+> +	BUG_ON(refcount_read(&name->refcnt) == REFCOUNT_SATURATED);
+> 
+> -	if (--name->refcnt > 0)
+> +	if (!refcount_dec_and_test(&name->refcnt))
+>  		return;
+> 
+>  	if (name->name != name->iname) {
+> diff --git a/include/linux/fs.h b/include/linux/fs.h
+> index d0a54e9aac7a..8217e07726d4 100644
+> --- a/include/linux/fs.h
+> +++ b/include/linux/fs.h
+> @@ -2719,7 +2719,7 @@ struct audit_names;
+>  struct filename {
+>  	const char		*name;	/* pointer to actual string */
+>  	const __user char	*uptr;	/* original userland pointer */
+> -	int			refcnt;
+> +	refcount_t		refcnt;
+>  	struct audit_names	*aname;
+>  	const char		iname[];
+>  };
+> diff --git a/kernel/auditsc.c b/kernel/auditsc.c
+> index 37cded22497e..232e0be9f6d9 100644
+> --- a/kernel/auditsc.c
+> +++ b/kernel/auditsc.c
+> @@ -2188,7 +2188,7 @@ __audit_reusename(const __user char *uptr)
+>  		if (!n->name)
+>  			continue;
+>  		if (n->name->uptr == uptr) {
+> -			n->name->refcnt++;
+> +			refcount_inc(&n->name->refcnt);
+>  			return n->name;
+>  		}
+>  	}
+> @@ -2217,7 +2217,7 @@ void __audit_getname(struct filename *name)
+>  	n->name = name;
+>  	n->name_len = AUDIT_NAME_FULL;
+>  	name->aname = n;
+> -	name->refcnt++;
+> +	refcount_inc(&name->refcnt);
+>  }
+> 
+>  static inline int audit_copy_fcaps(struct audit_names *name,
+> @@ -2349,7 +2349,7 @@ void __audit_inode(struct filename *name, const struct dentry *dentry,
+>  		return;
+>  	if (name) {
+>  		n->name = name;
+> -		name->refcnt++;
+> +		refcount_inc(&name->refcnt);
+>  	}
+> 
+>  out:
+> @@ -2474,7 +2474,7 @@ void __audit_inode_child(struct inode *parent,
+>  		if (found_parent) {
+>  			found_child->name = found_parent->name;
+>  			found_child->name_len = AUDIT_NAME_FULL;
+> -			found_child->name->refcnt++;
+> +			refcount_inc(&found_child->name->refcnt);
+>  		}
+>  	}
 
-My apologies for the delay in responding, unfortunately this email was
-a bit buried in my inbox and it took me a while to get to it.
+I'm not fully aware of what audit is doing with struct filename outside
+of needing it for the audit log. Rather than impose the atomic
+references for everyone, would it be doable to simply dupe the struct
+instead of grabbing the (non-atomic) reference to the existing one?
 
-Unfortunately, like John, I'm struggling a bit to see how we might
-resolve this.  Unfortunately, we don't always know the context in
-which audit_filter() is going to be called; in some cases we would
-need to ensure the task_lock() was held, in others we may already be
-holding it on the current CPU.  The only thing I'm reasonably certain
-about is that audit_exe_compare() can't safely use
-get_task_exe_file().
+If not, since there's no over/underflow handling right now, it'd
+certainly be cheaper to use an atomic_t here rather than a full
+refcount.
 
-I imagine we could think about grabbing a reference to the mm_struct
-and stashing it in the audit_context so that we could access
-mm_struct::exe_file with only a RCU lock, but then we have to manage
-the mm_struct reference in audit_context and I worry that will be ugly
-and/or expensive (likely "and").
+-- 
+Jens Axboe
 
-Does anyone else have any bright ideas or crazy thoughts on this?
-
---=20
-paul-moore.com
