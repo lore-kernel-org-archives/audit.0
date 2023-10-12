@@ -2,205 +2,143 @@ Return-Path: <audit-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DD812CDB47E
-	for <audit@archiver.kernel.org>; Thu, 12 Oct 2023 21:55:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8542DCDB474
+	for <audit@archiver.kernel.org>; Thu, 12 Oct 2023 22:07:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1442942AbjJLVzV (ORCPT <rfc822;audit@archiver.kernel.org>);
-        Thu, 12 Oct 2023 17:55:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43030 "EHLO
+        id S1442995AbjJLWHy (ORCPT <rfc822;audit@archiver.kernel.org>);
+        Thu, 12 Oct 2023 18:07:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344165AbjJLVzV (ORCPT
-        <rfc822;audit@vger.kernel.org>); Thu, 12 Oct 2023 17:55:21 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DAF75B8;
-        Thu, 12 Oct 2023 14:55:18 -0700 (PDT)
-Received: by linux.microsoft.com (Postfix, from userid 1180)
-        id 3E83F20B74C0; Thu, 12 Oct 2023 14:55:18 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 3E83F20B74C0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1697147718;
-        bh=X9TXOYTeReXKeqvHtc+Vad8+a4hTXFQ9YgHArM9yVNE=;
-        h=Date:From:To:Cc:Subject:From;
-        b=pTSbVjMJnZvDc7zYeEGTsgQiuu3ZE3xRwZ7ix9shTVTzVA6YcRSVk+XLq+ng3ZPtf
-         KaFKy/BmUb43ww/sqcgkY5F4Zi7aRP/1mYNauIL02UtdgD3lX6c//qGEvPDvzEisv3
-         BE3KlS3nq/U6JDEx8aRQQjXWNiyN8prhXskalI50=
-Date:   Thu, 12 Oct 2023 14:55:18 -0700
-From:   Dan Clash <daclash@linux.microsoft.com>
-To:     audit@vger.kernel.org, io-uring@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, paul@paul-moore.com, axboe@kernel.dk,
+        with ESMTP id S1443011AbjJLWHv (ORCPT
+        <rfc822;audit@vger.kernel.org>); Thu, 12 Oct 2023 18:07:51 -0400
+Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35750CF
+        for <audit@vger.kernel.org>; Thu, 12 Oct 2023 15:07:49 -0700 (PDT)
+Received: by mail-ot1-x334.google.com with SMTP id 46e09a7af769-6bc9353be9bso212140a34.1
+        for <audit@vger.kernel.org>; Thu, 12 Oct 2023 15:07:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1697148468; x=1697753268; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=BX2/UVo10WOnZMCSNHexte/JXK8qu4Upt2chvVFA7x8=;
+        b=Lvn7N9uv69OZ121AzsqYZ2McrKtiTMN2tMUBLVvOksqkKLDH+drXyGVEVaXdxKGXTx
+         Phb21hBcMMvtmC913ArKg86TM83fNUWdt7laSTB8IF6uWHxQDsC81Z5o+GS5GA42AWv8
+         mPXjVN/rkqLLJCTzlddx52AtBxdiwEArOLdZWa1CJhdFKijFmJcAjZcqeHeiUhoDGI/x
+         qnOlMa53ZqH+u6HjpAlgHTBUhKnKOvVYHFOmkHvFDrsn7TnjTn2+1tz6R3C7C1KOTuui
+         KO5Ki88kPktgoJHCceTHiKrtkqZk1F5mT0lg48Jn0EfRFlmvai8eqdVUgHdM2CKRt8VO
+         DZGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1697148468; x=1697753268;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=BX2/UVo10WOnZMCSNHexte/JXK8qu4Upt2chvVFA7x8=;
+        b=S5POjCKabpic8O6U2y9HouQ2pAz9ZGxdiTZdSbUcJ+Fs1c42Z9JpnbO7cXTuOreg5L
+         bugCrumqsckZuDksBjELLkbecwq6WDJjP2gHZCrkFgy7yXfB/LC6/+FpkbLxAB9mwp8G
+         p7nfjtoLfNfcduiGmwg8Bo3CYSYXLwoaQpqT0iCt32mfsp7X8+Ex2Rvr8r61dQPgU1O1
+         Wn3fKuZvDeO+0ZLtOa7WpBEtkvOs7MBXZviuIUJ5cXwllGUKuID9/ynG94wyed6c7zb5
+         i6zFey+JbiBqMxKhThvHblQUP87FDj/dZmgq+qN1naSuiFo9EEuRACgOuGfA8LbQbYt7
+         O7Cg==
+X-Gm-Message-State: AOJu0Ywudlt3OGrMNxnCGcPp3NHEpsmsNGnqBPTmlagedoi7UhRKmPzB
+        mEShzvn4/KF0pi5uygJ+tloDQw==
+X-Google-Smtp-Source: AGHT+IE69wm+LfM1P9hVAjNQFO/fTOBepgHbSEMYy1IVhm+plv/9fJIRwOYYZ4z6oxAD4V9Qyp04lg==
+X-Received: by 2002:a9d:51cb:0:b0:6bf:5010:9d35 with SMTP id d11-20020a9d51cb000000b006bf50109d35mr25251752oth.3.1697148468435;
+        Thu, 12 Oct 2023 15:07:48 -0700 (PDT)
+Received: from [192.168.1.136] ([198.8.77.194])
+        by smtp.gmail.com with ESMTPSA id o10-20020a056a001bca00b0068c670afe30sm7442663pfw.124.2023.10.12.15.07.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 12 Oct 2023 15:07:47 -0700 (PDT)
+Message-ID: <eb150179-c328-4058-80e3-f517d45310c4@kernel.dk>
+Date:   Thu, 12 Oct 2023 16:07:46 -0600
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] audit,io_uring: io_uring openat triggers audit reference
+ count underflow
+Content-Language: en-US
+To:     Dan Clash <daclash@linux.microsoft.com>, audit@vger.kernel.org,
+        io-uring@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, paul@paul-moore.com,
         linux-fsdevel@vger.kernel.org, brauner@kernel.org,
         dan.clash@microsoft.com
-Subject: [PATCH] audit,io_uring: io_uring openat triggers audit reference
- count underflow
-Message-ID: <20231012215518.GA4048@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.5.21 (2010-09-15)
+References: <20231012215518.GA4048@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <20231012215518.GA4048@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <audit.vger.kernel.org>
 X-Mailing-List: audit@vger.kernel.org
 
-An io_uring openat operation can update an audit reference count
-from multiple threads resulting in the call trace below.
+On 10/12/23 3:55 PM, Dan Clash wrote:
+> An io_uring openat operation can update an audit reference count
+> from multiple threads resulting in the call trace below.
+> 
+> A call to io_uring_submit() with a single openat op with a flag of
+> IOSQE_ASYNC results in the following reference count updates.
+> 
+> These first part of the system call performs two increments that do not race.
+> 
+> do_syscall_64()
+>   __do_sys_io_uring_enter()
+>     io_submit_sqes()
+>       io_openat_prep()
+>         __io_openat_prep()
+>           getname()
+>             getname_flags()       /* update 1 (increment) */
+>               __audit_getname()   /* update 2 (increment) */
+> 
+> The openat op is queued to an io_uring worker thread which starts the
+> opportunity for a race.  The system call exit performs one decrement.
+> 
+> do_syscall_64()
+>   syscall_exit_to_user_mode()
+>     syscall_exit_to_user_mode_prepare()
+>       __audit_syscall_exit()
+>         audit_reset_context()
+>            putname()              /* update 3 (decrement) */
+> 
+> The io_uring worker thread performs one increment and two decrements.
+> These updates can race with the system call decrement.
+> 
+> io_wqe_worker()
+>   io_worker_handle_work()
+>     io_wq_submit_work()
+>       io_issue_sqe()
+>         io_openat()
+>           io_openat2()
+>             do_filp_open()
+>               path_openat()
+>                 __audit_inode()   /* update 4 (increment) */
+>             putname()             /* update 5 (decrement) */
+>         __audit_uring_exit()
+>           audit_reset_context()
+>             putname()             /* update 6 (decrement) */
+> 
+> The fix is to change the refcnt member of struct audit_names
+> from int to atomic_t.
+> 
+> kernel BUG at fs/namei.c:262!
+> Call Trace:
+> ...
+>  ? putname+0x68/0x70
+>  audit_reset_context.part.0.constprop.0+0xe1/0x300
+>  __audit_uring_exit+0xda/0x1c0
+>  io_issue_sqe+0x1f3/0x450
+>  ? lock_timer_base+0x3b/0xd0
+>  io_wq_submit_work+0x8d/0x2b0
+>  ? __try_to_del_timer_sync+0x67/0xa0
+>  io_worker_handle_work+0x17c/0x2b0
+>  io_wqe_worker+0x10a/0x350
+> 
+> Cc: <stable@vger.kernel.org>
+> Link: https://lore.kernel.org/lkml/MW2PR2101MB1033FFF044A258F84AEAA584F1C9A@MW2PR2101MB1033.namprd21.prod.outlook.com/
+> Fixes: 5bd2182d58e9 ("audit,io_uring,io-wq: add some basic audit support to io_uring")
+> Signed-off-by: Dan Clash <daclash@linux.microsoft.com>
 
-A call to io_uring_submit() with a single openat op with a flag of
-IOSQE_ASYNC results in the following reference count updates.
+Reviewed-by: Jens Axboe <axboe@kernel.dk>
 
-These first part of the system call performs two increments that do not race.
-
-do_syscall_64()
-  __do_sys_io_uring_enter()
-    io_submit_sqes()
-      io_openat_prep()
-        __io_openat_prep()
-          getname()
-            getname_flags()       /* update 1 (increment) */
-              __audit_getname()   /* update 2 (increment) */
-
-The openat op is queued to an io_uring worker thread which starts the
-opportunity for a race.  The system call exit performs one decrement.
-
-do_syscall_64()
-  syscall_exit_to_user_mode()
-    syscall_exit_to_user_mode_prepare()
-      __audit_syscall_exit()
-        audit_reset_context()
-           putname()              /* update 3 (decrement) */
-
-The io_uring worker thread performs one increment and two decrements.
-These updates can race with the system call decrement.
-
-io_wqe_worker()
-  io_worker_handle_work()
-    io_wq_submit_work()
-      io_issue_sqe()
-        io_openat()
-          io_openat2()
-            do_filp_open()
-              path_openat()
-                __audit_inode()   /* update 4 (increment) */
-            putname()             /* update 5 (decrement) */
-        __audit_uring_exit()
-          audit_reset_context()
-            putname()             /* update 6 (decrement) */
-
-The fix is to change the refcnt member of struct audit_names
-from int to atomic_t.
-
-kernel BUG at fs/namei.c:262!
-Call Trace:
-...
- ? putname+0x68/0x70
- audit_reset_context.part.0.constprop.0+0xe1/0x300
- __audit_uring_exit+0xda/0x1c0
- io_issue_sqe+0x1f3/0x450
- ? lock_timer_base+0x3b/0xd0
- io_wq_submit_work+0x8d/0x2b0
- ? __try_to_del_timer_sync+0x67/0xa0
- io_worker_handle_work+0x17c/0x2b0
- io_wqe_worker+0x10a/0x350
-
-Cc: <stable@vger.kernel.org>
-Link: https://lore.kernel.org/lkml/MW2PR2101MB1033FFF044A258F84AEAA584F1C9A@MW2PR2101MB1033.namprd21.prod.outlook.com/
-Fixes: 5bd2182d58e9 ("audit,io_uring,io-wq: add some basic audit support to io_uring")
-Signed-off-by: Dan Clash <daclash@linux.microsoft.com>
----
- fs/namei.c         | 9 +++++----
- include/linux/fs.h | 2 +-
- kernel/auditsc.c   | 8 ++++----
- 3 files changed, 10 insertions(+), 9 deletions(-)
-
-diff --git a/fs/namei.c b/fs/namei.c
-index 567ee547492b..94565bd7e73f 100644
---- a/fs/namei.c
-+++ b/fs/namei.c
-@@ -188,7 +188,7 @@ getname_flags(const char __user *filename, int flags, int *empty)
- 		}
- 	}
- 
--	result->refcnt = 1;
-+	atomic_set(&result->refcnt, 1);
- 	/* The empty path is special. */
- 	if (unlikely(!len)) {
- 		if (empty)
-@@ -249,7 +249,7 @@ getname_kernel(const char * filename)
- 	memcpy((char *)result->name, filename, len);
- 	result->uptr = NULL;
- 	result->aname = NULL;
--	result->refcnt = 1;
-+	atomic_set(&result->refcnt, 1);
- 	audit_getname(result);
- 
- 	return result;
-@@ -261,9 +261,10 @@ void putname(struct filename *name)
- 	if (IS_ERR(name))
- 		return;
- 
--	BUG_ON(name->refcnt <= 0);
-+	if (WARN_ON_ONCE(!atomic_read(&name->refcnt)))
-+		return;
- 
--	if (--name->refcnt > 0)
-+	if (!atomic_dec_and_test(&name->refcnt))
- 		return;
- 
- 	if (name->name != name->iname) {
-diff --git a/include/linux/fs.h b/include/linux/fs.h
-index 4aeb3fa11927..85653ce30d2c 100644
---- a/include/linux/fs.h
-+++ b/include/linux/fs.h
-@@ -2444,7 +2444,7 @@ struct audit_names;
- struct filename {
- 	const char		*name;	/* pointer to actual string */
- 	const __user char	*uptr;	/* original userland pointer */
--	int			refcnt;
-+	atomic_t		refcnt;
- 	struct audit_names	*aname;
- 	const char		iname[];
- };
-diff --git a/kernel/auditsc.c b/kernel/auditsc.c
-index 21d2fa815e78..6f0d6fb6523f 100644
---- a/kernel/auditsc.c
-+++ b/kernel/auditsc.c
-@@ -2212,7 +2212,7 @@ __audit_reusename(const __user char *uptr)
- 		if (!n->name)
- 			continue;
- 		if (n->name->uptr == uptr) {
--			n->name->refcnt++;
-+			atomic_inc(&n->name->refcnt);
- 			return n->name;
- 		}
- 	}
-@@ -2241,7 +2241,7 @@ void __audit_getname(struct filename *name)
- 	n->name = name;
- 	n->name_len = AUDIT_NAME_FULL;
- 	name->aname = n;
--	name->refcnt++;
-+	atomic_inc(&name->refcnt);
- }
- 
- static inline int audit_copy_fcaps(struct audit_names *name,
-@@ -2373,7 +2373,7 @@ void __audit_inode(struct filename *name, const struct dentry *dentry,
- 		return;
- 	if (name) {
- 		n->name = name;
--		name->refcnt++;
-+		atomic_inc(&name->refcnt);
- 	}
- 
- out:
-@@ -2500,7 +2500,7 @@ void __audit_inode_child(struct inode *parent,
- 		if (found_parent) {
- 			found_child->name = found_parent->name;
- 			found_child->name_len = AUDIT_NAME_FULL;
--			found_child->name->refcnt++;
-+			atomic_inc(&found_child->name->refcnt);
- 		}
- 	}
- 
-
-base-commit: 0bb80ecc33a8fb5a682236443c1e740d5c917d1d
 -- 
-2.34.1
+Jens Axboe
+
 
