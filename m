@@ -2,252 +2,130 @@ Return-Path: <audit-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B28E8CDB473
-	for <audit@archiver.kernel.org>; Wed, 11 Oct 2023 17:56:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 11BFFCDB474
+	for <audit@archiver.kernel.org>; Thu, 12 Oct 2023 21:12:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231906AbjJKR4J (ORCPT <rfc822;audit@archiver.kernel.org>);
-        Wed, 11 Oct 2023 13:56:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52326 "EHLO
+        id S1442682AbjJLVMZ (ORCPT <rfc822;audit@archiver.kernel.org>);
+        Thu, 12 Oct 2023 17:12:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232554AbjJKR4I (ORCPT <rfc822;audit@vger.kernel.org>);
-        Wed, 11 Oct 2023 13:56:08 -0400
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9B29B7
-        for <audit@vger.kernel.org>; Wed, 11 Oct 2023 10:56:04 -0700 (PDT)
-Received: by mail-yb1-xb2e.google.com with SMTP id 3f1490d57ef6-d9a58f5f33dso92660276.1
-        for <audit@vger.kernel.org>; Wed, 11 Oct 2023 10:56:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1697046964; x=1697651764; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PWtaFijWyvVuvqNr4fXwM0s6fDs1JkHJ0F4b/NTx6Fg=;
-        b=QEuX5kE2NCe1N3mjYDcDbxTH5FHvBsVBVKZ314v00PCGhcLcAyJgifwL8pGcgNlkIv
-         WLEmQfoT8uwIV/fUtOozq3ULJi8OKeyrKst3ADmVbEjkmcS3HdPi3MPqB+dJhUuk4IiM
-         KtctoegdjUY33cU0O8E8xfjNo5guPC3xVCeXX8unqsYIo6NnVj8lWO5Uz2bz0JQUXyRT
-         DzMLZMo9+HkDMOQdRnM4aH3J32Tm990H6kf+DhK6TDQk6wVhx2j4S9zV6Nd8uQMLI5yu
-         iMVuWvnCnVH7/lIbTKPhllTLhqEhMcHz7dILExZ5Ny9N0KV0yR8DPTGf3MLT2NUM3cHv
-         TJ4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697046964; x=1697651764;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=PWtaFijWyvVuvqNr4fXwM0s6fDs1JkHJ0F4b/NTx6Fg=;
-        b=Uax+aquihQfnbvsmtmxQ47miY7L+0FHx7pOsUMyrIWHosin0pbyToN/LAiT0y4jvG6
-         xcKETQbm34LQMnRAc1HgMl7Y/NkGLeMzOdpqoBuYPpvXOspUItUuyaAd0+owh/NMouvj
-         J88Dcy9AVR3VHg+loMGYqFYtlQka0qz+0DT5eNhilamk1A8hRuSqzn6jkX7oY0Ub/DWt
-         9CjwUTOCArbppBWt/2VzJdDAOzi3lQ4eUUi9Nr5jDIN0CZ/OcNdv8sCYSifK+wvgW8+Y
-         eRmLiibL/AVT5z9LruPVN9mSjCTwxfAFSXUHmLAD9J6IfMxReYt1IQ6E2oJ/zHPj4WO8
-         xElg==
-X-Gm-Message-State: AOJu0Ywe5jz34wY5gX8GDsqWPp9/ZxKmDWPOpHWMa5v84AvuSF4D0Q4j
-        Dujk31dF9OVMQIX2CVdPqvxSG4pMldvNLm1Uuv7rhc5f1ESld4k0ig==
-X-Google-Smtp-Source: AGHT+IFJX+L5WIMd3iESlAGt+fefkGByy73bo4LOCcsfpjWkp6Ld2fU8oxPp98jSySiVcpcElpI3G9Vijd7B0lotooU=
-X-Received: by 2002:a25:938b:0:b0:d15:e204:a7be with SMTP id
- a11-20020a25938b000000b00d15e204a7bemr21290595ybm.8.1697046963771; Wed, 11
- Oct 2023 10:56:03 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230922152749.244197-1-chris.riches@nutanix.com>
-In-Reply-To: <20230922152749.244197-1-chris.riches@nutanix.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Wed, 11 Oct 2023 13:55:52 -0400
-Message-ID: <CAHC9VhTEUybqU3Bv51oLgCWLOjsFQBwzXONwXERPuM1U+vhmFQ@mail.gmail.com>
-Subject: Re: [RFC PATCH] audit: Send netlink ACK before setting connection in auditd_set
-To:     Chris Riches <chris.riches@nutanix.com>
-Cc:     audit@vger.kernel.org, Eric Paris <eparis@redhat.com>,
-        jonathan.davies@nutanix.com, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        with ESMTP id S1442372AbjJLVMY (ORCPT
+        <rfc822;audit@vger.kernel.org>); Thu, 12 Oct 2023 17:12:24 -0400
+Received: from DM6FTOPR00CU001.outbound.protection.outlook.com (mail-centralusazon11020017.outbound.protection.outlook.com [52.101.61.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BECF3BB;
+        Thu, 12 Oct 2023 14:12:20 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ly3XRmwJhJkQkiQhpLGykYq3nU+69sgF/yZbHFFWvSZz1qZ8Qi+20BUMGb4SFMOz4mw+phnoKhA9szbay1jDcRFWcwuM29Dlfw2Njd7StznkCkglHRvaU3QuYjQmOEnfXS1bEwT7SK/MFaUnBlr96Y099fUmJ0HgssSc2xQAaFSpYGYbdSTAJ9EumlKivKPQUEQCdhLbDkvQKJ0UCGWCc9ltSCdMFNP90GIZqKoyIhj5BctXbHctRq/8V4+BAwBVg2K3uS0PxylLbS4Ubdhja72s+EXGiPitMMI63RgmCDWqJmdiR3hda82xmsxhGSDZCreonXaa65lqw5qf0mLFMQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=0dIJ9qY6nqAlWDUWjAeggis+IhnNGsSwPtRb3glWxqE=;
+ b=Chy3Pcw2OFmJEcr9joe9hTDeTh+l26yOxVxGh6IMSqpn6JeefNFT8eC4NUTcSokeQfdH0tY0qUc6XUslKDBlV3wzgyN+UApgcBM/IkApV1IduUwVLOU5rY3uFSKN3PlY78xuJWRfvcX4ieKmS0SvBr5yWV5foa2p37m4donVNDajFIpgvQ5B90NODaRcE+Tz/Z3VVufS63tqVga+Zo33sdTJzlrFL1ddRKpo76/kePVU2uFxvVdJylSjGLorjxbipTHnS37iQAOUwcYJRF9jpP+ozunxTFb63FwQFGRcr9o9Nq6VHO8AxL23ZQAMeWvXeCotIvcv2HNw5Oh60/gNAw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microsoft.com; dmarc=pass action=none
+ header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=0dIJ9qY6nqAlWDUWjAeggis+IhnNGsSwPtRb3glWxqE=;
+ b=honllblg2pgOnfjCdVLXSmRXmVtvNKOWozOb08kEtBeP+2c99UK9QsBXHYucvwFROHs1DvuzL4oVXEvtrxsYVq2V7j8BkDjQY5qCpA0deMKxXKT1XvKTr7bd+t5+DVySwZg/WzZ0Ym9G5wtH5/RDn6sVa2VmsKBkkTnOX/AzbO4=
+Received: from MW2PR2101MB1033.namprd21.prod.outlook.com (2603:10b6:302:4::32)
+ by BL1PR21MB3281.namprd21.prod.outlook.com (2603:10b6:208:399::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6907.14; Thu, 12 Oct
+ 2023 21:12:17 +0000
+Received: from MW2PR2101MB1033.namprd21.prod.outlook.com
+ ([fe80::4b06:fbc4:1ab1:f615]) by MW2PR2101MB1033.namprd21.prod.outlook.com
+ ([fe80::4b06:fbc4:1ab1:f615%6]) with mapi id 15.20.6907.013; Thu, 12 Oct 2023
+ 21:12:17 +0000
+From:   Dan Clash <Dan.Clash@microsoft.com>
+To:     Jens Axboe <axboe@kernel.dk>, Paul Moore <paul@paul-moore.com>
+CC:     "audit@vger.kernel.org" <audit@vger.kernel.org>,
+        "io-uring@vger.kernel.org" <io-uring@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "brauner@kernel.org" <brauner@kernel.org>,
+        Dan Clash <daclash@linux.microsoft.com>
+Subject: Re: [EXTERNAL] Re: audit: io_uring openat triggers audit reference
+ count underflow in worker thread
+Thread-Topic: [EXTERNAL] Re: audit: io_uring openat triggers audit reference
+ count underflow in worker thread
+Thread-Index: AQHZ+JAylfbNgEMpYU+qEdC5BlzyarA9m/2AgACyf4CAACH1gIACSc/NgADBEgCABTGmpQ==
+Date:   Thu, 12 Oct 2023 21:12:17 +0000
+Message-ID: <MW2PR2101MB103342BED5785C37F5F078B3F1D3A@MW2PR2101MB1033.namprd21.prod.outlook.com>
+References: <MW2PR2101MB1033FFF044A258F84AEAA584F1C9A@MW2PR2101MB1033.namprd21.prod.outlook.com>
+ <ab758860-e51e-409c-8353-6205fbe515dc@kernel.dk>
+ <e0307260-c438-41d9-97ec-563e9932a60e@kernel.dk>
+ <CAHC9VhQ0z4wuH7R=KRcUTyZuRs7adYTiH5JjohJSz4d2-Jd9EQ@mail.gmail.com>
+ <MW2PR2101MB1033E52DD9307F9EF15F1E85F1CEA@MW2PR2101MB1033.namprd21.prod.outlook.com>
+ <23109a06-0f1e-4baf-973b-d0a3d208ea65@kernel.dk>
+In-Reply-To: <23109a06-0f1e-4baf-973b-d0a3d208ea65@kernel.dk>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=True;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2023-10-12T21:12:15.605Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=General;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microsoft.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: MW2PR2101MB1033:EE_|BL1PR21MB3281:EE_
+x-ms-office365-filtering-correlation-id: 9379eefc-af2b-432f-c068-08dbcb67e9f7
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: gYAQSuW78QoC4BhWZ8G2Wa8c5WRG6oUz8CZoqVFr5+4rEXs6+tv2MsZdYECibxrM6j/fWZqnbrmbjmWzn4/2FKYLPwlwd2pgDLXbPQefKWHoJhErDB/FjASlPuhsY9ofm25+zMoy8oNnGRBQkfQzs6eoqbLKwmEzxa4BitkBYF7i9DrJnVSpMpZAG14ILBvL/mHpQI2uX0iO0JdCdQBAuFdndLd5vl0X2A7TJ7RUTXVbXLxay7QvtWsf7OzBj6NZ8csDIxitX5t33Ul5RUi1kNQqIjpwsrAUMcS4wRzkpD2/35WgLZDiiqx8Pufoib+neJDNf4Qrqfo6sBzsbV2gy8xUa2S5gyRHtVpDqPgm5BdYejX2kwQUdctv1F7I+xOpU8s6ArRNacVtyQJ1yLO82R/Je8jQMguXkZyaktOvSH4OV8m/wGquWIoZjGdcIcHy3G8skfaS1QIa3HYY194obM5ehjtSZCr0/iUKzELKabzSi30nbqgBzmaV/JPYNGAK6EI2bUfqt755fu0tYIlPkU+Icj9iajk/KxvibyyCTWqgY4APIMLTsSgtDGEqbBOJmz05wf6JI36E+dG9fcyFHidPv2oR8glfeUBdT1tLMh3sqPFSFOapjQKtSD1lOmDbnQUlHsxr+voQTkUcaBFTBtLsISuiDWOoSNTbEHNDTXM=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW2PR2101MB1033.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(346002)(39860400002)(136003)(396003)(376002)(366004)(230922051799003)(451199024)(64100799003)(186009)(1800799009)(55016003)(8990500004)(107886003)(26005)(122000001)(38100700002)(66946007)(66476007)(66556008)(76116006)(66446008)(91956017)(110136005)(316002)(64756008)(54906003)(5660300002)(41300700001)(4326008)(52536014)(8676002)(6506007)(8936002)(71200400001)(7696005)(9686003)(2906002)(10290500003)(478600001)(82950400001)(82960400001)(86362001)(33656002)(558084003)(38070700005);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?+hFjJZMpCWFLKnqZayA/9v0N+QtDLekk+jiwX4PBeMHfo0u0SkmJW5pQkJ?=
+ =?iso-8859-1?Q?fP8cDTaZt9aV35cutQJ5fi2A28xsAyvvRFEgUBlo4X8q1zf1OSU3/Typx3?=
+ =?iso-8859-1?Q?x3ntMy82Vr8VpcDxQ/MRylxJEWmw3I35UaWuNqkTDzK6soeWKwAFXAXHZB?=
+ =?iso-8859-1?Q?u8S/RrqD/TKFb/a9SLCLoIOq31HjlTIncUieCMQ8cVkYYpv2SbMTUhsejz?=
+ =?iso-8859-1?Q?wSU4SKUmoUAz8FkT5CS1LuVIk5lVz4OgUyTp/4M/BTp5HwcP76zMumIX9a?=
+ =?iso-8859-1?Q?J+dTzFdmVIqVMhmzrHAUiaUb3g80W3UK5L6wHX6hzkeJOlzWsrX1fwHc4F?=
+ =?iso-8859-1?Q?PHwwfazxGXkFO1OneHHxhYfQGpa7+azqUrseFOurkvi8le6LtgwMik1TS4?=
+ =?iso-8859-1?Q?Q+e4FVBKWkDwnDx4id+gqA2kjRRFjD+/300bNjHqm+zhBKTgWh4hVNiMaX?=
+ =?iso-8859-1?Q?ilSlPOcndqr78dKnNWOacmhSW+azdrL4jOsDwc4c5CV6GNIdAru9M8SHZV?=
+ =?iso-8859-1?Q?V+Wx4PhxnRRkIgaxN5RR0vq0OrgQQq08lWVcn/io88qhB4RC/iHz7e+o82?=
+ =?iso-8859-1?Q?SZeyQZzg+EXObJms2ZcRiY7htMcByFv22Tfe0LAAWuYvk6u2uKQvapYhwu?=
+ =?iso-8859-1?Q?Gr5oir02WwKxfRX7J6uL46dgSZ33WqcN1RNVSto2gPMziQBcLqSyxLnSx1?=
+ =?iso-8859-1?Q?V2divR++GrhD574J7hcvqWINDVXp2uZ88+x2MO0HX9v8OcJe50i4q5Zz7j?=
+ =?iso-8859-1?Q?6VaroTALmaTAwGHp3Tgil2GmYGN+Wwb+IM6XKjSrjGRo6ToVt59ImaJ8iz?=
+ =?iso-8859-1?Q?SYnjlwyVzuwALDoUQS6+VvZjggn5qeF3YrXMAQFg/HmwS8Vm8eJxWHzL2G?=
+ =?iso-8859-1?Q?VBwiUN9GfuUFoc99bqLRt3M4IhrEw4IcQLa9UmfcrxV+MdbbM6tgUYw8SQ?=
+ =?iso-8859-1?Q?bSWpwxLGp+Qa4kzzCKkE0OfPk7uL7B8MMFG2oLbLv4QYyVbeIaiRA+7ysa?=
+ =?iso-8859-1?Q?utCWGOXnbpoU9SddD0f+Syu9JseyCQMesWaP54Mg9K4WHH78onmXMrkm0/?=
+ =?iso-8859-1?Q?SJBCPU3qdR8ycGBn+9RBmjjBEG6nOHz0N5M1R/rpl673vhvauYTllgSJOz?=
+ =?iso-8859-1?Q?278JNlBnkTVYf29ZmyPt39FlIvDR21JM/OFxC7m/QIydwgkSDsCErAa+Lb?=
+ =?iso-8859-1?Q?asff+u97b2Af4IUruK9AEWNxqSY4BtFsz+D07h49kwNvfggSsezhvjowOZ?=
+ =?iso-8859-1?Q?/zsNTSYUdgl8zwl/RR9G4TTTz0FBJum9vuOKEqz5Wezkvmgg2ciut1fYgG?=
+ =?iso-8859-1?Q?cnB74QbYLXf7Pn7TaHMSVCIEhFPCVVdDpOyxugwtQHWE0QobBlTRMEGsSu?=
+ =?iso-8859-1?Q?kKBsI0+ymcmahtQ1LYqQbFQN7lNL+0WgrhsRNluh7I0QDzQmcICDvIFu3R?=
+ =?iso-8859-1?Q?FKT/BxsQMk759BFuJIKMuwEa35V+pIQv5g9gCV30vyH5LCUXu8RHwirXeS?=
+ =?iso-8859-1?Q?XhMSVeTW4Qx9usQfRmjtWsIbe8GFF1ldlDOudJ7CFfcx6c81O9iAjxy9e1?=
+ =?iso-8859-1?Q?SUV4G5KvjdSh1V6ndRyXe8htCcc75RbP1RYWkQDfo/NDEUTyLAQKeRiWD8?=
+ =?iso-8859-1?Q?L/zq2r17zy17pObTDMTUPFT8WyszFAjg62?=
+Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: microsoft.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MW2PR2101MB1033.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9379eefc-af2b-432f-c068-08dbcb67e9f7
+X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Oct 2023 21:12:17.0337
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: XXmc8TvsKP5Fjx9M6nvLeMsFpezE1fed2gX73zl63lEIUmEXWwAGK2qWGh8nnq0Mkt8rpl4IxO5a0gW4H7JfxA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR21MB3281
 Precedence: bulk
 List-ID: <audit.vger.kernel.org>
 X-Mailing-List: audit@vger.kernel.org
 
-On Fri, Sep 22, 2023 at 11:28=E2=80=AFAM Chris Riches <chris.riches@nutanix=
-.com> wrote:
->
-> When auditd_set sets the auditd_conn pointer, audit messages can
-> immediately be put on the socket by other kernel threads. If the backlog
-> is large or the rate is high, this can immediately fill the socket
-> buffer. If the audit daemon requested an ACK for this operation, a full
-> socket buffer causes the ACK to get dropped, also setting ENOBUFS on the
-> socket.
->
-> To avoid this race and ensure ACKs get through, fast-track the ACK in
-> this specific case to ensure it is sent before auditd_conn is set.
->
-> Signed-off-by: Chris Riches <chris.riches@nutanix.com>
-
-Thanks for looking into this and submitting a patch Chris!
-
-I think the basic approach is good, but I think we can simply things
-slightly by using a resettable boolean as opposed to an integer flag
-for the ACK.  I've pasted in a quick, untested patch (below) to better
-demonstrate the idea, let me know what you think.  Further thoughts
-below ...
-
-> This mail is more of an RFC than a patch, though the included patch is a
-> useful illustation and might even be suitable for inclusion.
-
-Regardless of any other issues, I think you brought up a good point
-about there being socket buffer contention when the queues are
-full(ish) and an audit daemon connects to the kernel and while I'm not
-sure that this patch will fully resolve that issue, I do think it
-would be good to have (I'm doubtful if it can be fully resolved
-without some really awful hacks).
-
-> We are experiencing strange failures where the audit daemon fails to
-> start, hitting an ENOBUFS error on its audit_set_pid() call. This can be
-> reproduced by repeatedly restarting the audit daemon (or just doing a
-> tight loop of audit_open(), audit_set_pid(pid), audit_set_pid(0),
-> audit_close()) while the system is under heavy audit load. This also
-> seems to be dependent on the number of CPUs - we can reproduce this with
-> 2 CPUs but not with 48.
-
-The ENOBUFS errors are coming from the netlink layer and are likely a
-sign of extreme load.  I'm not very familiar with the audit userspace
-code, but it might be helpful to see if you can increase the socket
-buffer size for the audit daemon.
-
-> Tracing showed a race between the kernel setting auditd_conn and sending
-> the ACK, as described in the commit message. The included patch attempts
-> to fix this by ensuring the ACK is sent before any audit messages can be
-> put on the socket. This seems to fix the problem for auditd starting,
-> but strangely I still hit it when running my minimal repro (the tight
-> loop mentioned above), albeit less frequently. I'm not sure if the patch
-> or the repro is at fault.
-
-Sending a zero PID value, e.g. audit_set_pid(0), is going to cause the
-kernel to reset/drop the connection with the audit daemon; it's
-essentially the same as an orderly shutdown of the audit daemon.
-However, if you do it in a tight loop alternating between
-audit_set_pid(X) and audit_set_pid(0) you are basically thrashing the
-audit daemon connection state in the kernel which is in turn likely
-causing odd things to happen both with the kernel's audit queues and
-the auditd socket buffer.
-
-While the userspace reproducer is valid, it isn't something I would
-expect in normal use as simply starting and stopping the audit daemon
-adds a significant delay between disconnecting and reconnecting.
-
-I'm also not surprised to hear that as you increase the number of CPUs
-the problem goes away.  With more CPUs the system is able to schedule
-more threads simultaneously to maintain the kernel's audit queues and
-execute the audit daemon to drain both the netlink socket buffer and
-audit queues.
-
-> We may also want to look at this from the userspace side in the audit
-> daemon itself (or more specifically, libaudit). The ACK handling is a
-> little odd - check_ack() will happily return success without seeing an
-> ACK if a non-ACK message is top of the socket queue, but will fail if no
-> message arrives within the timeout. It also of course fails if ENOBUFS
-> is set on the socket, but this failure only seems to matter when doing
-> audit_set_pid() - similar failures during main-loop message processing
-> are logged but otherwise ignored, as far as I can tell.
-
-I suggest bringing this up with the audit userspace developer if you
-haven't already.  While we can, and should, improve things on the
-kernel side (e.g. the patch we are discussing), it also sounds like
-the userspace side has room for improvement as well.
-
-Here is the patch I mentioned above:
-
-diff --git a/kernel/audit.c b/kernel/audit.c
-index 16205dd29843..49f18003c1ac 100644
---- a/kernel/audit.c
-+++ b/kernel/audit.c
-@@ -487,15 +487,19 @@ static void auditd_conn_free(struct rcu_head *rcu)
- * @pid: auditd PID
- * @portid: auditd netlink portid
- * @net: auditd network namespace pointer
-+ * @skb: the netlink command from the audit daemon
-+ * @ack: netlink ack flag, cleared if ack'd here
- *
- * Description:
- * This function will obtain and drop network namespace references as
- * necessary.  Returns zero on success, negative values on failure.
- */
--static int auditd_set(struct pid *pid, u32 portid, struct net *net)
-+static int auditd_set(struct pid *pid, u32 portid,
-+                     struct net *net, struct sk_buff *skb, bool *ack)
-{
-       unsigned long flags;
-       struct auditd_connection *ac_old, *ac_new;
-+       struct nlmsghdr *nlh;
-
-       if (!pid || !net)
-               return -EINVAL;
-@@ -507,6 +511,13 @@ static int auditd_set(struct pid *pid, u32 portid, str=
-uct n
-et *net)
-       ac_new->portid =3D portid;
-       ac_new->net =3D get_net(net);
-
-+       /* send the ack now to avoid a race with the queue backlog */
-+       if (*ack) {
-+               nlh =3D nlmsg_hdr(skb);
-+               netlink_ack(skb, nlh, 0, NULL);
-+               *ack =3D false;
-+       }
-+
-       spin_lock_irqsave(&auditd_conn_lock, flags);
-       ac_old =3D rcu_dereference_protected(auditd_conn,
-                                          lockdep_is_held(&auditd_conn_lock=
-));
-@@ -1200,7 +1211,8 @@ static int audit_replace(struct pid *pid)
-       return auditd_send_unicast_skb(skb);
-}
-
--static int audit_receive_msg(struct sk_buff *skb, struct nlmsghdr *nlh)
-+static int audit_receive_msg(struct sk_buff *skb, struct nlmsghdr *nlh,
-+                            bool *ack)
-{
-       u32                     seq;
-       void                    *data;
-@@ -1293,7 +1305,8 @@ static int audit_receive_msg(struct sk_buff *skb, str=
-uct n
-lmsghdr *nlh)
-                               /* register a new auditd connection */
-                               err =3D auditd_set(req_pid,
-                                                NETLINK_CB(skb).portid,
--                                                sock_net(NETLINK_CB(skb).s=
-k));
-+                                                sock_net(NETLINK_CB(skb).s=
-k),
-+                                                skb, ack);
-                               if (audit_enabled !=3D AUDIT_OFF)
-                                       audit_log_config_change("audit_pid",
-                                                               new_pid,
-@@ -1538,9 +1551,10 @@ static int audit_receive_msg(struct sk_buff *skb, st=
-ruct
-nlmsghdr *nlh)
- * Parse the provided skb and deal with any messages that may be present,
- * malformed skbs are discarded.
- */
--static void audit_receive(struct sk_buff  *skb)
-+static void audit_receive(struct sk_buff *skb)
-{
-       struct nlmsghdr *nlh;
-+       bool ack;
-       /*
-        * len MUST be signed for nlmsg_next to be able to dec it below 0
-        * if the nlmsg_len was not aligned
-@@ -1553,9 +1567,13 @@ static void audit_receive(struct sk_buff  *skb)
-
-       audit_ctl_lock();
-       while (nlmsg_ok(nlh, len)) {
--               err =3D audit_receive_msg(skb, nlh);
--               /* if err or if this message says it wants a response */
--               if (err || (nlh->nlmsg_flags & NLM_F_ACK))
-+               ack =3D nlh->nlmsg_flags & NLM_F_ACK;
-+               err =3D audit_receive_msg(skb, nlh, &ack);
-+
-+               /* if audit_receive_msg() clears @ack then we never want to
-+                * send an ack here, otherwise send an ack on error or if
-+                * requested */
-+               if (ack && (err || (nlh->nlmsg_flags & NLM_F_ACK)))
-                       netlink_ack(skb, nlh, err, NULL);
-
-               nlh =3D nlmsg_next(nlh, &len);
-
---=20
-paul-moore.com
+The patch will be sent from my alternate email address daclash@linux.micros=
+oft.com.=0A=
+Paul and Jens, thank you for your guidance so far.=0A=
+=0A=
+Dan=0A=
+=0A=
+=0A=
+=0A=
