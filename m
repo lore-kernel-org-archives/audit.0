@@ -2,102 +2,141 @@ Return-Path: <audit-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3F345C41513
-	for <audit@archiver.kernel.org>; Fri, 13 Oct 2023 16:23:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E8E57C41513
+	for <audit@archiver.kernel.org>; Fri, 13 Oct 2023 16:38:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230081AbjJMQXD (ORCPT <rfc822;audit@archiver.kernel.org>);
-        Fri, 13 Oct 2023 12:23:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47038 "EHLO
+        id S231248AbjJMQik (ORCPT <rfc822;audit@archiver.kernel.org>);
+        Fri, 13 Oct 2023 12:38:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231934AbjJMQWl (ORCPT <rfc822;audit@vger.kernel.org>);
-        Fri, 13 Oct 2023 12:22:41 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CAE41984;
-        Fri, 13 Oct 2023 09:22:33 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D077C433C8;
-        Fri, 13 Oct 2023 16:22:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1697214153;
-        bh=77wzV9MEoTXLXfQTuKRRmBfTs1SSurFIFiGTL+MyTDY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=R14unBPRHsceasa7071+fmC82i7CgNT4e9sYuWd7ckZA9bsebHSt6D3G4DtzXH11T
-         jYQtoXu9YqxIme3RHsPYrLzzNLoXtALd88VDpD6kRtX+XHt5pQUCk5pEIPcctqxmVX
-         GSLvysb1y10jRfhW9CrsGjnIhmVK6CeUSXlpP8MZZDW1SanPraU7pO9CoGbAdaLUQP
-         W41kE0Q/WQ66m2HnuVgIEvnx8QkmPmf2UJvusIbTUfTkZI47ZDVGZqqXYlNtzE0Wwm
-         SaPgTW40CJf9lH5D0+xmyf7uMuWnLTlqHt0mC4Pw9NldSOg8t5VpVrBC2YrGtrwLMV
-         AJ3t8KOb6vyuQ==
-Date:   Fri, 13 Oct 2023 18:22:28 +0200
-From:   Christian Brauner <brauner@kernel.org>
-To:     Paul Moore <paul@paul-moore.com>
+        with ESMTP id S231349AbjJMQih (ORCPT <rfc822;audit@vger.kernel.org>);
+        Fri, 13 Oct 2023 12:38:37 -0400
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E03C95
+        for <audit@vger.kernel.org>; Fri, 13 Oct 2023 09:38:35 -0700 (PDT)
+Received: by mail-yb1-xb30.google.com with SMTP id 3f1490d57ef6-d9ad90e1038so1940442276.3
+        for <audit@vger.kernel.org>; Fri, 13 Oct 2023 09:38:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1697215114; x=1697819914; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=85tz8MZnQIy0CUyHXD4OwO6hFEU+0OOkrrzLhDAPynw=;
+        b=Q90R7Tdrw7oRx2g7QAuiOQfZ0moqLRi0ko1qyZhnLu68DdroxUEZIZKnYfrcTlEKHZ
+         F2o9IHgWzk8aHLHfIF14T7v2rkjG2OaTJntJhFE020tmKlxjtdvweSw81h/GmEDVdT9A
+         obdHXgUydPNnob+3r8KdEv1ojDVBnCdthXzgdmq56O3rNndoRI6ecYVSF13Q5/GpIJAG
+         1PGe5u0iFbpoIMhdrS5/6EYJOBP4xVIj6gT6rMzbL535Bqnu3JiRuURSrChrMOZkF1HY
+         J7lJIBRJCJsY8ji8W3H64++Bt/h22HUxEe9ijrUNRiqs5KdQxqiKKlyVD4AUGDpkk5T7
+         c1Jg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1697215114; x=1697819914;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=85tz8MZnQIy0CUyHXD4OwO6hFEU+0OOkrrzLhDAPynw=;
+        b=ElZ2+G/XpQMq0jgYNebp3OfylneqYG2NoEqPaA+yuNWZQdzvijQXXlpFC2j7aTa2rE
+         c66SeqTFUNQRAaCtrym+BGJkuXAJhtGt+CPebYkfuqwSUmvhb+DUT+BjSwpnaRe7E97e
+         UyH0cSPAAa+X46BdYGw4+ugJ5idWsnpTOT2Vr1iTfSLCu3UMzsvNuIbcxhshDW0c0mVc
+         5W/K3/vxnMJcKRuYgbqirPQsbXDLkW7y5NQLee9sCYhfWJHKBRhKY5MCUtParjdraLoq
+         2QVJNYSPsz06QHeDNka90UWs02J1GOWWSTIsBzjjcGZL7a9c2YdhKhpxqcifitqU0AE6
+         aXMw==
+X-Gm-Message-State: AOJu0YyzSUvD+NRudRD5jHD+phY/NcTFlJz++5K4HCNn/nhL02wmKIWj
+        El/aK1wGuugYbhJCxZZi6y1Do1WmB2CG2kO8Xkyw
+X-Google-Smtp-Source: AGHT+IEIaSBfASZ5Mn1dNgyH878ixt7Ja/xhQg8a+sIaxL+NLRUpQv75KfQ3z3OfydJhIWt+cgU+2xUOjDRn5uIOySM=
+X-Received: by 2002:a25:8f8c:0:b0:d89:f292:6e80 with SMTP id
+ u12-20020a258f8c000000b00d89f2926e80mr26964031ybl.35.1697215114724; Fri, 13
+ Oct 2023 09:38:34 -0700 (PDT)
+MIME-Version: 1.0
+References: <20231012215518.GA4048@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+ <20231013-karierte-mehrzahl-6a938035609e@brauner> <CAHC9VhTQFyyE59A3WG3Z0xkP6m31h1M0bvS=yihE7ukpUiDMug@mail.gmail.com>
+ <20231013-hakte-sitzt-853957a5d8da@brauner>
+In-Reply-To: <20231013-hakte-sitzt-853957a5d8da@brauner>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Fri, 13 Oct 2023 12:38:24 -0400
+Message-ID: <CAHC9VhQ2hX8QvQagt+J7V2OBtiSXctufVcVj0fi1bQEsduWD4Q@mail.gmail.com>
+Subject: Re: [PATCH] audit,io_uring: io_uring openat triggers audit reference
+ count underflow
+To:     Christian Brauner <brauner@kernel.org>
 Cc:     Dan Clash <daclash@linux.microsoft.com>,
         linux-kernel@vger.kernel.org, axboe@kernel.dk,
         linux-fsdevel@vger.kernel.org, dan.clash@microsoft.com,
         audit@vger.kernel.org, io-uring@vger.kernel.org
-Subject: Re: [PATCH] audit,io_uring: io_uring openat triggers audit reference
- count underflow
-Message-ID: <20231013-hakte-sitzt-853957a5d8da@brauner>
-References: <20231012215518.GA4048@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
- <20231013-karierte-mehrzahl-6a938035609e@brauner>
- <CAHC9VhTQFyyE59A3WG3Z0xkP6m31h1M0bvS=yihE7ukpUiDMug@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHC9VhTQFyyE59A3WG3Z0xkP6m31h1M0bvS=yihE7ukpUiDMug@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <audit.vger.kernel.org>
 X-Mailing-List: audit@vger.kernel.org
 
-On Fri, Oct 13, 2023 at 11:56:08AM -0400, Paul Moore wrote:
-> On Fri, Oct 13, 2023 at 11:44 AM Christian Brauner <brauner@kernel.org> wrote:
+On Fri, Oct 13, 2023 at 12:22=E2=80=AFPM Christian Brauner <brauner@kernel.=
+org> wrote:
+>
+> On Fri, Oct 13, 2023 at 11:56:08AM -0400, Paul Moore wrote:
+> > On Fri, Oct 13, 2023 at 11:44=E2=80=AFAM Christian Brauner <brauner@ker=
+nel.org> wrote:
+> > >
+> > > On Thu, 12 Oct 2023 14:55:18 -0700, Dan Clash wrote:
+> > > > An io_uring openat operation can update an audit reference count
+> > > > from multiple threads resulting in the call trace below.
+> > > >
+> > > > A call to io_uring_submit() with a single openat op with a flag of
+> > > > IOSQE_ASYNC results in the following reference count updates.
+> > > >
+> > > > These first part of the system call performs two increments that do=
+ not race.
+> > > >
+> > > > [...]
+> > >
+> > > Picking this up as is. Let me know if this needs another tree.
 > >
-> > On Thu, 12 Oct 2023 14:55:18 -0700, Dan Clash wrote:
-> > > An io_uring openat operation can update an audit reference count
-> > > from multiple threads resulting in the call trace below.
-> > >
-> > > A call to io_uring_submit() with a single openat op with a flag of
-> > > IOSQE_ASYNC results in the following reference count updates.
-> > >
-> > > These first part of the system call performs two increments that do not race.
-> > >
-> > > [...]
+> > Whoa.  A couple of things:
 > >
-> > Picking this up as is. Let me know if this needs another tree.
-> 
-> Whoa.  A couple of things:
-> 
-> * Please don't merge patches into an upstream tree if all of the
-> affected subsystems haven't ACK'd the patch.  I know you've got your
-> boilerplate below about ACKs *after* the merge, which is fine, but I
-> find it breaks decorum a bit to merge patches without an explicit ACK
-> or even just a "looks good to me" from all of the relevant subsystems.
+> > * Please don't merge patches into an upstream tree if all of the
+> > affected subsystems haven't ACK'd the patch.  I know you've got your
+> > boilerplate below about ACKs *after* the merge, which is fine, but I
+> > find it breaks decorum a bit to merge patches without an explicit ACK
+> > or even just a "looks good to me" from all of the relevant subsystems.
+>
+> I simply read your mail:
+>
+> X-Date: Fri, 13 Oct 2023 17:43:54 +0200
+> X-URI: https://lore.kernel.org/lkml/CAHC9VhQcSY9q=3DwVT7hOz9y=3Do3a67BVUn=
+VGNotgAvE6vK7WAkBw@mail.gmail.com
+>
+> "I'm not too concerned, either approach works for me, the important bit
+>  is moving to an atomic_t/refcount_t so we can protect ourselves
+>  against the race.  The patch looks good to me and I'd like to get this
+>  fix merged."
+>
+> including that "The patch looks good to me [...]" part before I sent out
+> the application message:
 
-I simply read your mail:
+Some of this is likely due to email races, or far faster than normal
+responses.  When I was writing the email you reference above ("This
+patch looks good to me...") the last email I had from you was asking
+for changes to the patch; since you were suggesting a change I made
+the assumption (which arguably one shouldn't assume things) that you
+were not planning to merge the patch.
 
-X-Date: Fri, 13 Oct 2023 17:43:54 +0200
-X-URI: https://lore.kernel.org/lkml/CAHC9VhQcSY9q=wVT7hOz9y=o3a67BVUnVGNotgAvE6vK7WAkBw@mail.gmail.com
+> X-Date: Fri, 13 Oct 2023 17:44:36 +0200
+> X-URI: https://lore.kernel.org/lkml/20231013-karierte-mehrzahl-6a93803560=
+9e@brauner
+>
+> > Regardless, as I mentioned in my last email (I think our last emails
+> > raced a bit), I'm okay with this change, please add my ACK.
+>
+> It's before the weekend and we're about to release -rc6. This thing
+> needs to be in -next, you said it looks good to you in a prior mail. I'm
+> not sure why I'm receiving this mail apart from the justified
+> clarification about -stable although that was made explicit in your
+> prior mail as well.
 
-"I'm not too concerned, either approach works for me, the important bit
- is moving to an atomic_t/refcount_t so we can protect ourselves
- against the race.  The patch looks good to me and I'd like to get this
- fix merged."
+I hope I explained the intent in my last email a bit more clearly with
+the explanation above.  Regardless, I think the lessons to be learned
+is that I won't assume that your suggestion of changes and merging a
+patch are mutually exclusive, and just to be on the safe side I would
+ask that you not merge audit, LSM, or SELinux related patches without
+an explicit ACK from those subsystems.  Hopefully that should prevent
+things like this from happening again.
 
-including that "The patch looks good to me [...]" part before I sent out
-the application message:
-
-X-Date: Fri, 13 Oct 2023 17:44:36 +0200
-X-URI: https://lore.kernel.org/lkml/20231013-karierte-mehrzahl-6a938035609e@brauner
-
-> Regardless, as I mentioned in my last email (I think our last emails
-> raced a bit), I'm okay with this change, please add my ACK.
-
-It's before the weekend and we're about to release -rc6. This thing
-needs to be in -next, you said it looks good to you in a prior mail. I'm
-not sure why I'm receiving this mail apart from the justified
-clarification about -stable although that was made explicit in your
-prior mail as well.
-
-> 
-> Acked-by: Paul Moore <paul@paul-moore.com>
-
-Thanks for providing an explicit ACK.
+--=20
+paul-moore.com
