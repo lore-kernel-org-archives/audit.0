@@ -2,119 +2,126 @@ Return-Path: <audit-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9E3F0CDB47E
-	for <audit@archiver.kernel.org>; Wed, 18 Oct 2023 22:20:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0132CCDB47E
+	for <audit@archiver.kernel.org>; Wed, 18 Oct 2023 22:22:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229487AbjJRWUf (ORCPT <rfc822;audit@archiver.kernel.org>);
-        Wed, 18 Oct 2023 18:20:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49002 "EHLO
+        id S229726AbjJRWWm (ORCPT <rfc822;audit@archiver.kernel.org>);
+        Wed, 18 Oct 2023 18:22:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229702AbjJRWUe (ORCPT <rfc822;audit@vger.kernel.org>);
-        Wed, 18 Oct 2023 18:20:34 -0400
-Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB982111
-        for <audit@vger.kernel.org>; Wed, 18 Oct 2023 15:20:31 -0700 (PDT)
-Received: by mail-qk1-x72b.google.com with SMTP id af79cd13be357-7781b176131so137375685a.1
-        for <audit@vger.kernel.org>; Wed, 18 Oct 2023 15:20:31 -0700 (PDT)
+        with ESMTP id S229487AbjJRWWl (ORCPT <rfc822;audit@vger.kernel.org>);
+        Wed, 18 Oct 2023 18:22:41 -0400
+Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1D4D111
+        for <audit@vger.kernel.org>; Wed, 18 Oct 2023 15:22:39 -0700 (PDT)
+Received: by mail-yb1-xb2c.google.com with SMTP id 3f1490d57ef6-d9c7bba32beso1504068276.1
+        for <audit@vger.kernel.org>; Wed, 18 Oct 2023 15:22:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1697667630; x=1698272430; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=SxCEfihGPhE4CcRlvsov45x1kZKFnCAgjmABL1WH3aM=;
-        b=S0KVT4SqBlJ+YSYcvSY6XzQVxDyDAckP/yZ6tTWiexNSxKijSIVC2AWr3awGUdci+1
-         0vZ+O/o/xzYTUXAEszLMYQgKGtu94ulKehNPSOSjcQWSDJBbxN22bNAOwP3f1Kwhlkth
-         Kj+n9NitVAsZiP/HU+Y+/87WPd9YGZSxBNzNkRRaoolhHfmyf4ckjSw1OaZVm7CBjpIp
-         Oeqzks4Nt5gHv4AOtiqKST321t72f2VcMz3t3W5HC8x9Ircvnk0c7RSiaYxtlhAbCBUL
-         XXYu6CVUpkaSZVvlygR/ljUbvlTfnwfRCEZqjT4iioRdjZOhW+vVZ67/k+DQnudk5Y/t
-         rS1g==
+        d=paul-moore.com; s=google; t=1697667759; x=1698272559; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5H5Kjrbp3RWUReVXdI4zGXiHrwnmNDbbBrQ3pcKetNo=;
+        b=RR3+ugyUZXjXi5MeNo8NUPqrTpnQ78ChO3RyunnwEhsU3EjkVaL0k51cNvoCfqAFVh
+         kc2L7GYNH3ukNGKRQLVhODv4sBBveCgd/mnIWcxnIjX2Z7Srnnc7svc1C5GsvxohbMCY
+         6SwP5QaN6PD5RuU4ZX13/WJFlqIAuEnkmXrdwRnMyHZZFD782iZRIS9/w37/+XWsXFad
+         uViYvcfLhp9rbSTwIcBOEOnm9qOVijDJufWGKT5Hb/6k7/HxWlonlfzaGtKspUjAZmEq
+         qSOrLDWjeDF9ox5KmA+819PJZFO4aQcDTLk7xWCoSS+F9YB55/oRe7EBkaoiLkl670i9
+         Srmg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697667630; x=1698272430;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=SxCEfihGPhE4CcRlvsov45x1kZKFnCAgjmABL1WH3aM=;
-        b=VWZfDrWQt8vlcgxdIqx076NqWe0hpNsuFDdUpFK9F68DqWloqxlx9aoELisA9Gavg1
-         SW28k1If0B7zT9GHKV66rxwTUhvqnIx1ugYrIzH4qA5qIprFgcHOvBZLKPCY8oOQcZRS
-         TDqz9OHsrL1ysfMuXZVNM5nnCTZgNg1hchNuFzzlizH1PHMIhDegVfHjlgZ0oczbDWpM
-         4NpKlDI3YeCSZaco/1vb7pNPOIkr1j2CZN82xTCEP2sprhM3PExxhtYXF5P7OpyfnEe2
-         OUuOGT9A/E/vOkIyD+KCxruBXZnfr/GCLhdjKJjzh5EQMcotRu5p1vFUNztaAUS7pGZ0
-         eMJA==
-X-Gm-Message-State: AOJu0YyeN0g6Z6+hTROpnzpZ+7LeKSPF0pL8pXyZ3TZdyR+RYSRKfTFk
-        Q6c3PuANVf37AUspE9k/mxRsUYxwkuYD/cHlew==
-X-Google-Smtp-Source: AGHT+IExpOXlMMKn7U5ru5sm+1FVGwcWN3w7mFZabMkm1MLSp9cDRJueVgVXh5iHAnYC+EWSzZ5zow==
-X-Received: by 2002:a05:620a:29c5:b0:778:8c0f:b9b4 with SMTP id s5-20020a05620a29c500b007788c0fb9b4mr636484qkp.28.1697667630630;
-        Wed, 18 Oct 2023 15:20:30 -0700 (PDT)
-Received: from localhost ([70.22.175.108])
-        by smtp.gmail.com with ESMTPSA id i24-20020a05620a075800b007742bc74184sm278670qki.110.2023.10.18.15.20.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Oct 2023 15:20:30 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1697667759; x=1698272559;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=5H5Kjrbp3RWUReVXdI4zGXiHrwnmNDbbBrQ3pcKetNo=;
+        b=O+8K+w0g2YCZoXgzDcZC+/91VpdOqz8SDHSjFnwzD7wlf7HR91dj2z9hSPgXhTABH5
+         OwYuAb5zhgxKIt5vXhz5MpAD9hV2q6FUP+So3L6rKHmrPcQOkKE5FPRXkQDJt4AChydb
+         a0uNuxh+/kAQauya/mli4KeloJ/tLgm53VBdqBS1h/8AR7iG2dNhPNzWdLRj9gOVmwT3
+         jl4oaPJhLQ24I3wNbI2Cu3LlYINLT7gzZBa0y6Eu5JKLAMEQrZflWUOL7gBi00GcqWZM
+         EoNCA5NIMpxToOl1yfeth0de2O2p29BEN1xtP/T6FsOOc1xhUtbfDj/SMdsK+BTMGbGP
+         AIlw==
+X-Gm-Message-State: AOJu0YwBEW9ntqw2cvwQB9ab92PNRrzVSKp9ON31MUN5ENjA/MXCLaCJ
+        usEqDLHNp9QeoUi8OngX25Vvq01xGi3N+0mH1APs7Zmbkl2Nuprspw==
+X-Google-Smtp-Source: AGHT+IEQE0mbaO9fW4bzBibKdtTqgOudEFzQPDI7a2Yqj2nzAW/u4yoFeLktcjB+nEFrLTwR57xr2LnVGV2iyD8ysms=
+X-Received: by 2002:a25:b52:0:b0:d9c:7c23:97bc with SMTP id
+ 79-20020a250b52000000b00d9c7c2397bcmr696051ybl.55.1697667758742; Wed, 18 Oct
+ 2023 15:22:38 -0700 (PDT)
+MIME-Version: 1.0
+References: <20231018222023.371274-2-paul@paul-moore.com>
+In-Reply-To: <20231018222023.371274-2-paul@paul-moore.com>
 From:   Paul Moore <paul@paul-moore.com>
+Date:   Wed, 18 Oct 2023 18:22:27 -0400
+Message-ID: <CAHC9VhTRAugYNG3xwMO2oxy+Wdb_Oo2VkRBRWMnMdiTKij8TUw@mail.gmail.com>
+Subject: Re: [PATCH] audit: use mmget() instead of get_task_exe_file() when
+ auditing @current
 To:     audit@vger.kernel.org
 Cc:     Andreas Steinmetz <anstein99@googlemail.com>,
-        John Johansen <john.johansen@canonical.com>,
-        Mateusz Guzik <mguzik@redhat.com>
-Subject: [PATCH] audit: use mmget() instead of get_task_exe_file() when auditing @current
-Date:   Wed, 18 Oct 2023 18:20:24 -0400
-Message-ID: <20231018222023.371274-2-paul@paul-moore.com>
-X-Mailer: git-send-email 2.42.0
-MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1980; i=paul@paul-moore.com; h=from:subject; bh=OFVg1vlWv5JP04SKoEkf+vxQEGoJuIBq+JJr7g0WP/o=; b=owEBbQKS/ZANAwAIAeog8tqXN4lzAcsmYgBlMFonFuHAcElItyXSOku3HjY8WSZTma1zFcSeP 43VUlooCRiJAjMEAAEIAB0WIQRLQqjPB/KZ1VSXfu/qIPLalzeJcwUCZTBaJwAKCRDqIPLalzeJ c9NID/sEeSNqwn4FmA59Zp0q6P8BiMyb0naNTmt4GdXZR53SG5V4x5i57BLbGd3q5KVvgnuh0yd 3mc/rCS8GFeiVxUGNseh6rMIHhnFzN30wqUnaZ71r8HBhfGOpTkJebhgaTtIDNGjROYwOQO9e7H WmuZJWOsDxpe7ki6/RWbc43bVUMMOuc+FE/h1ojKewuHO0TnUF6n0M1wagJCTCSeOxDkRDDHmXr LiDk5q3qDyZnozdV7WfGIjk+uBQD8aGiz4TgESM78GOx76/OA5VCTG39ttjzaYx+0R1UuNxSjgS wj4dH14cmyDZQM02EWeuJexkoLnJH2YpwlplnjxS5S7oxnp7nNYOU9HkBkWgryuxNC9suGyMoS2 ZW4UqEVPkbBwtidBxymfvsu6Yis6CHjxOY5YVizi3X8EqiRiQVl0u3EAShWGHu3xv5tczzYuzUi SXRpjIcNhhuD+ZucXRrBbgFDfWXJGmOph2cpSxbVxvDImcXL2b8l9gIx4RG2gZuwNYY16gFAxpA UKdOj+lSTgFEiOHxVCTH9f6CoG0o4o6JEYmgPsJrSldy2F7NcwlEIYZ+ejwRncQOrc1OHP3x6Rt rj9XATDHa2EcJB2AS7gU+CHdHGHoK4JDkCC2iVK+xwpWm8g1Z3aFRn7gv2ANuXiKjRenkLrgR3j jS3v/i2DwUoK53A==
-X-Developer-Key: i=paul@paul-moore.com; a=openpgp; fpr=7100AADFAE6E6E940D2E0AD655E45A5AE8CA7C8A
-Content-Transfer-Encoding: 8bit
+        John Johansen <john.johansen@canonical.com>, mjguzik@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <audit.vger.kernel.org>
 X-Mailing-List: audit@vger.kernel.org
 
-The get_task_exe_file() function locks the given task with task_lock()
-which when used inside audit_exe_compare() can cause deadlocks on
-systems that generate audit records when the task_lock() is held.  As
-we should be able to safely access current->mm we can drop the call to
-get_task_exe_file() and get a reference to current->mm directly which
-we can then use in a call to get_mm_exe_file() without having to take
-task_lock().
+Updating Mateusz's email.
 
-While the audit_exe_compare() function takes an arbitrary task_struct
-parameter, all of the callers outside of fork/clone, call
-audit_exe_compare() to operate on the current task_struct, making it
-the common case.  In the fork/clone case, when audit_exe_compare() is
-called on the child task_struct, it should be safe to use the
-get_task_mm() function as no other task should be holding task_lock()
-at this time.
+On Wed, Oct 18, 2023 at 6:20=E2=80=AFPM Paul Moore <paul@paul-moore.com> wr=
+ote:
+>
+> The get_task_exe_file() function locks the given task with task_lock()
+> which when used inside audit_exe_compare() can cause deadlocks on
+> systems that generate audit records when the task_lock() is held.  As
+> we should be able to safely access current->mm we can drop the call to
+> get_task_exe_file() and get a reference to current->mm directly which
+> we can then use in a call to get_mm_exe_file() without having to take
+> task_lock().
+>
+> While the audit_exe_compare() function takes an arbitrary task_struct
+> parameter, all of the callers outside of fork/clone, call
+> audit_exe_compare() to operate on the current task_struct, making it
+> the common case.  In the fork/clone case, when audit_exe_compare() is
+> called on the child task_struct, it should be safe to use the
+> get_task_mm() function as no other task should be holding task_lock()
+> at this time.
+>
+> Cc: <stable@vger.kernel.org>
+> Fixes: 5efc244346f9 ("audit: fix exe_file access in audit_exe_compare")
+> Reported-by: Andreas Steinmetz <anstein99@googlemail.com>
+> Signed-off-by: Paul Moore <paul@paul-moore.com>
+> ---
+>  kernel/audit_watch.c | 14 +++++++++++++-
+>  1 file changed, 13 insertions(+), 1 deletion(-)
+>
+> diff --git a/kernel/audit_watch.c b/kernel/audit_watch.c
+> index 65075f1e4ac8..fa3e6ea0e58c 100644
+> --- a/kernel/audit_watch.c
+> +++ b/kernel/audit_watch.c
+> @@ -526,8 +526,20 @@ int audit_exe_compare(struct task_struct *tsk, struc=
+t audit_fsnotify_mark *mark)
+>         struct file *exe_file;
+>         unsigned long ino;
+>         dev_t dev;
+> +       struct mm_struct *mm;
+>
+> -       exe_file =3D get_task_exe_file(tsk);
+> +       /* almost always operate on current, exceptions for fork/clone */
+> +       if (likely(tsk =3D=3D current)) {
+> +               mmget(current->mm);
+> +               mm =3D current->mm;
+> +       } else {
+> +               /* this can deadlock outside the fork/clone usage (see ab=
+ove) */
+> +               mm =3D get_task_mm(tsk);
+> +               if (!mm)
+> +                       return 0;
+> +       }
+> +       exe_file =3D get_mm_exe_file(mm);
+> +       mmput(mm);
+>         if (!exe_file)
+>                 return 0;
+>         ino =3D file_inode(exe_file)->i_ino;
+> --
+> 2.42.0
 
-Cc: <stable@vger.kernel.org>
-Fixes: 5efc244346f9 ("audit: fix exe_file access in audit_exe_compare")
-Reported-by: Andreas Steinmetz <anstein99@googlemail.com>
-Signed-off-by: Paul Moore <paul@paul-moore.com>
----
- kernel/audit_watch.c | 14 +++++++++++++-
- 1 file changed, 13 insertions(+), 1 deletion(-)
-
-diff --git a/kernel/audit_watch.c b/kernel/audit_watch.c
-index 65075f1e4ac8..fa3e6ea0e58c 100644
---- a/kernel/audit_watch.c
-+++ b/kernel/audit_watch.c
-@@ -526,8 +526,20 @@ int audit_exe_compare(struct task_struct *tsk, struct audit_fsnotify_mark *mark)
- 	struct file *exe_file;
- 	unsigned long ino;
- 	dev_t dev;
-+	struct mm_struct *mm;
- 
--	exe_file = get_task_exe_file(tsk);
-+	/* almost always operate on current, exceptions for fork/clone */
-+	if (likely(tsk == current)) {
-+		mmget(current->mm);
-+		mm = current->mm;
-+	} else {
-+		/* this can deadlock outside the fork/clone usage (see above) */
-+		mm = get_task_mm(tsk);
-+		if (!mm)
-+			return 0;
-+	}
-+	exe_file = get_mm_exe_file(mm);
-+	mmput(mm);
- 	if (!exe_file)
- 		return 0;
- 	ino = file_inode(exe_file)->i_ino;
--- 
-2.42.0
-
+--=20
+paul-moore.com
