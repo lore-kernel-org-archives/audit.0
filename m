@@ -2,91 +2,134 @@ Return-Path: <audit-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B17BCCDB482
-	for <audit@archiver.kernel.org>; Wed, 18 Oct 2023 22:23:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4B3DFCDB47E
+	for <audit@archiver.kernel.org>; Thu, 19 Oct 2023 00:22:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229966AbjJRWXd (ORCPT <rfc822;audit@archiver.kernel.org>);
-        Wed, 18 Oct 2023 18:23:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34878 "EHLO
+        id S229694AbjJSAW2 (ORCPT <rfc822;audit@archiver.kernel.org>);
+        Wed, 18 Oct 2023 20:22:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbjJRWXd (ORCPT <rfc822;audit@vger.kernel.org>);
-        Wed, 18 Oct 2023 18:23:33 -0400
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93D25113
-        for <audit@vger.kernel.org>; Wed, 18 Oct 2023 15:23:31 -0700 (PDT)
-Received: by mail-yb1-xb30.google.com with SMTP id 3f1490d57ef6-d9a389db3c7so169276276.1
-        for <audit@vger.kernel.org>; Wed, 18 Oct 2023 15:23:31 -0700 (PDT)
+        with ESMTP id S229688AbjJSAW2 (ORCPT <rfc822;audit@vger.kernel.org>);
+        Wed, 18 Oct 2023 20:22:28 -0400
+Received: from mail-oo1-xc2d.google.com (mail-oo1-xc2d.google.com [IPv6:2607:f8b0:4864:20::c2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D95FCFA
+        for <audit@vger.kernel.org>; Wed, 18 Oct 2023 17:22:26 -0700 (PDT)
+Received: by mail-oo1-xc2d.google.com with SMTP id 006d021491bc7-581e92f615fso1104517eaf.2
+        for <audit@vger.kernel.org>; Wed, 18 Oct 2023 17:22:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1697667811; x=1698272611; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4Ajnftp73O59rJQP7PyQI1ag+kBRLHglVcmFRcE57mQ=;
-        b=DUivJqZV5FlUuHhnCjXOXYUbLYzG75sd90g3gkvq2G+fxLJ1NdOh6FdexVGEED/nDI
-         V8JgpkhOETANIDd3aGCuFPGIDbz1Gp4+wqVr69EiyqLnlgt0ZatyzEP0CVe3bk4miY97
-         qijfnTngd7THMKIIDQpcWDj4+P/igFttDDNqeE38YfMyBrAGKezeOrtrLukQMgi18l2l
-         R2F+8CEPibh30tGj+17qsDNueT5IneOmNYhMJpYrth9TxLy41DL0VC5NlPovYHZH7N3O
-         YCyzZANFjH2FxW21RTnpYyIwcFx3AbGWHr8R9z4yEaj8BppXYFoYxshbB4vetCYT4omq
-         1QVQ==
+        d=gmail.com; s=20230601; t=1697674946; x=1698279746; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:references:in-reply-to
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=6o6wTNOsZ4BFP12AtUAZBDIHARUG+Z02uoEJrxveRfw=;
+        b=EV9hnRw0rdLn8JWGwVqnakAlcGMv8DiKuYC2q0sTGlbHSBMGS+mUyvtllIySLVMH1W
+         LIclTvbS4Rr/5dEPzhWLs/xBODJbUlS9imSgZ5Ua4u9hb34Mi4PFutXKCMEbjSJ8nXm4
+         +PVPGSPrHkR9H7hOSxYZRy6eT+gVav+hxk6wDndQ6BZeZIcwJw26wEQyanFSCn+iXtwl
+         ebtWNO0yEpVsldA1Z3OYWx2gV81PCUWnRAnk2NPDZofJzZbX9YystELCklFNbpersMFo
+         a89wxXswzaWuiMzE3bd0uJF0jeW3b8YbHO35YJcDXneulYVJqOmP1iXN8TIwkHZ/RAH7
+         f/6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697667811; x=1698272611;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=4Ajnftp73O59rJQP7PyQI1ag+kBRLHglVcmFRcE57mQ=;
-        b=nhYOiYDmen0up1IdvlLB26k2BbdI/k9uQV0D/fO1GVqDXYG++mH+ic4fqOGWudxaNW
-         t/vu6eDVzZHhiQWxeRzMHAbGSy4FUxx6YZC1/sTY0kbCFUDCuZlaKsLjbQLMKHktWa10
-         z8cRon9FD7KHsCKcMwE/SxE9Iu5VgCTbRvAH0lu5yuqOO020vwoYndc2HHPZ91IQUKqa
-         HTKwB+QhVujuZixX2kAaw/F6cXNLilos5TeUZErJr4NuGG+wp0jTGt41RGhlT5s5nJQ4
-         lLC0HqdKUpY213F8nujte7uItMQP53EsxHpSErE5JNgX4gOQQ4aHJ6HmmeG4viZHyI9P
-         k6Ow==
-X-Gm-Message-State: AOJu0YzDsh6DqsoX+go12Wg19VHt6Me/+PMIpOGmOXyaRV6E/D+alSoS
-        /jX+ecEe2Ou/fm04po8KxXX4+ngXztzDF5oRu+djk++M+x2JSfddmA==
-X-Google-Smtp-Source: AGHT+IFkCIlvjS3UdbaJfDthTUMuOXzDQ+rtt8Q34aeqMzb7V8/8FtAyrqc+XHMjw98FzTE3rdSrA+2aJlcqrNkLkzA=
-X-Received: by 2002:a25:154:0:b0:d86:4342:290 with SMTP id 81-20020a250154000000b00d8643420290mr126206ybb.21.1697667810731;
- Wed, 18 Oct 2023 15:23:30 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1697674946; x=1698279746;
+        h=cc:to:subject:message-id:date:from:references:in-reply-to
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=6o6wTNOsZ4BFP12AtUAZBDIHARUG+Z02uoEJrxveRfw=;
+        b=RYWPtXZLZmrB+i9KjH0KNod5VeouOp+ZZSWM1+R/7/b6kx7AXc/BBJ/IXZyQypg8bQ
+         ErPZIMkPaPknV3Gsh6DEE1YOGPBpah6PvSA1JgsmRUtsOtGbuHJTnvx/9bvjXf7N8/A1
+         k+ehZzhEEYq2gkOsk8eBixv6vtk8vo8SscCZ1qoaqYxKGZ68ybATcWL8dlnXETwIndp3
+         aZzZelQfmJq78JKPn2BwdzAFInytft51j8DdMGa05fZwYEy0sJmFkQML9yWtQK2rL4HI
+         hKZ5gVK0wuZGVn/q6BqvZYLrXKjfAE9LCklzjvVnNJMnhrkR5Wq1JQW1ZVKJBWDHUvrh
+         Pglg==
+X-Gm-Message-State: AOJu0YygdC+Gwuc0C6LUSRBC/nx8cHSiv+ESqscdt29PuSh7pQYJOfQ9
+        mxpaFHCLSbdpVraAJQpc8JQG8F0nNIeGmLcnNXY=
+X-Google-Smtp-Source: AGHT+IFMq3QVt1VaTkhxsSZiDgrNbnXVYUEbW88kD6FohnrSwgg0ZPvQxUUP44mHgiEkBiE2OfRPkjnYAKNciqihTTg=
+X-Received: by 2002:a4a:d357:0:b0:56e:466c:7393 with SMTP id
+ d23-20020a4ad357000000b0056e466c7393mr660875oos.5.1697674946108; Wed, 18 Oct
+ 2023 17:22:26 -0700 (PDT)
 MIME-Version: 1.0
-References: <CAOTMNwuhq9Fc1PW4Y6ZOyP8H7nCk3+9gsxRapRuScZ2-a+14hA@mail.gmail.com>
- <668dd928-b00d-4f7a-5e6a-b6efc6a9c08f@canonical.com> <CAHC9VhSQ2U0jhW5Goa+OTTPtx64viGjFWFJy7Y7CsetOaWs6jg@mail.gmail.com>
- <CAOTMNwsca-CuzOdmc5HeUCtBGWJVKb2GB_r1QEF-TnJv1Kkhyg@mail.gmail.com>
- <CAHC9VhQNTiX=na2a1QsAQWwPfjuvd2xnFGHAPxTs=wQXNt6eZg@mail.gmail.com>
- <6da3d0b6-aaae-4586-bd71-749d6fb38708@canonical.com> <CAHC9VhToqz-hs8vuUhd=vNKOXNc_iXOAbtuVTNGWJUvbbzq_kQ@mail.gmail.com>
- <CAHC9VhQyb_SfA0_=fqrVLZjYj76gLzwnf2Gs3j73FRVD-0vGeg@mail.gmail.com>
- <740fe39c-dab5-4ec9-b717-f5168e689985@canonical.com> <CAHC9VhQTbTkQzCdicPtj7WfEhJgmkX=zxPNu9cGVmHhbbzBzcg@mail.gmail.com>
- <CAHC9VhQ_i0TnA+Snsg-gsPEEb=uHyiNKDm48jmiuRc7y1-Gd=Q@mail.gmail.com>
-In-Reply-To: <CAHC9VhQ_i0TnA+Snsg-gsPEEb=uHyiNKDm48jmiuRc7y1-Gd=Q@mail.gmail.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Wed, 18 Oct 2023 18:23:20 -0400
-Message-ID: <CAHC9VhTE+xCnAj-NXgCZJwYkp9i1KAJCgQDPWjE3msVYScTQCg@mail.gmail.com>
-Subject: Re: [apparmor] AppArmor kernel audit locks up system
-To:     John Johansen <john.johansen@canonical.com>
-Cc:     Andreas Steinmetz <anstein99@googlemail.com>,
-        apparmor@lists.ubuntu.com, audit@vger.kernel.org
+Received: by 2002:ac9:7b90:0:b0:4f0:1250:dd51 with HTTP; Wed, 18 Oct 2023
+ 17:22:25 -0700 (PDT)
+In-Reply-To: <CAHC9VhTRAugYNG3xwMO2oxy+Wdb_Oo2VkRBRWMnMdiTKij8TUw@mail.gmail.com>
+References: <20231018222023.371274-2-paul@paul-moore.com> <CAHC9VhTRAugYNG3xwMO2oxy+Wdb_Oo2VkRBRWMnMdiTKij8TUw@mail.gmail.com>
+From:   Mateusz Guzik <mjguzik@gmail.com>
+Date:   Thu, 19 Oct 2023 02:22:25 +0200
+Message-ID: <CAGudoHE=RPqcwNh2sEeUF=Dhd=OPpuhbQu1YCJ+V3g1Jhf9JUw@mail.gmail.com>
+Subject: Re: [PATCH] audit: use mmget() instead of get_task_exe_file() when
+ auditing @current
+To:     Paul Moore <paul@paul-moore.com>
+Cc:     audit@vger.kernel.org,
+        Andreas Steinmetz <anstein99@googlemail.com>,
+        John Johansen <john.johansen@canonical.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <audit.vger.kernel.org>
 X-Mailing-List: audit@vger.kernel.org
 
-On Wed, Oct 18, 2023 at 5:00=E2=80=AFPM Paul Moore <paul@paul-moore.com> wr=
-ote:
-> On Wed, Oct 18, 2023 at 4:50=E2=80=AFPM Paul Moore <paul@paul-moore.com> =
-wrote:
-> > It shouldn't, the only time we ever really operate on something other
-> > than @current is when a fork/clone happens and we are filtering on the
-> > new child process.  At least that used to be the case, I can't imagine
-> > someone would audit something other than @current (not sure you could
-> > with respect to this stuff?), but I guess it couldn't hurt to double
-> > check on the current code base.
->
-> Yes, that still looks to be the case.
->
-> --
-> paul-moore.com
+On 10/19/23, Paul Moore <paul@paul-moore.com> wrote:
+>> The get_task_exe_file() function locks the given task with task_lock()
+>> which when used inside audit_exe_compare() can cause deadlocks on
+>> systems that generate audit records when the task_lock() is held.  As
+>> we should be able to safely access current->mm we can drop the call to
+>> get_task_exe_file() and get a reference to current->mm directly which
+>> we can then use in a call to get_mm_exe_file() without having to take
+>> task_lock().
+>>
 
-Patch posting:
+I don't follow what's the deadlock.
 
-https://lore.kernel.org/audit/20231018222023.371274-2-paul@paul-moore.com
+You mean they hold task lock for current and then call into
+audit_exe_compare which takes it again?
 
---=20
-paul-moore.com
+I would argue any calls into the routine with *any* task already
+locked are fishy at best (I'm assuming there is an established task
+lock ordering which may be accidentally violated).
+
+>> While the audit_exe_compare() function takes an arbitrary task_struct
+>> parameter, all of the callers outside of fork/clone, call
+>> audit_exe_compare() to operate on the current task_struct, making it
+>> the common case.  In the fork/clone case, when audit_exe_compare() is
+>> called on the child task_struct, it should be safe to use the
+>> get_task_mm() function as no other task should be holding task_lock()
+>> at this time.
+>>
+>> Cc: <stable@vger.kernel.org>
+>> Fixes: 5efc244346f9 ("audit: fix exe_file access in audit_exe_compare")
+>> Reported-by: Andreas Steinmetz <anstein99@googlemail.com>
+>> Signed-off-by: Paul Moore <paul@paul-moore.com>
+>> ---
+>>  kernel/audit_watch.c | 14 +++++++++++++-
+>>  1 file changed, 13 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/kernel/audit_watch.c b/kernel/audit_watch.c
+>> index 65075f1e4ac8..fa3e6ea0e58c 100644
+>> --- a/kernel/audit_watch.c
+>> +++ b/kernel/audit_watch.c
+>> @@ -526,8 +526,20 @@ int audit_exe_compare(struct task_struct *tsk, struct
+>> audit_fsnotify_mark *mark)
+>>         struct file *exe_file;
+>>         unsigned long ino;
+>>         dev_t dev;
+>> +       struct mm_struct *mm;
+>>
+>> -       exe_file = get_task_exe_file(tsk);
+>> +       /* almost always operate on current, exceptions for fork/clone */
+>> +       if (likely(tsk == current)) {
+>> +               mmget(current->mm);
+>> +               mm = current->mm;
+>> +       } else {
+>> +               /* this can deadlock outside the fork/clone usage (see
+>> above) */
+>> +               mm = get_task_mm(tsk);
+>> +               if (!mm)
+>> +                       return 0;
+>> +       }
+>> +       exe_file = get_mm_exe_file(mm);
+>> +       mmput(mm);
+>>         if (!exe_file)
+>>                 return 0;
+>>         ino = file_inode(exe_file)->i_ino;
+
+Assuming concerns expressed above are moot, I would hide the logic in
+audit_get_task_exe_file or similar.
+
+-- 
+Mateusz Guzik <mjguzik gmail.com>
