@@ -1,48 +1,483 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8991D1BDCD;
-	Mon, 23 Oct 2023 17:02:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D9AC6FD5
+	for <audit@vger.kernel.org>; Tue, 24 Oct 2023 03:52:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="BJsEmp5x"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB4BBC433C8;
-	Mon, 23 Oct 2023 17:02:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1698080578;
-	bh=S4BUXYqW7MerdaHiLVRAwlqONWvs5nY4McI2oMjWThI=;
-	h=Date:From:To:Subject:References:In-Reply-To:From;
-	b=BJsEmp5xvn1YBZsrWGBhdaTH8/3KAOQyicAzr1942Jy818Z9H+4FTi18RES0cQ+r4
-	 nEBn+/HgO7vqRgjOQ6KL2PxOtIpEvc9W6pvU8NM3Uy2uULt4V7bTIuHulPCdNms3Cp
-	 /eaV/PeLiVS3UWbd8wsVNbxr7e8mr2WL+Vkbym/w=
-Date: Mon, 23 Oct 2023 13:02:56 -0400
-From: Konstantin Ryabitsev <konstantin@linuxfoundation.org>
-To: audit@vger.kernel.org, autofs@vger.kernel.org, 
-	backports@vger.kernel.org, ceph-devel@vger.kernel.org, cgroups@vger.kernel.org, 
-	dash@vger.kernel.org
-Subject: Re: This list is being migrated to new vger infra (no action
- required)
-Message-ID: <20231023-cringing-salt-18e50b@meerkat>
-References: <20231023-obscurity-bottom-1dc09c@meerkat>
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="WAHBHXtj"
+Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC7BC10A
+	for <audit@vger.kernel.org>; Mon, 23 Oct 2023 20:52:23 -0700 (PDT)
+Received: by mail-qk1-x72d.google.com with SMTP id af79cd13be357-778a20df8c3so281469585a.3
+        for <audit@vger.kernel.org>; Mon, 23 Oct 2023 20:52:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1698119543; x=1698724343; darn=vger.kernel.org;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=PYQStjjr2Q8HKTHbB20ou4WiXIqkha1Xi9gNGY1VyVs=;
+        b=WAHBHXtjHEsNLoriS8vOtzrxgPI6/NMjDrdW5rIviWtRjDjfsUKxfuTOekd8pKSCyk
+         D1j8V4OyAzgJh5iLtBrkUgqGbWOPoj3VTOZC9JcpciWz4cfj+rKZxhmRF+aEX4hl+T//
+         nYVBex5k/D3yPgZa64W8kV4L66lKiEm323MlPTmkYLspb6+hojACf8PyxQeG/Yi1/2Fd
+         +OW/2kBtN4yHRtVJALJYvZoAKP6yTODb8TTIJABeqk/QHJmguWtEAWhvnIO3uRtSFoP6
+         Z31sTINDDOu0o0B9lHst/GL//IKm5o/Qqk6Ny3uJV1kKyC3Zjd7UiZcqkB+qzb9Ja7sv
+         JeXg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1698119543; x=1698724343;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=PYQStjjr2Q8HKTHbB20ou4WiXIqkha1Xi9gNGY1VyVs=;
+        b=IB3MujWpINadBRjMrhsdyw8o2bcqiG6XBF3VFpIDIguWB2l2B3ucFhgRiKJE1k0qDP
+         kSiR1E1BtMgmyfMSKAVtx0iqNK6UJjoeXcqDFwU91ULZ+RRx6vpYdURWYzzR6elf10K+
+         /gAAihTdxecWgJ7XdX+gGZPNH8O13IXYGzJLJyuo/pOWo0vjwpui8UEMQ53ipup/QoMl
+         NK5VqVgUPnWw3Mf2xQsi0a29dzV2l2M1jHXyWTS2H0aunGT1OCILi5lkcpazzLrS7YXU
+         knoSadFY9L7w8MkXRty33XIy6UEyzxYttCGadBlVH9fRxhLg4tALLA0LhFKDsASm+byt
+         pW2w==
+X-Gm-Message-State: AOJu0YxUL0Fr9tPUEs6/8ASR3W82Hv5uETAooGCdq8uswsOn+iZfcxh7
+	suwKJ4yGuGDNjGzNcbIx68RR
+X-Google-Smtp-Source: AGHT+IHfXLDpTQH23RQCgDD0EvaJ8t5ssD/FP1FN3NpOgQNJgnc6N7o0sQ0agZuP/Pbj2axyoTKe+g==
+X-Received: by 2002:a05:620a:1a25:b0:772:6419:89ab with SMTP id bk37-20020a05620a1a2500b00772641989abmr13610179qkb.55.1698119542757;
+        Mon, 23 Oct 2023 20:52:22 -0700 (PDT)
+Received: from localhost ([70.22.175.108])
+        by smtp.gmail.com with ESMTPSA id bi12-20020a05620a318c00b00772662b7804sm3164703qkb.100.2023.10.23.20.52.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 Oct 2023 20:52:22 -0700 (PDT)
+Date: Mon, 23 Oct 2023 23:52:21 -0400
+Message-ID: <7c8c2a158c628a642078f746e5c42f2f.paul@paul-moore.com>
+From: Paul Moore <paul@paul-moore.com>
+To: Fan Wu <wufan@linux.microsoft.com>, corbet@lwn.net, zohar@linux.ibm.com, jmorris@namei.org, serge@hallyn.com, tytso@mit.edu, ebiggers@kernel.org, axboe@kernel.dk, agk@redhat.com, snitzer@kernel.org, eparis@redhat.com
+Cc: linux-doc@vger.kernel.org, linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org, linux-fscrypt@vger.kernel.org, linux-block@vger.kernel.org, dm-devel@redhat.com, audit@vger.kernel.org, roberto.sassu@huawei.com, linux-kernel@vger.kernel.org, Deven Bowers <deven.desai@linux.microsoft.com>, Fan Wu <wufan@linux.microsoft.com>
+Subject: Re: [PATCH RFC v11 2/19] ipe: add policy parser
+References: <1696457386-3010-3-git-send-email-wufan@linux.microsoft.com>
+In-Reply-To: <1696457386-3010-3-git-send-email-wufan@linux.microsoft.com>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20231023-obscurity-bottom-1dc09c@meerkat>
 
-On Mon, Oct 23, 2023 at 12:41:42PM -0400, Konstantin Ryabitsev wrote:
-> This list is being migrated to the new vger infrastructure. This should be a
-> fully transparent process and you don't need to change anything about how you
-> participate with the list or how you receive mail.
+On Oct  4, 2023 Fan Wu <wufan@linux.microsoft.com> wrote:
 > 
-> There will be a brief delay with archives on lore.kernel.org. I will follow up
-> once the archive migration has been completed.
+> IPE's interpretation of the what the user trusts is accomplished through
+> its policy. IPE's design is to not provide support for a single trust
+> provider, but to support multiple providers to enable the end-user to
+> choose the best one to seek their needs.
+> 
+> This requires the policy to be rather flexible and modular so that
+> integrity providers, like fs-verity, dm-verity, dm-integrity, or
+> some other system, can plug into the policy with minimal code changes.
+> 
+> Signed-off-by: Deven Bowers <deven.desai@linux.microsoft.com>
+> Signed-off-by: Fan Wu <wufan@linux.microsoft.com>
+> ---
+> v2:
+>   + Split evaluation loop, access control hooks,
+>     and evaluation loop from policy parser and userspace
+>     interface to pass mailing list character limit
+> 
+> v3:
+>   + Move policy load and activation audit event to 03/12
+>   + Fix a potential panic when a policy failed to load.
+>   + use pr_warn for a failure to parse instead of an
+>     audit record
+>   + Remove comments from headers
+>   + Add lockdep assertions to ipe_update_active_policy and
+>     ipe_activate_policy
+>   + Fix up warnings with checkpatch --strict
+>   + Use file_ns_capable for CAP_MAC_ADMIN for securityfs
+>     nodes.
+>   + Use memdup_user instead of kzalloc+simple_write_to_buffer.
+>   + Remove strict_parse command line parameter, as it is added
+>     by the sysctl command line.
+>   + Prefix extern variables with ipe_
+> 
+> v4:
+>   + Remove securityfs to reverse-dependency
+>   + Add SHA1 reverse dependency.
+>   + Add versioning scheme for IPE properties, and associated
+>     interface to query the versioning scheme.
+>   + Cause a parser to always return an error on unknown syntax.
+>   + Remove strict_parse option
+>   + Change active_policy interface from sysctl, to securityfs,
+>     and change scheme.
+> 
+> v5:
+>   + Cause an error if a default action is not defined for each
+>     operation.
+>   + Minor function renames
+> 
+> v6:
+>   + No changes
+> 
+> v7:
+>   + Further split parser and userspace interface into two
+>     separate commits, for easier review.
+>   + Refactor policy parser to make code cleaner via introducing a
+>     more modular design, for easier extension of policy, and
+>     easier review.
+> 
+> v8:
+>   + remove unnecessary pr_info emission on parser loading
+>   + add explicit newline to the pr_err emitted when a parser
+>     fails to load.
+> 
+> v9:
+>   + switch to match table to parse policy
+>   + remove quote syntax and KERNEL_READ operation
+> 
+> v10:
+>   + Fix memory leaks in parser
+>   + Fix typos and change code styles
+> 
+> v11:
+>   + Fix code style issues
+> ---
+>  security/ipe/Makefile        |   2 +
+>  security/ipe/policy.c        | 101 ++++++++
+>  security/ipe/policy.h        |  83 ++++++
+>  security/ipe/policy_parser.c | 487 +++++++++++++++++++++++++++++++++++
+>  security/ipe/policy_parser.h |  11 +
+>  5 files changed, 684 insertions(+)
+>  create mode 100644 security/ipe/policy.c
+>  create mode 100644 security/ipe/policy.h
+>  create mode 100644 security/ipe/policy_parser.c
+>  create mode 100644 security/ipe/policy_parser.h
 
-Archive migration has been completed. Please reach out to helpdesk@kernel.org
-if you notice anything not working correctly.
+...
 
-Best regards,
--K
+> diff --git a/security/ipe/policy.c b/security/ipe/policy.c
+> new file mode 100644
+> index 000000000000..3a529c7950a1
+> --- /dev/null
+> +++ b/security/ipe/policy.c
+> @@ -0,0 +1,101 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (C) Microsoft Corporation. All rights reserved.
+> + */
+
+...
+
+> +static int set_pkcs7_data(void *ctx, const void *data, size_t len,
+> +			  size_t asn1hdrlen)
+> +{
+> +	struct ipe_policy *p = ctx;
+> +
+> +	p->text = (const char *)data;
+> +	p->textlen = len;
+> +
+> +	return 0;
+> +}
+
+The @asn1hdrlen parameter isn't used in this function, at least at this
+point in the patchset, so you really should remove it.  If it is needed
+later in the patchset you can always update the function.
+
+> diff --git a/security/ipe/policy_parser.c b/security/ipe/policy_parser.c
+> new file mode 100644
+> index 000000000000..c09458bd348d
+> --- /dev/null
+> +++ b/security/ipe/policy_parser.c
+> @@ -0,0 +1,487 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (C) Microsoft Corporation. All rights reserved.
+> + */
+
+...
+
+> +/**
+> + * remove_trailing_spaces - Truncate all trailing spaces in a string.
+> + *
+> + * @line: Supplies a poilcy line string for preprocessing.
+> + *
+> + * Return: The length of truncated string.
+> + */
+> +static size_t remove_trailing_spaces(char *line)
+> +{
+> +	size_t i = 0;
+> +
+> +	for (i = strlen(line); i > 0 && (line[i - 1] == ' ' || line[i - 1] == '\t'); --i)
+> +		;
+
+Maybe I've asked this before, I can't remember: could you use the
+isspace() macro here instead of explicitly checking for ' ' and '\t'?
+
+  i = strlen(line);
+  while (i > 0 && isspace(line[i - 1]))
+    i--;
+  line[i] = '\0';
+
+> +	line[i] = '\0';
+> +
+> +	return i;
+> +}
+> +
+> +/**
+> + * parse_version - Parse policy version.
+> + * @ver: Supplies a version string to be parsed.
+> + * @p: Supplies the partial parsed policy.
+> + *
+> + * Return:
+> + * * 0	- OK
+> + * * !0	- Standard errno
+> + */
+> +static int parse_version(char *ver, struct ipe_parsed_policy *p)
+> +{
+> +	int rc = 0;
+> +	size_t sep_count = 0;
+> +	char *token;
+> +	u16 *const cv[] = { &p->version.major, &p->version.minor, &p->version.rev };
+> +
+> +	while ((token = strsep(&ver, ".")) != NULL) {
+> +		/* prevent overflow */
+> +		if (sep_count >= ARRAY_SIZE(cv))
+> +			return -EBADMSG;
+> +
+> +		rc = kstrtou16(token, 10, cv[sep_count]);
+> +		if (rc)
+> +			return rc;
+> +
+> +		++sep_count;
+> +	}
+> +
+> +	/* prevent underflow */
+> +	if (sep_count != ARRAY_SIZE(cv))
+> +		rc = -EBADMSG;
+
+You could always just 'return -EBADMSG' here and 'return 0' below to
+simplify things a little.
+
+> +	return rc;
+> +}
+> +
+> +enum header_opt {
+> +	IPE_HEADER_POLICY_NAME = 0,
+> +	IPE_HEADER_POLICY_VERSION,
+> +	__IPE_HEADER_MAX
+> +};
+> +
+> +static const match_table_t header_tokens = {
+> +	{IPE_HEADER_POLICY_NAME,	"policy_name=%s"},
+> +	{IPE_HEADER_POLICY_VERSION,	"policy_version=%s"},
+> +	{__IPE_HEADER_MAX,		NULL}
+> +};
+> +
+> +/**
+> + * parse_header - Parse policy header information.
+> + * @line: Supplies header line to be parsed.
+> + * @p: Supplies the partial parsed policy.
+> + *
+> + * Return:
+> + * * 0	- OK
+> + * * !0	- Standard errno
+> + */
+> +static int parse_header(char *line, struct ipe_parsed_policy *p)
+> +{
+> +	int rc = 0;
+> +	char *t, *ver = NULL;
+> +	substring_t args[MAX_OPT_ARGS];
+> +	size_t idx = 0;
+> +
+> +	while ((t = strsep(&line, IPE_POLICY_DELIM)) != NULL) {
+> +		int token;
+> +
+> +		if (*t == '\0')
+> +			continue;
+> +		if (idx >= __IPE_HEADER_MAX) {
+> +			rc = -EBADMSG;
+> +			goto out;
+> +		}
+> +
+> +		token = match_token(t, header_tokens, args);
+> +		if (token != idx) {
+> +			rc = -EBADMSG;
+> +			goto out;
+> +		}
+> +
+> +		switch (token) {
+> +		case IPE_HEADER_POLICY_NAME:
+> +			p->name = match_strdup(&args[0]);
+> +			if (!p->name)
+> +				rc = -ENOMEM;
+> +			break;
+> +		case IPE_HEADER_POLICY_VERSION:
+> +			ver = match_strdup(&args[0]);
+> +			if (!ver) {
+> +				rc = -ENOMEM;
+> +				break;
+> +			}
+> +			rc = parse_version(ver, p);
+> +			break;
+> +		default:
+> +			rc = -EBADMSG;
+> +		}
+> +		if (rc)
+> +			goto out;
+> +		++idx;
+> +	}
+> +
+> +	if (idx != __IPE_HEADER_MAX) {
+> +		rc = -EBADMSG;
+> +		goto out;
+
+You probably don't need to 'goto out' here.
+
+> +	}
+> +
+> +out:
+> +	kfree(ver);
+> +	return rc;
+> +}
+
+...
+
+> +/**
+> + * parse_rule - parse a policy rule line.
+> + * @line: Supplies rule line to be parsed.
+> + * @p: Supplies the partial parsed policy.
+> + *
+> + * Return:
+> + * * !IS_ERR	- OK
+> + * * -ENOMEM	- Out of memory
+> + * * -EBADMSG	- Policy syntax error
+> + */
+> +static int parse_rule(char *line, struct ipe_parsed_policy *p)
+> +{
+> +	int rc = 0;
+> +	bool first_token = true, is_default_rule = false;
+> +	bool op_parsed = false;
+> +	enum ipe_op_type op = IPE_OP_INVALID;
+> +	enum ipe_action_type action = IPE_ACTION_INVALID;
+> +	struct ipe_rule *r = NULL;
+> +	char *t;
+> +
+> +	r = kzalloc(sizeof(*r), GFP_KERNEL);
+> +	if (!r)
+> +		return -ENOMEM;
+> +
+> +	INIT_LIST_HEAD(&r->next);
+> +	INIT_LIST_HEAD(&r->props);
+> +
+> +	while (t = strsep(&line, IPE_POLICY_DELIM), line) {
+> +		if (*t == '\0')
+> +			continue;
+> +		if (first_token && token_default(t)) {
+> +			is_default_rule = true;
+> +		} else {
+> +			if (!op_parsed) {
+> +				op = parse_operation(t);
+> +				if (op == IPE_OP_INVALID)
+> +					rc = -EBADMSG;
+> +				else
+> +					op_parsed = true;
+> +			} else {
+> +				rc = parse_property(t, r);
+> +			}
+> +		}
+> +
+> +		if (rc)
+> +			goto err;
+> +		first_token = false;
+> +	}
+> +
+> +	action = parse_action(t);
+> +	if (action == IPE_ACTION_INVALID) {
+> +		rc = -EBADMSG;
+> +		goto err;
+> +	}
+> +
+> +	if (is_default_rule) {
+> +		if (!list_empty(&r->props)) {
+> +			rc = -EBADMSG;
+> +		} else if (op == IPE_OP_INVALID) {
+> +			if (p->global_default_action != IPE_ACTION_INVALID)
+> +				rc = -EBADMSG;
+> +			else
+> +				p->global_default_action = action;
+> +		} else {
+> +			if (p->rules[op].default_action != IPE_ACTION_INVALID)
+> +				rc = -EBADMSG;
+> +			else
+> +				p->rules[op].default_action = action;
+> +		}
+> +	} else if (op != IPE_OP_INVALID && action != IPE_ACTION_INVALID) {
+> +		r->op = op;
+> +		r->action = action;
+> +	} else {
+> +		rc = -EBADMSG;
+> +	}
+
+I might be missing something important in the policy syntac, but could
+this function, and perhaps the ipe_parsed_policy struct, be simplified
+if the default action was an explicit rule?
+
+ "op=DEFAULT action=ALLOW"
+
+> +	if (rc)
+> +		goto err;
+> +	if (!is_default_rule)
+> +		list_add_tail(&r->next, &p->rules[op].rules);
+> +	else
+> +		free_rule(r);
+> +
+> +	return rc;
+> +err:
+> +	free_rule(r);
+> +	return rc;
+> +}
+> +
+> +/**
+> + * free_parsed_policy - free a parsed policy structure.
+> + * @p: Supplies the parsed policy.
+> + */
+> +void free_parsed_policy(struct ipe_parsed_policy *p)
+> +{
+> +	size_t i = 0;
+> +	struct ipe_rule *pp, *t;
+> +
+> +	if (IS_ERR_OR_NULL(p))
+> +		return;
+> +
+> +	for (i = 0; i < ARRAY_SIZE(p->rules); ++i)
+> +		list_for_each_entry_safe(pp, t, &p->rules[i].rules, next) {
+> +			list_del(&pp->next);
+> +			free_rule(pp);
+> +		}
+> +
+> +	kfree(p->name);
+> +	kfree(p);
+> +}
+> +
+> +/**
+> + * validate_policy - validate a parsed policy.
+> + * @p: Supplies the fully parsed policy.
+> + *
+> + * Given a policy structure that was just parsed, validate that all
+> + * necessary fields are present, initialized correctly.
+> + *
+> + * A parsed policy can be in an invalid state for use (a default was
+> + * undefined) by just parsing the policy.
+> + *
+> + * Return:
+> + * * 0		- OK
+> + * * -EBADMSG	- Policy is invalid
+> + */
+> +static int validate_policy(const struct ipe_parsed_policy *p)
+> +{
+> +	size_t i = 0;
+> +
+> +	if (p->global_default_action != IPE_ACTION_INVALID)
+> +		return 0;
+
+Should the if conditional above be "==" and not "!="?
+
+> +	for (i = 0; i < ARRAY_SIZE(p->rules); ++i) {
+> +		if (p->rules[i].default_action == IPE_ACTION_INVALID)
+> +			return -EBADMSG;
+> +	}
+> +
+> +	return 0;
+> +}
+
+--
+paul-moore.com
