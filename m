@@ -1,54 +1,54 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EB0D79F6
-	for <audit@vger.kernel.org>; Tue, 24 Oct 2023 03:52:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8782179D9
+	for <audit@vger.kernel.org>; Tue, 24 Oct 2023 03:52:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="NOsjfUsi"
-Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CB2DDD
-	for <audit@vger.kernel.org>; Mon, 23 Oct 2023 20:52:36 -0700 (PDT)
-Received: by mail-qv1-xf29.google.com with SMTP id 6a1803df08f44-66d190a8f87so25650596d6.0
-        for <audit@vger.kernel.org>; Mon, 23 Oct 2023 20:52:36 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="ZzJPx0y1"
+Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 045361722
+	for <audit@vger.kernel.org>; Mon, 23 Oct 2023 20:52:38 -0700 (PDT)
+Received: by mail-qk1-x730.google.com with SMTP id af79cd13be357-7789a4c01easo264257985a.0
+        for <audit@vger.kernel.org>; Mon, 23 Oct 2023 20:52:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1698119555; x=1698724355; darn=vger.kernel.org;
+        d=paul-moore.com; s=google; t=1698119558; x=1698724358; darn=vger.kernel.org;
         h=in-reply-to:references:subject:cc:to:from:message-id:date:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=55ZRJ15k5rlJjmFui052IxveaRjJKA9VJGl0uzNotB8=;
-        b=NOsjfUsiwJ6iZkl1CzbXPwvgzAEyZ3ahiAQdcJtdRzTg1KxCLIflQ32IHGJXELMhe5
-         XYZf6o62nBC47jGKfMuZhXz0tFU239x9gsK2mBXcfdav0bjk+8I5c+GYS1hYNieD0Cz+
-         zpatyfzG0HJIRkkMc+BJAPtiG0N+2G1oWAnQ33ujxNuvs5QGupUEirFdGtFE7zJA5nwa
-         fxgjJsU9y5d9HAAcnGSWHyjdv4A2FAqwC+h5Hz2z7gIG80oeDnprAdkDTZpl1pgEufGj
-         cjObeC16eeFfiC6/mXIaWl1BUmjoVswgU5kOFiAANUcwpw2JSTd5cEGjqU1IXitMBtVS
-         tNEg==
+        bh=XsaNGjlcimJtQjiAwAEMf2P9+0lBW+WKE/hjZAD7dek=;
+        b=ZzJPx0y19ajQdpatRHIV9OeYbUZdaaBZFXCshlqwJCZYO2u3kgFCbgta/xGM2jnj2p
+         8+kCX5JTZZ1VehON7byPvfJ5U6/lZGLLV2HrO7ImJwWRGysVUGepVz4oGfXDSxWpS01H
+         llWr0/T3mPVztmuSNR7LotGveoiuz5fcXyqySGe9L3uM8KoTajs1X9PyyL0LMbDIr0zz
+         wU8i7Zkr8+w0f9km6wDCmpyvw8I6jpaFQ46JySPHx7VHXazCIRGoGTUGtkcUXyKSOFyy
+         w/aOFa8b5S0U1O6CjzMwBBUajPeEcD5Cat7S04a9vo3XlUfv/5SiVcqa5keww9C74lKY
+         DXOw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698119555; x=1698724355;
+        d=1e100.net; s=20230601; t=1698119558; x=1698724358;
         h=in-reply-to:references:subject:cc:to:from:message-id:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=55ZRJ15k5rlJjmFui052IxveaRjJKA9VJGl0uzNotB8=;
-        b=wkzVhLQ0TU+SMZxs0odd10QSSRdO7SOi/CojSPtV/UOvEgT9I+8VMJqBfgqEiMq+MS
-         uLzqnaXcq/y11/2tmm64qhtB98lHT7rCG+2VTEBQ3bVT3tePQ2hAO6K3y1FBswpPGBf5
-         ZqkpVLybggOk61BHA3CgyO1M+ss5mEV30/oeBGFtafCBjt4k6JfrrG1wgjfdCde52Zkq
-         bJ2vr4KliD6eGkn6VEuhxwL/yk8p4ufYJHaLv5M0DDi800uuvSfh7DZ3XV7o2bZENX3D
-         6w/b8ytpdaeEKITH0miIxw60Ut+gDz3HmHOsov7cvDgDMYKGGlbuAc0oEiGTuZr74Njm
-         MKdA==
-X-Gm-Message-State: AOJu0YwJ2kyFkckpD74svvHhCMlQJkETspYpFKjLvn31LwstjbQ+Bkwl
-	+W1X4wl6L/1UmZYGyLBIz5uNRd0prObZadOBAg==
-X-Google-Smtp-Source: AGHT+IFhehT5SBIN3u4k21hQKcqd9tt3cVRe5RSL6o1ZuOBt7dfMcEzUGFp3iEoi8dzbbuQJKBLFmg==
-X-Received: by 2002:a05:6214:626:b0:66d:5dec:6099 with SMTP id a6-20020a056214062600b0066d5dec6099mr11383093qvx.41.1698119555528;
-        Mon, 23 Oct 2023 20:52:35 -0700 (PDT)
+        bh=XsaNGjlcimJtQjiAwAEMf2P9+0lBW+WKE/hjZAD7dek=;
+        b=UYMdi5R8b6JfKLGC1A37rICbmvwzHGKBL7ROvDZIW2jrxiruStSQaCf7bRM7RhjRSM
+         xbOBollrvj1G9HvZmf3Lp7oxsI0u0z29m//Ad0GzYo9czmJQzGcab/NCxXNJTFZxWKYl
+         TeL8Xk9mqEfeD9jIGp7scRtGzzRWcU7j8u6FVBCW9oJI0c0cqjLx9B8St5gWDJhSGP08
+         VmamtMsnzMYR/Ginojz5bxREGZ7unXDxoQnA5WORrJ+mtSjYkUs2dDefDDLFfFOCzDCY
+         j98d4VntyEQVpQiYGm5H1Xnp0I+XJNsxfPGsNa2xZdrWX08IKyR3DcAMMVT/zVtUNCH2
+         mPkw==
+X-Gm-Message-State: AOJu0YwClDjsI9m8NlJ0EFj1P01ma/pMpz4D3Rw74I4lfP2wTcQDDCvY
+	JYpxsFpD2JKs7nOz3uP8kawx
+X-Google-Smtp-Source: AGHT+IFgtMi4EqN6N9ZtnfOHbANV4Egy0LBPK5cs6vsX4rIphs5HUZhBFo1nSJ25zSqGEggCASqLKw==
+X-Received: by 2002:a05:620a:430d:b0:778:8dc1:bb7b with SMTP id u13-20020a05620a430d00b007788dc1bb7bmr13244374qko.27.1698119557740;
+        Mon, 23 Oct 2023 20:52:37 -0700 (PDT)
 Received: from localhost ([70.22.175.108])
-        by smtp.gmail.com with ESMTPSA id ee3-20020a0562140a4300b0065b260eafd9sm3357598qvb.87.2023.10.23.20.52.34
+        by smtp.gmail.com with ESMTPSA id s4-20020ad45004000000b0063f88855ef2sm3286811qvo.101.2023.10.23.20.52.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Oct 2023 20:52:34 -0700 (PDT)
-Date: Mon, 23 Oct 2023 23:52:34 -0400
-Message-ID: <c2a88a9292a6ce1e301ec2244657f385.paul@paul-moore.com>
+        Mon, 23 Oct 2023 20:52:37 -0700 (PDT)
+Date: Mon, 23 Oct 2023 23:52:36 -0400
+Message-ID: <88259677752389b350614857e6003b8c.paul@paul-moore.com>
 From: Paul Moore <paul@paul-moore.com>
 To: Fan Wu <wufan@linux.microsoft.com>, corbet@lwn.net, zohar@linux.ibm.com, jmorris@namei.org, serge@hallyn.com, tytso@mit.edu, ebiggers@kernel.org, axboe@kernel.dk, agk@redhat.com, snitzer@kernel.org, eparis@redhat.com
-Cc: linux-doc@vger.kernel.org, linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org, linux-fscrypt@vger.kernel.org, linux-block@vger.kernel.org, dm-devel@redhat.com, audit@vger.kernel.org, roberto.sassu@huawei.com, linux-kernel@vger.kernel.org, Fan Wu <wufan@linux.microsoft.com>, Deven Bowers <deven.desai@linux.microsoft.com>
-Subject: Re: [PATCH RFC v11 16/19] ipe: enable support for fs-verity as a trust  provider
-References: <1696457386-3010-17-git-send-email-wufan@linux.microsoft.com>
-In-Reply-To: <1696457386-3010-17-git-send-email-wufan@linux.microsoft.com>
+Cc: linux-doc@vger.kernel.org, linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org, linux-fscrypt@vger.kernel.org, linux-block@vger.kernel.org, dm-devel@redhat.com, audit@vger.kernel.org, roberto.sassu@huawei.com, linux-kernel@vger.kernel.org, Deven Bowers <deven.desai@linux.microsoft.com>, Fan Wu <wufan@linux.microsoft.com>
+Subject: Re: [PATCH RFC v11 18/19] ipe: kunit test for parser
+References: <1696457386-3010-19-git-send-email-wufan@linux.microsoft.com>
+In-Reply-To: <1696457386-3010-19-git-send-email-wufan@linux.microsoft.com>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
@@ -57,26 +57,27 @@ List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 
 On Oct  4, 2023 Fan Wu <wufan@linux.microsoft.com> wrote:
 > 
-> Enable IPE policy authors to indicate trust for a singular fsverity
-> file, identified by the digest information, through "fsverity_digest"
-> and all files using fsverity's builtin signatures via
-> "fsverity_signature".
-> 
-> This enables file-level integrity claims to be expressed in IPE,
-> allowing individual files to be authorized, giving some flexibility
-> for policy authors. Such file-level claims are important to be expressed
-> for enforcing the integrity of packages, as well as address some of the
-> scalability issues in a sole dm-verity based solution (# of loop back
-> devices, etc).
-> 
-> This solution cannot be done in userspace as the minimum threat that
-> IPE should mitigate is an attacker downloads malicious payload with
-> all required dependencies. These dependencies can lack the userspace
-> check, bypassing the protection entirely. A similar attack succeeds if
-> the userspace component is replaced with a version that does not
-> perform the check. As a result, this can only be done in the common
-> entry point - the kernel.
-> 
+> Add various happy/unhappy unit tests for both IPE's parser.
+
+I'm going to suggest: "... for IPE's policy parser."
+
+Also, aside from the policy parser tests, are there any other IPE
+functional tests?  We do have a testing guideline for new LSM
+submissions:
+
+ "New LSMs must be accompanied by a test suite to verify basic
+  functionality and help identify regressions. The test suite
+  must be publicly available without download restrictions
+  requiring accounts, subscriptions, etc. Test coverage does
+  not need to reach a specific percentage, but core functionality
+  and any user interfaces should be well covered by the test
+  suite. Maintaining the test suite in a public git repository is
+  preferable over tarball snapshots. Integrating the test suite
+  with existing automated Linux kernel testing services is
+  encouraged."
+
+https://github.com/LinuxSecurityModule/kernel/blob/main/README.md#new-lsm-guidelines
+
 > Signed-off-by: Deven Bowers <deven.desai@linux.microsoft.com>
 > Signed-off-by: Fan Wu <wufan@linux.microsoft.com>
 > ---
@@ -87,129 +88,24 @@ On Oct  4, 2023 Fan Wu <wufan@linux.microsoft.com> wrote:
 >   Introduced
 > 
 > v8:
->   * Undo squash of 08/12, 10/12 - separating drivers/md/ from security/
->   * Use common-audit function for fsverity_signature.
->   + Change fsverity implementation to use fsverity_get_digest
->   + prevent unnecessary copy of fs-verity signature data, instead
->     just check for presence of signature data.
->   + Remove free_inode_security hook, as the digest is now acquired
->     at runtime instead of via LSM blob.
+>   + Remove the kunit tests with respect to the fsverity digest, as these
+>     require significant changes to work with the new method of acquiring
+>     the digest at runtime.
 > 
 > v9:
->   + Adapt to the new parser
+>   + Remove the kunit tests related to ipe_context
 > 
 > v10:
->   + Update the fsverity get digest call
+>   + No changes
 > 
 > v11:
 >   + No changes
 > ---
->  security/ipe/Kconfig         |  13 +++++
->  security/ipe/audit.c         |  23 ++++++++
->  security/ipe/eval.c          | 110 +++++++++++++++++++++++++++++++++++
->  security/ipe/eval.h          |  10 ++++
->  security/ipe/hooks.c         |  30 ++++++++++
->  security/ipe/hooks.h         |   7 +++
->  security/ipe/ipe.c           |  13 +++++
->  security/ipe/ipe.h           |   3 +
->  security/ipe/policy.h        |   3 +
->  security/ipe/policy_parser.c |   8 +++
->  10 files changed, 220 insertions(+)
-
-...
-
-> diff --git a/security/ipe/audit.c b/security/ipe/audit.c
-> index b5c58655ac74..e3a8552a76a4 100644
-> --- a/security/ipe/audit.c
-> +++ b/security/ipe/audit.c
-> @@ -79,6 +100,8 @@ static void audit_rule(struct audit_buffer *ab, const struct ipe_rule *r)
->  		audit_log_format(ab, "%s", audit_prop_names[ptr->type]);
->  		if (ptr->type == IPE_PROP_DMV_ROOTHASH)
->  			audit_dmv_roothash(ab, ptr->value);
-> +		if (ptr->type == IPE_PROP_FSV_DIGEST)
-> +			audit_fsv_digest(ab, ptr->value);
-
-My comments on audit_dmv_roothash() also apply here.
-
->  		audit_log_format(ab, " ");
->  	}
-> diff --git a/security/ipe/eval.c b/security/ipe/eval.c
-> index 82ad48d7aa3d..f0194b0ca2ff 100644
-> --- a/security/ipe/eval.c
-> +++ b/security/ipe/eval.c
-> @@ -172,6 +191,91 @@ static bool evaluate_dmv_sig_true(const struct ipe_eval_ctx *const ctx,
->  }
->  #endif /* CONFIG_IPE_PROP_DM_VERITY */
->  
-> +#ifdef CONFIG_IPE_PROP_FS_VERITY
-> +/**
-> + * evaluate_fsv_digest - Analyze @ctx against a fsv digest property.
-> + * @ctx: Supplies a pointer to the context being evaluated.
-> + * @p: Supplies a pointer to the property being evaluated.
-> + *
-> + * Return:
-> + * * true	- The current @ctx match the @p
-> + * * false	- The current @ctx doesn't match the @p
-> + */
-> +static bool evaluate_fsv_digest(const struct ipe_eval_ctx *const ctx,
-> +				struct ipe_prop *p)
-> +{
-> +	enum hash_algo alg;
-> +	u8 digest[FS_VERITY_MAX_DIGEST_SIZE];
-> +
-> +	if (!ctx->ino)
-> +		return false;
-> +	if (!fsverity_get_digest((struct inode *)ctx->ino,
-> +				 digest,
-> +				 NULL,
-> +				 &alg))
-> +		return false;
-> +
-> +	return ipe_digest_eval(p->value,
-> +			       digest,
-> +			       hash_digest_size[alg],
-> +			       hash_algo_name[alg]);
-> +}
-> +
-> +/**
-> + * evaluate_fsv_sig_false - Analyze @ctx against a fsv sig false property.
-> + * @ctx: Supplies a pointer to the context being evaluated.
-> + * @p: Supplies a pointer to the property being evaluated.
-> + *
-> + * Return:
-> + * * true	- The current @ctx match the @p
-> + * * false	- The current @ctx doesn't match the @p
-> + */
-> +static bool evaluate_fsv_sig_false(const struct ipe_eval_ctx *const ctx,
-> +				   struct ipe_prop *p)
-> +{
-> +	return !ctx->ino ||
-> +	       !IS_VERITY(ctx->ino) ||
-> +	       !ctx->ipe_inode ||
-> +	       !ctx->ipe_inode->fs_verity_signed;
-> +}
-> +
-> +/**
-> + * evaluate_fsv_sig_true - Analyze @ctx against a fsv sig true property.
-> + * @ctx: Supplies a pointer to the context being evaluated.
-> + * @p: Supplies a pointer to the property being evaluated.
-> + *
-> + * Return:
-> + * * true - The current @ctx match the @p
-> + * * false - The current @ctx doesn't match the @p
-> + */
-> +static bool evaluate_fsv_sig_true(const struct ipe_eval_ctx *const ctx,
-> +				  struct ipe_prop *p)
-> +{
-> +	return ctx->ino &&
-> +	       IS_VERITY(ctx->ino) &&
-> +	       ctx->ipe_inode &&
-> +	       ctx->ipe_inode->fs_verity_signed;
-> +}
-
-See my previous comments about the false/true functions.
-
-> +#else
+>  security/ipe/Kconfig        |  17 +++
+>  security/ipe/Makefile       |   3 +
+>  security/ipe/policy_tests.c | 294 ++++++++++++++++++++++++++++++++++++
+>  3 files changed, 314 insertions(+)
+>  create mode 100644 security/ipe/policy_tests.c
 
 --
 paul-moore.com
