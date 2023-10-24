@@ -1,111 +1,129 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8782179D9
-	for <audit@vger.kernel.org>; Tue, 24 Oct 2023 03:52:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9248037CAF
+	for <audit@vger.kernel.org>; Tue, 24 Oct 2023 15:44:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="ZzJPx0y1"
-Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 045361722
-	for <audit@vger.kernel.org>; Mon, 23 Oct 2023 20:52:38 -0700 (PDT)
-Received: by mail-qk1-x730.google.com with SMTP id af79cd13be357-7789a4c01easo264257985a.0
-        for <audit@vger.kernel.org>; Mon, 23 Oct 2023 20:52:38 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="W0sdrGfX"
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49DE6C2
+	for <audit@vger.kernel.org>; Tue, 24 Oct 2023 08:44:28 -0700 (PDT)
+Received: by mail-yb1-xb2f.google.com with SMTP id 3f1490d57ef6-d9abc069c8bso3633105276.3
+        for <audit@vger.kernel.org>; Tue, 24 Oct 2023 08:44:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1698119558; x=1698724358; darn=vger.kernel.org;
-        h=in-reply-to:references:subject:cc:to:from:message-id:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=XsaNGjlcimJtQjiAwAEMf2P9+0lBW+WKE/hjZAD7dek=;
-        b=ZzJPx0y19ajQdpatRHIV9OeYbUZdaaBZFXCshlqwJCZYO2u3kgFCbgta/xGM2jnj2p
-         8+kCX5JTZZ1VehON7byPvfJ5U6/lZGLLV2HrO7ImJwWRGysVUGepVz4oGfXDSxWpS01H
-         llWr0/T3mPVztmuSNR7LotGveoiuz5fcXyqySGe9L3uM8KoTajs1X9PyyL0LMbDIr0zz
-         wU8i7Zkr8+w0f9km6wDCmpyvw8I6jpaFQ46JySPHx7VHXazCIRGoGTUGtkcUXyKSOFyy
-         w/aOFa8b5S0U1O6CjzMwBBUajPeEcD5Cat7S04a9vo3XlUfv/5SiVcqa5keww9C74lKY
-         DXOw==
+        d=paul-moore.com; s=google; t=1698162267; x=1698767067; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kNUC1bN/lPZpYJJTCpt+p86VSRMczCoTnYfmB/OCd54=;
+        b=W0sdrGfXNMayEWoZFtYoy1XK0BLF/0pxT61Ht1A3xyeIo+rEjI48jv4TaB5ijzOTU2
+         3pfnaAcREqUwpEp7ygbqPGQ/kkKflpzG/rVcfYN4wkN/oGh3Ad9yX2I+OxsfToUydtZD
+         rs1io8AbGrVoNUVyEN5u+fppfr/IKdGgG7IbvWB2tj8/avBntNZKZjI5D6P8fEMj77AJ
+         ZARFxZXybBV2pY3CzPqY2w+Efq0CqEheWxPlAifXoKVgjY9nnvIW761MFEIS/MK1o3oz
+         eGXWSJxePNKLwismzFezEtDCggugVTD70i3o+FqzPGm6WD2wDcUgtugn/M/yxz71IpWl
+         g0wg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698119558; x=1698724358;
-        h=in-reply-to:references:subject:cc:to:from:message-id:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XsaNGjlcimJtQjiAwAEMf2P9+0lBW+WKE/hjZAD7dek=;
-        b=UYMdi5R8b6JfKLGC1A37rICbmvwzHGKBL7ROvDZIW2jrxiruStSQaCf7bRM7RhjRSM
-         xbOBollrvj1G9HvZmf3Lp7oxsI0u0z29m//Ad0GzYo9czmJQzGcab/NCxXNJTFZxWKYl
-         TeL8Xk9mqEfeD9jIGp7scRtGzzRWcU7j8u6FVBCW9oJI0c0cqjLx9B8St5gWDJhSGP08
-         VmamtMsnzMYR/Ginojz5bxREGZ7unXDxoQnA5WORrJ+mtSjYkUs2dDefDDLFfFOCzDCY
-         j98d4VntyEQVpQiYGm5H1Xnp0I+XJNsxfPGsNa2xZdrWX08IKyR3DcAMMVT/zVtUNCH2
-         mPkw==
-X-Gm-Message-State: AOJu0YwClDjsI9m8NlJ0EFj1P01ma/pMpz4D3Rw74I4lfP2wTcQDDCvY
-	JYpxsFpD2JKs7nOz3uP8kawx
-X-Google-Smtp-Source: AGHT+IFgtMi4EqN6N9ZtnfOHbANV4Egy0LBPK5cs6vsX4rIphs5HUZhBFo1nSJ25zSqGEggCASqLKw==
-X-Received: by 2002:a05:620a:430d:b0:778:8dc1:bb7b with SMTP id u13-20020a05620a430d00b007788dc1bb7bmr13244374qko.27.1698119557740;
-        Mon, 23 Oct 2023 20:52:37 -0700 (PDT)
-Received: from localhost ([70.22.175.108])
-        by smtp.gmail.com with ESMTPSA id s4-20020ad45004000000b0063f88855ef2sm3286811qvo.101.2023.10.23.20.52.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Oct 2023 20:52:37 -0700 (PDT)
-Date: Mon, 23 Oct 2023 23:52:36 -0400
-Message-ID: <88259677752389b350614857e6003b8c.paul@paul-moore.com>
-From: Paul Moore <paul@paul-moore.com>
-To: Fan Wu <wufan@linux.microsoft.com>, corbet@lwn.net, zohar@linux.ibm.com, jmorris@namei.org, serge@hallyn.com, tytso@mit.edu, ebiggers@kernel.org, axboe@kernel.dk, agk@redhat.com, snitzer@kernel.org, eparis@redhat.com
-Cc: linux-doc@vger.kernel.org, linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org, linux-fscrypt@vger.kernel.org, linux-block@vger.kernel.org, dm-devel@redhat.com, audit@vger.kernel.org, roberto.sassu@huawei.com, linux-kernel@vger.kernel.org, Deven Bowers <deven.desai@linux.microsoft.com>, Fan Wu <wufan@linux.microsoft.com>
-Subject: Re: [PATCH RFC v11 18/19] ipe: kunit test for parser
-References: <1696457386-3010-19-git-send-email-wufan@linux.microsoft.com>
-In-Reply-To: <1696457386-3010-19-git-send-email-wufan@linux.microsoft.com>
+        d=1e100.net; s=20230601; t=1698162267; x=1698767067;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=kNUC1bN/lPZpYJJTCpt+p86VSRMczCoTnYfmB/OCd54=;
+        b=ou0Jzwn5olVa28p45OYgL39phoJW/BEusCbd9X1pi53FbCNM2n4mIFJqKYt3d6LQ1t
+         QWI21aY4Py/wxSJUCEX3nuwrrKdJdi4g6bYt+DadP4Ufhv3zOdaaLikl7VdtKMASsqOa
+         77b2Nn7e2IYreGFXiQOHA0lP/5wldQyv9EJ+P6k0bmuQiKjwsFqYJrp2TPKsKLVxM1jV
+         RlB6rjH8IUTyYs98uKaM6et2bq3qsCjT2Q6qCNamwvp629PwxgP6j1VlWhxmUNpiRmhj
+         fNe5ygpYRnybDZSMr82lB42UX5xW/gSXhA2vHG3TQsrDFikXbRM91VM4Ua50lx0mtpNH
+         mEQg==
+X-Gm-Message-State: AOJu0Ywx4K2RVTdkIXo8R2X8zx/TipgsOtOdz6igZHDKJ2LMUOfJfwY4
+	D0D010pNWbOIk9dvHzhWhN3hJrobr6eTIZXxnb9U
+X-Google-Smtp-Source: AGHT+IHJyDeDMBKAKQfnE3Ex3rU6tW5rrEbHBCp2q2WeKSoRN1RTOSWPERaznBWF8W82jyj0tBAmsGd4K73+iApP7Y4=
+X-Received: by 2002:a25:abc9:0:b0:da0:47b0:5241 with SMTP id
+ v67-20020a25abc9000000b00da047b05241mr1729056ybi.34.1698162267408; Tue, 24
+ Oct 2023 08:44:27 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+References: <20231018222023.371274-2-paul@paul-moore.com> <CAHC9VhTRAugYNG3xwMO2oxy+Wdb_Oo2VkRBRWMnMdiTKij8TUw@mail.gmail.com>
+ <CAGudoHE=RPqcwNh2sEeUF=Dhd=OPpuhbQu1YCJ+V3g1Jhf9JUw@mail.gmail.com>
+ <CAHC9VhQYxOAix_kbDR2oCfWGG1YRCV5DrGS_x99U03vmA6wUdQ@mail.gmail.com>
+ <CAGudoHHGZCgcSZ8MmpBRSj+=-Kkn6q3c521d3JKiTm9xUe5N2Q@mail.gmail.com>
+ <CAHC9VhTqh93PZ8uwwTVTKZTH7_GHsjhqV-CLpFRfTq2vJeQcCA@mail.gmail.com>
+ <CAGudoHHqP6oMcQO8MCx47a0vwv8a8Nb1tHn-kJAj4iFa+Anf2A@mail.gmail.com>
+ <CAHC9VhQDE43vwe2UAQCYeXuAQcdOj-evsie=spit-oXcekwNkw@mail.gmail.com>
+ <CAGudoHH5R_zNf0uLPSB+_o0N8bU2g29L6Nrz8Yo-KhG2Vot_ew@mail.gmail.com>
+ <CAHC9VhQy6w6=ndC-8nY+tjM_A3bfGFoeDqViaxeFokH0FF4XdQ@mail.gmail.com> <CAGudoHHwH1nJzQfS1OynoKmp--58CtiVB+BX9j46K6hwYxvJeA@mail.gmail.com>
+In-Reply-To: <CAGudoHHwH1nJzQfS1OynoKmp--58CtiVB+BX9j46K6hwYxvJeA@mail.gmail.com>
+From: Paul Moore <paul@paul-moore.com>
+Date: Tue, 24 Oct 2023 11:44:15 -0400
+Message-ID: <CAHC9VhQPCX_OoNgXUR--gjx8Pi2be=h1swt4cSOKnJA0aAdjLg@mail.gmail.com>
+Subject: Re: [PATCH] audit: use mmget() instead of get_task_exe_file() when
+ auditing @current
+To: Mateusz Guzik <mjguzik@gmail.com>
+Cc: audit@vger.kernel.org, Andreas Steinmetz <anstein99@googlemail.com>, 
+	John Johansen <john.johansen@canonical.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Oct  4, 2023 Fan Wu <wufan@linux.microsoft.com> wrote:
-> 
-> Add various happy/unhappy unit tests for both IPE's parser.
+On Sat, Oct 21, 2023 at 9:51=E2=80=AFAM Mateusz Guzik <mjguzik@gmail.com> w=
+rote:
+> On 10/19/23, Paul Moore <paul@paul-moore.com> wrote:
+> > On Thu, Oct 19, 2023 at 12:56=E2=80=AFPM Mateusz Guzik <mjguzik@gmail.c=
+om> wrote:
+> >> On 10/19/23, Paul Moore <paul@paul-moore.com> wrote:
+> >> > On Thu, Oct 19, 2023 at 10:52=E2=80=AFAM Mateusz Guzik <mjguzik@gmai=
+l.com>
+> >> > wrote:
+> >> >> On 10/19/23, Paul Moore <paul@paul-moore.com> wrote:
+> >> >> > Thinking about it a bit more this morning, I think we can safely
+> >> >> > ignore the non-@current case in audit_exe_compare() as the whole
+> >> >> > point
+> >> >> > of the audit exe filter is to record the actions of processes
+> >> >> > instantiated from that executable file; if the @current task is n=
+ot
+> >> >> > being logged/filtered, we shouldn't have to worry about the exe
+> >> >> > filter.
+> >> >>
+> >> >> I did a quick stab at figuring out whether one can get there with
+> >> >> non-current to begin with, but did not convince myself it is not
+> >> >> possible.
+> >> >>
+> >> >> That said, should you repost, I think refing and unrefing mm should=
+ be
+> >> >> a
+> >> >> voided.
+> >> >
+> >> > We have to deref current->mm to get the exe_file, but so long as we
+> >> > get a reference with mmget()/mmput() it should be safe, no?
+> >>
+> >> For task =3D=3D current the very condition which allows you to safely
+> >> mmget also makes the operation redundant -- current already has a ref
+> >> on mm for as long as it executes.
+> >
+> > I've been using the move_pages(2) syscall code as an example and in
+> > the find_mm_struct() function the code either does a mmget() if
+> > accessing current->mm or a get_task_mm() if accessing an arbitrary
+> > task.
+> >
+> >   -> SYSCALL_DEFINE6(move_pages, ...)
+> >     -> kernel_move_pages(...)
+> >       -> find_mm_struct(...)
+> >
+> > What am I missing?
+> >
+>
+> To my reading they did not want to special-case it in the caller --
+> they just mmput regardless of what task is.
+>
+> Again, you may notice there are no locks held in that usecase. The
+> pointer is blindly derefed and a refcount bumped. For this to be safe,
+> it has to be guaranteed > 0 already, which it is for a task accessing
+> it's own mm struct. You can find the releasing mmput in exit ->
+> do_exit -> exit_mm callchain.
 
-I'm going to suggest: "... for IPE's policy parser."
+I'll have a v2 out soon (later today?).
 
-Also, aside from the policy parser tests, are there any other IPE
-functional tests?  We do have a testing guideline for new LSM
-submissions:
-
- "New LSMs must be accompanied by a test suite to verify basic
-  functionality and help identify regressions. The test suite
-  must be publicly available without download restrictions
-  requiring accounts, subscriptions, etc. Test coverage does
-  not need to reach a specific percentage, but core functionality
-  and any user interfaces should be well covered by the test
-  suite. Maintaining the test suite in a public git repository is
-  preferable over tarball snapshots. Integrating the test suite
-  with existing automated Linux kernel testing services is
-  encouraged."
-
-https://github.com/LinuxSecurityModule/kernel/blob/main/README.md#new-lsm-guidelines
-
-> Signed-off-by: Deven Bowers <deven.desai@linux.microsoft.com>
-> Signed-off-by: Fan Wu <wufan@linux.microsoft.com>
-> ---
-> v1-v6:
->   + Not present
-> 
-> v7:
->   Introduced
-> 
-> v8:
->   + Remove the kunit tests with respect to the fsverity digest, as these
->     require significant changes to work with the new method of acquiring
->     the digest at runtime.
-> 
-> v9:
->   + Remove the kunit tests related to ipe_context
-> 
-> v10:
->   + No changes
-> 
-> v11:
->   + No changes
-> ---
->  security/ipe/Kconfig        |  17 +++
->  security/ipe/Makefile       |   3 +
->  security/ipe/policy_tests.c | 294 ++++++++++++++++++++++++++++++++++++
->  3 files changed, 314 insertions(+)
->  create mode 100644 security/ipe/policy_tests.c
-
---
+--=20
 paul-moore.com
