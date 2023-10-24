@@ -1,54 +1,54 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 088A579F6
-	for <audit@vger.kernel.org>; Tue, 24 Oct 2023 03:52:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C095E79F0
+	for <audit@vger.kernel.org>; Tue, 24 Oct 2023 03:52:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="XNc3KcIb"
-Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40DAA10E7
-	for <audit@vger.kernel.org>; Mon, 23 Oct 2023 20:52:31 -0700 (PDT)
-Received: by mail-qt1-x830.google.com with SMTP id d75a77b69052e-41cd8bd5727so22426111cf.3
-        for <audit@vger.kernel.org>; Mon, 23 Oct 2023 20:52:31 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="VH9QwKYR"
+Received: from mail-qv1-xf34.google.com (mail-qv1-xf34.google.com [IPv6:2607:f8b0:4864:20::f34])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E44ED68
+	for <audit@vger.kernel.org>; Mon, 23 Oct 2023 20:52:30 -0700 (PDT)
+Received: by mail-qv1-xf34.google.com with SMTP id 6a1803df08f44-66d122f6294so29252996d6.0
+        for <audit@vger.kernel.org>; Mon, 23 Oct 2023 20:52:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1698119550; x=1698724350; darn=vger.kernel.org;
+        d=paul-moore.com; s=google; t=1698119549; x=1698724349; darn=vger.kernel.org;
         h=in-reply-to:references:subject:cc:to:from:message-id:date:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=HLvkudqanD7ho/JohV3yYMvdl0m/YZEqjpT0bM0Y7Gw=;
-        b=XNc3KcIb+IR8QS+MHo1fOpYYF218BMMpw9ZcQas/Zpj/xANT2PzcX4M5DsFY6GkHqo
-         GerPdig2n7O8sfAn0qDHvpz7jzGrLAenJNm2fMLtJgW6GHMP1BM/mocMG5qmzrI00V8z
-         OD2X/6lxilvyC0tlj2dWBsJrLgBQnunzBka62gH08EiefGgRKntxbfvMO3yzbVXTldlr
-         QPnp2txrzw92B0Cicpf2FTbrf7sRyc3NGEdJdeTq2R4bArrNpYRBleLaA/LChZocuWuk
-         pjqLpKlaAh+qrOCmUZL5tI60SseyZxjXGmoEe6jGKxvMeejw6mSyHUDZQTDbWUQwK6Hr
-         j0ZQ==
+        bh=9D20GBuYY3uJJiQrbUxHHBPEASCxtbko8RJ2E48OU8Y=;
+        b=VH9QwKYRmk6eU8dQU07efSTkyTcT8b16XU5vSDej7YATeRQE7005fkvcH+hQBmM3W2
+         VYVAnHG7gl7n30wKJGlqmf0TbSxqXOOoORozJyoPKIcEFWRF7se0GRFmTsZfedu39br9
+         bxez2thEnH3wbmocRlKeOcc8b+8r2NatMwYRVqDOQx/VR+y6KIfQLZejXdebzxdIiw0+
+         D4p6oF1+6sbWA6/FuFNkWknYNvauig01Nl6OCSbNzxGhbrBrs+vQlfUJWdTQrVu+HmZF
+         fibgjXkSTVNwA3R1/XYwlUYYURwTiKfJL2Akh/98Nw7UEqWsJ+LrvowUSmAUbaJsmU4A
+         bUug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698119550; x=1698724350;
+        d=1e100.net; s=20230601; t=1698119549; x=1698724349;
         h=in-reply-to:references:subject:cc:to:from:message-id:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=HLvkudqanD7ho/JohV3yYMvdl0m/YZEqjpT0bM0Y7Gw=;
-        b=RswhHkHArzeuy5f9KX+Qw8n+g3Fg7F1EC3QNdr9QcD25MFJpLtTwG8Zfu8Ka7Iu3jm
-         O3bwwJzZXEuChGtGw+cm0zyXwBXZ06g0gNlYN0CuSXzD8bTIRVxhN79jHbIqbpuqHfI7
-         8M7zY27QsuBKPfCYFQuj2EdfBYYE85N/w+9YKFUPdmNZc+n7UCc0q4ZoBpNTt4e+0nlt
-         R/sVwK6Td62PSyV+EocvAtMXUORHIMo3tEv9dvHfs5xWl2AvfZ8qFGjkhpK36DYB0Lnf
-         rEMlwYCuOk0QECj5YGIf48Fv7jXMqEfK58xphL6/0hjcURy4wuuXt9VDwlfLAmb72evY
-         d1Kw==
-X-Gm-Message-State: AOJu0YypWpEy0bo6W7g6n2CgleEEc2+bjl2+5uURbuDQ9kHIbBEGoWKW
-	ZFjoyEjOeAdKP0WpwJac5k1L
-X-Google-Smtp-Source: AGHT+IHxiDP0oQS0IHZl9PGSzz8xG4YIOPId7UdDJm7uyxgqMm7h4born+PADWw4P1qOvg39+RCjvw==
-X-Received: by 2002:ac8:5c08:0:b0:41b:ff51:4e72 with SMTP id i8-20020ac85c08000000b0041bff514e72mr11390786qti.48.1698119550281;
-        Mon, 23 Oct 2023 20:52:30 -0700 (PDT)
-Received: from localhost ([70.22.175.108])
-        by smtp.gmail.com with ESMTPSA id kr25-20020ac861d9000000b004181c32dcc3sm3179140qtb.16.2023.10.23.20.52.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        bh=9D20GBuYY3uJJiQrbUxHHBPEASCxtbko8RJ2E48OU8Y=;
+        b=R90H0h+uG4AfFlrOAevrXrcOTVoM19iFWkSo5syFXRiN1vr6sGccn+8tkH4MoNVF5Q
+         Ies2RPS2LqV7SomWYVgV5E8Ilsm5z00YOWy0FwNL7FDwzO1sKwlTMBPX/QDAcLT0Rsix
+         3Cp4UQUzpRM31mqwEzX3yzztuDja90h8hYo+iH+Yv4nEEYVmdDqDozVoeLdyo6k+DZw6
+         hlLcY6UrZxfFhLTh7fiqyEcxLS3pZ1FqXLddP9MRSuUkWeCP0glAjiIsVAm5JDgn1D0e
+         1vxZpSZgGTKcuicfq1LF1WLk+wNj+iGNcUqgwnnbMYd3xvPMd/03EB5Y1tZZ9Ok+mo8y
+         UxGQ==
+X-Gm-Message-State: AOJu0Yz04+IuH67evOJJonngsJcati8BNv3b/vZnix+NrZjYUipfbMRd
+	pIGLtLa4IaSAju3c2wRK8OLs
+X-Google-Smtp-Source: AGHT+IFpIqqh1fB4hnxmAOL2NoddL/lzIp7ju14Dk5onQmmR8wOSeU2mbOH9yH4fSAzqdyjSPcWQFA==
+X-Received: by 2002:ad4:5bcd:0:b0:65b:896:a5bb with SMTP id t13-20020ad45bcd000000b0065b0896a5bbmr13586438qvt.34.1698119549271;
         Mon, 23 Oct 2023 20:52:29 -0700 (PDT)
-Date: Mon, 23 Oct 2023 23:52:29 -0400
-Message-ID: <85311850a862fe6ccb946634429b890a.paul@paul-moore.com>
+Received: from localhost ([70.22.175.108])
+        by smtp.gmail.com with ESMTPSA id c15-20020a0cd60f000000b00658266be23fsm3330187qvj.41.2023.10.23.20.52.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 Oct 2023 20:52:28 -0700 (PDT)
+Date: Mon, 23 Oct 2023 23:52:28 -0400
+Message-ID: <1ef52e983dd5b9a7759dc76bfe156804.paul@paul-moore.com>
 From: Paul Moore <paul@paul-moore.com>
 To: Fan Wu <wufan@linux.microsoft.com>, corbet@lwn.net, zohar@linux.ibm.com, jmorris@namei.org, serge@hallyn.com, tytso@mit.edu, ebiggers@kernel.org, axboe@kernel.dk, agk@redhat.com, snitzer@kernel.org, eparis@redhat.com
-Cc: linux-doc@vger.kernel.org, linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org, linux-fscrypt@vger.kernel.org, linux-block@vger.kernel.org, dm-devel@redhat.com, audit@vger.kernel.org, roberto.sassu@huawei.com, linux-kernel@vger.kernel.org, Fan Wu <wufan@linux.microsoft.com>
-Subject: Re: [PATCH RFC v11 11/19] dm verity: set DM_TARGET_SINGLETON feature  flag
-References: <1696457386-3010-12-git-send-email-wufan@linux.microsoft.com>
-In-Reply-To: <1696457386-3010-12-git-send-email-wufan@linux.microsoft.com>
+Cc: linux-doc@vger.kernel.org, linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org, linux-fscrypt@vger.kernel.org, linux-block@vger.kernel.org, dm-devel@redhat.com, audit@vger.kernel.org, roberto.sassu@huawei.com, linux-kernel@vger.kernel.org, Deven Bowers <deven.desai@linux.microsoft.com>, Fan Wu <wufan@linux.microsoft.com>
+Subject: Re: [PATCH RFC v11 9/19] ipe: add permissive toggle
+References: <1696457386-3010-10-git-send-email-wufan@linux.microsoft.com>
+In-Reply-To: <1696457386-3010-10-git-send-email-wufan@linux.microsoft.com>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
@@ -57,41 +57,134 @@ List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 
 On Oct  4, 2023 Fan Wu <wufan@linux.microsoft.com> wrote:
 > 
-> The device-mapper has a flag to mark targets as singleton, which is a
-> required flag for immutable targets. Without this flag, multiple
-> dm-verity targets can be added to a mapped device, which has no
-> practical use cases and will let dm_table_get_immutable_target return
-> NULL. This patch adds the missing flag, restricting only one
-> dm-verity target per mapped device.
+> IPE, like SELinux, supports a permissive mode. This mode allows policy
+> authors to test and evaluate IPE policy without it effecting their
+> programs. When the mode is changed, a 1404 AUDIT_MAC_STATUS
+> be reported.
 > 
+> This patch adds the following audit records:
+> 
+>     audit: MAC_STATUS enforcing=0 old_enforcing=1 auid=4294967295
+>       ses=4294967295 enabled=1 old-enabled=1 lsm=ipe res=1
+>     audit: MAC_STATUS enforcing=1 old_enforcing=0 auid=4294967295
+>       ses=4294967295 enabled=1 old-enabled=1 lsm=ipe res=1
+> 
+> The audit record only emit when the value from the user input is
+> different from the current enforce value.
+> 
+> Signed-off-by: Deven Bowers <deven.desai@linux.microsoft.com>
 > Signed-off-by: Fan Wu <wufan@linux.microsoft.com>
 > ---
-> v1-v10:
->   + Not present
+> v2:
+>   + Split evaluation loop, access control hooks,
+>     and evaluation loop from policy parser and userspace
+>     interface to pass mailing list character limit
+> 
+> v3:
+>   + Move ipe_load_properties to patch 04.
+>   + Remove useless 0-initializations
+>   + Prefix extern variables with ipe_
+>   + Remove kernel module parameters, as these are
+>     exposed through sysctls.
+>   + Add more prose to the IPE base config option
+>     help text.
+>   + Use GFP_KERNEL for audit_log_start.
+>   + Remove unnecessary caching system.
+>   + Remove comments from headers
+>   + Use rcu_access_pointer for rcu-pointer null check
+>   + Remove usage of reqprot; use prot only.
+>   + Move policy load and activation audit event to 03/12
+> 
+> v4:
+>   + Remove sysctls in favor of securityfs nodes
+>   + Re-add kernel module parameters, as these are now
+>     exposed through securityfs.
+>   + Refactor property audit loop to a separate function.
+> 
+> v5:
+>   + fix minor grammatical errors
+>   + do not group rule by curly-brace in audit record,
+>     reconstruct the exact rule.
+> 
+> v6:
+>   + No changes
+> 
+> v7:
+>   + Further split lsm creation into a separate commit from the
+>     evaluation loop and audit system, for easier review.
+>   + Propagating changes to support the new ipe_context structure in the
+>     evaluation loop.
+>   + Split out permissive functionality into a separate patch for easier
+>     review.
+>   + Remove permissive switch compile-time configuration option - this
+>     is trivial to add later.
+> 
+> v8:
+>   + Remove "IPE" prefix from permissive audit record
+>   + align fields to the linux-audit field dictionary. This causes the
+>     following fields to change:
+>       enforce -> permissive
+> 
+>   + Remove duplicated information correlated with syscall record, that
+>     will always be present in the audit event.
+>   + Change audit types:
+>     + AUDIT_TRUST_STATUS -> AUDIT_MAC_STATUS
+>       + There is no significant difference in meaning between
+>         these types.
+> 
+> v9:
+>   + Clean up ipe_context related code
+> 
+> v10:
+>   + Change audit format to comform with the existing format selinux is
+>     using
+>   + Remove the audit record emission during init to align with selinux,
+>     which does not perform this action.
+> 
+> v11:
+>   + Remove redundant code
 > ---
->  drivers/md/dm-verity-target.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  security/ipe/audit.c | 22 ++++++++++++++
+>  security/ipe/audit.h |  1 +
+>  security/ipe/eval.c  | 14 +++++++--
+>  security/ipe/eval.h  |  1 +
+>  security/ipe/fs.c    | 68 ++++++++++++++++++++++++++++++++++++++++++++
+>  5 files changed, 104 insertions(+), 2 deletions(-)
 
-This seems reasonable to me and matches with other users of
-DM_TARGET_IMMUTABLE.
+...
 
-Alasdair, Mike, can we get an ACK on this?
-
-> diff --git a/drivers/md/dm-verity-target.c b/drivers/md/dm-verity-target.c
-> index 26adcfea0302..80673b66c194 100644
-> --- a/drivers/md/dm-verity-target.c
-> +++ b/drivers/md/dm-verity-target.c
-> @@ -1503,7 +1503,7 @@ int dm_verity_get_root_digest(struct dm_target *ti, u8 **root_digest, unsigned i
+> diff --git a/security/ipe/eval.c b/security/ipe/eval.c
+> index 499b6b3338f2..78c54ff1fdd3 100644
+> --- a/security/ipe/eval.c
+> +++ b/security/ipe/eval.c
+> @@ -167,9 +172,12 @@ int ipe_evaluate_event(const struct ipe_eval_ctx *const ctx)
+>  	ipe_audit_match(ctx, match_type, action, rule);
 >  
->  static struct target_type verity_target = {
->  	.name		= "verity",
-> -	.features	= DM_TARGET_IMMUTABLE,
-> +	.features	= DM_TARGET_SINGLETON | DM_TARGET_IMMUTABLE,
->  	.version	= {1, 9, 0},
->  	.module		= THIS_MODULE,
->  	.ctr		= verity_ctr,
-> -- 
-> 2.25.1
+>  	if (action == IPE_ACTION_DENY)
+> -		return -EACCES;
+> +		rc = -EACCES;
+> +
+> +	if (!enforcing)
+> +		rc = 0;
+
+Why the local @enforcing variable?  Why not:
+
+  if (!READ_ONCE(enforce))
+    rc = 0;
+
+> -	return 0;
+> +	return rc;
+>  }
+>  
+>  /**
+> @@ -198,3 +206,5 @@ void ipe_invalidate_pinned_sb(const struct super_block *mnt_sb)
+>  
+>  module_param(success_audit, bool, 0400);
+>  MODULE_PARM_DESC(success_audit, "Start IPE with success auditing enabled");
+> +module_param(enforce, bool, 0400);
+> +MODULE_PARM_DESC(enforce, "Start IPE in enforce or permissive mode");
+
+"enforcing"
 
 --
 paul-moore.com
