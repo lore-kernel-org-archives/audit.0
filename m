@@ -1,131 +1,154 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4136427EDD
-	for <audit@vger.kernel.org>; Tue, 24 Oct 2023 17:29:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A93D2510F
+	for <audit@vger.kernel.org>; Tue, 24 Oct 2023 17:59:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="eUX/UtKT"
-Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6091AD7A
-	for <audit@vger.kernel.org>; Tue, 24 Oct 2023 10:29:35 -0700 (PDT)
-Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-5a82f176860so47249057b3.1
-        for <audit@vger.kernel.org>; Tue, 24 Oct 2023 10:29:35 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LRQ0YRgZ"
+Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7A3E90
+	for <audit@vger.kernel.org>; Tue, 24 Oct 2023 10:59:24 -0700 (PDT)
+Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-1e9bb3a0bfeso3588891fac.3
+        for <audit@vger.kernel.org>; Tue, 24 Oct 2023 10:59:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1698168574; x=1698773374; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1698170364; x=1698775164; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :references:in-reply-to:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=j2Rcg098g6AhVTGBDhxXKdB9Um8Zn7l5QTSQI9nH5CA=;
-        b=eUX/UtKTDiu4IDIyEfDhy/BrrohTiCapvHFp26wsYYTAcsGjGtQUnAAwaZ+Jc20Bxj
-         PN99jmou5UwDA7M9RPxEfULoVVG6wA9e5KCZvM1UGRW8HiV5NrcvGjcU737OC/QatCFO
-         JkndSH+gPYq5DgMWXyPgBaBRuBNgkhagHinTtQmRM0LGkZrUzv8kTJdHoQLsBDrQ8rca
-         Ndb2tOzvsSNR04dfh+nTNjV/4QS0qwOEtOAw3KWXJuQcX4SPS7Cwy2+B2IoACwjseEcb
-         RRzPiU9nyC5Y9jBKIqq+FPbsyl0T40DJIbTAOo55duCCagKHRCxBlTidEBdaxx7a6HR1
-         zhwA==
+        bh=hNfTfTcQ7mQcaJervdTn1bK9nCfMCSyoEAL8FAmNNYo=;
+        b=LRQ0YRgZC3H5Ua5kKdT94vWui9J+oV2EEZq2foxZAkmEQfdcffm9iIF8H3NP7SxJmM
+         53LmmvospNRg6Pk78zLrzM9q0TgNMGnnBO4+BunbtuOJi35JtQaNI12IeQdkbjJh7jwh
+         jeI6bceAPJSH2StyxgscmcVf73W662Lm0+Q51cuojDrSLm+eSokZfxxq8lKkCW6MHFkT
+         RzKi30ZQruhxpehIynQPwWLbYzIwh6KrzEEJX8BNiPym2tBznkxcn7NB1lVLRNKuy5in
+         OCudxgOSP20oaRZCvj7JJaUxSSc3y+QKAkFRHixEm8S59uJEzZ/ecm+QGUHi6ZNu6X2B
+         pRCw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698168574; x=1698773374;
+        d=1e100.net; s=20230601; t=1698170364; x=1698775164;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :references:in-reply-to:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=j2Rcg098g6AhVTGBDhxXKdB9Um8Zn7l5QTSQI9nH5CA=;
-        b=Wd+Rh+He4QYXfA1Zx4MFKQOkere+fk/xfI+wqnqsYoYszqkNUWI4Ni8bmXwksE5DN/
-         Jq5ORJFQXu7m9Tc8Zgj18ZX57yeLoAZGJiQhDMB23+v6EdkG7/KKXDBhCh9tuXN4hVta
-         dztLVKoLQl0NCuK8IZNyJHt88JogqUUuPDt719aEmH7zh5B+qAKMozvF7xxNEGLsvMpH
-         To811EknXi5rHy4xBT3uzwxv4P7GAzUjKjKJEHoD3C/XG2K88B2WRHkl81l8qTZP8q2q
-         78aQKfP87NqLg5qq6ljbbTrthGbCwBBK33wbGXdC2GgOa4c5khCvr+a1x1cY/Fv8tQyX
-         R23Q==
-X-Gm-Message-State: AOJu0YymkL7R2kmpO5Y4FVdQYNXAKT2n0BzdizGrRekKAdQLZJf5d2O4
-	qWIiubiIcwdLREhRN59e+LIPiBY1GJoR0/DbEG9t
-X-Google-Smtp-Source: AGHT+IE2Rn0qyti2pWDjgNyxfgZr0qMzFDQClCuCoS3/M/0q3Gqb7UEMjWZ41sg+DzFdQiRM5YnjYKoxkLrTPcE08y0=
-X-Received: by 2002:a25:d68c:0:b0:d81:7d00:41f9 with SMTP id
- n134-20020a25d68c000000b00d817d0041f9mr13001832ybg.57.1698168574490; Tue, 24
- Oct 2023 10:29:34 -0700 (PDT)
+        bh=hNfTfTcQ7mQcaJervdTn1bK9nCfMCSyoEAL8FAmNNYo=;
+        b=YzbMWl4iu6LpDi/tHIsJOmo+lkOx0mlJVJzwYBt7xQyZG09fea7nDw5CYKMbJJCDuC
+         3QBVUToLKmVinRZuXASrbsCwzd0T0a8tphWAnMswZBMimQJ860ved2OA5Hs+kOG/jqw4
+         wQDevXrekZI3NXTvOnJj5PXZ1FJxj6eKfoN5RvhPem0WtMazHodvyvriAU3qQTeCaUER
+         ACq8DAdDk3byibyvsOfQOEXD+gTW6l8i8Q0T/0A5ZFI4jqw8L40HyQZzS1an4/OMYrV5
+         OhgtG2tQuF9STzPTQFEnAJHsXRhvqlh8MIAcY92RKRbYxuSwUUYuND0clKYEZzrjGpyc
+         gLgA==
+X-Gm-Message-State: AOJu0YwUnY5JZz7PMrpjE9zqiw78XOVysdZTsiJUSfBYg9nLDUOssgR+
+	7HCX5uGFj4nlb1W264LIHmdB27QSpQJRi4VPE7I=
+X-Google-Smtp-Source: AGHT+IGCUUn4Zcrfzk/RW9vc92SbaA6Aw1hbnQuMqjDooxUUBfq/7h5ZG3cL91h7+gdm1A32io2WR8yXwfXU3aDxO+M=
+X-Received: by 2002:a05:6871:821:b0:1d6:4b84:c7ed with SMTP id
+ q33-20020a056871082100b001d64b84c7edmr15048340oap.23.1698170358947; Tue, 24
+ Oct 2023 10:59:18 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Received: by 2002:ac9:5c4a:0:b0:4f0:1250:dd51 with HTTP; Tue, 24 Oct 2023
+ 10:59:18 -0700 (PDT)
+In-Reply-To: <CAHC9VhR-5uK=D0r3zDDsHegjiEqEuhsBhBqLTZ7Xm2PPup64oA@mail.gmail.com>
 References: <20231024161432.97029-2-paul@paul-moore.com> <a5650045-164f-4bff-b688-ddbc66dc95c4@canonical.com>
-In-Reply-To: <a5650045-164f-4bff-b688-ddbc66dc95c4@canonical.com>
-From: Paul Moore <paul@paul-moore.com>
-Date: Tue, 24 Oct 2023 13:29:23 -0400
-Message-ID: <CAHC9VhR-5uK=D0r3zDDsHegjiEqEuhsBhBqLTZ7Xm2PPup64oA@mail.gmail.com>
+ <CAHC9VhR-5uK=D0r3zDDsHegjiEqEuhsBhBqLTZ7Xm2PPup64oA@mail.gmail.com>
+From: Mateusz Guzik <mjguzik@gmail.com>
+Date: Tue, 24 Oct 2023 19:59:18 +0200
+Message-ID: <CAGudoHEAes9Avq4EKqNCFwKd_AQPhQE4v6Z3LYCZasJqQXKtjA@mail.gmail.com>
 Subject: Re: [PATCH v2] audit: don't take task_lock() in audit_exe_compare()
  code path
-To: John Johansen <john.johansen@canonical.com>, audit@vger.kernel.org
-Cc: Andreas Steinmetz <anstein99@googlemail.com>, Mateusz Guzik <mjguzik@gmail.com>
+To: Paul Moore <paul@paul-moore.com>
+Cc: John Johansen <john.johansen@canonical.com>, audit@vger.kernel.org, 
+	Andreas Steinmetz <anstein99@googlemail.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Oct 24, 2023 at 12:47=E2=80=AFPM John Johansen
-<john.johansen@canonical.com> wrote:
-> On 10/24/23 09:14, Paul Moore wrote:
-> > The get_task_exe_file() function locks the given task with task_lock()
-> > which when used inside audit_exe_compare() can cause deadlocks on
-> > systems that generate audit records when the task_lock() is held. We
-> > resolve this problem with two changes: ignoring those cases where the
-> > task being audited is not the current task, and changing our approach
-> > to obtaining the executable file struct to not require task_lock().
-> >
-> > With the intent of the audit exe filter being to filter on audit events
-> > generated by processes started by the specified executable, it makes
-> > sense that we would only want to use the exe filter on audit records
-> > associated with the currently executing process, e.g. @current.  If
-> > we are asked to filter records using a non-@current task_struct we can
-> > safely ignore the exe filter without negatively impacting the admin's
-> > expectations for the exe filter.
-> >
-> > Knowing that we only have to worry about filtering the currently
-> > executing task in audit_exe_compare() we can do away with the
-> > task_lock() and call get_mm_exe_file() with @current->mm directly.
-> >
-> > Cc: <stable@vger.kernel.org>
-> > Fixes: 5efc244346f9 ("audit: fix exe_file access in audit_exe_compare")
-> > Reported-by: Andreas Steinmetz <anstein99@googlemail.com>
-> > Signed-off-by: Paul Moore <paul@paul-moore.com>
+On 10/24/23, Paul Moore <paul@paul-moore.com> wrote:
+> On Tue, Oct 24, 2023 at 12:47=E2=80=AFPM John Johansen
+> <john.johansen@canonical.com> wrote:
+>> On 10/24/23 09:14, Paul Moore wrote:
+>> > The get_task_exe_file() function locks the given task with task_lock()
+>> > which when used inside audit_exe_compare() can cause deadlocks on
+>> > systems that generate audit records when the task_lock() is held. We
+>> > resolve this problem with two changes: ignoring those cases where the
+>> > task being audited is not the current task, and changing our approach
+>> > to obtaining the executable file struct to not require task_lock().
+>> >
+>> > With the intent of the audit exe filter being to filter on audit event=
+s
+>> > generated by processes started by the specified executable, it makes
+>> > sense that we would only want to use the exe filter on audit records
+>> > associated with the currently executing process, e.g. @current.  If
+>> > we are asked to filter records using a non-@current task_struct we can
+>> > safely ignore the exe filter without negatively impacting the admin's
+>> > expectations for the exe filter.
+>> >
+>> > Knowing that we only have to worry about filtering the currently
+>> > executing task in audit_exe_compare() we can do away with the
+>> > task_lock() and call get_mm_exe_file() with @current->mm directly.
+>> >
+>> > Cc: <stable@vger.kernel.org>
+>> > Fixes: 5efc244346f9 ("audit: fix exe_file access in audit_exe_compare"=
+)
+>> > Reported-by: Andreas Steinmetz <anstein99@googlemail.com>
+>> > Signed-off-by: Paul Moore <paul@paul-moore.com>
+>>
+>> looks good to me
+>> Reviewed-by: John Johansen <john.johanse@canonical.com>
+>>
+>> > ---
+>> > - v2
+>> > * dropped mmget()/mmput()
+>> >
+>> > - v1
+>> > * initial revision
+>> > ---
+>> >   kernel/audit_watch.c | 7 ++++++-
+>> >   1 file changed, 6 insertions(+), 1 deletion(-)
+>> >
+>> > diff --git a/kernel/audit_watch.c b/kernel/audit_watch.c
+>> > index 65075f1e4ac8..99da4ee8e597 100644
+>> > --- a/kernel/audit_watch.c
+>> > +++ b/kernel/audit_watch.c
+>> > @@ -527,11 +527,16 @@ int audit_exe_compare(struct task_struct *tsk,
+>> > struct audit_fsnotify_mark *mark)
+>> >       unsigned long ino;
+>> >       dev_t dev;
+>> >
+>> > -     exe_file =3D get_task_exe_file(tsk);
+>> > +     /* only do exe filtering if we are recording @current
+>> > events/records */
+>> > +     if (tsk !=3D current)
+>> > +             return 0;
+>> > +
+>> > +     exe_file =3D get_mm_exe_file(current->mm);
 >
-> looks good to me
-> Reviewed-by: John Johansen <john.johanse@canonical.com>
+> Hmmm.  I don't know why I didn't think of this earlier, but we should
+> probably protect against @current->mm being NULL, right?
 >
-> > ---
-> > - v2
-> > * dropped mmget()/mmput()
-> >
-> > - v1
-> > * initial revision
-> > ---
-> >   kernel/audit_watch.c | 7 ++++++-
-> >   1 file changed, 6 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/kernel/audit_watch.c b/kernel/audit_watch.c
-> > index 65075f1e4ac8..99da4ee8e597 100644
-> > --- a/kernel/audit_watch.c
-> > +++ b/kernel/audit_watch.c
-> > @@ -527,11 +527,16 @@ int audit_exe_compare(struct task_struct *tsk, st=
-ruct audit_fsnotify_mark *mark)
-> >       unsigned long ino;
-> >       dev_t dev;
-> >
-> > -     exe_file =3D get_task_exe_file(tsk);
-> > +     /* only do exe filtering if we are recording @current events/reco=
-rds */
-> > +     if (tsk !=3D current)
-> > +             return 0;
-> > +
-> > +     exe_file =3D get_mm_exe_file(current->mm);
 
-Hmmm.  I don't know why I didn't think of this earlier, but we should
-probably protect against @current->mm being NULL, right?
+For the thread to start executing ->mm has to be set.
 
-> >       if (!exe_file)
-> >               return 0;
-> >       ino =3D file_inode(exe_file)->i_ino;
-> >       dev =3D file_inode(exe_file)->i_sb->s_dev;
-> >       fput(exe_file);
-> > +
-> >       return audit_mark_compare(mark, ino, dev);
-> >   }
+Although I do find it plausible there maybe a corner case during
+kernel bootstrap and it may be that code can land here with that
+state, but I can't be arsed to check.
+
+Given that stock code has an unintentional property of handling empty
+mm and this is a bugfix, I am definitely not going to protest adding a
+check. But I would WARN_ONCE it though.
+
+>> >       if (!exe_file)
+>> >               return 0;
+>> >       ino =3D file_inode(exe_file)->i_ino;
+>> >       dev =3D file_inode(exe_file)->i_sb->s_dev;
+>> >       fput(exe_file);
+>> > +
+>> >       return audit_mark_compare(mark, ino, dev);
+>> >   }
+>
+> --
+> paul-moore.com
+>
+
 
 --=20
-paul-moore.com
+Mateusz Guzik <mjguzik gmail.com>
