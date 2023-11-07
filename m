@@ -1,200 +1,90 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10089249FA
-	for <audit@vger.kernel.org>; Fri,  3 Nov 2023 22:30:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B8DD34546
+	for <audit@vger.kernel.org>; Tue,  7 Nov 2023 23:31:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="Fb+t+TGV"
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E365BCA
-	for <audit@vger.kernel.org>; Fri,  3 Nov 2023 15:30:17 -0700 (PDT)
-Received: by mail-yb1-xb2f.google.com with SMTP id 3f1490d57ef6-d9cbba16084so2596866276.1
-        for <audit@vger.kernel.org>; Fri, 03 Nov 2023 15:30:17 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="XQSPaINL"
+Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 913ED5252
+	for <audit@vger.kernel.org>; Tue,  7 Nov 2023 15:31:19 -0800 (PST)
+Received: by mail-qk1-x731.google.com with SMTP id af79cd13be357-7789923612dso405300985a.0
+        for <audit@vger.kernel.org>; Tue, 07 Nov 2023 15:31:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1699050617; x=1699655417; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OOhQ+4ppHia6X5vZEThJt6hjspNBijG8E4l1rtJpvmc=;
-        b=Fb+t+TGVFWJo9Lt7NqbDpiCp5KTiTLq3qWK2F8FUuNtUM5WTuaxGb0+z1NVnqotvW1
-         2qZn6RS+Srkmk93yyT+/Ms2J3a7yxlyceX7Ft6kBLCx2jcS7lEJy9zgxUQXVHzj4blHS
-         fyr7qxkrJU2HwS9ru50vk3tZdpJzSWKa2JEcflHAIVzuA7GESxwEJtB/bI3b70A9QUXa
-         doEEoLqOl5hoHhMwCKdm/XfcW/zcTZPHZcjWSio+N81QNCrj++ZcVtYVoo53MGlrHnkn
-         WkerntN/joI4lYf51rws1n6PycdZxbZwUR8MePbvYxSxCedAqTx+o/U0M0YpVs5udBPf
-         IO1w==
+        d=paul-moore.com; s=google; t=1699399878; x=1700004678; darn=vger.kernel.org;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=tydNgQiOMp3YV+RndotzaXK25ekNq4eLzdezzERvLsQ=;
+        b=XQSPaINLHa/MgGSJFkpPaDccHGKJkBxuhsyssCC/lgDStILQ2tQUYFfdb3mQPD9CT7
+         l45ZNFDv1uq9WbX6XiJUBLeUx1zs8EE3ffAXBN62Zy9qmW87Dipvfh5iAtuii40VPNGd
+         jL2eFsCRvPy8Y1MFohYV/nahcVeZMJRzt0U3BW4kxORUlYUrzlZTmN3iBmpf7+hKxd84
+         8p2rp0PNvhCX3pdPkv0S459k0b97E5IUg7WtqSdTwgfYRA+aM+WT871Xal7QP/FhXouo
+         kCySYCL9jckC/KzrqDYoxDBukU8qNzcId4Hv/tdb5FEJHK+Z/Srwwd94IM33snwykFRy
+         G16Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699050617; x=1699655417;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=OOhQ+4ppHia6X5vZEThJt6hjspNBijG8E4l1rtJpvmc=;
-        b=QVMbhk6oUc2cEmz7J4qnD28W5ib0PumhHnq51tRHbaWMNe/iGX6uZ9kzk4iecZ0o1M
-         QS8rGxay/W0prJf55Zyq3xp7qc3gBhQn3Js5pIMFDx5bzKKrmHRR8lvD8Knqox0Tx6+k
-         sPVe7Sd4w91geJ9klY/XqlTye61X5uHLWxuI0w0XTIxdKl5bOldJLJ+hJgsxoUIs0Ybu
-         y4kivA2GEbIErDuonPo8sF0Pwe9roGKSZRzkt3Oj912DvcL67N208xEfaegtvL1Yvgzo
-         2tXiYtD1WfZ0IZXVd1UDtBUG8oSoA3WblRKzHGSiDVRbbR8rhkdm9B/mqZaf4rZzoVJM
-         fsTA==
-X-Gm-Message-State: AOJu0Ywey2u0RNbbQec27TlPKsYmFojzlPRlpSjKl5iPGEwK3THZ3q9Y
-	dFGyxFyfh7EUfizR/udWq2Rftaebz7sDGmJP0AbG
-X-Google-Smtp-Source: AGHT+IGnpRgvInClOyTeRts44EfuCsVIf/oEzDvkRyvT0ioHtkFzmAn/jixwPJXsOyu5FJvaQ36V6EmrXY08ildtF/Y=
-X-Received: by 2002:a25:8590:0:b0:da0:cf4b:c504 with SMTP id
- x16-20020a258590000000b00da0cf4bc504mr23753840ybk.8.1699050616923; Fri, 03
- Nov 2023 15:30:16 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1699399878; x=1700004678;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=tydNgQiOMp3YV+RndotzaXK25ekNq4eLzdezzERvLsQ=;
+        b=Y8ksFkPBp88Z6JFxiJOWiUauj9f4p2ANpC/rtbuRfknEe0F1GKTRXSbU/Q+PDamyzN
+         sbbOB5OGNjEMZdJOg+GLl0ND1bgvH92y7BQV/k5YqAWDaN5HLzTbZ4PhcvEmL60rbKB7
+         voiNCc1z4g+UWd2vQR49z/G8Ew6vZU/xnc/RTP8fEXQivtDSdpKNi6KUHm9durSjmEsV
+         PT+KHm4hjvJxybUHAS5mvW45m7Rjj7xaoPpCScG+akQg/mlSWa85ctg4bLMFvJy5ue6K
+         eQPFxAtP3lZ5c/yiXjG4yYEMmX1QB5hBSqExTK0AXcNhvHSMlpumrgjKrqNUx/pj7+rJ
+         mh1Q==
+X-Gm-Message-State: AOJu0Yw9S66f6wjjE2oC+5ZSp/USrWp6HC5eCfhpFIh75ssAmiG7YLvr
+	Wd51AOhBHneI2bB1PhxRWfKN
+X-Google-Smtp-Source: AGHT+IHM9avX7OkERLkdBlgwIoyCkgyZiUpJCJ1aoFFn6AJm7YWd10lY6xYl3NUjkWQFaxZ8280W7g==
+X-Received: by 2002:a05:620a:c43:b0:774:2c35:3796 with SMTP id u3-20020a05620a0c4300b007742c353796mr76738qki.34.1699399878530;
+        Tue, 07 Nov 2023 15:31:18 -0800 (PST)
+Received: from localhost ([70.22.175.108])
+        by smtp.gmail.com with ESMTPSA id r12-20020a05620a298c00b0077407e3d68asm399576qkp.111.2023.11.07.15.31.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Nov 2023 15:31:18 -0800 (PST)
+Date: Tue, 07 Nov 2023 18:31:17 -0500
+Message-ID: <c5f6bd1dee4ad9b43fc8c9dc1c7645b3.paul@paul-moore.com>
+From: Paul Moore <paul@paul-moore.com>
+To: Chris Riches <chris.riches@nutanix.com>
+Cc: audit@vger.kernel.org, Eric Paris <eparis@redhat.com>, jonathan.davies@nutanix.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] audit: Send netlink ACK before setting connection in  auditd_set
+References: <20231018092351.195715-1-chris.riches@nutanix.com>
+In-Reply-To: <20231018092351.195715-1-chris.riches@nutanix.com>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <1696457386-3010-6-git-send-email-wufan@linux.microsoft.com>
- <c53599e9d278fc55be30e3bac9411328.paul@paul-moore.com> <616a6fd7-47b1-4b46-af23-46f9b1a3eedf@linux.microsoft.com>
- <CAHC9VhScdtqJeUTTUQVk4D70tTLz4TgU_aRTMRnHa0OARyubaw@mail.gmail.com>
- <c40cd6a6-5c32-4e72-8831-f87ee0a09324@linux.microsoft.com> <CAHC9VhR9scT7V7dvN5zhAYdExORB9arWaR7Gbix1AUtAMDPHcg@mail.gmail.com>
-In-Reply-To: <CAHC9VhR9scT7V7dvN5zhAYdExORB9arWaR7Gbix1AUtAMDPHcg@mail.gmail.com>
-From: Paul Moore <paul@paul-moore.com>
-Date: Fri, 3 Nov 2023 18:30:16 -0400
-Message-ID: <CAHC9VhQLbgvg6syOB2_GYFK+zpWbyx6zrDoM1aBnA18u_Qjj4g@mail.gmail.com>
-Subject: Re: [PATCH RFC v11 5/19] ipe: introduce 'boot_verified' as a trust provider
-To: Fan Wu <wufan@linux.microsoft.com>
-Cc: corbet@lwn.net, zohar@linux.ibm.com, jmorris@namei.org, serge@hallyn.com, 
-	tytso@mit.edu, ebiggers@kernel.org, axboe@kernel.dk, agk@redhat.com, 
-	snitzer@kernel.org, eparis@redhat.com, linux-doc@vger.kernel.org, 
-	linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org, 
-	linux-fscrypt@vger.kernel.org, linux-block@vger.kernel.org, 
-	dm-devel@redhat.com, audit@vger.kernel.org, roberto.sassu@huawei.com, 
-	linux-kernel@vger.kernel.org, Deven Bowers <deven.desai@linux.microsoft.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Fri, Nov 3, 2023 at 6:15=E2=80=AFPM Paul Moore <paul@paul-moore.com> wro=
-te:
-> On Thu, Nov 2, 2023 at 6:46=E2=80=AFPM Fan Wu <wufan@linux.microsoft.com>=
- wrote:
-> > On 10/26/2023 3:12 PM, Paul Moore wrote:
-> > > On Thu, Oct 26, 2023 at 5:33=E2=80=AFPM Fan Wu <wufan@linux.microsoft=
-.com> wrote:
-> > >> On 10/23/2023 8:52 PM, Paul Moore wrote:
-> > >>> On Oct  4, 2023 Fan Wu <wufan@linux.microsoft.com> wrote:
-> > >>>>
-> > >>>> IPE is designed to provide system level trust guarantees, this usu=
-ally
-> > >>>> implies that trust starts from bootup with a hardware root of trus=
-t,
-> > >>>> which validates the bootloader. After this, the bootloader verifie=
-s the
-> > >>>> kernel and the initramfs.
-> > >>>>
-> > >>>> As there's no currently supported integrity method for initramfs, =
-and
-> > >>>> it's typically already verified by the bootloader, introduce a pro=
-perty
-> > >>>> that causes the first superblock to have an execution to be "pinne=
-d",
-> > >>>> which is typically initramfs.
-> > >>>>
-> > >>>> When the "pinned" device is unmounted, it will be "unpinned" and
-> > >>>> `boot_verified` property will always evaluate to false afterward.
-> > >>>>
-> > >>>> We use a pointer with a spin_lock to "pin" the device instead of r=
-cu
-> > >>>> because rcu synchronization may sleep, which is not allowed when
-> > >>>> unmounting a device.
-> > >>>>
-> > >>>> Signed-off-by: Deven Bowers <deven.desai@linux.microsoft.com>
-> > >>>> Signed-off-by: Fan Wu <wufan@linux.microsoft.com>
-> > >> ...
-> > >>>> ---
-> > >>>>    security/ipe/eval.c          | 72 +++++++++++++++++++++++++++++=
-++++++-
-> > >>>>    security/ipe/eval.h          |  2 +
-> > >>>>    security/ipe/hooks.c         | 12 ++++++
-> > >>>>    security/ipe/hooks.h         |  2 +
-> > >>>>    security/ipe/ipe.c           |  1 +
-> > >>>>    security/ipe/policy.h        |  2 +
-> > >>>>    security/ipe/policy_parser.c | 35 +++++++++++++++++-
-> > >>>>    7 files changed, 124 insertions(+), 2 deletions(-)
->
-> ...
->
-> > >>>> +/**
-> > >>>> + * from_pinned - Determine whether @sb is the pinned super_block.
-> > >>>> + * @sb: Supplies a super_block to check against the pinned super_=
-block.
-> > >>>> + *
-> > >>>> + * Return:
-> > >>>> + * * true   - @sb is the pinned super_block
-> > >>>> + * * false  - @sb is not the pinned super_block
-> > >>>> + */
-> > >>>> +static bool from_pinned(const struct super_block *sb)
-> > >>>> +{
-> > >>>> +    bool rv;
-> > >>>> +
-> > >>>> +    if (!sb)
-> > >>>> +            return false;
-> > >>>> +    spin_lock(&pin_lock);
-> > >>>> +    rv =3D !IS_ERR_OR_NULL(pinned_sb) && pinned_sb =3D=3D sb;
-> > >>>> +    spin_unlock(&pin_lock);
-> > >>>
-> > >>> It's okay for an initial version, but I still think you need to get
-> > >>> away from this spinlock in from_pinned() as quickly as possible.
-> > >>> Maybe I'm wrong, but this looks like a major source of lock content=
-ion.
-> > >>>
-> > >>> I understand the issue around RCU and the potential for matching on
-> > >>> a reused buffer/address, but if you modified IPE to have its own LS=
-M
-> > >>> security blob in super_block::security you could mark the superbloc=
-k
-> > >>> when it was mounted and do a lockless lookup here in from_pinned().
-> > >>
-> > >> Thank you for the suggestion. After some testing, I discovered that
-> > >> switching to RCU to pin the super block and using a security blob to
-> > >> mark a pinned super block works. This approach do avoid many spinloc=
-k
-> > >> operations. I'll incorporate these changes in the next version of th=
-e patch.
-> > >
-> > > I probably wasn't as clear as I should have been, I was thinking of
-> > > doing away with the @pinned_sb global variable entirely, as well as
-> > > its associated lock problems and simply marking the initramfs/initrd
-> > > superblock when it was mounted.  I will admit that I haven't fully
-> > > thought about all the implementation details, but I think you could
-> > > leverage the security_sb_mount() hook to set a flag in IPE's
-> > > superblock metadata when the initramfs was mounted.
-> >
-> > I wasn't able to find a way to let LSM pin initramfs/initrd during moun=
-t
-> > time ...
->
-> I haven't had to look at the kernel init code in a while, and I don't
-> recall ever looking at the initramfs code, but I spent some time
-> digging through the code and I wonder if it would be possible to mark
-> the initramfs superblock in wait_for_initramfs() via a new LSM hook
-> using @current->fs->root.mnt->mnt_sb?  Although I'm not completely
-> sure that it's populated.  Have you already looked at an approach like
-> this?
+On Oct 18, 2023 Paul Moore <paul@paul-moore.com> wrote:
+> 
+> When auditd_set sets the auditd_conn pointer, audit messages can
+> immediately be put on the socket by other kernel threads. If the backlog
+> is large or the rate is high, this can immediately fill the socket
+> buffer. If the audit daemon requested an ACK for this operation, a full
+> socket buffer causes the ACK to get dropped, also setting ENOBUFS on the
+> socket.
+> 
+> To avoid this race and ensure ACKs get through, fast-track the ACK in
+> this specific case to ensure it is sent before auditd_conn is set.
+> 
+> Signed-off-by: Chris Riches <chris.riches@nutanix.com>
+> ---
+> 
+> > I'm happier with the bool over the integer type for the @ack variable.
+> > I'd suggest updating the patch and posting it again so we can review
+> > it in full, but we weren't very far off last time so I think it should
+> > be close, if not acceptable on the next revision.
+> 
+> Here's the latest iteration of the suggested patch. I've done it via git
+> send-email so it should apply cleanly.
+> 
+>  kernel/audit.c | 31 ++++++++++++++++++++++++-------
+>  1 file changed, 24 insertions(+), 7 deletions(-)
 
-Thinking about this more, the current IPE approach of treating the
-first file access as being present in the initramfs is not correct
-(one could build a system without an initramfs).  I think we need to
-do something like the above where the initramfs is explicitly marked
-in the initramfs code.
+This looks good to me, thanks for your patience and persistence Chris.
 
-> > But I think we could replace the global variable with a flag
-> > variable ipe_sb_state so we could use atomic operation to only mark one
-> > drive as pinned without any lock. The code will be like:
-> >
-> > static void pin_sb(const struct super_block *sb)
-> > {
-> >         if (!sb)
-> >                 return;
-> >
-> >         if (!test_and_set_bit_lock(IPE_SB_PINNED, &ipe_sb_state)) {
-> >                 ipe_sb(sb)->pinned =3D true;
-> >         }
-> > }
-> >
-> > Would this sound better?
+I'm going to merge this into audit/dev-staging now and it will move to
+audit/dev once v6.7-rc1 is released and the merge window closes.
 
---=20
+--
 paul-moore.com
