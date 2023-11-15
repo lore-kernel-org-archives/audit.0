@@ -1,170 +1,94 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAEC533083;
-	Tue, 14 Nov 2023 22:32:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DD07647
+	for <audit@vger.kernel.org>; Wed, 15 Nov 2023 00:31:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IswBA9nK"
-Received: from mail-oo1-xc2f.google.com (mail-oo1-xc2f.google.com [IPv6:2607:f8b0:4864:20::c2f])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 051DCFA;
-	Tue, 14 Nov 2023 14:32:15 -0800 (PST)
-Received: by mail-oo1-xc2f.google.com with SMTP id 006d021491bc7-5875e24c749so3244934eaf.1;
-        Tue, 14 Nov 2023 14:32:14 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="KLrBy9RN"
+Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46FB7C2
+	for <audit@vger.kernel.org>; Tue, 14 Nov 2023 16:31:24 -0800 (PST)
+Received: by mail-oi1-x236.google.com with SMTP id 5614622812f47-3b58d96a3bbso3547419b6e.1
+        for <audit@vger.kernel.org>; Tue, 14 Nov 2023 16:31:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1700001134; x=1700605934; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :references:in-reply-to:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uhzuEU81ElbxL9bVKL6KDLHN6K/p74gwFfTaOSir1ec=;
-        b=IswBA9nK29yh9T6e5W3k63TUlX4MHCSQkiu0XXXaSy962DCve0OjkDXLaX0BxaEOEP
-         L+5Nb18i8A+1IuUyMlWi3JtT/+7D+5TDwItHA/JXze6hioBKaxVGfvH5Qe739UGLHvRX
-         DoiCi7yyrUjzpwcPviW0qXNyXxqltbBwHU9oQo30pbtEeSmGoMIazaHpeOFXDYEDo4Hk
-         Jd0rD41tFsLehXs5UZ9YsAvv8Ws3VHG1OsAwEWtyByUbqbsBa4X3MACJC9ogHaVUII3N
-         OOpuyxb5bW7JNScaEvEb75xAcb6ntQlTV/N49+ZzudUjBk+vxAEASWIkIMDt2g+bO5f9
-         58aQ==
+        d=paul-moore.com; s=google; t=1700008283; x=1700613083; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=p0QBTdx9SEDtes3snJLqUjgrY8mouIZlEJk8I8Juc+s=;
+        b=KLrBy9RNbcX29Rydq0yy+Bs2uPp+kFwfVVb8lZjG0e1LGG1Fm+uQ2+qGMlsrlGqFI/
+         swbVTuW2ViFS4BdazXvdhd352wv8AHWJvywm4e6aKakkm672/9qQ1M7xabVjAWPe2Fb+
+         lw/zr1vGvB2/UWObzPEKisUDTbo4evnRq5jzXLPk0pfnWHU1Oz0i/dnrIDkw5onTPh/G
+         /q4Sybw33VjWNoX9ZP9wc7wyOEwuTUAi0yLmKGauAxvEWtvypny51IrEmDLOo9+NvIQY
+         IPQ23m3Z/fpcw/bcrswkUtjKEPPrP2wQ3Rfe6X2sRZiqygGele7r/UMa4KeF87xtb/64
+         y3YA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700001134; x=1700605934;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :references:in-reply-to:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=uhzuEU81ElbxL9bVKL6KDLHN6K/p74gwFfTaOSir1ec=;
-        b=OPH95coY+YrDEPaoM94CArqnedHKN1fakGNrElAcvYfcoaPkaiqAIkgFdCUN7sn4Zz
-         PvZHB6URgK+RFNDzKKxflINgVNSUEYm1RhGBaGfzCioj7MKvCf0cs7WZd5pJ9SkPPhwK
-         i+vkAsbudocAF18zClFeIge6G4mgib+lQvrEyKJ1nl/y6l3PTxpjDkFAJYCpi9+Kaipg
-         tBpr83CReSQ9qg0E9TDXWj4WBVBenWx3tDXLuerc4GctZ+ZGlEXMDw2JPgyPuIOicx0U
-         pS+264aJODyhTsCMHD/5fw1tAu3Xy7aaj4lzVgYj8vt9AYmt8VsEEwufDIISQgOr6BPW
-         E6+w==
-X-Gm-Message-State: AOJu0YxqjqWBRZkRdS/L99u5iVhFrlgtlXm8NTC29wQ6sOJ0+pI2e1ap
-	VktZIsm2qMf+3+I6bb3I45rkoYehdS4SG4wcKvE=
-X-Google-Smtp-Source: AGHT+IFlNdHtdA7WYxN4DjbHyz119O5bT0kXRmV8L0J4WqnX5kRY/PZwDDF5KFLqc0uxtewXKEQwQoej5XIZMiLd0N4=
-X-Received: by 2002:a05:6820:2c8f:b0:57b:3b48:6f11 with SMTP id
- dx15-20020a0568202c8f00b0057b3b486f11mr2853523oob.4.1700001134225; Tue, 14
- Nov 2023 14:32:14 -0800 (PST)
+        d=1e100.net; s=20230601; t=1700008283; x=1700613083;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=p0QBTdx9SEDtes3snJLqUjgrY8mouIZlEJk8I8Juc+s=;
+        b=Jb6IPZ8pAb9vs1MLrhRQhssqWUP95rVrK/P/1JZX8F17aP9XxIdIiwuQcHZjEV5r7a
+         rB1mW5bQ9R7LoJHz+bujTzuy18nM1t4oaRqOkKrWwcQkbLvgweOsNqsk8+DGUZ4NIvKE
+         6Sej1aYWRONCXjN6RharBEAh++If1gr0nP0k4eshLmZP6vzfrKC2AZp442beR8wks2x9
+         thQaO0gPgKGuq9ZsTVdhZTkXMxx6we2HNmPrcyMR0PO0JM5WelGqWSt1Ku00bL35RcHI
+         zFG5jTYHv141tC+GhPqV1QjPFoTXQPrXG4QarvII+HTOsO4pEnpmcIdM++D2S5nSvHdv
+         dOEg==
+X-Gm-Message-State: AOJu0Yxc3Kz0FuAx2vV7RKWY777E2Jbv6Bxz23auM8kzF5dIcZm/s9JT
+	BFEb7cNo7jzyjMI/yeiOMe+KzTKNCoMbtCk6Hg==
+X-Google-Smtp-Source: AGHT+IGdOdjRocWa3CRq4bfMv5ItELW6gRsuoAJ56l31A439TrrEPVz+jzXJWW3uqg5FZpGqY6P0Zg==
+X-Received: by 2002:a05:6808:1804:b0:3b6:cdc2:51a0 with SMTP id bh4-20020a056808180400b003b6cdc251a0mr14250340oib.29.1700008283464;
+        Tue, 14 Nov 2023 16:31:23 -0800 (PST)
+Received: from localhost ([70.22.175.108])
+        by smtp.gmail.com with ESMTPSA id tq21-20020a05620a3d1500b0076eee688a95sm3042510qkn.0.2023.11.14.16.31.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Nov 2023 16:31:23 -0800 (PST)
+From: Paul Moore <paul@paul-moore.com>
+To: audit@vger.kernel.org
+Cc: Artem Savkov <asavkov@redhat.com>,
+	Mateusz Guzik <mjguzik@gmail.com>
+Subject: [PATCH] audit: don't WARN_ON_ONCE(!current->mm) in audit_exe_compare()
+Date: Tue, 14 Nov 2023 19:31:14 -0500
+Message-ID: <20231115003113.433773-2-paul@paul-moore.com>
+X-Mailer: git-send-email 2.42.1
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Received: by 2002:ac9:7510:0:b0:4f0:1250:dd51 with HTTP; Tue, 14 Nov 2023
- 14:32:13 -0800 (PST)
-In-Reply-To: <CAHC9VhSjJ+ZgScF9f=8Fyovn15tKgaqFdV1qZxp=RWiuZSAdAA@mail.gmail.com>
-References: <20231024161432.97029-2-paul@paul-moore.com> <a5650045-164f-4bff-b688-ddbc66dc95c4@canonical.com>
- <CAHC9VhR-5uK=D0r3zDDsHegjiEqEuhsBhBqLTZ7Xm2PPup64oA@mail.gmail.com>
- <CAGudoHEAes9Avq4EKqNCFwKd_AQPhQE4v6Z3LYCZasJqQXKtjA@mail.gmail.com>
- <20231114092903.GA590929@alecto.usersys.redhat.com> <CAGudoHEDXaPTN1icH64Ff9rOJPJmr6ek-nCUhWtzUb0JqbXDzw@mail.gmail.com>
- <CAHC9VhSjJ+ZgScF9f=8Fyovn15tKgaqFdV1qZxp=RWiuZSAdAA@mail.gmail.com>
-From: Mateusz Guzik <mjguzik@gmail.com>
-Date: Tue, 14 Nov 2023 23:32:13 +0100
-Message-ID: <CAGudoHFGT2QaMGLzePtY23AQk85Uy2uMKDV08n_ep6k-7EE0zQ@mail.gmail.com>
-Subject: Re: [PATCH v2] audit: don't take task_lock() in audit_exe_compare()
- code path
-To: Paul Moore <paul@paul-moore.com>
-Cc: Artem Savkov <asavkov@redhat.com>, John Johansen <john.johansen@canonical.com>, 
-	audit@vger.kernel.org, Andreas Steinmetz <anstein99@googlemail.com>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1159; i=paul@paul-moore.com; h=from:subject; bh=2tAvYOQG6Os14H3e8pmYsLssDYzP62DnjxyzZawQaPA=; b=owEBbQKS/ZANAwAIAeog8tqXN4lzAcsmYgBlVBFR5qwvuDiCPKEuudFgNso+ylYfTc+gUt1PT TplBnHZJ+OJAjMEAAEIAB0WIQRLQqjPB/KZ1VSXfu/qIPLalzeJcwUCZVQRUQAKCRDqIPLalzeJ czZMD/9yI0I85yZ5yoYJCx76FJxvhHPtLfs+RyuFiSpD0PuQtCV1N/IC5hcCdL5ge1OzA8AQzGT L5RXJgBKdNGOz4mOFTV0Km0+4hXyshQABRXU1QKl01x46yoosudsB86e2mG7AA9EK8ooyw6xAa1 c07a5dcV90kpvFgWDRrFy5PE1jA7yAqOv3sUGkkP45nlIgXJYbkxR2DG/r+TMZdTVXZYbC7Zdkk Z0AqVYW8IMSGeLLXn+v6IldwD1OOwAQasQxsxLO+5lCarjXwOrtLxhgCPo0n5ldKz4hN6WHGT7F efRyVW9zACkKuJpoDXJFSp9yRwq1WErpY4H5sZFUCdKZwE/ZZ7FIdMXLFd1AnMsMZmcbREFjsB1 5Qrk5/WqzrJ6oFuSNLVcHRuFHxOwzV9gD0o/xmoqXGOFGHUdSbxGQQOlOxUnejo3HSjbgjKaDoV VA50aio2o0zEzUE3fNaTFMtFEPuljfUuttNSsAusU6/MMK0mMbBua8RnIXFDMTguBugEPwuybtx 5TA/AYuHRwoxfjFERf9WJKjkaktAuibCWGpEs9j4sJimjsrxzSV4qlOK0tOJ2+wm/V5r32dLCqs 8jsqlOL54Rx1gh9m748oQzEalggRiPPWpxUaOKbuIMgQh4qGy7O26l8aWTvYwCj5tkYWZOe1hyT Dawi57OOKR+hbcw==
+X-Developer-Key: i=paul@paul-moore.com; a=openpgp; fpr=7100AADFAE6E6E940D2E0AD655E45A5AE8CA7C8A
+Content-Transfer-Encoding: 8bit
 
-On 11/14/23, Paul Moore <paul@paul-moore.com> wrote:
-> On Tue, Nov 14, 2023 at 5:33=E2=80=AFAM Mateusz Guzik <mjguzik@gmail.com>=
- wrote:
->> On 11/14/23, Artem Savkov <asavkov@redhat.com> wrote:
->> > On Tue, Oct 24, 2023 at 07:59:18PM +0200, Mateusz Guzik wrote:
->> >> For the thread to start executing ->mm has to be set.
->> >>
->> >> Although I do find it plausible there maybe a corner case during
->> >> kernel bootstrap and it may be that code can land here with that
->> >> state, but I can't be arsed to check.
->> >>
->> >> Given that stock code has an unintentional property of handling empty
->> >> mm and this is a bugfix, I am definitely not going to protest adding =
-a
->> >> check. But I would WARN_ONCE it though.
->> >
->> > There is a case when this happens. Below is the trace I get when
->> > unloading a bpf program of type BPF_PROG_TYPE_SOCKET_FILTER while ther=
-e
->> > is an audit exe filter in place. So maybe the WARN shouldn't be there
->> > after all?
->> >
->> > [  722.833206] ------------[ cut here ]------------
->> > [  722.833902] WARNING: CPU: 1 PID: 0 at kernel/audit_watch.c:534
->> > audit_exe_compare+0x14d/0x1a0
->> [snip]
->> > [  722.836308] Call Trace:
->> > [  722.836343]  <IRQ>
->> > [  722.836375]  ? __warn+0xc9/0x350
->> > [  722.836426]  ? audit_exe_compare+0x14d/0x1a0
->> > [  722.836485]  ? report_bug+0x326/0x3c0
->> > [  722.836547]  ? handle_bug+0x3c/0x70
->> > [  722.836596]  ? exc_invalid_op+0x14/0x50
->> > [  722.836649]  ? asm_exc_invalid_op+0x16/0x20
->> > [  722.836721]  ? audit_exe_compare+0x14d/0x1a0
->> > [  722.838368]  audit_filter+0x4ab/0xa70
->> > [  722.839965]  ? perf_event_bpf_event+0xf1/0x490
->> > [  722.841562]  ? __pfx_audit_filter+0x10/0x10
->> > [  722.843157]  ? __pfx_perf_event_bpf_event+0x10/0x10
->> > [  722.844757]  ? rcu_do_batch+0x3d7/0xf50
->> > [  722.846330]  audit_log_start+0x28/0x60
->> > [  722.847870]  bpf_audit_prog.part.0+0x3c/0x150
->> > [  722.849398]  bpf_prog_put_deferred+0x8b/0x210
->> > [  722.850919]  sk_filter_release_rcu+0xd7/0x110
->> > [  722.852439]  rcu_do_batch+0x3d9/0xf50
->>
->> So the question is if you can get these calls to __bpf_prog_put with
->> current->mm !=3D NULL, and the answer is yes.
->>
->> I slapped this in:
->>
->> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
->> index 0ed286b8a0f0..fd4385e815f1 100644
->> --- a/kernel/bpf/syscall.c
->> +++ b/kernel/bpf/syscall.c
->> @@ -2150,6 +2150,8 @@ static void __bpf_prog_put(struct bpf_prog *prog)
->>  {
->>         struct bpf_prog_aux *aux =3D prog->aux;
->>
->> +       WARN_ON(current->mm);
->> +
->>         if (atomic64_dec_and_test(&aux->refcnt)) {
->>                 if (in_irq() || irqs_disabled()) {
->>                         INIT_WORK(&aux->work, bpf_prog_put_deferred);
->>
->> and ran a one-liner I had handy:
->> bpftrace -e 'kprobe:prepare_exec_creds { @[kstack(),
->> curtask->cred->usage] =3D count(); }'
->>
->> Traces are close -> __fput -> bpf_prog_release.
->>
->> I think it is a bug that ebpf can call into audit with current which
->> is not even bpf-related, and other times with the 'right' one -- what
->> is the exe filter supposed to do? (and what about other audit
->> codepaths which perhaps also look at current?)
->>
->> I have 0 interest in working on it and I don't think it is a high
->> priority anyway.
->>
->> With that in mind I concede replacing WARN_ONCE with a mere check
->> would still maintain the original bugfix, while not spewing the new
->> trace and it probably should be done for the time being (albeit with a
->> comment why).
->>
->> I do maintain this warn uncovered a problem though.
->>
->> Ultimately it is Paul's call I think. :)
->
-> I'm going to drop the WARN_ON_ONCE() since there is always a risk of
-> eBPF doing something odd and I don't want to have to keep revisiting
-> this each time to figure out what is at fault.
->
-> Thanks for reporting this Artem, I'll put together a patch and run it
-> overnight, if everything looks good in the morning I'll post it for
-> review, comment, etc. before sending it up to Linus.
->
+eBPF can end up calling into the audit code from some odd places, and
+some of these places don't have @current set properly so we end up
+tripping the `WARN_ON_ONCE(!current->mm)` near the top of
+`audit_exe_compare()`.  While the basic `!current->mm` check is good,
+the `WARN_ON_ONCE()` results in some scary console messages so let's
+drop that and just do the regular `!current->mm` check to avoid
+problems.
 
-SGTM. Hopefully we can put the matter to rest after that. ;)
+Cc: <stable@vger.kernel.org>
+Fixes: 47846d51348d ("audit: don't take task_lock() in audit_exe_compare() code path")
+Reported-by: Artem Savkov <asavkov@redhat.com>
+Signed-off-by: Paul Moore <paul@paul-moore.com>
+---
+ kernel/audit_watch.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---=20
-Mateusz Guzik <mjguzik gmail.com>
+diff --git a/kernel/audit_watch.c b/kernel/audit_watch.c
+index 91e82e34b51e..7a98cd176a12 100644
+--- a/kernel/audit_watch.c
++++ b/kernel/audit_watch.c
+@@ -531,7 +531,7 @@ int audit_exe_compare(struct task_struct *tsk, struct audit_fsnotify_mark *mark)
+ 	if (tsk != current)
+ 		return 0;
+ 
+-	if (WARN_ON_ONCE(!current->mm))
++	if (!current->mm)
+ 		return 0;
+ 	exe_file = get_mm_exe_file(current->mm);
+ 	if (!exe_file)
+-- 
+2.42.1
+
