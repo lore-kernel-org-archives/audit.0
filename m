@@ -1,94 +1,94 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DD07647
-	for <audit@vger.kernel.org>; Wed, 15 Nov 2023 00:31:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EAFE630
+	for <audit@vger.kernel.org>; Wed, 15 Nov 2023 00:36:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="KLrBy9RN"
-Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46FB7C2
-	for <audit@vger.kernel.org>; Tue, 14 Nov 2023 16:31:24 -0800 (PST)
-Received: by mail-oi1-x236.google.com with SMTP id 5614622812f47-3b58d96a3bbso3547419b6e.1
-        for <audit@vger.kernel.org>; Tue, 14 Nov 2023 16:31:24 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="GiYsYDBn"
+Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68B68D7
+	for <audit@vger.kernel.org>; Tue, 14 Nov 2023 16:36:44 -0800 (PST)
+Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-5a87ac9d245so73404017b3.3
+        for <audit@vger.kernel.org>; Tue, 14 Nov 2023 16:36:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1700008283; x=1700613083; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=p0QBTdx9SEDtes3snJLqUjgrY8mouIZlEJk8I8Juc+s=;
-        b=KLrBy9RNbcX29Rydq0yy+Bs2uPp+kFwfVVb8lZjG0e1LGG1Fm+uQ2+qGMlsrlGqFI/
-         swbVTuW2ViFS4BdazXvdhd352wv8AHWJvywm4e6aKakkm672/9qQ1M7xabVjAWPe2Fb+
-         lw/zr1vGvB2/UWObzPEKisUDTbo4evnRq5jzXLPk0pfnWHU1Oz0i/dnrIDkw5onTPh/G
-         /q4Sybw33VjWNoX9ZP9wc7wyOEwuTUAi0yLmKGauAxvEWtvypny51IrEmDLOo9+NvIQY
-         IPQ23m3Z/fpcw/bcrswkUtjKEPPrP2wQ3Rfe6X2sRZiqygGele7r/UMa4KeF87xtb/64
-         y3YA==
+        d=paul-moore.com; s=google; t=1700008603; x=1700613403; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XIevNFu0KUbpOnxFdIZtIm8Qr94xdqJKRuJSXcWfDnI=;
+        b=GiYsYDBnbZJcg3vR66S8+0BJxtZp9z/Slh4JphC6UIgACccPylHI0Cn2cJ0gWqpFGx
+         OqFP+XcfjrMMj/CcBSsB7yVpskmHS8+9KBGJdCjK4EvZicUYiHlqSTaC+difjEmPyovO
+         LFmsSmd5qYfCCk1xYvu56E7yrXpNptkzDql1OOWa82y4VolVQaTVTi0EUdY/Apx3HXno
+         i6ig3IeAUhUAkZZzYdPowT+/QtDH7BNwH0z2+9Df3mwQ2DfNkGdcjf5u4+/gyFasCZhh
+         KCxTF4c35O85Ljhf/aX8/7PwdADnWBR0KY+el7RINGmRbHisvxtuPX3B1ME+AWZqHS07
+         rAMA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700008283; x=1700613083;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=p0QBTdx9SEDtes3snJLqUjgrY8mouIZlEJk8I8Juc+s=;
-        b=Jb6IPZ8pAb9vs1MLrhRQhssqWUP95rVrK/P/1JZX8F17aP9XxIdIiwuQcHZjEV5r7a
-         rB1mW5bQ9R7LoJHz+bujTzuy18nM1t4oaRqOkKrWwcQkbLvgweOsNqsk8+DGUZ4NIvKE
-         6Sej1aYWRONCXjN6RharBEAh++If1gr0nP0k4eshLmZP6vzfrKC2AZp442beR8wks2x9
-         thQaO0gPgKGuq9ZsTVdhZTkXMxx6we2HNmPrcyMR0PO0JM5WelGqWSt1Ku00bL35RcHI
-         zFG5jTYHv141tC+GhPqV1QjPFoTXQPrXG4QarvII+HTOsO4pEnpmcIdM++D2S5nSvHdv
-         dOEg==
-X-Gm-Message-State: AOJu0Yxc3Kz0FuAx2vV7RKWY777E2Jbv6Bxz23auM8kzF5dIcZm/s9JT
-	BFEb7cNo7jzyjMI/yeiOMe+KzTKNCoMbtCk6Hg==
-X-Google-Smtp-Source: AGHT+IGdOdjRocWa3CRq4bfMv5ItELW6gRsuoAJ56l31A439TrrEPVz+jzXJWW3uqg5FZpGqY6P0Zg==
-X-Received: by 2002:a05:6808:1804:b0:3b6:cdc2:51a0 with SMTP id bh4-20020a056808180400b003b6cdc251a0mr14250340oib.29.1700008283464;
-        Tue, 14 Nov 2023 16:31:23 -0800 (PST)
-Received: from localhost ([70.22.175.108])
-        by smtp.gmail.com with ESMTPSA id tq21-20020a05620a3d1500b0076eee688a95sm3042510qkn.0.2023.11.14.16.31.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Nov 2023 16:31:23 -0800 (PST)
-From: Paul Moore <paul@paul-moore.com>
-To: audit@vger.kernel.org
-Cc: Artem Savkov <asavkov@redhat.com>,
-	Mateusz Guzik <mjguzik@gmail.com>
-Subject: [PATCH] audit: don't WARN_ON_ONCE(!current->mm) in audit_exe_compare()
-Date: Tue, 14 Nov 2023 19:31:14 -0500
-Message-ID: <20231115003113.433773-2-paul@paul-moore.com>
-X-Mailer: git-send-email 2.42.1
+        d=1e100.net; s=20230601; t=1700008603; x=1700613403;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=XIevNFu0KUbpOnxFdIZtIm8Qr94xdqJKRuJSXcWfDnI=;
+        b=gueYrsO8ZZNQSGmBaY3rj/T0EcFiVu5iwwxrOIp59bIKrZAgXUm2yRF4j5bK3GrUX1
+         Frp92hy5DlJOyXBQMvUOzvVc26fq961YQ3WNWpJNu9a+1BLC1GujX0o0y8NYHMMl1n/c
+         nG7oaLz/05Jq8SPo6K2som0Lgua/8jA3IlOdah/T52bmtEhazKofteZZ8mI68vTjHT/s
+         pYtl6QhPIRZQaDqq8acTTs5nPPpnrqobQhs3pfl+1UrCM4K80aHmFFL+iSP3h/Vpqqv/
+         F1EGZnn/G27on1zCaCtDanIOOKB5Nzjd5HNmNkLq9zb8t/xkMauN+uyGY241HU8fyPpd
+         QCtw==
+X-Gm-Message-State: AOJu0Yzo+tnAwGx0xY1+wQ1xB9F57hYTYkhdCel38Dt8Q0mZ2GjxlnGy
+	aEc9mNaiR+ujj9cu1fi8gNJa1yZUF6M9S1No3RSB
+X-Google-Smtp-Source: AGHT+IHE1hSQfo7fzHFpI5FuO+9eFgNwa7xnRAVut/1YkucrvGMMZKLpFYyO5r9YrEujw78LA4Gm1aFof4buCYXsFDk=
+X-Received: by 2002:a25:da86:0:b0:d81:9612:46fe with SMTP id
+ n128-20020a25da86000000b00d81961246femr10810780ybf.57.1700008603554; Tue, 14
+ Nov 2023 16:36:43 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1159; i=paul@paul-moore.com; h=from:subject; bh=2tAvYOQG6Os14H3e8pmYsLssDYzP62DnjxyzZawQaPA=; b=owEBbQKS/ZANAwAIAeog8tqXN4lzAcsmYgBlVBFR5qwvuDiCPKEuudFgNso+ylYfTc+gUt1PT TplBnHZJ+OJAjMEAAEIAB0WIQRLQqjPB/KZ1VSXfu/qIPLalzeJcwUCZVQRUQAKCRDqIPLalzeJ czZMD/9yI0I85yZ5yoYJCx76FJxvhHPtLfs+RyuFiSpD0PuQtCV1N/IC5hcCdL5ge1OzA8AQzGT L5RXJgBKdNGOz4mOFTV0Km0+4hXyshQABRXU1QKl01x46yoosudsB86e2mG7AA9EK8ooyw6xAa1 c07a5dcV90kpvFgWDRrFy5PE1jA7yAqOv3sUGkkP45nlIgXJYbkxR2DG/r+TMZdTVXZYbC7Zdkk Z0AqVYW8IMSGeLLXn+v6IldwD1OOwAQasQxsxLO+5lCarjXwOrtLxhgCPo0n5ldKz4hN6WHGT7F efRyVW9zACkKuJpoDXJFSp9yRwq1WErpY4H5sZFUCdKZwE/ZZ7FIdMXLFd1AnMsMZmcbREFjsB1 5Qrk5/WqzrJ6oFuSNLVcHRuFHxOwzV9gD0o/xmoqXGOFGHUdSbxGQQOlOxUnejo3HSjbgjKaDoV VA50aio2o0zEzUE3fNaTFMtFEPuljfUuttNSsAusU6/MMK0mMbBua8RnIXFDMTguBugEPwuybtx 5TA/AYuHRwoxfjFERf9WJKjkaktAuibCWGpEs9j4sJimjsrxzSV4qlOK0tOJ2+wm/V5r32dLCqs 8jsqlOL54Rx1gh9m748oQzEalggRiPPWpxUaOKbuIMgQh4qGy7O26l8aWTvYwCj5tkYWZOe1hyT Dawi57OOKR+hbcw==
-X-Developer-Key: i=paul@paul-moore.com; a=openpgp; fpr=7100AADFAE6E6E940D2E0AD655E45A5AE8CA7C8A
-Content-Transfer-Encoding: 8bit
+References: <20231024161432.97029-2-paul@paul-moore.com> <a5650045-164f-4bff-b688-ddbc66dc95c4@canonical.com>
+ <CAHC9VhR-5uK=D0r3zDDsHegjiEqEuhsBhBqLTZ7Xm2PPup64oA@mail.gmail.com>
+ <CAGudoHEAes9Avq4EKqNCFwKd_AQPhQE4v6Z3LYCZasJqQXKtjA@mail.gmail.com>
+ <20231114092903.GA590929@alecto.usersys.redhat.com> <CAGudoHEDXaPTN1icH64Ff9rOJPJmr6ek-nCUhWtzUb0JqbXDzw@mail.gmail.com>
+ <CAHC9VhSjJ+ZgScF9f=8Fyovn15tKgaqFdV1qZxp=RWiuZSAdAA@mail.gmail.com> <CAGudoHFGT2QaMGLzePtY23AQk85Uy2uMKDV08n_ep6k-7EE0zQ@mail.gmail.com>
+In-Reply-To: <CAGudoHFGT2QaMGLzePtY23AQk85Uy2uMKDV08n_ep6k-7EE0zQ@mail.gmail.com>
+From: Paul Moore <paul@paul-moore.com>
+Date: Tue, 14 Nov 2023 19:36:32 -0500
+Message-ID: <CAHC9VhREsz5A5GvmYRmA9+ZUypjFtc72eJoMOSv_QmBxZMaLFw@mail.gmail.com>
+Subject: Re: [PATCH v2] audit: don't take task_lock() in audit_exe_compare()
+ code path
+To: Mateusz Guzik <mjguzik@gmail.com>
+Cc: Artem Savkov <asavkov@redhat.com>, John Johansen <john.johansen@canonical.com>, 
+	audit@vger.kernel.org, Andreas Steinmetz <anstein99@googlemail.com>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-eBPF can end up calling into the audit code from some odd places, and
-some of these places don't have @current set properly so we end up
-tripping the `WARN_ON_ONCE(!current->mm)` near the top of
-`audit_exe_compare()`.  While the basic `!current->mm` check is good,
-the `WARN_ON_ONCE()` results in some scary console messages so let's
-drop that and just do the regular `!current->mm` check to avoid
-problems.
+On Tue, Nov 14, 2023 at 5:32=E2=80=AFPM Mateusz Guzik <mjguzik@gmail.com> w=
+rote:
+> On 11/14/23, Paul Moore <paul@paul-moore.com> wrote:
+> > On Tue, Nov 14, 2023 at 5:33=E2=80=AFAM Mateusz Guzik <mjguzik@gmail.co=
+m> wrote:
+> >> On 11/14/23, Artem Savkov <asavkov@redhat.com> wrote:
+> >> > On Tue, Oct 24, 2023 at 07:59:18PM +0200, Mateusz Guzik wrote:
 
-Cc: <stable@vger.kernel.org>
-Fixes: 47846d51348d ("audit: don't take task_lock() in audit_exe_compare() code path")
-Reported-by: Artem Savkov <asavkov@redhat.com>
-Signed-off-by: Paul Moore <paul@paul-moore.com>
----
- kernel/audit_watch.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+...
 
-diff --git a/kernel/audit_watch.c b/kernel/audit_watch.c
-index 91e82e34b51e..7a98cd176a12 100644
---- a/kernel/audit_watch.c
-+++ b/kernel/audit_watch.c
-@@ -531,7 +531,7 @@ int audit_exe_compare(struct task_struct *tsk, struct audit_fsnotify_mark *mark)
- 	if (tsk != current)
- 		return 0;
- 
--	if (WARN_ON_ONCE(!current->mm))
-+	if (!current->mm)
- 		return 0;
- 	exe_file = get_mm_exe_file(current->mm);
- 	if (!exe_file)
--- 
-2.42.1
+> > I'm going to drop the WARN_ON_ONCE() since there is always a risk of
+> > eBPF doing something odd and I don't want to have to keep revisiting
+> > this each time to figure out what is at fault.
+> >
+> > Thanks for reporting this Artem, I'll put together a patch and run it
+> > overnight, if everything looks good in the morning I'll post it for
+> > review, comment, etc. before sending it up to Linus.
+>
+> SGTM. Hopefully we can put the matter to rest after that. ;)
 
+I was still online when the test finished, so I've gone ahead and
+posted the patch, lore link below:
+
+https://lore.kernel.org/audit/20231115003113.433773-2-paul@paul-moore.com
+
+--=20
+paul-moore.com
