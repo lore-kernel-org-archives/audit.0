@@ -1,44 +1,44 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="kxVw7zDg"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="XqelU12q"
 Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 296E5AB
-	for <audit@vger.kernel.org>; Tue, 12 Dec 2023 02:29:06 -0800 (PST)
-Received: from pps.filterd (m0333520.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3BC7hll0028870;
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6575A0
+	for <audit@vger.kernel.org>; Tue, 12 Dec 2023 02:29:05 -0800 (PST)
+Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3BC7hhoT004096;
 	Tue, 12 Dec 2023 10:29:03 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-type : content-transfer-encoding; s=corp-2023-11-20;
- bh=tJc/FOodJSHcQG0F9yHAqD4iooQS++do2a0zd/mCcHQ=;
- b=kxVw7zDghT/+bZ+HLAPPA9j0iO6O7UOZ3+tratE1gO2WsnGL/P4v/h6q+66/WUJEE7m7
- ac5TVlFFAyxt0tVoVHLl7cVR64Y5gbZdgxjefc3n6JEzH9LCpDBMb9ZcfLKiPmSijl1e
- 446mqnyqaX6U5fC5jq9NDETWqJx/CLuokPXvpturYCrjWyX6IISZ8TD/VvCcmm/+IHL2
- pCmDi+S5xSzqYKg78StCue/qxRLeftFjIkQwmBK7eHd8lFA/T4Vi1dUQy4gxGcSbfgr7
- bOVeAs3kGOdcOLrf3A/fdFw/Hf1tcC74Q3U8AdV/N4kXPQ9uat06GRIxZoBKEsC0X5UL Jw== 
+ bh=qMj3ReSdPcp5iKT/NunZQc9n6eMHL2ztLH+zs0f/eyY=;
+ b=XqelU12q7AZluOUKQBdEqZktv8rs6e4LIzl2i2jfriAUv/lOI24ynsy1/IfIJFgS57rG
+ 370tsne8cBN9swRy2L8ZbAICIepwPlEfkt7ZiW8ILmX88NOyKc47OcS8ocU4K0KAvDiG
+ g1jUIhWhnfoigTKjDRKrQnhe5j3azyLLOj0hi4uji1dyyS+RFO1ccOF9bn+uWK9Xa3o/
+ MtmVJl8JV7DKBqO0PTX4sEaiopJGEYs7mnYhqoUPKzlfX7Yuaxtq3Ipv4fpsyzoBmXvM
+ isHPAvlavTM3/KCn43XbnCeSJOgHg/slc7/6jgTBPKwrsezXZHV4uVmPw2TYrEMoSPgj 9Q== 
 Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3uvg9d5auq-1
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3uvfuu593a-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 12 Dec 2023 10:29:03 +0000
-Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 3BC9IEgN003222;
-	Tue, 12 Dec 2023 10:29:03 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3uvep6cmt7-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 12 Dec 2023 10:29:03 +0000
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3BCASxHU033207;
-	Tue, 12 Dec 2023 10:29:02 GMT
-Received: from lab61.no.oracle.com (lab61.no.oracle.com [10.172.144.82])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3uvep6cmqk-4;
 	Tue, 12 Dec 2023 10:29:02 +0000
+Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 3BC9Jt6v003154;
+	Tue, 12 Dec 2023 10:29:02 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3uvep6cmsm-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 12 Dec 2023 10:29:02 +0000
+Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3BCASxHS033207;
+	Tue, 12 Dec 2023 10:29:01 GMT
+Received: from lab61.no.oracle.com (lab61.no.oracle.com [10.172.144.82])
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3uvep6cmqk-3;
+	Tue, 12 Dec 2023 10:29:01 +0000
 From: =?UTF-8?q?H=C3=A5kon=20Bugge?= <haakon.bugge@oracle.com>
 To: Paul Moore <paul@paul-moore.com>, Eric Paris <eparis@redhat.com>,
         audit@vger.kernel.org
 Cc: Ankur Arora <ankur.a.arora@oracle.com>
-Subject: [PATCH 2/2] audit: Apply special optimizations
-Date: Tue, 12 Dec 2023 11:28:57 +0100
-Message-Id: <20231212102857.803984-4-haakon.bugge@oracle.com>
+Subject: [PATCH 2/2] audit: Apply codegen optimizations
+Date: Tue, 12 Dec 2023 11:28:56 +0100
+Message-Id: <20231212102857.803984-3-haakon.bugge@oracle.com>
 X-Mailer: git-send-email 2.39.3
 In-Reply-To: <20231212102857.803984-1-haakon.bugge@oracle.com>
 References: <20231212102857.803984-1-haakon.bugge@oracle.com>
@@ -57,8 +57,8 @@ X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 bulk
  malwarescore=0 mlxscore=0 mlxlogscore=999 adultscore=0 suspectscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2311290000
  definitions=main-2312120083
-X-Proofpoint-GUID: MBAKxHxuO-Rdt-Yz2-oa3drQzBdL3U9i
-X-Proofpoint-ORIG-GUID: MBAKxHxuO-Rdt-Yz2-oa3drQzBdL3U9i
+X-Proofpoint-GUID: Kx1CMZY1fWt4jwXAoIaNxZArYurfVaNR
+X-Proofpoint-ORIG-GUID: Kx1CMZY1fWt4jwXAoIaNxZArYurfVaNR
 
 For the most time-consuming function, when running a syscall benchmark
 with STIG compliant audit rules:
@@ -68,7 +68,7 @@ with STIG compliant audit rules:
 
     27.62%  syscall_lat   [kernel.kallsyms]  [k] __audit_filter_op
 
-we apply special optimizations, which speeds up the syscall
+we apply codegen optimizations, which speeds up the syscall
 performance by around 17% on an Intel Cascade Lake system.
 
 We run "perf stat -d -r 5 ./syscall_lat", where syscall_lat is a C
