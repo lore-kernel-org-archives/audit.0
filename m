@@ -1,52 +1,52 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="BhrPvPgf"
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A49E7C9
-	for <audit@vger.kernel.org>; Wed, 13 Dec 2023 15:45:33 -0800 (PST)
-Received: by mail-yb1-xb2b.google.com with SMTP id 3f1490d57ef6-db3fa47c2f7so7817237276.0
-        for <audit@vger.kernel.org>; Wed, 13 Dec 2023 15:45:33 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="gaRmKhar"
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5691E95
+	for <audit@vger.kernel.org>; Wed, 13 Dec 2023 15:55:02 -0800 (PST)
+Received: by mail-yb1-xb32.google.com with SMTP id 3f1490d57ef6-db3a09e96daso7790715276.3
+        for <audit@vger.kernel.org>; Wed, 13 Dec 2023 15:55:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1702511133; x=1703115933; darn=vger.kernel.org;
+        d=paul-moore.com; s=google; t=1702511701; x=1703116501; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=fQRPl11FIdqPB7HGtV874kSsRJNwd7G0C7Frj/e1C6I=;
-        b=BhrPvPgf5bwq/P6pqHto3aQt881BwYwi7CGg20y+mTEMxj/IpPK+H18bHCeJPVHcDI
-         zxmqWq+mvZ6UvUdfer7nE6bmIllZ3kr/J/FRJPGmdXC15t6All2C8c/tD0jZ18eZUEca
-         L8Gc2Vz1lecP/0CCEygltLDdP4XecFBYkGru8zGY0Bbd4ODgfEiXiOYAAB3jVRjUEEKB
-         u+ZsK96AEvxA/WGgHtgfhay+fmBF6056aeXdeY6E3K9CTQ3qT4zgB2AFFiiCRJkhoEYa
-         MekQwO8ovA1RMir8SorEgTklH//HL1zivMZWMFcxPUzU8hjbId7i9gwHF1L3dGz5I9AT
-         +udw==
+        bh=CkBZKS6LAs1F5ONRHXy5kBd/1XvGCXt8RwzfLFFl5pk=;
+        b=gaRmKharOPGUJohPkgNiPSARCAT4kqDmWukPOeoUCr2hREtmZR2pxTP2J0mFXq7YPG
+         pwFZah2lJEvmAdpklaxcU1cOZNHeINcQ8XibUfhqYZJytXj0Npn6JnagnEnGPiy2/kJn
+         A0cO9q8U/rbmafzeC42v0ear8SOPIQSd7bsX5ct8wVr7LTl9fjLEQzQSZTWoUAyqkhgG
+         6rpTm8+pv1x2eo+RKOYtfCiScaHy4GohSUYIpGBZpH3FX1GzFxEJAiwE3Oq51/tdsr+Q
+         le6gREWnEP7Xb7o1Xsy08+dE4HNkge3fp/HDZWJjSH3L36k3HjOFYIvHSmu8QsQnSI9I
+         h/dQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702511133; x=1703115933;
+        d=1e100.net; s=20230601; t=1702511701; x=1703116501;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=fQRPl11FIdqPB7HGtV874kSsRJNwd7G0C7Frj/e1C6I=;
-        b=Ljdg/Y/xAaDQ5nM4lOWOzeTa60xHbZe7twLEZ18EM5ljDJraGyMWQIymBgZugMifVi
-         FA+gIFYdZjVYLdzd8jJl4sBbEJT6VvbSYF8UE0mtxx8w73suEzdB8QqMwd87heQMzLJc
-         BcHcDzZdgjCHnTx13Lofvy8fZWqZbONWAqi8nm4b9k30MMR3ad9Ne2iuFt9B+4ZZO+H1
-         GOfdGO6M/L9hc7EShfRQTiwvMgyDj3xbOGLY0NExgGLkqavdRpBf56hb3WWJoj0uWMxl
-         8q6i5cH9RcGCKz2S7H7P9q/YMpdpHNbhTpweN+xJvCxxdaSgUQua5r1ze1TTtLmfA5iE
-         YuUg==
-X-Gm-Message-State: AOJu0YzzCabJoFKU9IhiNjMZFQkklzOEYawFwb6Y/3eesFebaiaTuS8e
-	bHAi8FWjp7LwcePiDtoZLXXGy/O64WFMBJgAl73D
-X-Google-Smtp-Source: AGHT+IGmuYhYyR47v/crSBUSPFB8HjdPO4EXPMTnUPSqgg7VVOL5xccTsgCXKVExpL3yjkQ4YfJeofj9+NRfSv6OQGM=
-X-Received: by 2002:a5b:683:0:b0:dbc:c0bf:3484 with SMTP id
- j3-20020a5b0683000000b00dbcc0bf3484mr2271724ybq.96.1702511132793; Wed, 13 Dec
- 2023 15:45:32 -0800 (PST)
+        bh=CkBZKS6LAs1F5ONRHXy5kBd/1XvGCXt8RwzfLFFl5pk=;
+        b=WWSmI9ZSf8DVykxCzEVkGrRzjwN0KIdGW40N7MrcpRyXEUeWNglg4bbk+DEjIxJxDB
+         Yho3CFKYHzaU6J/DC5G0Ber9sITcjB3Q2/0/rHXSoHrJTkY1cDb43fYoqLI9UIEkOwXB
+         s0ZnI6wEk8BCDBuCrLrmalB7J8T6a4sPiwG7Z8Dlk8XjFu/lvq0BjG8fkBm5zv8Ek4T6
+         WUcj4gNZOUJ/rbg2AxfpjELakSrZ43QtVY1YfUmCksDFNqBtgrXacvMRjkcZARIxlLCg
+         bVhrUWbkLB87yhz5pAgLGiLQeDIP9yEFl+Xwfdnhjy43sZhDZ0oDtGV0vnCCjsAY+ny1
+         IBqA==
+X-Gm-Message-State: AOJu0Yx7gNXXYeicxZZTaQftOc9i0qo4fjZNA90pNT07dLemFyGEl6xX
+	HSsXee0tiF2aBSb9ZyHx0Ez50kUt5AJn9uqzAkQc
+X-Google-Smtp-Source: AGHT+IHnswyk6UwpaY99gWWCj9oIQUBFkpLzxTe3fkzBPighlARJ6sSxmjVGtum+Uz48nA3Mcysl0WnzePf3kt3ot0E=
+X-Received: by 2002:a25:ab4b:0:b0:dbc:e22c:879 with SMTP id
+ u69-20020a25ab4b000000b00dbce22c0879mr351494ybi.77.1702511701464; Wed, 13 Dec
+ 2023 15:55:01 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231212102857.803984-1-haakon.bugge@oracle.com> <20231212102857.803984-3-haakon.bugge@oracle.com>
-In-Reply-To: <20231212102857.803984-3-haakon.bugge@oracle.com>
+References: <20231212102857.803984-1-haakon.bugge@oracle.com> <20231212102857.803984-2-haakon.bugge@oracle.com>
+In-Reply-To: <20231212102857.803984-2-haakon.bugge@oracle.com>
 From: Paul Moore <paul@paul-moore.com>
-Date: Wed, 13 Dec 2023 18:45:22 -0500
-Message-ID: <CAHC9VhTs7nfz7jEU0Oqv8nq_hTb404KyjHKM5G7T3WA3X3LcDA@mail.gmail.com>
-Subject: Re: [PATCH 2/2] audit: Apply codegen optimizations
+Date: Wed, 13 Dec 2023 18:54:50 -0500
+Message-ID: <CAHC9VhQGFP81T1sbJVYPuLfpfei9Wk6SzgnWYwHcsCmiwSX-yg@mail.gmail.com>
+Subject: Re: [PATCH 1/2] audit: Vary struct audit_entry alignment
 To: =?UTF-8?B?SMOla29uIEJ1Z2dl?= <haakon.bugge@oracle.com>
 Cc: Eric Paris <eparis@redhat.com>, audit@vger.kernel.org, 
 	Ankur Arora <ankur.a.arora@oracle.com>
@@ -56,85 +56,117 @@ Content-Transfer-Encoding: quoted-printable
 On Tue, Dec 12, 2023 at 5:29=E2=80=AFAM H=C3=A5kon Bugge <haakon.bugge@orac=
 le.com> wrote:
 >
-> For the most time-consuming function, when running a syscall benchmark
-> with STIG compliant audit rules:
+> We allocate struct audit_entry using kzalloc() which aligns the
+> structure at its natural boundary and so uses the kmalloc-512
+> SLAB.
 >
->   Overhead  Command       Shared Object      Symbol
->  .........  ............  .................  ........................
+> That means that the lower order 9 bits are equal for these allocations.
+> Which on architectures with limited L1D cache-sets width would cause
+> conflict misses.
 >
->     27.62%  syscall_lat   [kernel.kallsyms]  [k] __audit_filter_op
+> With STIG compliant audit rules, up-to 26 L1D misses per syscall have
+> been observed. This, of course, varies from boot to boot.
 >
-> we apply codegen optimizations, which speeds up the syscall
-> performance by around 17% on an Intel Cascade Lake system.
+> Fix this by using a kmem_cache aligned at cacheline width, which
+> greatly increases the entropy in the lower order VA bits. With this
+> fix, we observe a maximum of 0.8 misses per syscall using the same set
+> of audit rules.
 >
-> We run "perf stat -d -r 5 ./syscall_lat", where syscall_lat is a C
-> application that measures average syscall latency from getpid()
-> running 100 million rounds.
->
-> Between each perf run, we reboot the system and waits until the last
-> minute load is less than 1.0.
+> Testing: run "perf stat -d -r 5 ./syscall_lat", where syscall_lat is a
+> simple getpid() loop, running 100 million rounds. This test is run 10
+> times, with a reboot in between. After each reboot, we wait until
+> the last minute load is less than 1.0.
 >
 > We boot the kernel, v6.6-rc4, with "mitigations=3Doff", in order to
 > amplify the changes in the audit system.
->
-> Let the base kernel be v6.6-rc4 with booted with "audit=3D1" and
-> "mitigations=3Doff" and with the commit "audit: Vary struct audit_entry
-> alignment" on an Intel Cascade Lake system. The following three
-> metrics are reported, nanoseconds per syscall, L1D misses per syscall,
-> and finally Intructions Per Cycle, ipc.
 >
 > Base vs. base + this commit gives:
 >
 > ns per call:
 >   min avg max   pstdev
-> - 203 203 209 0.954149
-> + 173 173 178 0.884534
+> - 205 210 227 6.402000
+> + 203 203 209 0.954149
 >
 > L1d misses per syscall:
->      min    avg    max   pstdev
-> -  0.012  0.103  0.817 0.238352
-> +  0.010  0.209  1.235 0.399416
+>     min    avg    max   pstdev
+> - 3.147 12.017 26.045 6.568284
+> + 0.012  0.103  0.817 0.238352
 >
 > ipc:
 >     min    avg    max   pstdev
-> - 2.320  2.329  2.330 0.003000
-> + 2.430  2.436  2.440 0.004899
+> - 2.090  2.259  2.300 0.060075
+> + 2.320  2.329  2.330 0.003000
 >
+> The above metrics are all improved, and the L1D misses per syscall has
+> a significant reduction.
+>
+> Co-developed-by: Ankur Arora <ankur.a.arora@oracle.com>
+> Signed-off-by: Ankur Arora <ankur.a.arora@oracle.com>
 > Signed-off-by: H=C3=A5kon Bugge <haakon.bugge@oracle.com>
 > ---
->  kernel/auditsc.c | 2 ++
->  1 file changed, 2 insertions(+)
+>  kernel/auditfilter.c | 14 +++++++++++---
+>  1 file changed, 11 insertions(+), 3 deletions(-)
 >
-> diff --git a/kernel/auditsc.c b/kernel/auditsc.c
-> index 6f0d6fb6523fa..84d0dfe75a4ac 100644
-> --- a/kernel/auditsc.c
-> +++ b/kernel/auditsc.c
-> @@ -822,6 +822,7 @@ static int audit_in_mask(const struct audit_krule *ru=
-le, unsigned long val)
->   * parameter can be NULL, but all others must be specified.
->   * Returns 1/true if the filter finds a match, 0/false if none are found=
-.
->   */
-> +#pragma GCC optimize("unswitch-loops", "align-loops=3D16", "align-jumps=
-=3D16")
-
-The kernel doesn't really make use of #pragma optimization statements
-like this, at least not in any of the core areas, and I'm not
-interested in being the first to do so.  I appreciate the time and
-effort that you have spent profiling the audit subsystem, but this
-isn't a patch I can accept at this point in time, I'm sorry.
-
->  static int __audit_filter_op(struct task_struct *tsk,
->                            struct audit_context *ctx,
->                            struct list_head *list,
-> @@ -841,6 +842,7 @@ static int __audit_filter_op(struct task_struct *tsk,
+> diff --git a/kernel/auditfilter.c b/kernel/auditfilter.c
+> index 8317a37dea0bb..b7597a63a3950 100644
+> --- a/kernel/auditfilter.c
+> +++ b/kernel/auditfilter.c
+> @@ -80,6 +80,7 @@ static void audit_free_lsm_field(struct audit_field *f)
 >         }
->         return 0;
 >  }
-> +#pragma GCC reset_options
 >
->  /**
->   * audit_filter_uring - apply filters to an io_uring operation
+> +static struct kmem_cache *entry_cache;
+>  static inline void audit_free_rule(struct audit_entry *e)
+>  {
+>         int i;
+> @@ -93,7 +94,7 @@ static inline void audit_free_rule(struct audit_entry *=
+e)
+>                         audit_free_lsm_field(&erule->fields[i]);
+>         kfree(erule->fields);
+>         kfree(erule->filterkey);
+> -       kfree(e);
+> +       kmem_cache_free(entry_cache, e);
+>  }
+>
+>  void audit_free_rule_rcu(struct rcu_head *head)
+> @@ -108,13 +109,20 @@ static inline struct audit_entry *audit_init_entry(=
+u32 field_count)
+>         struct audit_entry *entry;
+>         struct audit_field *fields;
+>
+> -       entry =3D kzalloc(sizeof(*entry), GFP_KERNEL);
+> +       if (!entry_cache) {
+> +               entry_cache =3D kmem_cache_create("audit_entry", sizeof(*=
+entry), 0,
+> +                                               SLAB_HWCACHE_ALIGN, NULL)=
+;
+> +               if (!entry_cache)
+> +                       return NULL;
+
+Two things:
+
+1. If we are going to create a kmem_cache pool we shouldn't create it
+here, it should be in its own audit_filter_init() function which is
+called from audit_init().
+
+2. I'm not sure it makes a lot of sense to create a kmem_cache pool
+for audit filter entries, especially given the modest performance
+gains.  Is there not some way to request cacheline alignment with
+kmalloc() or similar?
+
+> +       }
+> +
+> +       entry =3D kmem_cache_zalloc(entry_cache, GFP_KERNEL);
+>         if (unlikely(!entry))
+>                 return NULL;
+>
+>         fields =3D kcalloc(field_count, sizeof(*fields), GFP_KERNEL);
+>         if (unlikely(!fields)) {
+> -               kfree(entry);
+> +               kmem_cache_free(entry_cache, entry);
+>                 return NULL;
+>         }
+>         entry->rule.fields =3D fields;
 > --
 > 2.39.3
 
