@@ -1,174 +1,271 @@
+Received: from sonic306-28.consmr.mail.ne1.yahoo.com (sonic306-28.consmr.mail.ne1.yahoo.com [66.163.189.90])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4B1A18EA9
+	for <audit@vger.kernel.org>; Fri, 15 Dec 2023 22:23:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=schaufler-ca.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="gaRmKhar"
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5691E95
-	for <audit@vger.kernel.org>; Wed, 13 Dec 2023 15:55:02 -0800 (PST)
-Received: by mail-yb1-xb32.google.com with SMTP id 3f1490d57ef6-db3a09e96daso7790715276.3
-        for <audit@vger.kernel.org>; Wed, 13 Dec 2023 15:55:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1702511701; x=1703116501; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CkBZKS6LAs1F5ONRHXy5kBd/1XvGCXt8RwzfLFFl5pk=;
-        b=gaRmKharOPGUJohPkgNiPSARCAT4kqDmWukPOeoUCr2hREtmZR2pxTP2J0mFXq7YPG
-         pwFZah2lJEvmAdpklaxcU1cOZNHeINcQ8XibUfhqYZJytXj0Npn6JnagnEnGPiy2/kJn
-         A0cO9q8U/rbmafzeC42v0ear8SOPIQSd7bsX5ct8wVr7LTl9fjLEQzQSZTWoUAyqkhgG
-         6rpTm8+pv1x2eo+RKOYtfCiScaHy4GohSUYIpGBZpH3FX1GzFxEJAiwE3Oq51/tdsr+Q
-         le6gREWnEP7Xb7o1Xsy08+dE4HNkge3fp/HDZWJjSH3L36k3HjOFYIvHSmu8QsQnSI9I
-         h/dQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702511701; x=1703116501;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=CkBZKS6LAs1F5ONRHXy5kBd/1XvGCXt8RwzfLFFl5pk=;
-        b=WWSmI9ZSf8DVykxCzEVkGrRzjwN0KIdGW40N7MrcpRyXEUeWNglg4bbk+DEjIxJxDB
-         Yho3CFKYHzaU6J/DC5G0Ber9sITcjB3Q2/0/rHXSoHrJTkY1cDb43fYoqLI9UIEkOwXB
-         s0ZnI6wEk8BCDBuCrLrmalB7J8T6a4sPiwG7Z8Dlk8XjFu/lvq0BjG8fkBm5zv8Ek4T6
-         WUcj4gNZOUJ/rbg2AxfpjELakSrZ43QtVY1YfUmCksDFNqBtgrXacvMRjkcZARIxlLCg
-         bVhrUWbkLB87yhz5pAgLGiLQeDIP9yEFl+Xwfdnhjy43sZhDZ0oDtGV0vnCCjsAY+ny1
-         IBqA==
-X-Gm-Message-State: AOJu0Yx7gNXXYeicxZZTaQftOc9i0qo4fjZNA90pNT07dLemFyGEl6xX
-	HSsXee0tiF2aBSb9ZyHx0Ez50kUt5AJn9uqzAkQc
-X-Google-Smtp-Source: AGHT+IHnswyk6UwpaY99gWWCj9oIQUBFkpLzxTe3fkzBPighlARJ6sSxmjVGtum+Uz48nA3Mcysl0WnzePf3kt3ot0E=
-X-Received: by 2002:a25:ab4b:0:b0:dbc:e22c:879 with SMTP id
- u69-20020a25ab4b000000b00dbce22c0879mr351494ybi.77.1702511701464; Wed, 13 Dec
- 2023 15:55:01 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b="DKhPVw4U"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1702678985; bh=3K2HpHNKhJjYC/jlHqs8c4QospmLiwGAijJoid6Lhnc=; h=From:To:Cc:Subject:Date:In-Reply-To:References:From:Subject:Reply-To; b=DKhPVw4UDyUBJVlvdOCbp4QubI/rR98eR1dqQde7ANvmLh1KkmxNjMqzTAhO1tw/ZFV64fXnB9vCHMd2NPL94Dll8OdPOgOsZ5+wZ4nGzhNQ71Oo2xXoD1aBkkn1O/eOHigxp+IeiC6UW3FWKNu5hjWC7dNieXy7cs1ZjrA1vi3lisfv4zEjEjFEu+v319rn+pv595OEedznkehTNmi4QA5AoPnOyzPRdWrEWPZS2Z0oIguG/F1qmglG3HEBVe+AKTCvKvG2OgKBeI7pJlfXxEIfpQMRozLJr+as4jxHzsjYPR0xs6cPf2/QZ2nJiM/hk8mdggwl29j59Mf6YPhdkg==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1702678985; bh=MZlb38rYf8W/vHI2h+PHatLwwFEtf+RcJsUCjZNVPSg=; h=X-Sonic-MF:From:To:Subject:Date:From:Subject; b=UGEnKkw9Wxb1IltArVG+6nPj8eZ3iJn1NlS1mayB9y8lLNKwE/sw+HkhHHTfyAT4OBsZb8s9AGw7oSH7dM2sxP4XzHINCzVK5ERj9ySS+XQBPlhxfIQcLIEkXzXx27dWlSTW9dMJfED0JvpWMvC/y5ZPvGdOSFgS5vThWOEEdWM4vlw71/Fb7H+5yA/MY34JARWPz79BSzBkQRgA/i7ol2Oq4xRmAN/TJT1jbMkbBKpGHF1cUXHlAZNn8P5ZbW0e0roNljIgFwTXnDIwYKL779Vd0Ll2DDFumqTIU/Y6/iiHQt2L6Kf+zq2X5bjjIGhbRTg4jXvBSxLeItCgJ2rxyg==
+X-YMail-OSG: MqD1QvEVM1mzRvOFxVeJteBxh.3_0ejux3rZfLw1NuBTZFSCG0SXigzMUQJMboc
+ OUVHg1hLd59R97LEs.5KR.eUsCKGFr0BYlMTEl8Acj5mfP4JoNrLgjbC34XZ0q1mNT1oLSC7RJ9V
+ dnAqdS8hYP5t6OMYvQFJ7EOJ9oL29wwC3K4vKfOzL5oIZ.WyHtfzPpORDBI9QM3um47BynpPgaPs
+ T_rlkZ3QqGx9ngV1VuYzVQ3Ay2lRvySSOXF3dtwk6z1UQH_nLffChyoHzRqJo54y7oe9eU74bRnz
+ LJ25Jsu1W_X1pTyOF90D_3t9MfsvyJmQT75IKgrvLhACJXIHt6XYltNdprXtT.GPPFt99XOtsa6N
+ iHqFXeKXNaBpZTebUb6Dyae8QFyIjxc0CHq2dl1EcTfhTGmhnP3EyW1qAxSJXaTIRszsIPkKyjda
+ 51kpT34xH43GHRQ9cAtvvTKK4g83DFNf3YanvKs42ZxgLUCi9qFgmqvYsAsv_HHD17qVvurV3n4o
+ Hwmovc4Ngbu3N_LdHB_Ls8KWCc8qMDODDMxdGdOSqR3gQj7hMl1yU3UbXUJ5zi_tTssOv8jdjLdi
+ LnGUOyEBGpx5ye3cUTvlShTrwkBkHiWlDtyIb9D5EzbwnvjGA99.FRNaYn_mK1PsgSr5s1EAD1r3
+ tNwzMjtjLLyOW1qXtELIb8VrpAv_5_RXdw761kvuliPR.hjbEalLKFAxStLaAZLNeMbmjOhuXjE_
+ PJNitrxarnaIgXrvBFsGAeEucedvHtxEKCvmk_whTtCeW4Dk2uJG80xLEvaAdGD8Q.mAPPTlZmhf
+ 7G29OMa9HHoFqrgtqKD5MJhqUuNSViwhJ3YroD05iuf9nJxkhLJW5zqBrKLlvUEENzRRkJq9z.kG
+ KRLGFrtzl1.tVXaHHkNLhG8.nMoADpuSD0ymoo_6_Mt7Bt.6rLMvhr0NKmZOMMRRGPq2Jxv1hMal
+ kgELtulFLV3ACpFUL5JDNuYtlEBJsIY7jgR8I9R3xV60uy4F88mgnz2ILSfEWr1V1IgX7Fgu3Quk
+ RApobblUPf1YjF.g8cwbuqxR22b.8sHtFhLj9Nvv_qwN_jd9FJ3ZmJVvoVCvcJMcRHwVTV_dqYAp
+ 3DqIj3SHphJjsHRvCPN2IzfUE26DOzLvdbzkQZ7WJhdGhC1DEZpK06mzB4NiE2CxcWG1t.kDpgME
+ 0cue3FJYDeM8Q6Hj1QGCNAzRV2.e8_yEVWFF_OyTtNkO0_m7MDY_wjCzCub3ZeVwXZ4nBT.fWjlO
+ UCiYJPPsbfmqehehvLLekQt3Pd9W4hKBnBuFSAQcvTauJGmeC9CbJJXYUq1SdNfzQWaQgwuhb4E5
+ k9j4v_TrMMt4E7IkOYUhmumtEy87IWPMoXoirfr00zX55RsiytnIomHo2QHYx6mLBhsYYUaru_HK
+ 3eZA6A_01w.8_7LiGB9ca.87rgF0spMslLBcB4XBLzFPI2mEPp2y6Q8.cuAgFUiJ.UppriKpiBuO
+ vxhIIUNqSMHO8R866MfhqgZDzHzLQhP_RuzfhbNXsh500RuFyUdgAAgINRnvA7wMV0GEnI30QjIn
+ _MTsRKVjLMiwX1xyuExwjtTHWS4wp_w1ASnTu0xt6etpuv.bolC5yF9TH9Yn9_o_bcbak4.h_b2z
+ N109owM.GaAo1APZ5xySnl.v_0cWCAgPl3F4BPYkC1WnFZ.gYknQ6F1NBRlfLk1X5CyKq7J8G0C5
+ XONELvaHVWOOKUe2Ef5E8Lt6ZB2KdX858PYpdyzSUvS6RmsVG6polN_09YQlfSgrihrIV2N8gLzj
+ qtQmsNtuN5i70.jsi9uRDqivxmATWbIVn6wAsnyiRLrh2dzJ9kZJWeO.Y0Tr5kudaDM8tdaaqROq
+ vpyDzP9GY93K9ernnYW7jtqVfEv58V1CBYXo4U3ByyzvsM.dbYKQKFKxoXtVcY6SNTlf5muMuMgM
+ EsU7STc.R7yObS820_O8FQBvZAlHi4bB3PpO2SfOFR3kn5PIaZn0yz1AlcCNeSe0ZzJtoDxOTInW
+ 3Z_i3NNOUkw78ilppG7QujhJL1MD8jeuaTq1zVWAefOrhe88C3n64FUVzsKqlpKV7rkRNLfSxJLj
+ ochBEVe8BRXat.9uSD7BnVETt3mPh3or8nt07zFIVAyDs.yaTspJX_3kgBnBSOqxe.D7RMMiF3S5
+ DICrfg6Hnhzm8PWdNfGPq1T9F.hHasoeDqVqIIVFfWQR0w0c1ify7LHdBvt9HN_JtlZGRfPXwf1D
+ fZ4szefntB0PgfrdjBcjCGQR6.yXuZp7w98Hibjug2gMeivCnDlL13LEGwszQinxpJpO_DmqD3Np
+ ANpmaJqSYJJs1YwqjqXZS7KfC
+X-Sonic-MF: <casey@schaufler-ca.com>
+X-Sonic-ID: fa0799ff-e34b-4ec5-bfc7-8fc06b8687f9
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic306.consmr.mail.ne1.yahoo.com with HTTP; Fri, 15 Dec 2023 22:23:05 +0000
+Received: by hermes--production-gq1-6949d6d8f9-q7525 (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 7388d6c7a490bc7dfaae35982f4a3b58;
+          Fri, 15 Dec 2023 22:23:03 +0000 (UTC)
+From: Casey Schaufler <casey@schaufler-ca.com>
+To: casey@schaufler-ca.com,
+	paul@paul-moore.com,
+	linux-security-module@vger.kernel.org
+Cc: jmorris@namei.org,
+	serge@hallyn.com,
+	keescook@chromium.org,
+	john.johansen@canonical.com,
+	penguin-kernel@i-love.sakura.ne.jp,
+	stephen.smalley.work@gmail.com,
+	linux-kernel@vger.kernel.org,
+	mic@digikod.net,
+	linux-audit@redhat.com,
+	audit@vger.kernel.org
+Subject: [PATCH v39 08/42] LSM: Use lsmblob in security_ipc_getsecid
+Date: Fri, 15 Dec 2023 14:16:02 -0800
+Message-ID: <20231215221636.105680-9-casey@schaufler-ca.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20231215221636.105680-1-casey@schaufler-ca.com>
+References: <20231215221636.105680-1-casey@schaufler-ca.com>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231212102857.803984-1-haakon.bugge@oracle.com> <20231212102857.803984-2-haakon.bugge@oracle.com>
-In-Reply-To: <20231212102857.803984-2-haakon.bugge@oracle.com>
-From: Paul Moore <paul@paul-moore.com>
-Date: Wed, 13 Dec 2023 18:54:50 -0500
-Message-ID: <CAHC9VhQGFP81T1sbJVYPuLfpfei9Wk6SzgnWYwHcsCmiwSX-yg@mail.gmail.com>
-Subject: Re: [PATCH 1/2] audit: Vary struct audit_entry alignment
-To: =?UTF-8?B?SMOla29uIEJ1Z2dl?= <haakon.bugge@oracle.com>
-Cc: Eric Paris <eparis@redhat.com>, audit@vger.kernel.org, 
-	Ankur Arora <ankur.a.arora@oracle.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Tue, Dec 12, 2023 at 5:29=E2=80=AFAM H=C3=A5kon Bugge <haakon.bugge@orac=
-le.com> wrote:
->
-> We allocate struct audit_entry using kzalloc() which aligns the
-> structure at its natural boundary and so uses the kmalloc-512
-> SLAB.
->
-> That means that the lower order 9 bits are equal for these allocations.
-> Which on architectures with limited L1D cache-sets width would cause
-> conflict misses.
->
-> With STIG compliant audit rules, up-to 26 L1D misses per syscall have
-> been observed. This, of course, varies from boot to boot.
->
-> Fix this by using a kmem_cache aligned at cacheline width, which
-> greatly increases the entropy in the lower order VA bits. With this
-> fix, we observe a maximum of 0.8 misses per syscall using the same set
-> of audit rules.
->
-> Testing: run "perf stat -d -r 5 ./syscall_lat", where syscall_lat is a
-> simple getpid() loop, running 100 million rounds. This test is run 10
-> times, with a reboot in between. After each reboot, we wait until
-> the last minute load is less than 1.0.
->
-> We boot the kernel, v6.6-rc4, with "mitigations=3Doff", in order to
-> amplify the changes in the audit system.
->
-> Base vs. base + this commit gives:
->
-> ns per call:
->   min avg max   pstdev
-> - 205 210 227 6.402000
-> + 203 203 209 0.954149
->
-> L1d misses per syscall:
->     min    avg    max   pstdev
-> - 3.147 12.017 26.045 6.568284
-> + 0.012  0.103  0.817 0.238352
->
-> ipc:
->     min    avg    max   pstdev
-> - 2.090  2.259  2.300 0.060075
-> + 2.320  2.329  2.330 0.003000
->
-> The above metrics are all improved, and the L1D misses per syscall has
-> a significant reduction.
->
-> Co-developed-by: Ankur Arora <ankur.a.arora@oracle.com>
-> Signed-off-by: Ankur Arora <ankur.a.arora@oracle.com>
-> Signed-off-by: H=C3=A5kon Bugge <haakon.bugge@oracle.com>
-> ---
->  kernel/auditfilter.c | 14 +++++++++++---
->  1 file changed, 11 insertions(+), 3 deletions(-)
->
-> diff --git a/kernel/auditfilter.c b/kernel/auditfilter.c
-> index 8317a37dea0bb..b7597a63a3950 100644
-> --- a/kernel/auditfilter.c
-> +++ b/kernel/auditfilter.c
-> @@ -80,6 +80,7 @@ static void audit_free_lsm_field(struct audit_field *f)
->         }
->  }
->
-> +static struct kmem_cache *entry_cache;
->  static inline void audit_free_rule(struct audit_entry *e)
->  {
->         int i;
-> @@ -93,7 +94,7 @@ static inline void audit_free_rule(struct audit_entry *=
-e)
->                         audit_free_lsm_field(&erule->fields[i]);
->         kfree(erule->fields);
->         kfree(erule->filterkey);
-> -       kfree(e);
-> +       kmem_cache_free(entry_cache, e);
->  }
->
->  void audit_free_rule_rcu(struct rcu_head *head)
-> @@ -108,13 +109,20 @@ static inline struct audit_entry *audit_init_entry(=
-u32 field_count)
->         struct audit_entry *entry;
->         struct audit_field *fields;
->
-> -       entry =3D kzalloc(sizeof(*entry), GFP_KERNEL);
-> +       if (!entry_cache) {
-> +               entry_cache =3D kmem_cache_create("audit_entry", sizeof(*=
-entry), 0,
-> +                                               SLAB_HWCACHE_ALIGN, NULL)=
-;
-> +               if (!entry_cache)
-> +                       return NULL;
+There may be more than one LSM that provides IPC data for auditing.
+Change security_ipc_getsecid() to fill in a lsmblob structure instead
+of the u32 secid.  Change the name to security_ipc_getlsmblob() to
+reflect the change.  The audit data structure containing the secid
+will be updated later, so there is a bit of scaffolding here.
 
-Two things:
+Reviewed-by: Kees Cook <keescook@chromium.org>
+Reviewed-by: John Johansen <john.johansen@canonical.com>
+Acked-by: Stephen Smalley <stephen.smalley.work@gmail.com>
+Acked-by: Paul Moore <paul@paul-moore.com>
+Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
+Cc: linux-audit@redhat.com
+Cc: audit@vger.kernel.org
+---
+ include/linux/lsm_hook_defs.h |  4 ++--
+ include/linux/security.h      | 18 +++++++++++++++---
+ kernel/auditsc.c              |  3 +--
+ security/security.c           | 14 +++++++-------
+ security/selinux/hooks.c      |  9 ++++++---
+ security/smack/smack_lsm.c    | 17 ++++++++++-------
+ 6 files changed, 41 insertions(+), 24 deletions(-)
 
-1. If we are going to create a kmem_cache pool we shouldn't create it
-here, it should be in its own audit_filter_init() function which is
-called from audit_init().
+diff --git a/include/linux/lsm_hook_defs.h b/include/linux/lsm_hook_defs.h
+index 52d090d1957c..d69332031270 100644
+--- a/include/linux/lsm_hook_defs.h
++++ b/include/linux/lsm_hook_defs.h
+@@ -234,8 +234,8 @@ LSM_HOOK(void, LSM_RET_VOID, task_to_inode, struct task_struct *p,
+ 	 struct inode *inode)
+ LSM_HOOK(int, 0, userns_create, const struct cred *cred)
+ LSM_HOOK(int, 0, ipc_permission, struct kern_ipc_perm *ipcp, short flag)
+-LSM_HOOK(void, LSM_RET_VOID, ipc_getsecid, struct kern_ipc_perm *ipcp,
+-	 u32 *secid)
++LSM_HOOK(void, LSM_RET_VOID, ipc_getlsmblob, struct kern_ipc_perm *ipcp,
++	 struct lsmblob *blob)
+ LSM_HOOK(int, 0, msg_msg_alloc_security, struct msg_msg *msg)
+ LSM_HOOK(void, LSM_RET_VOID, msg_msg_free_security, struct msg_msg *msg)
+ LSM_HOOK(int, 0, msg_queue_alloc_security, struct kern_ipc_perm *perm)
+diff --git a/include/linux/security.h b/include/linux/security.h
+index 029cf071148b..2ca118960234 100644
+--- a/include/linux/security.h
++++ b/include/linux/security.h
+@@ -289,6 +289,17 @@ static inline bool lsmblob_is_set(struct lsmblob *blob)
+ 	return !!memcmp(blob, &empty, sizeof(*blob));
+ }
+ 
++/**
++ * lsmblob_init - initialize a lsmblob structure
++ * @blob: Pointer to the data to initialize
++ *
++ * Set all secid for all modules to the specified value.
++ */
++static inline void lsmblob_init(struct lsmblob *blob)
++{
++	memset(blob, 0, sizeof(*blob));
++}
++
+ #ifdef CONFIG_SECURITY
+ 
+ int call_blocking_lsm_notifier(enum lsm_event event, void *data);
+@@ -487,7 +498,7 @@ int security_task_prctl(int option, unsigned long arg2, unsigned long arg3,
+ void security_task_to_inode(struct task_struct *p, struct inode *inode);
+ int security_create_user_ns(const struct cred *cred);
+ int security_ipc_permission(struct kern_ipc_perm *ipcp, short flag);
+-void security_ipc_getsecid(struct kern_ipc_perm *ipcp, u32 *secid);
++void security_ipc_getlsmblob(struct kern_ipc_perm *ipcp, struct lsmblob *blob);
+ int security_msg_msg_alloc(struct msg_msg *msg);
+ void security_msg_msg_free(struct msg_msg *msg);
+ int security_msg_queue_alloc(struct kern_ipc_perm *msq);
+@@ -1299,9 +1310,10 @@ static inline int security_ipc_permission(struct kern_ipc_perm *ipcp,
+ 	return 0;
+ }
+ 
+-static inline void security_ipc_getsecid(struct kern_ipc_perm *ipcp, u32 *secid)
++static inline void security_ipc_getlsmblob(struct kern_ipc_perm *ipcp,
++					   struct lsmblob *blob)
+ {
+-	*secid = 0;
++	lsmblob_init(blob);
+ }
+ 
+ static inline int security_msg_msg_alloc(struct msg_msg *msg)
+diff --git a/kernel/auditsc.c b/kernel/auditsc.c
+index 52b4697d938c..89d490db0494 100644
+--- a/kernel/auditsc.c
++++ b/kernel/auditsc.c
+@@ -2638,8 +2638,7 @@ void __audit_ipc_obj(struct kern_ipc_perm *ipcp)
+ 	context->ipc.gid = ipcp->gid;
+ 	context->ipc.mode = ipcp->mode;
+ 	context->ipc.has_perm = 0;
+-	/* stacking scaffolding */
+-	security_ipc_getsecid(ipcp, &context->ipc.oblob.scaffold.secid);
++	security_ipc_getlsmblob(ipcp, &context->ipc.oblob);
+ 	context->type = AUDIT_IPC;
+ }
+ 
+diff --git a/security/security.c b/security/security.c
+index 4b78bface040..b82245d55f66 100644
+--- a/security/security.c
++++ b/security/security.c
+@@ -3595,17 +3595,17 @@ int security_ipc_permission(struct kern_ipc_perm *ipcp, short flag)
+ }
+ 
+ /**
+- * security_ipc_getsecid() - Get the sysv ipc object's secid
++ * security_ipc_getlsmblob() - Get the sysv ipc object LSM data
+  * @ipcp: ipc permission structure
+- * @secid: secid pointer
++ * @blob: pointer to lsm information
+  *
+- * Get the secid associated with the ipc object.  In case of failure, @secid
+- * will be set to zero.
++ * Get the lsm information associated with the ipc object.
+  */
+-void security_ipc_getsecid(struct kern_ipc_perm *ipcp, u32 *secid)
++
++void security_ipc_getlsmblob(struct kern_ipc_perm *ipcp, struct lsmblob *blob)
+ {
+-	*secid = 0;
+-	call_void_hook(ipc_getsecid, ipcp, secid);
++	lsmblob_init(blob);
++	call_void_hook(ipc_getlsmblob, ipcp, blob);
+ }
+ 
+ /**
+diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
+index 83ce496e8ef6..f15991ef6ca8 100644
+--- a/security/selinux/hooks.c
++++ b/security/selinux/hooks.c
+@@ -6266,10 +6266,13 @@ static int selinux_ipc_permission(struct kern_ipc_perm *ipcp, short flag)
+ 	return ipc_has_perm(ipcp, av);
+ }
+ 
+-static void selinux_ipc_getsecid(struct kern_ipc_perm *ipcp, u32 *secid)
++static void selinux_ipc_getlsmblob(struct kern_ipc_perm *ipcp,
++				   struct lsmblob *blob)
+ {
+ 	struct ipc_security_struct *isec = selinux_ipc(ipcp);
+-	*secid = isec->sid;
++	blob->selinux.secid = isec->sid;
++	/* stacking scaffolding */
++	blob->scaffold.secid = isec->sid;
+ }
+ 
+ static void selinux_d_instantiate(struct dentry *dentry, struct inode *inode)
+@@ -7165,7 +7168,7 @@ static struct security_hook_list selinux_hooks[] __ro_after_init = {
+ 	LSM_HOOK_INIT(userns_create, selinux_userns_create),
+ 
+ 	LSM_HOOK_INIT(ipc_permission, selinux_ipc_permission),
+-	LSM_HOOK_INIT(ipc_getsecid, selinux_ipc_getsecid),
++	LSM_HOOK_INIT(ipc_getlsmblob, selinux_ipc_getlsmblob),
+ 
+ 	LSM_HOOK_INIT(msg_queue_associate, selinux_msg_queue_associate),
+ 	LSM_HOOK_INIT(msg_queue_msgctl, selinux_msg_queue_msgctl),
+diff --git a/security/smack/smack_lsm.c b/security/smack/smack_lsm.c
+index a4ace6ea2ab0..b00f4f44f9c5 100644
+--- a/security/smack/smack_lsm.c
++++ b/security/smack/smack_lsm.c
+@@ -3396,16 +3396,19 @@ static int smack_ipc_permission(struct kern_ipc_perm *ipp, short flag)
+ }
+ 
+ /**
+- * smack_ipc_getsecid - Extract smack security id
++ * smack_ipc_getlsmblob - Extract smack security data
+  * @ipp: the object permissions
+- * @secid: where result will be saved
++ * @blob: where result will be saved
+  */
+-static void smack_ipc_getsecid(struct kern_ipc_perm *ipp, u32 *secid)
++static void smack_ipc_getlsmblob(struct kern_ipc_perm *ipp,
++				 struct lsmblob *blob)
+ {
+-	struct smack_known **blob = smack_ipc(ipp);
+-	struct smack_known *iskp = *blob;
++	struct smack_known **iskpp = smack_ipc(ipp);
++	struct smack_known *iskp = *iskpp;
+ 
+-	*secid = iskp->smk_secid;
++	blob->smack.skp = iskp;
++	/* stacking scaffolding */
++	blob->scaffold.secid = iskp->smk_secid;
+ }
+ 
+ /**
+@@ -5109,7 +5112,7 @@ static struct security_hook_list smack_hooks[] __ro_after_init = {
+ 	LSM_HOOK_INIT(task_to_inode, smack_task_to_inode),
+ 
+ 	LSM_HOOK_INIT(ipc_permission, smack_ipc_permission),
+-	LSM_HOOK_INIT(ipc_getsecid, smack_ipc_getsecid),
++	LSM_HOOK_INIT(ipc_getlsmblob, smack_ipc_getlsmblob),
+ 
+ 	LSM_HOOK_INIT(msg_msg_alloc_security, smack_msg_msg_alloc_security),
+ 
+-- 
+2.41.0
 
-2. I'm not sure it makes a lot of sense to create a kmem_cache pool
-for audit filter entries, especially given the modest performance
-gains.  Is there not some way to request cacheline alignment with
-kmalloc() or similar?
-
-> +       }
-> +
-> +       entry =3D kmem_cache_zalloc(entry_cache, GFP_KERNEL);
->         if (unlikely(!entry))
->                 return NULL;
->
->         fields =3D kcalloc(field_count, sizeof(*fields), GFP_KERNEL);
->         if (unlikely(!fields)) {
-> -               kfree(entry);
-> +               kmem_cache_free(entry_cache, entry);
->                 return NULL;
->         }
->         entry->rule.fields =3D fields;
-> --
-> 2.39.3
-
---=20
-paul-moore.com
