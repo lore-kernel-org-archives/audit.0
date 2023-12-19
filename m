@@ -1,147 +1,177 @@
-Received: from mail-oi1-f180.google.com (mail-oi1-f180.google.com [209.85.167.180])
+Received: from mail-ua1-f53.google.com (mail-ua1-f53.google.com [209.85.222.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB51871470
-	for <audit@vger.kernel.org>; Mon, 18 Dec 2023 22:09:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 716E338F8F
+	for <audit@vger.kernel.org>; Tue, 19 Dec 2023 18:55:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="gPWrj1NV"
-Received: by mail-oi1-f180.google.com with SMTP id 5614622812f47-3b9f8c9307dso3594288b6e.0
-        for <audit@vger.kernel.org>; Mon, 18 Dec 2023 14:09:16 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="JjjWjXl2"
+Received: by mail-ua1-f53.google.com with SMTP id a1e0cc1a2514c-7caff8105dcso1424979241.0
+        for <audit@vger.kernel.org>; Tue, 19 Dec 2023 10:55:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1702937356; x=1703542156; darn=vger.kernel.org;
+        d=paul-moore.com; s=google; t=1703012099; x=1703616899; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Eh4cb/ceLetDgVuIaguAYjCffbGi7zeOxXqi5aerhDs=;
-        b=gPWrj1NVkw8ilNxtEe+S9zkaOtAxEnf1Nofm3rN4CjULQkJtmN+/8qV84VWhadtGq5
-         gLu6Zul/yA412PsgRGmzyiQkx7atupk3T0Q31eC8Jqx+j+Fm38AusFrefd7o4SfDFgsm
-         Cr4JWSdqoqPQ8iQ0jpKdVLHAgIZVewcc8uBa0PWI5nPih2REKVfRVYbVthJV+7VccXHn
-         3Gky9i1OJ3Z68AQLgjjsozl2F0VVk2y1l7isWzmNO+gQI1oHUUHaQIq0h6OHSklbW/Mp
-         I0KADalIKIuIFXepo0nqI5MzNtlRcjZWXEgzraPW1La6GwHya8ClACOmSfoe+UctAFNm
-         k8WA==
+        bh=3MZidDprQN0C1t5nfrNf1lJcDeo/a0WFKgNv6uOViOY=;
+        b=JjjWjXl2x/UOzYRIbgVvVtZtxZeM/zTZdSN+Ze8wdo0xd1AE+aaVwNiNzqE5NSZjTF
+         Evd6T9QJW0WxeKfhVYGfdKUjqHQS8wNvV16bt05n8D3jed92aRX86d4jvyeCqcmc2U8u
+         JlI5o2YmK83b7M+bJfntC9TAq/pxlcvwZAwwi2WvjSJ5TZk2qRsx/rYIvyY7tugmV3TH
+         LroMye4Yer86wx2ueKdvJntDIdzkHuuK6ut55nC2kbvt5bqa9ZdkKrdhB9Cs8qEtJDTk
+         woYQs7kF1CKilPN4Fd8tiB2Wl03RSr2n9XPyT45jLqyxah/Bnl/vyy405z/xxkWCPBb3
+         F+KA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702937356; x=1703542156;
+        d=1e100.net; s=20230601; t=1703012099; x=1703616899;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Eh4cb/ceLetDgVuIaguAYjCffbGi7zeOxXqi5aerhDs=;
-        b=ZNeW40IStTjN5/+/Q6Pt+fc63TM9oWoz3p4U2fwL2lZi+DVt0y8A6wOu3QRkuRSE8w
-         YqURp3Imzmu18+G0gFCFsJJV1xCl5tqvfAE9xyNuZrUITekMWbyhFLvEs9zaLQ6mcvvS
-         hKvKeq389RY+YHIrulJnFiU5webgEU7pNnaLP/tBgQz0+jXWiQjVqOvyP/x7FYXGE6D/
-         pHt2deE00YdAMkPBRNpsVnSNeYWSCxRznMqlQrV6/kVSm7ud8nUyRzzkTf13u+ZrQ2GF
-         QTVIzhEXpW2KwsR+DFFXHOhCQxsI9B6UprqvNWe77DnhjN0QDVjAlTJy3OXm3gd1Tmku
-         Hbbw==
-X-Gm-Message-State: AOJu0YzB+dtx659hKaUPRqMKDSKXjMNC2dgnYhCaGR3aMRj0YG17p58/
-	0ty65f0iPT+ssxMJqb3ts7AltLL/AYLUwLS1fP8E
-X-Google-Smtp-Source: AGHT+IF2bOcczTMmDKZdYaIoC6RQaIbcEInhXIbg/9NfRAktyQIj6Fe6K7cedZM0dYyBmcmIWiNsh8g60p1LvwmjMr4=
-X-Received: by 2002:a05:6808:1442:b0:3b8:b063:adf6 with SMTP id
- x2-20020a056808144200b003b8b063adf6mr22051986oiv.83.1702937355773; Mon, 18
- Dec 2023 14:09:15 -0800 (PST)
+        bh=3MZidDprQN0C1t5nfrNf1lJcDeo/a0WFKgNv6uOViOY=;
+        b=ZN/rwzanlV/EGRQYX/G3eaaYZUdy6zr2/eadASItbrkUEPJg5fDQ9/ZnwcaTYCUCdn
+         NDsfZGkcuAd+6sMqItVkeYDhzogIutTHAFjRhaPui04B81YirvKelyjKoIUkSCkFG4nS
+         TrCb8UTV2X8Q4rzRwWR8DDBsrKz8cRniZKl5O3TSNmW7TYMnv6jGBZgMV6pV+mF1q7dG
+         XuBLid1T0923rboyi7ZlZIwPBOwjOOWGWhgnndVvCaojnhTay7+mE5K6fe1eJKqB2w3B
+         JKH1ebhxm1iPnIHUBwkiNeS/bQNUzdFuHtzfBtayjG7BSaAK8mEPWJrxkSEgtoUagqfk
+         lbIA==
+X-Gm-Message-State: AOJu0Yxjul5MmrR8iZqrh+VMTIBqBIiWFlqQzMPK2qDfMvdeUxLKg3Li
+	fygPYJ1XNOhxu3F1fuOJiGzt/K1gVYntVP4vnMhn
+X-Google-Smtp-Source: AGHT+IHWgPJJ8+OHXQ9zsQPimQZjstB2rf8nzLtxT3a7zSpIzCOY9hc4p2u+soGuy7uxgXpaN4cDChV7x21japkWDcE=
+X-Received: by 2002:a05:6102:a53:b0:464:7a5c:b8e2 with SMTP id
+ i19-20020a0561020a5300b004647a5cb8e2mr14897178vss.3.1703012099137; Tue, 19
+ Dec 2023 10:54:59 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231212102857.803984-1-haakon.bugge@oracle.com>
- <20231212102857.803984-3-haakon.bugge@oracle.com> <CAHC9VhTs7nfz7jEU0Oqv8nq_hTb404KyjHKM5G7T3WA3X3LcDA@mail.gmail.com>
- <CEB5B23B-7D1D-4C7B-B8A6-CA07239CB5EF@oracle.com>
-In-Reply-To: <CEB5B23B-7D1D-4C7B-B8A6-CA07239CB5EF@oracle.com>
+References: <3636f52d-f343-45e5-88c6-3c7e28e87a45@linux.dev>
+ <20231215174639.1034164-1-dave@dtucker.co.uk> <CAADnVQ+4AYvFnrjsdtwOArA9Mj+6nfg5sgkugLKHNRR_LCB7fg@mail.gmail.com>
+In-Reply-To: <CAADnVQ+4AYvFnrjsdtwOArA9Mj+6nfg5sgkugLKHNRR_LCB7fg@mail.gmail.com>
 From: Paul Moore <paul@paul-moore.com>
-Date: Mon, 18 Dec 2023 17:09:04 -0500
-Message-ID: <CAHC9VhRR+WuY6ZG7G6_qFipZyydtFUkju+ZjXyfpKwo_C7CCPg@mail.gmail.com>
-Subject: Re: [PATCH 2/2] audit: Apply codegen optimizations
-To: Haakon Bugge <haakon.bugge@oracle.com>
-Cc: Eric Paris <eparis@redhat.com>, "audit@vger.kernel.org" <audit@vger.kernel.org>, 
-	Ankur Arora <ankur.a.arora@oracle.com>
+Date: Tue, 19 Dec 2023 13:54:48 -0500
+Message-ID: <CAHC9VhQjpv1sgVaCbBddZxmqYc2FCA6c2y3k3SWuHgZcJUpNCw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3] bpf: Include pid, uid and comm in audit output
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Dave Tucker <dave@dtucker.co.uk>, bpf <bpf@vger.kernel.org>, 
+	Dave Tucker <datucker@redhat.com>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
+	Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Yafang Shao <laoar.shao@gmail.com>, audit@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sat, Dec 16, 2023 at 11:28=E2=80=AFAM Haakon Bugge <haakon.bugge@oracle.=
-com> wrote:
-> > On 14 Dec 2023, at 00:45, Paul Moore <paul@paul-moore.com> wrote:
-> > On Tue, Dec 12, 2023 at 5:29=E2=80=AFAM H=C3=A5kon Bugge <haakon.bugge@=
-oracle.com> wrote:
-> >>
-> >> For the most time-consuming function, when running a syscall benchmark
-> >> with STIG compliant audit rules:
-> >>
-> >>  Overhead  Command       Shared Object      Symbol
-> >> .........  ............  .................  ........................
-> >>
-> >>    27.62%  syscall_lat   [kernel.kallsyms]  [k] __audit_filter_op
-> >>
-> >> we apply codegen optimizations, which speeds up the syscall
-> >> performance by around 17% on an Intel Cascade Lake system.
-> >>
-> >> We run "perf stat -d -r 5 ./syscall_lat", where syscall_lat is a C
-> >> application that measures average syscall latency from getpid()
-> >> running 100 million rounds.
-> >>
-> >> Between each perf run, we reboot the system and waits until the last
-> >> minute load is less than 1.0.
-> >>
-> >> We boot the kernel, v6.6-rc4, with "mitigations=3Doff", in order to
-> >> amplify the changes in the audit system.
-> >>
-> >> Let the base kernel be v6.6-rc4 with booted with "audit=3D1" and
-> >> "mitigations=3Doff" and with the commit "audit: Vary struct audit_entr=
-y
-> >> alignment" on an Intel Cascade Lake system. The following three
-> >> metrics are reported, nanoseconds per syscall, L1D misses per syscall,
-> >> and finally Intructions Per Cycle, ipc.
-> >>
-> >> Base vs. base + this commit gives:
-> >>
-> >> ns per call:
-> >>  min avg max   pstdev
-> >> - 203 203 209 0.954149
-> >> + 173 173 178 0.884534
-> >>
-> >> L1d misses per syscall:
-> >>     min    avg    max   pstdev
-> >> -  0.012  0.103  0.817 0.238352
-> >> +  0.010  0.209  1.235 0.399416
-> >>
-> >> ipc:
-> >>    min    avg    max   pstdev
-> >> - 2.320  2.329  2.330 0.003000
-> >> + 2.430  2.436  2.440 0.004899
-> >>
-> >> Signed-off-by: H=C3=A5kon Bugge <haakon.bugge@oracle.com>
-> >> ---
-> >> kernel/auditsc.c | 2 ++
-> >> 1 file changed, 2 insertions(+)
-> >>
-> >> diff --git a/kernel/auditsc.c b/kernel/auditsc.c
-> >> index 6f0d6fb6523fa..84d0dfe75a4ac 100644
-> >> --- a/kernel/auditsc.c
-> >> +++ b/kernel/auditsc.c
-> >> @@ -822,6 +822,7 @@ static int audit_in_mask(const struct audit_krule =
-*rule, unsigned long val)
-> >>  * parameter can be NULL, but all others must be specified.
-> >>  * Returns 1/true if the filter finds a match, 0/false if none are fou=
-nd.
-> >>  */
-> >> +#pragma GCC optimize("unswitch-loops", "align-loops=3D16", "align-jum=
-ps=3D16")
+On Fri, Dec 15, 2023 at 1:00=E2=80=AFPM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+> On Fri, Dec 15, 2023 at 9:47=E2=80=AFAM Dave Tucker <dave@dtucker.co.uk> =
+wrote:
 > >
-> > The kernel doesn't really make use of #pragma optimization statements
-> > like this, at least not in any of the core areas, and I'm not
-> > interested in being the first to do so.  I appreciate the time and
-> > effort that you have spent profiling the audit subsystem, but this
-> > isn't a patch I can accept at this point in time, I'm sorry.
->
-> Fair enough. Will a function attribute aka:
->
-> __attribute__((optimize("foo=3Dbar")))
->
-> be acceptable for you?
+> > Current output from auditd is as follows:
+> >
+> > time->Wed Dec 13 21:39:24 2023
+> > type=3DBPF msg=3Daudit(1702503564.519:11241): prog-id=3D439 op=3DLOAD
+> >
+> > This only tells you that a BPF program was loaded, but without
+> > any context. If we include the prog-name, pid, uid and comm we get
+> > output as follows:
+> >
+> > time->Wed Dec 13 21:59:59 2023
+> > type=3DBPF msg=3Daudit(1702504799.156:99528): op=3DUNLOAD prog-id=3D500=
+92
+> >         prog-name=3D"test" pid=3D27279 uid=3D0 comm=3D"new_name"
+> >
+> > With pid, uid a system administrator has much better context
+> > over which processes and user loaded which eBPF programs.
+> > comm is useful since processes may be short-lived.
+> >
+> > Signed-off-by: Dave Tucker <dave@dtucker.co.uk>
 
-Unless you can show me widespread acceptance of these types of
-optimizations in core kernel code, my answer is no.  I'm sorry.
+Assuming you have audit configured to not disable syscall auditing
+(most distros disable it by default[1]), you should see a SYSCALL
+audit record associated with the bpf(BPF_PROG_LOAD) call.  Below is a
+quick example taken from a Fedora Rawhide test system:
+
+type=3DPROCTITLE msg=3Daudit(12/19/2023 13:44:22.917:1976) :
+  proctitle=3D(systemd)
+type=3DSYSCALL msg=3Daudit(12/19/2023 13:44:22.917:1976) :
+  arch=3Dx86_64 syscall=3Dbpf success=3Dyes exit=3D11
+  a0=3DBPF_PROG_LOAD a1=3D0x7ffd6c818190 a2=3D0x90 a3=3D0x13
+  items=3D0 ppid=3D1 pid=3D29898 auid=3Droot uid=3Droot gid=3Droot
+  euid=3Droot suid=3Droot fsuid=3Droot egid=3Droot sgid=3Droot fsgid=3Droot
+  tty=3D(none) ses=3D4 comm=3Dsystemd
+  exe=3D/usr/lib/systemd/systemd
+  subj=3Dunconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 key=3D(null)
+type=3DBPF msg=3Daudit(12/19/2023 13:44:22.917:1976) :
+  prog-id=3D128 op=3DLOAD
+
+You will notice that the full user credentials and process
+information, e.g. PID, are captured in the SYSCALL record.
+Admittedly, we are missing the BPF program name, which I think could
+be a reasonable addition to the BPF record, but I don't want to see us
+duplicate information from the SYSCALL record in the BPF record unless
+we have a situation where we are loading BPF programs outside a user
+syscall event.
+
+[1] https://github.com/linux-audit/audit-documentation/wiki/HOWTO-Fedora-En=
+able-Auditing
+
+> > diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+> > index 06320d9abf33..86600ca1f106 100644
+> > --- a/kernel/bpf/syscall.c
+> > +++ b/kernel/bpf/syscall.c
+> > @@ -35,6 +35,7 @@
+> >  #include <linux/rcupdate_trace.h>
+> >  #include <linux/memcontrol.h>
+> >  #include <linux/trace_events.h>
+> > +#include <linux/uidgid.h>
+> >
+> >  #include <net/netfilter/nf_bpf_link.h>
+> >  #include <net/netkit.h>
+> > @@ -2110,6 +2111,8 @@ static void bpf_audit_prog(const struct bpf_prog =
+*prog, unsigned int op)
+> >  {
+> >         struct audit_context *ctx =3D NULL;
+> >         struct audit_buffer *ab;
+> > +       const struct cred *cred;
+> > +       char comm[sizeof(current->comm)];
+> >
+> >         if (WARN_ON_ONCE(op >=3D BPF_AUDIT_MAX))
+> >                 return;
+> > @@ -2120,8 +2123,22 @@ static void bpf_audit_prog(const struct bpf_prog=
+ *prog, unsigned int op)
+> >         ab =3D audit_log_start(ctx, GFP_ATOMIC, AUDIT_BPF);
+> >         if (unlikely(!ab))
+> >                 return;
+> > -       audit_log_format(ab, "prog-id=3D%u op=3D%s",
+> > -                        prog->aux->id, bpf_audit_str[op]);
+> > +
+> > +       audit_log_format(ab, "op=3D%s prog-id=3D%u",
+> > +                        bpf_audit_str[op], prog->aux->id);
+> > +       audit_log_format(ab, " prog-name=3D");
+> > +       audit_log_untrustedstring(ab, prog->aux->name ?: "(none)");
+> > +
+> > +       if (current->mm) {
+> > +               cred =3D current_cred();
+>
+> Is this how you're trying to detect whether it's running
+> out of workqueue?
+> You probably need:
+> if (!current->mm || (current->flags & PF_KTHREAD))
+>
+> But even with that it looks wrong, since
+> BPF_AUDIT_UNLOAD message will be _randomly_ unbalanced
+> with LOAD message.
+> Last __bpf_prog_put() can happen in either context.
+>
+> You also need to cc Paul.
+> He needs to ack it before we can take it.
+> As it stands I think this change makes the audit worse.
+
+Thanks Alexei.  Yes, please send any audit related patches to the
+audit mailing list.  It's listed in MAINTAINERS, but I've also added
+it to the CC line above.
 
 --=20
 paul-moore.com
