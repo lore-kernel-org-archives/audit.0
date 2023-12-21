@@ -1,308 +1,259 @@
-Received: from smtp-bc0c.mail.infomaniak.ch (smtp-bc0c.mail.infomaniak.ch [45.157.188.12])
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E29055E74
-	for <audit@vger.kernel.org>; Thu, 21 Dec 2023 19:02:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75ABD65195
+	for <audit@vger.kernel.org>; Thu, 21 Dec 2023 19:05:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="cx6A1Qsg"
-Received: from smtp-3-0000.mail.infomaniak.ch (unknown [10.4.36.107])
-	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4Swzrf33jNzMqcgN;
-	Thu, 21 Dec 2023 18:45:22 +0000 (UTC)
-Received: from unknown by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4Swzrd39yhz3Z;
-	Thu, 21 Dec 2023 19:45:21 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
-	s=20191114; t=1703184322;
-	bh=EXsauPF/6y5U4q7Zy4qc2/K5W/Ae5AZN6LUc/21+7n8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=cx6A1QsgaKMcvMzeGhH2aucCyLOvrT2g8zhrSudRRcUupNq2RVVHNspOa7g6OjTha
-	 voqoegstjYjHtLz5baP71+PDVi7Wk6CeZasQyHsevPCDPlhQJ8GG94pNr3ED89a+2y
-	 MNX3UJTOOUDNLi4eRx33oG2/WeHuxEs7ofbSjho8=
-Date: Thu, 21 Dec 2023 19:45:16 +0100
-From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="F3yIYlzB";
+	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="yMIPVj9p"
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3BLIHOXI022929;
+	Thu, 21 Dec 2023 19:05:22 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : references : in-reply-to : content-type :
+ content-id : content-transfer-encoding : mime-version; s=corp-2023-11-20;
+ bh=SScmVVTwmY3sKj9TF2o7XhMliFTfLOegkfwFL+gYAlU=;
+ b=F3yIYlzBqQNMc8jvO3hswsW1IwB1rM4+4ZTPHyimShSw7kIW6L1RCBvqlcBghpC40wb6
+ KIhcibe2GXEDNMOTq2gTXQeueW7Q35UTdViwl3PP2MW9fXg+OnITiNxQgjtNbHyKyBMu
+ BT4NwBr/+UiPu2t/YiwpPs4gc9ThFJypCSN5IoC5j3gKRLjX3jVX67p9hdM6TQjWeL+5
+ GrxLrr29GA9AxePhz5E8Z9H3384TP6FmjeDovNwZoKHIkSqGaeZHNMQYZinPUceIE/8i
+ USzv0RYw1H/WRQ8QjXA+/nRbTfycylvE6GKqKVuonWWCo8pZwCdsF04Ji1aBv4giLuHG SA== 
+Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3v12p4c01p-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 21 Dec 2023 19:05:22 +0000
+Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 3BLHbXF1031178;
+	Thu, 21 Dec 2023 19:05:21 GMT
+Received: from nam11-dm6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2168.outbound.protection.outlook.com [104.47.57.168])
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3v12bhnbm4-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 21 Dec 2023 19:05:21 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=aIASIRhaHQJHzoKuNEji46SG9tSeEmrcIMky39p2iATfgDSi72F9EEyqS+pV/dSQZhxdOS+wIDiWpfldFlFwAUpDpVB3TCpVF8lmZMzqXTPhVPSxHTWuVTKHqzMdzUuzlIQDAxKmODtwwMkcNXy/bbiUuuHVqFzpOlKGrVomlGXn4qQz3SNmQW+/xdTuMKY/3fCu8mZJ94FvuImqamfo7zJTdFE5u3tVJXegTexF6Yr1zVtFHGMK3o0XlBYxwCJtIsQBKt5Onf1KDaGI8w3kpoDwc84oLktIUbqZw8UE2D/Tlh8o76s7GihSp13PyQZt3j7CF4FJs8hI1PJecE7l6g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=SScmVVTwmY3sKj9TF2o7XhMliFTfLOegkfwFL+gYAlU=;
+ b=GdG02eCl8nC9RglG/PrIo+JOwi5dZIrWjr+DoVlPLeqciguhhKtxJ4U5IQRW0TcW4+LWup/nm0hIRsee+gcX8xdJ/jx20C4EwFJvOTtu782PyMIkb6RhasZU+pfGnWSkoHWpZySSNXQVT25wQFhoqv8UZVMizrKpdlU72JWLSs1JW8cKIJjP3K0FnInw+Q4rPtmzAsxjvSV690JNX3tuo3JkMLgnM6RhUe+iVohH2paMW5H/81AxXzsIhoJTkrFueEcZu4QwAy+7TeKR7Z8EvEYrLlEymLVRZ1pyTgRArYTKTC+JKOOYyIBowP/V0IMsoRfLoMnhSzQysUCMYMiYvQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=SScmVVTwmY3sKj9TF2o7XhMliFTfLOegkfwFL+gYAlU=;
+ b=yMIPVj9pMmoZtFiLH4dl51OtNjVnqa0HwcUlkoRuoZevf7EYu5NKIsevZmG8T4lMLUe3HeNxQq8Gqdl5gRX7nrMT8jHrzNsU9+0RhznR0woMs7XDeCCWANLtYyJIUfY6BfuKz0pxeXuM1x+1sdP3W5yb8IuqSPaeYJ/A2hD0MB4=
+Received: from PH0PR10MB5593.namprd10.prod.outlook.com (2603:10b6:510:f5::16)
+ by IA0PR10MB6770.namprd10.prod.outlook.com (2603:10b6:208:43d::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7113.20; Thu, 21 Dec
+ 2023 19:05:18 +0000
+Received: from PH0PR10MB5593.namprd10.prod.outlook.com
+ ([fe80::b850:7ce8:b7be:c8c0]) by PH0PR10MB5593.namprd10.prod.outlook.com
+ ([fe80::b850:7ce8:b7be:c8c0%5]) with mapi id 15.20.7113.019; Thu, 21 Dec 2023
+ 19:05:18 +0000
+From: Haakon Bugge <haakon.bugge@oracle.com>
 To: Paul Moore <paul@paul-moore.com>
-Cc: Eric Paris <eparis@redhat.com>, James Morris <jmorris@namei.org>, 
-	"Serge E . Hallyn" <serge@hallyn.com>, Ben Scarlato <akhna@google.com>, 
-	=?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>, Jeff Xu <jeffxu@google.com>, 
-	Jorge Lucangeli Obes <jorgelo@google.com>, Konstantin Meskhidze <konstantin.meskhidze@huawei.com>, 
-	Shervin Oloumi <enlightened@google.com>, audit@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-security-module@vger.kernel.org
-Subject: Re: [RFC PATCH v1 3/7] landlock: Log ruleset creation and release
-Message-ID: <20231221.eij3poa3Se4b@digikod.net>
-References: <20230921061641.273654-1-mic@digikod.net>
- <20230921061641.273654-4-mic@digikod.net>
- <CAHC9VhQTvFp+i=j7t+55EnG44xg=Pmvkh=Oq=e7ddJWDZXLeSA@mail.gmail.com>
+CC: Eric Paris <eparis@redhat.com>,
+        "audit@vger.kernel.org"
+	<audit@vger.kernel.org>,
+        Ankur Arora <ankur.a.arora@oracle.com>
+Subject: Re: [PATCH 2/2] audit: Apply codegen optimizations
+Thread-Topic: [PATCH 2/2] audit: Apply codegen optimizations
+Thread-Index: AQHaLh58sc5YvNqF2kWi0fPrhBBXabCsHXAAgAOD8gCABIOagA==
+Date: Thu, 21 Dec 2023 19:05:18 +0000
+Message-ID: <D2FCA0C0-72EE-4A6A-BE25-1DEC368C1797@oracle.com>
+References: <20231212102857.803984-1-haakon.bugge@oracle.com>
+ <20231212102857.803984-3-haakon.bugge@oracle.com>
+ <CAHC9VhTs7nfz7jEU0Oqv8nq_hTb404KyjHKM5G7T3WA3X3LcDA@mail.gmail.com>
+ <CEB5B23B-7D1D-4C7B-B8A6-CA07239CB5EF@oracle.com>
+ <CAHC9VhRR+WuY6ZG7G6_qFipZyydtFUkju+ZjXyfpKwo_C7CCPg@mail.gmail.com>
+In-Reply-To: 
+ <CAHC9VhRR+WuY6ZG7G6_qFipZyydtFUkju+ZjXyfpKwo_C7CCPg@mail.gmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: Apple Mail (2.3774.200.91.1.1)
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: PH0PR10MB5593:EE_|IA0PR10MB6770:EE_
+x-ms-office365-filtering-correlation-id: 1787c659-f11a-4db2-9787-08dc0257c5f3
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 
+ Tbu/FLHMhWwrK1BGjOQade15Gag0w1bJgK/0Gg+tMZlwkbNltU+BTIZVkNmPTmZeUQV/E7fb3XiG7S/wHS0wj2zkcO+9YHGHbTRWtCPXzo/EuF85cVVJJRW3hQz+49aNJCv7eESb4vh+UZcq3UVGojCl174VlzMfvH55vhvcP8/jnIgL9OMwXZNByzTNLrkEsSI9/x0ffWJhVJBa4Yu5g1gcQqxHhtpoQiIqvwZEycqooY/38VcSdyCGmSG5LpqfggxHk4myrEmXEs76X91PMJ9/RisvoLDX44byy0T8y+ww0B6qPQCF2tfifKi9vOVLeQ152/I5Hs8Dry3aVRSSrDGuIK3NjfWXZNWWUo7w+epIq0yFNsCOTNhbVwGuCuxPD5NJKDJLtilMvddZf5gyCp4c2yAD4y2wMnSNkakRlaXj+ErdTXM/RJKP6P5x1SJb9N8wzb1An/SoYrAvHoir6IAEetzO+jBD0q5WH7+W42CgydQtAlP6uRMAGcmfblHjSa2pcoDwQmus+dHTMHfil8ahNevisBx4kuoYcu6ffbWvBjCwL4bYKnXAB+4ecNYQUhMtHfReualYO6zRuaFQcnVSiS0PVvhOYyNL8CLQsx7Je5ZPJ7UihfNYrDLUred7VP/D7j3lL1vczOUJVZ0NNQ==
+x-forefront-antispam-report: 
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR10MB5593.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(366004)(396003)(136003)(39860400002)(376002)(346002)(230922051799003)(64100799003)(451199024)(186009)(1800799012)(6486002)(71200400001)(478600001)(38100700002)(122000001)(66574015)(26005)(83380400001)(107886003)(2616005)(53546011)(6512007)(6506007)(33656002)(8936002)(4326008)(2906002)(36756003)(41300700001)(5660300002)(8676002)(44832011)(86362001)(6916009)(38070700009)(66946007)(76116006)(316002)(66556008)(66476007)(66446008)(64756008)(54906003)(91956017)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: 
+ =?utf-8?B?YTRLbGV1MTVxb01haUdBRzlGY01QdThNWExuYjdtVlFMWWd3YWlLZUtqMVhY?=
+ =?utf-8?B?VEdnRVQxbEU0WHZZVVZkQXJ2MFdGdVUxWTZySy9ZWHdVeURXbTZZZnUrRGJD?=
+ =?utf-8?B?Tm9mb1VmdkpLRzdBWUFjRXBjM2tUeVZuWXpJRXBpOXYxZkhXTjlKbHZmOXBs?=
+ =?utf-8?B?dmtVbFJIZnJHaU0zZXIzbktObVRXckpXRnNjeXhScXdOZVlScWZqUG1SOHV3?=
+ =?utf-8?B?RHdHTlR1N2JCYXRGMkFlSFdjNnNWUkZmeGp3Z2R4TkoxNVlPMmtVeEJaM2xW?=
+ =?utf-8?B?NlAvNzQ5dHZ2TzM5NE1mVDBDbUhxSjlLUjJJZjdjYmhmUW9xV0NTVjN6Ykg1?=
+ =?utf-8?B?L2RTSXd6bFdpUXpSeGFoZjhMRlhmc1VIdWNZcEZvU0dYZjByRmdPeENUcTBq?=
+ =?utf-8?B?UVMwOXZzRTVobnBxVStDUG5ML213bjhqTXZiTGRFVktkbUQwVjh4Sy9jc0tZ?=
+ =?utf-8?B?V0tQemFrSS9BcGh3SE0rOGhScEQwU0t4R3JhMU1pVHFvS21PR3N3enZJZ1JQ?=
+ =?utf-8?B?QmI0UVRNMCt2OFBkMDNad1RtVTNzZ3orMU5ma0hJVkdOZ1hRaXFzT0RzT2hx?=
+ =?utf-8?B?OStsU0IvSEhKWnJKWi9hR3pNcHk2NnhTMlpBNHd1SVpoamh2S2FpdFJhbG8z?=
+ =?utf-8?B?a2FnakhxNXZ3LzVoZE5PQ2dySG55STJTRmVmYzZ1L01Rc1FsTnRvdVpXZzNU?=
+ =?utf-8?B?dUtyQ0NVRGhpUGRUbHZJeVNKVTRqa1IzdUFEZC84TnQ4bzdNdUprYUp4YXB4?=
+ =?utf-8?B?dG56ZzdObzZQT2tNQzRWVy9RU3YzMDBoanpnOHdLcXgvTFRObkZES2tERXUr?=
+ =?utf-8?B?eGY4VVNsWFhtYmg3MDltcDdZcjM3bVZTejc0Yld5cXl3YlJuUzJ0Z1N6bXkw?=
+ =?utf-8?B?dHNlRGJyMWJMbG1rbkw5NGdqaGl6Tm9OQk9oTjF6SklKdUY5YUQ5NHlVUis0?=
+ =?utf-8?B?MHFsYS9WemQvVndVZFMyUUluRC82cFNBMjZpbENXVi9TT0VQTCtBTC9ESU0w?=
+ =?utf-8?B?NmVDdWhpVVJyVnM1WkdLYjB2VWptU2l3YUZFN0x3VXJUUGE2OW40NDF4K3ow?=
+ =?utf-8?B?bXBETjVIbWl3Rzd2ejdxZGNNOFlOU3J2Y01MNHlVczlZcHRha01UazB3NDRt?=
+ =?utf-8?B?eVBnYVhtMGQvUkZnTk5BRGQ0cWF5NzFaMWFhemVhVWJENWJrbWhiakcrZzJl?=
+ =?utf-8?B?MnV0RlQyWHRjSG1XMzNqQVZ3SVNoN041eEJmTFZMTUs2T0xmSUdxbDR2aTBk?=
+ =?utf-8?B?R1F1Zlg3bXhtdGIwdWo5QXNrWkpocGtnTXZPOGpyQlFHaWd3TUlXeFVpcXZO?=
+ =?utf-8?B?Y21IR3JsMHozQ2I4VEltMmtFcTFNaDVEWDFZOU9aYUxFQU1TcEpBVW9aeFBM?=
+ =?utf-8?B?ZzdNMGVmV0JRaHl5bDlTV2l0citOWHNheTNTU2pKUmV3TE5BYzFQcS9wRU1s?=
+ =?utf-8?B?T293M1pWVXhoNDhmN0t1ejE2N2hiZDlIT3BndVp5cC82TWZRZDJQNy9OdmtL?=
+ =?utf-8?B?MHY1RXdpRDIrdjZIR1ZqNHZnQkRDM09EdWRvS0xiTlEyTVQ1V3pxU3FTYWFI?=
+ =?utf-8?B?YlowYjRTN2FkeTJKYk5FRXhVSnVaSmx0bmppK2lPK1NGNXJIdVh6UWprditE?=
+ =?utf-8?B?SnI5dHo1TDIxUWxkRXBCL3ZJK04weWIyaVdxcTE0dTZpY1ZFczJ5aG9MaW9v?=
+ =?utf-8?B?UTRwS3JHdi9sc0VYSHJ2a0xDU1hYclkyd0NoTGdYcURkMU5yamgvRjBQSmtU?=
+ =?utf-8?B?YUhIK1dZaE80NlFHb05scFhWbFp6bFRQN2lseUs5T0xURlhSM05RUTFrbjBw?=
+ =?utf-8?B?Tkt0dExnU3drTHlxQjAybmJWbFByNkEwZXFRZE4ybGJSZ1BGS1NnYzA4QlJQ?=
+ =?utf-8?B?MFgrTFdlaExPQXByU3FsTXArdDcxVjQwZFFHdDhWa0IyQlNjVzVRUlJxN1dB?=
+ =?utf-8?B?OFJwa3FxVTJLaE9yaDNtYnliNVlHSzdlbHhXbjZubXhXWFNwS0JnT29palc4?=
+ =?utf-8?B?VytYMVdZSDNOUW4vMFRtb3BKSHBzbmRHbVVieVVSSkFicXVhYXBvNUNFVWZa?=
+ =?utf-8?B?amtDSy9iV3Q4L0tnU2NrWTJ3OU9aOTErMmF1d21CT1ZNLytXdjBoaEJLbXE0?=
+ =?utf-8?B?djFlTXp3ckNjMFJFRXhGZndSOTgrQVRoZ2hCMENTbGppR2t5YUdTbXdrNnkv?=
+ =?utf-8?B?MXc9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <19E4CB6E966B3445A902A6FF36A5DEEA@namprd10.prod.outlook.com>
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHC9VhQTvFp+i=j7t+55EnG44xg=Pmvkh=Oq=e7ddJWDZXLeSA@mail.gmail.com>
-X-Infomaniak-Routing: alpha
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: 
+	pJVlq+b4SUDiCxKhOOPCqwCYdM2Dq1MNrmkpdGCFbr6v0Xwe6yQRPRyrxjfPBXL7BSvtz0PKb976zqy2nsQNPSbfLGEfBZ269AWvbe7lH1KXHCSM/hEn/EyOuh2e4VYhiS78+Ddredwb0fGj4iPq+gAlRIEbjQuihPZ2EvQndgryNSTfByGZH8gay/rMT/TdX7QsK2u5VK2/U8Sbcc0M4HvOax+PlqTf5YsyfAB1xZyR2skkL4vecOYCjwk1WHjXKLEmZWu4svxKLBlVPw2EdanZL6wi730SeT/lVQAUdkSrCuChmraVuav85f04shdbRssX7357TUmsddV0xycJwDXMO3fJNlftIhmtKSUymnvhcRB4V7kbjf7QfRxrzjoEmgvWLsU+SrWTAv9qFZJttf89NgreC830Lw9O6Ob+Wl6IYQlFT0zbC9F2gDow1AYFNoewZ78pEy/AyjlAbE++WjYfhayj9j/GdGZi4q66K2PQc1h53KTwmqQZVeLFAgdLaqkK48BrmkD0jRhAAow/NtUvm+Hap5yf1fq3Y2cWYanpzrCHrTbZ2dJ3yC1WxUDk8/e670bBgHkb5uryc1igFqH2foR56zWryQZsRYNkpy8=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR10MB5593.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1787c659-f11a-4db2-9787-08dc0257c5f3
+X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Dec 2023 19:05:18.5698
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: KvtnmhNXSio1KUNwE2IlC9s1eGBIeHx/vNXFGE3T/8ASniDsPVl4WWLZC/WxDCG3wxkkKGpTGdjVgqdTPH7i2w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR10MB6770
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-12-21_09,2023-12-21_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 phishscore=0 mlxscore=0
+ adultscore=0 suspectscore=0 spamscore=0 malwarescore=0 mlxlogscore=999
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2311290000
+ definitions=main-2312210145
+X-Proofpoint-GUID: 7SvTy0rZrBtP2yb9-ruLm1YfGfhd2uF5
+X-Proofpoint-ORIG-GUID: 7SvTy0rZrBtP2yb9-ruLm1YfGfhd2uF5
 
-On Wed, Dec 20, 2023 at 04:22:15PM -0500, Paul Moore wrote:
-> On Thu, Sep 21, 2023 at 2:17 AM Mickaël Salaün <mic@digikod.net> wrote:
-> >
-> > Add audit support for ruleset/domain creation and release. Ruleset and
-> > domain IDs are generated from the same 64-bit counter to avoid confusing
-> > them. There is no need to hide the sequentiality to users that are
-> > already allowed to read logs.  In the future, if these IDs were to be
-> > viewable by unprivileged users, then we'll need to scramble them.
-> >
-> > Add a new AUDIT_LANDLOCK record type.
-> 
-> When adding new audit records we generally ask people to include
-> examples taken from their testing to the commit description.
-
-OK, I'll add that in the next series.
-
-> 
-> > Signed-off-by: Mickaël Salaün <mic@digikod.net>
-> > ---
-> >  include/uapi/linux/audit.h   |   1 +
-> >  security/landlock/Makefile   |   2 +
-> >  security/landlock/audit.c    | 119 +++++++++++++++++++++++++++++++++++
-> >  security/landlock/audit.h    |  35 +++++++++++
-> >  security/landlock/ruleset.c  |   6 ++
-> >  security/landlock/ruleset.h  |  10 +++
-> >  security/landlock/syscalls.c |   8 +++
-> >  7 files changed, 181 insertions(+)
-> >  create mode 100644 security/landlock/audit.c
-> >  create mode 100644 security/landlock/audit.h
-> 
-> ...
-> 
-> > diff --git a/security/landlock/audit.c b/security/landlock/audit.c
-> > new file mode 100644
-> > index 000000000000..f58bd529784a
-> > --- /dev/null
-> > +++ b/security/landlock/audit.c
-> > @@ -0,0 +1,119 @@
-> > +// SPDX-License-Identifier: GPL-2.0-only
-> > +/*
-> > + * Landlock LSM - Audit helpers
-> > + *
-> > + * Copyright © 2023 Microsoft Corporation
-> > + */
-> > +
-> > +#include <linux/atomic.h>
-> > +#include <linux/audit.h>
-> > +#include <linux/lsm_audit.h>
-> > +
-> > +#include "audit.h"
-> > +#include "cred.h"
-> > +
-> > +atomic64_t ruleset_and_domain_counter = ATOMIC64_INIT(0);
-> > +
-> > +#define BIT_INDEX(bit) HWEIGHT(bit - 1)
-> > +
-> > +static void log_accesses(struct audit_buffer *const ab,
-> > +                        const access_mask_t accesses)
-> > +{
-> > +       const char *const desc[] = {
-> > +               [BIT_INDEX(LANDLOCK_ACCESS_FS_EXECUTE)] = "execute",
-> > +               [BIT_INDEX(LANDLOCK_ACCESS_FS_WRITE_FILE)] = "write_file",
-> > +               [BIT_INDEX(LANDLOCK_ACCESS_FS_READ_FILE)] = "read_file",
-> > +               [BIT_INDEX(LANDLOCK_ACCESS_FS_READ_DIR)] = "read_dir",
-> > +               [BIT_INDEX(LANDLOCK_ACCESS_FS_REMOVE_DIR)] = "remove_dir",
-> > +               [BIT_INDEX(LANDLOCK_ACCESS_FS_REMOVE_FILE)] = "remove_file",
-> > +               [BIT_INDEX(LANDLOCK_ACCESS_FS_MAKE_CHAR)] = "make_char",
-> > +               [BIT_INDEX(LANDLOCK_ACCESS_FS_MAKE_DIR)] = "make_dir",
-> > +               [BIT_INDEX(LANDLOCK_ACCESS_FS_MAKE_REG)] = "make_reg",
-> > +               [BIT_INDEX(LANDLOCK_ACCESS_FS_MAKE_SOCK)] = "make_sock",
-> > +               [BIT_INDEX(LANDLOCK_ACCESS_FS_MAKE_FIFO)] = "make_fifo",
-> > +               [BIT_INDEX(LANDLOCK_ACCESS_FS_MAKE_BLOCK)] = "make_block",
-> > +               [BIT_INDEX(LANDLOCK_ACCESS_FS_MAKE_SYM)] = "make_sym",
-> > +               [BIT_INDEX(LANDLOCK_ACCESS_FS_REFER)] = "refer",
-> > +               [BIT_INDEX(LANDLOCK_ACCESS_FS_TRUNCATE)] = "truncate",
-> > +       };
-> > +       const unsigned long access_mask = accesses;
-> > +       unsigned long access_bit;
-> > +       bool is_first = true;
-> > +
-> > +       BUILD_BUG_ON(ARRAY_SIZE(desc) != LANDLOCK_NUM_ACCESS_FS);
-> > +
-> > +       for_each_set_bit(access_bit, &access_mask, ARRAY_SIZE(desc)) {
-> > +               audit_log_format(ab, "%s%s", is_first ? "" : ",",
-> > +                                desc[access_bit]);
-> > +               is_first = false;
-> > +       }
-> > +}
-> > +
-> > +/* Inspired by dump_common_audit_data(). */
-> > +static void log_task(struct audit_buffer *const ab)
-> > +{
-> > +       /* 16 bytes (TASK_COMM_LEN) */
-> > +       char comm[sizeof(current->comm)];
-> > +
-> > +       /*
-> > +        * Uses task_pid_nr() instead of task_tgid_nr() because of how
-> > +        * credentials and Landlock work.
-> > +        */
-> > +       audit_log_format(ab, "tid=%d comm=", task_pid_nr(current));
-> > +       audit_log_untrustedstring(ab,
-> > +                                 memcpy(comm, current->comm, sizeof(comm)));
-> > +}
-> 
-> Depending on how log_task() is used, it may be redundant with respect
-> to the existing SYSCALL record.  Yes, there is already redundancy with
-> the AVC record, but that is a legacy problem and not something we can
-> easily fix, but given that the Landlock records are new we have an
-> opportunity to do things properly :)
-
-Indeed, it would make it simpler too. I wasn't sure how standalone a
-record should be, but I guess there tools should be able to look for a
-set of related records (e.g. event with a SYSCALL record matching a PID
-and a LANDLOCK record).
-
-> 
-> > +void landlock_log_create_ruleset(struct landlock_ruleset *const ruleset)
-> > +{
-> > +       struct audit_buffer *ab;
-> > +
-> > +       WARN_ON_ONCE(ruleset->id);
-> > +
-> > +       ab = audit_log_start(audit_context(), GFP_ATOMIC, AUDIT_LANDLOCK);
-> > +       if (!ab)
-> > +               /* audit_log_lost() call */
-> > +               return;
-> > +
-> > +       ruleset->id = atomic64_inc_return(&ruleset_and_domain_counter);
-> > +       log_task(ab);
-> > +       audit_log_format(ab,
-> > +                        " op=create-ruleset ruleset=%llu handled_access_fs=",
-> > +                        ruleset->id);
-> 
-> "handled_access_fs" seems a bit long for a field name, is there any
-> reason why it couldn't simply be "access_fs" or something similar?
-
-"handled_access_fs" is from the landlock_create_ruleset(2) API, so I'd
-like to use the same name. However, because the types of handled access
-rights for a ruleset will expand (e.g. we now have a
-handled_access_net), I'm wondering if it would be better to keep this
-(growing) one-line record or if we should use several records for a
-ruleset creation (i.e. one line per type of handled access righs).
-
-> 
-> > +       log_accesses(ab, ruleset->fs_access_masks[ruleset->num_layers - 1]);
-> > +       audit_log_end(ab);
-> > +}
-> > +
-> > +/*
-> > + * This is useful to know when a domain or a ruleset will never show again in
-> > + * the audit log.
-> > + */
-> > +void landlock_log_release_ruleset(const struct landlock_ruleset *const ruleset)
-> > +{
-> > +       struct audit_buffer *ab;
-> > +       const char *name;
-> > +       u64 id;
-> > +
-> > +       ab = audit_log_start(audit_context(), GFP_ATOMIC, AUDIT_LANDLOCK);
-> > +       if (!ab)
-> > +               /* audit_log_lost() call */
-> > +               return;
-> > +
-> > +       /* It should either be a domain or a ruleset. */
-> > +       if (ruleset->hierarchy) {
-> > +               name = "domain";
-> 
-> Perhaps I missed it, but I didn't see an audit record with
-> "op=create-domain", is there one?  If there is no audit record for
-> creating a Landlock domain, why do we care about releasing a Landlock
-> domain?
-> 
-> [NOTE: I see that domain creation is audited in patch 4, I would
-> suggest reworking the patchset so the ruleset auditing is in one
-> patch, domain auditing another ... or just squash the two patches.
-> Either approach would be preferable to this approach.]
-
-Domain creation is indeed recorded with the restrict_self operation from
-the next patch. I'll rework and extend these patches to get something
-more consistent.
-
-> 
-> > +               id = ruleset->hierarchy->id;
-> > +               WARN_ON_ONCE(ruleset->id);
-> > +       } else {
-> > +               name = "ruleset";
-> > +               id = ruleset->id;
-> > +       }
-> > +       WARN_ON_ONCE(!id);
-> > +
-> > +       /*
-> > +        * Because this might be called by kernel threads, logging
-> > +        * related task information with log_task() would be useless.
-> > +        */
-> > +       audit_log_format(ab, "op=release-%s %s=%llu", name, name, id);
-> 
-> This starts to get a little tricky.  The general guidance is that for
-> a given audit record type, e.g. AUDIT_LANDLOCK, there should be no
-> change in presence or ordering of fields, yet in
-> landlock_log_create_ruleset() we log the permission information and
-> here in landlock_log_release_ruleset() we do not.  The easy fix is to
-> record the permission information here as well, or simply use a
-> "handled_access_fs=?" placeholder.  Something to keep in mind as you
-> move forward.
-
-OK, I used different "op" to specify the related fields, but I should
-use a dedicated record type when it makes sense instead. My reasoning
-was that it would be easier to filter on one or two record types, but
-I like the fixed set of fields per record type.
-
-I plan to add a few record types, something like that:
-
-For a ruleset creation event, several grouped records:
-- AUDIT_LANDLOCK_RULESET: "id=[new ruleset ID] op=create"
-- AUDIT_LANDLOCK_ACCESS: "type=[fs or net] rights=[bitmask]"
-
-For rule addition, several records per landlock_add_rule(2) call.
-Example with a path_beneath rule:
-- AUDIT_LANDLOCK_RULESET: "id=[ruleset ID] op=add_rule"
-- AUDIT_LANDLOCK_PATH: "scope=beneath path=[file path] dev= ino="
-- AUDIT_LANDLOCK_ACCESS: "type=fs rights=[bitmask]"
-
-Example with a net_port rule:
-- AUDIT_LANDLOCK_RULESET: "id=[ruleset ID] op=add_rule"
-- AUDIT_LANDLOCK_PORT: "port="
-- AUDIT_LANDLOCK_ACCESS: "type=net rights=[bitmask]"
-
-For domain creation/restriction:
-- AUDIT_LANDLOCK_DOMAIN: "id=[new domain ID] op=create"
-- AUDIT_LANDLOCK_RULESET: "id=[ruleset ID] op=use"
-
-For ruleset release:
-- AUDIT_LANDLOCK_RULESET: "id=[ruleset ID] op=release"
-
-For domain release:
-- AUDIT_LANDLOCK_DOMAIN: "id=[domain ID] op=release"
-
-For denied FS access:
-- AUDIT_LANDLOCK_DENIAL: "id=[domain ID] op=mkdir"
-- AUDIT_LANDLOCK_PATH: "scope=exact path=[file path] dev= ino="
-
-For denied net access:
-- AUDIT_LANDLOCK_DENIAL: "id=[domain ID] op=connect"
-- AUDIT_LANDLOCK_PORT: "port="
-
-It may not be worth it to differenciate between domain and ruleset for
-audit though.
-
-What do you think?
-
-I guess it will still be OK to expand a record type with new appended
-fields right? For instance, could we append a "flags" field to a
-AUDIT_LANDLOCK_RULESET record (because it may not make sense to create a
-dedicated record type for that)?
-
-> 
-> > +       audit_log_end(ab);
-> > +}
-> 
-> --
-> paul-moore.com
+DQoNCj4gT24gMTggRGVjIDIwMjMsIGF0IDIzOjA5LCBQYXVsIE1vb3JlIDxwYXVsQHBhdWwtbW9v
+cmUuY29tPiB3cm90ZToNCj4gDQo+IE9uIFNhdCwgRGVjIDE2LCAyMDIzIGF0IDExOjI44oCvQU0g
+SGFha29uIEJ1Z2dlIDxoYWFrb24uYnVnZ2VAb3JhY2xlLmNvbT4gd3JvdGU6DQo+Pj4gT24gMTQg
+RGVjIDIwMjMsIGF0IDAwOjQ1LCBQYXVsIE1vb3JlIDxwYXVsQHBhdWwtbW9vcmUuY29tPiB3cm90
+ZToNCj4+PiBPbiBUdWUsIERlYyAxMiwgMjAyMyBhdCA1OjI54oCvQU0gSMOla29uIEJ1Z2dlIDxo
+YWFrb24uYnVnZ2VAb3JhY2xlLmNvbT4gd3JvdGU6DQo+Pj4+IA0KPj4+PiBGb3IgdGhlIG1vc3Qg
+dGltZS1jb25zdW1pbmcgZnVuY3Rpb24sIHdoZW4gcnVubmluZyBhIHN5c2NhbGwgYmVuY2htYXJr
+DQo+Pj4+IHdpdGggU1RJRyBjb21wbGlhbnQgYXVkaXQgcnVsZXM6DQo+Pj4+IA0KPj4+PiBPdmVy
+aGVhZCAgQ29tbWFuZCAgICAgICBTaGFyZWQgT2JqZWN0ICAgICAgU3ltYm9sDQo+Pj4+IC4uLi4u
+Li4uLiAgLi4uLi4uLi4uLi4uICAuLi4uLi4uLi4uLi4uLi4uLiAgLi4uLi4uLi4uLi4uLi4uLi4u
+Li4uLi4uDQo+Pj4+IA0KPj4+PiAgIDI3LjYyJSAgc3lzY2FsbF9sYXQgICBba2VybmVsLmthbGxz
+eW1zXSAgW2tdIF9fYXVkaXRfZmlsdGVyX29wDQo+Pj4+IA0KPj4+PiB3ZSBhcHBseSBjb2RlZ2Vu
+IG9wdGltaXphdGlvbnMsIHdoaWNoIHNwZWVkcyB1cCB0aGUgc3lzY2FsbA0KPj4+PiBwZXJmb3Jt
+YW5jZSBieSBhcm91bmQgMTclIG9uIGFuIEludGVsIENhc2NhZGUgTGFrZSBzeXN0ZW0uDQo+Pj4+
+IA0KPj4+PiBXZSBydW4gInBlcmYgc3RhdCAtZCAtciA1IC4vc3lzY2FsbF9sYXQiLCB3aGVyZSBz
+eXNjYWxsX2xhdCBpcyBhIEMNCj4+Pj4gYXBwbGljYXRpb24gdGhhdCBtZWFzdXJlcyBhdmVyYWdl
+IHN5c2NhbGwgbGF0ZW5jeSBmcm9tIGdldHBpZCgpDQo+Pj4+IHJ1bm5pbmcgMTAwIG1pbGxpb24g
+cm91bmRzLg0KPj4+PiANCj4+Pj4gQmV0d2VlbiBlYWNoIHBlcmYgcnVuLCB3ZSByZWJvb3QgdGhl
+IHN5c3RlbSBhbmQgd2FpdHMgdW50aWwgdGhlIGxhc3QNCj4+Pj4gbWludXRlIGxvYWQgaXMgbGVz
+cyB0aGFuIDEuMC4NCj4+Pj4gDQo+Pj4+IFdlIGJvb3QgdGhlIGtlcm5lbCwgdjYuNi1yYzQsIHdp
+dGggIm1pdGlnYXRpb25zPW9mZiIsIGluIG9yZGVyIHRvDQo+Pj4+IGFtcGxpZnkgdGhlIGNoYW5n
+ZXMgaW4gdGhlIGF1ZGl0IHN5c3RlbS4NCj4+Pj4gDQo+Pj4+IExldCB0aGUgYmFzZSBrZXJuZWwg
+YmUgdjYuNi1yYzQgd2l0aCBib290ZWQgd2l0aCAiYXVkaXQ9MSIgYW5kDQo+Pj4+ICJtaXRpZ2F0
+aW9ucz1vZmYiIGFuZCB3aXRoIHRoZSBjb21taXQgImF1ZGl0OiBWYXJ5IHN0cnVjdCBhdWRpdF9l
+bnRyeQ0KPj4+PiBhbGlnbm1lbnQiIG9uIGFuIEludGVsIENhc2NhZGUgTGFrZSBzeXN0ZW0uIFRo
+ZSBmb2xsb3dpbmcgdGhyZWUNCj4+Pj4gbWV0cmljcyBhcmUgcmVwb3J0ZWQsIG5hbm9zZWNvbmRz
+IHBlciBzeXNjYWxsLCBMMUQgbWlzc2VzIHBlciBzeXNjYWxsLA0KPj4+PiBhbmQgZmluYWxseSBJ
+bnRydWN0aW9ucyBQZXIgQ3ljbGUsIGlwYy4NCj4+Pj4gDQo+Pj4+IEJhc2UgdnMuIGJhc2UgKyB0
+aGlzIGNvbW1pdCBnaXZlczoNCj4+Pj4gDQo+Pj4+IG5zIHBlciBjYWxsOg0KPj4+PiBtaW4gYXZn
+IG1heCAgIHBzdGRldg0KPj4+PiAtIDIwMyAyMDMgMjA5IDAuOTU0MTQ5DQo+Pj4+ICsgMTczIDE3
+MyAxNzggMC44ODQ1MzQNCj4+Pj4gDQo+Pj4+IEwxZCBtaXNzZXMgcGVyIHN5c2NhbGw6DQo+Pj4+
+ICAgIG1pbiAgICBhdmcgICAgbWF4ICAgcHN0ZGV2DQo+Pj4+IC0gIDAuMDEyICAwLjEwMyAgMC44
+MTcgMC4yMzgzNTINCj4+Pj4gKyAgMC4wMTAgIDAuMjA5ICAxLjIzNSAwLjM5OTQxNg0KPj4+PiAN
+Cj4+Pj4gaXBjOg0KPj4+PiAgIG1pbiAgICBhdmcgICAgbWF4ICAgcHN0ZGV2DQo+Pj4+IC0gMi4z
+MjAgIDIuMzI5ICAyLjMzMCAwLjAwMzAwMA0KPj4+PiArIDIuNDMwICAyLjQzNiAgMi40NDAgMC4w
+MDQ4OTkNCj4+Pj4gDQo+Pj4+IFNpZ25lZC1vZmYtYnk6IEjDpWtvbiBCdWdnZSA8aGFha29uLmJ1
+Z2dlQG9yYWNsZS5jb20+DQo+Pj4+IC0tLQ0KPj4+PiBrZXJuZWwvYXVkaXRzYy5jIHwgMiArKw0K
+Pj4+PiAxIGZpbGUgY2hhbmdlZCwgMiBpbnNlcnRpb25zKCspDQo+Pj4+IA0KPj4+PiBkaWZmIC0t
+Z2l0IGEva2VybmVsL2F1ZGl0c2MuYyBiL2tlcm5lbC9hdWRpdHNjLmMNCj4+Pj4gaW5kZXggNmYw
+ZDZmYjY1MjNmYS4uODRkMGRmZTc1YTRhYyAxMDA2NDQNCj4+Pj4gLS0tIGEva2VybmVsL2F1ZGl0
+c2MuYw0KPj4+PiArKysgYi9rZXJuZWwvYXVkaXRzYy5jDQo+Pj4+IEBAIC04MjIsNiArODIyLDcg
+QEAgc3RhdGljIGludCBhdWRpdF9pbl9tYXNrKGNvbnN0IHN0cnVjdCBhdWRpdF9rcnVsZSAqcnVs
+ZSwgdW5zaWduZWQgbG9uZyB2YWwpDQo+Pj4+ICogcGFyYW1ldGVyIGNhbiBiZSBOVUxMLCBidXQg
+YWxsIG90aGVycyBtdXN0IGJlIHNwZWNpZmllZC4NCj4+Pj4gKiBSZXR1cm5zIDEvdHJ1ZSBpZiB0
+aGUgZmlsdGVyIGZpbmRzIGEgbWF0Y2gsIDAvZmFsc2UgaWYgbm9uZSBhcmUgZm91bmQuDQo+Pj4+
+ICovDQo+Pj4+ICsjcHJhZ21hIEdDQyBvcHRpbWl6ZSgidW5zd2l0Y2gtbG9vcHMiLCAiYWxpZ24t
+bG9vcHM9MTYiLCAiYWxpZ24tanVtcHM9MTYiKQ0KPj4+IA0KPj4+IFRoZSBrZXJuZWwgZG9lc24n
+dCByZWFsbHkgbWFrZSB1c2Ugb2YgI3ByYWdtYSBvcHRpbWl6YXRpb24gc3RhdGVtZW50cw0KPj4+
+IGxpa2UgdGhpcywgYXQgbGVhc3Qgbm90IGluIGFueSBvZiB0aGUgY29yZSBhcmVhcywgYW5kIEkn
+bSBub3QNCj4+PiBpbnRlcmVzdGVkIGluIGJlaW5nIHRoZSBmaXJzdCB0byBkbyBzby4gIEkgYXBw
+cmVjaWF0ZSB0aGUgdGltZSBhbmQNCj4+PiBlZmZvcnQgdGhhdCB5b3UgaGF2ZSBzcGVudCBwcm9m
+aWxpbmcgdGhlIGF1ZGl0IHN1YnN5c3RlbSwgYnV0IHRoaXMNCj4+PiBpc24ndCBhIHBhdGNoIEkg
+Y2FuIGFjY2VwdCBhdCB0aGlzIHBvaW50IGluIHRpbWUsIEknbSBzb3JyeS4NCj4+IA0KPj4gRmFp
+ciBlbm91Z2guIFdpbGwgYSBmdW5jdGlvbiBhdHRyaWJ1dGUgYWthOg0KPj4gDQo+PiBfX2F0dHJp
+YnV0ZV9fKChvcHRpbWl6ZSgiZm9vPWJhciIpKSkNCj4+IA0KPj4gYmUgYWNjZXB0YWJsZSBmb3Ig
+eW91Pw0KPiANCj4gVW5sZXNzIHlvdSBjYW4gc2hvdyBtZSB3aWRlc3ByZWFkIGFjY2VwdGFuY2Ug
+b2YgdGhlc2UgdHlwZXMgb2YNCj4gb3B0aW1pemF0aW9ucyBpbiBjb3JlIGtlcm5lbCBjb2RlLCBt
+eSBhbnN3ZXIgaXMgbm8uICBJJ20gc29ycnkuDQoNCkhpIFBhdWwsDQoNCldlbGwsIEkgZ3Vlc3Mg
+d2UgYm90aCBrbm93IHRoYXQgSSBjYW5ub3Qgc2hvdyB5b3UgYW55ICJ3aWRlc3ByZWFkIGFjY2Vw
+dGFuY2UiIG9mIHRoZSBzb3J0LiBIZXJlIGlzIHdoYXQgSSBzZWU6DQoNCmFyY2gvYXJtL2xpYi94
+b3ItbmVvbi5jOiNwcmFnbWEgR0NDIG9wdGltaXplICJ0cmVlLXZlY3Rvcml6ZSINCihub3Qgd2hh
+dCB5b3UgZGVzY3JpYmUgYXMgY29yZSBrZXJuZWwpDQoNCmxpYi96c3RkL2NvbW1vbi9jb21waWxl
+ci5oOiMgICAgZGVmaW5lIERPTlRfVkVDVE9SSVpFIF9fYXR0cmlidXRlX18oKG9wdGltaXplKCJu
+by10cmVlLXZlY3Rvcml6ZSIpKSkNCihjb3JlLCBidXQgbm90IHdpZGVzcHJlYWQpDQoNClRoZW4g
+b2YgY291cnNlLCB0aGVyZSBhcmUgbW9yZSBleGFtcGxlcyBvZiBzcGVjaWZpYyBvcHRpbWl6YXRp
+b25zIG9yIGRpc2FibGUgdGhlcmVvZiBpbiBNYWtlZmlsZXM6DQoNCmtlcm5lbC9kZWJ1Zy9rZGIv
+TWFrZWZpbGU6Y2xlYW4tZmlsZXMgOj0gZ2VuLWtkYl9jbWRzLmMNCmtlcm5lbC9rY3Nhbi9NYWtl
+ZmlsZTpDRkxBR1NfY29yZS5vIDo9ICQoY2FsbCBjYy1vcHRpb24sLWZuby1jb25zZXJ2ZS1zdGFj
+aykgXA0Ka2VybmVsL2tjc2FuL01ha2VmaWxlOiAtZm5vLXN0YWNrLXByb3RlY3RvciAtRERJU0FC
+TEVfQlJBTkNIX1BST0ZJTElORw0Ka2VybmVsL2tjc2FuL01ha2VmaWxlOkNGTEFHU19rY3Nhbl90
+ZXN0Lm8gOj0gJChDRkxBR1NfS0NTQU4pIC1mbm8tb21pdC1mcmFtZS1wb2ludGVyDQprZXJuZWwv
+TWFrZWZpbGU6Q0ZMQUdTX2tjb3YubyA6PSAkKGNhbGwgY2Mtb3B0aW9uLCAtZm5vLWNvbnNlcnZl
+LXN0YWNrKSAtZm5vLXN0YWNrLXByb3RlY3Rvcg0Ka2VybmVsL01ha2VmaWxlOmNsZWFuLWZpbGVz
+IDo9IGtoZWFkZXJzX2RhdGEudGFyLnh6IGtoZWFkZXJzLm1kNQ0Ka2VybmVsL3NjaGVkL01ha2Vm
+aWxlOiMgQWNjb3JkaW5nIHRvIEFsYW4gTW9kcmEgPGFsYW5AbGludXhjYXJlLmNvbS5hdT4sIHRo
+ZSAtZm5vLW9taXQtZnJhbWUtcG9pbnRlciBpcw0Ka2VybmVsL3NjaGVkL01ha2VmaWxlOkNGTEFH
+U19jb3JlLm8gOj0gJChQUk9GSUxJTkcpIC1mbm8tb21pdC1mcmFtZS1wb2ludGVyDQprZXJuZWwv
+YnBmL01ha2VmaWxlOmNmbGFncy1ub2djc2UtJChDT05GSUdfWDg2KSQoQ09ORklHX0NDX0lTX0dD
+QykgOj0gLWZuby1nY3NlDQprZXJuZWwvZW50cnkvTWFrZWZpbGU6Q0ZMQUdTX1JFTU9WRV9jb21t
+b24ubyA9IC1mc3RhY2stcHJvdGVjdG9yIC1mc3RhY2stcHJvdGVjdG9yLXN0cm9uZw0Ka2VybmVs
+L2VudHJ5L01ha2VmaWxlOkNGTEFHU19jb21tb24ubyArPSAtZm5vLXN0YWNrLXByb3RlY3Rvcg0K
+a2VybmVsL3JjdS9NYWtlZmlsZTpLQlVJTERfQ0ZMQUdTICs9IC1nIC1mbm8tb21pdC1mcmFtZS1w
+b2ludGVyDQoNCk15IHZpZXcgaXM6DQoNClRoZSBjb2Rpbmcgb2YgdGltZSBjcml0aWNhbCBmdW5j
+dGlvbnMsIHRoYXQgYWNjZXNzIHN0cnVjdHMsIHRoYXQgYXJlIGFsbG9jYXRlZCBieSBre20sen1h
+bGxvYyBhbmQgZmFtaWx5LCBpbiBhIHNob3J0IHByb3hpbWl0eSBpbiB0aW1lLCBpcywgd2l0aCBh
+bGwgcmVzcGVjdCwgbm90IGEgZ29vZCBwcm9ncmFtbWluZyBwcmFjdGljZSwgYXMgZGVwaWN0ZWQg
+YnkgdGhlIGV4YW1wbGUgaW4gdGhpcyBwYXRjaCBzZXJpZXMuDQoNCkkgaGF2ZSB0byBhY2NlcHQs
+IHRoYXQgeW91IHdpbGwgbm90IGFjY2VwdCB0aGlzIHBhdGNoIHNlcmllcyBvciBhIHYyIHRoZXJl
+b2YuDQoNCkJ1dCwgdGhpcyBsZWF2ZXMgKDIxMCAtIDE3MykgPSAzNyBuYW5vc2Vjb25kIHVubmVj
+ZXNzYXJ5IG92ZXJoZWFkIG9mIGEgc3lzY2FsbCBvbiB0aGUgZmxvb3IuDQoNCkl0IHNob3VsZCBi
+ZSB1bm5lY2Vzc2FyeSB0byBxdW90ZSB0aGUgbnVtYmVyIG9mIENhc2NhZGUgTGFrZSBzeXN0ZW1z
+IGJlaW5nIGRlcGxveWVkLCBob3cgbWFueSBvZiB0aGVtIHRoYXQgcnVuIHdpdGggYXVkaXQgZW5h
+YmxlZCBhbmQgU1RJRyBjb21wb25lbnQgcnVsZXMsIHRvIHBvaW50IG9mIHRoZSBzaWduaWZpY2Fu
+Y2Ugb2YgdGhvc2UgbmFub3NlY29uZHMuDQoNCkkgd291bGQgYmUgdmVyeSBhcHByZWNpYXRpdmUg
+aWYgeW91IGNvdWxkIGNvbWUgdXAgd2l0aCBhIGJldHRlciBhbmQgbW9yZSBhY2NlcHRhYmxlIHNv
+bHV0aW9uLCBpbiBvcmRlciB0byBzaGF2ZSBvZmYgdGhlc2UgbmFub3NlY29uZHMuDQoNCg0KVGh4
+cywgSMOla29uDQoNCg0KDQo=
