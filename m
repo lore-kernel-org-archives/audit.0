@@ -1,213 +1,247 @@
-Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com [209.85.219.180])
+Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com [209.85.219.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F03C1524F
-	for <audit@vger.kernel.org>; Fri, 22 Dec 2023 04:31:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4888C2FC36
+	for <audit@vger.kernel.org>; Fri, 22 Dec 2023 22:42:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="LhRMzko3"
-Received: by mail-yb1-f180.google.com with SMTP id 3f1490d57ef6-dbd73ac40ecso1385749276.1
-        for <audit@vger.kernel.org>; Thu, 21 Dec 2023 20:31:39 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="K+5VMif8"
+Received: by mail-yb1-f170.google.com with SMTP id 3f1490d57ef6-dbd5b96b12eso2190642276.2
+        for <audit@vger.kernel.org>; Fri, 22 Dec 2023 14:42:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1703219499; x=1703824299; darn=vger.kernel.org;
+        d=paul-moore.com; s=google; t=1703284966; x=1703889766; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=K2UajPSpn5owkIR8hABl2zqNtuk0YQqcGj3na/KtgyA=;
-        b=LhRMzko3mQ0W1Ksic/0gqCFfWNICzY3pnRuYNvmTPbZx3GZzxxPza25ztBhGy46My5
-         j4P68KUFXd2P/gT/cyfDQzPLW95KCc8PT5LnNDaNrXpysOwlpkrzMyNni2rbCkY5jxEQ
-         5LKtIxQ4CvgTaneFNnkj5B9h6IHY4TDTz12rr8bUFzKIFkUnrH7xP9mDhL3nk5ncpR2G
-         1zzhhJ5LH/U+Au7MCDoZ/YF8TXoj0MOeoi9PD3rdvdU4VNKgxBW7Ds0gb4jUMdMmlsto
-         zbKtEyykbgULhrbSaI9b6Y/UVkt5fE39AbadUHn7oVLW3RpaNK8noHgXsyXdM0fLL8dP
-         zH3Q==
+        bh=KRfe3st5Sq+6jYTfqEvbxYNV9ZVvDUCiVKsaDs8UPZg=;
+        b=K+5VMif8LmUVhet8VzLt6mVJhCBoGNnaoIxsrljT0Q6T54IoHW10u3wR8DIt+fNPPt
+         NKR1RUPxXYfmD/clpgWa8hnxPL62rcosSc9OOokVxveCfThOff6TZprb7Qk8YZodK/p6
+         xbrwGTHsCD1Mdgg5rYTNCL4VNu3U5izRw0XfgfCxwIVAMt82oQs7Y2yVEsIpynbXk/Vi
+         vwMorZ8tdjGvE0tBbHLg2LI3FbqaCSXRa9LG0WdJX9ePxgT781gQlGXXwQOl9N/Ohw3g
+         1pEbcRryz0EbMLiyIAMH7Oj2QbqKuIS7JHi9d1MG41SvoitLmS8TRFo6j5YbkzjT12vX
+         252A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1703219499; x=1703824299;
+        d=1e100.net; s=20230601; t=1703284966; x=1703889766;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=K2UajPSpn5owkIR8hABl2zqNtuk0YQqcGj3na/KtgyA=;
-        b=eenD2iLdX27Ed/bF8fSkggtIbcxWuM4DPia7YFIKFn49bLpfqdn4L2DJDQqPoQxG4Q
-         7dsG+UBNGivjhEN2Z4p4aHDyX/do9K/jw4fdtf6M09fZ91wVCh890yWnxrKxaElKb27I
-         cC8a6m3gPSpgH5lMNd5EFdxwRVMHtFjEOBZeDGsX25osB3lVuPerzcdSX5mSK971ktCx
-         Tqvpt7sC85vPUG/RQRwh8O2gWMQ5JvV/B4+eZ84knio47TOlE6hrVELJmPzNSIxm1/07
-         Tg4tZ8WrJzE08GQAk+zEwvnkbRNQ3FBHSPaMDtuVdtcV7UoAlI0r0ZZcUDHfQKChuJL/
-         4Cng==
-X-Gm-Message-State: AOJu0Yy3WYqxOx+Pfu/CtrFz2q77XaWI4PB9kNGD4JQapY3z3gsmbYIq
-	Lv5stSb75SwvP2lCml8sfWpUK6mRkrAcCf91JjBKDywIOuLx
-X-Google-Smtp-Source: AGHT+IET89OaJczxukZDOgWGzWhVnbrs5DhV/nV7XSWssrpAuWKiwyiom/WF5cTKcHHuCPwTXsSOCUOo4GyC2Sht36A=
-X-Received: by 2002:a5b:94a:0:b0:dbd:b6e6:65a4 with SMTP id
- x10-20020a5b094a000000b00dbdb6e665a4mr563932ybq.83.1703219498828; Thu, 21 Dec
- 2023 20:31:38 -0800 (PST)
+        bh=KRfe3st5Sq+6jYTfqEvbxYNV9ZVvDUCiVKsaDs8UPZg=;
+        b=huZ1W61k8OHTgnJAcIidEJOukGGysRzWpTdNPWJuPE5GZIke/dgUD7RwsowduylI9C
+         dk2ekNFDhqfCRxieqWbgygJKEBaQBbXk6IRDjWTa/1uUucWKc0RSnP/mH+xT/jq7ZvdC
+         ZqQcMyqukrHINHqymMBypUvg9qMnW6qCAggn5NKMQzx80yf0k4XLcGYcS83aorA1pIPb
+         xUnBf3dQLUhVVw4kajr+b1sgh9ZLR5gNkWSpUGbmrHp6TrSxQ6RpfYOKwmoNFbfIy9XM
+         4KuwzdbJOoZFIvQ7YqBO3Hh6SwVEzUtzzkpWaIeAi+R93B+ZSdT9Kzqheg4s9EVqPr0c
+         RMDw==
+X-Gm-Message-State: AOJu0Yz+sGqxbHPMt6pkPN8SKohFuLlurgMiXNNTS9o66HrfWyKRJPZX
+	x+86QQz1r+k/iZguN0a7A1DbibmOWdX6qDy9maBLmfo8/aZO
+X-Google-Smtp-Source: AGHT+IHhe8gtJ2Jy890CtHKaIWwDsBVan3b58VTz5sDuWmxN3cj/Uo7ROSdRdcB3Nvh6s8vP9wSpox+867vdOU3UAHQ=
+X-Received: by 2002:a25:dccc:0:b0:db7:dacf:2f3a with SMTP id
+ y195-20020a25dccc000000b00db7dacf2f3amr1626639ybe.129.1703284966179; Fri, 22
+ Dec 2023 14:42:46 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231212102857.803984-1-haakon.bugge@oracle.com>
- <20231212102857.803984-3-haakon.bugge@oracle.com> <CAHC9VhTs7nfz7jEU0Oqv8nq_hTb404KyjHKM5G7T3WA3X3LcDA@mail.gmail.com>
- <CEB5B23B-7D1D-4C7B-B8A6-CA07239CB5EF@oracle.com> <CAHC9VhRR+WuY6ZG7G6_qFipZyydtFUkju+ZjXyfpKwo_C7CCPg@mail.gmail.com>
- <D2FCA0C0-72EE-4A6A-BE25-1DEC368C1797@oracle.com>
-In-Reply-To: <D2FCA0C0-72EE-4A6A-BE25-1DEC368C1797@oracle.com>
+References: <20230921061641.273654-1-mic@digikod.net> <20230921061641.273654-4-mic@digikod.net>
+ <CAHC9VhQTvFp+i=j7t+55EnG44xg=Pmvkh=Oq=e7ddJWDZXLeSA@mail.gmail.com> <20231221.eij3poa3Se4b@digikod.net>
+In-Reply-To: <20231221.eij3poa3Se4b@digikod.net>
 From: Paul Moore <paul@paul-moore.com>
-Date: Thu, 21 Dec 2023 23:31:28 -0500
-Message-ID: <CAHC9VhTzyujPxH+o8gwbCHba-n1Eoef9QzCSjqGRBmS7y5hbug@mail.gmail.com>
-Subject: Re: [PATCH 2/2] audit: Apply codegen optimizations
-To: Haakon Bugge <haakon.bugge@oracle.com>
-Cc: Eric Paris <eparis@redhat.com>, "audit@vger.kernel.org" <audit@vger.kernel.org>, 
-	Ankur Arora <ankur.a.arora@oracle.com>
+Date: Fri, 22 Dec 2023 17:42:35 -0500
+Message-ID: <CAHC9VhRiUOe9enkCOko0mGehxt+2tbJNGoJm=jmauhZSPFvzRg@mail.gmail.com>
+Subject: Re: [RFC PATCH v1 3/7] landlock: Log ruleset creation and release
+To: =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>
+Cc: Eric Paris <eparis@redhat.com>, James Morris <jmorris@namei.org>, 
+	"Serge E . Hallyn" <serge@hallyn.com>, Ben Scarlato <akhna@google.com>, 
+	=?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>, 
+	Jeff Xu <jeffxu@google.com>, Jorge Lucangeli Obes <jorgelo@google.com>, 
+	Konstantin Meskhidze <konstantin.meskhidze@huawei.com>, Shervin Oloumi <enlightened@google.com>, 
+	audit@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-security-module@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Dec 21, 2023 at 2:05=E2=80=AFPM Haakon Bugge <haakon.bugge@oracle.c=
-om> wrote:
-> > On 18 Dec 2023, at 23:09, Paul Moore <paul@paul-moore.com> wrote:
-> > On Sat, Dec 16, 2023 at 11:28=E2=80=AFAM Haakon Bugge <haakon.bugge@ora=
-cle.com> wrote:
-> >>> On 14 Dec 2023, at 00:45, Paul Moore <paul@paul-moore.com> wrote:
-> >>> On Tue, Dec 12, 2023 at 5:29=E2=80=AFAM H=C3=A5kon Bugge <haakon.bugg=
-e@oracle.com> wrote:
-> >>>>
-> >>>> For the most time-consuming function, when running a syscall benchma=
-rk
-> >>>> with STIG compliant audit rules:
-> >>>>
-> >>>> Overhead  Command       Shared Object      Symbol
-> >>>> .........  ............  .................  ........................
-> >>>>
-> >>>>   27.62%  syscall_lat   [kernel.kallsyms]  [k] __audit_filter_op
-> >>>>
-> >>>> we apply codegen optimizations, which speeds up the syscall
-> >>>> performance by around 17% on an Intel Cascade Lake system.
-> >>>>
-> >>>> We run "perf stat -d -r 5 ./syscall_lat", where syscall_lat is a C
-> >>>> application that measures average syscall latency from getpid()
-> >>>> running 100 million rounds.
-> >>>>
-> >>>> Between each perf run, we reboot the system and waits until the last
-> >>>> minute load is less than 1.0.
-> >>>>
-> >>>> We boot the kernel, v6.6-rc4, with "mitigations=3Doff", in order to
-> >>>> amplify the changes in the audit system.
-> >>>>
-> >>>> Let the base kernel be v6.6-rc4 with booted with "audit=3D1" and
-> >>>> "mitigations=3Doff" and with the commit "audit: Vary struct audit_en=
-try
-> >>>> alignment" on an Intel Cascade Lake system. The following three
-> >>>> metrics are reported, nanoseconds per syscall, L1D misses per syscal=
-l,
-> >>>> and finally Intructions Per Cycle, ipc.
-> >>>>
-> >>>> Base vs. base + this commit gives:
-> >>>>
-> >>>> ns per call:
-> >>>> min avg max   pstdev
-> >>>> - 203 203 209 0.954149
-> >>>> + 173 173 178 0.884534
-> >>>>
-> >>>> L1d misses per syscall:
-> >>>>    min    avg    max   pstdev
-> >>>> -  0.012  0.103  0.817 0.238352
-> >>>> +  0.010  0.209  1.235 0.399416
-> >>>>
-> >>>> ipc:
-> >>>>   min    avg    max   pstdev
-> >>>> - 2.320  2.329  2.330 0.003000
-> >>>> + 2.430  2.436  2.440 0.004899
-> >>>>
-> >>>> Signed-off-by: H=C3=A5kon Bugge <haakon.bugge@oracle.com>
-> >>>> ---
-> >>>> kernel/auditsc.c | 2 ++
-> >>>> 1 file changed, 2 insertions(+)
-> >>>>
-> >>>> diff --git a/kernel/auditsc.c b/kernel/auditsc.c
-> >>>> index 6f0d6fb6523fa..84d0dfe75a4ac 100644
-> >>>> --- a/kernel/auditsc.c
-> >>>> +++ b/kernel/auditsc.c
-> >>>> @@ -822,6 +822,7 @@ static int audit_in_mask(const struct audit_krul=
-e *rule, unsigned long val)
-> >>>> * parameter can be NULL, but all others must be specified.
-> >>>> * Returns 1/true if the filter finds a match, 0/false if none are fo=
-und.
-> >>>> */
-> >>>> +#pragma GCC optimize("unswitch-loops", "align-loops=3D16", "align-j=
-umps=3D16")
-> >>>
-> >>> The kernel doesn't really make use of #pragma optimization statements
-> >>> like this, at least not in any of the core areas, and I'm not
-> >>> interested in being the first to do so.  I appreciate the time and
-> >>> effort that you have spent profiling the audit subsystem, but this
-> >>> isn't a patch I can accept at this point in time, I'm sorry.
-> >>
-> >> Fair enough. Will a function attribute aka:
-> >>
-> >> __attribute__((optimize("foo=3Dbar")))
-> >>
-> >> be acceptable for you?
-> >
-> > Unless you can show me widespread acceptance of these types of
-> > optimizations in core kernel code, my answer is no.  I'm sorry.
->
-> Hi Paul,
->
-> Well, I guess we both know that I cannot show you any "widespread accepta=
-nce" of the sort. Here is what I see:
->
-> arch/arm/lib/xor-neon.c:#pragma GCC optimize "tree-vectorize"
-> (not what you describe as core kernel)
->
-> lib/zstd/common/compiler.h:#    define DONT_VECTORIZE __attribute__((opti=
-mize("no-tree-vectorize")))
-> (core, but not widespread)
->
-> Then of course, there are more examples of specific optimizations or disa=
-ble thereof in Makefiles:
->
-> kernel/debug/kdb/Makefile:clean-files :=3D gen-kdb_cmds.c
-> kernel/kcsan/Makefile:CFLAGS_core.o :=3D $(call cc-option,-fno-conserve-s=
-tack) \
-> kernel/kcsan/Makefile: -fno-stack-protector -DDISABLE_BRANCH_PROFILING
-> kernel/kcsan/Makefile:CFLAGS_kcsan_test.o :=3D $(CFLAGS_KCSAN) -fno-omit-=
-frame-pointer
-> kernel/Makefile:CFLAGS_kcov.o :=3D $(call cc-option, -fno-conserve-stack)=
- -fno-stack-protector
-> kernel/Makefile:clean-files :=3D kheaders_data.tar.xz kheaders.md5
-> kernel/sched/Makefile:# According to Alan Modra <alan@linuxcare.com.au>, =
-the -fno-omit-frame-pointer is
-> kernel/sched/Makefile:CFLAGS_core.o :=3D $(PROFILING) -fno-omit-frame-poi=
-nter
-> kernel/bpf/Makefile:cflags-nogcse-$(CONFIG_X86)$(CONFIG_CC_IS_GCC) :=3D -=
-fno-gcse
-> kernel/entry/Makefile:CFLAGS_REMOVE_common.o =3D -fstack-protector -fstac=
-k-protector-strong
-> kernel/entry/Makefile:CFLAGS_common.o +=3D -fno-stack-protector
-> kernel/rcu/Makefile:KBUILD_CFLAGS +=3D -g -fno-omit-frame-pointer
->
-> My view is:
->
-> The coding of time critical functions, that access structs, that are allo=
-cated by k{m,z}alloc and family, in a short proximity in time, is, with all=
- respect, not a good programming practice, as depicted by the example in th=
-is patch series.
->
-> I have to accept, that you will not accept this patch series or a v2 ther=
-eof.
->
-> But, this leaves (210 - 173) =3D 37 nanosecond unnecessary overhead of a =
-syscall on the floor.
->
-> It should be unnecessary to quote the number of Cascade Lake systems bein=
-g deployed, how many of them that run with audit enabled and STIG component=
- rules, to point of the significance of those nanoseconds.
->
-> I would be very appreciative if you could come up with a better and more =
-acceptable solution, in order to shave off these nanoseconds.
+On Thu, Dec 21, 2023 at 1:45=E2=80=AFPM Micka=C3=ABl Sala=C3=BCn <mic@digik=
+od.net> wrote:
+> On Wed, Dec 20, 2023 at 04:22:15PM -0500, Paul Moore wrote:
+> > On Thu, Sep 21, 2023 at 2:17=E2=80=AFAM Micka=C3=ABl Sala=C3=BCn <mic@d=
+igikod.net> wrote:
+> > >
+> > > Add audit support for ruleset/domain creation and release ...
 
-I appreciate and understand your frustration, but sometimes the
-subjective quality and maintainability of the code needs to take
-precedence, and in my mind the tradeoff for a 37ns win is not
-desirable.  Thank you again for your time and effort.
+...
+
+> > > +/* Inspired by dump_common_audit_data(). */
+> > > +static void log_task(struct audit_buffer *const ab)
+> > > +{
+> > > +       /* 16 bytes (TASK_COMM_LEN) */
+> > > +       char comm[sizeof(current->comm)];
+> > > +
+> > > +       /*
+> > > +        * Uses task_pid_nr() instead of task_tgid_nr() because of ho=
+w
+> > > +        * credentials and Landlock work.
+> > > +        */
+> > > +       audit_log_format(ab, "tid=3D%d comm=3D", task_pid_nr(current)=
+);
+> > > +       audit_log_untrustedstring(ab,
+> > > +                                 memcpy(comm, current->comm, sizeof(=
+comm)));
+> > > +}
+> >
+> > Depending on how log_task() is used, it may be redundant with respect
+> > to the existing SYSCALL record.  Yes, there is already redundancy with
+> > the AVC record, but that is a legacy problem and not something we can
+> > easily fix, but given that the Landlock records are new we have an
+> > opportunity to do things properly :)
+>
+> Indeed, it would make it simpler too. I wasn't sure how standalone a
+> record should be, but I guess there tools should be able to look for a
+> set of related records (e.g. event with a SYSCALL record matching a PID
+> and a LANDLOCK record).
+
+I believe ausearch will output the entire event when it matches on a
+field in one of the event's records.
+
+> > > +void landlock_log_create_ruleset(struct landlock_ruleset *const rule=
+set)
+> > > +{
+> > > +       struct audit_buffer *ab;
+> > > +
+> > > +       WARN_ON_ONCE(ruleset->id);
+> > > +
+> > > +       ab =3D audit_log_start(audit_context(), GFP_ATOMIC, AUDIT_LAN=
+DLOCK);
+> > > +       if (!ab)
+> > > +               /* audit_log_lost() call */
+> > > +               return;
+> > > +
+> > > +       ruleset->id =3D atomic64_inc_return(&ruleset_and_domain_count=
+er);
+> > > +       log_task(ab);
+> > > +       audit_log_format(ab,
+> > > +                        " op=3Dcreate-ruleset ruleset=3D%llu handled=
+_access_fs=3D",
+> > > +                        ruleset->id);
+> >
+> > "handled_access_fs" seems a bit long for a field name, is there any
+> > reason why it couldn't simply be "access_fs" or something similar?
+>
+> "handled_access_fs" is from the landlock_create_ruleset(2) API, so I'd
+> like to use the same name.
+
+Okay, that's a reasonable reason.
+
+> However, because the types of handled access
+> rights for a ruleset will expand (e.g. we now have a
+> handled_access_net), I'm wondering if it would be better to keep this
+> (growing) one-line record or if we should use several records for a
+> ruleset creation (i.e. one line per type of handled access righs).
+
+I think it would be better to have a single record for rulesets rather
+than multiple records all dealing with rulesets.
+
+> > > +               id =3D ruleset->hierarchy->id;
+> > > +               WARN_ON_ONCE(ruleset->id);
+> > > +       } else {
+> > > +               name =3D "ruleset";
+> > > +               id =3D ruleset->id;
+> > > +       }
+> > > +       WARN_ON_ONCE(!id);
+> > > +
+> > > +       /*
+> > > +        * Because this might be called by kernel threads, logging
+> > > +        * related task information with log_task() would be useless.
+> > > +        */
+> > > +       audit_log_format(ab, "op=3Drelease-%s %s=3D%llu", name, name,=
+ id);
+> >
+> > This starts to get a little tricky.  The general guidance is that for
+> > a given audit record type, e.g. AUDIT_LANDLOCK, there should be no
+> > change in presence or ordering of fields, yet in
+> > landlock_log_create_ruleset() we log the permission information and
+> > here in landlock_log_release_ruleset() we do not.  The easy fix is to
+> > record the permission information here as well, or simply use a
+> > "handled_access_fs=3D?" placeholder.  Something to keep in mind as you
+> > move forward.
+>
+> OK, I used different "op" to specify the related fields, but I should
+> use a dedicated record type when it makes sense instead. My reasoning
+> was that it would be easier to filter on one or two record types, but
+> I like the fixed set of fields per record type.
+>
+> I plan to add a few record types, something like that:
+>
+> For a ruleset creation event, several grouped records:
+> - AUDIT_LANDLOCK_RULESET: "id=3D[new ruleset ID] op=3Dcreate"
+> - AUDIT_LANDLOCK_ACCESS: "type=3D[fs or net] rights=3D[bitmask]"
+
+I'm guessing that LANDLOCK_RULESET would be for policy changes, and
+LANDLOCK_ACCESS would be for individual access grants or denials?  If
+so, that looks reasonable.
+
+> For rule addition, several records per landlock_add_rule(2) call.
+> Example with a path_beneath rule:
+> - AUDIT_LANDLOCK_RULESET: "id=3D[ruleset ID] op=3Dadd_rule"
+> - AUDIT_LANDLOCK_PATH: "scope=3Dbeneath path=3D[file path] dev=3D ino=3D"
+> - AUDIT_LANDLOCK_ACCESS: "type=3Dfs rights=3D[bitmask]"
+
+I worry that LANDLOCK_PATH is too much of a duplicate for the existing
+PATH record.  Assuming the "scope=3D" field is important, could it live
+in the LANDLOCK_ACCESS record and then you could do away with the
+dedicated LANDLOCK_PATH record?  Oh, wait ... this is to record the
+policy, not a individual access request, gotcha.  If that is the case
+and RULESET, PATH, ACCESS are all used simply to record the policy
+information I might suggest creation of an AUDIT_LANDLOCK_POLICY
+record that captures all of the above.  If you think that is too
+cumbersome, then perhaps you can do the object/access-specific record
+type, e.g. AUDIT_LANDLOCK_POLICY_FS and AUDIT_LANDLOCK_POLICY_NET.
+
+You also shouldn't reuse the "type=3D" field.  Steve gets grumpy when
+people reuse field names for different things.  You can find a
+reasonably complete list of fields here:
+https://github.com/linux-audit/audit-documentation/blob/main/specs/fields/f=
+ield-dictionary.csv
+
+> For domain creation/restriction:
+> - AUDIT_LANDLOCK_DOMAIN: "id=3D[new domain ID] op=3Dcreate"
+> - AUDIT_LANDLOCK_RULESET: "id=3D[ruleset ID] op=3Duse"
+
+I imagine you could capture this in the policy record type?
+
+> For ruleset release:
+> - AUDIT_LANDLOCK_RULESET: "id=3D[ruleset ID] op=3Drelease"
+>
+> For domain release:
+> - AUDIT_LANDLOCK_DOMAIN: "id=3D[domain ID] op=3Drelease"
+
+Same with the above two.
+
+> For denied FS access:
+> - AUDIT_LANDLOCK_DENIAL: "id=3D[domain ID] op=3Dmkdir"
+> - AUDIT_LANDLOCK_PATH: "scope=3Dexact path=3D[file path] dev=3D ino=3D"
+
+I would use a single record type, i.e. AUDIT_LANDLOCK_ACCESS, to
+capture both access granted and denied events.  I'd also omit the
+dedicated LANDLOCK_PATH record here in favor of the generic PATH
+record (see my comments above).
+
+> For denied net access:
+> - AUDIT_LANDLOCK_DENIAL: "id=3D[domain ID] op=3Dconnect"
+> - AUDIT_LANDLOCK_PORT: "port=3D"
+
+I would look at the SOCKADDR record type instead of introducing a new
+LANDLOCK_PORT type.
+
+> I guess it will still be OK to expand a record type with new appended
+> fields right? For instance, could we append a "flags" field to a
+> AUDIT_LANDLOCK_RULESET record (because it may not make sense to create a
+> dedicated record type for that)?
+
+Of course, one can always add fields to an existing record type with
+the understanding that they MUST be added to the end.
 
 --=20
 paul-moore.com
