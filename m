@@ -1,92 +1,112 @@
-Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com [209.85.219.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp-190b.mail.infomaniak.ch (smtp-190b.mail.infomaniak.ch [185.125.25.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C44622C6A4
-	for <audit@vger.kernel.org>; Thu,  4 Jan 2024 21:30:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B03735EE9
+	for <audit@vger.kernel.org>; Fri,  5 Jan 2024 18:21:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="TpAPfgSV"
-Received: by mail-yb1-f173.google.com with SMTP id 3f1490d57ef6-dbd7248ac28so830301276.2
-        for <audit@vger.kernel.org>; Thu, 04 Jan 2024 13:30:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1704403849; x=1705008649; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=liy/6VgmB8kWQ21CUUxI99uteVuJGjbMlq+ZYGusDy4=;
-        b=TpAPfgSVWJVfKtYMhiLgLlhVGYSDAls75B+o9NAX0XXbP4VjTM79OxQyZbANiCX6KR
-         r8+QRbK7qdFHCt0bJsznJH1DDV3AjLl/jAfnShvBiWI8mnIaGnhkAbI432RU4vs62U75
-         xdRxaRRiuIu7tsnIdkJ29KJD0J2aZemVzj1haSdyTQgsFMCsfmWUNcOCnepPyznbHOB6
-         nJpuxSVTmndW37VGHrRFly38OSGMnZ2Z5jLfHotYAa9OvSH5XYMudr+otQ9j6oXSIPxQ
-         LvV5M6wdHVqrqHpzBr15PX/aDbcVjAGrmpmdFrWqaaGItkza2WeZ9FclIHOBzdxZU3QA
-         capA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704403849; x=1705008649;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=liy/6VgmB8kWQ21CUUxI99uteVuJGjbMlq+ZYGusDy4=;
-        b=pmwgAfc23DYICR9x9B+VnlPjkADRFXKT+53vogDE5t87aLh2EFZq1VTppWZhbr134B
-         12Ga3eyhnkhoRX3ARMYzzqQaXo32qUkxj9EeTPJa/aVREfM6vLNTr9dh6ohCsepRGsA5
-         LaCg/0tALdO2cAU/qwoIM4xg8xtA344wpln50ZrVl5Y4SdsTsHFq8y9TZINWhh/G539X
-         tZydyBsBvj9tSvIiZTMl7geAHhVuV5jdp40uhWlQMoGNQkRFeeohDHsxUFtajfoG4VDs
-         tk9+JoFIzfWcilHg9MoqW28IzT5lG9Mqq9B3ziupoC5ia2JbOYKZ3T+ATZ4ArXGJrWHb
-         5XuA==
-X-Gm-Message-State: AOJu0Yyn8YDn06Fi+ZnvEBk0BjQLoaiSDU0gKCp+aflx2f+8wnMir34s
-	siVUGhtKzWUE6uYgU80Y3M1ZAs6555zpnvF1HmOvVwMRXPXAvWFuT5CbP1U=
-X-Google-Smtp-Source: AGHT+IGO3ioXEu7cVqjO87v37TXJrp8J3GLOmGblye3xoIpyF8rofmlFADs+B13Sfn0nvFbUDvhyIHzTX2mXfIu30ro=
-X-Received: by 2002:a25:8043:0:b0:dbe:a236:d6a4 with SMTP id
- a3-20020a258043000000b00dbea236d6a4mr1051292ybn.53.1704403849633; Thu, 04 Jan
- 2024 13:30:49 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="NRsoFtNP"
+Received: from smtp-2-0001.mail.infomaniak.ch (unknown [10.5.36.108])
+	by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4T6BPx5Y7nzMpnh2;
+	Fri,  5 Jan 2024 18:12:37 +0000 (UTC)
+Received: from unknown by smtp-2-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4T6BPw3F4SzMpnPr;
+	Fri,  5 Jan 2024 19:12:36 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
+	s=20191114; t=1704478357;
+	bh=7CcqvU+dm80k4/4DXMGXtl1qlVFCE19rwLyaDkrOPGw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=NRsoFtNP0tf+eAvgWVGPBL9wvlbAzS0BsOsJG6+txPx08INeRo0k/42aig9fnmPAr
+	 xx/z5B17Ep+nb3jljzUgdjgXyk6h2ho/sIJNFwq6gGk8Mv2L+Jrn0K4DOdDdieACd7
+	 bz5uzcdlc9xJJfygY0VJw6bL9xVNBJLJ4qqVVU+w=
+Date: Fri, 5 Jan 2024 19:12:35 +0100
+From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
+To: Paul Moore <paul@paul-moore.com>
+Cc: Eric Paris <eparis@redhat.com>, James Morris <jmorris@namei.org>, 
+	"Serge E . Hallyn" <serge@hallyn.com>, Ben Scarlato <akhna@google.com>, 
+	=?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>, Jeff Xu <jeffxu@google.com>, 
+	Jorge Lucangeli Obes <jorgelo@google.com>, Konstantin Meskhidze <konstantin.meskhidze@huawei.com>, 
+	Shervin Oloumi <enlightened@google.com>, audit@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-security-module@vger.kernel.org
+Subject: Re: Re: [RFC PATCH v1 3/7] landlock: Log ruleset creation and release
+Message-ID: <20240105.aiquux9Oox7l@digikod.net>
+References: <20230921061641.273654-1-mic@digikod.net>
+ <20230921061641.273654-4-mic@digikod.net>
+ <CAHC9VhQTvFp+i=j7t+55EnG44xg=Pmvkh=Oq=e7ddJWDZXLeSA@mail.gmail.com>
+ <20231221.eij3poa3Se4b@digikod.net>
+ <CAHC9VhRiUOe9enkCOko0mGehxt+2tbJNGoJm=jmauhZSPFvzRg@mail.gmail.com>
+ <20231229.aex0ijae2The@digikod.net>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231228025600.9796-1-zeming@nfschina.com>
-In-Reply-To: <20231228025600.9796-1-zeming@nfschina.com>
-From: Paul Moore <paul@paul-moore.com>
-Date: Thu, 4 Jan 2024 16:30:38 -0500
-Message-ID: <CAHC9VhSjxWR9fy2Dq8-sgP=1bkPmDjFH-QehZ4eow1U=sEpBzg@mail.gmail.com>
-Subject: =?UTF-8?Q?Re=3A_=5BPATCH=5D_kernel=3A_auditfilter=3A_Remove_unnecessary_?=
-	=?UTF-8?Q?=E2=80=980=E2=80=99_values_from_ret?=
-To: Li zeming <zeming@nfschina.com>
-Cc: eparis@redhat.com, audit@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20231229.aex0ijae2The@digikod.net>
+X-Infomaniak-Routing: alpha
 
-On Wed, Dec 27, 2023 at 9:56=E2=80=AFPM Li zeming <zeming@nfschina.com> wro=
-te:
->
-> The ret variable is assigned when it does not need to be defined, as it
-> has already been assigned before use.
->
-> Signed-off-by: Li zeming <zeming@nfschina.com>
-> ---
->  kernel/auditfilter.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+On Fri, Dec 29, 2023 at 06:42:10PM +0100, Mickaël Salaün wrote:
+> On Fri, Dec 22, 2023 at 05:42:35PM -0500, Paul Moore wrote:
+> > On Thu, Dec 21, 2023 at 1:45 PM Mickaël Salaün <mic@digikod.net> wrote:
+> > > On Wed, Dec 20, 2023 at 04:22:15PM -0500, Paul Moore wrote:
+> > > > On Thu, Sep 21, 2023 at 2:17 AM Mickaël Salaün <mic@digikod.net> wrote:
+> > > > >
+> > > > > Add audit support for ruleset/domain creation and release ...
+> > 
+> > ...
 
-Thanks for the patch, as this is not a critical change it will be
-processed after the upcoming merge window closes.
+> > > For rule addition, several records per landlock_add_rule(2) call.
+> > > Example with a path_beneath rule:
+> > > - AUDIT_LANDLOCK_RULESET: "id=[ruleset ID] op=add_rule"
+> > > - AUDIT_LANDLOCK_PATH: "scope=beneath path=[file path] dev= ino="
+> > > - AUDIT_LANDLOCK_ACCESS: "type=fs rights=[bitmask]"
+> > 
+> > I worry that LANDLOCK_PATH is too much of a duplicate for the existing
+> > PATH record.  Assuming the "scope=" field is important, could it live
+> > in the LANDLOCK_ACCESS record and then you could do away with the
+> > dedicated LANDLOCK_PATH record?  Oh, wait ... this is to record the
+> > policy, not a individual access request, gotcha.  If that is the case
+> > and RULESET, PATH, ACCESS are all used simply to record the policy
+> > information I might suggest creation of an AUDIT_LANDLOCK_POLICY
+> > record that captures all of the above.  If you think that is too
+> > cumbersome, then perhaps you can do the object/access-specific record
+> > type, e.g. AUDIT_LANDLOCK_POLICY_FS and AUDIT_LANDLOCK_POLICY_NET.
+> 
+> OK, what about this records for *one* rule addition event?
+> 
+> - AUDIT_LANDLOCK_RULE: "ruleset=[ruleset ID] rule_type=path_beneath
+>   allowed_access=[bitmask]"
+> - AUDIT_PATH: "path=[file path] dev= ino= ..."
+> 
+> However, because struct landlock_path_beneath_attr can evolve and get
+> new fields which might be differents than the landlock_net_port_attr's
+> ones, wouldn't it be wiser to use a dedicated AUDIT_LANDLOCK_RULE_FS or
+> AUDIT_LANDLOCK_RULE_PATH_BENEATH record type? These names are getting a
+> bit long though, but types match the UAPI.
 
-> diff --git a/kernel/auditfilter.c b/kernel/auditfilter.c
-> index 8317a37dea0bb..be8c680121e46 100644
-> --- a/kernel/auditfilter.c
-> +++ b/kernel/auditfilter.c
-> @@ -788,7 +788,7 @@ static int audit_compare_rule(struct audit_krule *a, =
-struct audit_krule *b)
->  static inline int audit_dupe_lsm_field(struct audit_field *df,
->                                            struct audit_field *sf)
->  {
-> -       int ret =3D 0;
-> +       int ret;
->         char *lsm_str;
->
->         /* our own copy of lsm_str */
-> --
-> 2.18.2
+Hmm, AUDIT_PATH is used when a syscall's argument is a path, but in the
+case of Landlock, the arguments are file descriptors.
 
---=20
-paul-moore.com
+I can still export audit_copy_inode() to create a synthetic audit_names
+struct, and export/call audit_log_name() to create an AUDIT_PATH entry
+but I'm not sure it is the best approach. What would you prefer?
+Should I use AUDIT_TYPE_NORMAL or create a new one?
+
+[...]
+
+> > > For denied FS access:
+> > > - AUDIT_LANDLOCK_DENIAL: "id=[domain ID] op=mkdir"
+> > > - AUDIT_LANDLOCK_PATH: "scope=exact path=[file path] dev= ino="
+> > 
+> > I would use a single record type, i.e. AUDIT_LANDLOCK_ACCESS, to
+> > capture both access granted and denied events.  I'd also omit the
+> > dedicated LANDLOCK_PATH record here in favor of the generic PATH
+> > record (see my comments above).
+> 
+> Makes sense for the generic PATH record. We would get this:
+> 
+> - AUDIT_LANDLOCK_ACCESS: "domain=[domain ID] op=mkdir result=denied"
+> - AUDIT_PATH: "path=[file path] dev= ino= ..."
