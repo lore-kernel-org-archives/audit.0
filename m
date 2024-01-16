@@ -1,22 +1,22 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F8572232F;
-	Tue, 16 Jan 2024 00:14:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4375023772;
+	Tue, 16 Jan 2024 00:15:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jEvcnyHW"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48F85C43390;
-	Tue, 16 Jan 2024 00:14:42 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WmW5uz+T"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C591C43394;
+	Tue, 16 Jan 2024 00:15:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1705364083;
-	bh=XU8GS1ZsDIkRERAdlY+FQGzJZ+rg+O384zwExr1qy9Y=;
+	s=k20201202; t=1705364101;
+	bh=uwojOkSRfGaW6eah0IpP53DK5E7SRGTo5G4Znq8Fw/0=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=jEvcnyHWTApm6rRSJ2Di2/ukBGCuTWeE95zNXDAveoYhxxfEUQ1tA5ul7YRfuWlGb
-	 2ckhDghyRadXAm5689e26W1grJQPvU4MpPju8eVWubiKUmmMvWOrf3320Xi8RK3Hxe
-	 YyH3H+BquLtgAnX3jlBfIjnhtea7jYgQsNAjmeSpp541xP6jWirq80bjTYNgBVfTt5
-	 N80+ET2TjdDPE3/IiO06kaVJI4kPOcrD29PUZxAIxGsM767oCUc0BbqT9EMXkXRYlX
-	 RVPoChcRRZRAxW7m2BpQGCwB0ydngNvbWjwv5a2SuE8F5EsFPX9/eEOjKrXnklJB8t
-	 UwDvVBUyquJzg==
+	b=WmW5uz+TxrzA+K5wXgEc7YlY+IJ/ANBw+V07NpoiqgsS35GVkDoEt0JxAMcXE6+CV
+	 HqQOEuIuXv2xOm/uQhKjU5g8vhE65zUzq57xkO9JZvtiBJ2Y4St95Yi1BvwBL9HaT4
+	 MUQkmBNVZk9qyi/fFFGIPm6Mg6k2/tuFMN1yXaGvjt99/b5TYo0EkykVq8V+XLuP7n
+	 NSUFPWuW20R7derS+BVzCNzDEDXDijNE/2kwaln5BUzlyqi81vf43oyuvcIBBEJ8lc
+	 Zuoj7wHG/Aw2refrR3HKG2CQrRx7krmaj5K3dChVpXPrummipkIJ06sTiN3mH9a+D7
+	 MK3TSHpsqkShw==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -25,12 +25,12 @@ Cc: Chris Riches <chris.riches@nutanix.com>,
 	Sasha Levin <sashal@kernel.org>,
 	eparis@redhat.com,
 	audit@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 2/8] audit: Send netlink ACK before setting connection in auditd_set
-Date: Mon, 15 Jan 2024 19:14:30 -0500
-Message-ID: <20240116001439.213839-2-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.10 2/8] audit: Send netlink ACK before setting connection in auditd_set
+Date: Mon, 15 Jan 2024 19:14:48 -0500
+Message-ID: <20240116001457.214018-2-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240116001439.213839-1-sashal@kernel.org>
-References: <20240116001439.213839-1-sashal@kernel.org>
+In-Reply-To: <20240116001457.214018-1-sashal@kernel.org>
+References: <20240116001457.214018-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
@@ -39,7 +39,7 @@ List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 5.15.147
+X-stable-base: Linux 5.10.208
 Content-Transfer-Encoding: 8bit
 
 From: Chris Riches <chris.riches@nutanix.com>
@@ -65,7 +65,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 24 insertions(+), 7 deletions(-)
 
 diff --git a/kernel/audit.c b/kernel/audit.c
-index 94ded5de9131..82b6fea46e20 100644
+index aeec86ed4708..2ab04e0a7441 100644
 --- a/kernel/audit.c
 +++ b/kernel/audit.c
 @@ -490,15 +490,19 @@ static void auditd_conn_free(struct rcu_head *rcu)
