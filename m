@@ -1,22 +1,22 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4375023772;
-	Tue, 16 Jan 2024 00:15:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 274972556E;
+	Tue, 16 Jan 2024 00:15:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WmW5uz+T"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C591C43394;
-	Tue, 16 Jan 2024 00:15:00 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VkiNWLO/"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 243CEC433C7;
+	Tue, 16 Jan 2024 00:15:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1705364101;
-	bh=uwojOkSRfGaW6eah0IpP53DK5E7SRGTo5G4Znq8Fw/0=;
+	s=k20201202; t=1705364118;
+	bh=h+L08kPtKfUMqX0fdYTOgjFNOY8LB+WNx4QrlH1oejc=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=WmW5uz+TxrzA+K5wXgEc7YlY+IJ/ANBw+V07NpoiqgsS35GVkDoEt0JxAMcXE6+CV
-	 HqQOEuIuXv2xOm/uQhKjU5g8vhE65zUzq57xkO9JZvtiBJ2Y4St95Yi1BvwBL9HaT4
-	 MUQkmBNVZk9qyi/fFFGIPm6Mg6k2/tuFMN1yXaGvjt99/b5TYo0EkykVq8V+XLuP7n
-	 NSUFPWuW20R7derS+BVzCNzDEDXDijNE/2kwaln5BUzlyqi81vf43oyuvcIBBEJ8lc
-	 Zuoj7wHG/Aw2refrR3HKG2CQrRx7krmaj5K3dChVpXPrummipkIJ06sTiN3mH9a+D7
-	 MK3TSHpsqkShw==
+	b=VkiNWLO/hFDSXaF00nMHd6Fs7hLhk4DeFAxuBcThiUCiTPVHfnrA2viZE4G2uCzH/
+	 ODF3OArFsMG8ylEBSa2wsjjPsM65Mq3FJelh8+zeva4b3Y+bY0Rz4WGXVdjxjHWZZV
+	 yidnXh4F318JT5auoEUCwhRDGnDiHdcXRhsDJ6AixL7GHcCQshwrjV1OnP2JDTIthA
+	 mLyZewivU9ceyG5DuzaMfZLZ8xhCt/BeTl2oP0FQ6lQJYEJH6gOAiw1lQ18lOH6PGA
+	 fV8YuyYpX3gdmZZC6TifQe2sNhKE/VayMfBF8drQECEMjrjzoQPmCXSwWXnPcL5Xw7
+	 A9TJWJM5tW3zQ==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -25,12 +25,12 @@ Cc: Chris Riches <chris.riches@nutanix.com>,
 	Sasha Levin <sashal@kernel.org>,
 	eparis@redhat.com,
 	audit@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 2/8] audit: Send netlink ACK before setting connection in auditd_set
-Date: Mon, 15 Jan 2024 19:14:48 -0500
-Message-ID: <20240116001457.214018-2-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 2/7] audit: Send netlink ACK before setting connection in auditd_set
+Date: Mon, 15 Jan 2024 19:15:07 -0500
+Message-ID: <20240116001514.214199-2-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240116001457.214018-1-sashal@kernel.org>
-References: <20240116001457.214018-1-sashal@kernel.org>
+In-Reply-To: <20240116001514.214199-1-sashal@kernel.org>
+References: <20240116001514.214199-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
@@ -39,7 +39,7 @@ List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 5.10.208
+X-stable-base: Linux 5.4.267
 Content-Transfer-Encoding: 8bit
 
 From: Chris Riches <chris.riches@nutanix.com>
@@ -65,10 +65,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 24 insertions(+), 7 deletions(-)
 
 diff --git a/kernel/audit.c b/kernel/audit.c
-index aeec86ed4708..2ab04e0a7441 100644
+index 805b0c9972d3..39e84d65d253 100644
 --- a/kernel/audit.c
 +++ b/kernel/audit.c
-@@ -490,15 +490,19 @@ static void auditd_conn_free(struct rcu_head *rcu)
+@@ -484,15 +484,19 @@ static void auditd_conn_free(struct rcu_head *rcu)
   * @pid: auditd PID
   * @portid: auditd netlink portid
   * @net: auditd network namespace pointer
@@ -89,7 +89,7 @@ index aeec86ed4708..2ab04e0a7441 100644
  
  	if (!pid || !net)
  		return -EINVAL;
-@@ -510,6 +514,13 @@ static int auditd_set(struct pid *pid, u32 portid, struct net *net)
+@@ -504,6 +508,13 @@ static int auditd_set(struct pid *pid, u32 portid, struct net *net)
  	ac_new->portid = portid;
  	ac_new->net = get_net(net);
  
@@ -103,7 +103,7 @@ index aeec86ed4708..2ab04e0a7441 100644
  	spin_lock_irqsave(&auditd_conn_lock, flags);
  	ac_old = rcu_dereference_protected(auditd_conn,
  					   lockdep_is_held(&auditd_conn_lock));
-@@ -1203,7 +1214,8 @@ static int audit_replace(struct pid *pid)
+@@ -1198,7 +1209,8 @@ static int audit_replace(struct pid *pid)
  	return auditd_send_unicast_skb(skb);
  }
  
@@ -113,7 +113,7 @@ index aeec86ed4708..2ab04e0a7441 100644
  {
  	u32			seq;
  	void			*data;
-@@ -1296,7 +1308,8 @@ static int audit_receive_msg(struct sk_buff *skb, struct nlmsghdr *nlh)
+@@ -1290,7 +1302,8 @@ static int audit_receive_msg(struct sk_buff *skb, struct nlmsghdr *nlh)
  				/* register a new auditd connection */
  				err = auditd_set(req_pid,
  						 NETLINK_CB(skb).portid,
@@ -123,7 +123,7 @@ index aeec86ed4708..2ab04e0a7441 100644
  				if (audit_enabled != AUDIT_OFF)
  					audit_log_config_change("audit_pid",
  								new_pid,
-@@ -1541,9 +1554,10 @@ static int audit_receive_msg(struct sk_buff *skb, struct nlmsghdr *nlh)
+@@ -1529,9 +1542,10 @@ static int audit_receive_msg(struct sk_buff *skb, struct nlmsghdr *nlh)
   * Parse the provided skb and deal with any messages that may be present,
   * malformed skbs are discarded.
   */
@@ -135,7 +135,7 @@ index aeec86ed4708..2ab04e0a7441 100644
  	/*
  	 * len MUST be signed for nlmsg_next to be able to dec it below 0
  	 * if the nlmsg_len was not aligned
-@@ -1556,9 +1570,12 @@ static void audit_receive(struct sk_buff  *skb)
+@@ -1544,9 +1558,12 @@ static void audit_receive(struct sk_buff  *skb)
  
  	audit_ctl_lock();
  	while (nlmsg_ok(nlh, len)) {
