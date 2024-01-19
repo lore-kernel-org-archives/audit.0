@@ -1,154 +1,90 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com [209.85.219.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 503D028E12;
-	Tue, 16 Jan 2024 00:15:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E083A54BE3
+	for <audit@vger.kernel.org>; Fri, 19 Jan 2024 16:33:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.171
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1705682030; cv=none; b=HrLt+l5ryKAJ6tOGfNPR9+yo7i4KP5ibmR7jlu+op+9ZaAOS7zPDk1BfUbSzC7e3BQY95lpMhuqIloE8WjgN+w2psWr+6PBJH3vpwIoeZ1VC8c7unD+8AAShCHOOzUDsRxqyvGHNdm5tfyvStccWnv09cBecqSdzblhk7SbLBIc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1705682030; c=relaxed/simple;
+	bh=rH2cnrTenI/ovUuxdgm8ztyVBIo++YyJ/oUzTgwGS6o=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=ZZqLo/IKuKg6nF6oSEKxAPmyNO0GIyDNdv819cczu67QhWmvvhvpAqbn8/gDtfR0fzmhruxQARIkwyR2cZ5aKpZfrfNqT9u30yhOZL4TuOhFWyRJTincTB77/CfKDEV+xmP9il5Faus2ZXb1gcRu0/KDCNJwpG6l1gSdTkx2kZU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=Od5SyaRM; arc=none smtp.client-ip=209.85.219.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U27Pgbn9"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F6ADC433C7;
-	Tue, 16 Jan 2024 00:15:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1705364129;
-	bh=GV43oK5wDl0s56gyABaT2KB/a5findCCE8sdtNjHPvI=;
-	h=From:To:Cc:Subject:Date:From;
-	b=U27Pgbn9OF7Q2M6XXCpvMot7nhyDHQ5xPEzd9696/4lmNoa6BW6jZJQVA5cXgeh2o
-	 GGtPu4fdfbZ1tdb+EL4QMlkEkI7iaAeq9G1N+h5IFWXV/tSHD80RZu3JHeJ+QWQbnJ
-	 oBZp8ZeEIXtgJTHtcl8EiFM69eq+jvL77FnrZYsFI7NCM6fpyUFTz/mua24vDIl1BW
-	 b+1sXXY67zYIDf0KSYz6QZ4DmB2NC1B9nynF0kBRDwNd17gUTLOEP+LlteXNyCm5mj
-	 FtjxgxX3Pm4RhXqovYz4Iv84+8xDuP4woPySL8njWEM2k3xD6YofmRsNXuWDbvzpnr
-	 1GbouQRgDOzfA==
-From: Sasha Levin <sashal@kernel.org>
-To: linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Cc: Chris Riches <chris.riches@nutanix.com>,
-	Paul Moore <paul@paul-moore.com>,
-	Sasha Levin <sashal@kernel.org>,
-	eparis@redhat.com,
-	audit@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 1/5] audit: Send netlink ACK before setting connection in auditd_set
-Date: Mon, 15 Jan 2024 19:15:21 -0500
-Message-ID: <20240116001526.214354-1-sashal@kernel.org>
-X-Mailer: git-send-email 2.43.0
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="Od5SyaRM"
+Received: by mail-yb1-f171.google.com with SMTP id 3f1490d57ef6-dbed0710c74so904980276.1
+        for <audit@vger.kernel.org>; Fri, 19 Jan 2024 08:33:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1705682028; x=1706286828; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=nrJHSioKHAnyTv1OPCyZuc+rZyrkHjI3ktv0C6hnyOU=;
+        b=Od5SyaRMAonO17qer5aZaXvQCR/OfmCSYTkEuzF0UR/k4vXny5m8i1yNU+GOjNMCmF
+         nNGNACTZ6QWtAr3eyE7LhCJhv9z+yOKo0roeZc/iACyX7B+DoUeQXAems8V4czsecshj
+         FvAI9dq9nsHH8W5AK9qx2rBUcF9KWfyUEh6XXS3Ipn3lTwr3mhKmPmkaJYqsmn4B6ltH
+         EJRZj6b3yyK8PHpNWc+TuvZRGIX5OEwwN74e/bZXZ98fqMwX7GCaTYtwTiERlKh2OnhU
+         uoRQPTHYErVDt9M29wzL5MqrdA3Dd2Rswua6wHZky7A6xpyeibkqoV/8+AJNeKWtswAf
+         YU7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1705682028; x=1706286828;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=nrJHSioKHAnyTv1OPCyZuc+rZyrkHjI3ktv0C6hnyOU=;
+        b=qznT/dGWVWTWhXKGGs88id5SDh4CtQs6FBt2v7Yu3dQJuaB1F4qLYUHCkeq26by78P
+         wO+8xfs0sFya7faht7mpijOE8Tr0ct8YXM1FPf9LSv8n1SqSwzo/uNhqDAzzoBGe6tgD
+         meazoabyCFD/UXTidKz2LAhY4/9/1G2/EfJEtGmPcM93N9SAWbExYwaIyBALwZdvmtup
+         vISfqvZeauwjzf2jJe9RttmgW6MHDhOs6gJb2ZP5Fvj3dAplQcggeAxs9HUG/SyDJDQz
+         ZdZVwaTyMApkYOQkuqlvMPR8Qvb9UaPItYT6m/x4ldk/3CrzsdeYuzSXPByI1lKZRa/T
+         BLEg==
+X-Gm-Message-State: AOJu0YxF+mx3yen3h4MFFOxdAqGcquOkfg6u+ww02UvvmX5UCJWZs6f6
+	ejntndgDskMPM6CrB2b03gflJVhxTuSICIU3by30hHwMTzP/jy7a1PhtLMZarcZr73oaW67Rw26
+	uPpGAcnxQWAFRf49gtnMXipVK7jPZK1aCR1eM
+X-Google-Smtp-Source: AGHT+IEH1cn/9O9lR6VO5+PB4kXdW/p6syEQjEKnEBK6vJuIhvjLAhx1VffIqvthuNA7/gUwUuNi7fAT2XiiJ16SA8Y=
+X-Received: by 2002:a5b:b4a:0:b0:dbd:4eff:3981 with SMTP id
+ b10-20020a5b0b4a000000b00dbd4eff3981mr156149ybr.69.1705682027861; Fri, 19 Jan
+ 2024 08:33:47 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 4.19.305
-Content-Transfer-Encoding: 8bit
+From: Paul Moore <paul@paul-moore.com>
+Date: Fri, 19 Jan 2024 11:33:37 -0500
+Message-ID: <CAHC9VhRBkW4bH0K_-PeQ5HA=5yMHSimFboiQgG9iDcwYVZcSFQ@mail.gmail.com>
+Subject: IORING_OP_FIXED_FD_INSTALL and audit/LSM interactions
+To: Jens Axboe <axboe@kernel.dk>, Christian Brauner <brauner@kernel.org>
+Cc: io-uring@vger.kernel.org, linux-security-module@vger.kernel.org, 
+	audit@vger.kernel.org, selinux@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-From: Chris Riches <chris.riches@nutanix.com>
+Hello all,
 
-[ Upstream commit 022732e3d846e197539712e51ecada90ded0572a ]
+I just noticed the recent addition of IORING_OP_FIXED_FD_INSTALL and I
+see that it is currently written to skip the io_uring auditing.
+Assuming I'm understanding the patch correctly, and I'll admit that
+I've only looked at it for a short time today, my gut feeling is that
+we want to audit the FIXED_FD_INSTALL opcode as it could make a
+previously io_uring-only fd generally accessible to userspace.
 
-When auditd_set sets the auditd_conn pointer, audit messages can
-immediately be put on the socket by other kernel threads. If the backlog
-is large or the rate is high, this can immediately fill the socket
-buffer. If the audit daemon requested an ACK for this operation, a full
-socket buffer causes the ACK to get dropped, also setting ENOBUFS on the
-socket.
+I'm also trying to determine how worried we should be about
+io_install_fixed_fd() potentially happening with the current task's
+credentials overridden by the io_uring's personality.  Given that this
+io_uring operation inserts a fd into the current process, I believe
+that we should be checking to see if the current task's credentials,
+and not the io_uring's credentials/personality, are allowed to receive
+the fd in receive_fd()/security_file_receive().  I don't see an
+obvious way to filter/block credential overrides on a per-opcode
+basis, but if we don't want to add a mask for io_kiocb::flags in
+io_issue_defs (or something similar), perhaps we can forcibly mask out
+REQ_F_CREDS in io_install_fixed_fd_prep()?  I'm very interested to
+hear what others think about this.
 
-To avoid this race and ensure ACKs get through, fast-track the ACK in
-this specific case to ensure it is sent before auditd_conn is set.
+Of course if I'm reading the commit or misunderstanding the
+IORING_OP_FIXED_FD_INSTALL operation, corrections are welcome :)
 
-Signed-off-by: Chris Riches <chris.riches@nutanix.com>
-[PM: fix some tab vs space damage]
-Signed-off-by: Paul Moore <paul@paul-moore.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- kernel/audit.c | 31 ++++++++++++++++++++++++-------
- 1 file changed, 24 insertions(+), 7 deletions(-)
-
-diff --git a/kernel/audit.c b/kernel/audit.c
-index 471d3ad910aa..5fb87eccb8c2 100644
---- a/kernel/audit.c
-+++ b/kernel/audit.c
-@@ -498,15 +498,19 @@ static void auditd_conn_free(struct rcu_head *rcu)
-  * @pid: auditd PID
-  * @portid: auditd netlink portid
-  * @net: auditd network namespace pointer
-+ * @skb: the netlink command from the audit daemon
-+ * @ack: netlink ack flag, cleared if ack'd here
-  *
-  * Description:
-  * This function will obtain and drop network namespace references as
-  * necessary.  Returns zero on success, negative values on failure.
-  */
--static int auditd_set(struct pid *pid, u32 portid, struct net *net)
-+static int auditd_set(struct pid *pid, u32 portid, struct net *net,
-+		      struct sk_buff *skb, bool *ack)
- {
- 	unsigned long flags;
- 	struct auditd_connection *ac_old, *ac_new;
-+	struct nlmsghdr *nlh;
- 
- 	if (!pid || !net)
- 		return -EINVAL;
-@@ -518,6 +522,13 @@ static int auditd_set(struct pid *pid, u32 portid, struct net *net)
- 	ac_new->portid = portid;
- 	ac_new->net = get_net(net);
- 
-+	/* send the ack now to avoid a race with the queue backlog */
-+	if (*ack) {
-+		nlh = nlmsg_hdr(skb);
-+		netlink_ack(skb, nlh, 0, NULL);
-+		*ack = false;
-+	}
-+
- 	spin_lock_irqsave(&auditd_conn_lock, flags);
- 	ac_old = rcu_dereference_protected(auditd_conn,
- 					   lockdep_is_held(&auditd_conn_lock));
-@@ -1204,7 +1215,8 @@ static int audit_replace(struct pid *pid)
- 	return auditd_send_unicast_skb(skb);
- }
- 
--static int audit_receive_msg(struct sk_buff *skb, struct nlmsghdr *nlh)
-+static int audit_receive_msg(struct sk_buff *skb, struct nlmsghdr *nlh,
-+			     bool *ack)
- {
- 	u32			seq;
- 	void			*data;
-@@ -1296,7 +1308,8 @@ static int audit_receive_msg(struct sk_buff *skb, struct nlmsghdr *nlh)
- 				/* register a new auditd connection */
- 				err = auditd_set(req_pid,
- 						 NETLINK_CB(skb).portid,
--						 sock_net(NETLINK_CB(skb).sk));
-+						 sock_net(NETLINK_CB(skb).sk),
-+						 skb, ack);
- 				if (audit_enabled != AUDIT_OFF)
- 					audit_log_config_change("audit_pid",
- 								new_pid,
-@@ -1529,9 +1542,10 @@ static int audit_receive_msg(struct sk_buff *skb, struct nlmsghdr *nlh)
-  * Parse the provided skb and deal with any messages that may be present,
-  * malformed skbs are discarded.
-  */
--static void audit_receive(struct sk_buff  *skb)
-+static void audit_receive(struct sk_buff *skb)
- {
- 	struct nlmsghdr *nlh;
-+	bool ack;
- 	/*
- 	 * len MUST be signed for nlmsg_next to be able to dec it below 0
- 	 * if the nlmsg_len was not aligned
-@@ -1544,9 +1558,12 @@ static void audit_receive(struct sk_buff  *skb)
- 
- 	audit_ctl_lock();
- 	while (nlmsg_ok(nlh, len)) {
--		err = audit_receive_msg(skb, nlh);
--		/* if err or if this message says it wants a response */
--		if (err || (nlh->nlmsg_flags & NLM_F_ACK))
-+		ack = nlh->nlmsg_flags & NLM_F_ACK;
-+		err = audit_receive_msg(skb, nlh, &ack);
-+
-+		/* send an ack if the user asked for one and audit_receive_msg
-+		 * didn't already do it, or if there was an error. */
-+		if (ack || err)
- 			netlink_ack(skb, nlh, err, NULL);
- 
- 		nlh = nlmsg_next(nlh, &len);
 -- 
-2.43.0
-
+paul-moore.com
