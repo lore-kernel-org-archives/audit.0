@@ -1,130 +1,86 @@
-Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com [209.85.219.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4222D55795
-	for <audit@vger.kernel.org>; Tue, 23 Jan 2024 23:58:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06621F4F3;
+	Wed, 24 Jan 2024 06:02:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706054311; cv=none; b=u4d2Wg2QJko9Igr8J9uUNUhX5kIZo0ySN21uXYUVM0aqi2lWxWt4rgHP6A7mJ/i8s5ZaPjt19Jo3S+S23IiAHjf60bxHOor9tanZryg3c732jq3k8jYPFIt/BlvqXxOYOcO7YlFzrDpR0LRc2ZDyANHs16FzAqfwib+/eVUeBBs=
+	t=1706076160; cv=none; b=OhhpfInbu7uBr06Xjia2mtTj1sBA7P6kBcfgngRrCPC6eLy3eU6abrFytb7ppcoI8Tj+C5PYfLi1iayTB1u46XijRCv2220Exf+/LzlueKHF5mdtlrvk4lWO3wCsdFr0vZu0eyseOkKskv6ynyngHNq4aLAUI6cSr8tTutFoSyI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706054311; c=relaxed/simple;
-	bh=IynX6u4mvBalm/RbV4Poaqp1DBQ8ctKBACbRd1Iv/o0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=PRxet9Brs1xbDi5BErCHtr9ZgqSxk/rv++e48maHg6Z0dN0RRCcfYjUFCA/Vf9d81TAiuw42C+R6khMpmR4LASB7GGRBRgw3m0biiB9c8zM+u3c0FEBkvhwZEQX36x64uSTCb2IekTnUBrbMKPp4zszGDsbG+1cReD8NcqB1PCo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=PWva0+iS; arc=none smtp.client-ip=209.85.219.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="PWva0+iS"
-Received: by mail-yb1-f171.google.com with SMTP id 3f1490d57ef6-dbe344a6cf4so4342021276.0
-        for <audit@vger.kernel.org>; Tue, 23 Jan 2024 15:58:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1706054309; x=1706659109; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cL6AxRz6Xtq0xrIYdJsZbYeq0wCWJbZQUMTqfFz90ow=;
-        b=PWva0+iSu4xAerRswmveUqTSosX8M1kkN3MR0vF9ZOsDezNAf/IeKNZu9tf8/09PH8
-         JnDsVqPc6p1fE6kKe0IgXuL9s/rr2D3oNNkP5w7KZ21PbjOBZYehqwbJ8YkZfbiDvtA7
-         0nxKM4HkeGmJ8ttd6q6RTYGq870qZYKp6NmFzQc/kCHJb1uR68B7UB97kZyP/2xhC3N6
-         Ar5a/LcJ+yhyZu8nEU4DW5efxHrO8e7eaWSdnRMMaihXrN3xdh9DjtrGxgwOtwVmimwK
-         b5bZXeZRTjq4HXBOs0XzIuglm7zoxtG2KadDH4sgudjRBX48/PNwCmWiyN0lKcV6BEfl
-         bt1Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706054309; x=1706659109;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=cL6AxRz6Xtq0xrIYdJsZbYeq0wCWJbZQUMTqfFz90ow=;
-        b=os1iz7JtF7mr0D4X6tFRj7YUUsE+0hjNco2tfmKKk2AF1vJyk/eBQx514M7JUa0y73
-         Kx1cwC5c6wNVdImUXlszcLNDlSTHY9ya+Zl7uNo6PBkGAcPl32zUyCV22cWxokrrhImf
-         9qJckOiQ7v5RDPxMUnaiyYSyxnKAB/ws/jQLusHjA+lghEfW9L9WQnZSQVNqkypgoKma
-         Qxg0/oPImSkXQDIEt4O/35P0dwsaw3YJhGrJUDqAgQr0MHGQh0EGOtLIZR98MFMzaD4e
-         plWD1tNSn2xWe7AhdtF63eTvFCtr4tnV57BeBUdzKIQHLHlhXObhkt7GpHYkhJpRKTZ8
-         JI6g==
-X-Gm-Message-State: AOJu0YyHrVqCn4AFNsipCAuMYvRptcoocB5817Ot4Cwa4cxuY0v7h3WX
-	ND3hO0VmP08lJ4zPzmisUwE+lcfmBc9YJDH7+hZ7vur0psdLmtI4KMSkq1TUMXpOf7Iv1wr7W3f
-	/MqBVmx1lzBlQkgnQdrxFwojgFzolrMeAzckBLHDrnCjBd70EKQ==
-X-Google-Smtp-Source: AGHT+IEaVh9ckNB9SI9jCXziUhbBHVpZnwT8uzibvDSWQZxDfVcAHLY6UJiD5wdYwnlOMVQdxM0ncF0PvMW/HeoXf3o=
-X-Received: by 2002:a25:e0c3:0:b0:dc2:65ff:7948 with SMTP id
- x186-20020a25e0c3000000b00dc265ff7948mr19443ybg.0.1706054309145; Tue, 23 Jan
- 2024 15:58:29 -0800 (PST)
+	s=arc-20240116; t=1706076160; c=relaxed/simple;
+	bh=1cJ6y/s5yfErFY2lTdHgVlK39PG6xTSXM204E6Jaajc=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=KVPYJZfFSfETrj9/JyOCV2CFcEtvVY2DFXkkHvUwX5IBCrAQmF1DhP0PwjrEgwa7RAQZ7jlfhc77rr87QpxtK+T2FT0OOnD53oluAUk+hY/+dsf/MJLwAKwO0UtJa2Dk0viALNFOm4Yx1DVmgUWrjPVJEfeCW0klsbCi0WIy0b4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: e59fd9dbe6164cc7b6c9fc7ee19fd901-20240124
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.35,REQID:3e2797d1-8673-409c-ab5f-fd77af66332d,IP:10,
+	URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:-15,FILE:0,BULK:0,RULE:Release_Ham,ACT
+	ION:release,TS:-10
+X-CID-INFO: VERSION:1.1.35,REQID:3e2797d1-8673-409c-ab5f-fd77af66332d,IP:10,UR
+	L:0,TC:0,Content:-5,EDM:0,RT:0,SF:-15,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
+	N:release,TS:-10
+X-CID-META: VersionHash:5d391d7,CLOUDID:a088b17f-4f93-4875-95e7-8c66ea833d57,B
+	ulkID:2401241402291UVM2KV1,BulkQuantity:0,Recheck:0,SF:19|44|66|38|24|17|1
+	02,TC:nil,Content:0,EDM:-3,IP:-2,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,CO
+	L:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0
+X-CID-BVR: 0,NGT
+X-CID-BAS: 0,NGT,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_FAS,TF_CID_SPAM_FSD,TF_CID_SPAM_FSI
+X-UUID: e59fd9dbe6164cc7b6c9fc7ee19fd901-20240124
+Received: from mail.kylinos.cn [(39.156.73.10)] by mailgw
+	(envelope-from <chentao@kylinos.cn>)
+	(Generic MTA)
+	with ESMTP id 226046693; Wed, 24 Jan 2024 14:02:28 +0800
+Received: from mail.kylinos.cn (localhost [127.0.0.1])
+	by mail.kylinos.cn (NSMail) with SMTP id E0CDBE000EB9;
+	Wed, 24 Jan 2024 14:02:27 +0800 (CST)
+X-ns-mid: postfix-65B0A7F3-71094480
+Received: from kernel.. (unknown [172.20.15.234])
+	by mail.kylinos.cn (NSMail) with ESMTPA id 4243EE000EB9;
+	Wed, 24 Jan 2024 14:02:25 +0800 (CST)
+From: Kunwu Chan <chentao@kylinos.cn>
+To: paul@paul-moore.com,
+	eparis@redhat.com
+Cc: audit@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Kunwu Chan <chentao@kylinos.cn>
+Subject: [PATCH] audit: Use KMEM_CACHE instead of kmem_cache_create
+Date: Wed, 24 Jan 2024 14:02:24 +0800
+Message-Id: <20240124060224.463335-1-chentao@kylinos.cn>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240123215501.289566-2-paul@paul-moore.com> <170604930501.2065523.10114697425588415558.b4-ty@kernel.dk>
- <e785d5df-9873-46ab-8b8a-7135da6ed273@kernel.dk> <cff4ba69-cc21-4af9-8a44-503649677b9c@kernel.dk>
-In-Reply-To: <cff4ba69-cc21-4af9-8a44-503649677b9c@kernel.dk>
-From: Paul Moore <paul@paul-moore.com>
-Date: Tue, 23 Jan 2024 18:58:18 -0500
-Message-ID: <CAHC9VhTrH4+bVnQnzmmn4eJ4bMt=6wJSg7_DJ_Bo-K5AC3nBfA@mail.gmail.com>
-Subject: Re: [PATCH] io_uring: enable audit and restrict cred override for IORING_OP_FIXED_FD_INSTALL
-To: Jens Axboe <axboe@kernel.dk>
-Cc: io-uring@vger.kernel.org, linux-security-module@vger.kernel.org, 
-	selinux@vger.kernel.org, audit@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jan 23, 2024 at 5:43=E2=80=AFPM Jens Axboe <axboe@kernel.dk> wrote:
-> On 1/23/24 3:40 PM, Jens Axboe wrote:
-> > On 1/23/24 3:35 PM, Jens Axboe wrote:
-> >>
-> >> On Tue, 23 Jan 2024 16:55:02 -0500, Paul Moore wrote:
-> >>> We need to correct some aspects of the IORING_OP_FIXED_FD_INSTALL
-> >>> command to take into account the security implications of making an
-> >>> io_uring-private file descriptor generally accessible to a userspace
-> >>> task.
-> >>>
-> >>> The first change in this patch is to enable auditing of the FD_INSTAL=
-L
-> >>> operation as installing a file descriptor into a task's file descript=
-or
-> >>> table is a security relevant operation and something that admins/user=
-s
-> >>> may want to audit.
-> >>>
-> >>> [...]
-> >>
-> >> Applied, thanks!
-> >>
-> >> [1/1] io_uring: enable audit and restrict cred override for IORING_OP_=
-FIXED_FD_INSTALL
-> >>       commit: 16bae3e1377846734ec6b87eee459c0f3551692c
-> >
-> > So after doing that and writing the test case and testing it, it dawned
-> > on me that we should potentially allow the current task creds. And to
-> > make matters worse, this is indeed what happens if eg the application
-> > would submit this with IOSQE_ASYNC or if it was part of a linked series
-> > and we marked it async.
-> >
-> > While I originally reasoned for why this is fine as it'd be silly to
-> > register your current creds and then proceed to pass in that personalit=
-y,
-> > I do think that we should probably handle that case and clearly separat=
-e
-> > the case of "we assigned creds from the submitting task because we're
-> > handing it to a thread" vs "the submitting task asked for other creds
-> > that were previously registered".
-> >
-> > I'll take a look and see what works the best here.
->
-> Actually, a quick look and it's fine, the usual async offload will do
-> the right thing. So let's just keep it as-is, I don't think there's any
-> point to complicating this for some theoretically-valid-but-obscure use
-> case!
+Use the new KMEM_CACHE() macro instead of direct kmem_cache_create
+to simplify the creation of SLAB caches.
 
-Perhaps the one case where REQ_F_CREDS is our friend for FD_INSTALL ;)
+Signed-off-by: Kunwu Chan <chentao@kylinos.cn>
+---
+ kernel/audit.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-> FWIW, the test case is here, and I'll augment it now to add IOSQE_ASYNC
-> as well just to cover all the bases.
->
-> https://git.kernel.dk/cgit/liburing/commit/?id=3Dbc576ca398661b266d3e4a4f=
-5db3a9cf7f33fe62
-
-Great, thanks!
-
+diff --git a/kernel/audit.c b/kernel/audit.c
+index 9c8e5f732c4c..e7a62ebbf4d1 100644
+--- a/kernel/audit.c
++++ b/kernel/audit.c
+@@ -1693,9 +1693,7 @@ static int __init audit_init(void)
+ 	if (audit_initialized =3D=3D AUDIT_DISABLED)
+ 		return 0;
+=20
+-	audit_buffer_cache =3D kmem_cache_create("audit_buffer",
+-					       sizeof(struct audit_buffer),
+-					       0, SLAB_PANIC, NULL);
++	audit_buffer_cache =3D KMEM_CACHE(audit_buffer, SLAB_PANIC);
+=20
+ 	skb_queue_head_init(&audit_queue);
+ 	skb_queue_head_init(&audit_retry_queue);
 --=20
-paul-moore.com
+2.39.2
+
