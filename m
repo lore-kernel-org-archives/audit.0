@@ -1,58 +1,58 @@
-Received: from mail-qk1-f182.google.com (mail-qk1-f182.google.com [209.85.222.182])
+Received: from mail-qk1-f170.google.com (mail-qk1-f170.google.com [209.85.222.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCE44768FA
-	for <audit@vger.kernel.org>; Thu, 25 Jan 2024 14:59:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE1E66EB5B
+	for <audit@vger.kernel.org>; Thu, 25 Jan 2024 15:13:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706194769; cv=none; b=CTecup5/EIWPFz7zwif8lUiFJCGGbw3ShPS1yuyxPHJZ1ZoYBDilEvzD9RTmeZDLorLBa7S5vl9xBItPHUZyxBiHRk0pFMFse2vIOMaaYK5qTlrVmdqJcbf5+QDpJxx86Uc+n1+mug3ni7s+d5GDfegLe6DMpSi1XiP9dKlFpew=
+	t=1706195603; cv=none; b=g3CmpAtWSdU2xIc+OlB/rdWd7RdSJpoQKwEQckC52RTbon/h26oF7htJ0ScvWxoUV6fZ1ZtRAlSnibMii9XX3nYIKDb5c0fLQV9UWQgaVlMsFNw37pKZWAH+Jusqyux/U595DqGu8lIr5qCK9nK05VM1In2JoEzWDD+HrXx5izE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706194769; c=relaxed/simple;
-	bh=MIK+QxFxsRFVsK0JI7umRqsFHJP1cu+AgJYKYupHzD8=;
+	s=arc-20240116; t=1706195603; c=relaxed/simple;
+	bh=1+gWzxHdDlvUYh7j8de4u19xdmEQhVFoU39PTbIkN2E=;
 	h=Date:Message-ID:MIME-Version:Content-Type:Content-Disposition:
-	 From:To:Cc:Subject:References:In-Reply-To; b=XKXR836lgnHJjUASHSS9sJYD8L6ueS9IJJKyuNNWksS6QRwK4fY5MsPmiyyi/NpS4uEB5TqDvQCaLftRcpyi1P5kHw+5DieeOvpa+rYI6j3jjL4T4vyyaQMg9ralOnBz3KzgRwOyaz4VPPRiEvAtKIpdz94+Cu6tT8kqkrRju6E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=EJGUEt5E; arc=none smtp.client-ip=209.85.222.182
+	 From:To:Cc:Subject:References:In-Reply-To; b=eENQm2AdRMGiBoedYkbCZ8LkbZBJJOWfjsMPBPIsgXMAkAdVqQUHhxXehK7JZnkhD+eqkJUdLMyPU4KO95KSCKEIH38WfVntyfUf+SF3+9KiI7HQpIe5rPLXUobJGLlviQUDs5rc3HPHTNwy8O1znHs2CxUcggC5+SGBBeVmqZs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=ApDpCl9W; arc=none smtp.client-ip=209.85.222.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="EJGUEt5E"
-Received: by mail-qk1-f182.google.com with SMTP id af79cd13be357-783195e57c7so423693485a.2
-        for <audit@vger.kernel.org>; Thu, 25 Jan 2024 06:59:27 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="ApDpCl9W"
+Received: by mail-qk1-f170.google.com with SMTP id af79cd13be357-783293278adso535047985a.3
+        for <audit@vger.kernel.org>; Thu, 25 Jan 2024 07:13:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1706194766; x=1706799566; darn=vger.kernel.org;
+        d=paul-moore.com; s=google; t=1706195601; x=1706800401; darn=vger.kernel.org;
         h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
          :content-disposition:mime-version:message-id:date:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=QokRh4sTQUfkR5bLB823ppJrMrKDL4nb6Ul8jfaanJ8=;
-        b=EJGUEt5EzcW0W2TEafctDGLnax7Gem1JWD/XRvyaYBOuqyf3xhZh9VPrXOOR6A8gK0
-         Oom9s78uRXj40iODYRe5+frCC310Np2YkZhIN8JVHY8sedULs2XHuiQ9IkCccwMt0f4L
-         72piT+jImKhWVdpAxvs0KlIWjtL6f2KW+oFaH9/dJeWL7NLeu/dMd/kYfCf2DLHwbKdH
-         LDBrABMqhRlWHS7JbdAy8pdZFkYnCvKTbFNdjmsUal70Cn9V/ZjTwcOuoDdRy0pj+LrR
-         qcvx52HgvlqYJND3n8dqUJbxpVkFzbAR5izYXpnauj6BQl6TWxXc+RFW/burEgPSB1MZ
-         QZYQ==
+        bh=V8QfX+fXMC//GQOsMmawYMOFIuyxE057vSsZZYnIogE=;
+        b=ApDpCl9WKbxlFmKiIncvTlnmk9JM6IOLvC3SIXbIgOfwx49W2FemHoAbiZrMJ+3wJS
+         Bni1LaAiamlDI6boEdKLBxFNPLT2DIP4RwNcyhIIIEKihFMH5KLdLffNUJy0jRQ3dnQF
+         43KzNq8kimi002Y1KZHPGn2/jKpmKXahnWre5NSUbtW5EDjJRE/EbAa3ixAYRI0gRhwc
+         L55iOFw2X7EDDX0352cD1cDcuCKsLrG2pjmUp03iD1sQIvZ62zeUrtN/yCIqJDAWEQhS
+         I5vCP6HXy88p29Y3iXMmN0xovsXj1GP/SsPx0nVE8J2kY8Gy/+cnabtb4ya5BYc/Cixt
+         SaBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706194766; x=1706799566;
+        d=1e100.net; s=20230601; t=1706195601; x=1706800401;
         h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
          :content-disposition:mime-version:message-id:date:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=QokRh4sTQUfkR5bLB823ppJrMrKDL4nb6Ul8jfaanJ8=;
-        b=QDyoueVx2nqATPgBiPptgpJf6zRvAF7nX6LzrGbtPaYQME0LvBE2NZ4U4vw818UhYO
-         EH68g7mVzTg9eFM/UWtjaPUJlwBwNXeue/5YeBRbmLQ5I7cOpba9Pcum4k0A7efMOeat
-         yNILn61qnvZRNAGIjDxOBZWPYWQrfOXPfcxg126xs/SIclYqvWD+hHJChtaR58EqpsIq
-         VvkF4UhwhFLvfRrcgdexcrsMQG6kQjKu7NKMf4tW1nSeQyhY7905Df7M3YL226OlfQAB
-         dwnUQe4B0Pgx2Gu7zgmNb5afxqlXDlJHnGlHN8LJ9pjayLOnDQbkctC1S10vD20tEZVh
-         a0Rw==
-X-Gm-Message-State: AOJu0Yw3+9KGhM3Y5RAgWkKjIVLJPxnC0xrrjob5qHtc36jpL5yzZp/o
-	1Q5ehyiqfGmsYI8e1Zxcm421raQewP253VPLyeeXtxPpd5uaq+3g9Wc/YrqkRg==
-X-Google-Smtp-Source: AGHT+IF1Hke1j7fCAq2l/nqw+mSJkIzr6GHG9KukUEeDR56kC+lW1t7KmwvMNfBY5TVqXw/h82D19w==
-X-Received: by 2002:a05:620a:4483:b0:783:2516:58c8 with SMTP id x3-20020a05620a448300b00783251658c8mr1406385qkp.19.1706194766644;
-        Thu, 25 Jan 2024 06:59:26 -0800 (PST)
+        bh=V8QfX+fXMC//GQOsMmawYMOFIuyxE057vSsZZYnIogE=;
+        b=J394mVDjvLM5xm6zBeo0jgwI34drSTPEb50t9AZBy1d1JkOkY8hXPFysqtCmq+Pb6v
+         3tux9k8rx5mCyzV9HHt8iJ6ZRZmvqwCYEoKRhRek+nG6XuQabfFPsKNRU00VzUaPgspz
+         kJ+tiXz0JrvQk2MOty4fCaxrld2RggoVCnZ942gPANVAOKF1Xl+z1AM50m7KVG4lHYyA
+         sfNSsARcqvWIjyXigijtAIOc1mQ3kMRKtd1w5QgyN8CWEPQQVjn4Q9nJ62yf0kcUKt4b
+         IZGGP4xUfsAzJHnPBj1LxG44P4ZrAPpTV70G2quELHXMqASGlxJpMsXa20q2FJDhRrJj
+         MYQA==
+X-Gm-Message-State: AOJu0Yz+Cmij7tDVhEzNtpCF8YQIixt7Ow/wjOYDF53gKi818HTIECYM
+	VLlaZZ+pp8djC9UoelnO8YxEVD2kNOkBGatADzUGBS4SYnxuEckxdkxRDR3PNg==
+X-Google-Smtp-Source: AGHT+IH++ju+QnC7zWMmKmf82XR22Nz1qLA0O29ZEqkNG6+qEZ7JpdQbGUJ0jC6kQDzg6KIzJ4GsuA==
+X-Received: by 2002:a05:6214:c25:b0:67a:a721:caf3 with SMTP id a5-20020a0562140c2500b0067aa721caf3mr1242821qvd.84.1706195600876;
+        Thu, 25 Jan 2024 07:13:20 -0800 (PST)
 Received: from localhost ([70.22.175.108])
-        by smtp.gmail.com with ESMTPSA id t8-20020a05620a034800b00783a206381csm3472154qkm.37.2024.01.25.06.59.26
+        by smtp.gmail.com with ESMTPSA id j6-20020a0ce006000000b006817a88541dsm5526504qvk.75.2024.01.25.07.13.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Jan 2024 06:59:26 -0800 (PST)
-Date: Thu, 25 Jan 2024 09:59:25 -0500
-Message-ID: <736295ee70e12c5e1ba8a19b9a832b5f@paul-moore.com>
+        Thu, 25 Jan 2024 07:13:20 -0800 (PST)
+Date: Thu, 25 Jan 2024 10:13:20 -0500
+Message-ID: <1d15909e568d1571f08d430213ad77ff@paul-moore.com>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
@@ -63,21 +63,21 @@ Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline 
 Content-Transfer-Encoding: 8bit
 From: Paul Moore <paul@paul-moore.com>
-To: Li zeming <zeming@nfschina.com>, eparis@redhat.com
-Cc: audit@vger.kernel.org, linux-kernel@vger.kernel.org, Li zeming <zeming@nfschina.com>
-Subject: Re: [PATCH] kernel: auditfilter: Remove unnecessary ‘0’ values from  ret
-References: <20231228025600.9796-1-zeming@nfschina.com>
-In-Reply-To: <20231228025600.9796-1-zeming@nfschina.com>
+To: Kunwu Chan <chentao@kylinos.cn>, eparis@redhat.com
+Cc: audit@vger.kernel.org, linux-kernel@vger.kernel.org, Kunwu Chan <chentao@kylinos.cn>
+Subject: Re: [PATCH] audit: Use KMEM_CACHE instead of kmem_cache_create
+References: <20240124060224.463335-1-chentao@kylinos.cn>
+In-Reply-To: <20240124060224.463335-1-chentao@kylinos.cn>
 
-On Dec 27, 2023 Li zeming <zeming@nfschina.com> wrote:
+On Jan 24, 2024 Kunwu Chan <chentao@kylinos.cn> wrote:
 > 
-> The ret variable is assigned when it does not need to be defined, as it
-> has already been assigned before use.
+> Use the new KMEM_CACHE() macro instead of direct kmem_cache_create
+> to simplify the creation of SLAB caches.
 > 
-> Signed-off-by: Li zeming <zeming@nfschina.com>
+> Signed-off-by: Kunwu Chan <chentao@kylinos.cn>
 > ---
->  kernel/auditfilter.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  kernel/audit.c | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
 
 Merged into audit/dev, thanks.
 
