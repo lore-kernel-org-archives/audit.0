@@ -1,86 +1,85 @@
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f182.google.com (mail-qk1-f182.google.com [209.85.222.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06621F4F3;
-	Wed, 24 Jan 2024 06:02:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCE44768FA
+	for <audit@vger.kernel.org>; Thu, 25 Jan 2024 14:59:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706076160; cv=none; b=OhhpfInbu7uBr06Xjia2mtTj1sBA7P6kBcfgngRrCPC6eLy3eU6abrFytb7ppcoI8Tj+C5PYfLi1iayTB1u46XijRCv2220Exf+/LzlueKHF5mdtlrvk4lWO3wCsdFr0vZu0eyseOkKskv6ynyngHNq4aLAUI6cSr8tTutFoSyI=
+	t=1706194769; cv=none; b=CTecup5/EIWPFz7zwif8lUiFJCGGbw3ShPS1yuyxPHJZ1ZoYBDilEvzD9RTmeZDLorLBa7S5vl9xBItPHUZyxBiHRk0pFMFse2vIOMaaYK5qTlrVmdqJcbf5+QDpJxx86Uc+n1+mug3ni7s+d5GDfegLe6DMpSi1XiP9dKlFpew=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706076160; c=relaxed/simple;
-	bh=1cJ6y/s5yfErFY2lTdHgVlK39PG6xTSXM204E6Jaajc=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=KVPYJZfFSfETrj9/JyOCV2CFcEtvVY2DFXkkHvUwX5IBCrAQmF1DhP0PwjrEgwa7RAQZ7jlfhc77rr87QpxtK+T2FT0OOnD53oluAUk+hY/+dsf/MJLwAKwO0UtJa2Dk0viALNFOm4Yx1DVmgUWrjPVJEfeCW0klsbCi0WIy0b4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: e59fd9dbe6164cc7b6c9fc7ee19fd901-20240124
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.35,REQID:3e2797d1-8673-409c-ab5f-fd77af66332d,IP:10,
-	URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:-15,FILE:0,BULK:0,RULE:Release_Ham,ACT
-	ION:release,TS:-10
-X-CID-INFO: VERSION:1.1.35,REQID:3e2797d1-8673-409c-ab5f-fd77af66332d,IP:10,UR
-	L:0,TC:0,Content:-5,EDM:0,RT:0,SF:-15,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-	N:release,TS:-10
-X-CID-META: VersionHash:5d391d7,CLOUDID:a088b17f-4f93-4875-95e7-8c66ea833d57,B
-	ulkID:2401241402291UVM2KV1,BulkQuantity:0,Recheck:0,SF:19|44|66|38|24|17|1
-	02,TC:nil,Content:0,EDM:-3,IP:-2,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,CO
-	L:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0
-X-CID-BVR: 0,NGT
-X-CID-BAS: 0,NGT,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_FAS,TF_CID_SPAM_FSD,TF_CID_SPAM_FSI
-X-UUID: e59fd9dbe6164cc7b6c9fc7ee19fd901-20240124
-Received: from mail.kylinos.cn [(39.156.73.10)] by mailgw
-	(envelope-from <chentao@kylinos.cn>)
-	(Generic MTA)
-	with ESMTP id 226046693; Wed, 24 Jan 2024 14:02:28 +0800
-Received: from mail.kylinos.cn (localhost [127.0.0.1])
-	by mail.kylinos.cn (NSMail) with SMTP id E0CDBE000EB9;
-	Wed, 24 Jan 2024 14:02:27 +0800 (CST)
-X-ns-mid: postfix-65B0A7F3-71094480
-Received: from kernel.. (unknown [172.20.15.234])
-	by mail.kylinos.cn (NSMail) with ESMTPA id 4243EE000EB9;
-	Wed, 24 Jan 2024 14:02:25 +0800 (CST)
-From: Kunwu Chan <chentao@kylinos.cn>
-To: paul@paul-moore.com,
-	eparis@redhat.com
-Cc: audit@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Kunwu Chan <chentao@kylinos.cn>
-Subject: [PATCH] audit: Use KMEM_CACHE instead of kmem_cache_create
-Date: Wed, 24 Jan 2024 14:02:24 +0800
-Message-Id: <20240124060224.463335-1-chentao@kylinos.cn>
-X-Mailer: git-send-email 2.39.2
+	s=arc-20240116; t=1706194769; c=relaxed/simple;
+	bh=MIK+QxFxsRFVsK0JI7umRqsFHJP1cu+AgJYKYupHzD8=;
+	h=Date:Message-ID:MIME-Version:Content-Type:Content-Disposition:
+	 From:To:Cc:Subject:References:In-Reply-To; b=XKXR836lgnHJjUASHSS9sJYD8L6ueS9IJJKyuNNWksS6QRwK4fY5MsPmiyyi/NpS4uEB5TqDvQCaLftRcpyi1P5kHw+5DieeOvpa+rYI6j3jjL4T4vyyaQMg9ralOnBz3KzgRwOyaz4VPPRiEvAtKIpdz94+Cu6tT8kqkrRju6E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=EJGUEt5E; arc=none smtp.client-ip=209.85.222.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="EJGUEt5E"
+Received: by mail-qk1-f182.google.com with SMTP id af79cd13be357-783195e57c7so423693485a.2
+        for <audit@vger.kernel.org>; Thu, 25 Jan 2024 06:59:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1706194766; x=1706799566; darn=vger.kernel.org;
+        h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
+         :content-disposition:mime-version:message-id:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=QokRh4sTQUfkR5bLB823ppJrMrKDL4nb6Ul8jfaanJ8=;
+        b=EJGUEt5EzcW0W2TEafctDGLnax7Gem1JWD/XRvyaYBOuqyf3xhZh9VPrXOOR6A8gK0
+         Oom9s78uRXj40iODYRe5+frCC310Np2YkZhIN8JVHY8sedULs2XHuiQ9IkCccwMt0f4L
+         72piT+jImKhWVdpAxvs0KlIWjtL6f2KW+oFaH9/dJeWL7NLeu/dMd/kYfCf2DLHwbKdH
+         LDBrABMqhRlWHS7JbdAy8pdZFkYnCvKTbFNdjmsUal70Cn9V/ZjTwcOuoDdRy0pj+LrR
+         qcvx52HgvlqYJND3n8dqUJbxpVkFzbAR5izYXpnauj6BQl6TWxXc+RFW/burEgPSB1MZ
+         QZYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706194766; x=1706799566;
+        h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
+         :content-disposition:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=QokRh4sTQUfkR5bLB823ppJrMrKDL4nb6Ul8jfaanJ8=;
+        b=QDyoueVx2nqATPgBiPptgpJf6zRvAF7nX6LzrGbtPaYQME0LvBE2NZ4U4vw818UhYO
+         EH68g7mVzTg9eFM/UWtjaPUJlwBwNXeue/5YeBRbmLQ5I7cOpba9Pcum4k0A7efMOeat
+         yNILn61qnvZRNAGIjDxOBZWPYWQrfOXPfcxg126xs/SIclYqvWD+hHJChtaR58EqpsIq
+         VvkF4UhwhFLvfRrcgdexcrsMQG6kQjKu7NKMf4tW1nSeQyhY7905Df7M3YL226OlfQAB
+         dwnUQe4B0Pgx2Gu7zgmNb5afxqlXDlJHnGlHN8LJ9pjayLOnDQbkctC1S10vD20tEZVh
+         a0Rw==
+X-Gm-Message-State: AOJu0Yw3+9KGhM3Y5RAgWkKjIVLJPxnC0xrrjob5qHtc36jpL5yzZp/o
+	1Q5ehyiqfGmsYI8e1Zxcm421raQewP253VPLyeeXtxPpd5uaq+3g9Wc/YrqkRg==
+X-Google-Smtp-Source: AGHT+IF1Hke1j7fCAq2l/nqw+mSJkIzr6GHG9KukUEeDR56kC+lW1t7KmwvMNfBY5TVqXw/h82D19w==
+X-Received: by 2002:a05:620a:4483:b0:783:2516:58c8 with SMTP id x3-20020a05620a448300b00783251658c8mr1406385qkp.19.1706194766644;
+        Thu, 25 Jan 2024 06:59:26 -0800 (PST)
+Received: from localhost ([70.22.175.108])
+        by smtp.gmail.com with ESMTPSA id t8-20020a05620a034800b00783a206381csm3472154qkm.37.2024.01.25.06.59.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 Jan 2024 06:59:26 -0800 (PST)
+Date: Thu, 25 Jan 2024 09:59:25 -0500
+Message-ID: <736295ee70e12c5e1ba8a19b9a832b5f@paul-moore.com>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0 
+Content-Type: text/plain; charset=utf-8 
+Content-Disposition: inline 
+Content-Transfer-Encoding: 8bit
+From: Paul Moore <paul@paul-moore.com>
+To: Li zeming <zeming@nfschina.com>, eparis@redhat.com
+Cc: audit@vger.kernel.org, linux-kernel@vger.kernel.org, Li zeming <zeming@nfschina.com>
+Subject: Re: [PATCH] kernel: auditfilter: Remove unnecessary ‘0’ values from  ret
+References: <20231228025600.9796-1-zeming@nfschina.com>
+In-Reply-To: <20231228025600.9796-1-zeming@nfschina.com>
 
-Use the new KMEM_CACHE() macro instead of direct kmem_cache_create
-to simplify the creation of SLAB caches.
+On Dec 27, 2023 Li zeming <zeming@nfschina.com> wrote:
+> 
+> The ret variable is assigned when it does not need to be defined, as it
+> has already been assigned before use.
+> 
+> Signed-off-by: Li zeming <zeming@nfschina.com>
+> ---
+>  kernel/auditfilter.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Signed-off-by: Kunwu Chan <chentao@kylinos.cn>
----
- kernel/audit.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+Merged into audit/dev, thanks.
 
-diff --git a/kernel/audit.c b/kernel/audit.c
-index 9c8e5f732c4c..e7a62ebbf4d1 100644
---- a/kernel/audit.c
-+++ b/kernel/audit.c
-@@ -1693,9 +1693,7 @@ static int __init audit_init(void)
- 	if (audit_initialized =3D=3D AUDIT_DISABLED)
- 		return 0;
-=20
--	audit_buffer_cache =3D kmem_cache_create("audit_buffer",
--					       sizeof(struct audit_buffer),
--					       0, SLAB_PANIC, NULL);
-+	audit_buffer_cache =3D KMEM_CACHE(audit_buffer, SLAB_PANIC);
-=20
- 	skb_queue_head_init(&audit_queue);
- 	skb_queue_head_init(&audit_retry_queue);
---=20
-2.39.2
-
+--
+paul-moore.com
