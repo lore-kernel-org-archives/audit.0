@@ -1,239 +1,275 @@
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2EA60482F6;
-	Mon,  5 Feb 2024 23:21:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
+Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com [209.85.219.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B33A1BC27
+	for <audit@vger.kernel.org>; Tue,  6 Feb 2024 21:53:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707175270; cv=none; b=op9hMrcIa7cG7IszkDPJTKR/Tkm6w2LSiAs0y58Z+6DBkbfuecX0nx3crLms3uy4/NlcW2jdKK6Fb3GYKU6hG7O+hmHAvCiAkA7+akUYu8HYLFRz4wgkEViPvQualnqMBI8HNd8+B4BPR2bDdF6FqOowQU4z5dAa3lh7/aa2eNk=
+	t=1707256417; cv=none; b=QuP1X/QZhsRx2lRZPQ/zBujDtAGwR4aOUta8sX0iFtp6r6w0GRXi9jD7KMYiaJatIuOWQkkJRczIQqz9LGuw3tklL0tKYfddTjtnIctIXqXGxyASmTgqat0jW4JUakx8hYVPQf7PidHbjGzMYGLxoHA+zec1Kap2REM/OXvLDXs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707175270; c=relaxed/simple;
-	bh=zNL2ywjKJssZ5pRTlZYgka+6y+zGk61/qvBAu5YB1YU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ElX/mlT6EWN1wEbMptDhTEZu8L04x/Ic95MsnaupgPAtVi9i7cjJ565LIbX7m08r/KK7lyp18624XE1+6KfhIc0M3SkdU3PoV0ZIb09ljA14ePBwLLLkbHBcfUg/5mL4QdTYMDDXmcoKqaPtYidqKSP3qsDIt6U/+mUhD3NVf7E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=gI6cjtkm; arc=none smtp.client-ip=13.77.154.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
+	s=arc-20240116; t=1707256417; c=relaxed/simple;
+	bh=lEXEftvc8USQ5Sq5o5lp81iZXZA1RVqdMSS6fDyVwYE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ROBFvAT3NDm5rxsa5BIrkp2E2LXYwsjf1o3F2LIBEW9BLgwgJ8qO0813o8OZPdQ5OGp8HJMPnV3e4u00RAGmr/eM551fZ+/jyR5Jo0yFdBS1fma+o3eTejvENZSRtxJ7aTcKed1q29DF/HfL9hPDwqMOeuSnUFSY0G5fzobKddY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=YOrekqBm; arc=none smtp.client-ip=209.85.219.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="gI6cjtkm"
-Received: from [10.137.106.151] (unknown [131.107.8.87])
-	by linux.microsoft.com (Postfix) with ESMTPSA id 7AEC4207D846;
-	Mon,  5 Feb 2024 15:21:08 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 7AEC4207D846
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1707175268;
-	bh=Qg5yL0/Namb3YNGXwn7cLAEyy/A44S+ELEwtmFhQ+RU=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=gI6cjtkm4cibm2DUJ9mtikbVu9hHSNKlrL01rbV0Y8abl/91KTJ8r5LlGcVKm9npe
-	 EPhMJHhHGPNgNk3rT65weiExV4D+LnWH+FHKY7HJV0KPaLDujK5Oaas9kgHlsRJkAo
-	 o4qOBdinDv8keS6+bkjw5zNNXTTm+m7Xl1UsGhi0=
-Message-ID: <695f5fc3-446d-4f18-88cf-a95b3287fe7f@linux.microsoft.com>
-Date: Mon, 5 Feb 2024 15:21:08 -0800
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="YOrekqBm"
+Received: by mail-yb1-f170.google.com with SMTP id 3f1490d57ef6-dc6d24737d7so1337826276.0
+        for <audit@vger.kernel.org>; Tue, 06 Feb 2024 13:53:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1707256414; x=1707861214; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=E8VjUURyKl+tDea7fU1YfuA8k7lBdd08O4dfl2Z6+qs=;
+        b=YOrekqBm7lRAevzM7cbTxu7osqs2uDDeEc+pFoXzn6QV6lAHr5CJaplibVG95IRdb6
+         Oy9lnWMptMvSAPHlgft41NfLh1N82vAIq0NALTLUtBy+mH/pLPUyJ0U2FnG319MVRWn4
+         FQs0pFRzTBvCfvvQdWiL9On/vfy2VzY98dpCMKZah75NKlhcmjTcQdeipJhjQyb2fKPG
+         wUSsoubF8VN0j9ABnsWTbKrzE5Bakh5l/wlknLPQaCqqBrD1SYJhyh0gArJWIsw5gQZa
+         FygjWFOUMrPno6A4Uxw79yjVj7MdmSVerDZUXxGqz7dVMvQ63vyTAz7N5ROtznAzhNLO
+         l8Ug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1707256414; x=1707861214;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=E8VjUURyKl+tDea7fU1YfuA8k7lBdd08O4dfl2Z6+qs=;
+        b=OfYg4Rzto5pharsuRzvqHuLtvO5RaOP6Sh0gCJ9sU5a8l4IC4KI7d584l8S4huZP8+
+         nlWSMfoAzKpfIhx1V+BGneFRjsfJRTmQ3nbGto6PAokvQ7wCeRi1F9FmBtn4uBKBcqHw
+         AUXAm1QK/6EUj+SV7dzj7JDJrT54vRdk+4goSWuRiLgyUuctriDIKJWsc/iWLKRCui3t
+         QnpEL6yihtg42LobsveZRvxwm+zjPrZ0qWOGmXqaBi1YdujjKdS49Rr5SzniCnbRJKQO
+         vLrQRqp0Bs6/WpUWZAoLilWhgYu8+FGvb0EUQGAbfA4V8xC+wALZQxOL5PH8915DOFG1
+         HF5w==
+X-Gm-Message-State: AOJu0Yzk1Yl/5v9pNY/V+zd7eoNVKsapsgIccVpqf3dpua877lH6zYKd
+	zVOby3AVpEEWPJnCqpdvroehX7LXuA+kFqZbbO5zznaOcD5KWcWrmZojybGxY212cUneeuy4IQW
+	C79GNOEukceZcvvpIOtNxFk4sCLOF72J9Bk+8
+X-Google-Smtp-Source: AGHT+IEO4hTUbTAAn40GVh6bVY5MjCMuUK0Go+sNf1Zs+luw8FRTbTUb/aYdCk/1t8fccmSNm68UjpBMUgzFkT5lF5I=
+X-Received: by 2002:a25:84d2:0:b0:dc2:32e6:d1b1 with SMTP id
+ x18-20020a2584d2000000b00dc232e6d1b1mr2686889ybm.18.1707256414268; Tue, 06
+ Feb 2024 13:53:34 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RFC v12 8/20] ipe: add userspace interface
-Content-Language: en-US
-To: Paul Moore <paul@paul-moore.com>
-Cc: corbet@lwn.net, zohar@linux.ibm.com, jmorris@namei.org, serge@hallyn.com,
- tytso@mit.edu, ebiggers@kernel.org, axboe@kernel.dk, agk@redhat.com,
- snitzer@kernel.org, eparis@redhat.com, linux-doc@vger.kernel.org,
- linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org,
- linux-fscrypt@vger.kernel.org, linux-block@vger.kernel.org,
- dm-devel@lists.linux.dev, audit@vger.kernel.org,
- linux-kernel@vger.kernel.org, Deven Bowers <deven.desai@linux.microsoft.com>
-References: <1706654228-17180-9-git-send-email-wufan@linux.microsoft.com>
- <737a8ea0323b3db38044813041215bac@paul-moore.com>
- <6e7c707c-28cd-42ec-a617-6f8d2ce9da4f@linux.microsoft.com>
- <CAHC9VhSX4iNHEw89-mpF07cSqgGd1myQ6CUfiQnA9pgg3QS7Tw@mail.gmail.com>
-From: Fan Wu <wufan@linux.microsoft.com>
-In-Reply-To: <CAHC9VhSX4iNHEw89-mpF07cSqgGd1myQ6CUfiQnA9pgg3QS7Tw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <1706654228-17180-16-git-send-email-wufan@linux.microsoft.com>
+ <6ac3cca9d1d3505f3ed9c7196512f2db@paul-moore.com> <05cb5f03-9236-47b7-8dd4-1741c289efdc@linux.microsoft.com>
+In-Reply-To: <05cb5f03-9236-47b7-8dd4-1741c289efdc@linux.microsoft.com>
+From: Paul Moore <paul@paul-moore.com>
+Date: Tue, 6 Feb 2024 16:53:23 -0500
+Message-ID: <CAHC9VhS3Yb9QE3spJjFn2Mef-6m5Jxk6Yr80O1VkLp-yudp62w@mail.gmail.com>
+Subject: Re: [PATCH RFC v12 15/20] ipe: add support for dm-verity as a trust provider
+To: Fan Wu <wufan@linux.microsoft.com>
+Cc: corbet@lwn.net, zohar@linux.ibm.com, jmorris@namei.org, serge@hallyn.com, 
+	tytso@mit.edu, ebiggers@kernel.org, axboe@kernel.dk, agk@redhat.com, 
+	snitzer@kernel.org, eparis@redhat.com, linux-doc@vger.kernel.org, 
+	linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org, 
+	linux-fscrypt@vger.kernel.org, linux-block@vger.kernel.org, 
+	dm-devel@lists.linux.dev, audit@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Deven Bowers <deven.desai@linux.microsoft.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Mon, Feb 5, 2024 at 6:11=E2=80=AFPM Fan Wu <wufan@linux.microsoft.com> w=
+rote:
+> On 2/3/2024 2:25 PM, Paul Moore wrote:
+> > On Jan 30, 2024 Fan Wu <wufan@linux.microsoft.com> wrote:
+> >>
+> >> Allows author of IPE policy to indicate trust for a singular dm-verity
+> >> volume, identified by roothash, through "dmverity_roothash" and all
+> >> signed dm-verity volumes, through "dmverity_signature".
+> >>
+> >> Signed-off-by: Deven Bowers <deven.desai@linux.microsoft.com>
+> >> Signed-off-by: Fan Wu <wufan@linux.microsoft.com>
+> >> ---
+> >> v2:
+> >>    + No Changes
+> >>
+> >> v3:
+> >>    + No changes
+> >>
+> >> v4:
+> >>    + No changes
+> >>
+> >> v5:
+> >>    + No changes
+> >>
+> >> v6:
+> >>    + Fix an improper cleanup that can result in
+> >>      a leak
+> >>
+> >> v7:
+> >>    + Squash patch 08/12, 10/12 to [11/16]
+> >>
+> >> v8:
+> >>    + Undo squash of 08/12, 10/12 - separating drivers/md/ from securit=
+y/
+> >>      & block/
+> >>    + Use common-audit function for dmverity_signature.
+> >>    + Change implementation for storing the dm-verity digest to use the
+> >>      newly introduced dm_verity_digest structure introduced in patch
+> >>      14/20.
+> >>
+> >> v9:
+> >>    + Adapt to the new parser
+> >>
+> >> v10:
+> >>    + Select the Kconfig when all dependencies are enabled
+> >>
+> >> v11:
+> >>    + No changes
+> >>
+> >> v12:
+> >>    + Refactor to use struct digest_info* instead of void*
+> >>    + Correct audit format
+> >> ---
+> >>   security/ipe/Kconfig         |  18 ++++++
+> >>   security/ipe/Makefile        |   1 +
+> >>   security/ipe/audit.c         |  37 ++++++++++-
+> >>   security/ipe/digest.c        | 120 +++++++++++++++++++++++++++++++++=
+++
+> >>   security/ipe/digest.h        |  26 ++++++++
+> >>   security/ipe/eval.c          |  90 +++++++++++++++++++++++++-
+> >>   security/ipe/eval.h          |  10 +++
+> >>   security/ipe/hooks.c         |  67 +++++++++++++++++++
+> >>   security/ipe/hooks.h         |   8 +++
+> >>   security/ipe/ipe.c           |  15 +++++
+> >>   security/ipe/ipe.h           |   4 ++
+> >>   security/ipe/policy.h        |   3 +
+> >>   security/ipe/policy_parser.c |  26 +++++++-
+> >>   13 files changed, 421 insertions(+), 4 deletions(-)
+> >>   create mode 100644 security/ipe/digest.c
+> >>   create mode 100644 security/ipe/digest.h
+> >>
+> >> diff --git a/security/ipe/Kconfig b/security/ipe/Kconfig
+> >> index ac4d558e69d5..7afb1ce0cb99 100644
+> >> --- a/security/ipe/Kconfig
+> >> +++ b/security/ipe/Kconfig
+> >> @@ -8,6 +8,7 @@ menuconfig SECURITY_IPE
+> >>      depends on SECURITY && SECURITYFS && AUDIT && AUDITSYSCALL
+> >>      select PKCS7_MESSAGE_PARSER
+> >>      select SYSTEM_DATA_VERIFICATION
+> >> +    select IPE_PROP_DM_VERITY if DM_VERITY && DM_VERITY_VERIFY_ROOTHA=
+SH_SIG
+> >>      help
+> >>        This option enables the Integrity Policy Enforcement LSM
+> >>        allowing users to define a policy to enforce a trust-based acce=
+ss
+> >> @@ -15,3 +16,20 @@ menuconfig SECURITY_IPE
+> >>        admins to reconfigure trust requirements on the fly.
+> >>
+> >>        If unsure, answer N.
+> >> +
+> >> +if SECURITY_IPE
+> >> +menu "IPE Trust Providers"
+> >> +
+> >> +config IPE_PROP_DM_VERITY
+> >> +    bool "Enable support for dm-verity volumes"
+> >> +    depends on DM_VERITY && DM_VERITY_VERIFY_ROOTHASH_SIG
+> >> +    help
+> >> +      This option enables the properties 'dmverity_signature' and
+> >> +      'dmverity_roothash' in IPE policy. These properties evaluates
+> >> +      to TRUE when a file is evaluated against a dm-verity volume
+> >> +      that was mounted with a signed root-hash or the volume's
+> >> +      root hash matches the supplied value in the policy.
+> >> +
+> >> +endmenu
+> >> +
+> >> +endif
+> >> diff --git a/security/ipe/Makefile b/security/ipe/Makefile
+> >> index 2279eaa3cea3..66de53687d11 100644
+> >> --- a/security/ipe/Makefile
+> >> +++ b/security/ipe/Makefile
+> >> @@ -6,6 +6,7 @@
+> >>   #
+> >>
+> >>   obj-$(CONFIG_SECURITY_IPE) +=3D \
+> >> +    digest.o \
+> >>      eval.o \
+> >>      hooks.o \
+> >>      fs.o \
+> >> diff --git a/security/ipe/audit.c b/security/ipe/audit.c
+> >> index ed390d32c641..a4ad8e888df0 100644
+> >> --- a/security/ipe/audit.c
+> >> +++ b/security/ipe/audit.c
+> >> @@ -13,6 +13,7 @@
+> >>   #include "hooks.h"
+> >>   #include "policy.h"
+> >>   #include "audit.h"
+> >> +#include "digest.h"
+> >>
+> >>   #define ACTSTR(x) ((x) =3D=3D IPE_ACTION_ALLOW ? "ALLOW" : "DENY")
+> >>
+> >> @@ -54,8 +55,30 @@ static const char *const audit_prop_names[__IPE_PRO=
+P_MAX] =3D {
+> >>      "boot_verified=3DFALSE",
+> >>      "boot_verified=3DTRUE",
+> >>   #endif /* CONFIG_BLK_DEV_INITRD */
+> >> +#ifdef CONFIG_IPE_PROP_DM_VERITY
+> >> +    "dmverity_roothash=3D",
+> >> +    "dmverity_signature=3DFALSE",
+> >> +    "dmverity_signature=3DTRUE",
+> >> +#endif /* CONFIG_IPE_PROP_DM_VERITY */
+> >>   };
+> >>
+> >> +#ifdef CONFIG_IPE_PROP_DM_VERITY
+> >> +/**
+> >> + * audit_dmv_roothash - audit a roothash of a dmverity volume.
+> >> + * @ab: Supplies a pointer to the audit_buffer to append to.
+> >> + * @rh: Supplies a pointer to the digest structure.
+> >> + */
+> >> +static void audit_dmv_roothash(struct audit_buffer *ab, const void *r=
+h)
+> >> +{
+> >> +    audit_log_format(ab, "%s", audit_prop_names[IPE_PROP_DMV_ROOTHASH=
+]);
+> >> +    ipe_digest_audit(ab, rh);
+> >> +}
+> >> +#else
+> >> +static void audit_dmv_roothash(struct audit_buffer *ab, const void *r=
+h)
+> >> +{
+> >> +}
+> >> +#endif /* CONFIG_IPE_PROP_DM_VERITY */
+> >
+> > I talked about this back in my review of the v11 patchset and I'm
+> > guessing you may have missed it ... the problem with the above code is
+> > that the fields in an audit record should remain constant, even if
+> > there is no data for that particular field.  In cases where there is no
+> > data to record for a given field, a "?" should be used as the field's
+> > value, for example:
+> >
+> >    dmverify_roothash=3D?
+> >
+> > My guess is that you would want to do something like this:
+> >
+> >    #else  /* !CONFIG_IPE_PROP_DM_VERITY */
+> >    static void audit_dmv_roothash(...)
+> >    {
+> >      audit_log_format(ab, "%s=3D?", audit_prop_names[...]);
+> >    }
+> >    #endif /* CONFIG_IPE_PROP_DM_VERITY */
+> >
+> > --
+> > paul-moore.com
+>
+> These code are used for auditing a policy rule, which the parser will
+> guarantee the property will always have a valid value. The comments
+> might be misleading which sounds like it's auditing a file's state. I
+> will correct them.
+>
+> Also as we previously discussed, the policy grammar shouldn't depend on
+> any kernel switch so these preprocessor statement will be removed.
+>
+> However, as an audit record should remain constant, I guess we should do
+> some special treatment to anonymous files? Like audit record for them
+> should include "path=3D? dev=3D? ino=3D?"
 
+Yes, if the record type includes those fields just once, the record
+type should *always* include those fields.
 
-On 2/5/2024 3:10 PM, Paul Moore wrote:
-> On Mon, Feb 5, 2024 at 6:01 PM Fan Wu <wufan@linux.microsoft.com> wrote:
->> On 2/3/2024 2:25 PM, Paul Moore wrote:
->>> On Jan 30, 2024 Fan Wu <wufan@linux.microsoft.com> wrote:
->>>>
->>>> As is typical with LSMs, IPE uses securityfs as its interface with
->>>> userspace. for a complete list of the interfaces and the respective
->>>> inputs/outputs, please see the documentation under
->>>> admin-guide/LSM/ipe.rst
->>>>
->>>> Signed-off-by: Deven Bowers <deven.desai@linux.microsoft.com>
->>>> Signed-off-by: Fan Wu <wufan@linux.microsoft.com>
->>>> ---
->>>> v2:
->>>>     + Split evaluation loop, access control hooks,
->>>>       and evaluation loop from policy parser and userspace
->>>>       interface to pass mailing list character limit
->>>>
->>>> v3:
->>>>     + Move policy load and activation audit event to 03/12
->>>>     + Fix a potential panic when a policy failed to load.
->>>>     + use pr_warn for a failure to parse instead of an
->>>>       audit record
->>>>     + Remove comments from headers
->>>>     + Add lockdep assertions to ipe_update_active_policy and
->>>>       ipe_activate_policy
->>>>     + Fix up warnings with checkpatch --strict
->>>>     + Use file_ns_capable for CAP_MAC_ADMIN for securityfs
->>>>       nodes.
->>>>     + Use memdup_user instead of kzalloc+simple_write_to_buffer.
->>>>     + Remove strict_parse command line parameter, as it is added
->>>>       by the sysctl command line.
->>>>     + Prefix extern variables with ipe_
->>>>
->>>> v4:
->>>>     + Remove securityfs to reverse-dependency
->>>>     + Add SHA1 reverse dependency.
->>>>     + Add versioning scheme for IPE properties, and associated
->>>>       interface to query the versioning scheme.
->>>>     + Cause a parser to always return an error on unknown syntax.
->>>>     + Remove strict_parse option
->>>>     + Change active_policy interface from sysctl, to securityfs,
->>>>       and change scheme.
->>>>
->>>> v5:
->>>>     + Cause an error if a default action is not defined for each
->>>>       operation.
->>>>     + Minor function renames
->>>>
->>>> v6:
->>>>     + No changes
->>>>
->>>> v7:
->>>>     + Propagating changes to support the new ipe_context structure in the
->>>>       evaluation loop.
->>>>
->>>>     + Further split the parser and userspace interface changes into
->>>>       separate commits.
->>>>
->>>>     + "raw" was renamed to "pkcs7" and made read only
->>>>     + "raw"'s write functionality (update a policy) moved to "update"
->>>>     + introduced "version", "policy_name" nodes.
->>>>     + "content" renamed to "policy"
->>>>     + changes to allow the compiled-in policy to be treated
->>>>       identical to deployed-after-the-fact policies.
->>>>
->>>> v8:
->>>>     + Prevent securityfs initialization if the LSM is disabled
->>>>
->>>> v9:
->>>>     + Switch to securityfs_recursive_remove for policy folder deletion
->>>>
->>>> v10:
->>>>     + Simplify and correct concurrency
->>>>     + Fix typos
->>>>
->>>> v11:
->>>>     + Correct code comments
->>>>
->>>> v12:
->>>>     + Correct locking and remove redundant code
->>>> ---
->>>>    security/ipe/Makefile    |   2 +
->>>>    security/ipe/fs.c        | 101 +++++++++
->>>>    security/ipe/fs.h        |  16 ++
->>>>    security/ipe/ipe.c       |   3 +
->>>>    security/ipe/ipe.h       |   2 +
->>>>    security/ipe/policy.c    | 123 ++++++++++
->>>>    security/ipe/policy.h    |   9 +
->>>>    security/ipe/policy_fs.c | 469 +++++++++++++++++++++++++++++++++++++++
->>>>    8 files changed, 725 insertions(+)
->>>>    create mode 100644 security/ipe/fs.c
->>>>    create mode 100644 security/ipe/fs.h
->>>>    create mode 100644 security/ipe/policy_fs.c
->>>
->>> ...
->>>
->>>> diff --git a/security/ipe/policy.c b/security/ipe/policy.c
->>>> index f22a576a6d68..61fea3e38e11 100644
->>>> --- a/security/ipe/policy.c
->>>> +++ b/security/ipe/policy.c
->>>> @@ -43,6 +71,68 @@ static int set_pkcs7_data(void *ctx, const void *data, size_t len,
->>>>       return 0;
->>>>    }
->>>>
->>>> +/**
->>>> + * ipe_update_policy - parse a new policy and replace old with it.
->>>> + * @root: Supplies a pointer to the securityfs inode saved the policy.
->>>> + * @text: Supplies a pointer to the plain text policy.
->>>> + * @textlen: Supplies the length of @text.
->>>> + * @pkcs7: Supplies a pointer to a buffer containing a pkcs7 message.
->>>> + * @pkcs7len: Supplies the length of @pkcs7len.
->>>> + *
->>>> + * @text/@textlen is mutually exclusive with @pkcs7/@pkcs7len - see
->>>> + * ipe_new_policy.
->>>> + *
->>>> + * Context: Requires root->i_rwsem to be held.
->>>> + * Return:
->>>> + * * !IS_ERR        - The existing policy saved in the inode before update
->>>> + * * -ENOENT        - Policy doesn't exist
->>>> + * * -EINVAL        - New policy is invalid
->>>> + */
->>>> +struct ipe_policy *ipe_update_policy(struct inode *root,
->>>> +                                 const char *text, size_t textlen,
->>>> +                                 const char *pkcs7, size_t pkcs7len)
->>>> +{
->>>> +    int rc = 0;
->>>> +    struct ipe_policy *old, *ap, *new = NULL;
->>>> +
->>>> +    old = (struct ipe_policy *)root->i_private;
->>>> +    if (!old)
->>>> +            return ERR_PTR(-ENOENT);
->>>> +
->>>> +    new = ipe_new_policy(text, textlen, pkcs7, pkcs7len);
->>>> +    if (IS_ERR(new))
->>>> +            return new;
->>>> +
->>>> +    if (strcmp(new->parsed->name, old->parsed->name)) {
->>>> +            rc = -EINVAL;
->>>> +            goto err;
->>>> +    }
->>>> +
->>>> +    if (ver_to_u64(old) > ver_to_u64(new)) {
->>>> +            rc = -EINVAL;
->>>> +            goto err;
->>>> +    }
->>>> +
->>>> +    root->i_private = new;
->>>> +    swap(new->policyfs, old->policyfs);
->>>
->>> Should the swap() take place with @ipe_policy_lock held?
->>>
->> I think we are safe here because root->i_rwsem is held. Other two
->> operations set_active and delete are also depending on the inode lock.
->>>> +    mutex_lock(&ipe_policy_lock);
->>>> +    ap = rcu_dereference_protected(ipe_active_policy,
->>>> +                                   lockdep_is_held(&ipe_policy_lock));
->>>> +    if (old == ap) {
->>>> +            rcu_assign_pointer(ipe_active_policy, new);
->>>> +            mutex_unlock(&ipe_policy_lock);
->>>> +            synchronize_rcu();
->>>
->>> I'm guessing you are forcing a synchronize_rcu() here because you are
->>> free()'ing @old in the caller, yes?  Looking at the code, I only see
->>> one caller, update_policy().  With only one caller, why not free @old
->>> directly in ipe_update_policy()?  Do you see others callers that would
->>> do something different?
->>>
->> The call of synchronize_rcu() is because we are updating the current
->> active policy so we need to set the new policy as active.
-> 
-> Unless I'm mistaken, a syncronize_rcu() call only ensures that the
-> current task will see the updated value by waiting until all current
-> RCU critical sections have finished.  Given the mutex involved here I
-> don't believe this is necessary, but please correct me if I'm wrong.
-> 
-Sorry for the confusion. I think your previous comment was right, the 
-call of synchronize_rcu() is to free the old one. And I should put the 
-free of old just after the synchronize_rcu() call.
-
-Thanks,
-Fan
+--=20
+paul-moore.com
