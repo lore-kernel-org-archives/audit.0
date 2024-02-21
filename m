@@ -1,275 +1,221 @@
-Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com [209.85.219.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B33A1BC27
-	for <audit@vger.kernel.org>; Tue,  6 Feb 2024 21:53:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0518045C10;
+	Wed, 21 Feb 2024 21:25:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707256417; cv=none; b=QuP1X/QZhsRx2lRZPQ/zBujDtAGwR4aOUta8sX0iFtp6r6w0GRXi9jD7KMYiaJatIuOWQkkJRczIQqz9LGuw3tklL0tKYfddTjtnIctIXqXGxyASmTgqat0jW4JUakx8hYVPQf7PidHbjGzMYGLxoHA+zec1Kap2REM/OXvLDXs=
+	t=1708550706; cv=none; b=GwJOntZ02HQbFIZvNXdO3u+1sovaoa66xOyDEgHt8CF10O3W2KnVS0Q9xvpk/qHAVmWttB9pKXb+wnb/6O9PQ6qEn37fwO7mxLeu2/3Rm/xWPHGhR/eCBWUI5swumfqY6Xzjv+UkBs69gmTFuYVYLsyoYDUNgs92lEdaN4aZKQ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707256417; c=relaxed/simple;
-	bh=lEXEftvc8USQ5Sq5o5lp81iZXZA1RVqdMSS6fDyVwYE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ROBFvAT3NDm5rxsa5BIrkp2E2LXYwsjf1o3F2LIBEW9BLgwgJ8qO0813o8OZPdQ5OGp8HJMPnV3e4u00RAGmr/eM551fZ+/jyR5Jo0yFdBS1fma+o3eTejvENZSRtxJ7aTcKed1q29DF/HfL9hPDwqMOeuSnUFSY0G5fzobKddY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=YOrekqBm; arc=none smtp.client-ip=209.85.219.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+	s=arc-20240116; t=1708550706; c=relaxed/simple;
+	bh=pEK3ogWcsMBDjVNEBVGWfKJWNZ+VqsOdUsw3KYnCmp8=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=XxQM6N+2dFkG6RXETas84vZtt9pE40ZqVRb+zg/aoYdYMH1tf/ldg8e802FSpg6aTlG79wvOKMnNFSgKpFGiZTSWlTR0mtVpI1v9m6A55D7XYVswbgOZMPJq4Sc9147FpTfa1zG+UwUArex4r/VF1WBgAsPgs9bppNsOCbkrHhg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=piyl8rIr; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="YOrekqBm"
-Received: by mail-yb1-f170.google.com with SMTP id 3f1490d57ef6-dc6d24737d7so1337826276.0
-        for <audit@vger.kernel.org>; Tue, 06 Feb 2024 13:53:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1707256414; x=1707861214; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=E8VjUURyKl+tDea7fU1YfuA8k7lBdd08O4dfl2Z6+qs=;
-        b=YOrekqBm7lRAevzM7cbTxu7osqs2uDDeEc+pFoXzn6QV6lAHr5CJaplibVG95IRdb6
-         Oy9lnWMptMvSAPHlgft41NfLh1N82vAIq0NALTLUtBy+mH/pLPUyJ0U2FnG319MVRWn4
-         FQs0pFRzTBvCfvvQdWiL9On/vfy2VzY98dpCMKZah75NKlhcmjTcQdeipJhjQyb2fKPG
-         wUSsoubF8VN0j9ABnsWTbKrzE5Bakh5l/wlknLPQaCqqBrD1SYJhyh0gArJWIsw5gQZa
-         FygjWFOUMrPno6A4Uxw79yjVj7MdmSVerDZUXxGqz7dVMvQ63vyTAz7N5ROtznAzhNLO
-         l8Ug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707256414; x=1707861214;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=E8VjUURyKl+tDea7fU1YfuA8k7lBdd08O4dfl2Z6+qs=;
-        b=OfYg4Rzto5pharsuRzvqHuLtvO5RaOP6Sh0gCJ9sU5a8l4IC4KI7d584l8S4huZP8+
-         nlWSMfoAzKpfIhx1V+BGneFRjsfJRTmQ3nbGto6PAokvQ7wCeRi1F9FmBtn4uBKBcqHw
-         AUXAm1QK/6EUj+SV7dzj7JDJrT54vRdk+4goSWuRiLgyUuctriDIKJWsc/iWLKRCui3t
-         QnpEL6yihtg42LobsveZRvxwm+zjPrZ0qWOGmXqaBi1YdujjKdS49Rr5SzniCnbRJKQO
-         vLrQRqp0Bs6/WpUWZAoLilWhgYu8+FGvb0EUQGAbfA4V8xC+wALZQxOL5PH8915DOFG1
-         HF5w==
-X-Gm-Message-State: AOJu0Yzk1Yl/5v9pNY/V+zd7eoNVKsapsgIccVpqf3dpua877lH6zYKd
-	zVOby3AVpEEWPJnCqpdvroehX7LXuA+kFqZbbO5zznaOcD5KWcWrmZojybGxY212cUneeuy4IQW
-	C79GNOEukceZcvvpIOtNxFk4sCLOF72J9Bk+8
-X-Google-Smtp-Source: AGHT+IEO4hTUbTAAn40GVh6bVY5MjCMuUK0Go+sNf1Zs+luw8FRTbTUb/aYdCk/1t8fccmSNm68UjpBMUgzFkT5lF5I=
-X-Received: by 2002:a25:84d2:0:b0:dc2:32e6:d1b1 with SMTP id
- x18-20020a2584d2000000b00dc232e6d1b1mr2686889ybm.18.1707256414268; Tue, 06
- Feb 2024 13:53:34 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="piyl8rIr"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 97571C433F1;
+	Wed, 21 Feb 2024 21:25:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1708550705;
+	bh=pEK3ogWcsMBDjVNEBVGWfKJWNZ+VqsOdUsw3KYnCmp8=;
+	h=From:Subject:Date:To:Cc:From;
+	b=piyl8rIri2UZhWzO6yo1zioRkeNE/JkVgB3rClW62lgtZU6x+atyxbvPRC53LyB9y
+	 +rQOfeFuwJDF9rdObfhGRkA4KcAOp2jSPef+XUItB4AB5DhrZRoPmOWoB+4Iylq4O9
+	 Zq5+yJ2bSUBg5kaK7cPLvL7av1/eC939h5zuDd24tZIzPDDdTToGX8AKM8GH47rCzL
+	 vrOlfV3F25jmB0OTV6awbrPd7u0jIuVLDFrMbHzC0gneDLTln8QSPFNigBHVoDTupU
+	 SIR55iv/mcT8wbR4LnxJqC5G5MuMw246MMUT11yPMmVuDTzC7J/C+Y21jUVgvnXy0P
+	 bHDlFSvHq7nBA==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 78138C5478A;
+	Wed, 21 Feb 2024 21:25:05 +0000 (UTC)
+From: "Seth Forshee (DigitalOcean)" <sforshee@kernel.org>
+Subject: [PATCH v2 00/25] fs: use type-safe uid representation for
+ filesystem capabilities
+Date: Wed, 21 Feb 2024 15:24:31 -0600
+Message-Id: <20240221-idmap-fscap-refactor-v2-0-3039364623bd@kernel.org>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <1706654228-17180-16-git-send-email-wufan@linux.microsoft.com>
- <6ac3cca9d1d3505f3ed9c7196512f2db@paul-moore.com> <05cb5f03-9236-47b7-8dd4-1741c289efdc@linux.microsoft.com>
-In-Reply-To: <05cb5f03-9236-47b7-8dd4-1741c289efdc@linux.microsoft.com>
-From: Paul Moore <paul@paul-moore.com>
-Date: Tue, 6 Feb 2024 16:53:23 -0500
-Message-ID: <CAHC9VhS3Yb9QE3spJjFn2Mef-6m5Jxk6Yr80O1VkLp-yudp62w@mail.gmail.com>
-Subject: Re: [PATCH RFC v12 15/20] ipe: add support for dm-verity as a trust provider
-To: Fan Wu <wufan@linux.microsoft.com>
-Cc: corbet@lwn.net, zohar@linux.ibm.com, jmorris@namei.org, serge@hallyn.com, 
-	tytso@mit.edu, ebiggers@kernel.org, axboe@kernel.dk, agk@redhat.com, 
-	snitzer@kernel.org, eparis@redhat.com, linux-doc@vger.kernel.org, 
-	linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org, 
-	linux-fscrypt@vger.kernel.org, linux-block@vger.kernel.org, 
-	dm-devel@lists.linux.dev, audit@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Deven Bowers <deven.desai@linux.microsoft.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAA9q1mUC/22NQQrCMBBFr1JmbSRJSVBX3kO6mKSTNljTkmhQS
+ u/u2LWbgfeZx1uhUI5U4NKskKnGEufEoA8N+BHTQCL2zKClbqVRmvGBiwjF880U0D/nLGzrrAo
+ osbUBWHVYSLiMyY8sp9c08bjwe3zvrVvHPMbC7mdPV/Vb94pS+vy/UpWQokeD2kpzQuOud8qJp
+ uOcB+i2bfsCF+jp6c4AAAA=
+To: Christian Brauner <brauner@kernel.org>, 
+ Seth Forshee <sforshee@kernel.org>, Serge Hallyn <serge@hallyn.com>, 
+ Paul Moore <paul@paul-moore.com>, Eric Paris <eparis@redhat.com>, 
+ James Morris <jmorris@namei.org>, Alexander Viro <viro@zeniv.linux.org.uk>, 
+ Jan Kara <jack@suse.cz>, Stephen Smalley <stephen.smalley.work@gmail.com>, 
+ Ondrej Mosnacek <omosnace@redhat.com>, 
+ Casey Schaufler <casey@schaufler-ca.com>, Mimi Zohar <zohar@linux.ibm.com>, 
+ Roberto Sassu <roberto.sassu@huawei.com>, 
+ Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, 
+ Eric Snowberg <eric.snowberg@oracle.com>, 
+ "Matthew Wilcox (Oracle)" <willy@infradead.org>, 
+ Jonathan Corbet <corbet@lwn.net>, Miklos Szeredi <miklos@szeredi.hu>, 
+ Amir Goldstein <amir73il@gmail.com>
+Cc: linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+ linux-security-module@vger.kernel.org, audit@vger.kernel.org, 
+ selinux@vger.kernel.org, linux-integrity@vger.kernel.org, 
+ linux-doc@vger.kernel.org, linux-unionfs@vger.kernel.org
+X-Mailer: b4 0.12.4
+X-Developer-Signature: v=1; a=openpgp-sha256; l=6763; i=sforshee@kernel.org;
+ h=from:subject:message-id; bh=pEK3ogWcsMBDjVNEBVGWfKJWNZ+VqsOdUsw3KYnCmp8=; 
+ =?utf-8?q?b=3DowEBbQGS/pANAwAKAVMDma7l9DHJAcsmYgBl1moWoa2PeA8gvUi+F8nAKw73u?=
+ =?utf-8?q?YewhAhfWqEh/fe7_8SlhL/2JATMEAAEKAB0WIQSQnt+rKAvnETy4Hc9TA5mu5fQxy?=
+ =?utf-8?q?QUCZdZqFgAKCRBTA5mu5fQxydf1B/_0S9qlm7Hricn6XNcEnh8kf6deH57UoqT/zH?=
+ =?utf-8?q?u3R0D/8Akk4J0UyDpVDieeGAtq3ACBYdyvi4vPsVaSW_SYt2h7VB4KM+MtzGq234o?=
+ =?utf-8?q?SynaMZ/DoUgp3MWk/w0YrmGr947zFeiT8CyHfQ+n4lRPEnzlZKLdoEjhI_4ZXVPBa?=
+ =?utf-8?q?I390rByk0SGuKf7Cb8WIIReJ36MToptFKtKwN777xdEWc8TDtyvVSzMBGkTo0Dmt9?=
+ =?utf-8?q?Yny3w7_UpOW68h853T9SsFtY9z/O0Qwi66H6SWGNNe2LcCKN5y3EiOKQ2CSGI/vNo?=
+ =?utf-8?q?OecRjdw3LTvJ364qtzRc?= w+//WGGw9OOVYRUfBHjqDdeElgsYiN
+X-Developer-Key: i=sforshee@kernel.org; a=openpgp;
+ fpr=2ABCA7498D83E1D32D51D3B5AB4800A62DB9F73A
+X-Endpoint-Received:
+ by B4 Relay for sforshee@kernel.org/default with auth_id=103
 
-On Mon, Feb 5, 2024 at 6:11=E2=80=AFPM Fan Wu <wufan@linux.microsoft.com> w=
-rote:
-> On 2/3/2024 2:25 PM, Paul Moore wrote:
-> > On Jan 30, 2024 Fan Wu <wufan@linux.microsoft.com> wrote:
-> >>
-> >> Allows author of IPE policy to indicate trust for a singular dm-verity
-> >> volume, identified by roothash, through "dmverity_roothash" and all
-> >> signed dm-verity volumes, through "dmverity_signature".
-> >>
-> >> Signed-off-by: Deven Bowers <deven.desai@linux.microsoft.com>
-> >> Signed-off-by: Fan Wu <wufan@linux.microsoft.com>
-> >> ---
-> >> v2:
-> >>    + No Changes
-> >>
-> >> v3:
-> >>    + No changes
-> >>
-> >> v4:
-> >>    + No changes
-> >>
-> >> v5:
-> >>    + No changes
-> >>
-> >> v6:
-> >>    + Fix an improper cleanup that can result in
-> >>      a leak
-> >>
-> >> v7:
-> >>    + Squash patch 08/12, 10/12 to [11/16]
-> >>
-> >> v8:
-> >>    + Undo squash of 08/12, 10/12 - separating drivers/md/ from securit=
-y/
-> >>      & block/
-> >>    + Use common-audit function for dmverity_signature.
-> >>    + Change implementation for storing the dm-verity digest to use the
-> >>      newly introduced dm_verity_digest structure introduced in patch
-> >>      14/20.
-> >>
-> >> v9:
-> >>    + Adapt to the new parser
-> >>
-> >> v10:
-> >>    + Select the Kconfig when all dependencies are enabled
-> >>
-> >> v11:
-> >>    + No changes
-> >>
-> >> v12:
-> >>    + Refactor to use struct digest_info* instead of void*
-> >>    + Correct audit format
-> >> ---
-> >>   security/ipe/Kconfig         |  18 ++++++
-> >>   security/ipe/Makefile        |   1 +
-> >>   security/ipe/audit.c         |  37 ++++++++++-
-> >>   security/ipe/digest.c        | 120 +++++++++++++++++++++++++++++++++=
-++
-> >>   security/ipe/digest.h        |  26 ++++++++
-> >>   security/ipe/eval.c          |  90 +++++++++++++++++++++++++-
-> >>   security/ipe/eval.h          |  10 +++
-> >>   security/ipe/hooks.c         |  67 +++++++++++++++++++
-> >>   security/ipe/hooks.h         |   8 +++
-> >>   security/ipe/ipe.c           |  15 +++++
-> >>   security/ipe/ipe.h           |   4 ++
-> >>   security/ipe/policy.h        |   3 +
-> >>   security/ipe/policy_parser.c |  26 +++++++-
-> >>   13 files changed, 421 insertions(+), 4 deletions(-)
-> >>   create mode 100644 security/ipe/digest.c
-> >>   create mode 100644 security/ipe/digest.h
-> >>
-> >> diff --git a/security/ipe/Kconfig b/security/ipe/Kconfig
-> >> index ac4d558e69d5..7afb1ce0cb99 100644
-> >> --- a/security/ipe/Kconfig
-> >> +++ b/security/ipe/Kconfig
-> >> @@ -8,6 +8,7 @@ menuconfig SECURITY_IPE
-> >>      depends on SECURITY && SECURITYFS && AUDIT && AUDITSYSCALL
-> >>      select PKCS7_MESSAGE_PARSER
-> >>      select SYSTEM_DATA_VERIFICATION
-> >> +    select IPE_PROP_DM_VERITY if DM_VERITY && DM_VERITY_VERIFY_ROOTHA=
-SH_SIG
-> >>      help
-> >>        This option enables the Integrity Policy Enforcement LSM
-> >>        allowing users to define a policy to enforce a trust-based acce=
-ss
-> >> @@ -15,3 +16,20 @@ menuconfig SECURITY_IPE
-> >>        admins to reconfigure trust requirements on the fly.
-> >>
-> >>        If unsure, answer N.
-> >> +
-> >> +if SECURITY_IPE
-> >> +menu "IPE Trust Providers"
-> >> +
-> >> +config IPE_PROP_DM_VERITY
-> >> +    bool "Enable support for dm-verity volumes"
-> >> +    depends on DM_VERITY && DM_VERITY_VERIFY_ROOTHASH_SIG
-> >> +    help
-> >> +      This option enables the properties 'dmverity_signature' and
-> >> +      'dmverity_roothash' in IPE policy. These properties evaluates
-> >> +      to TRUE when a file is evaluated against a dm-verity volume
-> >> +      that was mounted with a signed root-hash or the volume's
-> >> +      root hash matches the supplied value in the policy.
-> >> +
-> >> +endmenu
-> >> +
-> >> +endif
-> >> diff --git a/security/ipe/Makefile b/security/ipe/Makefile
-> >> index 2279eaa3cea3..66de53687d11 100644
-> >> --- a/security/ipe/Makefile
-> >> +++ b/security/ipe/Makefile
-> >> @@ -6,6 +6,7 @@
-> >>   #
-> >>
-> >>   obj-$(CONFIG_SECURITY_IPE) +=3D \
-> >> +    digest.o \
-> >>      eval.o \
-> >>      hooks.o \
-> >>      fs.o \
-> >> diff --git a/security/ipe/audit.c b/security/ipe/audit.c
-> >> index ed390d32c641..a4ad8e888df0 100644
-> >> --- a/security/ipe/audit.c
-> >> +++ b/security/ipe/audit.c
-> >> @@ -13,6 +13,7 @@
-> >>   #include "hooks.h"
-> >>   #include "policy.h"
-> >>   #include "audit.h"
-> >> +#include "digest.h"
-> >>
-> >>   #define ACTSTR(x) ((x) =3D=3D IPE_ACTION_ALLOW ? "ALLOW" : "DENY")
-> >>
-> >> @@ -54,8 +55,30 @@ static const char *const audit_prop_names[__IPE_PRO=
-P_MAX] =3D {
-> >>      "boot_verified=3DFALSE",
-> >>      "boot_verified=3DTRUE",
-> >>   #endif /* CONFIG_BLK_DEV_INITRD */
-> >> +#ifdef CONFIG_IPE_PROP_DM_VERITY
-> >> +    "dmverity_roothash=3D",
-> >> +    "dmverity_signature=3DFALSE",
-> >> +    "dmverity_signature=3DTRUE",
-> >> +#endif /* CONFIG_IPE_PROP_DM_VERITY */
-> >>   };
-> >>
-> >> +#ifdef CONFIG_IPE_PROP_DM_VERITY
-> >> +/**
-> >> + * audit_dmv_roothash - audit a roothash of a dmverity volume.
-> >> + * @ab: Supplies a pointer to the audit_buffer to append to.
-> >> + * @rh: Supplies a pointer to the digest structure.
-> >> + */
-> >> +static void audit_dmv_roothash(struct audit_buffer *ab, const void *r=
-h)
-> >> +{
-> >> +    audit_log_format(ab, "%s", audit_prop_names[IPE_PROP_DMV_ROOTHASH=
-]);
-> >> +    ipe_digest_audit(ab, rh);
-> >> +}
-> >> +#else
-> >> +static void audit_dmv_roothash(struct audit_buffer *ab, const void *r=
-h)
-> >> +{
-> >> +}
-> >> +#endif /* CONFIG_IPE_PROP_DM_VERITY */
-> >
-> > I talked about this back in my review of the v11 patchset and I'm
-> > guessing you may have missed it ... the problem with the above code is
-> > that the fields in an audit record should remain constant, even if
-> > there is no data for that particular field.  In cases where there is no
-> > data to record for a given field, a "?" should be used as the field's
-> > value, for example:
-> >
-> >    dmverify_roothash=3D?
-> >
-> > My guess is that you would want to do something like this:
-> >
-> >    #else  /* !CONFIG_IPE_PROP_DM_VERITY */
-> >    static void audit_dmv_roothash(...)
-> >    {
-> >      audit_log_format(ab, "%s=3D?", audit_prop_names[...]);
-> >    }
-> >    #endif /* CONFIG_IPE_PROP_DM_VERITY */
-> >
-> > --
-> > paul-moore.com
->
-> These code are used for auditing a policy rule, which the parser will
-> guarantee the property will always have a valid value. The comments
-> might be misleading which sounds like it's auditing a file's state. I
-> will correct them.
->
-> Also as we previously discussed, the policy grammar shouldn't depend on
-> any kernel switch so these preprocessor statement will be removed.
->
-> However, as an audit record should remain constant, I guess we should do
-> some special treatment to anonymous files? Like audit record for them
-> should include "path=3D? dev=3D? ino=3D?"
+This series converts filesystem capabilities from passing around raw
+xattr data to using a kernel-internal representation with type safe
+uids, similar to the conversion done previously for posix ACLs.
+Currently fscaps representations in the kernel have two different
+instances of unclear or confused types:
 
-Yes, if the record type includes those fields just once, the record
-type should *always* include those fields.
+- fscaps are generally passed around in the raw xattr form, with the
+  rootid sometimes containing the user uid value and at other times
+  containing the filesystem value.
+- The existing kernel-internal representation of fscaps,
+  cpu_vfs_cap_data, uses the kuid_t type, but the value stored is
+  actually a vfsuid.
 
---=20
-paul-moore.com
+This series eliminates this confusion by converting the xattr data to
+the kernel representation near the userspace and filesystem boundaries,
+using the kernel representation within the vfs and commoncap code. The
+internal representation is renamed to vfs_caps to reflect this broader
+use, and the rootid is changed to a vfsuid_t to correctly identify the
+type of uid which it contains.
+
+New vfs interfaces are added to allow for getting and setting fscaps
+using the kernel representation. This requires the addition of new inode
+operations to allow overlayfs to handle fscaps properly; all other
+filesystems fall back to a generic implementation. The top-level vfs
+xattr interfaces will now reject fscaps xattrs, though the lower-level
+interfaces continue to accept them for reading and writing the raw xattr
+data.
+
+Based on previous feedback, new security hooks are added for fscaps
+operations. These are really only needed for EVM, and the selinux and
+smack implementations just peform the same operations that the
+equivalent xattr hooks would have done. Note too that this has not yet
+been updated based on the changes to make EVM into an LSM.
+
+The remainder of the changes are preparatory work, addition of helpers
+for converting between the xattr and kernel fscaps representation, and
+various updates to use the kernel representation and new interfaces.
+
+I have tested this code with xfstests, ltp, libcap2, and libcap-ng with
+no regressions found.
+
+To: Christian Brauner <brauner@kernel.org>
+To: Serge Hallyn <serge@hallyn.com>
+To: Paul Moore <paul@paul-moore.com>
+To: Eric Paris <eparis@redhat.com>
+To: James Morris <jmorris@namei.org>
+To: Alexander Viro <viro@zeniv.linux.org.uk>
+To: Miklos Szeredi <miklos@szeredi.hu>
+To: Amir Goldstein <amir73il@gmail.com>
+Cc:  <linux-kernel@vger.kernel.org>
+Cc:  <linux-fsdevel@vger.kernel.org>
+Cc:  <linux-security-module@vger.kernel.org>
+Cc:  <audit@vger.kernel.org>
+Cc:  <linux-unionfs@vger.kernel.org>
+Signed-off-by: Seth Forshee (DigitalOcean) <sforshee@kernel.org>
+
+--- Changes in v2:
+- Documented new inode operations in
+  Documentation/filesystems/{vfs,locking}.rst.
+- Changed types for sizes in function arguments and return values to
+  size_t/ssize_t.
+- Renamed flags arguments to setxattr_flags for clarity.
+- Removed memory allocation when reading fscaps xattrs.
+- Updated get_vfs_caps_from_disk() to use vfs_get_fscaps() and updated
+  comments to explain how these functions are different.
+- Updates/fixes to kernel-doc comments.
+- Remove unnecessary type cast.
+- Rename __vfs_{get,remove}_fscaps() to vfs_{get,remove}_fscaps_nosec().
+- Add missing fsnotify_xattr() call in vfs_set_fscaps().
+- Add fscaps security hooks along with appropriate handlers in selinux,
+  smack, and evm.
+- Remove remove_fscaps inode op in favor of passing NULL to set_fscaps.
+- Added static asserts for compatibility of vfs_cap_data and
+  vfs_ns_cap_data.
+- ovl: remove unnecessary check around ovl_copy_up(), and add check
+  before copyint up fscaps for removal that the fscaps actually exist on
+  the lower inode.
+- ovl: install fscaps handlers for all inode types
+- Add is_fscaps_xattr() helper and use it in place of open-coded strcmps
+- Link to v1: https://lore.kernel.org/r/20231129-idmap-fscap-refactor-v1-0-da5a26058a5b@kernel.org
+
+---
+Seth Forshee (DigitalOcean) (25):
+      mnt_idmapping: split out core vfs[ug]id_t definitions into vfsid.h
+      mnt_idmapping: include cred.h
+      capability: add static asserts for comapatibility of vfs_cap_data and vfs_ns_cap_data
+      capability: rename cpu_vfs_cap_data to vfs_caps
+      capability: use vfsuid_t for vfs_caps rootids
+      capability: provide helpers for converting between xattrs and vfs_caps
+      capability: provide a helper for converting vfs_caps to xattr for userspace
+      xattr: add is_fscaps_xattr() helper
+      commoncap: use is_fscaps_xattr()
+      xattr: use is_fscaps_xattr()
+      security: add hooks for set/get/remove of fscaps
+      selinux: add hooks for fscaps operations
+      smack: add hooks for fscaps operations
+      evm: add support for fscaps security hooks
+      security: call evm fscaps hooks from generic security hooks
+      fs: add inode operations to get/set/remove fscaps
+      fs: add vfs_get_fscaps()
+      fs: add vfs_set_fscaps()
+      fs: add vfs_remove_fscaps()
+      ovl: add fscaps handlers
+      ovl: use vfs_{get,set}_fscaps() for copy-up
+      fs: use vfs interfaces for capabilities xattrs
+      commoncap: remove cap_inode_getsecurity()
+      commoncap: use vfs fscaps interfaces
+      vfs: return -EOPNOTSUPP for fscaps from vfs_*xattr()
+
+ Documentation/filesystems/locking.rst |   4 +
+ Documentation/filesystems/vfs.rst     |  17 ++
+ MAINTAINERS                           |   1 +
+ fs/overlayfs/copy_up.c                |  72 ++---
+ fs/overlayfs/dir.c                    |   2 +
+ fs/overlayfs/inode.c                  |  72 +++++
+ fs/overlayfs/overlayfs.h              |   5 +
+ fs/xattr.c                            | 280 +++++++++++++++++-
+ include/linux/capability.h            |  23 +-
+ include/linux/evm.h                   |  39 +++
+ include/linux/fs.h                    |  12 +
+ include/linux/lsm_hook_defs.h         |   7 +
+ include/linux/mnt_idmapping.h         |  67 +----
+ include/linux/security.h              |  38 ++-
+ include/linux/vfsid.h                 |  74 +++++
+ include/linux/xattr.h                 |   5 +
+ include/uapi/linux/capability.h       |  13 +
+ kernel/auditsc.c                      |   9 +-
+ security/commoncap.c                  | 529 ++++++++++++++++++----------------
+ security/integrity/evm/evm_main.c     |  60 ++++
+ security/security.c                   |  80 +++++
+ security/selinux/hooks.c              |  26 ++
+ security/smack/smack_lsm.c            |  71 +++++
+ 23 files changed, 1144 insertions(+), 362 deletions(-)
+---
+base-commit: 841c35169323cd833294798e58b9bf63fa4fa1de
+change-id: 20230512-idmap-fscap-refactor-63b61fa0a36f
+
+Best regards,
+-- 
+Seth Forshee (DigitalOcean) <sforshee@kernel.org>
+
