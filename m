@@ -1,138 +1,278 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75454145343;
-	Tue, 27 Feb 2024 14:57:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B955F2C856;
+	Thu, 29 Feb 2024 00:55:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709045872; cv=none; b=QrcgrKWhHO/FCgxbhaFyJXx2XewJv/JaA0FIEJNawqYimE5M6YwwpUCSLDI5tEo0wUM3u8iZMsxeepepVDKM5cL8iAIE2g59IK2FaRObYnPSv2F3hIJ9P6TCVq8XbScvDg8B2tou3UaKGsWmBqtM+Ix7ejxusJBg9IBX4SCwbfs=
+	t=1709168121; cv=none; b=jtB/mvuWAE7gl6Au+jORpQ4T0elTTXugxBnaAXtiEX2QsJBX/6uv+mGK3ZrFNEE20a/5tmZSBBSjMG1l8CztIY26avSUKD74jfoeX2fF3I1z5DI4wlr2XxfcLKisjg7uakqDHapJkjUqh1/tRgpdTrsJ/IeZj3yprBwNjTcpf4s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709045872; c=relaxed/simple;
-	bh=wmEclif75z08Y7k+kYIcq9r8njHDzniHYzsVWuX5qXc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nvcEbAN/CYonehRsQzbHPhoEnmFJbVdD71rxtQpTCDz1+LJmal3gxNKQUcW772uVU+78sxbhiBDrvW4ovnhLIqIMUnLFZGCk4nJJzSYjMT4FSeuSoLRY8RTDC/vP7liQk2qd9l1+9nNXNvwzEMLmC4CHOTFaYeGwwn4ci4ruHxM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tsXgDuZq; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1709168121; c=relaxed/simple;
+	bh=EDo5RTtPeuCmWwByqD0kigCW6lb+mDj+rRRl1BJXMoU=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=huaT5/pf/f+0aDIVx0bLUS3LkrmPxPU6W177c8bWEJYhUGfwpotvIBjd8jA4uH/K/nE3RpQvplh+uT4+HSVgXhcV3dN/cyaCoyAX1Tjr9KJcnZ8ICjopjUg/G50tkua//Xi53Nl+Tz2DjPWQtD56aucaX/YBw7ljTkK10QCZG7g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=VaeyjUDc; arc=none smtp.client-ip=13.77.154.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tsXgDuZq"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2BB6BC433F1;
-	Tue, 27 Feb 2024 14:57:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709045872;
-	bh=wmEclif75z08Y7k+kYIcq9r8njHDzniHYzsVWuX5qXc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=tsXgDuZqZaxkgTGkVT4vgZZkifzs/XhauPG/Z8VblgKg3JYBuzgPCH2sN/AOfYAsz
-	 Cizp02wJoy2Js13JQt0E+Zl0HHvCGA3oZPWP9ioF8VBtoICsQTFvdJzNjP0YHkL+jx
-	 ZIEk0/YHOPTJNdkd9MEZU1P/jrlu9PFKFSfTKXyWBhplucxucznwgrqof5c5iGRM/2
-	 tUKDL8CJyGhfVnM/DYhRi1QnqmdGaigiZHrlvcPEAFN5h7QksWvunvY47bRRJDFmc2
-	 IfgbTjgpxKGsD+8Gs+Bdb72wnC6/I2S3F3cVc+DfaWBszVKJLxEdYDxu+6MSCu1WCQ
-	 xKCvkJWQbWn0Q==
-Date: Tue, 27 Feb 2024 08:57:51 -0600
-From: "Seth Forshee (DigitalOcean)" <sforshee@kernel.org>
-To: Amir Goldstein <amir73il@gmail.com>
-Cc: Christian Brauner <brauner@kernel.org>, Serge Hallyn <serge@hallyn.com>,
-	Paul Moore <paul@paul-moore.com>, Eric Paris <eparis@redhat.com>,
-	James Morris <jmorris@namei.org>,
-	Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
-	Stephen Smalley <stephen.smalley.work@gmail.com>,
-	Ondrej Mosnacek <omosnace@redhat.com>,
-	Casey Schaufler <casey@schaufler-ca.com>,
-	Mimi Zohar <zohar@linux.ibm.com>,
-	Roberto Sassu <roberto.sassu@huawei.com>,
-	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-	Eric Snowberg <eric.snowberg@oracle.com>,
-	"Matthew Wilcox (Oracle)" <willy@infradead.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Miklos Szeredi <miklos@szeredi.hu>, linux-kernel@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org,
-	linux-security-module@vger.kernel.org, audit@vger.kernel.org,
-	selinux@vger.kernel.org, linux-integrity@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-unionfs@vger.kernel.org
-Subject: Re: [PATCH v2 20/25] ovl: add fscaps handlers
-Message-ID: <Zd34b4Lw9hOHJYr2@do-x1extreme>
-References: <20240221-idmap-fscap-refactor-v2-0-3039364623bd@kernel.org>
- <20240221-idmap-fscap-refactor-v2-20-3039364623bd@kernel.org>
- <CAOQ4uxjvrFuz2iCiO9dsOnear+qN=M+GFW-eEOZU5uCzBkTwLQ@mail.gmail.com>
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="VaeyjUDc"
+Received: by linux.microsoft.com (Postfix, from userid 1052)
+	id 8BDCC20B74C5; Wed, 28 Feb 2024 16:55:18 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 8BDCC20B74C5
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1709168118;
+	bh=HFneUDC8Z8Dzy3b48RYvWYU96HA+vpivC93Ukb00udk=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=VaeyjUDc+8JO4rPJ7hesRJoJksglcnozafZKfBahk6zuyIG+QRWSyE+tKnQvxTnaH
+	 Ayl4NCvWI1kr9hog/zpSl9jtmfYwzlQgmBqAGBAptUfY3VB892TGccF7+zPhuIxsYl
+	 Edptdjhq0lGodpRzH/Iu5ov0L4Q/puX05ZpY+kkQ=
+From: Fan Wu <wufan@linux.microsoft.com>
+To: corbet@lwn.net,
+	zohar@linux.ibm.com,
+	jmorris@namei.org,
+	serge@hallyn.com,
+	tytso@mit.edu,
+	ebiggers@kernel.org,
+	axboe@kernel.dk,
+	agk@redhat.com,
+	snitzer@kernel.org,
+	eparis@redhat.com,
+	paul@paul-moore.com
+Cc: linux-doc@vger.kernel.org,
+	linux-integrity@vger.kernel.org,
+	linux-security-module@vger.kernel.org,
+	linux-fscrypt@vger.kernel.org,
+	linux-block@vger.kernel.org,
+	dm-devel@lists.linux.dev,
+	audit@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Deven Bowers <deven.desai@linux.microsoft.com>,
+	Fan Wu <wufan@linux.microsoft.com>
+Subject: [RFC PATCH v13 03/20] ipe: add evaluation loop
+Date: Wed, 28 Feb 2024 16:54:45 -0800
+Message-Id: <1709168102-7677-4-git-send-email-wufan@linux.microsoft.com>
+X-Mailer: git-send-email 1.8.3.1
+In-Reply-To: <1709168102-7677-1-git-send-email-wufan@linux.microsoft.com>
+References: <1709168102-7677-1-git-send-email-wufan@linux.microsoft.com>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAOQ4uxjvrFuz2iCiO9dsOnear+qN=M+GFW-eEOZU5uCzBkTwLQ@mail.gmail.com>
 
-On Tue, Feb 27, 2024 at 03:28:18PM +0200, Amir Goldstein wrote:
-> > +int ovl_set_fscaps(struct mnt_idmap *idmap, struct dentry *dentry,
-> > +                  const struct vfs_caps *caps, int setxattr_flags)
-> > +{
-> > +       int err;
-> > +       struct ovl_fs *ofs = OVL_FS(dentry->d_sb);
-> > +       struct dentry *upperdentry = ovl_dentry_upper(dentry);
-> > +       struct dentry *realdentry = upperdentry ?: ovl_dentry_lower(dentry);
-> > +       const struct cred *old_cred;
-> > +
-> > +       /*
-> > +        * If the fscaps are to be remove from a lower file, check that they
-> > +        * exist before copying up.
-> > +        */
-> 
-> Don't you need to convert -ENODATA to 0 return value in this case?
+From: Deven Bowers <deven.desai@linux.microsoft.com>
 
-Do you mean that trying to remove an xattr that does not exist should
-return 0? Standard behavior is to return -ENODATA in this situation.
+IPE must have a centralized function to evaluate incoming callers
+against IPE's policy. This iteration of the policy for against the rules
+for that specific caller is known as the evaluation loop.
 
-> 
-> > +       if (!caps && !upperdentry) {
-> > +               struct path realpath;
-> > +               struct vfs_caps lower_caps;
-> > +
-> > +               ovl_path_lower(dentry, &realpath);
-> > +               old_cred = ovl_override_creds(dentry->d_sb);
-> > +               err = vfs_get_fscaps(mnt_idmap(realpath.mnt), realdentry,
-> > +                                    &lower_caps);
-> > +               revert_creds(old_cred);
-> > +               if (err)
-> > +                       goto out;
-> > +       }
-> > +
-> > +       err = ovl_want_write(dentry);
-> > +       if (err)
-> > +               goto out;
-> > +
-> 
-> ovl_want_write() should after ovl_copy_up(), see:
-> 162d06444070 ("ovl: reorder ovl_want_write() after ovl_inode_lock()")
+Signed-off-by: Deven Bowers <deven.desai@linux.microsoft.com>
+Signed-off-by: Fan Wu <wufan@linux.microsoft.com>
 
-Fixed.
+---
+v2:
++ Split evaluation loop, access control hooks, and evaluation loop from policy parser and userspace interface to pass mailing list character limit
 
-> > @@ -758,6 +826,8 @@ static const struct inode_operations ovl_symlink_inode_operations = {
-> >         .get_link       = ovl_get_link,
-> >         .getattr        = ovl_getattr,
-> >         .listxattr      = ovl_listxattr,
-> > +       .get_fscaps     = ovl_get_fscaps,
-> > +       .set_fscaps     = ovl_set_fscaps,
-> >         .update_time    = ovl_update_time,
-> >  };
-> >
-> > @@ -769,6 +839,8 @@ static const struct inode_operations ovl_special_inode_operations = {
-> >         .get_inode_acl  = ovl_get_inode_acl,
-> >         .get_acl        = ovl_get_acl,
-> >         .set_acl        = ovl_set_acl,
-> > +       .get_fscaps     = ovl_get_fscaps,
-> > +       .set_fscaps     = ovl_set_fscaps,
-> >         .update_time    = ovl_update_time,
-> >  };
-> >
-> 
-> 
-> Sorry, I did not understand the explanation why fscaps ops are needed
-> for non regular files. It does not look right to me.
+v3:
++ Move ipe_load_properties to patch 04.
++ Remove useless 0-initializations Prefix extern variables with ipe_
++ Remove kernel module parameters, as these are exposed through sysctls.
++ Add more prose to the IPE base config option help text.
++ Use GFP_KERNEL for audit_log_start.
++ Remove unnecessary caching system.
++ Remove comments from headers
++ Use rcu_access_pointer for rcu-pointer null check
++ Remove usage of reqprot; use prot only.
++Move policy load and activation audit event to 03/12
 
-The kernel does not forbid XATTR_NAME_CAPS for non-regular files and
-will internally even try to read them from non-regular files during
-killpriv checks. If we do not add handlers then we will end up using the
-normal ovl xattr handlers, which call vfs_*xattr(). These will return an
-error for fscaps xattrs after this series, which would be a change in
-behavior for overlayfs and make it behave differently from other
-filesystems.
+v4:
++ Remove sysctls in favor of securityfs nodes
++ Re-add kernel module parameters, as these are now exposed through securityfs.
++ Refactor property audit loop to a separate function.
+
+v5:
++ fix minor grammatical errors
++ do not group rule by curly-brace in audit record,
++ reconstruct the exact rule.
+
+v6:
++ No changes
+
+v7:
++ Further split lsm creation into a separate commit from the evaluation loop and audit system, for easier review.
++ Propagating changes to support the new ipe_context structure in the evaluation loop.
+
+v8:
++ Remove ipe_hook enumeration; hooks can be correlated via syscall record.
+
+v9:
++ Remove ipe_context related code and simplify the evaluation loop.
+
+v10:
++ Split eval part and boot_verified part
+
+v11:
++ Fix code style issues
+
+v12:
++ Correct an rcu_read_unlock usage
++ Add a WARN to unknown op during evaluation
+
+v13:
++ No changes
+---
+ security/ipe/Makefile |   1 +
+ security/ipe/eval.c   | 100 ++++++++++++++++++++++++++++++++++++++++++
+ security/ipe/eval.h   |  24 ++++++++++
+ 3 files changed, 125 insertions(+)
+ create mode 100644 security/ipe/eval.c
+ create mode 100644 security/ipe/eval.h
+
+diff --git a/security/ipe/Makefile b/security/ipe/Makefile
+index c09aec4904f2..57fe922cf1fc 100644
+--- a/security/ipe/Makefile
++++ b/security/ipe/Makefile
+@@ -6,6 +6,7 @@
+ #
+ 
+ obj-$(CONFIG_SECURITY_IPE) += \
++	eval.o \
+ 	ipe.o \
+ 	policy.o \
+ 	policy_parser.o \
+diff --git a/security/ipe/eval.c b/security/ipe/eval.c
+new file mode 100644
+index 000000000000..af56815ed0fa
+--- /dev/null
++++ b/security/ipe/eval.c
+@@ -0,0 +1,100 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (C) Microsoft Corporation. All rights reserved.
++ */
++
++#include <linux/fs.h>
++#include <linux/types.h>
++#include <linux/slab.h>
++#include <linux/file.h>
++#include <linux/sched.h>
++#include <linux/rcupdate.h>
++
++#include "ipe.h"
++#include "eval.h"
++#include "policy.h"
++
++struct ipe_policy __rcu *ipe_active_policy;
++
++/**
++ * evaluate_property - Analyze @ctx against a property.
++ * @ctx: Supplies a pointer to the context to be evaluated.
++ * @p: Supplies a pointer to the property to be evaluated.
++ *
++ * Return:
++ * * true	- The current @ctx match the @p
++ * * false	- The current @ctx doesn't match the @p
++ */
++static bool evaluate_property(const struct ipe_eval_ctx *const ctx,
++			      struct ipe_prop *p)
++{
++	return false;
++}
++
++/**
++ * ipe_evaluate_event - Analyze @ctx against the current active policy.
++ * @ctx: Supplies a pointer to the context to be evaluated.
++ *
++ * This is the loop where all policy evaluation happens against IPE policy.
++ *
++ * Return:
++ * * 0		- OK
++ * * -EACCES	- @ctx did not pass evaluation.
++ * * !0		- Error
++ */
++int ipe_evaluate_event(const struct ipe_eval_ctx *const ctx)
++{
++	bool match = false;
++	enum ipe_action_type action;
++	struct ipe_policy *pol = NULL;
++	const struct ipe_rule *rule = NULL;
++	const struct ipe_op_table *rules = NULL;
++	struct ipe_prop *prop = NULL;
++
++	rcu_read_lock();
++
++	pol = rcu_dereference(ipe_active_policy);
++	if (!pol) {
++		rcu_read_unlock();
++		return 0;
++	}
++
++	if (ctx->op == IPE_OP_INVALID) {
++		if (pol->parsed->global_default_action == IPE_ACTION_DENY) {
++			rcu_read_unlock();
++			return -EACCES;
++		}
++		if (pol->parsed->global_default_action == IPE_ACTION_INVALID)
++			WARN(1, "no default rule set for unknown op, ALLOW it");
++		rcu_read_unlock();
++		return 0;
++	}
++
++	rules = &pol->parsed->rules[ctx->op];
++
++	list_for_each_entry(rule, &rules->rules, next) {
++		match = true;
++
++		list_for_each_entry(prop, &rule->props, next) {
++			match = evaluate_property(ctx, prop);
++			if (!match)
++				break;
++		}
++
++		if (match)
++			break;
++	}
++
++	if (match)
++		action = rule->action;
++	else if (rules->default_action != IPE_ACTION_INVALID)
++		action = rules->default_action;
++	else
++		action = pol->parsed->global_default_action;
++
++	rcu_read_unlock();
++	if (action == IPE_ACTION_DENY)
++		return -EACCES;
++
++	return 0;
++}
+diff --git a/security/ipe/eval.h b/security/ipe/eval.h
+new file mode 100644
+index 000000000000..6b434515968f
+--- /dev/null
++++ b/security/ipe/eval.h
+@@ -0,0 +1,24 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Copyright (C) Microsoft Corporation. All rights reserved.
++ */
++
++#ifndef _IPE_EVAL_H
++#define _IPE_EVAL_H
++
++#include <linux/file.h>
++#include <linux/types.h>
++
++#include "policy.h"
++
++extern struct ipe_policy __rcu *ipe_active_policy;
++
++struct ipe_eval_ctx {
++	enum ipe_op_type op;
++
++	const struct file *file;
++};
++
++int ipe_evaluate_event(const struct ipe_eval_ctx *const ctx);
++
++#endif /* _IPE_EVAL_H */
+-- 
+2.43.1
+
