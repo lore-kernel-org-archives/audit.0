@@ -1,44 +1,44 @@
-Received: from mail-qk1-f181.google.com (mail-qk1-f181.google.com [209.85.222.181])
+Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com [209.85.219.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BF8C1947E
-	for <audit@vger.kernel.org>; Sat,  2 Mar 2024 16:22:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 892A815EA2
+	for <audit@vger.kernel.org>; Sat,  2 Mar 2024 16:37:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709396577; cv=none; b=bzBIK+xusQm82ODILQhb/cEcZc2+12tX1/KAvELjTKM7eGWGZt4VeDArreiJ1zPBTv6HfTztyfaLX7jQTMp+kkt2YM/Q/6bmOUTnN9PBNNrTrNX4UaX2IwrCjGF1Z9xPwul5C5rV2HyJJblqw9OD0ojvYrHa1BHYgyTH14xIP5Q=
+	t=1709397445; cv=none; b=Dzfm50KiXw7BiF3zgSAfZogBtqd2D8yNnnG7OcG5lklKNOzDh6BorCr6PY5duuZGAz1fOtQeQhdzy/u+EgpwaAgAHJo/vrbLKBwUzv7Yltt+veYmRPasRG2fyXCm00X3jec0wLALtZwxwr8hnWNGld/Tc7sf7macOkSYgWhH+go=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709396577; c=relaxed/simple;
-	bh=XURcPi80ktqpwDBSxPxq7g3Gl8HnCoFYrRqz0mcbS8A=;
+	s=arc-20240116; t=1709397445; c=relaxed/simple;
+	bh=9IC3fMEoEfXo3NNBOsCfC/33CDE0noCZBrsTmZNyk4k=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TV7BLK/08/r5ixNuehcErNZTcGbdtPcRW+lJSOAiqbwGcw5ma4lfsSonydNYR4fgitnrY52LpMzmZlmrLcnK34Ehz9Ka677qp2ONlO3mkpgnHiuT/WF729Om6INizAoQ+v4CKHLYQVkq0jCK+sRoLPLfIcmKi5EhmmJkhBnWijo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=redhat.com; arc=none smtp.client-ip=209.85.222.181
+	 Content-Type:Content-Disposition:In-Reply-To; b=L6DsKwe52AmBH8VzZV48EbnUHF07ZHzmAzTpP/mIsrsRE4fFUvgldp4TTCxtS5WfLdiTOB/ee/T0jMM1/gcmP1VWuLExs+/ZgIOQPcrxZomsCs67GzITGtaChWKdCX4GPbwsHN6ovVxq+LZT/+0puzFOh7jZOtMAzfesTXMIXg8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=redhat.com; arc=none smtp.client-ip=209.85.219.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-Received: by mail-qk1-f181.google.com with SMTP id af79cd13be357-7881c039be2so18993685a.0
-        for <audit@vger.kernel.org>; Sat, 02 Mar 2024 08:22:54 -0800 (PST)
+Received: by mail-qv1-f46.google.com with SMTP id 6a1803df08f44-69012259657so13964696d6.0
+        for <audit@vger.kernel.org>; Sat, 02 Mar 2024 08:37:22 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709396573; x=1710001373;
+        d=1e100.net; s=20230601; t=1709397441; x=1710002241;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=9CTJvFhGy1Bzd3KvOdnEpD8D/Edct8dik+Axa8R/H/U=;
-        b=LPf2ioveQRW4ji8I+xiE2mjYqBYRU1FZuGZHtBkYKVZHow9gW6aB3vcy3tYcjQkerv
-         IGzdkm4BxS5xYRb7AaWli6QxpgCjRVeZoRAay3OBnTHtEBEcQtMb0kyRbF2fotpXjHEJ
-         S0w8kd1UwODyNrT69qaNrfPagIt0LslHMBL2WukvdMKsBnC2ZIGA+1kTudLEM7OFhzEi
-         4AO3xNhR4YOA2rWf6pFow5cXpQNTgxpjbNCaC1R73fSBv4FsTBkbWpFg5Z9SK5id/eFX
-         5nxG9G1NGIRXvUi3LFVGLk3YVzgVBDG2a4mzHtJIz0OpL9tzxSBCRZLyLaix2rL4+yLJ
-         QS4A==
-X-Forwarded-Encrypted: i=1; AJvYcCW7zdS5RtWuvVL9nuhH15jsMa7V81WsJDbDTj+uwQvIMPqMbKtsWcxl1IvC9SvzwdyfnA0DQUO6CLTs5YymyfEc17S9tl4=
-X-Gm-Message-State: AOJu0YxH/fx0QVOuWWYBM6YeWvWQJ4p7MzM0f7mdXyNd064r0IySr3Wu
-	2A+PzvMIw26Mqrs8ZU9UmjIenqrdON9b6fsZBhtFwaj9h/1oKqQ0obDeYERumw==
-X-Google-Smtp-Source: AGHT+IH3W/XkrKR76p3+gwmEVhV4Af7xAoXDhhzOgTPCdCMEIBZjGKC5F+gRt7thhAcDDjvRoB1Eow==
-X-Received: by 2002:a05:620a:1794:b0:788:20a6:518a with SMTP id ay20-20020a05620a179400b0078820a6518amr910312qkb.66.1709396573481;
-        Sat, 02 Mar 2024 08:22:53 -0800 (PST)
+        bh=1bU93HGrxoKEjIsJ9NGLvb4RDQbkWY7Y2iFs9PS//8I=;
+        b=A/Ctj3SBqMLk6R4R7g3CKRESggSeWkfhd9VpM7s9z0jQ4qoMgZ3VFgv1FQ/wH65T2L
+         S6RTWffD6Ah2N5yFbLPjnbhGdAf7Q/c1ujUFJfojDqGWcwSnlQEaEiy0Z1p280KAZrlq
+         xbkN5ma+C0uAzYOUJdsz9vqwASlMlx/MF1RL5Cd1HTuB0WMaPaTxu77TND303/gjUsA1
+         Zgnzm9+6PkCxCiTkBsSWKB2zXuWbEBAqI4p28ppGabc8HGbnsl7vYDGi1IJZJBBj9W40
+         3EtNWPqtqpmwPJbJVus6TljDwM2skKXrabh4hrcQ5gfe1uMqpYhE5YOPoJmYCPoCUuhg
+         JtCg==
+X-Forwarded-Encrypted: i=1; AJvYcCWwQA37M5j71EtZaeUNBG8oA1J17A/DSNORdYc9JmIpyBLVtm6psvqHzANHvQUGHJU+KqFNEy+UpJWsMfkE6Q6FReyyzl0=
+X-Gm-Message-State: AOJu0YzbRLv/QtEC2A3/G5JCZhUt5D46iLrVWYXKR/folUA64J8IAXl+
+	Sc61ZnQDWNEbgPZB7E3ziyVpvMwdYpRDP2KX38Zhj1bzRJ8G6lr5eOL1LtQpAg==
+X-Google-Smtp-Source: AGHT+IGWfJd4hsp4cquzrMgFaq/8ztZK/NQH0jQErvnt6KcdvzJSodCboJ3PnepuNNUxb0g3iW3fHA==
+X-Received: by 2002:a0c:f885:0:b0:690:4916:4de9 with SMTP id u5-20020a0cf885000000b0069049164de9mr4614368qvn.34.1709397441567;
+        Sat, 02 Mar 2024 08:37:21 -0800 (PST)
 Received: from localhost (pool-68-160-141-91.bstnma.fios.verizon.net. [68.160.141.91])
-        by smtp.gmail.com with ESMTPSA id c17-20020a05620a0cf100b007881eb5683fsm280597qkj.2.2024.03.02.08.22.52
+        by smtp.gmail.com with ESMTPSA id ks30-20020a056214311e00b0068ffde5efb0sm3123189qvb.49.2024.03.02.08.37.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 02 Mar 2024 08:22:53 -0800 (PST)
-Date: Sat, 2 Mar 2024 11:22:50 -0500
+        Sat, 02 Mar 2024 08:37:21 -0800 (PST)
+Date: Sat, 2 Mar 2024 11:37:20 -0500
 From: Mike Snitzer <snitzer@kernel.org>
 To: Fan Wu <wufan@linux.microsoft.com>
 Cc: corbet@lwn.net, zohar@linux.ibm.com, jmorris@namei.org,
@@ -53,7 +53,7 @@ Cc: corbet@lwn.net, zohar@linux.ibm.com, jmorris@namei.org,
 	Deven Bowers <deven.desai@linux.microsoft.com>
 Subject: Re: [RFC PATCH v13 14/20] dm verity: consume root hash digest and
  signature data via LSM hook
-Message-ID: <ZeNSWgnKMldcb_jp@redhat.com>
+Message-ID: <ZeNVwBkbw2HlMRfa@redhat.com>
 References: <1709168102-7677-1-git-send-email-wufan@linux.microsoft.com>
  <1709168102-7677-15-git-send-email-wufan@linux.microsoft.com>
 Precedence: bulk
@@ -165,6 +165,17 @@ Fan Wu <wufan@linux.microsoft.com> wrote:
 >  #include "dm-verity.h"
 >  #include "dm-verity-fec.h"
 >  #include "dm-verity-verify-sig.h"
+
+Why are you including dm-core.h? (DM targets really shouldn't need it).
+
+And from that header:
+
+/*
+ * DM core internal structures used directly by dm.c, dm-rq.c and dm-table.c.
+ * DM targets must _not_ deference a mapped_device or dm_table to directly
+ * access their members!
+ */
+
 > @@ -22,6 +23,9 @@
 >  #include <linux/scatterlist.h>
 >  #include <linux/string.h>
@@ -224,11 +235,6 @@ Fan Wu <wufan@linux.microsoft.com> wrote:
 > +}
 > +#endif /* CONFIG_IPE_PROP_DM_VERITY */
 > +
-
-Please move verity_init_sig() to be at beginning of same #ifdef block
-as verity_free_sig() above.  Also, please add blank lines between
-#ifdef, #else and #endif.
-
 >  /*
 >   * Target parameters:
 >   *	<version>	The current format is version 1.
@@ -260,6 +266,15 @@ as verity_free_sig() above.  Also, please add blank lines between
 > +
 > +	v = ti->private;
 > +	bdev = dm_table_get_md(ti->table)->disk->part0;
+
+Must be for dereferencing mapped_device struct here ^
+
+Please remove the dm-core.h include and use this instead:
+
+struct gendisk *disk = dm_disk(dm_table_get_md(ti->table));
+
+Mike
+
 > +	root_digest.digest = v->root_digest;
 > +	root_digest.digest_len = v->digest_size;
 > +	root_digest.alg = v->alg_name;
@@ -276,8 +291,6 @@ as verity_free_sig() above.  Also, please add blank lines between
 > +}
 > +#endif /* CONFIG_IPE_PROP_DM_VERITY */
 > +
-
-Again, blank line after #ifdef and before #endif
-
-Thanks,
-Mike
+>  static struct target_type verity_target = {
+>  	.name		= "verity",
+>  	.features	= DM_TARGET_SINGLETON | DM_TARGET_IMMUTABLE,
