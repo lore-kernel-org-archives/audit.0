@@ -1,123 +1,112 @@
-Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com [209.85.219.171])
+Received: from mail-ua1-f54.google.com (mail-ua1-f54.google.com [209.85.222.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7815142658
-	for <audit@vger.kernel.org>; Tue, 12 Mar 2024 20:07:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17D4113B2BF
+	for <audit@vger.kernel.org>; Tue, 12 Mar 2024 21:07:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710274075; cv=none; b=Fgbnkai3qgCsUDDjb8ryOVCDpaAGn7FDTcCslEz9bdg0WOHHjVQLZ0TGel8tNIbZOz/hQTQ6x6Y+EPxktepO6HoWwvlGZWmizt5t9U1eIhx2ViYJLg5YOnXjYbIxoY2to7xh7RGROq6+dF1JdzaE97onsyLQ4xjGv51nW/PM5oE=
+	t=1710277659; cv=none; b=Ay+vXPw2BVDwMyOqNeJowngVNXA6XGSbkGu5meC2GkUPzL8Iau5N9c/OUD/qR/v1kfgmXfCLFnm694Fn+Q3CmBX5dMj+4U7hGPZ7W8Ytmj4NBfkPFvZPNsU3yJENUg0+ZzpO6fQfS7ySNrHNw6HvcUfTCDaOA3+hIdiGhV95HmU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710274075; c=relaxed/simple;
-	bh=KK3vfTC21FfD3a3vNi4VaniP6dAy7ashn5OtgY1y6Kc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=YzZ1pUW4XY5q8YeI7P7GvAMCXCs1/KrBVJt9eNv7K8oVV84Vh3MUbzji5ABkhSPPX8FBgOo/CPZ9SsH9oGgDYhbRFcHx1yby1StaRxM8wVaEcIiGf050Vfg6nS13uY4pHNJZUgxcCNSBHIYX+h5dFoMol7T8e1fDeZmeAAPXQM4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=ElgnVr/3; arc=none smtp.client-ip=209.85.219.171
+	s=arc-20240116; t=1710277659; c=relaxed/simple;
+	bh=D6bjhG/P9dFrD1W0lCskKTkomdq1ZxzgKWiMitBwAdM=;
+	h=Date:Message-ID:From:To:Cc:Subject; b=mpNihiKA3Y/zHrZNDnCGniJc4YUCBRb/HcvjbspDuSQ5rldqebPhaPRqhcZXbu59Q76TXa5DlLP7OGqN/GdlS8+qGjQbTH3m5QwCrzFA/k9pFV7LCM/+ZQQWyN969Hx9Mdf2BTLilseZtYYfO73Z9JJxLJAVXo0l55IiVwK30FM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=IlapvdIP; arc=none smtp.client-ip=209.85.222.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="ElgnVr/3"
-Received: by mail-yb1-f171.google.com with SMTP id 3f1490d57ef6-dc25e12cc63so225517276.0
-        for <audit@vger.kernel.org>; Tue, 12 Mar 2024 13:07:53 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="IlapvdIP"
+Received: by mail-ua1-f54.google.com with SMTP id a1e0cc1a2514c-7dbd6e2dcd1so1481616241.0
+        for <audit@vger.kernel.org>; Tue, 12 Mar 2024 14:07:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1710274073; x=1710878873; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=paul-moore.com; s=google; t=1710277656; x=1710882456; darn=vger.kernel.org;
+        h=subject:cc:to:from:message-id:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=dIM56byQCwYfF5RCflaFTltitkLV02ChrYWIQLMiS/Y=;
-        b=ElgnVr/3Q/zYk3p8cOr0srbGrwrn6SR+lC77XKGviNYk3F5Pp4ywOeBM4MexCiFGAb
-         K1JldP5PIG50cuVSCEjquhwrRdW1pHztVk5hQWrrQlPiOtHgMfw+F8fjjPybyawQHeKp
-         ZxyNdr8MI26Bj1AiSGBU6JkWMAFkvga9MPrGDq5CS+FiSwhZqZZb1peNgdyHRwBj1kM4
-         l9k3SECxSnTxmpzXoVifZzVrBdkUrGT+ZITUIt2GnyCZmREQM6Z7LYy6M4h0oHBRApMC
-         rXXmCc+zVuhcVCRcZsSBg/JWhX033y01J5x2vyxo0NS5vyCVyEcK20CHIOiuT6OGvjes
-         4Prg==
+        bh=jo8EpKLrI3zTu7k0f67xQqGTdMNEkmN1IsZcTCHKRUg=;
+        b=IlapvdIPZZEsZtMJq/kh0ohwnZmBeKjC0dXjgzXpCEVrLIckZ6rcF5opcFdkrYDr0A
+         mvMRMSpBnzPL1g1Wv0CmxQnCSmaDpt4G6W5B6bTRe6IQ3A1T18/XxkrN34mYKfOnkuq2
+         1PUAezAHZPLBoYlp3/vNcfGXQN64sZoueD00ZRwNeZZJW7vlSohr0ekIfiZwE9c3OK1f
+         3sYW6bGQTFneRXHkePHxP4ulBveBUyQAev1j4rHT0s/XiWQ/V+qyMnIDkLjDNiMjn88G
+         l/PXrAwGJuit4dxZ9vQ1uKfxVR9LSf9a5NJzhKrl4pingNyx3eY9ArbBOx6vp/ssX67c
+         V46w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710274073; x=1710878873;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1710277656; x=1710882456;
+        h=subject:cc:to:from:message-id:date:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=dIM56byQCwYfF5RCflaFTltitkLV02ChrYWIQLMiS/Y=;
-        b=Icn2JWQTuVH6tGBW2y/gG9sKyp6MnXsWEZeUYNwTk/BzUnT1uyKHvUmft8oAkzAvfY
-         XdB3SfOhht/FKHEuK7QjtSx+ArRxLyJMvFkFuGPc+Sej0RNs2u0Rt4wtBup0BmNTByJD
-         ++1OzZSu2PK79m7rX1gebUNAi3hAoBZHEBA5v3hLDrWAYqJ+IpdYP5NDyT2pjh9CRKZo
-         Gvd9aQuQqy4WPk+yhkUWvJy6PbX1lLbFa5rCf6RzLstbmLOQiMVK/TTsTRJy0tTw8LbX
-         cqr7N97JTRQ8OBO3of0y/LFv+kc6OSodfNTGvy0L43QPlZjNijENQRB0WN9bD/QMwhF5
-         CRdQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWSfLVYFjL9JbvOHBgwM1wcXMw/UULmFY56deH4m5LqlEvwa3A8lK+++h5W1j/fNyHwPWEV4bgch5FAWjGbgOgYBNapNho=
-X-Gm-Message-State: AOJu0YyUuNq7n6o0Wq2eKPeuRSAG8RB9yGTMk35f1wZHubldyIPvUbeh
-	gZOGkAEYmxXHAmeSl2WqRxLIQUSQoHeq0Uuj2bLd0ZqhObT4g1AtD+q3vBSezZ2VhD8srY3FMDP
-	C4kgCeFNfKUeDC2aMpFRCQw79/CJjENVpbJ1f
-X-Google-Smtp-Source: AGHT+IFUO9loFBNfYwY2rilDGi4a1ZxrFKhf7gDp1B59xt2uvInDy15QqH6xxud+73LelILqgfwJCkTcRwHNX1HB0r4=
-X-Received: by 2002:a25:c714:0:b0:dcd:b806:7446 with SMTP id
- w20-20020a25c714000000b00dcdb8067446mr396824ybe.1.1710274072732; Tue, 12 Mar
- 2024 13:07:52 -0700 (PDT)
+        bh=jo8EpKLrI3zTu7k0f67xQqGTdMNEkmN1IsZcTCHKRUg=;
+        b=GZAG5jhAocKkyqsSyXf9UkhhEip0zBXuF9MYaEhQK6fXRW4j6EORV624ZqAgzDci33
+         62QO3RDuSl3gV6N4t0/d8Be1bhhnHovi9nY6fKAORNwzRABhBxtyaoRNO1nye5tRsGbo
+         Yn9f9KIzesRfsbGa8VH/4Q0ulzMLbgJfmbwuAl5G2uBVzlOHHrIKpHCMEagbNxP+24rN
+         FKxEyUN1S70B6oqXcL5ykpJAQAwzoRDQQbJGLgTz5OdnavhRDJ1TuZ/qe+EU+WwO1N54
+         m8/ifA4bplmcdzx6vbzs+e8EOVxhCjHhUxOLvquBHAdwRiMf7tYUP4khvamVAeLBobUE
+         ZM+g==
+X-Gm-Message-State: AOJu0YxRphVz7rUiF/mvLcI3ByG3EQcCSFyM7z+5MSL4uV+/kos86TUC
+	kAghI+hwJlYHNBc28YfzeWqdcvs2vt/L65eGbo63h+aGsQzwd7HwFRxVu/0P4WCMZPlPU3T5Hg4
+	=
+X-Google-Smtp-Source: AGHT+IGdwmqIFShIOp0WZsGX63Jarjz6bvBb99g3Q5DGkyLnVCwRspzO50NKm6KImM+pL2+60Lj/UA==
+X-Received: by 2002:a67:ea45:0:b0:472:7619:1a63 with SMTP id r5-20020a67ea45000000b0047276191a63mr2174921vso.35.1710277654557;
+        Tue, 12 Mar 2024 14:07:34 -0700 (PDT)
+Received: from localhost ([70.22.175.108])
+        by smtp.gmail.com with ESMTPSA id lw16-20020a05621457d000b00691122f25cesm91861qvb.4.2024.03.12.14.07.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Mar 2024 14:07:33 -0700 (PDT)
+Date: Tue, 12 Mar 2024 17:07:33 -0400
+Message-ID: <a51f65333f170f8079c72d98c16137d9@paul-moore.com>
+From: Paul Moore <paul@paul-moore.com>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: audit@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] audit/audit-pr-20240312
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <1709768084-22539-1-git-send-email-wufan@linux.microsoft.com>
- <1709768084-22539-16-git-send-email-wufan@linux.microsoft.com>
- <20240312025712.GE1182@sol.localdomain> <20240312030712.GF1182@sol.localdomain>
- <51810153-eb6e-40f7-b5d0-5f72c2f4ee9b@linux.microsoft.com>
- <568fae5e-a6d4-4832-a1a1-ac3f4f93d650@schaufler-ca.com> <746a5548-0e98-4953-9e71-16b881c63aa8@linux.microsoft.com>
-In-Reply-To: <746a5548-0e98-4953-9e71-16b881c63aa8@linux.microsoft.com>
-From: Paul Moore <paul@paul-moore.com>
-Date: Tue, 12 Mar 2024 16:07:41 -0400
-Message-ID: <CAHC9VhTYoT-XrSp4h5QwT5tnzBS6NHG0XSQ=cKLueM0iM0DvJw@mail.gmail.com>
-Subject: Re: [RFC PATCH v14 15/19] fsverity: consume builtin signature via LSM hook
-To: Fan Wu <wufan@linux.microsoft.com>
-Cc: Casey Schaufler <casey@schaufler-ca.com>, Eric Biggers <ebiggers@kernel.org>, corbet@lwn.net, 
-	zohar@linux.ibm.com, jmorris@namei.org, serge@hallyn.com, tytso@mit.edu, 
-	axboe@kernel.dk, agk@redhat.com, snitzer@kernel.org, eparis@redhat.com, 
-	linux-doc@vger.kernel.org, linux-integrity@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, linux-fscrypt@vger.kernel.org, 
-	linux-block@vger.kernel.org, dm-devel@lists.linux.dev, audit@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Deven Bowers <deven.desai@linux.microsoft.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Tue, Mar 12, 2024 at 3:08=E2=80=AFPM Fan Wu <wufan@linux.microsoft.com> =
-wrote:
-> We could also make security_inode_setsecurity() more generic instead of
-> for xattr only, any suggestions?
+Hi Linus,
 
-For the sake of simplicity, since security_inode_setsecurity() doesn't
-work, it probably makes more sense to create a new LSM hook rather
-than make significant changes to security_inode_setsecurity().
+Two small audit patches for the Linux v6.9 merge window:
 
-I'm looking at the fsverity hook usage in this patch as well as the
-device-mapper hook usage in 13/19 with security_bdev_setsecurity() and
-I'm wondering if we could adopt a similar hook as we do with block
-devices:
+- Use the KMEM_CACHE() macro instead of kmem_cache_create()
 
-/* NOTE: these are just example values, more granularity would likely
-be needed */
-enum {
-  LSM_INTGR_DIGEST,
-  LSM_INTGR_SIG,
-} lsm_intgr_type;
+The guidance appears to be to use the KMEM_CACHE() macro when possible
+and there is no reason why we can't use the macro, so let's use it.
 
-/**
- * security_inode_integrity() - Set the inode's integrity data
- * @inode: the inode
- * @integrity_type: type of integrity, e.g. hash digest, signature, etc.
- * @value: the integrity value
- * @value: size of the integrity value
- *
- * Register a verified integrity measurement of an inode with the LSM.
- *
- * Return: Returns 0 on success, negative values on failure.
- */
-int security_inode_integrity(struct inode *inode,
-                             enum lsm_intgr_type type,
-                             const void *value, size_t size)
+- Remove an unnecessary assignment in audit_dupe_lsm_field()
 
-... if the above makes sense, I'd probably adjust
-security_bdev_setsecurity() both to have a similar name, e.g.
-/inode/bdev/, as well as to take a lsm_intgr_type enum instead of the
-character string ... unless we really need a character string for some
-reason, in which case use a character string in both places.
+A return value variable was assigned a value in its declaration, but
+the declaration value is overwritten before the return value variable
+is ever referenced; drop the assignment at declaration time.
+
+Please merge when you have the chance,
+-Paul
+
+--
+The following changes since commit 6613476e225e090cc9aad49be7fa504e290dd33d:
+
+  Linux 6.8-rc1 (2024-01-21 14:11:32 -0800)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/audit.git
+    tags/audit-pr-20240312
+
+for you to fetch changes up to aa13b709084a0287ef250a9fbde5993e4dfc3078:
+
+  audit: use KMEM_CACHE() instead of kmem_cache_create()
+    (2024-01-25 10:12:22 -0500)
+
+----------------------------------------------------------------
+audit/stable-6.9 PR 20240312
+
+----------------------------------------------------------------
+Kunwu Chan (1):
+      audit: use KMEM_CACHE() instead of kmem_cache_create()
+
+Li zeming (1):
+      audit: remove unnecessary assignment in audit_dupe_lsm_field()
+
+ kernel/audit.c       | 4 +---
+ kernel/auditfilter.c | 2 +-
+ 2 files changed, 2 insertions(+), 4 deletions(-)
 
 --
 paul-moore.com
