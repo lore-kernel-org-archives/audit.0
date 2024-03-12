@@ -1,73 +1,113 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 893D3944D;
-	Tue, 12 Mar 2024 03:07:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1941558112
+	for <audit@vger.kernel.org>; Tue, 12 Mar 2024 13:12:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710212835; cv=none; b=SdZ5+B0rQfe6mZwK3krc7yxPhmp5kIJ4i8nCAShFeQXtYpXkR6DzW/pdSaJd7eyTXT83AQzf/xNYKko/mQNHc3IPtFEBb0uzgLflvAvYZZjEpalXOxVafwrALNBeN5qeLc8ORkmxse+CUFh8qWX0PUyDQuZRMBac4E1uQgexZvQ=
+	t=1710249139; cv=none; b=KddK4jMRoKZ2ssM8InFn9xtDOpv/2/+DoSkncIi8EnqsI/Ze9mvFo6Ph3+VUcbBwIxSRFWBjwclGE50hBUAf1oim9fkWdv+OXHzYNovWC/7UARsf7E/lzJKXsj0D1MNKlmAmF67W03GdSpFj2K1bpcdyhAe2UR9GRtPE0mJU7eY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710212835; c=relaxed/simple;
-	bh=ytfRXWxS21AEFMuYcnSijS3Mxzg7KMVx/T5YQr2suZI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Y31POpR8nFoVxLfq6JQPqzUI079JpQnQvBGx4jWxXLOG96eoeztEOCJZkn1s8YmaDCHT7lsmALOEeVBgOworrSS0jB9D2tNxXI1eCsknnmNDdnmCv0zCb4y4VnUOjrd4SqNbbHO6n6hstkbuy0kzTa7f820D3+TWnF0n8160oUs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sTrInd9g; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1710249139; c=relaxed/simple;
+	bh=5rt+RWbBJPhAUl1uqDwh5UWlve/OPz4PeCvfGqj3MHQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=dYgnm0lD2Zf7jhg+FAvyTii+0yUXQ1pnYPVuKW7aLJX7/vLkfngdyLpRoQZZkSRylcygo1GBEohooamkBvi1LFTs/EPUhzITdxEATlII0D+BcsSyJXyzDAlw5KHntOjYPZN2YUWf950xq4LLezs4zCOxLVpkTHtD8CNPqTaRUdA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=AeF5oxQS; arc=none smtp.client-ip=209.85.128.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sTrInd9g"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 916FBC433F1;
-	Tue, 12 Mar 2024 03:07:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1710212835;
-	bh=ytfRXWxS21AEFMuYcnSijS3Mxzg7KMVx/T5YQr2suZI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=sTrInd9g9mRdwLnEinw9+JlkJL8fino7b0pt2kuqwA31AMvCBt3SlSZCymztrnk/o
-	 dCwJIKRTmzm3yse18G7gZ9YJsILW34zAVzxiGHCXjp86l5/p1RT8QJ73CCxVIswphn
-	 B/CkZWPUmts3N5PmOFW1h0UQcfvz1Zqu8ZVzVetuW3eJPkV24zQxzsmuQyrTUFf/0v
-	 PkEq4fcGX5ThURmPQ/pHP9BLHR/NR2e/0njk5IboPaUryGZKTDHOLF+Nf7VhobMaA4
-	 WPtrIzG8qSBxf9AVzDIzcNws1aB173V2O7MXTiUxM2iPBp+enlp12o1kn4vkv1oJCK
-	 6BeGxoIYJwUdQ==
-Date: Mon, 11 Mar 2024 20:07:12 -0700
-From: Eric Biggers <ebiggers@kernel.org>
-To: Fan Wu <wufan@linux.microsoft.com>
-Cc: corbet@lwn.net, zohar@linux.ibm.com, jmorris@namei.org,
-	serge@hallyn.com, tytso@mit.edu, axboe@kernel.dk, agk@redhat.com,
-	snitzer@kernel.org, eparis@redhat.com, paul@paul-moore.com,
-	linux-doc@vger.kernel.org, linux-integrity@vger.kernel.org,
-	linux-security-module@vger.kernel.org,
-	linux-fscrypt@vger.kernel.org, linux-block@vger.kernel.org,
-	dm-devel@lists.linux.dev, audit@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Deven Bowers <deven.desai@linux.microsoft.com>
-Subject: Re: [RFC PATCH v14 15/19] fsverity: consume builtin signature via
- LSM hook
-Message-ID: <20240312030712.GF1182@sol.localdomain>
-References: <1709768084-22539-1-git-send-email-wufan@linux.microsoft.com>
- <1709768084-22539-16-git-send-email-wufan@linux.microsoft.com>
- <20240312025712.GE1182@sol.localdomain>
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="AeF5oxQS"
+Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-609f4d8551eso42470387b3.1
+        for <audit@vger.kernel.org>; Tue, 12 Mar 2024 06:12:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1710249136; x=1710853936; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xGm6l1YRLh5BPGXSeJhTa5Xkczn4uT6yuT0rED+ytkk=;
+        b=AeF5oxQSugPKh8jPGo1deH2heQlPo67Gx8uPfkXw+A6XRCMxKrmhop4RTi2Raye9w5
+         td3/8L7cAv6COx2n55EwL5JReK1i4P5PPiYypoSIGkwLVHIPPS/nIssVhO6EvVoiSdwa
+         25PWyN9KMeoyTR/gJFW6FP+77dd1uhGAFDEy7I0P298m/ZrujwVNmzfBJ57RnEVJRnz7
+         hFIHzsvn0BzaDpDVS99DEsWFQFKYhVbuQt8C8bZjIr3opLAh5ipZEgkQMXlkanYGp1ue
+         yhcJEtkhHMAz7ALFS6U3xG0xIZj2H6Bi1chBbMLE5wbZkq+AccKzNCXCc5KD/mfWZoRg
+         cqCQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710249136; x=1710853936;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=xGm6l1YRLh5BPGXSeJhTa5Xkczn4uT6yuT0rED+ytkk=;
+        b=GCff0LXD0K4WzDzdItpP8KA29UmEioiqlh7tGRD3d/YEx4Prv3vwmD2bx2G2WQnaY8
+         4eYQdglmfkKe6hlFIlSUwUg3Ixl5TxgM7C208kEuiK+zE/ipTxOISy1FXJaWLBFym55z
+         /wSwHB9BNYGPaljvWH0IDXWIg7vsBU8xDunznJ90BosT0/elITNEXnlcN8LJ/AHMrM1X
+         rN1SzldVGU3NqXcVwFxN+WxMd/2dKE4Xajec1a1es+rdOt6qAlbCv7l0e6pvjLtlN2Fp
+         gdEnq02NTTqkjDsQWrjZYfXDlVptD2dAFGHdT34W0e+t8iap3yCdGhTuQmcRt2syQeyE
+         u7zA==
+X-Forwarded-Encrypted: i=1; AJvYcCUdi0Ijj9PhoLNAGwOXu4sUYOqd/9c4gB9mArPwuz6hji+hNHlNUjT2p++vXKEiTRPnW4vU7X7A+H7B0p5GCqakg/7/XhA=
+X-Gm-Message-State: AOJu0YxyBU3JHPgrZvo1DjZh2CHitQzDLGSgKiRvDSaB8anwMAS13yEH
+	GzplswOwMZPyvAaYxEhuizukThRpM/Og4G+OeUm7K4O9VYOthANdcjfIt3EYpRE4Y7no+vCamYt
+	2ghH+s7xVNKaga8YtnuaIfkYu+TXUzm5Z1p0d
+X-Google-Smtp-Source: AGHT+IEdiOBkJ+adeSqv+rNybEPwNkGGa7iFCLcf94f4++BXPp1TK3JUSZqCbU2Yvqne0MvrzB+F7Mt8oGlgCeTEfL8=
+X-Received: by 2002:a05:6902:2841:b0:dcd:b806:7446 with SMTP id
+ ee1-20020a056902284100b00dcdb8067446mr6722695ybb.1.1710249136161; Tue, 12 Mar
+ 2024 06:12:16 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240312025712.GE1182@sol.localdomain>
+References: <1709768084-22539-1-git-send-email-wufan@linux.microsoft.com>
+ <1709768084-22539-16-git-send-email-wufan@linux.microsoft.com>
+ <20240312025712.GE1182@sol.localdomain> <20240312030712.GF1182@sol.localdomain>
+In-Reply-To: <20240312030712.GF1182@sol.localdomain>
+From: Paul Moore <paul@paul-moore.com>
+Date: Tue, 12 Mar 2024 09:12:05 -0400
+Message-ID: <CAHC9VhSSWNa1qwZrWtj-ERFjN9QKR7fz17yb9903P_a2k6ewaQ@mail.gmail.com>
+Subject: Re: [RFC PATCH v14 15/19] fsverity: consume builtin signature via LSM hook
+To: Eric Biggers <ebiggers@kernel.org>
+Cc: Fan Wu <wufan@linux.microsoft.com>, corbet@lwn.net, zohar@linux.ibm.com, 
+	jmorris@namei.org, serge@hallyn.com, tytso@mit.edu, axboe@kernel.dk, 
+	agk@redhat.com, snitzer@kernel.org, eparis@redhat.com, 
+	linux-doc@vger.kernel.org, linux-integrity@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, linux-fscrypt@vger.kernel.org, 
+	linux-block@vger.kernel.org, dm-devel@lists.linux.dev, audit@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Deven Bowers <deven.desai@linux.microsoft.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Mar 11, 2024 at 07:57:12PM -0700, Eric Biggers wrote:
-> 
-> As I've said before, this commit message needs some work.  It currently doesn't
-> say anything about what the patch actually does.
-> 
-> BTW, please make sure you're Cc'ing the fsverity mailing list
-> (fsverity@lists.linux.dev), not fscrypt (linux-fscrypt@vger.kernel.org).
+On Mon, Mar 11, 2024 at 11:07=E2=80=AFPM Eric Biggers <ebiggers@kernel.org>=
+ wrote:
+> On Mon, Mar 11, 2024 at 07:57:12PM -0700, Eric Biggers wrote:
+> >
+> > As I've said before, this commit message needs some work.  It currently=
+ doesn't
+> > say anything about what the patch actually does.
+> >
+> > BTW, please make sure you're Cc'ing the fsverity mailing list
+> > (fsverity@lists.linux.dev), not fscrypt (linux-fscrypt@vger.kernel.org)=
+.
+>
+> Also, I thought this patch was using a new LSM hook, but I now see that y=
+ou're
+> actually abusing the existing security_inode_setsecurity() LSM hook.  Cur=
+rently
+> that hook is called when an xattr is set.  I don't see any precedent for
+> overloading it for other purposes.
 
-Also, I thought this patch was using a new LSM hook, but I now see that you're
-actually abusing the existing security_inode_setsecurity() LSM hook.  Currently
-that hook is called when an xattr is set.  I don't see any precedent for
-overloading it for other purposes.  This seems problematic, as it means that a
-request to set an xattr with the name you chose ("fsverity.builtin-sig") will be
-interpreted by LSMs as the fsverity builtin signature.  A dedicated LSM hook may
-be necessary to avoid issues with overloading the existing xattr hook like this.
+I'm not really bothered by this, and if it proves to be a problem in
+the future we can swap it for a new hook; we don't include the LSM
+in-kernel API in any stable API guarantees.
 
-- Eric
+> This seems problematic, as it means that a
+> request to set an xattr with the name you chose ("fsverity.builtin-sig") =
+will be
+> interpreted by LSMs as the fsverity builtin signature.  A dedicated LSM h=
+ook may
+> be necessary to avoid issues with overloading the existing xattr hook lik=
+e this.
+
+Would you be more comfortable if the name was in an IPE related space,
+for example something like "ipe.fsverity-sig"?
+
+--=20
+paul-moore.com
