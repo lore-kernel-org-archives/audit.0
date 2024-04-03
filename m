@@ -1,119 +1,120 @@
-Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E07D4EAC7
-	for <audit@vger.kernel.org>; Tue,  2 Apr 2024 01:26:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBA9B17997;
+	Wed,  3 Apr 2024 05:02:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712021210; cv=none; b=OibsUQgI3HsNorVtyQRMFAhlZ9LTXuL9it+SurgX8N0Rvw6HD/uQDZxvHvArUxZf8bM64Elm/eROpOJKfs1h3foNCe+BXwtHUD1HVEH7cK9Jb4ogkh1s20ayLcmZpsl2gq5qhaeyyvB/uiBQe/C5M6Z1qhQHDHl80qYqx28RcRs=
+	t=1712120574; cv=none; b=WoJmkHE6a9BFZr55Z1yDKdPX8BMy6d1G8nXwpyNAizZOiYxrU+QWJ/1NEI2wJ8+44qkWBEDD7YxwFkBmqfydTHR8SIThNE7TZ+0/nH7+U1MJJbyaAagh4jRyTQpwbGL6SMtcSw7j1T4Q+QhJwWvAIpzf79TzF+I7/lLBf+szvwo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712021210; c=relaxed/simple;
-	bh=WqrYHc1OrW927dxpv9fTrIBfKRqR2NBvDdcY6XIS0bs=;
-	h=Date:Message-ID:MIME-Version:Content-Type:Content-Disposition:
-	 From:To:Cc:Subject:References:In-Reply-To; b=eIAeD+mGQ4Zwpowl1CTZKQc8QeD+3VeJfYrs4wp35txchmVhQQ/mck7iknw4AH+X6i8EOLmoK/6yINGQPWZ5LwsClhPrfzCtZtr6tJGTA3ghQSeGzZ+YAim4NU/eFRgCzdDsdfakqg+hNdGzeXAPfYhw3GLivUfChyUNfSrfbZA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=G4lN+Yma; arc=none smtp.client-ip=209.85.160.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+	s=arc-20240116; t=1712120574; c=relaxed/simple;
+	bh=2/EZE/fqM7rihgoveOtBWFcjc/baKHO1PSwzHE8G7pI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=A1v7KDckGHDUG/nmQQuKQ9IuMdgMS5zHuLcPjx4IpIBPC3gLeaRFmKIuvWAJ4idmMJOzPshSk1g/UVkElqyN4Xuq0lA/zTH5GhMOYSkWgTiswEmMpr3AKGdCWBk6BVd5zdv1jH3eYdyWJ3mPwYpx5858M0Q3y0ixG/i9Spbu+fY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FzeEsPLR; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="G4lN+Yma"
-Received: by mail-qt1-f173.google.com with SMTP id d75a77b69052e-432ff72d745so6170781cf.1
-        for <audit@vger.kernel.org>; Mon, 01 Apr 2024 18:26:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1712021206; x=1712626006; darn=vger.kernel.org;
-        h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
-         :content-disposition:mime-version:message-id:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=hRws9YXLN8yb7zuQUc8CIutzWgp4avkTPI09HZCU6cI=;
-        b=G4lN+Yma1v3mXG/SF+E4Q4Vmtq9IXlAYYEGNzQXsfUcjzmflAs+JTdgx6LMlAIFL9g
-         HDlwt0Akkidq+vZKEYCuIM8jG6PdXrvmlZSZvYvCuuoFw+UXnJWjIQVzVoTaPmseSUjB
-         drYQtYihg223VfBX5smeEnjs9qy+vAJ0lPjCvzSMy/HoNWd/TZEAO8q6QRngJdOnp4EN
-         9xaNBt90oS9blyJa/pJykeOXUxR6rsO8BLXsKDz6q/rxfL+/lA7UkmJHT3RL6kelYr/t
-         eRDPrIDjF8MoOn/FpM4kB5PBwj/pbnZQyNAOl+U0vdT69ZGIZF0SqDAiL/yIpoyYbrEx
-         8StA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712021206; x=1712626006;
-        h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
-         :content-disposition:mime-version:message-id:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=hRws9YXLN8yb7zuQUc8CIutzWgp4avkTPI09HZCU6cI=;
-        b=h/gGGk/UwTIGqt5rxlrM2Ps5wzBxJpU1tA3dA3ckn5TaM4ynBCX1vJpiWD0Tj6LsRR
-         lGRS4XP6cgCnG6XyBq+5p5lCdfU6h6kTo4Kyviz3FprCpZ0p6yU/qZhjO9OSPJKbuavf
-         TBQZz1h7bOS3klY6itGDofFjnzRbQpmGM3JhqMwwWmhPnpnc4cSV8BTNL90o1TSHbgy6
-         UGY26h4Re1SKTU4pM68C6YCBM4OkSYeu9THhboq5RcEIBa6WQTN/4rBiSH11M6S54T55
-         P9Yo2pF8RlINGW2/MHBF6spJClallUEHv2RW/nvR7GbJ6s6uTiAcQpExZHSETcIi8nt2
-         NFFw==
-X-Forwarded-Encrypted: i=1; AJvYcCX9GmAzaLMmNRxAm7U+boTsWleDTjTDG60ZdVfRidlgYYcOuDjlFbIRxPOpkD9pZMvRpu5Asf8XSqPeQb6/+cXnY1HPC9w=
-X-Gm-Message-State: AOJu0YzArpVTDsrag6yQUyZzSnRDJ1C6342A9jMyqsjIdeH/blG6N6FT
-	WGdOTZv3n7lPclSGpZ7/PtGDwZcQrfKkKaraP0wFC//rsIaLzStkLjd0hn1CnQ==
-X-Google-Smtp-Source: AGHT+IFZ7SasfMMYh5vB3j/xGXqf/TCs4Bcif8z6dD6zV7+EZAG39P9HJEPaE4K4Urz2UW0TPzSDug==
-X-Received: by 2002:a05:622a:4b11:b0:432:de8a:3a8 with SMTP id et17-20020a05622a4b1100b00432de8a03a8mr9661426qtb.18.1712021206548;
-        Mon, 01 Apr 2024 18:26:46 -0700 (PDT)
-Received: from localhost ([70.22.175.108])
-        by smtp.gmail.com with ESMTPSA id fw4-20020a05622a4a8400b00432bcd630c8sm4405470qtb.93.2024.04.01.18.26.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Apr 2024 18:26:46 -0700 (PDT)
-Date: Mon, 01 Apr 2024 21:26:45 -0400
-Message-ID: <7bc35832c837a23773424bdc2255808b@paul-moore.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FzeEsPLR"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ADE58C433C7;
+	Wed,  3 Apr 2024 05:02:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1712120573;
+	bh=2/EZE/fqM7rihgoveOtBWFcjc/baKHO1PSwzHE8G7pI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=FzeEsPLRQAOk6nAJZOzfUVRUqL5geuLfeb18kcrV9MjUceB6XAQZjcIdUuPSBxrOY
+	 yPberXlvyeONEkyn3Jjnum/VwFEpiVybx92xdNIJsd2ogM04BAKkPingFDrTgmw9H3
+	 uZuNcCNiZkK47ku6nVB8jtuvI+H5ZWZi9R9tbXdEEGCbxwswJ0YIA7SNKTOG2qURBJ
+	 zH/d3sF98I1TGg+r6IN88Z/nGGYGWG21Nm0kw5lboTl+wPb+L8DWRNmC07ebNcBIGg
+	 dUhYRG0DCJliiZuRQses+zCCoV5H7Yt8cDK4/zYjzmy3ei5U4AbFLVFMUdsA+sHreN
+	 TcCOECUiistiA==
+Date: Tue, 2 Apr 2024 22:02:51 -0700
+From: Eric Biggers <ebiggers@kernel.org>
+To: Fan Wu <wufan@linux.microsoft.com>
+Cc: corbet@lwn.net, zohar@linux.ibm.com, jmorris@namei.org,
+	serge@hallyn.com, tytso@mit.edu, axboe@kernel.dk, agk@redhat.com,
+	snitzer@kernel.org, eparis@redhat.com, paul@paul-moore.com,
+	linux-doc@vger.kernel.org, linux-integrity@vger.kernel.org,
+	linux-security-module@vger.kernel.org, fsverity@lists.linux.dev,
+	linux-block@vger.kernel.org, dm-devel@lists.linux.dev,
+	audit@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Deven Bowers <deven.desai@linux.microsoft.com>
+Subject: Re: [PATCH v16 16/20] fsverity: consume fsverity built-in signatures
+ via LSM hook
+Message-ID: <20240403050251.GJ2576@sol.localdomain>
+References: <1711657047-10526-1-git-send-email-wufan@linux.microsoft.com>
+ <1711657047-10526-17-git-send-email-wufan@linux.microsoft.com>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 
-Content-Type: text/plain; charset=utf-8 
-Content-Disposition: inline 
-Content-Transfer-Encoding: 8bit
-From: Paul Moore <paul@paul-moore.com>
-To: Fan Wu <wufan@linux.microsoft.com>, corbet@lwn.net, zohar@linux.ibm.com, jmorris@namei.org, serge@hallyn.com, tytso@mit.edu, ebiggers@kernel.org, axboe@kernel.dk, agk@redhat.com, snitzer@kernel.org, eparis@redhat.com
-Cc: linux-doc@vger.kernel.org, linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org, fsverity@lists.linux.dev, linux-block@vger.kernel.org, dm-devel@lists.linux.dev, audit@vger.kernel.org, linux-kernel@vger.kernel.org, Fan Wu <wufan@linux.microsoft.com>
-Subject: Re: [PATCH v16 15/20] security: add security_inode_setintegrity() hook
-References: <1711657047-10526-16-git-send-email-wufan@linux.microsoft.com>
-In-Reply-To: <1711657047-10526-16-git-send-email-wufan@linux.microsoft.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1711657047-10526-17-git-send-email-wufan@linux.microsoft.com>
 
-On Mar 28, 2024 Fan Wu <wufan@linux.microsoft.com> wrote:
-> 
-> This patch introduces a new hook to save inode's integrity
-> data. For example, for fsverity enabled files, LSMs can use this hook to
-> save the verified fsverity builtin signature into the inode's security
-> blob, and LSMs can make access decisions based on the data inside
-> the signature, like the signer certificate.
-> 
-> Signed-off-by: Fan Wu <wufan@linux.microsoft.com>
-> 
-> --
-> v1-v14:
->   + Not present
-> 
-> v15:
->   + Introduced
-> 
-> v16:
->   + Switch to call_int_hook()
-> 
-> ---
->  include/linux/lsm_hook_defs.h |  2 ++
->  include/linux/security.h      | 10 ++++++++++
->  security/security.c           | 20 ++++++++++++++++++++
->  3 files changed, 32 insertions(+)
-> 
-> diff --git a/include/linux/lsm_hook_defs.h b/include/linux/lsm_hook_defs.h
-> index b391a7f13053..6f746dfdb28b 100644
-> --- a/include/linux/lsm_hook_defs.h
-> +++ b/include/linux/lsm_hook_defs.h
-> @@ -1020,6 +1023,13 @@ static inline int security_inode_copy_up(struct dentry *src, struct cred **new)
->  	return 0;
->  }
+On Thu, Mar 28, 2024 at 01:17:23PM -0700, Fan Wu wrote:
+> fsverity: consume fsverity built-in signatures via LSM hook
+
+Nothing is being "consumed" in this patch.  I think you might mean something
+like "expose verified fsverity built-in signatures to LSMs".
+
+> It enables a policy enforcement layer within LSMs for fsverity, offering
+> granular control over the usage of authenticity claims. For instance, a policy
+> could be established to permit the execution of all files with built-in
+> fsverity signatures while restricting kernel module loading to specified
+> hashes.
+
+No, this patch does not enable "restricting kernel module loading to specified
+hashes."  That can be done without this patch.
+
+> The introduction of a security_inode_setintegrity() hook call within
+> fsverity's workflow ensures that the verified built-in signature of a file
+> is stored in the inode's LSM blobs.
+
+No, it doesn't.  As I said on v15, this is not what IPE actually uses it for.
+
+Also, even if IPE did cache the built-in signature in i_security, the mere fact
+that it's cached would say nothing about what it's actually used for.
+
+> diff --git a/Documentation/filesystems/fsverity.rst b/Documentation/filesystems/fsverity.rst
+> index 13e4b18e5dbb..e13cf10211c8 100644
+> --- a/Documentation/filesystems/fsverity.rst
+> +++ b/Documentation/filesystems/fsverity.rst
+> @@ -86,6 +86,19 @@ authenticating fs-verity file hashes include:
+>    signature in their "security.ima" extended attribute, as controlled
+>    by the IMA policy.  For more information, see the IMA documentation.
 >  
-> +static inline int security_inode_setintegrity(struct inode *inode,
-> +					      enum lsm_integrity_type, type,
+> +- Integrity Policy Enforcement (IPE).  IPE supports enforcing access
+> +  control decisions based on immutable security properties of files,
+> +  including those protected by fs-verity's built-in signatures.
+> +  "IPE policy" specifically allows for the authorization of fs-verity
+> +  files using properties such as ``fsverity_digest`` for identifying
+> +  files by their verity digest, and ``fsverity_signature`` to validate
+> +  files signed with fs-verity's built-in signature mechanism.
 
-Another bonus comma ...
+Maybe leave out the "such as" above, since fsverity_digest and
+fsverity_signature are all the IPE properties related to fs-verity.
 
-> +					      const void *value, size_t size)
-> +{
-> +	return 0;
-> +}
-> +
+> +  This integration enhances security by ensuring the integrity and
+> +  authenticity of files on a per-file basis, leveraging fs-verity's
+> +  robust protection capabilities in conjunction with IPE's policy-driven
+> +  access control.
 
---
-paul-moore.com
+This reads a bit like a marketing blurb and feels a bit out of place, especially
+when it comes right after the paragraph about IMA which didn't include a similar
+sentence even though the exact same sentence would apply to IMA too.  Maybe just
+leave this sentence out.
+
+> @@ -457,7 +470,10 @@ Enabling this option adds the following:
+>     On success, the ioctl persists the signature alongside the Merkle
+>     tree.  Then, any time the file is opened, the kernel verifies the
+>     file's actual digest against this signature, using the certificates
+> -   in the ".fs-verity" keyring.
+> +   in the ".fs-verity" keyring. This verification happens as long as the
+> +   file's signature exists, regardless of the state of the sysctl variable
+> +   "fs.verity.require_signatures" described in the next item. The IPE LSM
+> +   relies on this behavior to save verified signatures into LSM blobs.
+
+No, IPE doesn't do that.
+
+- Eric
