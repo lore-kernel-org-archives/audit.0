@@ -1,142 +1,124 @@
-Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
+Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCAB0130AE6
-	for <audit@vger.kernel.org>; Tue, 16 Apr 2024 17:15:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B758C13A258;
+	Wed, 17 Apr 2024 10:05:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713287748; cv=none; b=ZwVWKnAeJ77fnqJ3eVuy97tuSQLnfLiYbdTpHhOvaBi8aImHf+xux3k/AQNVm5Dti3XWsoXQk0i/DL29BUMYjD1bZw1kQvdVChUnC/S76+8ION9yvwD7S/SF8Liw0Lsd2Dwf1FqfM44z7P+u7tyA0LmqMJBHDDL65IXOBxmpthg=
+	t=1713348342; cv=none; b=aKotXkkS9xCcP0POe5Kk0jopAB7BOFPVzZQjBY5ItccajdNy7IPztNuyUrw+3d8oFv4JcGlXSkTzt6NOmq6P9+yMLtVbVzIZZXlO9N9EuEGG5kSFsU0V9bik0qNB8++Zkksa4e1mH7s7eL4PjnzNqLWTNS1pm7Sr1vzzFS5qKtU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713287748; c=relaxed/simple;
-	bh=MQT6jyG8Dh6uTqUepq304Iz5DvJoz2C2ZxlSBnDndg0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=t0wcBumkFKjwpRdK1XqZgjyTzyNCYtka+jlxrM6+L96XSrke7UBMP9z/Vhysa01QxyNjxsFO/G1y2x+oY6KK9WJ1YmPUCIzTJWe8YXiiqKyDW/UogEkliA0uddM0HT9ocVQXXpa6zw+gzttP6MaNbACBezV+SlbSCoHH+1NJNzI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=OV7tMwZ5; arc=none smtp.client-ip=209.85.128.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+	s=arc-20240116; t=1713348342; c=relaxed/simple;
+	bh=1gRmg87JIr+AbQO3Esc+cHkCY63QUm02iWl6ErooOoI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=F1gfO8ucyMfydlTHUFuf9SDLrFAoOZtjhQTv9e5gmJ0MS085w7yKlIvYGQM0CH3QHioEMnV8t4QcSG0PHBqo5XXIysRhL3KK8ee57DyzH8JykzQcBsQVJWdAXRlcUk7wutKUgbASxupaZd8yiGqEocxZFgAJ5kU99suoVpVtCpY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AAzs3ZuR; arc=none smtp.client-ip=209.85.215.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="OV7tMwZ5"
-Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-617d411a6b3so39999117b3.3
-        for <audit@vger.kernel.org>; Tue, 16 Apr 2024 10:15:46 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AAzs3ZuR"
+Received: by mail-pg1-f170.google.com with SMTP id 41be03b00d2f7-5d8b887bb0cso4045939a12.2;
+        Wed, 17 Apr 2024 03:05:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1713287745; x=1713892545; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mlIaXljHgUnCCIy4J87+Qg7HO2SoOigLu1PurV4TaO8=;
-        b=OV7tMwZ5TU37kE/4F95cw+AS7PgwZv+2WuQeKL+XZD6Ymdm7ETN75G5PeELq8NSA2W
-         V1V8oaNxOdlgzdWJk7Fo7hfZZ+B1padTZ8NvrMUeXytnzyL3Uf+CTgey+Lrymh9VfdHO
-         /2dvIWDQSngwiZuy4NLxOK9IwvTVb4C3Ao7Z5COz1HfZwhU/SLNZ9IEj7K8Q2VF9xvtR
-         CVJCff+eALXkcdP8Cn3CCriXlO9hvYY4zot4XdOakiUxqb0pLTB+z8Sm8jinh+T0+1fk
-         1Zv37+7INyK/E2jzITVaXmVEw50rLxwPkcNE9YdZyawHi7u9qmZK56DKnwBwlLocmQKs
-         OKng==
+        d=gmail.com; s=20230601; t=1713348340; x=1713953140; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=1gRmg87JIr+AbQO3Esc+cHkCY63QUm02iWl6ErooOoI=;
+        b=AAzs3ZuRJX7XDEU/S31apMVw0w4s7Q7KO0FdVCxGcPYSQYxeRSY28pC1eu3Nrio5c1
+         /8hlCKRtkZAgyv8u2ZkQRGfxaZJMq1OWpJiBVcvOqdTd2WBLQIZ2kjfFBum4N2R8Isih
+         f2SkFV+0ugaXXipJ2Nlmu4lZAs98Uu7pgtHxn5StoZ+osrPawfSsDoFTHgEoyq2Tt6Q8
+         NRjLJNg4pvoJ5WApc/OPQ4IAFhbQ7RH2Kz3RT5CY8e2rwsQ/E1wXGXRIyVxPAPyHxqu0
+         xXjLmG+nWpVe8EKo2OzaEGE6HiF4EW+wqWYp7nr6UxxOhqD0p14pNRRYbP31JFxGWdYJ
+         BuPQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713287745; x=1713892545;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mlIaXljHgUnCCIy4J87+Qg7HO2SoOigLu1PurV4TaO8=;
-        b=daem+TJTjM03O2Hz/f1+EV8bn9Km7yS2GG2Ce07+Xxxwu5hbETBfAPaCEqOCaOg8yj
-         eLyerZl7SanMWxNIyeVaFyiVJb5NoN3BiSn/KTteV6Sqgz1TJRie64IckTIS0uvOA4Uh
-         OZ9Jg9I+vjcdvwafcf0VRxNOq+WUnU4DQEWbZrT+6iTMKU+wHInLvyYPfBj10IcIQfwq
-         FA3KENfm/2QLYd3O86zO5jR5WAQmkpvT765PJQGYhaikBmBtCip0LxqZ/BPYJPTstZcb
-         8usgX8ebaH8gC60sBV9pnuVyiSiwuYrdW+s5Kr76nJN5dizEnWBnspIKpSl4IPWXu/vx
-         qR/Q==
-X-Forwarded-Encrypted: i=1; AJvYcCXbuitq24kmp1dFKQ77qfriZzUJKasSIKRV837JGPEpGtbcMee1k9ksJAzsav4rYLGwNasMMS+Jr3F5zH2W7Fd5J55cjtU=
-X-Gm-Message-State: AOJu0Yw1pX2xDNPrRazYLbsgSlziR/XAUZD5cC2bdKttoukXz4/4qxG4
-	qI/qvLBEJ445qu3c6O8WxMbCeJOaG5uJdi6M8qEeQoW57Twd4W/li0xNgFL32CdQY9T6b7KXjc3
-	5T9apspuzi5IUcfZCVAFPK9o7nqZWbb6g1Fdi
-X-Google-Smtp-Source: AGHT+IHkFm3qzYwxgW3HLSkACstSKMok8vGwu3XPMJJY080YjRz5JwoPZy+04JvEa16/jfPOBvRc8hoChulBAhrzEX4=
-X-Received: by 2002:a81:6dd7:0:b0:61b:19e:9532 with SMTP id
- i206-20020a816dd7000000b0061b019e9532mr610255ywc.26.1713287745625; Tue, 16
- Apr 2024 10:15:45 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1713348340; x=1713953140;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1gRmg87JIr+AbQO3Esc+cHkCY63QUm02iWl6ErooOoI=;
+        b=iIRsi31AfcqzDKUNNO6o9d3ib8xGzePLs9voX9qMDY78+WB0gtQYpo7kXPOBnw2WTm
+         YzYRwT+Oo0gI3yiO4xGWx6DR+eU0urjiDqvVEdgaDP/jcMcgDaLBdIH6/wDsRP3KCpgl
+         Pz+utAPk2ispxU0TLWkBdG2f4Y4/LM1n+AfVbxPPAGTpgEf9i0JxbOqcd4fZCsMHsSE0
+         pmro/RaRuyLVSEcdLlg9r7LgoRzpd4G5HWENm4VxUvcuRbrI2iiRiJTACsZIVfN12aSC
+         5gZk7AoirKe21tUqOoK9HMtPad2H4a5jwUjYz7cl5xmXvftqdXkjqWsHFMN08st5+AzW
+         qHEA==
+X-Forwarded-Encrypted: i=1; AJvYcCX7IS6j45Gfqpkz+GTYOT1w1GCNrANLl/xhNlogdKJkw3K3EqUqgFKkc2TgQcow4QdjzjHAuB5G3fNaypVxqolnIJrRwppo7MhG2zZs9+/T/Nbl7SXr3Y2gQvvWRjUjEaiFSkIs1YjlyYKaPbKoSs+JVjxeDE6jhEgRQPQzpZbQHKVI10sX1XjmInTqEUNM70jCiOsLvZiLojjq55CPA52TGCgxr5GK93NyY2kPva240GtdGqkSCf2ItMR1qGvwAKhKpy4rGF4SeQ==
+X-Gm-Message-State: AOJu0Yy7solfZwT8Xrej9ZNsZNk0qeXZSEkViORqFlj1vWa7k1MVELAA
+	SlxwR+1FqfC8+ES8QkGdUbyMlj4fEsK0Id+6u0iD26wAp++h3IEJ
+X-Google-Smtp-Source: AGHT+IHoSQwgWNaYYN9PHfJ92Leu3dCSJnPJtoI+4IJ8iitgaNIncK7hpg/lzzZCpwVd83QGt3/Z2Q==
+X-Received: by 2002:a17:90a:108:b0:2aa:7057:437b with SMTP id b8-20020a17090a010800b002aa7057437bmr6040509pjb.16.1713348339921;
+        Wed, 17 Apr 2024 03:05:39 -0700 (PDT)
+Received: from archie.me ([103.124.138.155])
+        by smtp.gmail.com with ESMTPSA id t12-20020a17090a5d8c00b002a474e2d7d8sm1019325pji.15.2024.04.17.03.05.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 Apr 2024 03:05:38 -0700 (PDT)
+Received: by archie.me (Postfix, from userid 1000)
+	id 1682E18462BA0; Wed, 17 Apr 2024 17:05:35 +0700 (WIB)
+Date: Wed, 17 Apr 2024 17:05:35 +0700
+From: Bagas Sanjaya <bagasdotme@gmail.com>
+To: Randy Dunlap <rdunlap@infradead.org>,
+	Fan Wu <wufan@linux.microsoft.com>, corbet@lwn.net,
+	zohar@linux.ibm.com, jmorris@namei.org, serge@hallyn.com,
+	tytso@mit.edu, ebiggers@kernel.org, axboe@kernel.dk, agk@redhat.com,
+	snitzer@kernel.org, eparis@redhat.com, paul@paul-moore.com
+Cc: linux-doc@vger.kernel.org, linux-integrity@vger.kernel.org,
+	linux-security-module@vger.kernel.org, fsverity@lists.linux.dev,
+	linux-block@vger.kernel.org, dm-devel@lists.linux.dev,
+	audit@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Deven Bowers <deven.desai@linux.microsoft.com>
+Subject: Re: [PATCH v17 20/21] Documentation: add ipe documentation
+Message-ID: <Zh-e7945DM6f2u9T@archie.me>
+References: <1712969764-31039-1-git-send-email-wufan@linux.microsoft.com>
+ <1712969764-31039-21-git-send-email-wufan@linux.microsoft.com>
+ <Zh0Zh3-xraVl85Lm@archie.me>
+ <a2266217-c3ad-4bb2-8188-498a2c8ae36c@infradead.org>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <0cea7b29-5c31-409a-a8d3-de53c7ce40eb@linux.microsoft.com>
- <CAHC9VhTWbFu8vbapWG5ndt=r-y5SkSSe=AA3YEufreYtjPMrUw@mail.gmail.com> <15cf9f3c-efd7-40ce-8613-a113439c6fb6@gmail.com>
-In-Reply-To: <15cf9f3c-efd7-40ce-8613-a113439c6fb6@gmail.com>
-From: Paul Moore <paul@paul-moore.com>
-Date: Tue, 16 Apr 2024 13:15:34 -0400
-Message-ID: <CAHC9VhT2X=19CJUkbt30C026p-+Q9q8g87txb0axeUhOnGaPUA@mail.gmail.com>
-Subject: Re: io_uring: worker thread NULL dereference during openat op
-To: Pavel Begunkov <asml.silence@gmail.com>
-Cc: Dan Clash <daclash@linux.microsoft.com>, io-uring@vger.kernel.org, 
-	audit@vger.kernel.org, Jens Axboe <axboe@kernel.dk>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="0nWDRmFxn5oWDUvp"
+Content-Disposition: inline
+In-Reply-To: <a2266217-c3ad-4bb2-8188-498a2c8ae36c@infradead.org>
+
+
+--0nWDRmFxn5oWDUvp
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Apr 16, 2024 at 9:45=E2=80=AFAM Pavel Begunkov <asml.silence@gmail.=
-com> wrote:
-> On 4/16/24 04:29, Paul Moore wrote:
-> > On Mon, Apr 15, 2024 at 7:26=E2=80=AFPM Dan Clash <daclash@linux.micros=
-oft.com> wrote:
-> >>
-> >> Below is a test program that causes multiple io_uring worker threads t=
-o
-> >> hit a NULL dereference while executing openat ops.
+On Mon, Apr 15, 2024 at 07:56:16AM -0700, Randy Dunlap wrote:
+>=20
+> On 4/15/24 5:11 AM, Bagas Sanjaya wrote:
+> > The doc LGTM, thanks!
+> >=20
+> > Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
+>=20
+> Hi,
+> Please see netiquette, section "Trim replies".
+> Thanks.
+>=20
+>=20
+> --=20
+> #Randy
+> https://people.kernel.org/tglx/notes-about-netiquette
+> https://subspace.kernel.org/etiquette.html
 
-...
-
-> > Thanks for the well documented bug report!
-> >
-> > That's interesting, it looks like audit_inode() is potentially being
-> > passed a filename struct with a NULL name field (filename::name =3D=3D
-> > NULL).  Given the IOSQE_ASYNC and what looks like io_uring calling
-> > getname() from within the __io_openat_prep() function, I suspect the
-> > issue is that we aren't associating the filename information we
-> > collect in getname() with the proper audit_context().  In other words,
-> > we do the getname() in one context, and then the actual open operation
-> > in another, and the audit filename info is lost in the switch.
-> >
-> > I think this is related to another issue that Jens and I have been
-> > discussing relating to connect() and sockaddrs.  We had been hoping
-> > that the issue we were seeing with sockaddrs was just a special case
-> > with connect, but it doesn't look like that is the case.
-> >
-> > I'm going to be a bit busy this week with conferences, but given the
-> > previous discussions with Jens as well as this new issue, I suspect
-> > that we are going to need to do some work to support creation of a
-> > thin, or lazily setup, audit_context that we can initialize in the
-> > io_uring prep routines for use by getname(), move_addr_to_kernel(),
-> > etc., store in the io_kiocb struct, and then fully setup in
-> > audit_uring_entry().
->
-> I'd prefer not to leak that much into the io_uring's hot path. I
-> don't understand specifics of the problem, but let me throw
-> some ideas:
->
-> 1) Each io_uring request has a reference to the task it was
-> submitted from, i.e. req->task, can you use the context from
-> the submitter task? E.g.
->
-> audit_ctx =3D req->task->audit_context
->
-> io_uring explicitly lists all tasks using it, and you can easily
-> hook in there and initialise audit so that req->ctx->audit_context
-> is always set.
-
-In a few cases, see my previous comments for examples, the work done
-in the io_uring prep functions needs to be associated with the work
-done in the actual operation, e.g. openat, connect, etc.  The reason
-for this is that we need to carry over some bits of state from the
-prep portion to the operation itself so that it can be included in the
-audit_uring_entry()/_exit() region.  Unfortunately there are a number
-of reasons why we can't leverage the submitter's audit_context here,
-but most of the reasons essentially come down to the disconnected and
-async nature of io_uring operations and the separation between the
-prep work and actual operation.
-
-> 2) Can we initialise audit for each io-wq task when we create
-> them? We can also try to share audit ctx b/w iowq tasks and
-> the task they were created for.
-
-There is still the issue of connecting each individual prep work state
-with the associated operation within the audit_uring_entry()/_exit()
-region.
+Thanks for the tip!
 
 --=20
-paul-moore.com
+An old man doll... just what I always wanted! - Clara
+
+--0nWDRmFxn5oWDUvp
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZh+e6wAKCRD2uYlJVVFO
+o4TXAPwN11FytsnDX/+gFpUvWYFc3CxPaaA7sJCuHF5qVYQtGAEA6GP0hs+AljG4
+tOsfo209C7he+IJJJUnxDpScnZoh/wc=
+=jvcJ
+-----END PGP SIGNATURE-----
+
+--0nWDRmFxn5oWDUvp--
