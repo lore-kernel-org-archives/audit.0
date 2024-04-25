@@ -1,124 +1,119 @@
-Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B758C13A258;
-	Wed, 17 Apr 2024 10:05:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C742F1CFAF;
+	Thu, 25 Apr 2024 03:36:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713348342; cv=none; b=aKotXkkS9xCcP0POe5Kk0jopAB7BOFPVzZQjBY5ItccajdNy7IPztNuyUrw+3d8oFv4JcGlXSkTzt6NOmq6P9+yMLtVbVzIZZXlO9N9EuEGG5kSFsU0V9bik0qNB8++Zkksa4e1mH7s7eL4PjnzNqLWTNS1pm7Sr1vzzFS5qKtU=
+	t=1714016186; cv=none; b=PqJOlXlW5JU7LwEdmhnR9XLbGon0cdOXJlzaW9n7RH/R0dHVBUkKJ+f7yzZb7nczEv4SKNJVhfIXxxeC6KKrRo8JyVZXub//1lpNkpK9Qp5j2tHdvQZZWGEK8pSsEsKOEe8iPfAPMUWHOB8RGeQtpWN7U2+++DcTU6QuIwa6HnU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713348342; c=relaxed/simple;
-	bh=1gRmg87JIr+AbQO3Esc+cHkCY63QUm02iWl6ErooOoI=;
+	s=arc-20240116; t=1714016186; c=relaxed/simple;
+	bh=GeWAMnfWagn1Kaadtthqg0oPmCZaNIn9vT7HkPbKuW4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=F1gfO8ucyMfydlTHUFuf9SDLrFAoOZtjhQTv9e5gmJ0MS085w7yKlIvYGQM0CH3QHioEMnV8t4QcSG0PHBqo5XXIysRhL3KK8ee57DyzH8JykzQcBsQVJWdAXRlcUk7wutKUgbASxupaZd8yiGqEocxZFgAJ5kU99suoVpVtCpY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AAzs3ZuR; arc=none smtp.client-ip=209.85.215.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=FgWIAJBlx3pA46NipQ8VHxJWGwJppHS78P2n8gNpjkK5UfxCR6xbvi5uPr4NnFWqmvoTOsrtYGNoRRMzM/thkx/bkip9V8OmyAeManhDtQfg9pGYmr5FQLR4K2m5yqgCa1ks8VWV5/pZA5TAz876SJTN93m1ArtlWLwy4b4wMHM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DYJklTY1; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AAzs3ZuR"
-Received: by mail-pg1-f170.google.com with SMTP id 41be03b00d2f7-5d8b887bb0cso4045939a12.2;
-        Wed, 17 Apr 2024 03:05:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1713348340; x=1713953140; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=1gRmg87JIr+AbQO3Esc+cHkCY63QUm02iWl6ErooOoI=;
-        b=AAzs3ZuRJX7XDEU/S31apMVw0w4s7Q7KO0FdVCxGcPYSQYxeRSY28pC1eu3Nrio5c1
-         /8hlCKRtkZAgyv8u2ZkQRGfxaZJMq1OWpJiBVcvOqdTd2WBLQIZ2kjfFBum4N2R8Isih
-         f2SkFV+0ugaXXipJ2Nlmu4lZAs98Uu7pgtHxn5StoZ+osrPawfSsDoFTHgEoyq2Tt6Q8
-         NRjLJNg4pvoJ5WApc/OPQ4IAFhbQ7RH2Kz3RT5CY8e2rwsQ/E1wXGXRIyVxPAPyHxqu0
-         xXjLmG+nWpVe8EKo2OzaEGE6HiF4EW+wqWYp7nr6UxxOhqD0p14pNRRYbP31JFxGWdYJ
-         BuPQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713348340; x=1713953140;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1gRmg87JIr+AbQO3Esc+cHkCY63QUm02iWl6ErooOoI=;
-        b=iIRsi31AfcqzDKUNNO6o9d3ib8xGzePLs9voX9qMDY78+WB0gtQYpo7kXPOBnw2WTm
-         YzYRwT+Oo0gI3yiO4xGWx6DR+eU0urjiDqvVEdgaDP/jcMcgDaLBdIH6/wDsRP3KCpgl
-         Pz+utAPk2ispxU0TLWkBdG2f4Y4/LM1n+AfVbxPPAGTpgEf9i0JxbOqcd4fZCsMHsSE0
-         pmro/RaRuyLVSEcdLlg9r7LgoRzpd4G5HWENm4VxUvcuRbrI2iiRiJTACsZIVfN12aSC
-         5gZk7AoirKe21tUqOoK9HMtPad2H4a5jwUjYz7cl5xmXvftqdXkjqWsHFMN08st5+AzW
-         qHEA==
-X-Forwarded-Encrypted: i=1; AJvYcCX7IS6j45Gfqpkz+GTYOT1w1GCNrANLl/xhNlogdKJkw3K3EqUqgFKkc2TgQcow4QdjzjHAuB5G3fNaypVxqolnIJrRwppo7MhG2zZs9+/T/Nbl7SXr3Y2gQvvWRjUjEaiFSkIs1YjlyYKaPbKoSs+JVjxeDE6jhEgRQPQzpZbQHKVI10sX1XjmInTqEUNM70jCiOsLvZiLojjq55CPA52TGCgxr5GK93NyY2kPva240GtdGqkSCf2ItMR1qGvwAKhKpy4rGF4SeQ==
-X-Gm-Message-State: AOJu0Yy7solfZwT8Xrej9ZNsZNk0qeXZSEkViORqFlj1vWa7k1MVELAA
-	SlxwR+1FqfC8+ES8QkGdUbyMlj4fEsK0Id+6u0iD26wAp++h3IEJ
-X-Google-Smtp-Source: AGHT+IHoSQwgWNaYYN9PHfJ92Leu3dCSJnPJtoI+4IJ8iitgaNIncK7hpg/lzzZCpwVd83QGt3/Z2Q==
-X-Received: by 2002:a17:90a:108:b0:2aa:7057:437b with SMTP id b8-20020a17090a010800b002aa7057437bmr6040509pjb.16.1713348339921;
-        Wed, 17 Apr 2024 03:05:39 -0700 (PDT)
-Received: from archie.me ([103.124.138.155])
-        by smtp.gmail.com with ESMTPSA id t12-20020a17090a5d8c00b002a474e2d7d8sm1019325pji.15.2024.04.17.03.05.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Apr 2024 03:05:38 -0700 (PDT)
-Received: by archie.me (Postfix, from userid 1000)
-	id 1682E18462BA0; Wed, 17 Apr 2024 17:05:35 +0700 (WIB)
-Date: Wed, 17 Apr 2024 17:05:35 +0700
-From: Bagas Sanjaya <bagasdotme@gmail.com>
-To: Randy Dunlap <rdunlap@infradead.org>,
-	Fan Wu <wufan@linux.microsoft.com>, corbet@lwn.net,
-	zohar@linux.ibm.com, jmorris@namei.org, serge@hallyn.com,
-	tytso@mit.edu, ebiggers@kernel.org, axboe@kernel.dk, agk@redhat.com,
-	snitzer@kernel.org, eparis@redhat.com, paul@paul-moore.com
-Cc: linux-doc@vger.kernel.org, linux-integrity@vger.kernel.org,
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DYJklTY1"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BDCF6C113CC;
+	Thu, 25 Apr 2024 03:36:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1714016185;
+	bh=GeWAMnfWagn1Kaadtthqg0oPmCZaNIn9vT7HkPbKuW4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=DYJklTY1KH83ua4kI6LeO607GfBSbM2ev6VicCnIJrjSZSXEO/cSyCKjoFseMcV/f
+	 XzRcOQDv1baecMnURNXN1yYWL6CAk/7ShUgjgbKo8hlIUqvwDii4EroS3Qpu+/6BLV
+	 eNQBPFefTzuqC/BMjxpkI7w+rGCSbuekxbHMGgjUj5fP1BxuhuykvkoMiwNsg9+Km+
+	 w+iNxj+e3U0TernKO8YnJtbf2/XxFbHw/3FlDaZHWncDGhXwlQ7wqpA9Ps0UZP1FjF
+	 GdICSIxzjpaPOY7bd2GUVfRqfmci/0l7yFzmM+WP++La4EaxXB5+8mnjHQYK1dFZBC
+	 N82rs9fbu01HA==
+Date: Wed, 24 Apr 2024 20:36:23 -0700
+From: Eric Biggers <ebiggers@kernel.org>
+To: Fan Wu <wufan@linux.microsoft.com>
+Cc: corbet@lwn.net, zohar@linux.ibm.com, jmorris@namei.org,
+	serge@hallyn.com, tytso@mit.edu, axboe@kernel.dk, agk@redhat.com,
+	snitzer@kernel.org, eparis@redhat.com, paul@paul-moore.com,
+	linux-doc@vger.kernel.org, linux-integrity@vger.kernel.org,
 	linux-security-module@vger.kernel.org, fsverity@lists.linux.dev,
 	linux-block@vger.kernel.org, dm-devel@lists.linux.dev,
 	audit@vger.kernel.org, linux-kernel@vger.kernel.org,
 	Deven Bowers <deven.desai@linux.microsoft.com>
-Subject: Re: [PATCH v17 20/21] Documentation: add ipe documentation
-Message-ID: <Zh-e7945DM6f2u9T@archie.me>
+Subject: Re: [PATCH v17 16/21] fsverity: expose verified fsverity built-in
+ signatures to LSMs
+Message-ID: <20240425033623.GA1401@sol.localdomain>
 References: <1712969764-31039-1-git-send-email-wufan@linux.microsoft.com>
- <1712969764-31039-21-git-send-email-wufan@linux.microsoft.com>
- <Zh0Zh3-xraVl85Lm@archie.me>
- <a2266217-c3ad-4bb2-8188-498a2c8ae36c@infradead.org>
+ <1712969764-31039-17-git-send-email-wufan@linux.microsoft.com>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="0nWDRmFxn5oWDUvp"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <a2266217-c3ad-4bb2-8188-498a2c8ae36c@infradead.org>
+In-Reply-To: <1712969764-31039-17-git-send-email-wufan@linux.microsoft.com>
 
+On Fri, Apr 12, 2024 at 05:55:59PM -0700, Fan Wu wrote:
+> For instance, a policy could be established to permit the execution of all
+> files with verified built-in fsverity signatures while restricting kernel
+> module loading from specified fsverity files via fsverity digets.
 
---0nWDRmFxn5oWDUvp
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+"digets" => "digests"
 
-On Mon, Apr 15, 2024 at 07:56:16AM -0700, Randy Dunlap wrote:
->=20
-> On 4/15/24 5:11 AM, Bagas Sanjaya wrote:
-> > The doc LGTM, thanks!
-> >=20
-> > Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
->=20
-> Hi,
-> Please see netiquette, section "Trim replies".
-> Thanks.
->=20
->=20
-> --=20
-> #Randy
-> https://people.kernel.org/tglx/notes-about-netiquette
-> https://subspace.kernel.org/etiquette.html
+> The introduction of a security_inode_setintegrity() hook call within
+> fsverity's workflow ensures that the verified built-in signature of a file
+> is exposed to LSMs, This enables LSMs to recognize and label fsverity files
 
-Thanks for the tip!
+"LSMs, This" => "LSMs. This"
 
---=20
-An old man doll... just what I always wanted! - Clara
+> +#ifdef CONFIG_FS_VERITY_BUILTIN_SIGNATURES
+> +static int fsverity_inode_setintegrity(struct inode *inode,
+> +				       const struct fsverity_descriptor *desc)
+> +{
+> +	return security_inode_setintegrity(inode,
+> +					   LSM_INT_FSVERITY_BUILTINSIG_VALID,
+> +					   desc->signature,
+> +					   le32_to_cpu(desc->sig_size));
+> +}
+> +#else
+> +static inline int fsverity_inode_setintegrity(struct inode *inode,
+> +					      const struct fsverity_descriptor *desc)
+> +{
+> +	return 0;
+> +}
+> +#endif /* CONFIG_FS_VERITY_BUILTIN_SIGNATURES */
+[...]
+> @@ -241,6 +259,10 @@ struct fsverity_info *fsverity_create_info(const struct inode *inode,
+> 		}
+> 	}
+> 
+> +	err = fsverity_inode_setintegrity(inode, desc);
+> +	if (err)
+> +		goto fail;
+> +
 
---0nWDRmFxn5oWDUvp
-Content-Type: application/pgp-signature; name="signature.asc"
+Wouldn't it be much simpler to put the LSM call in fsverity_verify_signature()?
+Then no #ifdef would be needed, and there would be no weird cases where the LSM
+gets passed LSM_INT_FSVERITY_BUILTINSIG_VALID with an empty signature.
 
------BEGIN PGP SIGNATURE-----
+> diff --git a/fs/verity/signature.c b/fs/verity/signature.c
+> index 90c07573dd77..fd60e9704e78 100644
+> --- a/fs/verity/signature.c
+> +++ b/fs/verity/signature.c
+> @@ -41,7 +41,11 @@ static struct key *fsverity_keyring;
+>   * @sig_size: size of signature in bytes, or 0 if no signature
+>   *
+>   * If the file includes a signature of its fs-verity file digest, verify it
+> - * against the certificates in the fs-verity keyring.
+> + * against the certificates in the fs-verity keyring. Note that signatures
+> + * are verified regardless of the state of the 'fsverity_require_signatures'
+> + * variable and the LSM subsystem relies on this behavior to help enforce
+> + * file integrity policies. Please discuss changes with the LSM list
+> + * (thank you!).
+>   *
+>   * Return: 0 on success (signature valid or not required); -errno on failure
+>   */
 
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZh+e6wAKCRD2uYlJVVFO
-o4TXAPwN11FytsnDX/+gFpUvWYFc3CxPaaA7sJCuHF5qVYQtGAEA6GP0hs+AljG4
-tOsfo209C7he+IJJJUnxDpScnZoh/wc=
-=jvcJ
------END PGP SIGNATURE-----
+... and it would also make the above easier to understand if the LSM call were
+to happen right in fsverity_verify_signature().
 
---0nWDRmFxn5oWDUvp--
+- Eric
