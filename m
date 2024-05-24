@@ -1,154 +1,304 @@
 Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90D12148821;
-	Tue, 21 May 2024 21:42:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 321B185260;
+	Fri, 24 May 2024 20:46:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716327770; cv=none; b=lAQiKsbORL3csm6lFm/DdOyP+KIONYpWHFrMEethpVR3BDZpH6YJmu1CCUU8LviCs9eK6JfVUZRNhQBU59u6mQV31/vmq8Z3oNlMd38/35IVGT/+X/TA1HJ4DhKYoA1++Zp5U9QaMFKs3m79kzf4aT5VtWC5eDOOjG3O9qgYVRs=
+	t=1716583618; cv=none; b=igsE5oH5mUQuF/cy1jiEvji2KJx1CM25Z/tTavPBP6kad5BnyGXssqUDL/WnTDT62KCj3SilE4TP4f1sgVq8wTgEk0FSnQg52BPtYgDIdCoyi7Zeum1TI2Wr/4WzrN7smcHZsNgSVld9njwjFxdzLM9YJ2S0h4Yn4UO5rq3nJFg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716327770; c=relaxed/simple;
-	bh=u9OHQk1eGnLPF7q8QnB3x/3atmb+9wZIs5n85uU/v2c=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=d9MM7xsvtqLN903geLKBlL7Ptr5pjIxAR5nNs5wW/QUUAvSHPVLvnMnuIRHV3h4HBOW+cC61ySxfdAHqjSxyfLVdoxR42EHHl8yeQ+JENPKLntuokb/MJKgLGpsIaiLIvg3go5yapjMUkft6Z5IslzH9vmhVAio//1r5b4UsaQY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=pobkyxdG; arc=none smtp.client-ip=13.77.154.182
+	s=arc-20240116; t=1716583618; c=relaxed/simple;
+	bh=Ej3NXiS1J8Asr2mmuc/ZfSdt8aoKbwls798/+3mDHVk=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=FM/8eUt91iX1t64q2xmIygOy5rSz0U6k14p7wKBACT7KszbxTHB3lWAGr1CTqCu/i833tEz6/lqO9tTogkr6fQomtKXcy/aR/sUZ4725KJVa/B5DUimPnlQO7i+1jnE8PrNC5za1Sl9DTqoQI/SKc2Yq+xeGjAHj+emAGt0zXeo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=bw68c8wH; arc=none smtp.client-ip=13.77.154.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="pobkyxdG"
-Received: from [10.137.106.151] (unknown [167.220.2.23])
-	by linux.microsoft.com (Postfix) with ESMTPSA id CCF0E2067900;
-	Tue, 21 May 2024 14:42:47 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com CCF0E2067900
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="bw68c8wH"
+Received: by linux.microsoft.com (Postfix, from userid 1052)
+	id 4C91420B9264; Fri, 24 May 2024 13:46:51 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 4C91420B9264
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1716327768;
-	bh=BUSVrQbwhWTK6SmDrPgyWJrCD0hgOdRhFqYqUq240sk=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=pobkyxdGe7YVFwF3dkaJkJgWbG+KavLPiuQF6SQQN1zBASMoAM9wcAdd5EmYZaB/L
-	 61ecccz7Ow8aijjoRWVO+F98iR9BjxIC5czqVksM0Y0rMb0ZRRAKkfCOJ6tvNTRUK0
-	 vikUnzUoW2A/1EOMAGY+LrNlY0+QdhS1KLRy/ENA=
-Message-ID: <3bd4d9a8-58ce-4cb2-a91e-c0d33174d951@linux.microsoft.com>
-Date: Tue, 21 May 2024 14:42:47 -0700
+	s=default; t=1716583611;
+	bh=RTkFokh1m1xRTu3Dxcu60JLfdY+F9a8lStIHfNz4qaM=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=bw68c8wHo27zkg0km7VVZIAvKxIGAaCHomv+sG4NKrELqQ7YxIlj1yUwsHJDVnpBx
+	 oAh+dbVj1xyrfyuCYFtuU2EjBgxsoNAYvFGd3rYCEPyxtcUsf20VQ0v8jLx3g8a6gz
+	 gqadOrjK9NBsRlU/fCfxHU8Nj6Vv930gj9/jHKvw=
+From: Fan Wu <wufan@linux.microsoft.com>
+To: corbet@lwn.net,
+	zohar@linux.ibm.com,
+	jmorris@namei.org,
+	serge@hallyn.com,
+	tytso@mit.edu,
+	ebiggers@kernel.org,
+	axboe@kernel.dk,
+	agk@redhat.com,
+	snitzer@kernel.org,
+	mpatocka@redhat.com,
+	eparis@redhat.com,
+	paul@paul-moore.com
+Cc: linux-doc@vger.kernel.org,
+	linux-integrity@vger.kernel.org,
+	linux-security-module@vger.kernel.org,
+	fsverity@lists.linux.dev,
+	linux-block@vger.kernel.org,
+	dm-devel@lists.linux.dev,
+	audit@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Deven Bowers <deven.desai@linux.microsoft.com>,
+	Fan Wu <wufan@linux.microsoft.com>
+Subject: [PATCH v19 03/20] ipe: add evaluation loop
+Date: Fri, 24 May 2024 13:46:32 -0700
+Message-Id: <1716583609-21790-4-git-send-email-wufan@linux.microsoft.com>
+X-Mailer: git-send-email 1.8.3.1
+In-Reply-To: <1716583609-21790-1-git-send-email-wufan@linux.microsoft.com>
+References: <1716583609-21790-1-git-send-email-wufan@linux.microsoft.com>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v18 12/21] dm: add finalize hook to target_type
-To: Mikulas Patocka <mpatocka@redhat.com>
-Cc: Mike Snitzer <snitzer@kernel.org>, corbet@lwn.net, zohar@linux.ibm.com,
- jmorris@namei.org, serge@hallyn.com, tytso@mit.edu, ebiggers@kernel.org,
- axboe@kernel.dk, agk@redhat.com, eparis@redhat.com, paul@paul-moore.com,
- linux-doc@vger.kernel.org, linux-integrity@vger.kernel.org,
- linux-security-module@vger.kernel.org, fsverity@lists.linux.dev,
- linux-block@vger.kernel.org, dm-devel@lists.linux.dev,
- audit@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <1714775551-22384-1-git-send-email-wufan@linux.microsoft.com>
- <1714775551-22384-13-git-send-email-wufan@linux.microsoft.com>
- <aa767961-5e3-2ceb-1a1e-ff66a8eed649@redhat.com>
- <212b02a8-f5f0-4433-a726-1639dda61790@linux.microsoft.com>
- <bc9aa053-20a6-eaa-cbe4-344f340242b@redhat.com>
- <234910c1-40c3-4489-94ab-6e9a5f00d93e@linux.microsoft.com>
- <889a7880-8336-a44a-bea4-a4c81c5e5cce@redhat.com>
-Content-Language: en-CA
-From: Fan Wu <wufan@linux.microsoft.com>
-In-Reply-To: <889a7880-8336-a44a-bea4-a4c81c5e5cce@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
 
+From: Deven Bowers <deven.desai@linux.microsoft.com>
 
+Introduce a core evaluation function in IPE that will be triggered by
+various security hooks (e.g., mmap, bprm_check, kexec). This function
+systematically assesses actions against the defined IPE policy, by
+iterating over rules specific to the action being taken. This critical
+addition enables IPE to enforce its security policies effectively,
+ensuring that actions intercepted by these hooks are scrutinized for policy
+compliance before they are allowed to proceed.
 
-On 5/20/2024 5:31 AM, Mikulas Patocka wrote:
-> 
-> 
-> On Fri, 17 May 2024, Fan Wu wrote:
-> 
->>> So, it seems that the preresume callback provides the guarantee that you
->>> looking for.
->>>
->>>> -Fan
->>>
->>> Mikulas
->>
->> Thanks for the info. I have tested and verified that the preresume() hook can
->> also work for our case.
->>
->>  From the source code
->> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/md/dm-ioctl.c#n1149,
->> the whole resume process appears to be:
->>
->> 1. Check if there is a new map for the device. If so, attempt to activate the
->> new map using dm_swap_table() (where the finalize() callback occurs).
->>
->> 2. Check if the device is suspended. If so, use dm_resume() (where the
->> preresume() callback occurs) to resume the device.
->>
->> 3. If a new map is activated, use dm_table_destroy() to destroy the old map.
->>
->> For our case:
->>
->> - Using the finalize() callback, the metadata of the dm-verity target inside
->> the table is attached to the mapped device every time a new table is
->> activated.
->> - Using the preresume() callback, the same metadata is attached every time the
->> device resumes from suspension.
->>
->> If I understand the code correctly, resuming from suspension is a necessary
->> step for loading a new mapping table. Thus, the preresume() callback covers
->> all conditions where the finalize() callback would be triggered.
-> 
-> Yes.
-> 
->> However, the preresume() callback can also be triggered when the device
->> resumes from suspension without loading a new table, in which case there
->> is no new metadata in the table to attach to the mapped device.
-> 
-> Yes.
-> 
->> In the scenario where the finalize() callback succeeds but the preresume()
->> callback fails, it seems the device will remain in a suspended state, the
->> newly activated table will be kept, and the old table will be destroyed, so it
->> seems there is no inconsistency using finalize() even preresume() potentially
->> fails.
-> 
-> What does your security module do when the verification of the dm-verity
-> hash fails? Does it halt the whole system? Does it destroy just the
-> failing dm device? Or does it attempt to recover somehow from this
-> situation?
->
+Signed-off-by: Deven Bowers <deven.desai@linux.microsoft.com>
+Signed-off-by: Fan Wu <wufan@linux.microsoft.com>
 
-I'm not sure which hash verification is being referred to here, but it 
-could be either root hash signature verification or block-level hash 
-verification. Our security module does not intervene in these processes, 
-so the behavior remains as dm-verity currently handles it.
+---
+v2:
++ Split evaluation loop, access control hooks, and evaluation loop from policy parser and userspace interface to pass mailing list character limit
 
-Within the device mapper, our security module uses the device mapper 
-callback to duplicate the root hash of a dm-verity target and record the 
-signature verification state of the dm-verity target, then attach this 
-information to the security field of the block_device structure. This 
-process can only fail if the system is out of memory.
+v3:
++ Move ipe_load_properties to patch 04.
++ Remove useless 0-initializations Prefix extern variables with ipe_
++ Remove kernel module parameters, as these are exposed through sysctls.
++ Add more prose to the IPE base config option help text.
++ Use GFP_KERNEL for audit_log_start.
++ Remove unnecessary caching system.
++ Remove comments from headers
++ Use rcu_access_pointer for rcu-pointer null check
++ Remove usage of reqprot; use prot only.
++Move policy load and activation audit event to 03/12
 
-With the root hash and signature verification state attached to the 
-security field of the block device, the security system can access this 
-important metadata to enforce policies. For example, these policies can 
-include only allowing files from a dm-verity volume specified by its 
-root hash to execute or only allowing files from a verified signed 
-dm-verity volume to execute.
+v4:
++ Remove sysctls in favor of securityfs nodes
++ Re-add kernel module parameters, as these are now exposed through securityfs.
++ Refactor property audit loop to a separate function.
 
->> I believe both the finalize() callback proposed by Mike and the preresume()
->> callback suggested by Mikulas can work for our case. I am fine with either
->> approach, but I would like to know which one is preferred by the maintainers
->> and would appreciate an ACK for the chosen approach.
->>
->> -Fan
-> 
-> I would prefer preresume - we shouldn't add new callbacks unless it's
-> necessary.
-> 
-> Mikulas
->
+v5:
++ fix minor grammatical errors
++ do not group rule by curly-brace in audit record,
++ reconstruct the exact rule.
 
-Thanks for the confirmation. I will switch to use prereume and I will 
-send a new version later this week.
+v6:
++ No changes
 
--Fan
+v7:
++ Further split lsm creation into a separate commit from the evaluation loop and audit system, for easier review.
++ Propagating changes to support the new ipe_context structure in the evaluation loop.
+
+v8:
++ Remove ipe_hook enumeration; hooks can be correlated via syscall record.
+
+v9:
++ Remove ipe_context related code and simplify the evaluation loop.
+
+v10:
++ Split eval part and boot_verified part
+
+v11:
++ Fix code style issues
+
+v12:
++ Correct an rcu_read_unlock usage
++ Add a WARN to unknown op during evaluation
+
+v13:
++ No changes
+
+v14:
++ No changes
+
+v15:
++ No changes
+
+v16:
++ No changes
+
+v17:
++ Add years to license header
++ Fix code and documentation style issues
+
+v18:
++ No changes
+
+v19:
++ No changes
+---
+ security/ipe/Makefile |   1 +
+ security/ipe/eval.c   | 102 ++++++++++++++++++++++++++++++++++++++++++
+ security/ipe/eval.h   |  24 ++++++++++
+ 3 files changed, 127 insertions(+)
+ create mode 100644 security/ipe/eval.c
+ create mode 100644 security/ipe/eval.h
+
+diff --git a/security/ipe/Makefile b/security/ipe/Makefile
+index 3093de1afd3e..4cc17eb92060 100644
+--- a/security/ipe/Makefile
++++ b/security/ipe/Makefile
+@@ -6,6 +6,7 @@
+ #
+ 
+ obj-$(CONFIG_SECURITY_IPE) += \
++	eval.o \
+ 	ipe.o \
+ 	policy.o \
+ 	policy_parser.o \
+diff --git a/security/ipe/eval.c b/security/ipe/eval.c
+new file mode 100644
+index 000000000000..41331afdef7c
+--- /dev/null
++++ b/security/ipe/eval.c
+@@ -0,0 +1,102 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (C) 2020-2024 Microsoft Corporation. All rights reserved.
++ */
++
++#include <linux/fs.h>
++#include <linux/types.h>
++#include <linux/slab.h>
++#include <linux/file.h>
++#include <linux/sched.h>
++#include <linux/rcupdate.h>
++
++#include "ipe.h"
++#include "eval.h"
++#include "policy.h"
++
++struct ipe_policy __rcu *ipe_active_policy;
++
++/**
++ * evaluate_property() - Analyze @ctx against a rule property.
++ * @ctx: Supplies a pointer to the context to be evaluated.
++ * @p: Supplies a pointer to the property to be evaluated.
++ *
++ * This is a placeholder. The actual function will be introduced in the
++ * latter commits.
++ *
++ * Return:
++ * * %true	- The current @ctx match the @p
++ * * %false	- The current @ctx doesn't match the @p
++ */
++static bool evaluate_property(const struct ipe_eval_ctx *const ctx,
++			      struct ipe_prop *p)
++{
++	return false;
++}
++
++/**
++ * ipe_evaluate_event() - Analyze @ctx against the current active policy.
++ * @ctx: Supplies a pointer to the context to be evaluated.
++ *
++ * This is the loop where all policy evaluation happens against IPE policy.
++ *
++ * Return:
++ * * %0		- Success
++ * * %-EACCES	- @ctx did not pass evaluation
++ */
++int ipe_evaluate_event(const struct ipe_eval_ctx *const ctx)
++{
++	const struct ipe_op_table *rules = NULL;
++	const struct ipe_rule *rule = NULL;
++	struct ipe_policy *pol = NULL;
++	struct ipe_prop *prop = NULL;
++	enum ipe_action_type action;
++	bool match = false;
++
++	rcu_read_lock();
++
++	pol = rcu_dereference(ipe_active_policy);
++	if (!pol) {
++		rcu_read_unlock();
++		return 0;
++	}
++
++	if (ctx->op == IPE_OP_INVALID) {
++		if (pol->parsed->global_default_action == IPE_ACTION_DENY) {
++			rcu_read_unlock();
++			return -EACCES;
++		}
++		if (pol->parsed->global_default_action == IPE_ACTION_INVALID)
++			WARN(1, "no default rule set for unknown op, ALLOW it");
++		rcu_read_unlock();
++		return 0;
++	}
++
++	rules = &pol->parsed->rules[ctx->op];
++
++	list_for_each_entry(rule, &rules->rules, next) {
++		match = true;
++
++		list_for_each_entry(prop, &rule->props, next) {
++			match = evaluate_property(ctx, prop);
++			if (!match)
++				break;
++		}
++
++		if (match)
++			break;
++	}
++
++	if (match)
++		action = rule->action;
++	else if (rules->default_action != IPE_ACTION_INVALID)
++		action = rules->default_action;
++	else
++		action = pol->parsed->global_default_action;
++
++	rcu_read_unlock();
++	if (action == IPE_ACTION_DENY)
++		return -EACCES;
++
++	return 0;
++}
+diff --git a/security/ipe/eval.h b/security/ipe/eval.h
+new file mode 100644
+index 000000000000..b137f2107852
+--- /dev/null
++++ b/security/ipe/eval.h
+@@ -0,0 +1,24 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Copyright (C) 2020-2024 Microsoft Corporation. All rights reserved.
++ */
++
++#ifndef _IPE_EVAL_H
++#define _IPE_EVAL_H
++
++#include <linux/file.h>
++#include <linux/types.h>
++
++#include "policy.h"
++
++extern struct ipe_policy __rcu *ipe_active_policy;
++
++struct ipe_eval_ctx {
++	enum ipe_op_type op;
++
++	const struct file *file;
++};
++
++int ipe_evaluate_event(const struct ipe_eval_ctx *const ctx);
++
++#endif /* _IPE_EVAL_H */
+-- 
+2.44.0
+
