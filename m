@@ -1,137 +1,115 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45BB980043;
-	Fri, 31 May 2024 21:07:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5539B3207;
+	Sun,  2 Jun 2024 02:38:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717189645; cv=none; b=tnENd9JphxsRJpi/s6o3dXYHRh/OvjguOOBZ287WOR5yFogrGAsvri/I1Bc3QTH4eF014mp4S6sou6gtCYsJ0nbaqznEmdRDwTvm6m2SwPyRKkSpnYl3HsyqR1GHjAlMPf/oh8vaxBkixVIL4g1ScVbVUfEfs/EQkYM013p/BeY=
+	t=1717295893; cv=none; b=Na5a8Vq5EwtqhBJypvV1NQaspCtJLJRjQDa2DvXTxE1GV6fxr3mzjvqfZ8dQmnP3xCSuPoAQztsdyyNpUbfmVQUTLo+EGZWc/ytkbg3tY5Y/yXmYLdaDg6BD28EtmDql5Cg64meiwLia89XC4NMhfd9CO7IorIMf8M9lsxGIfZo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717189645; c=relaxed/simple;
-	bh=VTJxFpufpw/wb7fXrQpiRSaeHxnjVyqQgbQw3GY+JZw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=G5NElhk7OVeiinpK89uP9vRGRE7jyXNc2AWRG34XYqLyXZ2+xtRb7Cau7BpFQKsYlUkxhmNO6Ob7oZz6r7Y7wEm6RS+Yeunb2R0RDYIt8BufecRgaHRz5jK6OkZPJCTyHnRA/o6nZUOqoOrjHeY9Faj57c3Zi/LIVaDm4so+4sk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JlaQ60jH; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1717295893; c=relaxed/simple;
+	bh=BEvwO8ns12UnOClFh9ECeKgBnQu5E6KcClV2OXro1mg=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=pcZ6jkfrfnly8Uzw3pxhuSpTjw3evADZmYBo846QWfNFuMYCqQCFaEimVgz3xBeRGz45tL8RhcSzx973h1JWyNJeahKpjCKHDiua+ByfpxjuNaMSIVcOywpxZaZquOlhsyeDacpf7AwUxh1u8dxpANmEe+t7YrC2KMU2ix7P8AE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=g1vggi3U; arc=none smtp.client-ip=209.85.215.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JlaQ60jH"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76496C116B1;
-	Fri, 31 May 2024 21:07:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1717189644;
-	bh=VTJxFpufpw/wb7fXrQpiRSaeHxnjVyqQgbQw3GY+JZw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=JlaQ60jHg/ryzHhfMN0zWbzfasGhDbP58kShYSZQQ0GQQf2sNmego7GVbbbrgguOg
-	 tKqXQmUVj04jTSHz83oL8wGtyU52uD+0yxV6BbhMpJfKt/8oaT5mCPKlveTiZcKdd2
-	 DWA9ftIrL+DibJzhhV+z7gBSxAXinEtmGWRjo+RPA4QPFCSNbRLYiuq4e4nsbWYZ7B
-	 MVfV8Gb4HM7mgsO1y2CeDr/emuKYn/vsIGe+Pzm/myBvMjme9aSMVyf1oImaBKMlCo
-	 4sRAzcJuv/t93lyf3o1y6Wl4QEd/49+9zBQgrOHJRDYw7wV+mtZdFZ7HFMk7RqlQh2
-	 3SFn7M7WePxaA==
-Date: Fri, 31 May 2024 21:07:23 +0000
-From: Eric Biggers <ebiggers@kernel.org>
-To: Fan Wu <wufan@linux.microsoft.com>
-Cc: corbet@lwn.net, zohar@linux.ibm.com, jmorris@namei.org,
-	serge@hallyn.com, tytso@mit.edu, axboe@kernel.dk, agk@redhat.com,
-	snitzer@kernel.org, mpatocka@redhat.com, eparis@redhat.com,
-	paul@paul-moore.com, linux-doc@vger.kernel.org,
-	linux-integrity@vger.kernel.org,
-	linux-security-module@vger.kernel.org, fsverity@lists.linux.dev,
-	linux-block@vger.kernel.org, dm-devel@lists.linux.dev,
-	audit@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Deven Bowers <deven.desai@linux.microsoft.com>
-Subject: Re: [PATCH v19 12/20] dm verity: expose root hash digest and
- signature data to LSMs
-Message-ID: <20240531210723.GB2838215@google.com>
-References: <1716583609-21790-1-git-send-email-wufan@linux.microsoft.com>
- <1716583609-21790-13-git-send-email-wufan@linux.microsoft.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="g1vggi3U"
+Received: by mail-pg1-f169.google.com with SMTP id 41be03b00d2f7-681ad081695so2304546a12.3;
+        Sat, 01 Jun 2024 19:38:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1717295891; x=1717900691; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=b5jw3U32WVQ2mu7sEVPOQe4LCfxoKjEQKNWxX7qFcmg=;
+        b=g1vggi3UCHP5mOpiDKjlM+nToPv54f/ZfS4mNKMIoz/5BISLSP6Vnku/ihWx+jrSku
+         q/0r95CJ+l29QhuBtzsQ3z4/el6/ggYt2ongLLr08Yz5jFt8OHxjppOQJmhJWP5pSa6M
+         WZCWMHBdpZoAmvpqTGYBKYtUc9LZwtfQmKso8FsryoSslwkzLCuxhM2KM5sX49kOxcj6
+         9VQmR1FJQvBSuBhWQAxp7/mkntQrsY1v/zxWHMM+5MpVSnkVpgbBIXmIzcjawJKZMqLq
+         AGa69Qk8KlT8OzCTFXpj3mzebBb6OI8w4mQ1FWkuLmykwNJVd+6MQMvAiL1gKiuwTy8O
+         igqA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1717295891; x=1717900691;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=b5jw3U32WVQ2mu7sEVPOQe4LCfxoKjEQKNWxX7qFcmg=;
+        b=GjqJyjj0HLtsS8iRRyVg97Wy9LWaf0OF97W3NeUX1gOq46hqZyr9mngB+Ektw6Kdfc
+         H5/R1l8VZX1oqJjTSye4MOCWjgFcw8z+ieiCIIOGxT9zFddeR1utkMtceAIOMWihSaXE
+         pdVec7WgrTQrDhGzE2/bjig5iqFd6SD4EsSE0vBFUphut/8mHGExZT+Hj/pCJ4uWMlyH
+         FITNhK1n5P998CC/KtE4fFL/Bizvf1MDdo8kxdHYPdeP2mGU3AKPF5ErF54iLAS02ARM
+         PPASwKmQQrQFDGs5YATxElfOG1QbYbOrE18xuVVHCqtpSVR5fPn/ApvulWGVla8dYpRo
+         AXpg==
+X-Forwarded-Encrypted: i=1; AJvYcCVGV6t+kJXVnJA5MH6TrEf7Z9BcFwKBK/WL7fhHYc9JIi8c2gstWP2Qc+mdFtvG4GPIGf0lgBtkn6QNMVlllm0F2cw9i+NqKwt9MleQ9ZpPVSR7kIaw9NdKsbJA5Wd4Otd9W5LiIWNe/3A3Xt3Jmx12WGdbcXhI9OFlBQxFQ5EgOBXTR8Fit+zXiO+W00bBzDZ+Y8AGgG50z7GtCDuh4SkZAIH/hpM4HazDYpG51dHD74/Q7UirVA+igSgPnzDcftLY5BEAeBpKRMTo0Ol9MIDbygBS3R/WD1mGP5mdeQ==
+X-Gm-Message-State: AOJu0YwkQNkcVysxk+34KGEQJ7P7XPVMoZiO51ZQbu7d9IZpopa4Y/60
+	vIXNgM+NsG+6Gw1KgH+htK9IAtLFhkeojAnTS6Lar2+2Sbber+dgb6fWxkmH
+X-Google-Smtp-Source: AGHT+IGo/wVjyO4OICpJZDZTH4jheRMtb0X7t2+mNawRoMfV8Qr8nCyFpN9Zm95vvFymEE9SACUejg==
+X-Received: by 2002:a05:6a20:9788:b0:1b2:66b6:3848 with SMTP id adf61e73a8af0-1b26f296b46mr5019662637.55.1717295891380;
+        Sat, 01 Jun 2024 19:38:11 -0700 (PDT)
+Received: from localhost.localdomain ([39.144.45.187])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1f6323ea21csm39379575ad.202.2024.06.01.19.38.05
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Sat, 01 Jun 2024 19:38:10 -0700 (PDT)
+From: Yafang Shao <laoar.shao@gmail.com>
+To: torvalds@linux-foundation.org
+Cc: linux-mm@kvack.org,
+	linux-fsdevel@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org,
+	audit@vger.kernel.org,
+	linux-security-module@vger.kernel.org,
+	selinux@vger.kernel.org,
+	bpf@vger.kernel.org,
+	Yafang Shao <laoar.shao@gmail.com>
+Subject: [PATCH 0/6] kernel: Avoid memcpy of task comm
+Date: Sun,  2 Jun 2024 10:37:48 +0800
+Message-Id: <20240602023754.25443-1-laoar.shao@gmail.com>
+X-Mailer: git-send-email 2.30.1 (Apple Git-130)
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1716583609-21790-13-git-send-email-wufan@linux.microsoft.com>
+Content-Transfer-Encoding: 8bit
 
-On Fri, May 24, 2024 at 01:46:41PM -0700, Fan Wu wrote:
-> +#ifdef CONFIG_SECURITY
-> +
-> +#ifdef CONFIG_DM_VERITY_VERIFY_ROOTHASH_SIG
-> +
-> +static int verity_security_set_signature(struct block_device *bdev,
-> +					 struct dm_verity *v)
-> +{
-> +	return security_bdev_setintegrity(bdev,
-> +					  LSM_INT_DMVERITY_SIG_VALID,
-> +					  v->root_digest_sig,
-> +					  v->sig_size);
-> +}
-> +
-> +#else
-> +
-> +static inline int verity_security_set_signature(struct block_device *bdev,
-> +						struct dm_verity *v)
-> +{
-> +	return 0;
-> +}
-> +
-> +#endif /* CONFIG_DM_VERITY_VERIFY_ROOTHASH_SIG */
-> +
-> +/*
-> + * Expose verity target's root hash and signature data to LSMs before resume.
-> + *
-> + * Returns 0 on success, or -ENOMEM if the system is out of memory.
-> + */
-> +static int verity_preresume(struct dm_target *ti)
-> +{
-> +	struct block_device *bdev;
-> +	struct dm_verity_digest root_digest;
-> +	struct dm_verity *v;
-> +	int r;
-> +
-> +	v = ti->private;
-> +	bdev = dm_disk(dm_table_get_md(ti->table))->part0;
-> +	root_digest.digest = v->root_digest;
-> +	root_digest.digest_len = v->digest_size;
-> +	root_digest.alg = crypto_ahash_alg_name(v->tfm);
-> +
-> +	r = security_bdev_setintegrity(bdev, LSM_INT_DMVERITY_ROOTHASH, &root_digest,
-> +				       sizeof(root_digest));
-> +	if (r)
-> +		return r;
-> +
-> +	r =  verity_security_set_signature(bdev, v);
-> +	if (r)
-> +		goto bad;
-> +
-> +	return 0;
-> +
-> +bad:
-> +
-> +	security_bdev_setintegrity(bdev, LSM_INT_DMVERITY_ROOTHASH, NULL, 0);
-> +
-> +	return r;
-> +}
-> +
-> +#endif /* CONFIG_SECURITY */
-> +
->  static struct target_type verity_target = {
->  	.name		= "verity",
->  	.features	= DM_TARGET_SINGLETON | DM_TARGET_IMMUTABLE,
+Using memcpy to copy the task comm relies on the length of task comm.
+Changes in the task comm could result in a destination string that is not
+NUL-terminated. Therefore, we should explicitly ensure the destination
+string is always NUL-terminated, regardless of the task comm. This approach
+will facilitate future extensions to the task comm.
 
-Due to the possibility of table reloads, it looks like the security of this
-scheme is dependent on (a) DM_TARGET_SINGLETON, (b) DM_TARGET_IMMUTABLE, *and*
-(c) sending LSM_INT_DMVERITY_ROOTHASH and LSM_INT_DMVERITY_SIG_VALID to the
-LSM(s) even when there is no signature.  Notably, this differs from the
-similar-looking code in fsverity where updates are not possible and
-LSM_INT_FSVERITY_BUILTINSIG_VALID is not sent when there's no signature.
+As suggested by Linus [0], we can identify all relevant code with the
+following git grep command:
 
-Given the subtleties here and the fact that getting any of these things wrong
-would allow the LSM checks to be bypassed, it would really be worth leaving a
-comment that explicitly documents why this is secure.  And maybe also a 
-/* Note: singleton and immutable are depended on by the LSM hooks */ just above
-the 'DM_TARGET_SINGLETON | DM_TARGET_IMMUTABLE' in case someone tries to remove
-those.  I see they were added only recently, which was a breaking UAPI change,
-so I worry about people trying to revert it.
+  git grep 'memcpy.*->comm\>'
 
-- Eric
+Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
+Link: https://lore.kernel.org/all/CAHk-=wjAmmHUg6vho1KjzQi2=psR30+CogFd4aXrThr2gsiS4g@mail.gmail.com/ [0]
+
+Yafang Shao (6):
+  fs/exec: Drop task_lock() inside __get_task_comm()
+  tracing: Replace memcpy() with __get_task_comm()
+  auditsc: Replace memcpy() with __get_task_comm()
+  security: Replace memcpy() with __get_task_comm()
+  bpftool: Make task comm always be NUL-terminated
+  selftests/bpf: Replace memcpy() with __get_task_comm()
+
+ fs/exec.c                                     |  7 +++--
+ include/linux/sched.h                         |  2 +-
+ include/linux/tracepoint.h                    |  4 +--
+ include/trace/events/block.h                  | 10 +++----
+ include/trace/events/oom.h                    |  2 +-
+ include/trace/events/osnoise.h                |  2 +-
+ include/trace/events/sched.h                  | 27 ++++++++++---------
+ include/trace/events/signal.h                 |  2 +-
+ include/trace/events/task.h                   |  4 +--
+ kernel/auditsc.c                              |  6 ++---
+ security/lsm_audit.c                          |  4 +--
+ security/selinux/selinuxfs.c                  |  2 +-
+ tools/bpf/bpftool/pids.c                      |  2 ++
+ .../bpf/bpf_testmod/bpf_testmod-events.h      |  2 +-
+ 14 files changed, 41 insertions(+), 35 deletions(-)
+
+-- 
+2.39.1
+
