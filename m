@@ -1,96 +1,155 @@
-Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
+Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com [209.85.128.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4EED13C805
-	for <audit@vger.kernel.org>; Mon,  3 Jun 2024 21:42:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFB9E13C698
+	for <audit@vger.kernel.org>; Mon,  3 Jun 2024 22:06:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717450952; cv=none; b=ooBjNOWlAeLYDNH0kW995UOtYGLmrF4AqMGAQS0ljqr3HxeRgOD39MKn2qRj0MaaVVEMOYvDohgxi2fKVG0hpb95MaePyO1NKHgfkcZ5VpVZ78QHTj1GcZsfsXK3tD+m3PnR8nkY9NY1jfrkUvxIhpc3MtxaXS7yZO5r1IDmxBk=
+	t=1717452411; cv=none; b=T+DizzDPAUSnX9xNPcCsYM3/gVhDPlSliHY6Wdsk5KT/25cf+V/lMYjbwbp5Pt2T2FxYdwi5nEWcTpK0wXSVCImJjlojWTarZmJcB/XWlQvuh56wdS4boyPmeXqIH/hqNuY1YRsLgECF1VxrxC7jA8vJMNYPQrig7Howaqwm6K4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717450952; c=relaxed/simple;
-	bh=t2+3hpTAkuvcywD1/Fq+cZAsXxs3N6zMjhMfwGrJHIM=;
+	s=arc-20240116; t=1717452411; c=relaxed/simple;
+	bh=VmmtVwxasoTOHFXd7uw7knGwecHF+qPHtfjb8cGfUDQ=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=fd2ClzfMrCWQ0CJBGDDRxY3ms3zxnHvZ0DPZluubXNPBBJfBg/dCRxxb56+IYkLuyQelX1Mhvu31c00nCuOLsPudRWIN4AAuFBnDqaOTGb1vkbCy4S9Nv+umxiRLBieYll4RclMtneUbTX0Kw2UeouDfJ2KWZsZqhRQCQ8VJHBk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=N1eI4ZhZ; arc=none smtp.client-ip=209.85.208.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+	 To:Cc:Content-Type; b=rGVFAxOMWDXEORkOWMEtpLK+4mCxmDNNOQOyM91Z5vRN6X/FSjCAVONrdbX2cqHyolkTDxh8ILXkbgMjOQcKaHNCVJnAKTaYJ8m+OyobvINlnG4EbLg2AZ/t378hjeH1o9sQbXq23//b3j5+f8/8/00WiUCWmuM3SdsAHMrb/U0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=NiqfGCuA; arc=none smtp.client-ip=209.85.128.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="N1eI4ZhZ"
-Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-57a196134d1so5613551a12.2
-        for <audit@vger.kernel.org>; Mon, 03 Jun 2024 14:42:30 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="NiqfGCuA"
+Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-62c6317d15cso46840627b3.2
+        for <audit@vger.kernel.org>; Mon, 03 Jun 2024 15:06:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1717450949; x=1718055749; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=R+C9bWbF6JQXXqqT/WHs93C1W49YzDnZgVk3vpecOx4=;
-        b=N1eI4ZhZlPjf68UnhLGKgEctRtMjOntNIkVhWbizskPmuiRECFIehLROdwxyzTQ9AH
-         S9cP0MBrkfaqe7srvrEyx01OYady8bCw+zGe0+e6RweNuBb176fwD8b5ZT0cNBTt5D0R
-         vn7DjORx+6oRGzNKhQi4sA6ri3UvO20Z+ast4=
+        d=paul-moore.com; s=google; t=1717452408; x=1718057208; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zX8PVfQ5qnzftwtpw106lfiQ8TgkbA0h4I3z6i3Eidw=;
+        b=NiqfGCuAI1K9brleigY26fMpTB1gm2A2FWJwARfHvWhWo+Pub71Qg6Ye+LiYNERiOu
+         CMpl1MNwb3AJlP/bxR/++d5xV4izMwem9575sGOf9vcOrxjQsiDJ1GgAm5e3DwQwJSpH
+         u24wNc3dZbt/77pEn6td9HBEmfYnc0WlGZxGY3ZzTvCU+GHJmg6OoHn9WPo4AUEyS6Ko
+         Ga4k+1bgP4SyKtKtsOPD5uQBmT0g37rIX099dLfZTOZqr3DXcCqvh3IdPPpKhOKzKu5+
+         WaABleaD6zGHx+kVKqxV4imM6NqKUvAty0LW+9+l7xzi5i3CweMCNNEN486Lmqr2b2WS
+         twrg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717450949; x=1718055749;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=R+C9bWbF6JQXXqqT/WHs93C1W49YzDnZgVk3vpecOx4=;
-        b=QYptvudWjUmrFagUJ1TgEXYLkbfsfPrK1PYtiIW/7e5+WwkSiqwAyfI+e67Xxg0E16
-         psaKluU/MVwB9/QIw3kKIAe091Og2dFuqs031AdF2yRbUTcyk9CexmKeOQ/GypXTnauq
-         NhfDxeHs3s2UMj3OVcb4sutkjZL2esUNam0HM4N8H+FOWnbRv70FocMD1204e6nMvFxv
-         +zJbkGsJrgviD01Yjuy/0aLkm3YlPag1etm31YJE435TF0xObhNlaf1RHAYhv6eIAvyk
-         ViF/GJ0ZZ18C0Mb7Az0bzO5HjAzned1EDQNNMnwQiU7zGjOKbksYm2IdRgZDpv4/CJ/F
-         OHjw==
-X-Forwarded-Encrypted: i=1; AJvYcCUiDn1OY3XtDLBkLizEy/xXHgVg0B8RD67qTmgd2fRbk8fvoZBkM18X4DUsyhwNnfirPvoff8o8oBIXxTXAhJIG9jRp36A=
-X-Gm-Message-State: AOJu0YwuZib0Xs6QEyVOl6ne0eESf6R7WIS58LZULv4WdQUZQV3Ze+jM
-	F2rOlP2duDcrWKUSZNnm0jTK5NoprDGnky3ueUWs1+m3LcbXfYyvySGXso8dz8EbJUsTVXhkE+l
-	sDOA=
-X-Google-Smtp-Source: AGHT+IEfQ8S6fck2qnSJIjrn7q2ieB3ywlvowx/O5Nyp3BwuK5ClD27+3zsPr7afDF6YCw3DuSwmpw==
-X-Received: by 2002:a17:906:a1c3:b0:a66:dca6:43f6 with SMTP id a640c23a62f3a-a6820136b23mr764907766b.27.1717450948741;
-        Mon, 03 Jun 2024 14:42:28 -0700 (PDT)
-Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com. [209.85.218.46])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a687cc4e903sm496289666b.216.2024.06.03.14.42.27
-        for <audit@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Jun 2024 14:42:27 -0700 (PDT)
-Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-a6267778b3aso436309466b.3
-        for <audit@vger.kernel.org>; Mon, 03 Jun 2024 14:42:27 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCU6iDP8hjCOzjpYXsQmcHhJwvSXKfwD8efpbLmDM4/kVZ6Ju4GJ7GADyyfkqQXrnjSQTLa0I0+wRxJvwH+LG9BN8TlZtVs=
-X-Received: by 2002:a17:907:9482:b0:a68:c6c1:cd63 with SMTP id
- a640c23a62f3a-a68c6c1d466mr478691866b.13.1717450947222; Mon, 03 Jun 2024
- 14:42:27 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1717452408; x=1718057208;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=zX8PVfQ5qnzftwtpw106lfiQ8TgkbA0h4I3z6i3Eidw=;
+        b=Hfjml5/W7gRFpgi6BbrHun/2LuHm53cckjIju7FoQuKvxSQZmXRyD5yMmsPdSF+nv1
+         8jlWUsHq64I3pKLFIPGMni3h99ew8vmrSTX9xC2MLhYOuLdZ/wCSBJ7SLGwTyMeFXrup
+         V9MhNqv8Dyk4cNaGTRUtx9vA8iGl0cjwVpbDCTWGK91W+RRhj2gyX3FyCmUfi5ki2dnu
+         tNy0QAPvNWKJPq4yCRuxbuR4ENwdnRNVUIGP0tLBix/T+xEDW4/B4JH5MMrpRCOs+uia
+         48rXWMUc+eNLz7xVocw9taaqQD4exGEpM+GRzhOqxCygN9YbGZcg5S40TNjP1dajXX52
+         pgcQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXAow+NOPyG2PTOiCD0ctS8s0vUFTUv23UILMq9jWY0tq05iOqBO048fZi552DZv6WCQ8tpQn1cTSljipNi20SJIF6BUgg=
+X-Gm-Message-State: AOJu0YwtTlTrrt/LQvGUzgl1fI6sUnq3sgZ3C4i9v9rvHC5mpgmwElBY
+	QIeIRJy/Uq+po+kGckb5FuE1onlNXeJLoaR1KCvbgYEgtOcYinUVkB+GQJwPVoLCHyoMNIEjP52
+	FxkGxv3YR8LMJ/tfFkdjJrG5CGM0WW9Hbh5dJ
+X-Google-Smtp-Source: AGHT+IFlZXhnnbTx1bR3IL0MEuJpb6BYtD7X1NVqh0jIq3mMhTGkqNSjbPG9eHDX2tOy0Ga8K2kdNA8x6bcAW9bCfZ4=
+X-Received: by 2002:a81:92c2:0:b0:61b:33ae:e065 with SMTP id
+ 00721157ae682-62c7947ecbdmr103514047b3.0.1717452406285; Mon, 03 Jun 2024
+ 15:06:46 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240602023754.25443-1-laoar.shao@gmail.com> <20240602023754.25443-3-laoar.shao@gmail.com>
- <20240603172008.19ba98ff@gandalf.local.home>
-In-Reply-To: <20240603172008.19ba98ff@gandalf.local.home>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Mon, 3 Jun 2024 14:42:10 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whPUBbug2PACOzYXFbaHhA6igWgmBzpr5tOQYzMZinRnA@mail.gmail.com>
-Message-ID: <CAHk-=whPUBbug2PACOzYXFbaHhA6igWgmBzpr5tOQYzMZinRnA@mail.gmail.com>
-Subject: Re: [PATCH 2/6] tracing: Replace memcpy() with __get_task_comm()
-To: Steven Rostedt <rostedt@goodmis.org>
-Cc: Yafang Shao <laoar.shao@gmail.com>, linux-mm@kvack.org, linux-fsdevel@vger.kernel.org, 
-	linux-trace-kernel@vger.kernel.org, audit@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, selinux@vger.kernel.org, 
-	bpf@vger.kernel.org, Masami Hiramatsu <mhiramat@kernel.org>, 
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+References: <20240602023754.25443-1-laoar.shao@gmail.com> <20240602023754.25443-5-laoar.shao@gmail.com>
+In-Reply-To: <20240602023754.25443-5-laoar.shao@gmail.com>
+From: Paul Moore <paul@paul-moore.com>
+Date: Mon, 3 Jun 2024 18:06:35 -0400
+Message-ID: <CAHC9VhTd+tx5vk+z_6e2hF4Ovoc76AMLchMPerpzsAiB=8E_2w@mail.gmail.com>
+Subject: Re: [PATCH 4/6] security: Replace memcpy() with __get_task_comm()
+To: Yafang Shao <laoar.shao@gmail.com>
+Cc: torvalds@linux-foundation.org, linux-mm@kvack.org, 
+	linux-fsdevel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	audit@vger.kernel.org, linux-security-module@vger.kernel.org, 
+	selinux@vger.kernel.org, bpf@vger.kernel.org, 
+	James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, 
+	Stephen Smalley <stephen.smalley.work@gmail.com>, Ondrej Mosnacek <omosnace@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, 3 Jun 2024 at 14:19, Steven Rostedt <rostedt@goodmis.org> wrote:
+On Sat, Jun 1, 2024 at 10:38=E2=80=AFPM Yafang Shao <laoar.shao@gmail.com> =
+wrote:
 >
-> -               __array(        char,   comm,   TASK_COMM_LEN   )
-> +               __string(       comm,   strlen(comm)            )
+> Quoted from Linus [0]:
+>
+>   selinux never wanted a lock, and never wanted any kind of *consistent*
+>   result, it just wanted a *stable* result.
+>
+> Using __get_task_comm() to read the task comm ensures that the name is
+> always NUL-terminated, regardless of the source string. This approach als=
+o
+> facilitates future extensions to the task comm.
+>
+> Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
+> LINK: https://lore.kernel.org/all/CAHk-=3DwivfrF0_zvf+oj6=3D=3DSh=3D-npJo=
+oP8chLPEfaFV0oNYTTBA@mail.gmail.com/ [0]
+> Cc: Paul Moore <paul@paul-moore.com>
+> Cc: James Morris <jmorris@namei.org>
+> Cc: "Serge E. Hallyn" <serge@hallyn.com>
+> Cc: Stephen Smalley <stephen.smalley.work@gmail.com>
+> Cc: Ondrej Mosnacek <omosnace@redhat.com>
+> ---
+>  security/lsm_audit.c         | 4 ++--
+>  security/selinux/selinuxfs.c | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
-Is this actually safe is 'comm[]' is being modified at the same time?
-The 'strlen()' will not be consistent with the string copy.
+Similar to the audit change, as long as you sort out the
+__get_task_comm() issues such that it can operate without task_lock()
+this should be fine.
 
-Because that is very much the case. It's not a stable source.
+Acked-by: Paul Moore <paul@paul-moore.com>
 
-For example, strlen() may return 5. But by the time  you then actually
-copy the data, the string may have changed, and there would not
-necessarily be a NUL character at comm[5] any more. It might be
-further in the string, or it might be earlier.
+> diff --git a/security/lsm_audit.c b/security/lsm_audit.c
+> index 849e832719e2..a922e4339dd5 100644
+> --- a/security/lsm_audit.c
+> +++ b/security/lsm_audit.c
+> @@ -207,7 +207,7 @@ static void dump_common_audit_data(struct audit_buffe=
+r *ab,
+>         BUILD_BUG_ON(sizeof(a->u) > sizeof(void *)*2);
+>
+>         audit_log_format(ab, " pid=3D%d comm=3D", task_tgid_nr(current));
+> -       audit_log_untrustedstring(ab, memcpy(comm, current->comm, sizeof(=
+comm)));
+> +       audit_log_untrustedstring(ab, __get_task_comm(comm, sizeof(comm),=
+ current));
+>
+>         switch (a->type) {
+>         case LSM_AUDIT_DATA_NONE:
+> @@ -302,7 +302,7 @@ static void dump_common_audit_data(struct audit_buffe=
+r *ab,
+>                                 char comm[sizeof(tsk->comm)];
+>                                 audit_log_format(ab, " opid=3D%d ocomm=3D=
+", pid);
+>                                 audit_log_untrustedstring(ab,
+> -                                   memcpy(comm, tsk->comm, sizeof(comm))=
+);
+> +                                   __get_task_comm(comm, sizeof(comm), t=
+sk));
+>                         }
+>                 }
+>                 break;
+> diff --git a/security/selinux/selinuxfs.c b/security/selinux/selinuxfs.c
+> index e172f182b65c..a8a2ec742576 100644
+> --- a/security/selinux/selinuxfs.c
+> +++ b/security/selinux/selinuxfs.c
+> @@ -708,7 +708,7 @@ static ssize_t sel_write_checkreqprot(struct file *fi=
+le, const char __user *buf,
+>         if (new_value) {
+>                 char comm[sizeof(current->comm)];
+>
+> -               memcpy(comm, current->comm, sizeof(comm));
+> +               __get_task_comm(comm, sizeof(comm), current);
+>                 pr_err("SELinux: %s (%d) set checkreqprot to 1. This is n=
+o longer supported.\n",
+>                        comm, current->pid);
+>         }
+> --
+> 2.39.1
 
-                  Linus
+--=20
+paul-moore.com
