@@ -1,119 +1,142 @@
-Received: from mail-qv1-f51.google.com (mail-qv1-f51.google.com [209.85.219.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out03.mta.xmission.com (out03.mta.xmission.com [166.70.13.233])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72D19F9E9;
-	Wed,  5 Jun 2024 02:49:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A73E4501B;
+	Mon, 10 Jun 2024 13:16:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=166.70.13.233
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717555774; cv=none; b=nr9iaYB5pQQRtkK8yrWuQZ43cvqOj7jFkkYLZo/lIk+rlpbpddkuNZksjLs+jcuFOrwQ8BeOte3SdOrURNjEirQd/UGOje30COWtjDT/KmqgTeq4sw9LQk3pwbX4ocxv90JgtncjvW3xTwDq76bWJFx560gysN2p118VKvkQ5UI=
+	t=1718025405; cv=none; b=AbRXtFhtAP3d4jIZ5YWz+14Kby8GPBB4BUYro2sZNj8UQavqs8qLQ6161lfPDBE/xoSmh+DVr2Oc+Gwnt/21haqLW8ff+/uewKlBYryT8Xen6XB/pK2d6svxIA7mpLT0iiuy6hxi0bvHj7mVwp3U/OiivD26OJuAev3JvyLxE6Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717555774; c=relaxed/simple;
-	bh=F0SsIy3+W19LLpvn7Tlg14aUoOAuRRvMVsUgVQ8aDAQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=KxnGFbNhMeeTWfTecvKyEfGiTx2sJvRAQ8uup7nobS081ELpogyrBw7gFb3GX3KWbY3WiLBEiwW0/XrVxaF1OMEe1rd+B+T1sCoTKXWWYGKP3zmjFKOvBPJf3w3UznlNbUvg0PHs13dnhNfNOZhTIyn4Kyn3ehYNlCaUn2Uxnuo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gbDxYfSv; arc=none smtp.client-ip=209.85.219.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gbDxYfSv"
-Received: by mail-qv1-f51.google.com with SMTP id 6a1803df08f44-6af27d0c9f8so20564986d6.2;
-        Tue, 04 Jun 2024 19:49:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1717555771; x=1718160571; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2saUQpdqdIbqLGxvd8R0wiju4YwezRrdt4faqpUQys4=;
-        b=gbDxYfSvspenEyveQjmbVoQhfLbxrugrohbD5BwxIdYKwytRxZJG3LEuuGAOfjaXdR
-         spqfWHc9RCFCtPriT87vI1n1MlF4tqyopdaKQFN1GVYX+10tLmyFL3RLFLvyvSBqr6Fs
-         1pf8Q0MVOHYhFhl/EoCRgxxDTkhQnUYB4GBTbEvfqjQ6vELr6tN215UB6+3lBOZ1h0LI
-         W+lg+nw34mrqDrh8IGQ8CiLWPdMrzE1UrU6XxOnalFiWG0bZQWtE4L6nyDBF+lIcKpyX
-         licf6CbHKyFg43jWU4+hVdYXQ9zO7o7+KXi4YA0AWxFC1nBfnGaUrz2U9UCksk9tTCVb
-         QAkg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717555771; x=1718160571;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2saUQpdqdIbqLGxvd8R0wiju4YwezRrdt4faqpUQys4=;
-        b=JECJIAuCiThd8zcTRVo6iOihB1qTni7uoon96La9+A0hGfT435LcpHBk9LBRh21Pf7
-         tGNtCUSuKSJdnKx9Wls/9M/KkjCGMMV9RFE+IDm3D1J71hgN/FPlsrIvbSDwD3AzVAWq
-         0ty8/l046ePf9Ky/KFHemKYMiPRWDvfBfo7d1o/bQQPcaVIbf+wuVXQyyERekVS/7LSM
-         CoybtOHWBq17UCCMTa6wJbxIG0i7FOS/aYm2vzvqbYNt+yNsox8pMfLeKfprdW1lKOaN
-         DhKo87CralDtYs6AT66U8qpaOZxXTgHtsurnI91Q35CURA/0dgcCsBV/OJANLKCGm6fk
-         7CvQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWHBItQhioDoqOiyr1Y/0hyYYVVZxL5Q0de+LJck2RBmhGDPYBHyjMVFTNFuSlfZdk22O0zf9Nf/4WpwygdGwoxPmkHCcSsp4yhSpcm31WUhskiVF5qyF06uUiub1Nz1Zx7luybarSG7aRAypwHV0lbKOnjs5nszaf/LI7/1NgmDE/HeuvVhtc6f/eyTYbfbNI297AiCLxjpxtkZWefsNlOSPS8t60O02suLE+ziBSbqmWHPxQimuTU5mzrioC5y6Y9OKzSZb6edHdK8Vs0B3lxE+L4bOCQATZDK2EZQw==
-X-Gm-Message-State: AOJu0Yyv60dNijPxmrL7EC43g2WEFkIfAspFKCEkDmqw+IyiBZg426nN
-	9cGYPbQqQ2oINAbe1P0owqpJpYsib6nrSozEVFnh7wwi4yR7E8LPVhp/eqXkA2hrgNSknK7It/k
-	nrrBS9ZWOXYivW1j3115QWOZtjoRslewFGbaeHQ==
-X-Google-Smtp-Source: AGHT+IFq+yCl5o74ZjH3g13NJDso8wQ5+sJqbQadqfrtImzCDvp3GWtQvEB2R3IWUMP4fI/FfSN1B6bVUP2acYQYprE=
-X-Received: by 2002:a05:6214:4498:b0:6af:d47a:1421 with SMTP id
- 6a1803df08f44-6b030a9d410mr14097896d6.60.1717555771212; Tue, 04 Jun 2024
- 19:49:31 -0700 (PDT)
+	s=arc-20240116; t=1718025405; c=relaxed/simple;
+	bh=77k5rIMoIWHg6IseVGjYJC6hiieeMJ1RXLsTOo5sn9Q=;
+	h=From:To:Cc:References:Date:In-Reply-To:Message-ID:MIME-Version:
+	 Content-Type:Subject; b=lo9bYUA9nPyAd4qw/6n7qTJ7rBgTEijbFYdu7OmqgLYvob6eo0Lm1my5mCb17U8q4rJd/6k2aH6LbblQMWcxLMUGSn+2inSQINZOYGRitgnoAqC0Wutd8dVxar+NkQFenVHD8NaBUTt7/JmqrQ0xUX3P4/NeRUUv4iLOvrDtRjk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=xmission.com; spf=pass smtp.mailfrom=xmission.com; arc=none smtp.client-ip=166.70.13.233
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=xmission.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xmission.com
+Received: from in01.mta.xmission.com ([166.70.13.51]:38392)
+	by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.93)
+	(envelope-from <ebiederm@xmission.com>)
+	id 1sGeE1-007QxW-Ub; Mon, 10 Jun 2024 06:34:14 -0600
+Received: from ip68-227-168-167.om.om.cox.net ([68.227.168.167]:54200 helo=email.froward.int.ebiederm.org.xmission.com)
+	by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.93)
+	(envelope-from <ebiederm@xmission.com>)
+	id 1sGeE0-00FROe-SU; Mon, 10 Jun 2024 06:34:13 -0600
+From: "Eric W. Biederman" <ebiederm@xmission.com>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Yafang Shao <laoar.shao@gmail.com>,  Linus Torvalds
+ <torvalds@linux-foundation.org>,  linux-mm <linux-mm@kvack.org>,
+  Linux-Fsdevel <linux-fsdevel@vger.kernel.org>,  linux-trace-kernel
+ <linux-trace-kernel@vger.kernel.org>,  audit@vger.kernel.org,  LSM List
+ <linux-security-module@vger.kernel.org>,  selinux@vger.kernel.org,  bpf
+ <bpf@vger.kernel.org>,  Alexander Viro <viro@zeniv.linux.org.uk>,
+  Christian Brauner <brauner@kernel.org>,  Jan Kara <jack@suse.cz>,  Kees
+ Cook <keescook@chromium.org>
+References: <20240602023754.25443-1-laoar.shao@gmail.com>
+	<20240602023754.25443-2-laoar.shao@gmail.com>
+	<87ikysdmsi.fsf@email.froward.int.ebiederm.org>
+	<CALOAHbAASdjLjfDv5ZH7uj=oChKE6iYnwjKFMu6oabzqfs2QUw@mail.gmail.com>
+	<CAADnVQJ_RPg_xTjuO=+3G=4auZkS-t-F2WTs18rU2PbVdJVbdQ@mail.gmail.com>
+	<874jabdygo.fsf@email.froward.int.ebiederm.org>
+	<CAADnVQ+9T4n=ZhNMd57qfu2w=VqHM8Dzx-7UAAinU5MoORg63w@mail.gmail.com>
+Date: Mon, 10 Jun 2024 07:34:01 -0500
+In-Reply-To: <CAADnVQ+9T4n=ZhNMd57qfu2w=VqHM8Dzx-7UAAinU5MoORg63w@mail.gmail.com>
+	(Alexei Starovoitov's message of "Sun, 2 Jun 2024 11:23:17 -0700")
+Message-ID: <87ikyhrn7q.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240602023754.25443-1-laoar.shao@gmail.com> <20240602023754.25443-2-laoar.shao@gmail.com>
- <6cf37b34-c5e4-4d92-8a60-6c083e109439@stuba.sk>
-In-Reply-To: <6cf37b34-c5e4-4d92-8a60-6c083e109439@stuba.sk>
-From: Yafang Shao <laoar.shao@gmail.com>
-Date: Wed, 5 Jun 2024 10:48:55 +0800
-Message-ID: <CALOAHbC-DDEhkTwxinLnfFo_quoNzg4ADjJAaZDWNQ0f64Dsiw@mail.gmail.com>
-Subject: Re: [PATCH 1/6] fs/exec: Drop task_lock() inside __get_task_comm()
-To: Matus Jokay <matus.jokay@stuba.sk>
-Cc: torvalds@linux-foundation.org, linux-mm@kvack.org, 
-	linux-fsdevel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
-	audit@vger.kernel.org, linux-security-module@vger.kernel.org, 
-	selinux@vger.kernel.org, bpf@vger.kernel.org, 
-	Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
-	Eric Biederman <ebiederm@xmission.com>, Kees Cook <keescook@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
+X-XM-SPF: eid=1sGeE0-00FROe-SU;;;mid=<87ikyhrn7q.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.168.167;;;frm=ebiederm@xmission.com;;;spf=pass
+X-XM-AID: U2FsdGVkX1+aqS3BV7g8TVW+kULFxysO2TVuiqUO+14=
+X-SA-Exim-Connect-IP: 68.227.168.167
+X-SA-Exim-Mail-From: ebiederm@xmission.com
+X-Spam-Level: **
+X-Spam-Report: 
+	* -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
+	*  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+	*      [score: 0.4982]
+	*  0.7 XMSubLong Long Subject
+	*  1.5 XMNoVowels Alpha-numberic number with no vowels
+	*  0.0 XM_B_Unicode BODY: Testing for specific types of unicode
+	*  0.0 T_TM2_M_HEADER_IN_MSG BODY: No description available.
+	* -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
+	*      [sa07 1397; Body=1 Fuz1=1 Fuz2=1]
+	*  0.0 T_TooManySym_01 4+ unique symbols in subject
+	*  0.0 T_TooManySym_03 6+ unique symbols in subject
+	*  0.0 T_TooManySym_02 5+ unique symbols in subject
+	*  0.0 XM_B_AI_SPAM_COMBINATION Email matches multiple AI-related
+	*      patterns
+	* -0.0 T_SCC_BODY_TEXT_LINE No description available.
+	*  0.2 XM_B_SpammyWords One or more commonly used spammy words
+X-Spam-DCC: XMission; sa07 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: **;Alexei Starovoitov <alexei.starovoitov@gmail.com>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 465 ms - load_scoreonly_sql: 0.13 (0.0%),
+	signal_user_changed: 11 (2.3%), b_tie_ro: 9 (1.9%), parse: 1.04 (0.2%),
+	 extract_message_metadata: 12 (2.7%), get_uri_detail_list: 1.43 (0.3%),
+	 tests_pri_-2000: 13 (2.8%), tests_pri_-1000: 3.0 (0.6%),
+	tests_pri_-950: 1.29 (0.3%), tests_pri_-900: 1.09 (0.2%),
+	tests_pri_-90: 82 (17.7%), check_bayes: 81 (17.4%), b_tokenize: 8
+	(1.6%), b_tok_get_all: 10 (2.1%), b_comp_prob: 2.5 (0.5%),
+	b_tok_touch_all: 58 (12.5%), b_finish: 0.75 (0.2%), tests_pri_0: 320
+	(68.9%), check_dkim_signature: 0.66 (0.1%), check_dkim_adsp: 3.4
+	(0.7%), poll_dns_idle: 1.19 (0.3%), tests_pri_10: 2.7 (0.6%),
+	tests_pri_500: 14 (2.9%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [PATCH 1/6] fs/exec: Drop task_lock() inside __get_task_comm()
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 
-On Wed, Jun 5, 2024 at 4:01=E2=80=AFAM Matus Jokay <matus.jokay@stuba.sk> w=
-rote:
->
-> Sorry guys for the mistake,
->
-> > diff --git a/include/linux/sched.h b/include/linux/sched.h
-> > index c75fd46506df..56a927393a38 100644
-> > --- a/include/linux/sched.h
-> > +++ b/include/linux/sched.h
-> > @@ -1083,7 +1083,7 @@ struct task_struct {
-> >        *
-> >        * - normally initialized setup_new_exec()
-> >        * - access it with [gs]et_task_comm()
-> > -      * - lock it with task_lock()
-> > +      * - lock it with task_lock() for writing
-> there should be fixed only the comment about ->comm initialization during=
- exec.
->
-> diff --git a/include/linux/sched.h b/include/linux/sched.h
-> index c75fd46506df..48aa5c85ed9e 100644
-> --- a/include/linux/sched.h
-> +++ b/include/linux/sched.h
-> @@ -1081,9 +1081,9 @@ struct task_struct {
->         /*
->          * executable name, excluding path.
->          *
-> -        * - normally initialized setup_new_exec()
-> +        * - normally initialized begin_new_exec()
->          * - access it with [gs]et_task_comm()
-> -        * - lock it with task_lock()
-> +        * - lock it with task_lock() for writing
->          */
->         char                            comm[TASK_COMM_LEN];
->
-> Again, sorry for the noise. It's a very minor fix, but maybe even a small=
- fix to the documentation can help increase the readability of the code.
->
+Alexei Starovoitov <alexei.starovoitov@gmail.com> writes:
 
-Thank you for your improvement. It is very helpful. I will include it
-in the next version.
+> On Sun, Jun 2, 2024 at 10:53=E2=80=AFAM Eric W. Biederman <ebiederm@xmiss=
+ion.com> wrote:
+>>
+>> If you are performing lockless reads and depending upon a '\0'
+>> terminator without limiting yourself to the size of the buffer
+>> there needs to be a big fat comment as to how in the world
+>> you are guaranteed that a '\0' inside the buffer will always
+>> be found.
+>
+> I think Yafang can certainly add such a comment next to
+> __[gs]et_task_comm.
+>
+> I prefer to avoid open coding memcpy + mmemset when strscpy_pad works.
 
---=20
-Regards
-Yafang
+Looking through the code in set_task_comm
+strscpy_pad only works when both the source and designation are aligned.
+Otherwise it performs a byte a time copy, and is most definitely
+susceptible to the race I observed.
+
+Further I looked a couple of the uses of set_task_com, in
+fs/proc/base.c, kernel/kthread.c, and kernel/sys.c.
+
+Nowhere do I see a guarantee that the source buffer is word aligned
+or even something that would reasonably cause a compiler to place the
+buffer that is being passed to set_task_comm to be word aligned.
+
+As far as I can tell it is completely up to the compiler if it will
+cause strscpy_pad to honor the word at a time guarantee needed
+to make strscpy_pad safe for reading the information.
+
+This is not to say we can't make it safe.
+
+The easiest would be to create an aligned temporary buffer in
+set_task_comm, and preserve the existing interface.  Alternatively
+a type that has the appropriate size and alignment could be used
+as input to set_task_comm and it could be caller's responsibility
+to use it.
+
+While we can definitely make reading task->comm happen without taking
+the lock.  Doing so without updating set_task_comm to provide the
+guarantees needed to make it safe, looks like a case of play silly
+games, win silly prizes.
+
+Eric
