@@ -1,154 +1,170 @@
-Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com [209.85.208.172])
+Received: from mail-qv1-f54.google.com (mail-qv1-f54.google.com [209.85.219.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCC3915FA96
-	for <audit@vger.kernel.org>; Fri, 21 Jun 2024 16:39:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77DAF3201;
+	Sun, 23 Jun 2024 02:26:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718987972; cv=none; b=pRZFgipbmsMhc3+6UaeUU72qzkxTfOP9o0DwP3VGsOifEYWFcOaPldu46JaTavQyNA/oGvaxnVHr3Vm7Ktz5wKTfbsUMakoC8jcZWA9eTHwXacJEEJ6Zjbm+qipl88wFfNk8e2niMK5rcYy4EW+c5yB1ibIhaFLMFKbLQmRnDB8=
+	t=1719109612; cv=none; b=uzH/sk7quF2C/0HggNvDHLw5Dh611n0zjuPsIF8ZW4v/kVkzdBv4BVN0Jjc8TzTGJ7MeKtiLpSXbQJXyyvv/Ts4rE6EYbLB8DtjhpQ5rKdT/wiVH/RG5Own2gvq470EJutgv6slVmW/t07MsgQjcAAfv9MmDH7aI/6wl5v9az4M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718987972; c=relaxed/simple;
-	bh=UlgFUywd2WSEjSU6xsxYFHFG7CT7Xep9ROempUMO7/k=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=L6tI1ZnQPoodqL34jSzyreYQmkGGvyciJdsZ7kg5PStLE62dVfwp3rLT5kxFTZf2XEX6/cUVhTTwndabgAx3Ux4XoiqpGZf/s0cwQ12Q514KaThb60oCmYl2s/09S1wEbflmFksXuHNZ2ZjgQoPKqit9XktDH6jwndM8yA/DFhs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ffwll.ch; spf=none smtp.mailfrom=ffwll.ch; dkim=pass (1024-bit key) header.d=ffwll.ch header.i=@ffwll.ch header.b=VtXeSSY9; arc=none smtp.client-ip=209.85.208.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ffwll.ch
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ffwll.ch
+	s=arc-20240116; t=1719109612; c=relaxed/simple;
+	bh=k3fQs37Okn7+VGwF/h20dWOy71NEFBoK+N7m9s8/J9U=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=H6po5+W7zSOdVT67WO4pU2oU6FYrfitjAmkUTFJD+CVO+dUpMEK2z9CGRIPFhx4kbItDyxJ7ptlo5EeDawcWHgfAzhzg6X83Bs68FAvQk6yeemoEsOOZeMpyJaRroDmowxLpEy0XdWjyTGCVrTBKaeVNQTiL1nG/ermqoQ12Zj8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Wd3obNJB; arc=none smtp.client-ip=209.85.219.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ffwll.ch header.i=@ffwll.ch header.b="VtXeSSY9"
-Received: by mail-lj1-f172.google.com with SMTP id 38308e7fff4ca-2ec5018dcfdso1101231fa.1
-        for <audit@vger.kernel.org>; Fri, 21 Jun 2024 09:39:30 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Wd3obNJB"
+Received: by mail-qv1-f54.google.com with SMTP id 6a1803df08f44-6aedd5167d1so13950786d6.1;
+        Sat, 22 Jun 2024 19:26:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google; t=1718987969; x=1719592769; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=d+B4q6j7rnOa8lY5YGMu4l7DUBInPDPw5kUdlNxco7g=;
-        b=VtXeSSY9ptdv08DJDTJ2WKmFOBfvm36uqqpB1SXvyXSjnyBwyR/YSRClM3Fekc5PEb
-         dd8gQNWD9nZJ9TDZN2xK7sOY6Ng+93H+bPR3vwYwyztHQIRZ7VsPi0IMubPX9azpw0gj
-         56RGX+N8Cg63P3IsX1jP8xeP/0Sw8vR5VG9e8=
+        d=gmail.com; s=20230601; t=1719109609; x=1719714409; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=K+LPiISOoLYsJFxCwMt3f7g5PbGNmTkGzNcNw2ao++w=;
+        b=Wd3obNJBfLTLGbCswO4NZNivvgp9CBG7IsaHAPvPxws4uH7JAa57HWIuj4VP2azzt2
+         WB19icDB+4WNCEeH+iH6SoT1m7fI8dRsfhCznUkq86jrLYguaNEMwIamMC92MBIVHiPN
+         tJjNpY/5MUTDt33a6QD5iUsp6YybLQ6anNzHeSWqsdltt13XDwRs8xL+85GIEsfj6Xuo
+         727ZLAoK8eJIzyeY7SBf0AYQzpf2sV/JYZTsW/zV44pVfEMDTAAyna4DEonfNEnP5UKJ
+         1L94nWXQzi1WuplqjnwlY5pcc5J+PMiA6UOuJA/MOHq+k8d8n+xaUmVY4JmXPeXCFWL3
+         2W5Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718987969; x=1719592769;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=d+B4q6j7rnOa8lY5YGMu4l7DUBInPDPw5kUdlNxco7g=;
-        b=HggXC2d7pZgdrUO15CIdo6t87YCr4yNNPQgnIgXRCY7GTn8ehqjThQoto0KkrMnK46
-         SQTYBN4DIySHLptgRAC4L3Yf9ujl0ophAnFNlc6RIWRoSyCmUfKsmZs1Fu+4W0h3hXFK
-         35QyafSf0ODQrDXcF96OTwN73jFD621e8uCz82XWd52nBQbscuYXWCq60i87GgJYhWpQ
-         GouBt+NCtmH5oKQHU5qNJtFVt0vwZ2qVV7AtfGYq1tcDsBtvq8YQGKwUOLLcvnzQDmPV
-         spjPFwulgvQUW0r+9Tch0Qw8PjuDczBmX6EtTwhJ1s76vR3afK1ggAIZw2FDJhjfKnET
-         ivZA==
-X-Forwarded-Encrypted: i=1; AJvYcCUI5rx34jI+OgjxGxJxPyuhV+fyAB7j4qWPHKsuGnuQGmXa6KmB3hfD6iY10SAHiXJ5aWP9/ICPCKbLuPV2IlzL9upVTtI=
-X-Gm-Message-State: AOJu0YxXeUQj/Rrao1baJRp/JdLm3Kqqi4eBeGm6wnUyR1dVr1u75XVX
-	56jjaG3y1QKrcmna44RmlN/8/Cf6+sesys8LAnr6I5Py5mwA36ClI0Fkdesxvo8=
-X-Google-Smtp-Source: AGHT+IG0ddJjXBlSpbVZD4r9/H9u00KEsN82L79oP/i1sXbnFlr8kZL72WUFKn7R6WiFRcw1OhTvRw==
-X-Received: by 2002:a05:651c:1a12:b0:2ec:5365:34d3 with SMTP id 38308e7fff4ca-2ec53653746mr3909701fa.1.1718987968916;
-        Fri, 21 Jun 2024 09:39:28 -0700 (PDT)
-Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3663a8c8960sm2247234f8f.100.2024.06.21.09.39.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Jun 2024 09:39:28 -0700 (PDT)
-Date: Fri, 21 Jun 2024 18:39:26 +0200
-From: Daniel Vetter <daniel@ffwll.ch>
-To: Yafang Shao <laoar.shao@gmail.com>
-Cc: torvalds@linux-foundation.org, ebiederm@xmission.com,
-	alexei.starovoitov@gmail.com, rostedt@goodmis.org,
-	catalin.marinas@arm.com, akpm@linux-foundation.org,
-	penguin-kernel@i-love.sakura.ne.jp, linux-mm@kvack.org,
-	linux-fsdevel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-	audit@vger.kernel.org, linux-security-module@vger.kernel.org,
-	selinux@vger.kernel.org, bpf@vger.kernel.org,
-	netdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>
-Subject: Re: [PATCH v3 11/11] drm: Replace strcpy() with __get_task_comm()
-Message-ID: <ZnWsvvRUonTmZG5h@phenom.ffwll.local>
-Mail-Followup-To: Yafang Shao <laoar.shao@gmail.com>,
-	torvalds@linux-foundation.org, ebiederm@xmission.com,
-	alexei.starovoitov@gmail.com, rostedt@goodmis.org,
-	catalin.marinas@arm.com, akpm@linux-foundation.org,
-	penguin-kernel@i-love.sakura.ne.jp, linux-mm@kvack.org,
-	linux-fsdevel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-	audit@vger.kernel.org, linux-security-module@vger.kernel.org,
-	selinux@vger.kernel.org, bpf@vger.kernel.org,
-	netdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>
-References: <20240621022959.9124-1-laoar.shao@gmail.com>
- <20240621022959.9124-12-laoar.shao@gmail.com>
+        d=1e100.net; s=20230601; t=1719109609; x=1719714409;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=K+LPiISOoLYsJFxCwMt3f7g5PbGNmTkGzNcNw2ao++w=;
+        b=WwFEkYENVHyOqnSspAzjzYBTuzZTkT7vmgDPkdSvyh0G3wVyhgSrP0J3+1Tdcnf8pP
+         orLInHv0ps7D1cHQ/V5fe/fcJTH2uGG1RGc67jHM6tFn0QqYGe2Qk7+bgzY8CTWHkUE/
+         Lzd9g26N+iik30uxVYRzhsmWbf659ex28WrH3IHgfulgjR5U5g7DvTykgw3vey+96HlO
+         CC/5URQzhNHYLsVU9c9/a+ZazHopYfh/HRYNNpjU9yICovc3IqNM44XVhQa7dKivDll0
+         BOKdjm+7EBWkS82PDU9vqhBVMwTCFtKUGclBsiWadz/OYm12RKDiXvhNOQvNkaPVH2SV
+         e3vw==
+X-Forwarded-Encrypted: i=1; AJvYcCW+79M5vbSY/EZfoMvp2eJwozcfx4xgFyOjViqjC5DvEUN9FyFno0gQHLjLbrGnIcNp7i7QBBj7QXlQg7+H3amhqeMOFb8ZWbh64FdXitPpnA0THWc0Nl04jxf3bolul0oS4NGd7KYS9KJ1UF5cH0OfO3BKccxE72d9j51zo+u3sUEKBPQP6Q64X1l3hLX9qICaBCx7HuGTANjZAT9STyMBIsoaPnUhMB6726MgvmQyAKYpGqjcewREBC2RbLNt4QuMF1Zkab71ZblD0xAnDWmZyw/jJNeCyqfeRVZA19KNlF/C19/SX65du17r13vkCdlJMbMgTA==
+X-Gm-Message-State: AOJu0YypuxnjnCoh+azX8s7VnLkcIN2NCxq5ryR41dHibXDVpDyRZ5e+
+	xmxT/mK54DlLQi0qpjv4b0N+2ieqaEiFXqTCY3Rjk9+zJlKY0LNkKVygRhU3+2lA2POg5UFf//a
+	tVeddPec19D2Z96Re/wmtdpw3K6A=
+X-Google-Smtp-Source: AGHT+IFY0Y/UcJS7sknileL2UagN7ReFxrAWEEHMeCw0v9alkFUCpuvgoM4QBmWhVR/dsnO/cQfpgT+sNC6/yK6yero=
+X-Received: by 2002:a05:6214:20e2:b0:6b5:24b:f430 with SMTP id
+ 6a1803df08f44-6b540a91d2emr16144186d6.40.1719109609327; Sat, 22 Jun 2024
+ 19:26:49 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240621022959.9124-12-laoar.shao@gmail.com>
-X-Operating-System: Linux phenom 6.8.9-amd64 
+References: <20240621022959.9124-1-laoar.shao@gmail.com> <20240621022959.9124-7-laoar.shao@gmail.com>
+ <20240621135142.GF1098275@kernel.org>
+In-Reply-To: <20240621135142.GF1098275@kernel.org>
+From: Yafang Shao <laoar.shao@gmail.com>
+Date: Sun, 23 Jun 2024 10:26:13 +0800
+Message-ID: <CALOAHbARduAEv+CQnRuLokrf5NYkM5omhpOuJuDuBhf-daKgxg@mail.gmail.com>
+Subject: Re: [PATCH v3 06/11] mm/util: Deduplicate code in {kstrdup,kstrndup,kmemdup_nul}
+To: Simon Horman <horms@kernel.org>
+Cc: torvalds@linux-foundation.org, ebiederm@xmission.com, 
+	alexei.starovoitov@gmail.com, rostedt@goodmis.org, catalin.marinas@arm.com, 
+	akpm@linux-foundation.org, penguin-kernel@i-love.sakura.ne.jp, 
+	linux-mm@kvack.org, linux-fsdevel@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org, audit@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, selinux@vger.kernel.org, 
+	bpf@vger.kernel.org, netdev@vger.kernel.org, dri-devel@lists.freedesktop.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jun 21, 2024 at 10:29:59AM +0800, Yafang Shao wrote:
-> To prevent erros from occurring when the src string is longer than the
-> dst string in strcpy(), we should use __get_task_comm() instead. This
-> approach also facilitates future extensions to the task comm.
-> 
-> Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
-> Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
-> Cc: Maxime Ripard <mripard@kernel.org>
-> Cc: Thomas Zimmermann <tzimmermann@suse.de>
-> Cc: David Airlie <airlied@gmail.com>
-> Cc: Daniel Vetter <daniel@ffwll.ch>
+On Fri, Jun 21, 2024 at 9:51=E2=80=AFPM Simon Horman <horms@kernel.org> wro=
+te:
+>
+> On Fri, Jun 21, 2024 at 10:29:54AM +0800, Yafang Shao wrote:
+> > These three functions follow the same pattern. To deduplicate the code,
+> > let's introduce a common help __kstrndup().
+> >
+> > Suggested-by: Andrew Morton <akpm@linux-foundation.org>
+> > Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
+>
+> Hi Yafang Shao,
+>
+> Some minor nits from my side.
+>
+> > ---
+> >  mm/internal.h | 24 ++++++++++++++++++++++++
+> >  mm/util.c     | 27 ++++-----------------------
+> >  2 files changed, 28 insertions(+), 23 deletions(-)
+> >
+> > diff --git a/mm/internal.h b/mm/internal.h
+> > index b2c75b12014e..fd87f685739b 100644
+> > --- a/mm/internal.h
+> > +++ b/mm/internal.h
+> > @@ -1521,4 +1521,28 @@ static inline void shrinker_debugfs_remove(struc=
+t dentry *debugfs_entry,
+> >  void workingset_update_node(struct xa_node *node);
+> >  extern struct list_lru shadow_nodes;
+> >
+> > +/**
+> > + * __kstrndup - Create a NUL-terminated string from @s, which might be=
+ unterminated.
+> > + * @s: The data to stringify
+> > + * @len: The size of the data, including the null terminator
+> > + * @gfp: the GFP mask used in the kmalloc() call when allocating memor=
+y
+> > + *
+> > + * Return: newly allocated copy of @s with NUL-termination or %NULL in
+> > + * case of error
+> > + */
+> > +static __always_inline char *__kstrndup(const char *s, size_t len, gfp=
+_t gfp)
+> > +{
+> > +     char *buf;
+> > +
+> > +     buf =3D kmalloc_track_caller(len, gfp);
+> > +     if (!buf)
+> > +             return NULL;
+> > +
+> > +     memcpy(buf, s, len);
+> > +     /* Ensure the buf is always NUL-terminated, regardless of @s. */
+> > +     buf[len - 1] =3D '\0';
+> > +     return buf;
+> > +}
+> > +
+> > +
+>
+> nit: One blank line is enough.
 
-I guess the entire series will go in through a dedicated pull or some
-other tree, so
+Ah, will change it.
 
-Acked-by: Daniel Vetter <daniel.vetter@ffwll.ch>
+>
+> >  #endif       /* __MM_INTERNAL_H */
+> > diff --git a/mm/util.c b/mm/util.c
+> > index 41c7875572ed..d9135c5fdf7f 100644
+> > --- a/mm/util.c
+> > +++ b/mm/util.c
+> > @@ -58,17 +58,8 @@ char *kstrdup(const char *s, gfp_t gfp)
+> >       if (!s)
+> >               return NULL;
+> >
+> > -     len =3D strlen(s) + 1;
+> > -     buf =3D kmalloc_track_caller(len, gfp);
+> > -     if (buf) {
+> > -             memcpy(buf, s, len);
+> > -             /* During memcpy(), the string might be updated to a new =
+value,
+> > -              * which could be longer than the string when strlen() is
+> > -              * called. Therefore, we need to add a null termimator.
+> > -              */
+> > -             buf[len - 1] =3D '\0';
+> > -     }
+> > -     return buf;
+>
+> nit: The local variable buf is now unused, and should be removed from kst=
+rdup().
+>      Likewise for kstrndup() and kmemdup_nul()
+>
+>      Flagged by W=3D1 builds with gcc-13 and clang-18, and Smatch.
 
-for merging through whatever non-drm tree makes most sense for this.
+I missed that. Thanks for pointing it out.
 
-Cheers, Sima
-
-> ---
->  drivers/gpu/drm/drm_framebuffer.c     | 2 +-
->  drivers/gpu/drm/i915/i915_gpu_error.c | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/drm_framebuffer.c b/drivers/gpu/drm/drm_framebuffer.c
-> index 888aadb6a4ac..25262b07ffaf 100644
-> --- a/drivers/gpu/drm/drm_framebuffer.c
-> +++ b/drivers/gpu/drm/drm_framebuffer.c
-> @@ -868,7 +868,7 @@ int drm_framebuffer_init(struct drm_device *dev, struct drm_framebuffer *fb,
->  	INIT_LIST_HEAD(&fb->filp_head);
->  
->  	fb->funcs = funcs;
-> -	strcpy(fb->comm, current->comm);
-> +	__get_task_comm(fb->comm, sizeof(fb->comm), current);
->  
->  	ret = __drm_mode_object_add(dev, &fb->base, DRM_MODE_OBJECT_FB,
->  				    false, drm_framebuffer_free);
-> diff --git a/drivers/gpu/drm/i915/i915_gpu_error.c b/drivers/gpu/drm/i915/i915_gpu_error.c
-> index 625b3c024540..b2c16a53bd24 100644
-> --- a/drivers/gpu/drm/i915/i915_gpu_error.c
-> +++ b/drivers/gpu/drm/i915/i915_gpu_error.c
-> @@ -1411,7 +1411,7 @@ static bool record_context(struct i915_gem_context_coredump *e,
->  	rcu_read_lock();
->  	task = pid_task(ctx->pid, PIDTYPE_PID);
->  	if (task) {
-> -		strcpy(e->comm, task->comm);
-> +		__get_task_comm(e->comm, sizeof(e->comm), task);
->  		e->pid = task->pid;
->  	}
->  	rcu_read_unlock();
-> -- 
-> 2.39.1
-> 
-
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+--=20
+Regards
+Yafang
