@@ -1,102 +1,153 @@
-Received: from mail-qk1-f172.google.com (mail-qk1-f172.google.com [209.85.222.172])
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD3458C11;
-	Sun, 23 Jun 2024 06:01:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 694E514A08D;
+	Fri, 28 Jun 2024 08:58:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719122468; cv=none; b=PTUmBY1dmoLJkNH7hTLa1xsNk4SjKRW6WTh4luJOhglupT9Y5dXtDWj7Xkn5ID0Sw6296myI4wjOyEAcByhk8Lb9CT7ND/3Lu691qA49c2wYGnj2/h2QSe1P2AX91DLPMfxtFZCKDKZIKLSIvmgt/VmieXQ65eQ/rSgRoDdIeMc=
+	t=1719565091; cv=none; b=NxJu70tB08hmGZ4FhNVsYSoMji/9DHT6Ut3/kwvsFTF0YgwouHi7zDskuIwTCeoct4L3kF6GtqHjvGQohf9yVTn14GATyJa5PtW0eXwyuIHbqgCpnFmCnhYS3hRmOZyrMwJY6TV7Z3T11EExbm8d1GXKO7SO2/PZqarFxBXGm7Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719122468; c=relaxed/simple;
-	bh=7tBYjcPASrEA9EIwWbdTX/mLPmfYmGFhdjPrPv9CTiE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=RQ1+YiKUYDt22Lm5MDnfhUOjUdDxsDQF6eh55HOL7G3Yojxq4svKd9adIrMLSdYjNTQ+L+CLHOLZaQwEaAQZ12nkH61i1AmuBGTxsV3HfvxoXD0daye5blAmYFKX+k/lZWwUWoz0qRvq5i3vI/21ybb2Fa6RqMjV5iebl0IohUk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=R993nS54; arc=none smtp.client-ip=209.85.222.172
+	s=arc-20240116; t=1719565091; c=relaxed/simple;
+	bh=HZhJKiBVZERyBEmw8IFRI4IJlxHvdwvv0u4OoebYJtw=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=vA3u63BhyDHUwyfA/k0Gfdw1rJca8sbObarjVIj8PuqAEGt4OQTqdUDeHbTB59cEWS2XrnnHsFbNhI75i9kv61wSAI6+S5UL4Vukaik0bQKDtfsOlJBVKnuZbVtx78bglqhwF8HZ3go9peLJ1t5cSKRITY+sol23ExLGU+dWih4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OHPkKpY8; arc=none smtp.client-ip=209.85.214.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="R993nS54"
-Received: by mail-qk1-f172.google.com with SMTP id af79cd13be357-79baa4e8531so326304185a.2;
-        Sat, 22 Jun 2024 23:01:06 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OHPkKpY8"
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-1faad2f1967so11788215ad.0;
+        Fri, 28 Jun 2024 01:58:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1719122465; x=1719727265; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=639B1VhzkVRiQ3egX05fSRdoRLJZKUd3UI9/6wfJ8lw=;
-        b=R993nS54gBQpPnXksw45EdyenrtLPYB3PmH6lO7ye4DAWTstO2fNdwaDSKS50tzZMG
-         G2SRAG/e3ADXA7/Uw+En4WEJ66dhxJhNIQj/C4JFGQrSAOCyC7DuzK8jFHCvSxJNXG6B
-         hy7TfF/cBCwJorUHscfJETTmJufxf8caMyMvMZF2ywAWqKTcSRj0h6JDausIwcfrDElH
-         0jbik2TCCgi+eBaq4zVfXb4vbviX2AEWlrCriSPCj4jSeejjaDCweHM96sJ15UPln9M7
-         YNc5PUDAZ3RrdecTx7vsdqVzU/yIpirvYSExFO00Q5l8q6oiR5vCeiR/dXK0W35XcUln
-         txmw==
+        d=gmail.com; s=20230601; t=1719565090; x=1720169890; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=p+oKp38c6s8xaT2ZLZhMjXUeTO03kiDRVYzSyaWPaE0=;
+        b=OHPkKpY8mfnr82xkEkSyEBqSv7YVoweV+7W7g5vxuJXBI3c83koQ5cjaRZ7oeVd/OF
+         R3OZVGmEuPXajQ8aNVRkr1g5jNlSIfGpKkrL0LOvy7bMK8UJPvgs5yMRASxoiRLy2bj5
+         2wDY1iIcuUNt/WUVnsxTSQHW0xHcxBO0GZLuJ+FLQvq+znvOLfXuIbWvn0ljosxVpArc
+         uszp71E+8YqyiO+UkeD5q9k13xbz5EGdca6y4mZFMgfaXOBHcwu1lKgooZkccJcxshRE
+         w5U9qziNqtlyxgoXQ2DXu1b3OA54DzsL8YBGs11cqjN4n2F39m6w2oyK+Rrh8NmSg5+P
+         DvuQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719122465; x=1719727265;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=639B1VhzkVRiQ3egX05fSRdoRLJZKUd3UI9/6wfJ8lw=;
-        b=R6r8PO9gl32YCX79nMEJ4J4RZYcyICnnjMd9X8xtXAZt+8gC+BrTUfQPg/RSZubuzm
-         77TSRNtq8DBd8p+a8aW7TrrjaB2lY+Y/WP9xbf4eSD995/uQSQMigMRpdH85AbevF6F+
-         B3gz6UbxmkkDzL8zRj8DDspihdEac6GCkBkSQRIUsw6R2cPByZRlRutf86ccIL1ncH9/
-         pnN322M9Dq2JLFSY5TKb4GIpg/VPrV+CPcZsZODs0BuATu/Glw1v1YumsFv1sCzCqU5m
-         FdOaKbDXukPSySg/aZ9fwDMewmzKSm5s/W5Te2fMF2Z+wve+iDof5FaczqaPX1uuqHFE
-         GsOA==
-X-Forwarded-Encrypted: i=1; AJvYcCVajQzy9Hbni0oxBpL2+OOM9ET+/fAjwYME5PfBc+rJF7nxjOuazS+nlkyWZXHMY4Kx0wsjDJoBysiuriAY+Z4GGPlf/T0Wbr6OP1PvJVa4JcdYEP8Kqz4fTP9jWmsSsjh8kxFBs+ZjdL71MwpcUEeFOCuRiyFTUxxNSzDeDsvhB2vqzwjKstF/UnkEPBnDA83PfMDq1tZVzcYwo3jGlFAqx5AI0hZYArDj7uEVFCmG84oGMYiqabRRc7scJoXm03f7w7XjjQKmY+s1rz3yZ+sxNWoLx61WR6fj/RUJ1ddX+oPW9plU8FPW8N6KoqP5e5VjuxvA5w==
-X-Gm-Message-State: AOJu0YyBC/us2QSiJofjJQ16RCW7Jk0Es7RtiShpUz1F5UZdlRFUhfhN
-	+lmnymsOwfAmr+0pqBhbPzXxambXIU6iILsCdC86bwcsoATc33cOarFvSQFnoF0IYrNmyaQ24AS
-	R9beyfGGncsFCOdoWeLOi5B3hlGE=
-X-Google-Smtp-Source: AGHT+IHcXR+ehU+k0C/NmM/DLF8W1FSfgc1FOoi+9SruG7tbvTjl8bMu8+dVhBmSjLDe3SkqoqwwTUGvFNLK0f3vidI=
-X-Received: by 2002:ad4:5228:0:b0:6b4:f644:9d87 with SMTP id
- 6a1803df08f44-6b53debf738mr17899726d6.21.1719122465581; Sat, 22 Jun 2024
- 23:01:05 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1719565090; x=1720169890;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=p+oKp38c6s8xaT2ZLZhMjXUeTO03kiDRVYzSyaWPaE0=;
+        b=D4bUv+kTM1vNJhj8TPjlq7pYuI8b49W4n1DoKJ4WdscCncqwO/7k/twBiOEwQxK9l7
+         ObVQPV3viUpKVbTU4JHNMb/xAxgZnSWi6A47VhI55L/oso3mc+qrbzhRsf9jTgQbul3r
+         nUA514x9/MfBMhihjm7I1SfXTQcgg2Ipj7j8/hbFtmEm4Lf8JJ7ybSm7wOyCDZiPldvF
+         JI8pyZj4ON7SzHXskxjNuQLjl96TMETJjggz8SdoAFlWFcaBoPFbQZyJ6sIAnfnRgwfh
+         nEjFDOpAH1G+t2W0QwGKArz/ghwySVf6sywAhAeHjAr1+bFGgQaEspUqyL+SjM4zKdMo
+         z8wQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXYXvCLb7D5yYoeAH+CwGvStVcMZQA9RFrUN0IAVdGVZWz9DaWxFreBBtD++Xaj6mLmzGP2kauiMScmpQhH+nzId3f6fBlUw5h7iJj8jFb68yGrGOcmy+57Wb4sypj2hZZpFwAcs1gUuIOiLeM8z1nQSmIfIMG7K07Nv+hOkHCi7EhGVi606ELtjRoq5TErQKSgMxvyI7kcYikX5NuZawTpvXRWoSBN0TSBadqM00SpAjgPWPY2MqWGHKbFL8nwZtw8SfI73deCxQIZRQzKWmOvCk2prtoqYenUJyVCyUxpj80Rs5v7lE7JcgP95LJI366G9ZN/Qg==
+X-Gm-Message-State: AOJu0YyygW6bQNv9/GLV4xg3BMwh7dvjkBMjNHiwwT0JT8L06wkYZ8HB
+	O/uvH+Xe5xMWq59zanUx66iVGbfw3ZSnmzp3cqHlFhrl2jkbPU5C
+X-Google-Smtp-Source: AGHT+IHW5n7W+Hsi/3tpD3rJbrf7D7rBby69hy4/8oAP7PWGB8JzPIs+Xaa9S3prTCBl6bkFGCqEaA==
+X-Received: by 2002:a17:902:daca:b0:1f9:f6c5:b483 with SMTP id d9443c01a7336-1fac7f0478bmr14804095ad.27.1719565089631;
+        Fri, 28 Jun 2024 01:58:09 -0700 (PDT)
+Received: from localhost.localdomain ([39.144.106.153])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1fac1596728sm10270615ad.256.2024.06.28.01.57.58
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 28 Jun 2024 01:58:09 -0700 (PDT)
+From: Yafang Shao <laoar.shao@gmail.com>
+To: torvalds@linux-foundation.org
+Cc: ebiederm@xmission.com,
+	alexei.starovoitov@gmail.com,
+	rostedt@goodmis.org,
+	catalin.marinas@arm.com,
+	akpm@linux-foundation.org,
+	penguin-kernel@i-love.sakura.ne.jp,
+	linux-mm@kvack.org,
+	linux-fsdevel@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org,
+	audit@vger.kernel.org,
+	linux-security-module@vger.kernel.org,
+	selinux@vger.kernel.org,
+	bpf@vger.kernel.org,
+	netdev@vger.kernel.org,
+	dri-devel@lists.freedesktop.org,
+	Yafang Shao <laoar.shao@gmail.com>
+Subject: [PATCH v4 00/11] Improve the copy of task comm
+Date: Fri, 28 Jun 2024 16:57:39 +0800
+Message-Id: <20240628085750.17367-1-laoar.shao@gmail.com>
+X-Mailer: git-send-email 2.30.1 (Apple Git-130)
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240621022959.9124-1-laoar.shao@gmail.com> <20240621022959.9124-7-laoar.shao@gmail.com>
- <ZnWGsw4d9aq5mY0S@casper.infradead.org> <CALOAHbC0ta-g2pcWqsL6sVVigthedN04y8_tH-cS9TuDGEBsEg@mail.gmail.com>
- <ZneSWDgijj3r0MMC@casper.infradead.org>
-In-Reply-To: <ZneSWDgijj3r0MMC@casper.infradead.org>
-From: Yafang Shao <laoar.shao@gmail.com>
-Date: Sun, 23 Jun 2024 14:00:29 +0800
-Message-ID: <CALOAHbDvyBn=yUABT4G6Egne48cQqHDM7bvuBeKFmbSA5fhg4A@mail.gmail.com>
-Subject: Re: [PATCH v3 06/11] mm/util: Deduplicate code in {kstrdup,kstrndup,kmemdup_nul}
-To: Matthew Wilcox <willy@infradead.org>
-Cc: torvalds@linux-foundation.org, ebiederm@xmission.com, 
-	alexei.starovoitov@gmail.com, rostedt@goodmis.org, catalin.marinas@arm.com, 
-	akpm@linux-foundation.org, penguin-kernel@i-love.sakura.ne.jp, 
-	linux-mm@kvack.org, linux-fsdevel@vger.kernel.org, 
-	linux-trace-kernel@vger.kernel.org, audit@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, selinux@vger.kernel.org, 
-	bpf@vger.kernel.org, netdev@vger.kernel.org, dri-devel@lists.freedesktop.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Sun, Jun 23, 2024 at 11:11=E2=80=AFAM Matthew Wilcox <willy@infradead.or=
-g> wrote:
->
-> On Sun, Jun 23, 2024 at 10:29:30AM +0800, Yafang Shao wrote:
-> > On Fri, Jun 21, 2024 at 9:57=E2=80=AFPM Matthew Wilcox <willy@infradead=
-.org> wrote:
-> > >
-> > > On Fri, Jun 21, 2024 at 10:29:54AM +0800, Yafang Shao wrote:
-> > > > +++ b/mm/internal.h
-> > >
-> > > Why are you putting __kstrndup in a header file when it's only used
-> > > in util.c?
-> >
-> > I want to make it always inlined. However, it is not recommended to
-> > define an inline function in a .c file, right ?
->
-> I'm not aware of any such recommendation.  Better than putting it in
-> a .h file that everybody has to look at but nobody uses.
+Using {memcpy,strncpy,strcpy,kstrdup} to copy the task comm relies on the
+length of task comm. Changes in the task comm could result in a destination
+string that is overflow. Therefore, we should explicitly ensure the destination
+string is always NUL-terminated, regardless of the task comm. This approach
+will facilitate future extensions to the task comm.
 
-Understood.
-Will change it.
+As suggested by Linus [0], we can identify all relevant code with the
+following git grep command:
 
---=20
-Regards
-Yafang
+  git grep 'memcpy.*->comm\>'
+  git grep 'kstrdup.*->comm\>'
+  git grep 'strncpy.*->comm\>'
+  git grep 'strcpy.*->comm\>'
+
+PATCH #2~#4:   memcpy
+PATCH #5~#6:   kstrdup
+PATCH #7~#9:   strncpy
+PATCH #10~#11: strcpy
+
+Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
+Link: https://lore.kernel.org/all/CAHk-=wjAmmHUg6vho1KjzQi2=psR30+CogFd4aXrThr2gsiS4g@mail.gmail.com/ [0]
+
+Changes:
+v3->v4:
+- Rename __kstrndup() to __kmemdup_nul() and define it inside mm/util.c
+  (Matthew)
+- Remove unused local varaible (Simon)
+
+v2->v3: https://lore.kernel.org/all/20240621022959.9124-1-laoar.shao@gmail.com/
+- Deduplicate code around kstrdup (Andrew)
+- Add commit log for dropping task_lock (Catalin)
+
+v1->v2: https://lore.kernel.org/bpf/20240613023044.45873-1-laoar.shao@gmail.com/
+- Add comment for dropping task_lock() in __get_task_comm() (Alexei)
+- Drop changes in trace event (Steven)
+- Fix comment on task comm (Matus)
+
+v1: https://lore.kernel.org/all/20240602023754.25443-1-laoar.shao@gmail.com/
+
+Yafang Shao (11):
+  fs/exec: Drop task_lock() inside __get_task_comm()
+  auditsc: Replace memcpy() with __get_task_comm()
+  security: Replace memcpy() with __get_task_comm()
+  bpftool: Ensure task comm is always NUL-terminated
+  mm/util: Fix possible race condition in kstrdup()
+  mm/util: Deduplicate code in {kstrdup,kstrndup,kmemdup_nul}
+  mm/kmemleak: Replace strncpy() with __get_task_comm()
+  tsacct: Replace strncpy() with __get_task_comm()
+  tracing: Replace strncpy() with __get_task_comm()
+  net: Replace strcpy() with __get_task_comm()
+  drm: Replace strcpy() with __get_task_comm()
+
+ drivers/gpu/drm/drm_framebuffer.c     |  2 +-
+ drivers/gpu/drm/i915/i915_gpu_error.c |  2 +-
+ fs/exec.c                             | 10 ++++-
+ include/linux/sched.h                 |  4 +-
+ kernel/auditsc.c                      |  6 +--
+ kernel/trace/trace.c                  |  2 +-
+ kernel/trace/trace_events_hist.c      |  2 +-
+ kernel/tsacct.c                       |  2 +-
+ mm/kmemleak.c                         |  8 +---
+ mm/util.c                             | 61 ++++++++++++---------------
+ net/ipv6/ndisc.c                      |  2 +-
+ security/lsm_audit.c                  |  4 +-
+ security/selinux/selinuxfs.c          |  2 +-
+ tools/bpf/bpftool/pids.c              |  2 +
+ 14 files changed, 51 insertions(+), 58 deletions(-)
+
+-- 
+2.43.5
+
