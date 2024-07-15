@@ -1,136 +1,69 @@
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com [209.85.219.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6616914E2E3;
-	Fri, 28 Jun 2024 09:06:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DD15131E38
+	for <audit@vger.kernel.org>; Mon, 15 Jul 2024 19:40:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719565598; cv=none; b=S4Vpm5hZQGboXCkSmbF1OG+DqlmybGP3f8Knf4DNlCT0XbA8YgnNj9LNs+fYzGlAm36smi2tJ2dSYfK0nL95ICExdZuKDU5aj1BLwsMyIgC+8oGYhgTcKEaQxU+kO92GmatbAb4bbUxDUcQInQpWa96UAFRVlWvt5sqbYa02EPU=
+	t=1721072427; cv=none; b=OpiplCDb9EUlSBjy8e6sGStdWOQdamJKkCL9ID/wB3vtWITRFanLvSzQFn1LwF+45PI4z8NOTlptCJlvOTCAoQf5D0Fs1Baw97K59aug145fAhIMmSL0J/c435U3aNFvQQN/Ml+pXQzRUz2a0CvzCKedQ+Ors6EC3YUIPl2kERM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719565598; c=relaxed/simple;
-	bh=KFR6O5apdaE005aia/eSIy/aDnoPWMXgYn13tfLkB8g=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=EKRfcSsidmOIy6o9QYj676pssnQcSPNpF+5xmJwnzFXvVN+YMaqyW0kLXLczpjC9cC8N7nLiRyE6yeK9NZX79A68wRJ2iZL0UW4T4AM1fqgqFtcOVnAxSgWtMLWONuraGXsdgszA4M+Q/t/T+C62eOfOJgEmfBY9o63CWtaHCn0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XXPZhHWP; arc=none smtp.client-ip=209.85.214.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1721072427; c=relaxed/simple;
+	bh=Pd0Iv1O8PEgrlg4jpqWsd1xbS8cLVHpZw4BEyDtOjW8=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Content-Type; b=j8fo6xVLWDI1AfUHgWu0KZ9JQhuIX+ZZF1X4nxYDPWibKcdE5QTrZMBDkNBytJWF7w/attqaAWVXCH0D/TQt/OFcT5XNzziNQldm2bX+NoTB84ux5vPb8mdHviYCHoVD0FLjdZHwruzlPA+1RVPxsKba2AZUntBoCuHCNCg4UrQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=Enes8aKW; arc=none smtp.client-ip=209.85.219.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XXPZhHWP"
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-1faad409ca7so10102195ad.1;
-        Fri, 28 Jun 2024 02:06:37 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="Enes8aKW"
+Received: by mail-yb1-f177.google.com with SMTP id 3f1490d57ef6-e03c689addcso4689430276.0
+        for <audit@vger.kernel.org>; Mon, 15 Jul 2024 12:40:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1719565596; x=1720170396; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uws88M38Us6mZwthahlWUK7fM6+CMa7f0lHdNpc5/ec=;
-        b=XXPZhHWP5QwN57uWYOpdmk6Gaux3myKKOf3nc9dvHIPRKclvO1+9Bv6SRs4YWb7fXo
-         99EJL8IXsa2NhD6TX9su8uf2+VXgFECijWlmsYBqEkQC3V4qk7sBRah3P9K0lQoY08qR
-         FRMkgJn677sRYGlrGnajHFdUnES0aNh7IShdXt+EBd4d0AwJD5dWIzi8spLy7SHjZPPz
-         lhSQpPjRJhRh2XdMNQ/ZOfUt4MQ0JdHtyreGG9HPT3aPYcg+sakQ0VUlPj3twOvSiPKb
-         H+rhtadKLFnNIPb/r34KiYaHYtwn0ErFhTd8mAQ4vOZUnL43BJ9s79G3bQ6hKgtbK6dV
-         OZnQ==
+        d=paul-moore.com; s=google; t=1721072425; x=1721677225; darn=vger.kernel.org;
+        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=ZXFNtxZB7SjSCrWDVnvo5FjZA/gpJfVit9Mb02tbBPg=;
+        b=Enes8aKWz/Ar3UfVxic8tS8AnQnvGkhcCgiDxxWMPns5hR8tJtsrzJ8w9zGZ8/gouR
+         Bqey5UIGxq864UiObt0QdFBTc/XXxtZ3mRENoCUHsWMEwok6bdtjQSuUVyRDjglgSMO3
+         rNL96AEgQy65/Chhrh1GBOgsOncksg4K3wXHDsWIuJSTl5T5c7lgyKTybhF+4kGBve8z
+         IjCOC6YLgxT4POmxCKMFHk3XxC0ZkqSHvH1SMIrY4YGZDDSft6gJM5oymyDBmyKF+n3Y
+         7Gd23OYac0Y+pgn4LpaNxXEZisOE4d8Q5GzfMCi1B5GsWvuC7Xt0NXgc5plluIRn70VL
+         M17w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719565596; x=1720170396;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=uws88M38Us6mZwthahlWUK7fM6+CMa7f0lHdNpc5/ec=;
-        b=U70QX8udI8MELd5FeBLkaMmLRTUDQwJ+HGSVw2w3rOVeL4gxykvXAG636bi6XK/ipy
-         Uz5iyzCRcllVrDNRVtBQEXfhBLeauvOnyl5SQKf6LCXK+z84MH6KH8yz6tiL5zZPuQ+W
-         vUKO1HiLe6ODqTrsYY2cLpdUmFryN+iTOKqHa+QU/h4QNA+MU5GVlsg+aRdBO4WVl/XR
-         GduIoGC0Cnn3owemaG36ZRFLDu/Lbcb8r1KWertNPtbdR2TDQcb2IF2DH5LZukJqNR4e
-         0l7zdJuj/p61WztsnkYijsXdrTz6x9tldcTiSpBljfut1FTPdY9VqL/uOCihrJujhWS0
-         7k4w==
-X-Forwarded-Encrypted: i=1; AJvYcCV1GP4aohZ1kgG3orBrbhNMaf6kI3Cx4ta4OQT20zzEXOk40ls63sluWp1QE0mm4VHCbnWuuByiiHmsSxSW7kTP/GwzpaLPmWzFLluOYxsW6XgtnGsAFf+cGPsSP7G79VE5eB5x0+AI4mQJHD51cfgWteCOw1n2m4NzN2ruqdC23WcqHok4hMvYdihEMFnKSYMo7lP2CHrWQ8bU5XuquYi6mGNMZSDTXKgI8vC0+0Uz2RtCctXOhxM4eC/WnmsSg849BVYoVLhggiea6YOcnQnx9BsPGmuoArKSnQBMoIBFswo1BBWO+NNUNnmUNvqgdN5s/q+7+g==
-X-Gm-Message-State: AOJu0YyujdauGEAtCS0+BhclUwfeWFn0NvbDEs6EV7KY3SXwmWSpyL29
-	deWd3CozyCvRoYLBFZHiha0cGmHJNWl7wL9LtyMN2/yXZezq6+wObRpE8D1kBLg=
-X-Google-Smtp-Source: AGHT+IFavdIVLnysCQZL38ewD7/CaBekji3/EpakpMEZSkmUhyVQ9iiqTWsp/YgBhmvk5fMqdYz2hg==
-X-Received: by 2002:a17:903:244a:b0:1f9:e3fa:d932 with SMTP id d9443c01a7336-1fac7e975ffmr17035345ad.9.1719565596545;
-        Fri, 28 Jun 2024 02:06:36 -0700 (PDT)
-Received: from localhost.localdomain ([39.144.106.153])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1fac10e3a1dsm10473085ad.68.2024.06.28.02.06.29
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 28 Jun 2024 02:06:36 -0700 (PDT)
-From: Yafang Shao <laoar.shao@gmail.com>
-To: torvalds@linux-foundation.org,
-	laoar.shao@gmail.com
-Cc: akpm@linux-foundation.org,
-	alexei.starovoitov@gmail.com,
-	audit@vger.kernel.org,
-	bpf@vger.kernel.org,
-	catalin.marinas@arm.com,
-	dri-devel@lists.freedesktop.org,
-	ebiederm@xmission.com,
-	linux-fsdevel@vger.kernel.org,
-	linux-mm@kvack.org,
-	linux-security-module@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	netdev@vger.kernel.org,
-	penguin-kernel@i-love.sakura.ne.jp,
-	rostedt@goodmis.org,
-	selinux@vger.kernel.org,
-	Daniel Vetter <daniel.vetter@ffwll.ch>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>
-Subject: [PATCH v4 11/11] drm: Replace strcpy() with __get_task_comm()
-Date: Fri, 28 Jun 2024 17:05:17 +0800
-Message-Id: <20240628090517.17994-11-laoar.shao@gmail.com>
-X-Mailer: git-send-email 2.30.1 (Apple Git-130)
-In-Reply-To: <20240628090517.17994-1-laoar.shao@gmail.com>
-References: <20240628085750.17367-1-laoar.shao@gmail.com>
- <20240628090517.17994-1-laoar.shao@gmail.com>
+        d=1e100.net; s=20230601; t=1721072425; x=1721677225;
+        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ZXFNtxZB7SjSCrWDVnvo5FjZA/gpJfVit9Mb02tbBPg=;
+        b=miS+ko2NCG5OE/EgPNx9N618aN7bMxkhO0yhsILycbq5itkUap8HbM5cTXG8XrWdH5
+         efWMERURhRjt0zQam0zgsRvVNuyFxqEnjNdHXq0bPsv9itRxaaeVXo+Hbpo5np0r7ilb
+         5Xb23BQrIwR390ploMlZBvqd2C1aOTYxryVI4HIQa6MjVX9AJ1ww3Efn0cf+LMTc73vE
+         O8QIGmMH1ewZOBQAM/eUHLsDjSgjd+uIeXsO9SeQZ/wctPoyqFUboWw7MWP276ebTOJo
+         G9rLCSrUfsyRrS9+zsYWpIxaoYUovAh7V/h943OWxb23NQ/QCmDZqBSHZ1LItxEtydhF
+         oIbA==
+X-Gm-Message-State: AOJu0Yw5LaoKbUuJh0Rs8cGeW6KBg5DwhQDQ3ARxzDKFJEQHBbTw97Pe
+	7WGWVK15CpKBZUqjbv3N89aG+5TMeTHwkS+wJGA/VfXQCZeCljUTksyKvcjGb8O5SBX6d7QMIKv
+	tmuHjHg63vpa+LoxAYZVpybeMjqoK9+CVPAygk8UoBTZe1ao=
+X-Google-Smtp-Source: AGHT+IEvv0JgDJJssVcxqwMbXlCiukOqa+/z8HosMPJplmc+f8DjxLoOx/wNnIVwWVN7NPxZDQWePVj4AbiopG6hL90=
+X-Received: by 2002:a5b:383:0:b0:dfa:cd8f:372d with SMTP id
+ 3f1490d57ef6-e05d57ea7ddmr145738276.38.1721072424969; Mon, 15 Jul 2024
+ 12:40:24 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+From: Paul Moore <paul@paul-moore.com>
+Date: Mon, 15 Jul 2024 15:40:14 -0400
+Message-ID: <CAHC9VhQ1Ydiq=XBGX7pR8f+H_QNOb8ubzUNgTnT1s8NKaoh-FQ@mail.gmail.com>
+Subject: No audit kernel PR for the Linux v6.11 merge window
+To: audit@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-To prevent erros from occurring when the src string is longer than the
-dst string in strcpy(), we should use __get_task_comm() instead. This
-approach also facilitates future extensions to the task comm.
+Hello all,
 
-Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
-Acked-by: Daniel Vetter <daniel.vetter@ffwll.ch>
-Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
-Cc: Maxime Ripard <mripard@kernel.org>
-Cc: Thomas Zimmermann <tzimmermann@suse.de>
-Cc: David Airlie <airlied@gmail.com>
----
- drivers/gpu/drm/drm_framebuffer.c     | 2 +-
- drivers/gpu/drm/i915/i915_gpu_error.c | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Just a mention that there were no audit patches queued in the audit
+tree for Linux v6.11 so I am not currently planning any audit related
+pull requests for this merge window.
 
-diff --git a/drivers/gpu/drm/drm_framebuffer.c b/drivers/gpu/drm/drm_framebuffer.c
-index 888aadb6a4ac..25262b07ffaf 100644
---- a/drivers/gpu/drm/drm_framebuffer.c
-+++ b/drivers/gpu/drm/drm_framebuffer.c
-@@ -868,7 +868,7 @@ int drm_framebuffer_init(struct drm_device *dev, struct drm_framebuffer *fb,
- 	INIT_LIST_HEAD(&fb->filp_head);
- 
- 	fb->funcs = funcs;
--	strcpy(fb->comm, current->comm);
-+	__get_task_comm(fb->comm, sizeof(fb->comm), current);
- 
- 	ret = __drm_mode_object_add(dev, &fb->base, DRM_MODE_OBJECT_FB,
- 				    false, drm_framebuffer_free);
-diff --git a/drivers/gpu/drm/i915/i915_gpu_error.c b/drivers/gpu/drm/i915/i915_gpu_error.c
-index 625b3c024540..b2c16a53bd24 100644
---- a/drivers/gpu/drm/i915/i915_gpu_error.c
-+++ b/drivers/gpu/drm/i915/i915_gpu_error.c
-@@ -1411,7 +1411,7 @@ static bool record_context(struct i915_gem_context_coredump *e,
- 	rcu_read_lock();
- 	task = pid_task(ctx->pid, PIDTYPE_PID);
- 	if (task) {
--		strcpy(e->comm, task->comm);
-+		__get_task_comm(e->comm, sizeof(e->comm), task);
- 		e->pid = task->pid;
- 	}
- 	rcu_read_unlock();
 -- 
-2.43.5
-
+paul-moore.com
