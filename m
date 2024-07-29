@@ -1,53 +1,77 @@
-Received: from smtpout42.security-mail.net (smtpout42.security-mail.net [85.31.212.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24C7D16CD22
-	for <audit@vger.kernel.org>; Mon, 22 Jul 2024 09:45:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=85.31.212.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BA88335B5;
+	Mon, 29 Jul 2024 02:38:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721641506; cv=none; b=pqUEdbzvn0UesQfFIAxVJIB9XLp7Dd2aUizWKhVtGsoec5VmpGi7NsST0o9NeuA2vGMK0cGED21FO8NTqkBQjWc5cMpA3uZJ7Wibx+BbTipAyr9xGLHFXyl7D6GOztv+CbPWWO7uh3+4r/DBqwMzHCeEvln3HCoF2I1zyWmxGP4=
+	t=1722220704; cv=none; b=kTI/HZUEqvNmCs5yH7QZp9uQfeLlGsbIG5Tmf9EsuoTINQvJ/5SD73uQhQv3hJhOM/nDAsgVc4NnnS8LCyTtIDpYU7bvwbd3DSldBcB0hJhq823h+hpbTEJcqbzAKb03SjPotYP9U79aATc7fhN2uajrrZiYoKRhLHeXJTslcDE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721641506; c=relaxed/simple;
-	bh=hBw3JMQA4zvpLtBy+6/1m/DQmJRkpxpnzq6/ZBHGrP4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=A51d5iv3hPnrxLzYn8UatgwNLDogmZGOjmUI93dJaGTPpBbliXZ14jvwDOaGVrWgu/AK/q/O8qLQPiHOH64S5PoZqUcxvIBhresTY1/7OQ06DQyXNKHsp679TxZHxeJqe0SfUAI/+7FeFy/Qqhr+CW2JCzix9lGPiisG4Q0BQ4Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=kalrayinc.com; spf=pass smtp.mailfrom=kalrayinc.com; dkim=pass (1024-bit key) header.d=kalrayinc.com header.i=@kalrayinc.com header.b=WmV+DRpn; arc=none smtp.client-ip=85.31.212.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=kalrayinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kalrayinc.com
+	s=arc-20240116; t=1722220704; c=relaxed/simple;
+	bh=fHi1WKbG4rwo9K7JZ99t5n13jlcTwAYYxY3/86tkJzc=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=JZj6/dwg/P9+QUg+9nDn0ej9OIHZkr9p7bRGpiND0/fzNoSNKUwxR70TMFvRZejR7eiFR2MUNPlr0Xf5Q0DR5CzEN5bHCgbTyfu45aY3wHfLO7NLDyi+YqO1Uv2OT96Y6tv0mJgtKk7+eR2BIu1d+weiQDrwKWFnxEFWthAuJSA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VFDa6P7F; arc=none smtp.client-ip=209.85.215.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=kalrayinc.com header.i=@kalrayinc.com header.b="WmV+DRpn"
-Received: from localhost (localhost [127.0.0.1])
-	by fx302.security-mail.net (Postfix) with ESMTP id A6D0380A874
-	for <audit@vger.kernel.org>; Mon, 22 Jul 2024 11:43:22 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kalrayinc.com;
-	s=sec-sig-email; t=1721641402;
-	bh=hBw3JMQA4zvpLtBy+6/1m/DQmJRkpxpnzq6/ZBHGrP4=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=WmV+DRpnUUOg4D08q68w+Zh2MkHRv7p9UonTFtjGxBx4hag6W6dYFg3qLgKlMhWdL
-	 2EGHbIwC1gpCDOjAyjaYWD8S59qy/HRhqRQ9DoSznovl1Pir7MmljvWDMa2vwEAlXH
-	 7FkihZUcutlHxGVeXQBOVMH+lV2ZC1AdXB8n0mjc=
-Received: from fx302 (localhost [127.0.0.1]) by fx302.security-mail.net
- (Postfix) with ESMTP id 7F0E280AFDB; Mon, 22 Jul 2024 11:43:22 +0200 (CEST)
-Received: from srvsmtp.lin.mbt.kalray.eu (unknown [217.181.231.53]) by
- fx302.security-mail.net (Postfix) with ESMTPS id 6319480AE53; Mon, 22 Jul
- 2024 11:43:20 +0200 (CEST)
-Received: from junon.lan.kalrayinc.com (unknown [192.168.37.161]) by
- srvsmtp.lin.mbt.kalray.eu (Postfix) with ESMTPS id 2F44740317; Mon, 22 Jul
- 2024 11:43:20 +0200 (CEST)
-X-Secumail-id: <ae72.669e29b8.619e8.0>
-From: ysionneau@kalrayinc.com
-To: linux-kernel@vger.kernel.org, Paul Moore <paul@paul-moore.com>, Eric
- Paris <eparis@redhat.com>, Eric Biederman <ebiederm@xmission.com>, Kees Cook
- <kees@kernel.org>
-Cc: Jonathan Borne <jborne@kalrayinc.com>, Julian Vetter
- <jvetter@kalrayinc.com>, Yann Sionneau <ysionneau@kalrayinc.com>, Clement
- Leger <clement@clement-leger.fr>, audit@vger.kernel.org, linux-mm@kvack.org
-Subject: [RFC PATCH v3 12/37] kvx: Add ELF-related definitions
-Date: Mon, 22 Jul 2024 11:41:23 +0200
-Message-ID: <20240722094226.21602-13-ysionneau@kalrayinc.com>
-X-Mailer: git-send-email 2.45.2
-In-Reply-To: <20240722094226.21602-1-ysionneau@kalrayinc.com>
-References: <20240722094226.21602-1-ysionneau@kalrayinc.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VFDa6P7F"
+Received: by mail-pg1-f170.google.com with SMTP id 41be03b00d2f7-7163489149eso2111136a12.1;
+        Sun, 28 Jul 2024 19:38:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1722220703; x=1722825503; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=BoXVnJDl1DBrc1Y4CS2cvJgm86xrff8Hli3dvn72knc=;
+        b=VFDa6P7F57uEm75p0d8D4fulDN+V/TQzCllmI8dP+UJYkEDvklDFvO+kzlKOduIvLi
+         QklIeiJVjaZvW2K//oOhNQkZ0EBHrrJ0QSI8kjGJmvpUcuOWnPW6ACpxf+h5K2XxOhZ1
+         0NByg1pwfQZwZkj9SHoboaXEIHBYfGLTfdPSLai/L/iGscFLvJ8G9FLOCukmhxtdpiNL
+         CBhrQd3GwVHRKH3cmjHV84sTaVLWapMEzRjDK5eG72SZHF9+IH3Bew9sQL6x9xcCIL7h
+         aWRQsty5yH5nQJTclmMR/o6DJNxQnWn/9RLe7UZ2cWfWJ6SIY1FPpBsC73/7pDa9SVn2
+         7Ggw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1722220703; x=1722825503;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=BoXVnJDl1DBrc1Y4CS2cvJgm86xrff8Hli3dvn72knc=;
+        b=NwlZ5ZbYI7LGqq44sP6zW0JVy63oLP2dPpailVPvcNkXbfsy6aWfXeAdAvIZe90v3j
+         6f6faaoA3mADOUW/dArXgObXdNdFiRc919m36poBcmZTuvmzIlp5P3pbW5bvFapKIPGY
+         JGVfNiWVj30wGFBfDSqnAhgluIOjk9f9pb5TJhxFVPuyZoMuXs4BoKBlWVeavPMbCSoJ
+         wWjL4S6PpggTTR8erLxFWZJejbXr6q/NkvJjHZr7TBRMj8FP9GMSt+LJMA6wEDFTqulN
+         5TZpmlOiDm4O6lD/vcH1PkZvvTDqboGZVyasb5boJ9WeGRidVDkUkRAcokdJdHx05Ujz
+         DZ/g==
+X-Forwarded-Encrypted: i=1; AJvYcCVOFBbsz+ncTdQ96HEnlJdf8GQpVMWH0fCly6YT6GAD0AJmDiaPtGxNiPNgnPS0nHKs/23SjvwsqetrZc8mnCKJXg983Qbrp/WJnzc6DfI+FlvqjIFa3p3MVn/dO9rQJJxRrukvaIMdosk15O2snlR100XYynvrF3s+zHlWA4zzQUCb7+zDfHwBbUQ8YfBxhQJYa2KPy+4bQ/ceGv+PC9y10RFxIHPQHPjuvPz12xEnYXlo/FgwQ/XVNWlPRIJjyi+J7qwcp5r6gRudGGjxZbUswGHDlgmaEPjAJjGTIF9tMDlZruLsa0EDby5SXsX8BzV0CTQ44Q==
+X-Gm-Message-State: AOJu0Yxi1jAPRWGCNYR33YxRkaLxW1KWXzySC9C3G+0rYvjGzHm02zpj
+	IIGgT2B8VMqq7jOVUvuUeqZK5wH0fOuECvRsDXYX6+o1OUIP6GX/padO1IQlskUZ3w==
+X-Google-Smtp-Source: AGHT+IHeVJuzyb2EwGW+50qWRtjvsFUnfcwe8AV+hJIj0aUlJNPkNbWdN0SRhTofBR2ODO0UIaMdgg==
+X-Received: by 2002:a17:90b:384d:b0:2c9:7f3d:6aea with SMTP id 98e67ed59e1d1-2cf7e5f4b7cmr7481617a91.32.1722220702568;
+        Sun, 28 Jul 2024 19:38:22 -0700 (PDT)
+Received: from localhost.localdomain ([223.104.210.31])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2cf28c55a38sm7332247a91.10.2024.07.28.19.37.59
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Sun, 28 Jul 2024 19:38:22 -0700 (PDT)
+From: Yafang Shao <laoar.shao@gmail.com>
+To: akpm@linux-foundation.org
+Cc: torvalds@linux-foundation.org,
+	ebiederm@xmission.com,
+	alexei.starovoitov@gmail.com,
+	rostedt@goodmis.org,
+	catalin.marinas@arm.com,
+	penguin-kernel@i-love.sakura.ne.jp,
+	linux-mm@kvack.org,
+	linux-fsdevel@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org,
+	audit@vger.kernel.org,
+	linux-security-module@vger.kernel.org,
+	selinux@vger.kernel.org,
+	bpf@vger.kernel.org,
+	netdev@vger.kernel.org,
+	dri-devel@lists.freedesktop.org,
+	Yafang Shao <laoar.shao@gmail.com>
+Subject: [PATCH resend v4 00/11] Improve the copy of task comm
+Date: Mon, 29 Jul 2024 10:37:08 +0800
+Message-Id: <20240729023719.1933-1-laoar.shao@gmail.com>
+X-Mailer: git-send-email 2.30.1 (Apple Git-130)
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
@@ -55,68 +79,79 @@ List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset=utf-8
-X-ALTERMIMEV2_out: done
 
-From: Yann Sionneau <ysionneau@kalrayinc.com>
+Hello Andrew,
 
-Add ELF-related definitions for kvx, including: EM_KVX, AUDIT_ARCH_KVX
-and NT_KVX_TCA.
+Is it appropriate for you to apply this to the mm tree?
 
-Co-developed-by: Clement Leger <clement@clement-leger.fr>
-Signed-off-by: Clement Leger <clement@clement-leger.fr>
-Signed-off-by: Yann Sionneau <ysionneau@kalrayinc.com>
----
+Using {memcpy,strncpy,strcpy,kstrdup} to copy the task comm relies on the
+length of task comm. Changes in the task comm could result in a destination
+string that is overflow. Therefore, we should explicitly ensure the destination
+string is always NUL-terminated, regardless of the task comm. This approach
+will facilitate future extensions to the task comm.
 
-Notes:
+As suggested by Linus [0], we can identify all relevant code with the
+following git grep command:
 
-V2 -> V3: update NT_KVX_TCA register set number macro
----
- include/uapi/linux/audit.h  | 1 +
- include/uapi/linux/elf-em.h | 1 +
- include/uapi/linux/elf.h    | 1 +
- 3 files changed, 3 insertions(+)
+  git grep 'memcpy.*->comm\>'
+  git grep 'kstrdup.*->comm\>'
+  git grep 'strncpy.*->comm\>'
+  git grep 'strcpy.*->comm\>'
 
-diff --git a/include/uapi/linux/audit.h b/include/uapi/linux/audit.h
-index d676ed2b246ec..4db7aa3f84c70 100644
---- a/include/uapi/linux/audit.h
-+++ b/include/uapi/linux/audit.h
-@@ -402,6 +402,7 @@ enum {
- #define AUDIT_ARCH_HEXAGON	(EM_HEXAGON)
- #define AUDIT_ARCH_I386		(EM_386|__AUDIT_ARCH_LE)
- #define AUDIT_ARCH_IA64		(EM_IA_64|__AUDIT_ARCH_64BIT|__AUDIT_ARCH_LE)
-+#define AUDIT_ARCH_KVX		(EM_KVX|__AUDIT_ARCH_64BIT|__AUDIT_ARCH_LE)
- #define AUDIT_ARCH_M32R		(EM_M32R)
- #define AUDIT_ARCH_M68K		(EM_68K)
- #define AUDIT_ARCH_MICROBLAZE	(EM_MICROBLAZE)
-diff --git a/include/uapi/linux/elf-em.h b/include/uapi/linux/elf-em.h
-index ef38c2bc5ab7a..9cc348be7f860 100644
---- a/include/uapi/linux/elf-em.h
-+++ b/include/uapi/linux/elf-em.h
-@@ -51,6 +51,7 @@
- #define EM_RISCV	243	/* RISC-V */
- #define EM_BPF		247	/* Linux BPF - in-kernel virtual machine */
- #define EM_CSKY		252	/* C-SKY */
-+#define EM_KVX		256	/* Kalray VLIW Architecture */
- #define EM_LOONGARCH	258	/* LoongArch */
- #define EM_FRV		0x5441	/* Fujitsu FR-V */
- 
-diff --git a/include/uapi/linux/elf.h b/include/uapi/linux/elf.h
-index b54b313bcf073..2d4885f2e4995 100644
---- a/include/uapi/linux/elf.h
-+++ b/include/uapi/linux/elf.h
-@@ -448,6 +448,7 @@ typedef struct elf64_shdr {
- #define NT_MIPS_MSA	0x802		/* MIPS SIMD registers */
- #define NT_RISCV_CSR	0x900		/* RISC-V Control and Status Registers */
- #define NT_RISCV_VECTOR	0x901		/* RISC-V vector registers */
-+#define NT_KVX_TCA		0x902	/* kvx TCA registers */
- #define NT_LOONGARCH_CPUCFG	0xa00	/* LoongArch CPU config registers */
- #define NT_LOONGARCH_CSR	0xa01	/* LoongArch control and status registers */
- #define NT_LOONGARCH_LSX	0xa02	/* LoongArch Loongson SIMD Extension registers */
+PATCH #2~#4:   memcpy
+PATCH #5~#6:   kstrdup
+PATCH #7~#9:   strncpy
+PATCH #10~#11: strcpy
+
+Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
+Link: https://lore.kernel.org/all/CAHk-=wjAmmHUg6vho1KjzQi2=psR30+CogFd4aXrThr2gsiS4g@mail.gmail.com/ [0]
+
+Changes:
+v3->v4:
+- Rename __kstrndup() to __kmemdup_nul() and define it inside mm/util.c
+  (Matthew)
+- Remove unused local varaible (Simon)
+
+v2->v3: https://lore.kernel.org/all/20240621022959.9124-1-laoar.shao@gmail.com/
+- Deduplicate code around kstrdup (Andrew)
+- Add commit log for dropping task_lock (Catalin)
+
+v1->v2: https://lore.kernel.org/bpf/20240613023044.45873-1-laoar.shao@gmail.com/
+- Add comment for dropping task_lock() in __get_task_comm() (Alexei)
+- Drop changes in trace event (Steven)
+- Fix comment on task comm (Matus)
+
+v1: https://lore.kernel.org/all/20240602023754.25443-1-laoar.shao@gmail.com/
+
+Yafang Shao (11):
+  fs/exec: Drop task_lock() inside __get_task_comm()
+  auditsc: Replace memcpy() with __get_task_comm()
+  security: Replace memcpy() with __get_task_comm()
+  bpftool: Ensure task comm is always NUL-terminated
+  mm/util: Fix possible race condition in kstrdup()
+  mm/util: Deduplicate code in {kstrdup,kstrndup,kmemdup_nul}
+  mm/kmemleak: Replace strncpy() with __get_task_comm()
+  tsacct: Replace strncpy() with __get_task_comm()
+  tracing: Replace strncpy() with __get_task_comm()
+  net: Replace strcpy() with __get_task_comm()
+  drm: Replace strcpy() with __get_task_comm()
+
+ drivers/gpu/drm/drm_framebuffer.c     |  2 +-
+ drivers/gpu/drm/i915/i915_gpu_error.c |  2 +-
+ fs/exec.c                             | 10 ++++-
+ include/linux/sched.h                 |  4 +-
+ kernel/auditsc.c                      |  6 +--
+ kernel/trace/trace.c                  |  2 +-
+ kernel/trace/trace_events_hist.c      |  2 +-
+ kernel/tsacct.c                       |  2 +-
+ mm/kmemleak.c                         |  8 +---
+ mm/util.c                             | 61 ++++++++++++---------------
+ net/ipv6/ndisc.c                      |  2 +-
+ security/lsm_audit.c                  |  4 +-
+ security/selinux/selinuxfs.c          |  2 +-
+ tools/bpf/bpftool/pids.c              |  2 +
+ 14 files changed, 51 insertions(+), 58 deletions(-)
+
 -- 
-2.45.2
-
-
-
-
+2.43.5
 
