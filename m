@@ -1,28 +1,28 @@
 Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 88B6A14C5AF;
-	Sat,  3 Aug 2024 06:08:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F04B614D42C;
+	Sat,  3 Aug 2024 06:08:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722665333; cv=none; b=G1O3u1IXKqQ1jpBnhl1FtNO8PDL/OsXnLGs9pwa0wh9BHWY4NkH5RcLOgvjOsJScdmfD0Z73orMjqzUX48LC1UBzAUH5qgnCedYeftid1o3nnVZX9mXDi42QOBcR781VESDPIZ7z4+0otoil4ffti9DE4t30ttRtklBxbT1RWEw=
+	t=1722665333; cv=none; b=lQip0qAucYJDKr8qQmCbTKOu4Z0zK0ApVEYxXhuSavd7a/cCbixJe5jDTr+ABIMkQLkeHoqJiQyj4Z2liVreZ9SMcJlZKXfJusIrRFXWX8eM5csNKExenoSFJUp2rMt+InEq5387RuHqiKaAr1T7hw4BnOfetQDXl6eWyuT8NFo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1722665333; c=relaxed/simple;
-	bh=SpeLY3QYrPLbzOwA/B5BeJ6wXSFfjK03mPw9BBljPGY=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=V8kXOyVXXSgNX972HQFjrd33x3aoawO3+0LXKMJXUVvxq0ouJXRjVRmqwj+U7zrHmU1KPe4vqYlm7KSOfX1mOxIZWhf+KN14dFEHFsAolnXRZJVza9kxlAoUEMHKfrBQNfPsW5ND/4d45vGItLS+to2p41HbDIulw5g8hvoF/14=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=H6+LA1ib; arc=none smtp.client-ip=13.77.154.182
+	bh=7QztnXwRSzRr88tWV5PfygBqpyIgcNonx1RhTfs4giU=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=umlRZd1pB0v+42yQwttiIFul7SSYQwIabIphqmq+rfP4mYUFZgaxyijXnS3o6cSNihMU0Z1oXikv/vVz2LsGvgp0eKhbkd+nthSLUD8nGrOkfBgCEYhoQYtXRbjOpBol835oT07qUuFCh7eFQvOJl5jYCHerlD+gE+nVeOuOqiY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=LgcBnyZh; arc=none smtp.client-ip=13.77.154.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="H6+LA1ib"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="LgcBnyZh"
 Received: by linux.microsoft.com (Postfix, from userid 1052)
-	id BFCC620B7404; Fri,  2 Aug 2024 23:08:40 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com BFCC620B7404
+	id 12F5920B740E; Fri,  2 Aug 2024 23:08:40 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 12F5920B740E
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1722665320;
-	bh=8NsYu1UcYZC/kqgFfh+6cO5zyAqSfnlh5D0qwSaBrTc=;
+	s=default; t=1722665321;
+	bh=GEIpoTRAg18sP+I6UfHBKEeQVhMJnk8VaFynJSgz9F4=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=H6+LA1ibEcYHuI7CB+EFnwO7WyrnzaFex41pjRy+d1zLez+EJMIjXHqdrwKEhe8lI
-	 HIUNJblsQ6ATFqs1qaivqaK3GiO2BzEme7CEecs2lhdMUmQ/Uh6NR/2DWc7CwOgiDJ
-	 OdYdeJVH/VlLuB8FNXmv4XOmw0i6/e1bqZOdWxIQ=
+	b=LgcBnyZhTdXTybUINU88EPDWMp43uyK4afEhJMWaDP+jxhyELVqk7HhWLX+Ii4nX9
+	 tf8C6BdInCyM8XJzumIH4SbE1a55ILsMMMUMQjs/6NYIzT7N6ftMlSLSnDv5h2hOow
+	 bbcu+kJ4JqMAQE9ynZyai/QkN0XoSWSsSyopxa2Y=
 From: Fan Wu <wufan@linux.microsoft.com>
 To: corbet@lwn.net,
 	zohar@linux.ibm.com,
@@ -46,9 +46,9 @@ Cc: linux-doc@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Deven Bowers <deven.desai@linux.microsoft.com>,
 	Fan Wu <wufan@linux.microsoft.com>
-Subject: [PATCH v20 12/20] dm verity: expose root hash digest and signature data to LSMs
-Date: Fri,  2 Aug 2024 23:08:26 -0700
-Message-Id: <1722665314-21156-13-git-send-email-wufan@linux.microsoft.com>
+Subject: [PATCH v20 17/20] scripts: add boot policy generation program
+Date: Fri,  2 Aug 2024 23:08:31 -0700
+Message-Id: <1722665314-21156-18-git-send-email-wufan@linux.microsoft.com>
 X-Mailer: git-send-email 1.8.3.1
 In-Reply-To: <1722665314-21156-1-git-send-email-wufan@linux.microsoft.com>
 References: <1722665314-21156-1-git-send-email-wufan@linux.microsoft.com>
@@ -60,81 +60,49 @@ List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 
 From: Deven Bowers <deven.desai@linux.microsoft.com>
 
-dm-verity provides a strong guarantee of a block device's integrity. As
-a generic way to check the integrity of a block device, it provides
-those integrity guarantees to its higher layers, including the filesystem
-level.
-
-However, critical security metadata like the dm-verity roothash and its
-signing information are not easily accessible to the LSMs.
-To address this limitation, this patch introduces a mechanism to store
-and manage these essential security details within a newly added LSM blob
-in the block_device structure.
-
-This addition allows LSMs to make access control decisions on the integrity
-data stored within the block_device, enabling more flexible security
-policies. For instance, LSMs can now revoke access to dm-verity devices
-based on their roothashes, ensuring that only authorized and verified
-content is accessible. Additionally, LSMs can enforce policies to only
-allow files from dm-verity devices that have a valid digital signature to
-execute, effectively blocking any unsigned files from execution, thus
-enhancing security against unauthorized modifications.
-
-The patch includes new hook calls, `security_bdev_setintegrity()`, in
-dm-verity to expose the dm-verity roothash and the roothash signature to
-LSMs via preresume() callback. By using the preresume() callback, it
-ensures that the security metadata is consistently in sync with the
-metadata of the dm-verity target in the current active mapping table.
-The hook calls are depended on CONFIG_SECURITY.
+Enables an IPE policy to be enforced from kernel start, enabling access
+control based on trust from kernel startup. This is accomplished by
+transforming an IPE policy indicated by CONFIG_IPE_BOOT_POLICY into a
+c-string literal that is parsed at kernel startup as an unsigned policy.
 
 Signed-off-by: Deven Bowers <deven.desai@linux.microsoft.com>
 Signed-off-by: Fan Wu <wufan@linux.microsoft.com>
+
 ---
 v2:
   + No Changes
 
 v3:
-  + No changes
+  + No Changes
 
 v4:
-  + No changes
+  + No Changes
 
 v5:
-  + No changes
+  + No Changes
 
 v6:
-  + Fix an improper cleanup that can result in
-    a leak
+  + No Changes
 
 v7:
-  + Squash patch 08/12, 10/12 to [11/16]
-  + Use part0 for block_device, to retrieve the block_device, when
-    calling security_bdev_setsecurity
+  + Move from 01/11 to 14/16
+  + Don't return errno directly.
+  + Make output of script more user-friendly
+  + Add escaping for tab and '?'
+  + Mark argv pointer const
+  + Invert return code check in the boot policy parsing code path.
 
 v8:
-  + Undo squash of 08/12, 10/12 - separating drivers/md/ from
-    security/ & block/
-  + Use common-audit function for dmverity_signature.
-  + Change implementation for storing the dm-verity digest to use the
-    newly introduced dm_verity_digest structure introduced in patch
-    14/20.
-  + Create new structure, dm_verity_digest, containing digest algorithm,
-    size, and digest itself to pass to the LSM layer. V7 was missing the
-    algorithm.
-  + Create an associated public header containing this new structure and
-    the key values for the LSM hook, specific to dm-verity.
-  + Additional information added to commit, discussing the layering of
-    the changes and how the information passed will be used.
+  + No significant changes.
 
 v9:
   + No changes
 
 v10:
-  + No changes
+  + Update the init part code for rcu changes in the eval loop patch
 
 v11:
-  + Add an optional field to save signature
-  + Move the security hook call to the new finalize hook
+  + Fix code style issues
 
 v12:
   + No changes
@@ -143,254 +111,349 @@ v13:
   + No changes
 
 v14:
-  + Correct code format
-  + Remove unnecessary header and switch to dm_disk()
+  + No changes
 
 v15:
-  + Refactor security_bdev_setsecurity() to security_bdev_setintegrity()
-  + Remove unnecessary headers
+  + Fix one grammar issue in Kconfig
 
 v16:
-  + Use kmemdup to duplicate signature
-  + Clean up lsm blob data in error case
+  + No changes
 
 v17:
-  + Switch to depend on CONFIG_SECURITY
-  + Use new enum name LSM_INT_DMVERITY_SIG_VALID
+  + Add years to license header
+  + Fix code and documentation style issues
 
 v18:
-  + Amend commit title
-  + Fix incorrect error handling
-  + Make signature exposure depends on CONFIG_DM_VERITY_VERIFY_ROOTHASH_SIG
-  + Fix inaccurate comment
-  + Remove include/linux/dm-verity.h
-  + use crypto_ahash_alg_name(v->tfm) instead of v->alg_name
+  + No changes
 
 v19:
-  + Drop finalize callback and switch to preresume callback
-  + Adding NULL check to avoid kmemdup when sig is NULL
+  + No changes
 
 v20:
-  + Adding more documentation regarding the new setintegrity hook call
-  + Update the code for getting hash algorithm from either v->ahash_tfm
-    or v->shash_tfm
+  + Change boot policy file name to boot_policy.c
 ---
- drivers/md/dm-verity-target.c | 118 ++++++++++++++++++++++++++++++++++
- drivers/md/dm-verity.h        |   6 ++
- include/linux/security.h      |   9 ++-
- 3 files changed, 132 insertions(+), 1 deletion(-)
+ scripts/Makefile              |   1 +
+ scripts/ipe/Makefile          |   2 +
+ scripts/ipe/polgen/.gitignore |   2 +
+ scripts/ipe/polgen/Makefile   |   5 ++
+ scripts/ipe/polgen/polgen.c   | 145 ++++++++++++++++++++++++++++++++++
+ security/ipe/.gitignore       |   2 +
+ security/ipe/Kconfig          |  10 +++
+ security/ipe/Makefile         |  11 +++
+ security/ipe/fs.c             |   8 ++
+ security/ipe/ipe.c            |  12 +++
+ 10 files changed, 198 insertions(+)
+ create mode 100644 scripts/ipe/Makefile
+ create mode 100644 scripts/ipe/polgen/.gitignore
+ create mode 100644 scripts/ipe/polgen/Makefile
+ create mode 100644 scripts/ipe/polgen/polgen.c
+ create mode 100644 security/ipe/.gitignore
 
-diff --git a/drivers/md/dm-verity-target.c b/drivers/md/dm-verity-target.c
-index cf659c8feb29..24ba9a10444c 100644
---- a/drivers/md/dm-verity-target.c
-+++ b/drivers/md/dm-verity-target.c
-@@ -22,6 +22,7 @@
- #include <linux/scatterlist.h>
- #include <linux/string.h>
- #include <linux/jump_label.h>
-+#include <linux/security.h>
+diff --git a/scripts/Makefile b/scripts/Makefile
+index dccef663ca82..6bcda4b9d054 100644
+--- a/scripts/Makefile
++++ b/scripts/Makefile
+@@ -55,6 +55,7 @@ targets += module.lds
+ subdir-$(CONFIG_GCC_PLUGINS) += gcc-plugins
+ subdir-$(CONFIG_MODVERSIONS) += genksyms
+ subdir-$(CONFIG_SECURITY_SELINUX) += selinux
++subdir-$(CONFIG_SECURITY_IPE) += ipe
  
- #define DM_MSG_PREFIX			"verity"
- 
-@@ -930,6 +931,41 @@ static void verity_io_hints(struct dm_target *ti, struct queue_limits *limits)
- 	limits->dma_alignment = limits->logical_block_size - 1;
- }
- 
-+#ifdef CONFIG_SECURITY
+ # Let clean descend into subdirs
+ subdir-	+= basic dtc gdb kconfig mod
+diff --git a/scripts/ipe/Makefile b/scripts/ipe/Makefile
+new file mode 100644
+index 000000000000..e87553fbb8d6
+--- /dev/null
++++ b/scripts/ipe/Makefile
+@@ -0,0 +1,2 @@
++# SPDX-License-Identifier: GPL-2.0-only
++subdir-y := polgen
+diff --git a/scripts/ipe/polgen/.gitignore b/scripts/ipe/polgen/.gitignore
+new file mode 100644
+index 000000000000..b6f05cf3dc0e
+--- /dev/null
++++ b/scripts/ipe/polgen/.gitignore
+@@ -0,0 +1,2 @@
++# SPDX-License-Identifier: GPL-2.0-only
++polgen
+diff --git a/scripts/ipe/polgen/Makefile b/scripts/ipe/polgen/Makefile
+new file mode 100644
+index 000000000000..c20456a2f2e9
+--- /dev/null
++++ b/scripts/ipe/polgen/Makefile
+@@ -0,0 +1,5 @@
++# SPDX-License-Identifier: GPL-2.0
++hostprogs-always-y	:= polgen
++HOST_EXTRACFLAGS += \
++	-I$(srctree)/include \
++	-I$(srctree)/include/uapi \
+diff --git a/scripts/ipe/polgen/polgen.c b/scripts/ipe/polgen/polgen.c
+new file mode 100644
+index 000000000000..c6283b3ff006
+--- /dev/null
++++ b/scripts/ipe/polgen/polgen.c
+@@ -0,0 +1,145 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (C) 2020-2024 Microsoft Corporation. All rights reserved.
++ */
 +
-+static int verity_init_sig(struct dm_verity *v, const void *sig,
-+			   size_t sig_size)
++#include <stdlib.h>
++#include <stddef.h>
++#include <stdio.h>
++#include <unistd.h>
++#include <errno.h>
++
++static void usage(const char *const name)
 +{
-+	v->sig_size = sig_size;
++	printf("Usage: %s OutputFile (PolicyFile)\n", name);
++	exit(EINVAL);
++}
 +
-+	if (sig) {
-+		v->root_digest_sig = kmemdup(sig, v->sig_size, GFP_KERNEL);
-+		if (!v->root_digest_sig)
-+			return -ENOMEM;
++static int policy_to_buffer(const char *pathname, char **buffer, size_t *size)
++{
++	size_t fsize;
++	size_t read;
++	char *lbuf;
++	int rc = 0;
++	FILE *fd;
++
++	fd = fopen(pathname, "r");
++	if (!fd) {
++		rc = errno;
++		goto out;
 +	}
 +
++	fseek(fd, 0, SEEK_END);
++	fsize = ftell(fd);
++	rewind(fd);
++
++	lbuf = malloc(fsize);
++	if (!lbuf) {
++		rc = ENOMEM;
++		goto out_close;
++	}
++
++	read = fread((void *)lbuf, sizeof(*lbuf), fsize, fd);
++	if (read != fsize) {
++		rc = -1;
++		goto out_free;
++	}
++
++	*buffer = lbuf;
++	*size = fsize;
++	fclose(fd);
++
++	return rc;
++
++out_free:
++	free(lbuf);
++out_close:
++	fclose(fd);
++out:
++	return rc;
++}
++
++static int write_boot_policy(const char *pathname, const char *buf, size_t size)
++{
++	int rc = 0;
++	FILE *fd;
++	size_t i;
++
++	fd = fopen(pathname, "w");
++	if (!fd) {
++		rc = errno;
++		goto err;
++	}
++
++	fprintf(fd, "/* This file is automatically generated.");
++	fprintf(fd, " Do not edit. */\n");
++	fprintf(fd, "#include <linux/stddef.h>\n");
++	fprintf(fd, "\nextern const char *const ipe_boot_policy;\n\n");
++	fprintf(fd, "const char *const ipe_boot_policy =\n");
++
++	if (!buf || size == 0) {
++		fprintf(fd, "\tNULL;\n");
++		fclose(fd);
++		return 0;
++	}
++
++	fprintf(fd, "\t\"");
++
++	for (i = 0; i < size; ++i) {
++		switch (buf[i]) {
++		case '"':
++			fprintf(fd, "\\\"");
++			break;
++		case '\'':
++			fprintf(fd, "'");
++			break;
++		case '\n':
++			fprintf(fd, "\\n\"\n\t\"");
++			break;
++		case '\\':
++			fprintf(fd, "\\\\");
++			break;
++		case '\t':
++			fprintf(fd, "\\t");
++			break;
++		case '\?':
++			fprintf(fd, "\\?");
++			break;
++		default:
++			fprintf(fd, "%c", buf[i]);
++		}
++	}
++	fprintf(fd, "\";\n");
++	fclose(fd);
++
 +	return 0;
++
++err:
++	if (fd)
++		fclose(fd);
++	return rc;
 +}
 +
-+static void verity_free_sig(struct dm_verity *v)
++int main(int argc, const char *const argv[])
 +{
-+	kfree(v->root_digest_sig);
++	char *policy = NULL;
++	size_t len = 0;
++	int rc = 0;
++
++	if (argc < 2)
++		usage(argv[0]);
++
++	if (argc > 2) {
++		rc = policy_to_buffer(argv[2], &policy, &len);
++		if (rc != 0)
++			goto cleanup;
++	}
++
++	rc = write_boot_policy(argv[1], policy, len);
++cleanup:
++	if (policy)
++		free(policy);
++	if (rc != 0)
++		perror("An error occurred during policy conversion: ");
++	return rc;
 +}
+diff --git a/security/ipe/.gitignore b/security/ipe/.gitignore
+new file mode 100644
+index 000000000000..6e9939be1cb7
+--- /dev/null
++++ b/security/ipe/.gitignore
+@@ -0,0 +1,2 @@
++# SPDX-License-Identifier: GPL-2.0-only
++boot_policy.c
+diff --git a/security/ipe/Kconfig b/security/ipe/Kconfig
+index 6bc487b689e0..fccc69e66af1 100644
+--- a/security/ipe/Kconfig
++++ b/security/ipe/Kconfig
+@@ -21,6 +21,16 @@ menuconfig SECURITY_IPE
+ 	  If unsure, answer N.
+ 
+ if SECURITY_IPE
++config IPE_BOOT_POLICY
++	string "Integrity policy to apply on system startup"
++	help
++	  This option specifies a filepath to an IPE policy that is compiled
++	  into the kernel. This policy will be enforced until a policy update
++	  is deployed via the $securityfs/ipe/policies/$policy_name/active
++	  interface.
 +
-+#else
++	  If unsure, leave blank.
 +
-+static inline int verity_init_sig(struct dm_verity *v, const void *sig,
-+				  size_t sig_size)
-+{
-+	return 0;
-+}
+ menu "IPE Trust Providers"
+ 
+ config IPE_PROP_DM_VERITY
+diff --git a/security/ipe/Makefile b/security/ipe/Makefile
+index e1019bb9f0f3..70eea140306b 100644
+--- a/security/ipe/Makefile
++++ b/security/ipe/Makefile
+@@ -5,7 +5,16 @@
+ # Makefile for building the IPE module as part of the kernel tree.
+ #
+ 
++quiet_cmd_polgen = IPE_POL $(2)
++      cmd_polgen = scripts/ipe/polgen/polgen security/ipe/boot_policy.c $(2)
 +
-+static inline void verity_free_sig(struct dm_verity *v)
-+{
-+}
++targets += boot_policy.c
 +
-+#endif /* CONFIG_SECURITY */
++$(obj)/boot_policy.c: scripts/ipe/polgen/polgen $(CONFIG_IPE_BOOT_POLICY) FORCE
++	$(call if_changed,polgen,$(CONFIG_IPE_BOOT_POLICY))
 +
- static void verity_dtr(struct dm_target *ti)
+ obj-$(CONFIG_SECURITY_IPE) += \
++	boot_policy.o \
+ 	digest.o \
+ 	eval.o \
+ 	hooks.o \
+@@ -15,3 +24,5 @@ obj-$(CONFIG_SECURITY_IPE) += \
+ 	policy_fs.o \
+ 	policy_parser.o \
+ 	audit.o \
++
++clean-files := boot_policy.c \
+diff --git a/security/ipe/fs.c b/security/ipe/fs.c
+index b52fb6023904..5b6d19fb844a 100644
+--- a/security/ipe/fs.c
++++ b/security/ipe/fs.c
+@@ -190,6 +190,7 @@ static const struct file_operations enforce_fops = {
+ static int __init ipe_init_securityfs(void)
  {
- 	struct dm_verity *v = ti->private;
-@@ -949,6 +985,7 @@ static void verity_dtr(struct dm_target *ti)
- 	kfree(v->initial_hashstate);
- 	kfree(v->root_digest);
- 	kfree(v->zero_digest);
-+	verity_free_sig(v);
+ 	int rc = 0;
++	struct ipe_policy *ap;
  
- 	if (v->ahash_tfm) {
- 		static_branch_dec(&ahash_enabled);
-@@ -1418,6 +1455,13 @@ static int verity_ctr(struct dm_target *ti, unsigned int argc, char **argv)
- 		ti->error = "Root hash verification failed";
- 		goto bad;
+ 	if (!ipe_enabled)
+ 		return -EOPNOTSUPP;
+@@ -220,6 +221,13 @@ static int __init ipe_init_securityfs(void)
+ 		goto err;
  	}
-+
-+	r = verity_init_sig(v, verify_args.sig, verify_args.sig_size);
-+	if (r < 0) {
-+		ti->error = "Cannot allocate root digest signature";
-+		goto bad;
+ 
++	ap = rcu_access_pointer(ipe_active_policy);
++	if (ap) {
++		rc = ipe_new_policyfs_node(ap);
++		if (rc)
++			goto err;
 +	}
 +
- 	v->hash_per_block_bits =
- 		__fls((1 << v->hash_dev_block_bits) / v->digest_size);
+ 	np = securityfs_create_file("new_policy", 0200, root, NULL, &np_fops);
+ 	if (IS_ERR(np)) {
+ 		rc = PTR_ERR(np);
+diff --git a/security/ipe/ipe.c b/security/ipe/ipe.c
+index b410db0b486c..e19a18078cf3 100644
+--- a/security/ipe/ipe.c
++++ b/security/ipe/ipe.c
+@@ -9,6 +9,7 @@
+ #include "hooks.h"
+ #include "eval.h"
  
-@@ -1559,8 +1603,79 @@ int dm_verity_get_root_digest(struct dm_target *ti, u8 **root_digest, unsigned i
++extern const char *const ipe_boot_policy;
+ bool ipe_enabled;
+ 
+ static struct lsm_blob_sizes ipe_blobs __ro_after_init = {
+@@ -74,9 +75,20 @@ static struct security_hook_list ipe_hooks[] __ro_after_init = {
+  */
+ static int __init ipe_init(void)
+ {
++	struct ipe_policy *p = NULL;
++
+ 	security_add_hooks(ipe_hooks, ARRAY_SIZE(ipe_hooks), &ipe_lsmid);
+ 	ipe_enabled = true;
+ 
++	if (ipe_boot_policy) {
++		p = ipe_new_policy(ipe_boot_policy, strlen(ipe_boot_policy),
++				   NULL, 0);
++		if (IS_ERR(p))
++			return PTR_ERR(p);
++
++		rcu_assign_pointer(ipe_active_policy, p);
++	}
++
  	return 0;
  }
  
-+#ifdef CONFIG_SECURITY
-+
-+#ifdef CONFIG_DM_VERITY_VERIFY_ROOTHASH_SIG
-+
-+static int verity_security_set_signature(struct block_device *bdev,
-+					 struct dm_verity *v)
-+{
-+	/*
-+	 * if the dm-verity target is unsigned, v->root_digest_sig will
-+	 * be NULL, and the hook call is still required to let LSMs mark
-+	 * the device as unsigned. This information is crucial for LSMs to
-+	 * block operations such as execution on unsigned files
-+	 */
-+	return security_bdev_setintegrity(bdev,
-+					  LSM_INT_DMVERITY_SIG_VALID,
-+					  v->root_digest_sig,
-+					  v->sig_size);
-+}
-+
-+#else
-+
-+static inline int verity_security_set_signature(struct block_device *bdev,
-+						struct dm_verity *v)
-+{
-+	return 0;
-+}
-+
-+#endif /* CONFIG_DM_VERITY_VERIFY_ROOTHASH_SIG */
-+
-+/*
-+ * Expose verity target's root hash and signature data to LSMs before resume.
-+ *
-+ * Returns 0 on success, or -ENOMEM if the system is out of memory.
-+ */
-+static int verity_preresume(struct dm_target *ti)
-+{
-+	struct block_device *bdev;
-+	struct dm_verity_digest root_digest;
-+	struct dm_verity *v;
-+	int r;
-+
-+	v = ti->private;
-+	bdev = dm_disk(dm_table_get_md(ti->table))->part0;
-+	root_digest.digest = v->root_digest;
-+	root_digest.digest_len = v->digest_size;
-+	if (static_branch_unlikely(&ahash_enabled) && !v->shash_tfm)
-+		root_digest.alg = crypto_ahash_alg_name(v->ahash_tfm);
-+	else
-+		root_digest.alg = crypto_shash_alg_name(v->shash_tfm);
-+
-+	r = security_bdev_setintegrity(bdev, LSM_INT_DMVERITY_ROOTHASH, &root_digest,
-+				       sizeof(root_digest));
-+	if (r)
-+		return r;
-+
-+	r =  verity_security_set_signature(bdev, v);
-+	if (r)
-+		goto bad;
-+
-+	return 0;
-+
-+bad:
-+
-+	security_bdev_setintegrity(bdev, LSM_INT_DMVERITY_ROOTHASH, NULL, 0);
-+
-+	return r;
-+}
-+
-+#endif /* CONFIG_SECURITY */
-+
- static struct target_type verity_target = {
- 	.name		= "verity",
-+/* Note: the LSMs depend on the singleton and immutable features */
- 	.features	= DM_TARGET_SINGLETON | DM_TARGET_IMMUTABLE,
- 	.version	= {1, 10, 0},
- 	.module		= THIS_MODULE,
-@@ -1571,6 +1686,9 @@ static struct target_type verity_target = {
- 	.prepare_ioctl	= verity_prepare_ioctl,
- 	.iterate_devices = verity_iterate_devices,
- 	.io_hints	= verity_io_hints,
-+#ifdef CONFIG_SECURITY
-+	.preresume	= verity_preresume,
-+#endif /* CONFIG_SECURITY */
- };
- module_dm(verity);
- 
-diff --git a/drivers/md/dm-verity.h b/drivers/md/dm-verity.h
-index aac3a1b1d94a..ea2da450f173 100644
---- a/drivers/md/dm-verity.h
-+++ b/drivers/md/dm-verity.h
-@@ -45,6 +45,9 @@ struct dm_verity {
- 	u8 *salt;		/* salt: its size is salt_size */
- 	u8 *initial_hashstate;	/* salted initial state, if shash_tfm is set */
- 	u8 *zero_digest;	/* digest for a zero block */
-+#ifdef CONFIG_SECURITY
-+	u8 *root_digest_sig;	/* signature of the root digest */
-+#endif /* CONFIG_SECURITY */
- 	unsigned int salt_size;
- 	sector_t data_start;	/* data offset in 512-byte sectors */
- 	sector_t hash_start;	/* hash start in blocks */
-@@ -58,6 +61,9 @@ struct dm_verity {
- 	bool hash_failed:1;	/* set if hash of any block failed */
- 	bool use_bh_wq:1;	/* try to verify in BH wq before normal work-queue */
- 	unsigned int digest_size;	/* digest size for the current hash algorithm */
-+#ifdef CONFIG_SECURITY
-+	unsigned int sig_size;	/* root digest signature size */
-+#endif /* CONFIG_SECURITY */
- 	unsigned int hash_reqsize; /* the size of temporary space for crypto */
- 	enum verity_mode mode;	/* mode for handling verification errors */
- 	unsigned int corrupted_errs;/* Number of errors for corrupted blocks */
-diff --git a/include/linux/security.h b/include/linux/security.h
-index 39aec1c96d6a..0604893f2f9e 100644
---- a/include/linux/security.h
-+++ b/include/linux/security.h
-@@ -83,8 +83,15 @@ enum lsm_event {
- 	LSM_POLICY_CHANGE,
- };
- 
-+struct dm_verity_digest {
-+	const char *alg;
-+	const u8 *digest;
-+	size_t digest_len;
-+};
-+
- enum lsm_integrity_type {
--	__LSM_INT_MAX
-+	LSM_INT_DMVERITY_SIG_VALID,
-+	LSM_INT_DMVERITY_ROOTHASH,
- };
- 
- /*
 -- 
 2.44.0
 
