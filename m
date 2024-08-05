@@ -1,85 +1,117 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B6061D540;
-	Mon,  5 Aug 2024 18:51:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 150F416DC13
+	for <audit@vger.kernel.org>; Mon,  5 Aug 2024 21:28:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722883895; cv=none; b=rV6IlLO2tY6Me+jmagYzXgwDOmnyctXAEjm5Ln0EhKjB+JldjJubRjuIhIQh/3GHZQgBpCPGgEZ0ATRnWpbIds5uZX458UPK1GVaosCv7t2MTe0j1RJW1YoaE/OYPH4DHH010nRBZSp4MVwkz/FlEV7xPniq+qVInSfJagjr1oY=
+	t=1722893324; cv=none; b=a8Hee4MXH4Tk4/VG0tIcRYMMKKz9psIjq4eHRKDTc0pt+2cFlrtaQFK/tnCg0A1o/pwJdQiDkaVDRAd3hge9/yZvbbThkoMijEXQjiU0ldj0gEK/zEwve6Is5YdUg5TphMiu4F5bnOAfBt0kSzsZlF97Vt4V5HcRR+jdppoWYTQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722883895; c=relaxed/simple;
-	bh=uf8ILAskZN/4P/S4F7SKa3SGrBWodGKtmv2kZoh7MLg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AMsKY4XqP4toGx9mb03nqi6KmI/x0dlU076EHz7HoK4T9csZpZrFK/xIasHUaX1sUtJNMVb5JM2GErVDvunGba/p4ntmh0gi71cdJGXhigmdaTJjciD18Lz0a2o4ZXthrWW6GyW2RkcSAmiX87yMYUQYhaSvhi8YQOxl8lAw/+U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F3pyDbbA; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1722893324; c=relaxed/simple;
+	bh=CTTjcSVZh00GG8bK8bn079xIUwIcu3ks1xC9HUn/WHo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ZnX65Hnqii4fmT82UCO9erH1tMiKRsDk6FSI3nGZJ8vQwcmX9UutA/FXAQ1avKD1GkSBxcgCnYStzR4Tplt2o8Y6tTYONXQ/q+IClaHtb8UcZEuMK9MbuDeno7wWsGfBg8YjyV610agfeWceNUuJH6qgDARhY2/fQ7UD3i4fQX4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=Z3WL/weh; arc=none smtp.client-ip=209.85.167.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F3pyDbbA"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25914C32782;
-	Mon,  5 Aug 2024 18:51:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722883894;
-	bh=uf8ILAskZN/4P/S4F7SKa3SGrBWodGKtmv2kZoh7MLg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=F3pyDbbAzcvONmuquDw8PZ6flxoE46it5ePJVAuMwygCo/wGsmYpgJVJ7p9MzEJqD
-	 9ectkAhOEZoTUJz9r5RZ54q/pujI84cU6X4o3xzNRV4IGgUaRUgmwJJNrsBp7qoyPs
-	 RYtYLOXeyPac2aKqmsjr3M3MExOj8mVd4KC8mmd6Rhdx5KTd75sw3mlQ1vma60VRe6
-	 IJKXxmRXfMEvWGx9NpeG7XCIxv8XKud0y24Gs+GEQP30a1QLMTPE6vpcVCexMz+Frr
-	 71TZOsBY0fwczfFhAYylvjyHoCcCvIHjfrDun0Xl/r+rM0zxm5kqHEn2OHEGN/fIMA
-	 A9ZYjjwyFvq7Q==
-Date: Mon, 5 Aug 2024 11:51:32 -0700
-From: Eric Biggers <ebiggers@kernel.org>
-To: Fan Wu <wufan@linux.microsoft.com>
-Cc: corbet@lwn.net, zohar@linux.ibm.com, jmorris@namei.org,
-	serge@hallyn.com, tytso@mit.edu, axboe@kernel.dk, agk@redhat.com,
-	snitzer@kernel.org, mpatocka@redhat.com, eparis@redhat.com,
-	paul@paul-moore.com, linux-doc@vger.kernel.org,
-	linux-integrity@vger.kernel.org,
-	linux-security-module@vger.kernel.org, fsverity@lists.linux.dev,
-	linux-block@vger.kernel.org, dm-devel@lists.linux.dev,
-	audit@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Deven Bowers <deven.desai@linux.microsoft.com>
-Subject: Re: [PATCH v20 15/20] fsverity: expose verified fsverity built-in
- signatures to LSMs
-Message-ID: <20240805185132.GC1564@sol.localdomain>
-References: <1722665314-21156-1-git-send-email-wufan@linux.microsoft.com>
- <1722665314-21156-16-git-send-email-wufan@linux.microsoft.com>
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="Z3WL/weh"
+Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-52f0277daa5so17075566e87.0
+        for <audit@vger.kernel.org>; Mon, 05 Aug 2024 14:28:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1722893321; x=1723498121; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=4JmhoGoeqp0EkHzxnqjsByi1+fgV+qGizB/Udaf1KjI=;
+        b=Z3WL/wehUA5oHx3YiNUr8peqdqJXXgq+u0kf/MCKZGVY29llW5P9dlZLF8LCL+bnGe
+         OrxAmsczeLx2sKEdHBpzdD0FVhnhPnYYOFnTRAur5Sq6vFbyLYR1pspKrM36I7MnHaSq
+         opiT21XaeDREo7lFKx+kdwZ6CQlW4dBqbihzE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1722893321; x=1723498121;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4JmhoGoeqp0EkHzxnqjsByi1+fgV+qGizB/Udaf1KjI=;
+        b=HiNQve2+hi2hJRAxh8B+e6MvPRzMR6QxseReJJQ1yWSXIeRViwQbPTtmVPw2KhvpZj
+         yH9JA2vXQ2GvP+eJ3V0hUmUUVAAhBd0PmntuQCYAKYFqw0FQxaR6nGPteu7Mmcn6nCvy
+         7sdtOS+mN3gxlI0vjb8rvcqzyLCTlIlSk6qF/odGBj+V6LPvv/XaBCY3FOoWC0YN3kbn
+         pd24l+BACkvVr5OQ4FGl7b1uZvzIDRMNyjs/I3mSiKtbivdlP0zbNl7b/el8HXNNqE58
+         OmdRouWyhUSafHIq3usFcUNeugYb7NJsqvqm24NgKJHsqHmZj3Bd3wI+Nq79jmyTYfWM
+         c1Ng==
+X-Forwarded-Encrypted: i=1; AJvYcCUjeT3eyJg1TjtBE7GYwPPDHOpZB/4qPATvAUM4BMpS5pSxLWl/sVeHfRRAv6Fkz2TgA2E6Sim5urROPSqII0zogYV1tZU=
+X-Gm-Message-State: AOJu0YyOaG1iOsKKG7bPngdkal2hoZ3UJDLd1yCPbqPv4zVUNMrqz/Ap
+	ZXSnzbFLbP7wgpGVoXPl8Y3c2ZwYK2U3d+Gvs/mz7kRKf4wqdzenbw8ZxrYUfPGVObQj77XOgdu
+	hUZB9uw==
+X-Google-Smtp-Source: AGHT+IGfGIMTfhbX+a8b0LLo0+HAnh/wvQ1k06UK/9DXxWQTmlfM6WZGtpoZzqPkwYOiMnxNm+H+SQ==
+X-Received: by 2002:a05:6512:128e:b0:52c:d9b3:2b06 with SMTP id 2adb3069b0e04-530bb3b31damr8892703e87.58.1722893320924;
+        Mon, 05 Aug 2024 14:28:40 -0700 (PDT)
+Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com. [209.85.208.51])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a7dc9e83e50sm497431866b.172.2024.08.05.14.28.39
+        for <audit@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 05 Aug 2024 14:28:39 -0700 (PDT)
+Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-5a2a90243c9so12616763a12.0
+        for <audit@vger.kernel.org>; Mon, 05 Aug 2024 14:28:39 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCXdi1VNlTeWDdc+aTVx5OJPLLZmFwPTTf3XAAkk5nf1mWqbpfSMM7Tvwke8xfcH64PPh65xT17SMNDTCjlKiU8ENPG2bk8=
+X-Received: by 2002:aa7:df97:0:b0:5af:758a:6934 with SMTP id
+ 4fb4d7f45d1cf-5b7f0fc7f1amr8956337a12.0.1722893319128; Mon, 05 Aug 2024
+ 14:28:39 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1722665314-21156-16-git-send-email-wufan@linux.microsoft.com>
+References: <20240804075619.20804-1-laoar.shao@gmail.com>
+In-Reply-To: <20240804075619.20804-1-laoar.shao@gmail.com>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Mon, 5 Aug 2024 14:28:21 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whWtUC-AjmGJveAETKOMeMFSTwKwu99v7+b6AyHMmaDFA@mail.gmail.com>
+Message-ID: <CAHk-=whWtUC-AjmGJveAETKOMeMFSTwKwu99v7+b6AyHMmaDFA@mail.gmail.com>
+Subject: Re: [PATCH v5 0/9] Improve the copy of task comm
+To: Yafang Shao <laoar.shao@gmail.com>
+Cc: akpm@linux-foundation.org, ebiederm@xmission.com, 
+	alexei.starovoitov@gmail.com, rostedt@goodmis.org, catalin.marinas@arm.com, 
+	penguin-kernel@i-love.sakura.ne.jp, linux-mm@kvack.org, 
+	linux-fsdevel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	audit@vger.kernel.org, linux-security-module@vger.kernel.org, 
+	selinux@vger.kernel.org, bpf@vger.kernel.org, netdev@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Fri, Aug 02, 2024 at 11:08:29PM -0700, Fan Wu wrote:
-> This patch enhances fsverity's capabilities to support both integrity and
-> authenticity protection by introducing the exposure of built-in
-> signatures through a new LSM hook. This functionality allows LSMs,
-> e.g. IPE, to enforce policies based on the authenticity and integrity of
-> files, specifically focusing on built-in fsverity signatures. It enables
-> a policy enforcement layer within LSMs for fsverity, offering granular
-> control over the usage of authenticity claims. For instance, a policy
-> could be established to only permit the execution of all files with
-> verified built-in fsverity signatures.
-> 
-> The introduction of a security_inode_setintegrity() hook call within
-> fsverity's workflow ensures that the verified built-in signature of a file
-> is exposed to LSMs. This enables LSMs to recognize and label fsverity files
-> that contain a verified built-in fsverity signature. This hook is invoked
-> subsequent to the fsverity_verify_signature() process, guaranteeing the
-> signature's verification against fsverity's keyring. This mechanism is
-> crucial for maintaining system security, as it operates in kernel space,
-> effectively thwarting attempts by malicious binaries to bypass user space
-> stack interactions.
-> 
-> The second to last commit in this patch set will add a link to the IPE
-> documentation in fsverity.rst.
-> 
-> Signed-off-by: Deven Bowers <deven.desai@linux.microsoft.com>
-> Signed-off-by: Fan Wu <wufan@linux.microsoft.com>
+On Sun, 4 Aug 2024 at 00:56, Yafang Shao <laoar.shao@gmail.com> wrote:
+>
+> There is a BUILD_BUG_ON() inside get_task_comm(), so when you use
+> get_task_comm(), it implies that the BUILD_BUG_ON() is necessary.
 
-Acked-by: Eric Biggers <ebiggers@google.com>
+Let's just remove that silly BUILD_BUG_ON(). I don't think it adds any
+value, and honestly, it really only makes this patch-series uglier
+when reasonable uses suddenly pointlessly need that double-underscore
+version..
 
-- Eric
+So let's aim at
+
+ (a) documenting that the last byte in 'tsk->comm{}' is always
+guaranteed to be NUL, so that the thing can always just be treated as
+a string. Yes, it may change under us, but as long as we know there is
+always a stable NUL there *somewhere*, we really really don't care.
+
+ (b) removing __get_task_comm() entirely, and replacing it with a
+plain 'str*cpy*()' functions
+
+The whole (a) thing is a requirement anyway, since the *bulk* of
+tsk->comm really just seems to be various '%s' things in printk
+strings etc.
+
+And once we just admit that we can use the string functions, all the
+get_task_comm() stuff is just unnecessary.
+
+And yes, some people may want to use the strscpy_pad() function
+because they want to fill the whole destination buffer. But that's
+entirely about the *destination* use, not the tsk->comm[] source, so
+it has nothing to do with any kind of "get_task_comm()" logic, and it
+was always wrong to care about the buffer sizes magically matching.
+
+Hmm?
+
+                Linus
