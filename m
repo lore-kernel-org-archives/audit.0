@@ -1,194 +1,321 @@
-Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC3E115B109
-	for <audit@vger.kernel.org>; Thu,  8 Aug 2024 21:12:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.175
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D91015A85E;
+	Thu,  8 Aug 2024 22:38:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723151539; cv=none; b=lWnKv5VfMPkRKkrMCsQ7CNO/4FhtbCT05qC9zaIeIpgxNUqqIlOssjPTuQ6ie5moWyd0xVwvjvY9S1DF0saqD9U/y83J/IM6zgQgkF5wMdcY41st0xQSs0YEH8tKAIFl72PCU6l4yudoABPUWOyQO0YOYQcoFQQ1dhnB4PpTfTI=
+	t=1723156722; cv=none; b=DRjT26TMSRJLM1JBdTrzOUz+YTY9epqxIyW9ppS6d9Nd7vHSvjsMdF5NwrXpCUSkr54SnmAN8fZ8ThA1TogwzTXbk6g8htixehdt7aUOtI6EbpcDmAkNosDQ9RIUDgkYd9A5L+niMjnr9BCL1JJPTNDSDVFA/CxQE3S1rZvINyg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723151539; c=relaxed/simple;
-	bh=O+UVqcoHQqk/v26aJQY7cg5NLBWtOU+yxnENsZBLbBw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=athKg8GwlMvyZ/m0aylbrnZVhk/tIdyNahEvH2kUqMFQJB3OXKlPM5XeRIvM7xKt0GyLL7egLDJZL9m74rjiMR5Xm424AUspm21BvUHoIA9w3MdhbNTP7waUZkUfPwXTIz0prc2odwKoHlWTJQcM51DbdqdMqhgcYx3M2BXXNCw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=f18Au8cH; arc=none smtp.client-ip=209.85.128.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+	s=arc-20240116; t=1723156722; c=relaxed/simple;
+	bh=vZpsZCSq8m3vqkCqwtEtToVRyRwVVJuDvKSNYBexa4A=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=sFB/yHst0V54ktphl7ZkFHuzJzl7/OtQjy6a1yUkCzTiehnFi5YX4nrDxuxkQ7Sc9B+FFQNn4GhfZ7SZVNBgzAHENIhaUR3Q9BEXxqIzYvh7V8NjNxZ/uH2KZUOVmQGZmpTaTZwG3SSDUrg6A1ktRluQohQ57ueTy0FmsYw5bHc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=RKirm/xx; arc=none smtp.client-ip=13.77.154.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="f18Au8cH"
-Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-68d30057ae9so13205267b3.1
-        for <audit@vger.kernel.org>; Thu, 08 Aug 2024 14:12:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1723151537; x=1723756337; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5TVmurDZ09S8wToJn0zhvU/nJNzMoT0MyGdFWp7IEvY=;
-        b=f18Au8cHK8vkuvyT4vO3CU3J4H0e6dbg0zv4QxSfl17uRKXJNyXteoWTRjgetkpXTK
-         a8e9Y68XOE86ar2hY+MUEKCKibSUbMXHsA8sYcy7U7dIdIr2PhhqbGr2TjyhJ1vgCcec
-         SwOdO1Lhkq49LrMANzJcYaQj1f/sm3svBi8YXKw94wGq8Z331hxSsJLLzw+o1NWpbTtb
-         bmNhOi2Ct/E31GEB5CFJ4dXbqAjUuDGQutDYFoqXZ4O1i4GZXh0pFU5ONq7ku9rS0ly1
-         Qd+1/F6H5Gk1JkCHbpow25PBymD/Cg7Cq1YLySMM/YAyQChL8e7tQJlGShMxsR1kQ1Ez
-         U46g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723151537; x=1723756337;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5TVmurDZ09S8wToJn0zhvU/nJNzMoT0MyGdFWp7IEvY=;
-        b=vL+dybMh4PtxZZDvg5yuRipdg+mwICgYewbYRqPwRw60WT84gxUAqtDkV8q7Ig015M
-         UGUwj0VvD1/ezfXAibfoYPqBO6LXFEBnvsQR05+g7PGtajvmr8sLldwP+V1SgPYbAICC
-         aP2RPuBhbOQJO/TB6ZGBXXnTzkdjn5IXV0jXQee37p6xyhFP8WPjri3+aVqleKEWafs1
-         83YRXGf5/u06vXJYt/s4AMDMXoNzambKIDkcqj/a+oHozAZR5GHBTfI3FIVJgxNi/UUd
-         ptZ9z0XIR6PJ/+2/73Xig9qYekItNjenAYww7Ta0eYHi7GudXcJ3RmGUt+Za8jMkHFPl
-         98NQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWAHLOzvHMoWozIhl+Vngl2gwYzz0xEVkc/icilfxFlT8hstUF7nZ8FY99wZebqusNo1rsMm7p+3RWzgMrBklDHqvHuoAU=
-X-Gm-Message-State: AOJu0Yz/XAmAx2xJy48HZngaVLtLA/jSVYKuOjTE3wJWZg19aKoNXyzm
-	+PF1Wku/Hnc43aiyD5pY0ihZkVm7HbTaMsSakDk1xiVk2VHZLmGMWJYZXN3oad7MA9j4nSfg2sp
-	/8rgiYsu+D78hBBWLTu6XmOKnljorg+VfKzjX
-X-Google-Smtp-Source: AGHT+IFTPM6nWSmvE7FKoGAYxO2XaBlQV5+bjiWpCo8wSNYJn5sGxam/KrmJza+vfkACVNFh7nxdYhVFruYr16TUWgs=
-X-Received: by 2002:a05:690c:668e:b0:65c:2536:bea2 with SMTP id
- 00721157ae682-69bf81dda1amr37402877b3.19.1723151536654; Thu, 08 Aug 2024
- 14:12:16 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="RKirm/xx"
+Received: from [10.137.106.151] (unknown [131.107.174.23])
+	by linux.microsoft.com (Postfix) with ESMTPSA id 22ACA20B7165;
+	Thu,  8 Aug 2024 15:38:40 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 22ACA20B7165
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1723156720;
+	bh=yEDlBFY+f+khsxqRPGWjYMySWcnVDqiEKYWuZNRMm9g=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=RKirm/xxB+ARGZJYw79dlEwDWLHR2so6XHtk72RPoVvV7/Zik6Uqnl/w80Pes/b/Z
+	 jG8NWAe3CMJ0PE+1yx2+2jTFAivLABFSh21NLcwLtJAfsClg3scru+2FPmG7MNT0U/
+	 h86mIqeha/XcUfsC/XV7AnDTA+4R6bBy99vmeg48=
+Message-ID: <9dc30ca6-486c-4fa9-910d-ed1dc6da0e95@linux.microsoft.com>
+Date: Thu, 8 Aug 2024 15:38:39 -0700
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240806-openfast-v2-1-42da45981811@kernel.org>
- <20240807-erledigen-antworten-6219caebedc0@brauner> <d682e7c2749f8e8c74ea43b8893a17bd6e9a0007.camel@kernel.org>
- <20240808-karnickel-miteinander-d4fa6cd5f3c7@brauner> <20240808171130.5alxaa5qz3br6cde@quack3>
-In-Reply-To: <20240808171130.5alxaa5qz3br6cde@quack3>
-From: Paul Moore <paul@paul-moore.com>
-Date: Thu, 8 Aug 2024 17:12:05 -0400
-Message-ID: <CAHC9VhQ8h-a3HtRERGxAK77g6nw3fDzguFvwNkDcdbOYojQ6PQ@mail.gmail.com>
-Subject: Re: [PATCH v2] fs: try an opportunistic lookup for O_CREAT opens too
-To: Jan Kara <jack@suse.cz>
-Cc: Christian Brauner <brauner@kernel.org>, Jeff Layton <jlayton@kernel.org>, 
-	Alexander Viro <viro@zeniv.linux.org.uk>, Andrew Morton <akpm@linux-foundation.org>, 
-	Mateusz Guzik <mjguzik@gmail.com>, Josef Bacik <josef@toxicpanda.com>, linux-fsdevel@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, audit@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v20 12/20] dm verity: expose root hash digest and
+ signature data to LSMs
+To: mpatocka@redhat.com
+Cc: linux-doc@vger.kernel.org, linux-integrity@vger.kernel.org,
+ linux-security-module@vger.kernel.org, fsverity@lists.linux.dev,
+ linux-block@vger.kernel.org, dm-devel@lists.linux.dev,
+ audit@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Paul Moore <paul@paul-moore.com>
+References: <1722665314-21156-1-git-send-email-wufan@linux.microsoft.com>
+ <1722665314-21156-13-git-send-email-wufan@linux.microsoft.com>
+Content-Language: en-US
+From: Fan Wu <wufan@linux.microsoft.com>
+In-Reply-To: <1722665314-21156-13-git-send-email-wufan@linux.microsoft.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Thu, Aug 8, 2024 at 1:11=E2=80=AFPM Jan Kara <jack@suse.cz> wrote:
-> On Thu 08-08-24 12:36:07, Christian Brauner wrote:
-> > On Wed, Aug 07, 2024 at 10:36:58AM GMT, Jeff Layton wrote:
-> > > On Wed, 2024-08-07 at 16:26 +0200, Christian Brauner wrote:
-> > > > > +static struct dentry *lookup_fast_for_open(struct nameidata *nd,=
- int open_flag)
-> > > > > +{
-> > > > > +       struct dentry *dentry;
-> > > > > +
-> > > > > +       if (open_flag & O_CREAT) {
-> > > > > +               /* Don't bother on an O_EXCL create */
-> > > > > +               if (open_flag & O_EXCL)
-> > > > > +                       return NULL;
-> > > > > +
-> > > > > +               /*
-> > > > > +                * FIXME: If auditing is enabled, then we'll have=
- to unlazy to
-> > > > > +                * use the dentry. For now, don't do this, since =
-it shifts
-> > > > > +                * contention from parent's i_rwsem to its d_lock=
-ref spinlock.
-> > > > > +                * Reconsider this once dentry refcounting handle=
-s heavy
-> > > > > +                * contention better.
-> > > > > +                */
-> > > > > +               if ((nd->flags & LOOKUP_RCU) && !audit_dummy_cont=
-ext())
-> > > > > +                       return NULL;
-> > > >
-> > > > Hm, the audit_inode() on the parent is done independent of whether =
-the
-> > > > file was actually created or not. But the audit_inode() on the file
-> > > > itself is only done when it was actually created. Imho, there's no =
-need
-> > > > to do audit_inode() on the parent when we immediately find that fil=
-e
-> > > > already existed. If we accept that then this makes the change a lot
-> > > > simpler.
-> > > >
-> > > > The inconsistency would partially remain though. When the file does=
-n't
-> > > > exist audit_inode() on the parent is called but by the time we've
-> > > > grabbed the inode lock someone else might already have created the =
-file
-> > > > and then again we wouldn't audit_inode() on the file but we would h=
-ave
-> > > > on the parent.
-> > > >
-> > > > I think that's fine. But if that's bothersome the more aggressive t=
-hing
-> > > > to do would be to pull that audit_inode() on the parent further dow=
-n
-> > > > after we created the file. Imho, that should be fine?...
-> > > >
-> > > > See https://gitlab.com/brauner/linux/-/commits/vfs.misc.jeff/?ref_t=
-ype=3Dheads
-> > > > for a completely untested draft of what I mean.
-> > >
-> > > Yeah, that's a lot simpler. That said, my experience when I've worked
-> > > with audit in the past is that people who are using it are _very_
-> > > sensitive to changes of when records get emitted or not. I don't like
-> > > this, because I think the rules here are ad-hoc and somewhat arbitrar=
-y,
-> > > but keeping everything working exactly the same has been my MO whenev=
-er
-> > > I have to work in there.
-> > >
-> > > If a certain access pattern suddenly generates a different set of
-> > > records (or some are missing, as would be in this case), we might get
-> > > bug reports about this. I'm ok with simplifying this code in the way
-> > > you suggest, but we may want to do it in a patch on top of mine, to
-> > > make it simple to revert later if that becomes necessary.
-> >
-> > Fwiw, even with the rearranged checks in v3 of the patch audit records
-> > will be dropped because we may find a positive dentry but the path may
-> > have trailing slashes. At that point we just return without audit
-> > whereas before we always would've done that audit.
-> >
-> > Honestly, we should move that audit event as right now it's just really
-> > weird and see if that works. Otherwise the change is somewhat horrible
-> > complicating the already convoluted logic even more.
-> >
-> > So I'm appending the patches that I have on top of your patch in
-> > vfs.misc. Can you (other as well ofc) take a look and tell me whether
-> > that's not breaking anything completely other than later audit events?
->
-> The changes look good as far as I'm concerned but let me CC audit guys if
-> they have some thoughts regarding the change in generating audit event fo=
-r
-> the parent. Paul, does it matter if open(O_CREAT) doesn't generate audit
-> event for the parent when we are failing open due to trailing slashes in
-> the pathname? Essentially we are speaking about moving:
->
->         audit_inode(nd->name, dir, AUDIT_INODE_PARENT);
->
-> from open_last_lookups() into lookup_open().
+Hi Mikulas,
 
-Thanks for adding the audit mailing list to the CC, Jan.  I would ask
-for others to do the same when discussing changes that could impact
-audit (similar requests for the LSM framework, SELinux, etc.).
+I hope you’re doing well. I wanted to thank you again for your thorough 
+review for the last version. I’ve since made some minor updates for this 
+version, including adding more comments and refactoring the way the hash 
+algorithm name is obtained due to recent changes in dm-verity.
 
-The inode/path logging in audit is ... something.  I have a
-longstanding todo item to go revisit the audit inode logging, both to
-fix some known bugs, and see what we can improve (I'm guessing quite a
-bit).  Unfortunately, there is always something else which is burning
-a little bit hotter and I haven't been able to get to it yet.
+Would you mind if we keep the Review-by tag on the latest version since 
+the changes are minor? Your feedback is greatly valued, and I’d 
+appreciate it if you could take a quick look when you have a moment.
 
-The general idea with audit is that you want to record the information
-both on success and failure.  It's easy to understand the success
-case, as it is a record of what actually happened on the system, but
-you also want to record the failure case as it can provide some
-insight on what a process/user is attempting to do, and that can be
-very important for certain classes of users.  I haven't dug into the
-patches in Christian's tree, but in general I think Jeff's guidance
-about not changing what is recorded in the audit log is probably good
-advice (there will surely be exceptions to that, but it's still good
-guidance).
+-Fan
 
---=20
-paul-moore.com
+On 8/2/2024 11:08 PM, Fan Wu wrote:
+> From: Deven Bowers <deven.desai@linux.microsoft.com>
+> 
+> dm-verity provides a strong guarantee of a block device's integrity. As
+> a generic way to check the integrity of a block device, it provides
+> those integrity guarantees to its higher layers, including the filesystem
+> level.
+> 
+> However, critical security metadata like the dm-verity roothash and its
+> signing information are not easily accessible to the LSMs.
+> To address this limitation, this patch introduces a mechanism to store
+> and manage these essential security details within a newly added LSM blob
+> in the block_device structure.
+> 
+> This addition allows LSMs to make access control decisions on the integrity
+> data stored within the block_device, enabling more flexible security
+> policies. For instance, LSMs can now revoke access to dm-verity devices
+> based on their roothashes, ensuring that only authorized and verified
+> content is accessible. Additionally, LSMs can enforce policies to only
+> allow files from dm-verity devices that have a valid digital signature to
+> execute, effectively blocking any unsigned files from execution, thus
+> enhancing security against unauthorized modifications.
+> 
+> The patch includes new hook calls, `security_bdev_setintegrity()`, in
+> dm-verity to expose the dm-verity roothash and the roothash signature to
+> LSMs via preresume() callback. By using the preresume() callback, it
+> ensures that the security metadata is consistently in sync with the
+> metadata of the dm-verity target in the current active mapping table.
+> The hook calls are depended on CONFIG_SECURITY.
+> 
+> Signed-off-by: Deven Bowers <deven.desai@linux.microsoft.com>
+> Signed-off-by: Fan Wu <wufan@linux.microsoft.com>
+> ---
+...
+> 
+> v20:
+>    + Adding more documentation regarding the new setintegrity hook call
+>    + Update the code for getting hash algorithm from either v->ahash_tfm
+>      or v->shash_tfm
+> ---
+>   drivers/md/dm-verity-target.c | 118 ++++++++++++++++++++++++++++++++++
+>   drivers/md/dm-verity.h        |   6 ++
+>   include/linux/security.h      |   9 ++-
+>   3 files changed, 132 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/md/dm-verity-target.c b/drivers/md/dm-verity-target.c
+> index cf659c8feb29..24ba9a10444c 100644
+> --- a/drivers/md/dm-verity-target.c
+> +++ b/drivers/md/dm-verity-target.c
+> @@ -22,6 +22,7 @@
+>   #include <linux/scatterlist.h>
+>   #include <linux/string.h>
+>   #include <linux/jump_label.h>
+> +#include <linux/security.h>
+>   
+>   #define DM_MSG_PREFIX			"verity"
+>   
+> @@ -930,6 +931,41 @@ static void verity_io_hints(struct dm_target *ti, struct queue_limits *limits)
+>   	limits->dma_alignment = limits->logical_block_size - 1;
+>   }
+>   
+> +#ifdef CONFIG_SECURITY
+> +
+> +static int verity_init_sig(struct dm_verity *v, const void *sig,
+> +			   size_t sig_size)
+> +{
+> +	v->sig_size = sig_size;
+> +
+> +	if (sig) {
+> +		v->root_digest_sig = kmemdup(sig, v->sig_size, GFP_KERNEL);
+> +		if (!v->root_digest_sig)
+> +			return -ENOMEM;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static void verity_free_sig(struct dm_verity *v)
+> +{
+> +	kfree(v->root_digest_sig);
+> +}
+> +
+> +#else
+> +
+> +static inline int verity_init_sig(struct dm_verity *v, const void *sig,
+> +				  size_t sig_size)
+> +{
+> +	return 0;
+> +}
+> +
+> +static inline void verity_free_sig(struct dm_verity *v)
+> +{
+> +}
+> +
+> +#endif /* CONFIG_SECURITY */
+> +
+>   static void verity_dtr(struct dm_target *ti)
+>   {
+>   	struct dm_verity *v = ti->private;
+> @@ -949,6 +985,7 @@ static void verity_dtr(struct dm_target *ti)
+>   	kfree(v->initial_hashstate);
+>   	kfree(v->root_digest);
+>   	kfree(v->zero_digest);
+> +	verity_free_sig(v);
+>   
+>   	if (v->ahash_tfm) {
+>   		static_branch_dec(&ahash_enabled);
+> @@ -1418,6 +1455,13 @@ static int verity_ctr(struct dm_target *ti, unsigned int argc, char **argv)
+>   		ti->error = "Root hash verification failed";
+>   		goto bad;
+>   	}
+> +
+> +	r = verity_init_sig(v, verify_args.sig, verify_args.sig_size);
+> +	if (r < 0) {
+> +		ti->error = "Cannot allocate root digest signature";
+> +		goto bad;
+> +	}
+> +
+>   	v->hash_per_block_bits =
+>   		__fls((1 << v->hash_dev_block_bits) / v->digest_size);
+>   
+> @@ -1559,8 +1603,79 @@ int dm_verity_get_root_digest(struct dm_target *ti, u8 **root_digest, unsigned i
+>   	return 0;
+>   }
+>   
+> +#ifdef CONFIG_SECURITY
+> +
+> +#ifdef CONFIG_DM_VERITY_VERIFY_ROOTHASH_SIG
+> +
+> +static int verity_security_set_signature(struct block_device *bdev,
+> +					 struct dm_verity *v)
+> +{
+> +	/*
+> +	 * if the dm-verity target is unsigned, v->root_digest_sig will
+> +	 * be NULL, and the hook call is still required to let LSMs mark
+> +	 * the device as unsigned. This information is crucial for LSMs to
+> +	 * block operations such as execution on unsigned files
+> +	 */
+> +	return security_bdev_setintegrity(bdev,
+> +					  LSM_INT_DMVERITY_SIG_VALID,
+> +					  v->root_digest_sig,
+> +					  v->sig_size);
+> +}
+> +
+> +#else
+> +
+> +static inline int verity_security_set_signature(struct block_device *bdev,
+> +						struct dm_verity *v)
+> +{
+> +	return 0;
+> +}
+> +
+> +#endif /* CONFIG_DM_VERITY_VERIFY_ROOTHASH_SIG */
+> +
+> +/*
+> + * Expose verity target's root hash and signature data to LSMs before resume.
+> + *
+> + * Returns 0 on success, or -ENOMEM if the system is out of memory.
+> + */
+> +static int verity_preresume(struct dm_target *ti)
+> +{
+> +	struct block_device *bdev;
+> +	struct dm_verity_digest root_digest;
+> +	struct dm_verity *v;
+> +	int r;
+> +
+> +	v = ti->private;
+> +	bdev = dm_disk(dm_table_get_md(ti->table))->part0;
+> +	root_digest.digest = v->root_digest;
+> +	root_digest.digest_len = v->digest_size;
+> +	if (static_branch_unlikely(&ahash_enabled) && !v->shash_tfm)
+> +		root_digest.alg = crypto_ahash_alg_name(v->ahash_tfm);
+> +	else
+> +		root_digest.alg = crypto_shash_alg_name(v->shash_tfm);
+> +
+> +	r = security_bdev_setintegrity(bdev, LSM_INT_DMVERITY_ROOTHASH, &root_digest,
+> +				       sizeof(root_digest));
+> +	if (r)
+> +		return r;
+> +
+> +	r =  verity_security_set_signature(bdev, v);
+> +	if (r)
+> +		goto bad;
+> +
+> +	return 0;
+> +
+> +bad:
+> +
+> +	security_bdev_setintegrity(bdev, LSM_INT_DMVERITY_ROOTHASH, NULL, 0);
+> +
+> +	return r;
+> +}
+> +
+> +#endif /* CONFIG_SECURITY */
+> +
+>   static struct target_type verity_target = {
+>   	.name		= "verity",
+> +/* Note: the LSMs depend on the singleton and immutable features */
+>   	.features	= DM_TARGET_SINGLETON | DM_TARGET_IMMUTABLE,
+>   	.version	= {1, 10, 0},
+>   	.module		= THIS_MODULE,
+> @@ -1571,6 +1686,9 @@ static struct target_type verity_target = {
+>   	.prepare_ioctl	= verity_prepare_ioctl,
+>   	.iterate_devices = verity_iterate_devices,
+>   	.io_hints	= verity_io_hints,
+> +#ifdef CONFIG_SECURITY
+> +	.preresume	= verity_preresume,
+> +#endif /* CONFIG_SECURITY */
+>   };
+>   module_dm(verity);
+>   
+> diff --git a/drivers/md/dm-verity.h b/drivers/md/dm-verity.h
+> index aac3a1b1d94a..ea2da450f173 100644
+> --- a/drivers/md/dm-verity.h
+> +++ b/drivers/md/dm-verity.h
+> @@ -45,6 +45,9 @@ struct dm_verity {
+>   	u8 *salt;		/* salt: its size is salt_size */
+>   	u8 *initial_hashstate;	/* salted initial state, if shash_tfm is set */
+>   	u8 *zero_digest;	/* digest for a zero block */
+> +#ifdef CONFIG_SECURITY
+> +	u8 *root_digest_sig;	/* signature of the root digest */
+> +#endif /* CONFIG_SECURITY */
+>   	unsigned int salt_size;
+>   	sector_t data_start;	/* data offset in 512-byte sectors */
+>   	sector_t hash_start;	/* hash start in blocks */
+> @@ -58,6 +61,9 @@ struct dm_verity {
+>   	bool hash_failed:1;	/* set if hash of any block failed */
+>   	bool use_bh_wq:1;	/* try to verify in BH wq before normal work-queue */
+>   	unsigned int digest_size;	/* digest size for the current hash algorithm */
+> +#ifdef CONFIG_SECURITY
+> +	unsigned int sig_size;	/* root digest signature size */
+> +#endif /* CONFIG_SECURITY */
+>   	unsigned int hash_reqsize; /* the size of temporary space for crypto */
+>   	enum verity_mode mode;	/* mode for handling verification errors */
+>   	unsigned int corrupted_errs;/* Number of errors for corrupted blocks */
+> diff --git a/include/linux/security.h b/include/linux/security.h
+> index 39aec1c96d6a..0604893f2f9e 100644
+> --- a/include/linux/security.h
+> +++ b/include/linux/security.h
+> @@ -83,8 +83,15 @@ enum lsm_event {
+>   	LSM_POLICY_CHANGE,
+>   };
+>   
+> +struct dm_verity_digest {
+> +	const char *alg;
+> +	const u8 *digest;
+> +	size_t digest_len;
+> +};
+> +
+>   enum lsm_integrity_type {
+> -	__LSM_INT_MAX
+> +	LSM_INT_DMVERITY_SIG_VALID,
+> +	LSM_INT_DMVERITY_ROOTHASH,
+>   };
+>   
+>   /*
