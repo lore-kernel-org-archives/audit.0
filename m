@@ -1,129 +1,228 @@
-Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com [209.85.219.178])
+Received: from mail-qv1-f54.google.com (mail-qv1-f54.google.com [209.85.219.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4A0E144D20
-	for <audit@vger.kernel.org>; Wed,  7 Aug 2024 19:42:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 458F7208C4;
+	Thu,  8 Aug 2024 02:49:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723059778; cv=none; b=ECoIm/dmNFYb5KnOt6Wa1MpV5O9t/WPu7bqY7DOVhb9bJ+MKTpiNJr4t8CSHnsuyMYnCFqOkZm1BKXJfZNn0qk2I5nguFrgV/Vq7u03uOqxQwLyDcmn/mMsXVZiByEJ8X9zNjTV4+BezrbPKMSDtM4qe95jQCdgXZ2SpUNLFhes=
+	t=1723085398; cv=none; b=oU7nCfIVJLZXfZTXDv1L9bqtUqdN7Zs/1FOA1BdN6TF0SiTq/WXqs/ECAh3AuTfUjHQ1mf1KWjHvva170DgLGJ3c0d7vbokXwqqOZVHeQqpfVOkcb8/M/Q5Rd/vgj+5x88LhwGdmonlpKIpxT1ehvh/NYKJOxHPDDjZFnMxdiiI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723059778; c=relaxed/simple;
-	bh=4vWmcMOGkkyE6SpKOg+lxuJbBZmqhBwk93+K8cVoiVk=;
+	s=arc-20240116; t=1723085398; c=relaxed/simple;
+	bh=08sDwspuwXqyP/cnTLOgVWO66jmEEEako3F85Piab+4=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=qg+wrU3SrY5imaI61+2Qc2+2ynlQik5uaauJEulqlhaL7O2PwyIIzT+B7r3zAnfnQ3KHLplk5/UdQYF7iTFD4bwA5GJLQTgM/L7c89i/8xXgJsZPSuaTYqDejOsX+plkpY4jKlooLF4Kmiw7xNLGjG5VZu5WkqP2UjwpztttrVg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=DMg0Li7W; arc=none smtp.client-ip=209.85.219.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+	 To:Cc:Content-Type; b=lIMpApBZaoSzlIaGUvyPDqAWoVjEvEqt5jRDT2VWRT0BN+IPs/r9FPUXl8Qghza8YAqcNI2S7QAimppoL8ohYeWxExdBAcaAXoOVSKato3Yww3N8N6Mc+jTNk/r5vmwCcN3lsaJ8Ni3QeWB+oJArFa/8S463pMDP9PN4HBBVIDQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=J1jrsBZR; arc=none smtp.client-ip=209.85.219.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="DMg0Li7W"
-Received: by mail-yb1-f178.google.com with SMTP id 3f1490d57ef6-dff17fd97b3so173641276.2
-        for <audit@vger.kernel.org>; Wed, 07 Aug 2024 12:42:56 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="J1jrsBZR"
+Received: by mail-qv1-f54.google.com with SMTP id 6a1803df08f44-6b7acf213a3so2974356d6.1;
+        Wed, 07 Aug 2024 19:49:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1723059776; x=1723664576; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1723085395; x=1723690195; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ti+dWnafsTGNMHs+vxXfaBVPCpOMl1fNQUR/dBh5t54=;
-        b=DMg0Li7WhSZot3FQpEyegHvFrSKmdOT7b1+e9S0dkQXGpylihmCeZdNuMaNZ7XaRMF
-         5842fV463fVCMiDN4qfSV+ijhxnaU1aoTm0kzvAvco3rOCPyzPMHPz/m3JJuu7qRPoh8
-         Vh9ssPNU7puvvdE79IZTIO+kouJhhWWl7w/NRgXhJ/1Hm5pEaFZnZGWFk9EY6GkvEMdk
-         RyucaQIvwzlSzDjqatW+A309BBCi8N69A/9I1Tcalq5WO1CLtXVJEuGwohUAN0dmZDr5
-         QpMj8SGYeKvqdsh2vykyQoO9W4Nw1UHgZVqfkBrkb6DfaqkNPNP2i1UP9gQ1yhJQXY14
-         +LkA==
+        bh=4wCK7OrHV/RXkSDhtoAmVTQPNoEQ+lSxs9BlEtpZYM8=;
+        b=J1jrsBZRUimlSuaDiWN+k8GCMptHmap8/65h6sn88a1+lg2Lt2ITexZGK6z5P1q7sp
+         7nnyNgcWAK0vAT3NWyERls83p4Oj7iu5BjtNNPufJ7LvEmk+zjzf15HT2cSXMoJyr/Xp
+         SQdxKcxKTHzbTon5iuMaEXWrxVRqLpvOFQSnKt9XXWU1ZxcwYocq9wVE8DiOGSMvjC+4
+         IIBD91J8A6zlegZcwK1nzPKhT81sVGHA7blIhGfxYh6y2M2KC/s0j6R0Bk7xuGnj1YUT
+         Rsn2D4pgQqdQ4Npi7Inu5xWGipgeqrU6ylbVli+61bc/MphQS2yssARqvrtg3lpj1pE7
+         IfTA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723059776; x=1723664576;
+        d=1e100.net; s=20230601; t=1723085395; x=1723690195;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ti+dWnafsTGNMHs+vxXfaBVPCpOMl1fNQUR/dBh5t54=;
-        b=PqaUnRjAhEeWc3v4YtlV+pbzdbRcPwKmrK0R6u846Gu4PdeEiFslXTKwvmtHXCgUZ3
-         gaoJHJ7Mw4RPiiriNCNojI5YjhUN5AaKGaR6NU8uGwMjmXr8e2ebvDC8ad9hLVCU9y2U
-         qd75jBKOlQSPKjxyDq6UzRGwdLcxv2emqpXW7UPK4nPmM8IjxwsWnBdidPXTjydmWMNr
-         KKUsia0ruQS9H7kBP34cf8DIArBH4USwUTGw7N3z3cTrd2orHEqDjtefokcilkiO3j/x
-         KjLNFqjLoWo8iQLSurkuC8gscIK7BCvaWdvbOxcJ1tUqk5EQtVaiBtGAL6yGQzZ2MYxJ
-         LrQQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWSeCnfLwjyST2FAtYLSblyqelSdcTDwZqAL/okHElsnZVudnVa0Gs29PQN2xPWV+YNf2/eMAQ/fGhZBoYYNcUZq3ta1Xs=
-X-Gm-Message-State: AOJu0YytYjqEZp70QMBxQ1+2/rMmLzqThle8TG2eMc8PEbV7gx5WgexK
-	MR4C3lq21Hi7QMmfzVqSw3ZStip8yxg8rxFLzP5zLot7gv4ZPzX/7BFT02X6VGFxHkXrmdL/FLl
-	TJh4M01+MSL22GtoMwEqu2N0MbYc+YjpPEgfJ
-X-Google-Smtp-Source: AGHT+IH0uDMTEvlhrjytzwDCCXqiKRWy1dc9NB4WG2rHn2putvbgMZXGt7BbJfYOpwZgKPiHTdtB1n+xOLBh+e8QgUw=
-X-Received: by 2002:a05:6902:2b8e:b0:e0b:6039:dea with SMTP id
- 3f1490d57ef6-e0bde4ad354mr27003143276.40.1723059775981; Wed, 07 Aug 2024
- 12:42:55 -0700 (PDT)
+        bh=4wCK7OrHV/RXkSDhtoAmVTQPNoEQ+lSxs9BlEtpZYM8=;
+        b=dIehA2vPt7Zi3DKbOa+/Wku4WqRSBmwLIWialMyIhiWmQGBvYeY5lEJe+0iFjT7xJL
+         bo2aUTNTJ1rEL5Bn5oi1CIRfU4Oe70Y4axb97lPGLNjBZiaANCxE9oUNm9tiujtNnSiF
+         nA6Hz6TL/qIwoP6yREH03frkSI4526fGzdSU+U3olX3EH1DbhTbBETPpy1EShydOzdNn
+         O8CzNhwVMqd5nhEVoUJH33VUaEtqTejruTgwrh+W2laxA8yFF6w3j4KxCu6MZ1a9Ivvg
+         gl+m2WbLyY8MQq9X1mO/9y94Qoavocz9lzQbl+zbzmJ8ekXkmrmgXCTyfQFRiz45ugwV
+         NZtQ==
+X-Forwarded-Encrypted: i=1; AJvYcCV+TGBzLlntCAvXWY821qwZGhhKhyA8qHA86wm7XOhzkUVfD6wZibxLMoaEpMxOs4iiAZZrUNK2K/Mf64DHqPxiDgtqGfsQRPQvD1GR2iM+rZOtCILQTaGJDce9BE/FOvQtdIyHxcLQNU49RFrEFoc7A3mZgKPUxs3hyjEet+WjGLHNPA98iywHT9ilKgLyamXVtlJOg/IwNNeyckt3qMb1VXSFdpo4dSA6Kj2FdaA+2TK89/+dKvtejdgJCdCNIpW7207O4e89mJKPR9uKpc8YBDvPhNyKM5Zk1qx3UxtLFCdBskZ/NES48PnLVGgC2eEVESHp5w==
+X-Gm-Message-State: AOJu0YwYhGgG5FMgAXtDpWre6I6ImdGadI+R/Y3j1b37+Y7/r9IglA/5
+	yDkQdlXHsMSMFyKaUjCHU+vLAJrgoxdw3uw4qVyCJXBg56LZBT9J+vW2uEGamfyUtQCoomKbVIB
+	5REMoxccMckarNo04hNjuzO1TqMg=
+X-Google-Smtp-Source: AGHT+IFAUbAmwMhJNJgsN0YPryyoi42HRLLz74PRZZtqqDpLNMLF+qLuRDBW3t/1Fjr4gj2UTXsNjeSbG/Ntg/8Q0mk=
+X-Received: by 2002:a05:6214:4b0f:b0:6b5:4aa9:9687 with SMTP id
+ 6a1803df08f44-6bd6bd971c9mr6794786d6.50.1723085395024; Wed, 07 Aug 2024
+ 19:49:55 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <1722665314-21156-1-git-send-email-wufan@linux.microsoft.com>
- <1722665314-21156-21-git-send-email-wufan@linux.microsoft.com>
- <de7857fb-63d9-42fc-af1e-12ffcdfcdda8@molgen.mpg.de> <CAHC9VhRmcReVM_Le5bYor2deotnSe4OT08UYhL6xhiKCu0+3kA@mail.gmail.com>
- <5880e801-e896-4bf0-9a69-2cf5acb51ec3@molgen.mpg.de> <080c93d1-9c02-478f-a0be-f4bd3869c1fd@linux.microsoft.com>
-In-Reply-To: <080c93d1-9c02-478f-a0be-f4bd3869c1fd@linux.microsoft.com>
-From: Paul Moore <paul@paul-moore.com>
-Date: Wed, 7 Aug 2024 15:42:45 -0400
-Message-ID: <CAHC9VhTNTqK5Q446nQHcbxnV6cakAg0NEnvkvs4Tai+4UXOuAw@mail.gmail.com>
-Subject: Re: [PATCH v20 20/20] MAINTAINERS: ipe: add ipe maintainer information
-To: Fan Wu <wufan@linux.microsoft.com>
-Cc: Paul Menzel <pmenzel@molgen.mpg.de>, corbet@lwn.net, zohar@linux.ibm.com, 
-	jmorris@namei.org, serge@hallyn.com, tytso@mit.edu, ebiggers@kernel.org, 
-	axboe@kernel.dk, agk@redhat.com, snitzer@kernel.org, mpatocka@redhat.com, 
-	eparis@redhat.com, linux-doc@vger.kernel.org, linux-integrity@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, fsverity@lists.linux.dev, 
-	linux-block@vger.kernel.org, dm-devel@lists.linux.dev, audit@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
+References: <2jxak5v6dfxlpbxhpm3ey7oup4g2lnr3ueurfbosf5wdo65dk4@srb3hsk72zwq>
+In-Reply-To: <2jxak5v6dfxlpbxhpm3ey7oup4g2lnr3ueurfbosf5wdo65dk4@srb3hsk72zwq>
+From: Yafang Shao <laoar.shao@gmail.com>
+Date: Thu, 8 Aug 2024 10:49:17 +0800
+Message-ID: <CALOAHbBKzrvibUbj-1W7Z79AZsvOpMeG--EZ0pf2k0iyuPa1_w@mail.gmail.com>
+Subject: Re: [PATCH v5 0/9] Improve the copy of task comm
+To: Alejandro Colomar <alx@kernel.org>
+Cc: torvalds@linux-foundation.org, akpm@linux-foundation.org, 
+	alexei.starovoitov@gmail.com, audit@vger.kernel.org, bpf@vger.kernel.org, 
+	catalin.marinas@arm.com, dri-devel@lists.freedesktop.org, 
+	ebiederm@xmission.com, linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, 
+	linux-security-module@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	netdev@vger.kernel.org, penguin-kernel@i-love.sakura.ne.jp, 
+	rostedt@goodmis.org, selinux@vger.kernel.org, serge@hallyn.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Aug 7, 2024 at 2:01=E2=80=AFPM Fan Wu <wufan@linux.microsoft.com> w=
+On Wed, Aug 7, 2024 at 1:28=E2=80=AFAM Alejandro Colomar <alx@kernel.org> w=
 rote:
-> On 8/6/2024 9:48 PM, Paul Menzel wrote:
-> > Dear Paul,
-> >
-> > Am 06.08.24 um 22:54 schrieb Paul Moore:
-> >> On Sat, Aug 3, 2024 at 4:15=E2=80=AFAM Paul Menzel wrote:
-> >
-> >>> Thank you very much for your patch. Two nits, should you sent another
-> >>> interation: A more specific summary would avoid people having to look=
- at
-> >>> the message body or diff, and `git log --oneline` would be enough.
-> >>>
-> >>> MAINTAINERS: Add IPE entry with M: Fan Wu
-> >>>
-> >>> MAINTAINERS: Add IPE entry with Fan Wu as maintainer
-> >>>
-> >>> Am 03.08.24 um 08:08 schrieb Fan Wu:
-> >>>> Update MAINTAINERS to include ipe maintainer information.
-> >>>
-> >>> I=E2=80=99d at least mention Integrity Policy Enforcement. As you not=
- only
-> >>> include the maintainer information but add a new entry, I=E2=80=99d l=
-eave the
-> >>> body out, or mention that a new entry is added.
-> >>>
-> >>>> Signed-off-by: Fan Wu <wufan@linux.microsoft.com>
-> >>
-> >> Working under the current assumption that a new revision is not
-> >> needed, I can fix this up during the merge.  Fan, other-Paul, are you
-> >> both okay with the following:
-> >>
-> >>    "MAINTAINERS: add IPE entry with Fan Wu as maintainer
-> >>
-> >>     Add a MAINTAINERS entry for the Integrity Policy Enforcement (IPE)
-> >> LSM."
-> >
-> > Thank you. That is fine by me.
-> >
-> > Kind regards,
-> > Paul
 >
-> Hi Paul and Paul,
+> Hi Linus,
 >
-> Thank you both for your feedback and coordination on this. I'm good with
-> the proposed changes and appreciate your efforts.
+> Serge let me know about this thread earlier today.
+>
+> On 2024-08-05, Linus Torvalds <torvalds@linux-foundation.org> wrote:
+> > On Mon, 5 Aug 2024 at 20:01, Yafang Shao <laoar.shao@gmail.com> wrote:
+> > >
+> > > One concern about removing the BUILD_BUG_ON() is that if we extend
+> > > TASK_COMM_LEN to a larger size, such as 24, the caller with a
+> > > hardcoded 16-byte buffer may overflow.
+> >
+> > No, not at all. Because get_task_comm() - and the replacements - would
+> > never use TASK_COMM_LEN.
+> >
+> > They'd use the size of the *destination*. That's what the code already =
+does:
+> >
+> >   #define get_task_comm(buf, tsk) ({                      \
+> >   ...
+> >         __get_task_comm(buf, sizeof(buf), tsk);         \
+> >
+> > note how it uses "sizeof(buf)".
+>
+> In shadow.git, we also implemented macros that are named after functions
+> and calculate the appropriate number of elements internally.
+>
+>         $ grepc -h STRNCAT .
+>         #define STRNCAT(dst, src)  strncat(dst, src, NITEMS(src))
+>         $ grepc -h STRNCPY .
+>         #define STRNCPY(dst, src)  strncpy(dst, src, NITEMS(dst))
+>         $ grepc -h STRTCPY .
+>         #define STRTCPY(dst, src)  strtcpy(dst, src, NITEMS(dst))
+>         $ grepc -h STRFTIME .
+>         #define STRFTIME(dst, fmt, tm)  strftime(dst, NITEMS(dst), fmt, t=
+m)
+>         $ grepc -h DAY_TO_STR .
+>         #define DAY_TO_STR(str, day, iso)   day_to_str(NITEMS(str), str, =
+day, iso)
+>
+> They're quite useful, and when implementing them we found and fixed
+> several bugs thanks to them.
+>
+> > Now, it might be a good idea to also verify that 'buf' is an actual
+> > array, and that this code doesn't do some silly "sizeof(ptr)" thing.
+>
+> I decided to use NITEMS() instead of sizeof() for that reason.
+> (NITEMS() is just our name for ARRAY_SIZE().)
+>
+>         $ grepc -h NITEMS .
+>         #define NITEMS(a)            (SIZEOF_ARRAY((a)) / sizeof((a)[0]))
+>
+> > We do have a helper for that, so we could do something like
+> >
+> >    #define get_task_comm(buf, tsk) \
+> >         strscpy_pad(buf, __must_be_array(buf)+sizeof(buf), (tsk)->comm)
+>
+> We have SIZEOF_ARRAY() for when you want the size of an array:
+>
+>         $ grepc -h SIZEOF_ARRAY .
+>         #define SIZEOF_ARRAY(a)      (sizeof(a) + must_be_array(a))
 
-Updated as shown above, thanks all.
+There is already a similar macro in Linux:
 
---=20
-paul-moore.com
+  /**
+   * ARRAY_SIZE - get the number of elements in array @arr
+   * @arr: array to be sized
+   */
+  #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) +
+__must_be_array(arr))
+
+will use it instead of the sizeof().
+
+>
+> However, I don't think you want sizeof().  Let me explain why:
+>
+> -  Let's say you want to call wcsncpy(3) (I know nobody should be using
+>    that function, not strncpy(3), but I'm using it as a standard example
+>    of a wide-character string function).
+>
+>    You should call wcsncpy(dst, src, NITEMS(dst)).
+>    A call wcsncpy(dst, src, sizeof(dst)) is bogus, since the argument is
+>    the number of wide characters, not the number of bytes.
+>
+>    When translating that to normal characters, you want conceptually the
+>    same operation, but on (normal) characters.  That is, you want
+>    strncpy(dst, src, NITEMS(dst)).  While strncpy(3) with sizeof() works
+>    just fine because sizeof(char)=3D=3D1 by definition, it is conceptuall=
+y
+>    wrong to use it.
+>
+>    By using NITEMS() (i.e., ARRAY_SIZE()), you get the __must_be_array()
+>    check for free.
+>
+> In the end, SIZEOF_ARRAY() is something we very rarely use.  It's there
+> only used in the following two cases at the moment:
+>
+>         #define NITEMS(a)            (SIZEOF_ARRAY((a)) / sizeof((a)[0]))
+>         #define MEMZERO(arr)  memzero(arr, SIZEOF_ARRAY(arr))
+>
+> Does that sound convincing?
+>
+> For memcpy(3) for example, you do want sizeof(), because you're copying
+> raw bytes, but with strings, in which characters are conceptually
+> meaningful elements, NITEMS() makes more sense.
+>
+> BTW, I'm working on a __lengthof__ operator that will soon allow using
+> it on function parameters declared with array notation.  That is,
+>
+>         size_t
+>         f(size_t n, int a[n])
+>         {
+>                 return __lengthof__(a);  // This will return n.
+>         }
+>
+> If you're interested in it, I'm developing and discussing it here:
+> <https://inbox.sourceware.org/gcc-patches/20240806122218.3827577-1-alx@ke=
+rnel.org/>
+>
+> >
+> > as a helper macro for this all.
+> >
+> > (Although I'm not convinced we generally want the "_pad()" version,
+> > but whatever).
+>
+> We had problems with it in shadow recently.  In user-space, it's similar
+> to strncpy(3) (at least if you wrap it in a macro that makes sure that
+> it terminates the string with a null byte).
+>
+> We had a lot of uses of strncpy(3), from old times where that was used
+> to copy strings with truncation.  I audited all of that code (and
+> haven't really finished yet), and translated to calls similar to
+> strscpy(9) (we call it strtcpy(), as it _t_runcates).  The problem was
+> that in some cases the padding was necessary, and in others it was not,
+> and it was very hard to distinguish those.
+>
+> I recommend not zeroing strings unnecessarily, since that will make it
+> hard to review the code later.  E.g., twenty years from now, someone
+> takes a piece of code with a _pad() call, and has no clue if the zeroing
+> was for a reason, or for no reason.
+>
+> On the other hand, not zeroing may make it easier to explot bugs, so
+> whatever you think best.  In the kernel you may need to be more worried
+> than in user space.  Whatever.  :)
+
+Good point.
+I will avoid using the _pad().
+
+--
+Regards
+Yafang
