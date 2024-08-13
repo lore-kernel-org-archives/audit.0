@@ -1,126 +1,156 @@
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6CE0B55892;
-	Tue, 13 Aug 2024 17:54:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
+Received: from mail-io1-f41.google.com (mail-io1-f41.google.com [209.85.166.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF9B21AAE37
+	for <audit@vger.kernel.org>; Tue, 13 Aug 2024 22:19:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723571677; cv=none; b=t5YcTDVWcsFuVTP5JdrAwZYTRDPM5nkOXYRN19XWTGnzKIn3sgUYEtWGSCbQ/f75aMyEwhdKeQ5PeoMzORMGKbXHpFNt1mbl8aAnAsPbYJomo9HO9Y5tB4lu7dcCypJjVaX+FQnYKfUGbzFqcuxOyT24j/k6ZAIfPXPsB2Q+SxQ=
+	t=1723587571; cv=none; b=Oda+LtxZXNU9vMXQSpcn361CNLtIIAqFL2FTGOmhTFrKwRfXaWWS6FktDPL58FYoTA6ypSFhi9nzukc3i75tpecGwIt24OyjVHjyQAUKf3QkOR5aTtVnf+yZTSAR+BKyKpLFddobL0Otv2wvqfECcKnhoF/AxYrlLQCRZJpLlgk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723571677; c=relaxed/simple;
-	bh=OZ8AP9XkMsyzC1rp7t6xBJ1ljv/JLSQ6tTrIq+3/6jM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=rYtOWGB+hytqUr7YOCQDLTbSJ71qZ6f8FQhPSgquk71DTg3wYHTJ3/qmdmehxi0azb+ZiWqlHwyJ+gHVjiUgR5NH8QBiuqhYqHl5AOmSEBYed0FFnP3gwfo7GPfedtgofahwIR+MOT84/s/73SnbWyhLKgMWLUtyRoV85k9Ca1o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=dmb1BZne; arc=none smtp.client-ip=13.77.154.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
+	s=arc-20240116; t=1723587571; c=relaxed/simple;
+	bh=nUuj1yFQwQctPZyeaZf8ffYlrw7QeFKprNsInQ+jTuQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BgpcPglcpJsMszeBI28HyYW/K8z89K1CY/nmDJ5KpEOm0DoVIT6LChsoRJZrhYKT9aVlA3Kz08zifnNkUUJ7BSX88EN6AysPt8dVR0XLq88eXzLJYr8e9c2qZU7HZGeG/M5eVyLnzw5fLcpLndxTGCr3j3ThbOwkef9GoDUk/xg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=XmuOb7JL; arc=none smtp.client-ip=209.85.166.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="dmb1BZne"
-Received: from [10.137.106.151] (unknown [131.107.174.23])
-	by linux.microsoft.com (Postfix) with ESMTPSA id 3B9FE20B7165;
-	Tue, 13 Aug 2024 10:54:30 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 3B9FE20B7165
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1723571670;
-	bh=nytHXNFUCvkjmExa31/IXH9nsS7Ke1ecqy5aOeZ0RVQ=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=dmb1BZneqM72oPSe5DHw6ecIL62wYqVSoAd4vHn1OI6tbReWkMBOsAQwHOD1uJj15
-	 ici03yt3QfhtBQViHqWGIFo0+ZmMtlFPo/guJBTjh1+RFYmPmkUTt5X40IoxKyuN0+
-	 Imj1rgCamzVJDKZ83X9QPeow5gpEbDFPehT/Kkys=
-Message-ID: <e1dd4dcf-8e2e-4e7b-9d40-533efd123103@linux.microsoft.com>
-Date: Tue, 13 Aug 2024 10:54:29 -0700
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="XmuOb7JL"
+Received: by mail-io1-f41.google.com with SMTP id ca18e2360f4ac-81fd1e05a5aso256812139f.0
+        for <audit@vger.kernel.org>; Tue, 13 Aug 2024 15:19:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1723587569; x=1724192369; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=+QN8X+bBf4e4pg8ECVJmLV7aoGPPE4M9h9y5SfDnco4=;
+        b=XmuOb7JLvyzRoKVkigT8zV8uE0biCueUrdLC+6pXN5AjqeaxqAFGWT1hU9rPNRvsDZ
+         3fU5eBj4VHgEnvMbyOxDo4SlyF1dqm7T4zhNy+oWaV1J6qezOEKZ865/5a5QD6yf2zSE
+         zsQq6zZ31fcYemRtrJa5mxHUIsD3W7QlY7Iahg5D168bjobssTF11yaUpsmZBmKP3QY6
+         5ld4bJnVvmBPuUbevyZk00bRd5Lb1Yj1wt/HAHV8cdrDd/44dWqWllW0xGH36kY1+DHb
+         i0Jm6spuAdClmzuVQhUe8wMeuVMAO2Cv8iEw7Ie6jVlsxGLfspWZBbVehKyGXuViZ+tw
+         x0Tw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1723587569; x=1724192369;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+QN8X+bBf4e4pg8ECVJmLV7aoGPPE4M9h9y5SfDnco4=;
+        b=apQAYDMXHNi94IziLc5KkBINxEcmZHcjHOazcqh1pfobpw2l7TBhKF9o6TG0BUaQjI
+         JpNp5/35TeASGA1jTzWM2LHgZ2azqiI5dF6txwJNwrOGEhpWSR6rSQcM1oziAsZGDagN
+         Akfpiahx7cfU+b3LJKU/C4YuPnDjBNWH9waWnUX9VJXlu0pnI4hX9Fqrz4W9Y6yd09+s
+         SvBvYef1YuR0wviJ3zNkN9St+yEPtkZzd/sB9neAh1UxgRc6lV8tFbLd8lT68KN/hjrg
+         q+rog+EWUl1nlufM2a0+cOFyKWKhiLXQ7ELV9YD0h+xIA6oFNbe3oAqjwIgWgwQ/psdz
+         L0Hw==
+X-Forwarded-Encrypted: i=1; AJvYcCWDz10CZfXY144+Sor2VpHbEXkSh/NRzkXm9aZS40Lao8zFQFBGWcqnvdz3og1mLlUvHDpjYg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyG2Mt7o1Nmjam/VD59UNWx/hstd3Sn2LjJRVf/ly3itu6ihCTR
+	WgGDTuVen0Ovqwqv4WJW+70Z22OEI6unw36JuE81GSeAhUInJkPrCe5CXrtLLA==
+X-Google-Smtp-Source: AGHT+IH+Vc3rvDiFEg5ElrB7bMI7N4hpSdsoFZYx8k23AbxObZpcHIjRmC/uICTdWR81lxtCEKl/zQ==
+X-Received: by 2002:a05:6602:27c1:b0:824:d58c:ec9 with SMTP id ca18e2360f4ac-824dad3f48bmr165323439f.10.1723587568538;
+        Tue, 13 Aug 2024 15:19:28 -0700 (PDT)
+Received: from google.com (194.225.68.34.bc.googleusercontent.com. [34.68.225.194])
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4ca769f9d7dsm2773101173.118.2024.08.13.15.19.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Aug 2024 15:19:28 -0700 (PDT)
+Date: Tue, 13 Aug 2024 15:19:25 -0700
+From: Justin Stitt <justinstitt@google.com>
+To: Yafang Shao <laoar.shao@gmail.com>
+Cc: akpm@linux-foundation.org, torvalds@linux-foundation.org, 
+	ebiederm@xmission.com, alexei.starovoitov@gmail.com, rostedt@goodmis.org, 
+	catalin.marinas@arm.com, penguin-kernel@i-love.sakura.ne.jp, linux-mm@kvack.org, 
+	linux-fsdevel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, audit@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, selinux@vger.kernel.org, bpf@vger.kernel.org, 
+	netdev@vger.kernel.org, dri-devel@lists.freedesktop.org, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [PATCH v6 7/9] tracing: Replace strncpy() with strscpy()
+Message-ID: <hbjxkyhugi27mbrj5zo2thfdg2gotz6syz6qoeows6l6qwbzkt@c3yb26z4pn62>
+References: <20240812022933.69850-1-laoar.shao@gmail.com>
+ <20240812022933.69850-8-laoar.shao@gmail.com>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v20 02/20] ipe: add policy parser
-To: "Serge E. Hallyn" <serge@hallyn.com>
-Cc: corbet@lwn.net, zohar@linux.ibm.com, jmorris@namei.org, tytso@mit.edu,
- ebiggers@kernel.org, axboe@kernel.dk, agk@redhat.com, snitzer@kernel.org,
- mpatocka@redhat.com, eparis@redhat.com, paul@paul-moore.com,
- linux-doc@vger.kernel.org, linux-integrity@vger.kernel.org,
- linux-security-module@vger.kernel.org, fsverity@lists.linux.dev,
- linux-block@vger.kernel.org, dm-devel@lists.linux.dev,
- audit@vger.kernel.org, linux-kernel@vger.kernel.org,
- Deven Bowers <deven.desai@linux.microsoft.com>
-References: <1722665314-21156-1-git-send-email-wufan@linux.microsoft.com>
- <1722665314-21156-3-git-send-email-wufan@linux.microsoft.com>
- <20240810155000.GA35219@mail.hallyn.com>
-Content-Language: en-US
-From: Fan Wu <wufan@linux.microsoft.com>
-In-Reply-To: <20240810155000.GA35219@mail.hallyn.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240812022933.69850-8-laoar.shao@gmail.com>
 
+Hi,
 
+On Mon, Aug 12, 2024 at 10:29:31AM GMT, Yafang Shao wrote:
+> Using strscpy() to read the task comm ensures that the name is
+> always NUL-terminated, regardless of the source string. This approach also
+> facilitates future extensions to the task comm.
 
-On 8/10/2024 8:50 AM, Serge E. Hallyn wrote:
-> On Fri, Aug 02, 2024 at 11:08:16PM -0700, Fan Wu wrote:
->> From: Deven Bowers <deven.desai@linux.microsoft.com>
->>
->> IPE's interpretation of the what the user trusts is accomplished through
-> 
-> nit: "of what the user trusts" (drop the extra 'the')
-> 
->> its policy. IPE's design is to not provide support for a single trust
->> provider, but to support multiple providers to enable the end-user to
->> choose the best one to seek their needs.
->>
->> This requires the policy to be rather flexible and modular so that
->> integrity providers, like fs-verity, dm-verity, or some other system,
->> can plug into the policy with minimal code changes.
->>
->> Signed-off-by: Deven Bowers <deven.desai@linux.microsoft.com>
->> Signed-off-by: Fan Wu <wufan@linux.microsoft.com>
-> 
-> This all looks fine.  Just one comment below.
-> 
-Thank you for reviewing this!
+Thanks for sending patches replacing str{n}cpy's!
+
+I believe there's at least two more instances of strncpy in trace.c as
+well as in trace_events_hist.c (for a grand total of 6 instances in the
+files you've touched in this specific patch).
+
+It'd be great if you could replace those instances in this patch as well :>)
+
+This would help greatly with [1].
 
 > 
->> +/**
->> + * parse_rule() - parse a policy rule line.
->> + * @line: Supplies rule line to be parsed.
->> + * @p: Supplies the partial parsed policy.
->> + *
->> + * Return:
->> + * * 0		- Success
->> + * * %-ENOMEM	- Out of memory (OOM)
->> + * * %-EBADMSG	- Policy syntax error
->> + */
->> +static int parse_rule(char *line, struct ipe_parsed_policy *p)
->> +{
->> +	enum ipe_action_type action = IPE_ACTION_INVALID;
->> +	enum ipe_op_type op = IPE_OP_INVALID;
->> +	bool is_default_rule = false;
->> +	struct ipe_rule *r = NULL;
->> +	bool first_token = true;
->> +	bool op_parsed = false;
->> +	int rc = 0;
->> +	char *t;
->> +
->> +	r = kzalloc(sizeof(*r), GFP_KERNEL);
->> +	if (!r)
->> +		return -ENOMEM;
->> +
->> +	INIT_LIST_HEAD(&r->next);
->> +	INIT_LIST_HEAD(&r->props);
->> +
->> +	while (t = strsep(&line, IPE_POLICY_DELIM), line) {
+> Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
+> Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> Cc: Steven Rostedt <rostedt@goodmis.org>
+> Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+> ---
+>  kernel/trace/trace.c             | 2 +-
+>  kernel/trace/trace_events_hist.c | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 > 
-> If line is passed in as NULL, t will be NULL on the first test.  Then
-> you'll break out and call parse_action(NULL), which calls
-> match_token(NULL, ...), which I do not think is safe.
-> 
-> I realize the current caller won't pass in NULL, but it seems worth
-> checking for here in case some future caller is added by someone
-> who's unaware.
-> 
-> Or, maybe add 'line must not be null' to the function description.
+> diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
+> index 578a49ff5c32..1b2577f9d734 100644
+> --- a/kernel/trace/trace.c
+> +++ b/kernel/trace/trace.c
+> @@ -1907,7 +1907,7 @@ __update_max_tr(struct trace_array *tr, struct task_struct *tsk, int cpu)
+>  	max_data->critical_start = data->critical_start;
+>  	max_data->critical_end = data->critical_end;
+>  
+> -	strncpy(max_data->comm, tsk->comm, TASK_COMM_LEN);
+> +	strscpy(max_data->comm, tsk->comm, TASK_COMM_LEN);
+
+If max_data->comm wants to be NUL-terminated then this is the right
+replacement. Without knowing how the trace stack works at all, it's hard
+for me to tell if that is the case.
+
+There's a length-supplied format specifier for which this comm field is
+used with; Either this is just another safeguard against spilling over
+the buffer or this field really doesn't care about NUL-termination.
+| seq_printf(m, "#    | task: %.16s-%d "
+|       "(uid:%d nice:%ld policy:%ld rt_prio:%ld)\n",
+|       data->comm, data->pid,
+
+In the event this field doesn't need to be NUL-terminated then we are
+introducing an off-by-one error where we are copying one less useful
+byte with strscpy -- Linus pointed out earlier [2] that these things all
+just want to be c-strings so this is probably the right change :>)
+
+>  	max_data->pid = tsk->pid;
+>  	/*
+>  	 * If tsk == current, then use current_uid(), as that does not use
+> diff --git a/kernel/trace/trace_events_hist.c b/kernel/trace/trace_events_hist.c
+> index 6ece1308d36a..4cd24c25ce05 100644
+> --- a/kernel/trace/trace_events_hist.c
+> +++ b/kernel/trace/trace_events_hist.c
+> @@ -1599,7 +1599,7 @@ static inline void save_comm(char *comm, struct task_struct *task)
+>  		return;
+>  	}
+>  
+> -	strncpy(comm, task->comm, TASK_COMM_LEN);
+> +	strscpy(comm, task->comm, TASK_COMM_LEN);
+>  }
+>  
+>  static void hist_elt_data_free(struct hist_elt_data *elt_data)
+> -- 
+> 2.43.5
 > 
 
-Yes, I agree that adding a NULL check would be better. I will include it 
-in the next version.
+Link: https://github.com/KSPP/linux/issues/90 [1]
+Link: https://lore.kernel.org/all/CAHk-=whWtUC-AjmGJveAETKOMeMFSTwKwu99v7+b6AyHMmaDFA@mail.gmail.com/ [2]
 
--Fan
+Thanks
+Justin
