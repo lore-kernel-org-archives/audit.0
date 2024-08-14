@@ -1,129 +1,153 @@
-Received: from mail-qv1-f47.google.com (mail-qv1-f47.google.com [209.85.219.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A72A156CE;
-	Wed, 14 Aug 2024 02:34:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.47
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE30A1BBBDA;
+	Wed, 14 Aug 2024 18:23:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723602900; cv=none; b=Ry1B+S4W4A5B7Kh8DNpAJWD4m2Yhc42KeZOYKh+8qN0h2HJ1NRNQrY87QUnhwBaWIkUu00ds3mf0qO6P4awm6m1+TZm/7oDx2nzlhMcYKiJw+8Zda+NVMrsZBfcydJ2mJIJFDvbMpBVdLILTHkHKVMVVxRGO6ZtBKI0w96S65Yc=
+	t=1723659827; cv=none; b=ecqMVYTAoQGQPVgtaSAWeGJhUfzGQp2f08y7fOVqbNqTm1M/P/PodtZd1J32iiUHcBLWhPEfa7XrBgK0VbByoawDDZzUa7qA9XfhQ9aQ6M4yhvNdfveEsOG95jssRdB6avaOfWphYYyZtqYUs+iNNJYbHIKLmXywMxB9wBHE+TU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723602900; c=relaxed/simple;
-	bh=gulgz5rKPIgrCppnzyz5c+/APUjS7s9WOQeVGOEKdkQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=pYUWlMcVIrI7dNZx0d2Oymsq3C6Qnci748epvLqWLcoze6OnzG/egOiUtzwutBw0+jywCf71NqyiceZ0t3lA3nnx+pWxFamnBVGNaQQBtr4YaZPSVuXX6Lq2GLuStw3fe+NX+OBC3h1ej1suF5i7zzKo7SxskCJyGoqCTKZCzB0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Z56zElc8; arc=none smtp.client-ip=209.85.219.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1723659827; c=relaxed/simple;
+	bh=VP+QiCS6zOdtfbT9zGI9LEQCyWB6JQVT2Grcrrb4SEo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=enA1H0FcnXfL5DuueGnZBjbkH2BuyYsOFykiRk/bf6sbi8llo9qlQImUIq/nox5knqN3KfrdkstTbo3K25OSbeWHLpk9mJ5UoA+aXXpYE2hiWGKXLa9nBUq6diUmizS9ryaBFM4pWmB/8HNlnzBevY83OAZFrvcuxzDK8jnBuHU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=arhIygC1; arc=none smtp.client-ip=13.77.154.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Z56zElc8"
-Received: by mail-qv1-f47.google.com with SMTP id 6a1803df08f44-6bb96ef0e8eso32734916d6.2;
-        Tue, 13 Aug 2024 19:34:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1723602897; x=1724207697; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gulgz5rKPIgrCppnzyz5c+/APUjS7s9WOQeVGOEKdkQ=;
-        b=Z56zElc8D5kAO0p6JXNP68wMk4rW8ExrF3yfJ9y7pG1TBPuXaJKeNzM5j8lh/fTeDv
-         dq3EemzEwhDU8gejfZLOLVC2y1Sc65CoeT3oinmoEy2+tuuvSdNsN1LXoOQrCYkokHYG
-         dq9cL/HWKc1NXOmzBS+Rekgr8WMqZTd/I5SBEhYsk5pZmKqIdH2ZbMN0SpRzDjeqgynH
-         j981y9CbGZd/eKAWfO423+Q3ihE2ojKMA2zkCX/aFgGMzu6nQb902UBQ1FfOchGSGIFt
-         Qc8uytDwT43gMz8dDR/7c47UbSaUNTvK1VNjFrtV2vKd4IWbDWcZCknMuTQe/LE/qmI+
-         irRQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723602897; x=1724207697;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=gulgz5rKPIgrCppnzyz5c+/APUjS7s9WOQeVGOEKdkQ=;
-        b=AejIe4KHV9iK8lkCT9Q2IEwmDiGvJnneicTfyAEFVow9vxuYM9jAAMzuflR4FbSDVo
-         4BIlLYcDBaX8/MLUTSN9s2ljH0Noe96hPsHMLtxpzzQihha9ZwWH1bm6DgsMBm40dLo/
-         Rejfjaz1FVzuq+AVcRCo4mLEe07NDLEFZJxrT5kPz0C8/x9/bF+/Zlz7QDSJHSU4XhT5
-         rJHHVT7qipCqLMP3FTXBTtMngQcF6ZATB+gHDIQffHLXW5bqd4IlbSGMhrsPss3o6hsw
-         dX26QF0PlGqUZpwpYC25NfKeeIO36RdpcKYAy/5hBXndQI4IOnNVJJvXei2fdQJwFcRY
-         0gWA==
-X-Forwarded-Encrypted: i=1; AJvYcCXok3ZOPd0gADdUPsyiRDw6GZQ54AbO7gEjjZpB2kEmrdd7SKQyrhyipC/9p2tY90IBn1sMdc2tUGZQtCy+kZ8ach75MTsdsvoCShw9c1ajTWqj8lm++CLIhyG7YJD5Ti622IEhWgo6jjor426L+UQzjquk01fTuaXoTnh2SwGfSZ3alb6bYeywauk6zT3YO3JRwij/Cgx/k0xgcE2BTuMcohV+Y+rlqqUHNDukGwDXCXDhIWN+yAxrCIElU/MO2Pk/TksnwT1U4BOyj/0B/r6G7M14xhVNqL2oKPVmEVa6eQV0Iam8SfeMTdRUI/ouOwMfWG3u7Q==
-X-Gm-Message-State: AOJu0YyYfWiuQyeN9qUzn3cigW/BWklo5wUzCOstBN88ppI+qqsD6aHQ
-	MLmLABk7aFSSvH/39PdUUxZg8iW5hjP8bgA3hAL7VcE9w3u894o6MwS4bisc6ADQhLTlHrvPRrk
-	iwFHs6E4Mg661GG4Sd66h4i0G4ZUKztA3IbFkfWgQ
-X-Google-Smtp-Source: AGHT+IFMSVMbk2rFvvLCxVG+t2Kro+kM02PzB20ab6DAgtzjWvP0nxAeN6FMupoLej6GxB7D7awodMjAvR0yE5dJ7Jc=
-X-Received: by 2002:a05:6214:4413:b0:6b7:ab54:3b90 with SMTP id
- 6a1803df08f44-6bf5d22db83mr14601296d6.35.1723602897166; Tue, 13 Aug 2024
- 19:34:57 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="arhIygC1"
+Received: from [10.137.106.151] (unknown [131.107.174.23])
+	by linux.microsoft.com (Postfix) with ESMTPSA id 3D2C020B7165;
+	Wed, 14 Aug 2024 11:23:39 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 3D2C020B7165
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1723659819;
+	bh=rQ4vq6TsUxv4l4kbIL+sjMudyLAkyj4vXkuWLSuksPI=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=arhIygC1hFg4TcYMA000C9oRAiO/qMK7FqChi4JOP6pNVnUW0LTKCD5XOeOTvqLjO
+	 OxWN/HJ2LGm2JmHXlgiaG0btNEqrqB5MZKuZtC7CvZRFE5dhaiW+q0w86YV5loKWME
+	 vgVOeLlN6FYqX4YJz687dnyfNgPTF6jdt4sY5pgY=
+Message-ID: <cbf1caa0-835b-4d1d-aed5-9741eb10cf8b@linux.microsoft.com>
+Date: Wed, 14 Aug 2024 11:23:39 -0700
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240812022933.69850-1-laoar.shao@gmail.com> <20240812022933.69850-8-laoar.shao@gmail.com>
- <hbjxkyhugi27mbrj5zo2thfdg2gotz6syz6qoeows6l6qwbzkt@c3yb26z4pn62> <CAFhGd8oBmBVooQha7EB+_wenO8TfOjqJsZAzgHLuDUSYmwxy=w@mail.gmail.com>
-In-Reply-To: <CAFhGd8oBmBVooQha7EB+_wenO8TfOjqJsZAzgHLuDUSYmwxy=w@mail.gmail.com>
-From: Yafang Shao <laoar.shao@gmail.com>
-Date: Wed, 14 Aug 2024 10:34:21 +0800
-Message-ID: <CALOAHbC=DpQROvwxxzqU31L5pOd5tC3+26Q_KuC8PZ7FeU=AAg@mail.gmail.com>
-Subject: Re: [PATCH v6 7/9] tracing: Replace strncpy() with strscpy()
-To: Justin Stitt <justinstitt@google.com>, ruanjinjie@huawei.com
-Cc: akpm@linux-foundation.org, torvalds@linux-foundation.org, 
-	ebiederm@xmission.com, alexei.starovoitov@gmail.com, rostedt@goodmis.org, 
-	catalin.marinas@arm.com, penguin-kernel@i-love.sakura.ne.jp, 
-	linux-mm@kvack.org, linux-fsdevel@vger.kernel.org, 
-	linux-trace-kernel@vger.kernel.org, audit@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, selinux@vger.kernel.org, 
-	bpf@vger.kernel.org, netdev@vger.kernel.org, dri-devel@lists.freedesktop.org, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v20 02/20] ipe: add policy parser
+To: Paul Moore <paul@paul-moore.com>, "Serge E. Hallyn" <serge@hallyn.com>
+Cc: corbet@lwn.net, zohar@linux.ibm.com, jmorris@namei.org, tytso@mit.edu,
+ ebiggers@kernel.org, axboe@kernel.dk, agk@redhat.com, snitzer@kernel.org,
+ mpatocka@redhat.com, eparis@redhat.com, linux-doc@vger.kernel.org,
+ linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org,
+ fsverity@lists.linux.dev, linux-block@vger.kernel.org,
+ dm-devel@lists.linux.dev, audit@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Deven Bowers <deven.desai@linux.microsoft.com>
+References: <1722665314-21156-1-git-send-email-wufan@linux.microsoft.com>
+ <1722665314-21156-3-git-send-email-wufan@linux.microsoft.com>
+ <20240810155000.GA35219@mail.hallyn.com>
+ <e1dd4dcf-8e2e-4e7b-9d40-533efd123103@linux.microsoft.com>
+ <CAHC9VhTYT3RTG1FbnZQ2F68a16gU9_QJ-=LSGbroP-40tpRTiw@mail.gmail.com>
+Content-Language: en-US
+From: Fan Wu <wufan@linux.microsoft.com>
+In-Reply-To: <CAHC9VhTYT3RTG1FbnZQ2F68a16gU9_QJ-=LSGbroP-40tpRTiw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Wed, Aug 14, 2024 at 6:31=E2=80=AFAM Justin Stitt <justinstitt@google.co=
-m> wrote:
->
-> On Tue, Aug 13, 2024 at 3:19=E2=80=AFPM Justin Stitt <justinstitt@google.=
-com> wrote:
-> >
-> > Hi,
-> >
-> > On Mon, Aug 12, 2024 at 10:29:31AM GMT, Yafang Shao wrote:
-> > > Using strscpy() to read the task comm ensures that the name is
-> > > always NUL-terminated, regardless of the source string. This approach=
- also
-> > > facilitates future extensions to the task comm.
-> >
-> > Thanks for sending patches replacing str{n}cpy's!
-> >
-> > I believe there's at least two more instances of strncpy in trace.c as
-> > well as in trace_events_hist.c (for a grand total of 6 instances in the
-> > files you've touched in this specific patch).
-> >
-> > It'd be great if you could replace those instances in this patch as wel=
-l :>)
-> >
-> > This would help greatly with [1].
-> >
->
-> I just saw that Jinjie Ruan sent replacements for these strncpy's too
-> and tracked down and replaced an instance of strscpy() that was
-> present in trace.c but was moved to trace_sched_switch.c during a
-> refactor.
->
-> They even used the new 2-argument strscpy which is pretty neat.
->
-> See their patch here:
-> https://lore.kernel.org/all/20240731075058.617588-1-ruanjinjie@huawei.com=
-/
 
-+ Jinjie
 
-That sounds good. Since this change can be handled as a separate
-patch, I will drop it from the next version and leave it to Jinjie.
-Please note that Steven might have a better solution for handling
-task->comm in trace events, so it=E2=80=99s probably best to leave any chan=
-ges
-related to trace events to him [0].
+On 8/13/2024 6:53 PM, Paul Moore wrote:
+> On Tue, Aug 13, 2024 at 1:54 PM Fan Wu <wufan@linux.microsoft.com> wrote:
+>> On 8/10/2024 8:50 AM, Serge E. Hallyn wrote:
+>>> On Fri, Aug 02, 2024 at 11:08:16PM -0700, Fan Wu wrote:
+>>>> From: Deven Bowers <deven.desai@linux.microsoft.com>
+>>>>
+>>>> IPE's interpretation of the what the user trusts is accomplished through
+>>>
+>>> nit: "of what the user trusts" (drop the extra 'the')
+>>>
+>>>> its policy. IPE's design is to not provide support for a single trust
+>>>> provider, but to support multiple providers to enable the end-user to
+>>>> choose the best one to seek their needs.
+>>>>
+>>>> This requires the policy to be rather flexible and modular so that
+>>>> integrity providers, like fs-verity, dm-verity, or some other system,
+>>>> can plug into the policy with minimal code changes.
+>>>>
+>>>> Signed-off-by: Deven Bowers <deven.desai@linux.microsoft.com>
+>>>> Signed-off-by: Fan Wu <wufan@linux.microsoft.com>
+>>>
+>>> This all looks fine.  Just one comment below.
+>>>
+>> Thank you for reviewing this!
+>>
+>>>
+>>>> +/**
+>>>> + * parse_rule() - parse a policy rule line.
+>>>> + * @line: Supplies rule line to be parsed.
+>>>> + * @p: Supplies the partial parsed policy.
+>>>> + *
+>>>> + * Return:
+>>>> + * * 0              - Success
+>>>> + * * %-ENOMEM       - Out of memory (OOM)
+>>>> + * * %-EBADMSG      - Policy syntax error
+>>>> + */
+>>>> +static int parse_rule(char *line, struct ipe_parsed_policy *p)
+>>>> +{
+>>>> +    enum ipe_action_type action = IPE_ACTION_INVALID;
+>>>> +    enum ipe_op_type op = IPE_OP_INVALID;
+>>>> +    bool is_default_rule = false;
+>>>> +    struct ipe_rule *r = NULL;
+>>>> +    bool first_token = true;
+>>>> +    bool op_parsed = false;
+>>>> +    int rc = 0;
+>>>> +    char *t;
+>>>> +
+>>>> +    r = kzalloc(sizeof(*r), GFP_KERNEL);
+>>>> +    if (!r)
+>>>> +            return -ENOMEM;
+>>>> +
+>>>> +    INIT_LIST_HEAD(&r->next);
+>>>> +    INIT_LIST_HEAD(&r->props);
+>>>> +
+>>>> +    while (t = strsep(&line, IPE_POLICY_DELIM), line) {
+>>>
+>>> If line is passed in as NULL, t will be NULL on the first test.  Then
+>>> you'll break out and call parse_action(NULL), which calls
+>>> match_token(NULL, ...), which I do not think is safe.
+>>>
+>>> I realize the current caller won't pass in NULL, but it seems worth
+>>> checking for here in case some future caller is added by someone
+>>> who's unaware.
+>>>
+>>> Or, maybe add 'line must not be null' to the function description.
+>>
+>> Yes, I agree that adding a NULL check would be better. I will include it
+>> in the next version.
+> 
+> We're still waiting to hear back from the device-mapper devs, but if
+> this is the only change required to the patchset I can add a NULL
+> check when I merge the patchset as it seems silly to resend the entire
+> patchset for this.  Fan, do you want to share the code snippet with
+> the NULL check so Serge can take a look?
+> 
 
-[0] https://lore.kernel.org/all/20240603184016.3374559f@gandalf.local.home/=
-#t
+Sure, here is the diff.
 
---
-Regards
-Yafang
+diff --git a/security/ipe/policy_parser.c b/security/ipe/policy_parser.c
+index 32064262348a..0926b442e32a 100644
+--- a/security/ipe/policy_parser.c
++++ b/security/ipe/policy_parser.c
+@@ -309,6 +309,9 @@ static int parse_rule(char *line, struct 
+ipe_parsed_policy *p)
+         int rc = 0;
+         char *t;
+
++       if (IS_ERR_OR_NULL(line))
++               return -EBADMSG;
++
+         r = kzalloc(sizeof(*r), GFP_KERNEL);
+         if (!r)
+                 return -ENOMEM;
+
+-Fan
