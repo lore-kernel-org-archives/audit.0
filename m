@@ -1,137 +1,229 @@
-Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B13CC1332A1;
-	Wed, 28 Aug 2024 03:04:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8815216132F;
+	Wed, 28 Aug 2024 10:15:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724814285; cv=none; b=gttHFE7SjeWAZ9bwyuVy4YuBmdjcOMXkNZFxQCGBzsJnCnH4XOhAhY76wglzrrL5i77sr4FrWpqByJCaueNW+PajDQJPWnE5zkIqHla3TaAFTESZOpBw4XAmzhE2qjEBe0RUe2u6MyUi/ou0wXDpoifaGohmq5gA7AK1osNSalc=
+	t=1724840140; cv=none; b=VTFT3D7YBFnl/afoJnW8DOtsD+6CxZPJEIt97kwa9hEyAg5KlhDy+on+rG2WNqwBtgO8qk5Tll3hasZzD9pBhdQdGHT55cNfiaKOVRppQ+3rUlO0CXZUk9lp9Al40BElv95DnR8bQAbQOJfp/tZENAUw+sPoOKu1r7JgJhZAg84=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724814285; c=relaxed/simple;
-	bh=iqRY1P34qqoNfGxtLuvfxUNzgKq34JOZhG+axK8tdYs=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=o3a99nFEzVdjc5n5gwq6oplLYyPEXwLrvJI+77i4njMPKaIV+FS1xNnG7neNcB4Rk5DCXconwRQ0fzUTgFMkVOuczcySUVgXK+u7gA+Lw/ChyKmWrNntdBS4HY0bpRIVeggv23Z5EM40Ps1Bqh2nIKrnR0hY0qFeG+T0f2U8i+c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=e81pcOe8; arc=none smtp.client-ip=209.85.216.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1724840140; c=relaxed/simple;
+	bh=5xuHNpJ8s4HOyC/ZMbuo393EqBOuuHgBE8NpAhMS1xo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=WfWKw6G0eVSUKdGcitRmZGAGCD/t8reKnkfIP+wTZuGLmNU4vqbuSpgsQT0ArUjk5WCh4s14GcH3xurx2GV5FaxPYjeRaj1+sOu4TIHm8DfS6l1vK9rqejWpNbst6cu4OK1mZ+NuGdWZ+dgJ8XbYb7FuIvtmpYclp8Z3QOS4GfE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=n474//dd; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="e81pcOe8"
-Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-2d3e44b4613so4566704a91.3;
-        Tue, 27 Aug 2024 20:04:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1724814283; x=1725419083; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8OBLeQ9F541pwxbn8dEubiWANdxJtGv9ekHxWl5Hwac=;
-        b=e81pcOe8iwoPu+A0y/ykVmzG0XbGCoDPD3x1pK4ijYyA38MjqT5iPwWGRTo3gMouOq
-         fORnaPq1otZXtBwWkq6Hl5NO+84dnKiddILYgBVsGXBY4EalgGUqZgR/ZseHbEUrJ+sW
-         0UeGYOkLTOolfvWyKFTtJWF0KXvyN/pA2LOMU3MWc0WGl/Pif7uoAOhZLXC5mhOG97xv
-         FXfCd8jf9xyTlhxinjyfDqJH4iRSnQ2YUT3w48Cu0LeiPyLMLpJ6UD3/Ws2i+XMUxZ1/
-         /gZE3UV/fnsBmQBRrMKUAoVH26uISzrqxOOaSN7oPIzio093HFzDzG0dhUczUhiA1n/+
-         g7cw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724814283; x=1725419083;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8OBLeQ9F541pwxbn8dEubiWANdxJtGv9ekHxWl5Hwac=;
-        b=hDv8YGuMVd3hIa16OeVDea+XUEnulFDjScHhfTN7+SQ0rRuXNf6yVxXAvZmfrkYs0Z
-         1oIKGUUf5HyqU9Y8o5Q/AsBt6crDazMBTLnOljjV6K1fZYuooLWlLV9FW2BKl1AFNFXj
-         UUfb0zrlQNSEjymlFyB5JhPmEKwMyq9haVRDt3xRL835YyoWvMjaRhulYbe/6fQ7imXP
-         FBFIWf/iboK1lk8d2033BwAdKJJDO/zqC5Si632J4jTKCzZXNXrZJEbmYfAlU3FLmDhU
-         NUpLT+BLe6btCQmcyuKclq6h9kbUQJ+bqq8h69uLb8JMH54nm7aUnyqwrqD4hzSES81i
-         Cz0Q==
-X-Forwarded-Encrypted: i=1; AJvYcCU7RXAn3SnBWchTm7cn5EACoxvazW6Mqj080VvMqbhgiSDMt8T4AB13qM8lKjNLawF7ok2YKzkl9qC61VrjwQ==@vger.kernel.org, AJvYcCUDBo+MRnxSMM0hfY91EbCw3LBnVHv3pmsgOsqskFJ+M5i1tyPdeL06N/xBJFVIdDIboencYbas2w==@vger.kernel.org, AJvYcCUsg43SnC9LJHdmCikaBq7/Y2xDKt+mhIaLvx0+3TXyQhMBmIj2Dzhzh4K2Xu/xcQ91xrb2bQ==@vger.kernel.org, AJvYcCV7IeGckOCnWGu66drMWPaX6HZpP68TZq20DWo5WHVZgms+bYtrQm0ztOw12G3fgWIhOJ61FIwiSI/ufub1kO2GRN7b@vger.kernel.org, AJvYcCWBpfYGuGnH6MpDGW44zEVVIoZJe8zIF5/FbkocG3p3gNVQpRDcwg3gJtHPJ2+3z0eKFS9tjE67@vger.kernel.org, AJvYcCWz4aNoDo85wLpuY6ffxsyKkngAAl0YMzIw8jESsnMc1yyMTCjrDQ5v+mIydtykQKihoIKw@vger.kernel.org, AJvYcCXIkqS7k9zP01l+YsqGIS5eFOEG/Hzk7/dDbSX47YaRmXV3dyw5GaAcS/eIWyaZuHmnRlmM0xA2D7Q3gABPZSdOxhGP5Kha@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz9HGif0oSVAktneJr8j+554uz8Cw/5v+1VmErWHm5pSXcmBbkB
-	uehyLe2fTHpFwGR+bL+0vSGteML7kLWDKNPtwRovks38N+3SmSGy
-X-Google-Smtp-Source: AGHT+IG9WCG/sJqfIUmD5L1QkWASIgz28eaxuJrS0TfQtB7xTFo8bkGI6Rj777tc/95CgBuyWlEpcw==
-X-Received: by 2002:a17:90b:390e:b0:2c8:e888:26a2 with SMTP id 98e67ed59e1d1-2d646bcd147mr17296354a91.13.1724814282792;
-        Tue, 27 Aug 2024 20:04:42 -0700 (PDT)
-Received: from localhost.localdomain ([39.144.104.43])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2d8445db8f6sm317977a91.1.2024.08.27.20.04.32
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 27 Aug 2024 20:04:42 -0700 (PDT)
-From: Yafang Shao <laoar.shao@gmail.com>
-To: akpm@linux-foundation.org
-Cc: torvalds@linux-foundation.org,
-	alx@kernel.org,
-	justinstitt@google.com,
-	ebiederm@xmission.com,
-	alexei.starovoitov@gmail.com,
-	rostedt@goodmis.org,
-	catalin.marinas@arm.com,
-	penguin-kernel@i-love.sakura.ne.jp,
-	linux-mm@kvack.org,
-	linux-fsdevel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	audit@vger.kernel.org,
-	linux-security-module@vger.kernel.org,
-	selinux@vger.kernel.org,
-	bpf@vger.kernel.org,
-	netdev@vger.kernel.org,
-	dri-devel@lists.freedesktop.org,
-	Yafang Shao <laoar.shao@gmail.com>,
-	Daniel Vetter <daniel.vetter@ffwll.ch>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>
-Subject: [PATCH v8 8/8] drm: Replace strcpy() with strscpy()
-Date: Wed, 28 Aug 2024 11:03:21 +0800
-Message-Id: <20240828030321.20688-9-laoar.shao@gmail.com>
-X-Mailer: git-send-email 2.30.1 (Apple Git-130)
-In-Reply-To: <20240828030321.20688-1-laoar.shao@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="n474//dd"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5E4DC98EC0;
+	Wed, 28 Aug 2024 10:15:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1724840140;
+	bh=5xuHNpJ8s4HOyC/ZMbuo393EqBOuuHgBE8NpAhMS1xo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=n474//ddYkvBDbFi4PGLE0FTy+iiAA4s4wyNdxcHGJALrL1fthrhN3uI+zqdovRS/
+	 144KFSBIez7oTLYMwkU1OpzSMrIJ/beg9u2IV2kfsLQ3HbVrfcjTYwUOYc0zNYGCUW
+	 sJPUqdSKe/vNZkKLA9B0zTCgnE8dCgdnbOaVHYsUF8xA9psYiMn54rrFhKkNIi3oCl
+	 dvtmwiVj6Pzfi2AhPqiPDt2mnx4XVarJ+wsJOyfm+g/Kx8+3f9FhCTGEuLGnAERvcX
+	 Jg4rftmJ9JMgCrLnqOr0dbza144I/TB8JbkMRSm3BmoN9HM3dOV8VyCx9rbu7NESVa
+	 DUUS4wBFCSJWg==
+Date: Wed, 28 Aug 2024 12:15:33 +0200
+From: Alejandro Colomar <alx@kernel.org>
+To: Yafang Shao <laoar.shao@gmail.com>
+Cc: akpm@linux-foundation.org, torvalds@linux-foundation.org, 
+	justinstitt@google.com, ebiederm@xmission.com, alexei.starovoitov@gmail.com, 
+	rostedt@goodmis.org, catalin.marinas@arm.com, penguin-kernel@i-love.sakura.ne.jp, 
+	linux-mm@kvack.org, linux-fsdevel@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org, audit@vger.kernel.org, linux-security-module@vger.kernel.org, 
+	selinux@vger.kernel.org, bpf@vger.kernel.org, netdev@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, Alexander Viro <viro@zeniv.linux.org.uk>, 
+	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, Kees Cook <keescook@chromium.org>, 
+	Matus Jokay <matus.jokay@stuba.sk>, "Serge E. Hallyn" <serge@hallyn.com>
+Subject: Re: [PATCH v8 1/8] Get rid of __get_task_comm()
+Message-ID: <lql4y2nvs3ewadszhmv4m6fnqja4ff4ymuurpidlwvgf4twvru@esnh37a2jxbd>
 References: <20240828030321.20688-1-laoar.shao@gmail.com>
+ <20240828030321.20688-2-laoar.shao@gmail.com>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="74qvuoge5bg2djof"
+Content-Disposition: inline
+In-Reply-To: <20240828030321.20688-2-laoar.shao@gmail.com>
 
-To prevent erros from occurring when the src string is longer than the
-dst string in strcpy(), we should use strscpy() instead. This
-approach also facilitates future extensions to the task comm.
 
-Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
-Acked-by: Daniel Vetter <daniel.vetter@ffwll.ch>
-Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
-Cc: Maxime Ripard <mripard@kernel.org>
-Cc: Thomas Zimmermann <tzimmermann@suse.de>
-Cc: David Airlie <airlied@gmail.com>
----
- drivers/gpu/drm/drm_framebuffer.c     | 2 +-
- drivers/gpu/drm/i915/i915_gpu_error.c | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+--74qvuoge5bg2djof
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+From: Alejandro Colomar <alx@kernel.org>
+To: Yafang Shao <laoar.shao@gmail.com>
+Cc: akpm@linux-foundation.org, torvalds@linux-foundation.org, 
+	justinstitt@google.com, ebiederm@xmission.com, alexei.starovoitov@gmail.com, 
+	rostedt@goodmis.org, catalin.marinas@arm.com, penguin-kernel@i-love.sakura.ne.jp, 
+	linux-mm@kvack.org, linux-fsdevel@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org, audit@vger.kernel.org, linux-security-module@vger.kernel.org, 
+	selinux@vger.kernel.org, bpf@vger.kernel.org, netdev@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, Alexander Viro <viro@zeniv.linux.org.uk>, 
+	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, Kees Cook <keescook@chromium.org>, 
+	Matus Jokay <matus.jokay@stuba.sk>, "Serge E. Hallyn" <serge@hallyn.com>
+Subject: Re: [PATCH v8 1/8] Get rid of __get_task_comm()
+References: <20240828030321.20688-1-laoar.shao@gmail.com>
+ <20240828030321.20688-2-laoar.shao@gmail.com>
+MIME-Version: 1.0
+In-Reply-To: <20240828030321.20688-2-laoar.shao@gmail.com>
 
-diff --git a/drivers/gpu/drm/drm_framebuffer.c b/drivers/gpu/drm/drm_framebuffer.c
-index 888aadb6a4ac..2d6993539474 100644
---- a/drivers/gpu/drm/drm_framebuffer.c
-+++ b/drivers/gpu/drm/drm_framebuffer.c
-@@ -868,7 +868,7 @@ int drm_framebuffer_init(struct drm_device *dev, struct drm_framebuffer *fb,
- 	INIT_LIST_HEAD(&fb->filp_head);
- 
- 	fb->funcs = funcs;
--	strcpy(fb->comm, current->comm);
-+	strscpy(fb->comm, current->comm);
- 
- 	ret = __drm_mode_object_add(dev, &fb->base, DRM_MODE_OBJECT_FB,
- 				    false, drm_framebuffer_free);
-diff --git a/drivers/gpu/drm/i915/i915_gpu_error.c b/drivers/gpu/drm/i915/i915_gpu_error.c
-index 96c6cafd5b9e..afa9dae39378 100644
---- a/drivers/gpu/drm/i915/i915_gpu_error.c
-+++ b/drivers/gpu/drm/i915/i915_gpu_error.c
-@@ -1412,7 +1412,7 @@ static bool record_context(struct i915_gem_context_coredump *e,
- 	rcu_read_lock();
- 	task = pid_task(ctx->pid, PIDTYPE_PID);
- 	if (task) {
--		strcpy(e->comm, task->comm);
-+		strscpy(e->comm, task->comm);
- 		e->pid = task->pid;
- 	}
- 	rcu_read_unlock();
--- 
-2.43.5
+Hi Yafang,
 
+On Wed, Aug 28, 2024 at 11:03:14AM GMT, Yafang Shao wrote:
+> We want to eliminate the use of __get_task_comm() for the following
+> reasons:
+>=20
+> - The task_lock() is unnecessary
+>   Quoted from Linus [0]:
+>   : Since user space can randomly change their names anyway, using locking
+>   : was always wrong for readers (for writers it probably does make sense
+>   : to have some lock - although practically speaking nobody cares there
+>   : either, but at least for a writer some kind of race could have
+>   : long-term mixed results
+>=20
+> - The BUILD_BUG_ON() doesn't add any value
+>   The only requirement is to ensure that the destination buffer is a valid
+>   array.
+>=20
+> - Zeroing is not necessary in current use cases
+>   To avoid confusion, we should remove it. Moreover, not zeroing could
+>   potentially make it easier to uncover bugs. If the caller needs a
+>   zero-padded task name, it should be explicitly handled at the call site.
+>=20
+> Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
+> Link: https://lore.kernel.org/all/CAHk-=3DwivfrF0_zvf+oj6=3D=3DSh=3D-npJo=
+oP8chLPEfaFV0oNYTTBA@mail.gmail.com [0]
+> Link: https://lore.kernel.org/all/CAHk-=3DwhWtUC-AjmGJveAETKOMeMFSTwKwu99=
+v7+b6AyHMmaDFA@mail.gmail.com/
+> Suggested-by: Alejandro Colomar <alx@kernel.org>
+> Link: https://lore.kernel.org/all/2jxak5v6dfxlpbxhpm3ey7oup4g2lnr3ueurfbo=
+sf5wdo65dk4@srb3hsk72zwq
+> Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
+> Cc: Alexander Viro <viro@zeniv.linux.org.uk>
+> Cc: Christian Brauner <brauner@kernel.org>
+> Cc: Jan Kara <jack@suse.cz>
+> Cc: Eric Biederman <ebiederm@xmission.com>
+> Cc: Kees Cook <keescook@chromium.org>
+> Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+> Cc: Matus Jokay <matus.jokay@stuba.sk>
+> Cc: Alejandro Colomar <alx@kernel.org>
+> Cc: "Serge E. Hallyn" <serge@hallyn.com>
+> ---
+>  fs/exec.c             | 10 ----------
+>  fs/proc/array.c       |  2 +-
+>  include/linux/sched.h | 32 ++++++++++++++++++++++++++------
+>  kernel/kthread.c      |  2 +-
+>  4 files changed, 28 insertions(+), 18 deletions(-)
+>=20
+
+[...]
+
+> diff --git a/include/linux/sched.h b/include/linux/sched.h
+> index f8d150343d42..c40b95a79d80 100644
+> --- a/include/linux/sched.h
+> +++ b/include/linux/sched.h
+
+[...]
+
+> @@ -1914,10 +1917,27 @@ static inline void set_task_comm(struct task_stru=
+ct *tsk, const char *from)
+>  	__set_task_comm(tsk, from, false);
+>  }
+> =20
+> -extern char *__get_task_comm(char *to, size_t len, struct task_struct *t=
+sk);
+> +/*
+
+[...]
+
+> + * - ARRAY_SIZE() can help ensure that @buf is indeed an array.
+> + */
+>  #define get_task_comm(buf, tsk) ({			\
+> -	BUILD_BUG_ON(sizeof(buf) !=3D TASK_COMM_LEN);	\
+> -	__get_task_comm(buf, sizeof(buf), tsk);		\
+> +	strscpy(buf, (tsk)->comm, ARRAY_SIZE(buf));	\
+
+I see that there's a two-argument macro
+
+	#define strscpy(dst, src)	sized_strscpy(dst, src, sizeof(dst))
+
+which is used in patch 2/8
+
+	diff --git a/kernel/auditsc.c b/kernel/auditsc.c
+	index 6f0d6fb6523f..e4ef5e57dde9 100644
+	--- a/kernel/auditsc.c
+	+++ b/kernel/auditsc.c
+	@@ -2730,7 +2730,7 @@ void __audit_ptrace(struct task_struct *t)
+		context->target_uid =3D task_uid(t);
+		context->target_sessionid =3D audit_get_sessionid(t);
+		security_task_getsecid_obj(t, &context->target_sid);
+	-       memcpy(context->target_comm, t->comm, TASK_COMM_LEN);
+	+       strscpy(context->target_comm, t->comm);
+	 }
+
+	 /**
+
+I propose modifying that macro to use ARRAY_SIZE() instead of sizeof(),
+and then calling that macro here too.  That would not only make sure
+that this is an array, but make sure that every call to that macro is an
+array.  An if there are macros for similar string functions that reduce
+the argument with a usual sizeof(), the same thing could be done to
+those too.
+
+Have a lovley day!
+Alex
+
+> +	buf;						\
+>  })
+> =20
+>  #ifdef CONFIG_SMP
+> diff --git a/kernel/kthread.c b/kernel/kthread.c
+> index f7be976ff88a..7d001d033cf9 100644
+> --- a/kernel/kthread.c
+> +++ b/kernel/kthread.c
+> @@ -101,7 +101,7 @@ void get_kthread_comm(char *buf, size_t buf_size, str=
+uct task_struct *tsk)
+>  	struct kthread *kthread =3D to_kthread(tsk);
+> =20
+>  	if (!kthread || !kthread->full_name) {
+> -		__get_task_comm(buf, buf_size, tsk);
+> +		strscpy(buf, tsk->comm, buf_size);
+>  		return;
+>  	}
+> =20
+> --=20
+> 2.43.5
+>=20
+
+--=20
+<https://www.alejandro-colomar.es/>
+
+--74qvuoge5bg2djof
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE6jqH8KTroDDkXfJAnowa+77/2zIFAmbO+MUACgkQnowa+77/
+2zKy2RAAnnnQ7wIvUyQxf0H9XEIY8X2+ncAYPevk+tiPOW5bQccWRYr4HTCgFzGw
+ROoKl9PQMjlmswMdkJxLRBd3r2r4nwpDtvORpRfVBbyJwcEbrh1+L8l834QWQbKA
+sf7ADLROAhIWViIeyaFhFYw/LyBh8fwArPgzPbS1V1YbpXQeh50zpTaZG5CnTFzC
+OwQ02fhV2rZABw7Vc5d/ZSk0sk4ZfkfqrGKADzX2fhVYkcXYta4QU5oIYmtVlZ1K
+GyNHVHWcF27pDYQ/it3bKIugmz3RpyJ0uf7vYwcOwfnCeypEQquaEHAxOOuCdjGk
+SdObiDbJmE5L3FmMcRxHacE2bX5vSlubD9oNFhIA8nJVNN//lvEcG2f7uLUNtT9a
+rb5+wxYYuIoe5CY/hAm0g4R5RTen4WJdnnGuawk703XeRp7eZKvOfJHgwx+mLiln
+CB3EGWz6g8ieUhnYcmn3ZRH0YyStGxY/xVgWldQSJkcLJSQ/ppGk+BqeDwShUPnD
+lPvOwIzfDehLUj+he0PiELV787pJWEbrXHdUumbLryBlBEAnwgkz93KfZtEYjGst
+g/63uDKyaxh6XYNtKbmYyDC0uN3jf9JKdfNFtA73mlOaeV4EYP7DLUc9m7t9Wuq6
+QXB8wxZoun63oEyvF1QFKG1QEU0q9LRvy3h/isMlJmcehTcqI3Y=
+=NyZ7
+-----END PGP SIGNATURE-----
+
+--74qvuoge5bg2djof--
