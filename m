@@ -1,246 +1,129 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0692B158DC2;
-	Wed, 28 Aug 2024 10:33:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39A7315ECDF
+	for <audit@vger.kernel.org>; Wed, 28 Aug 2024 11:26:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724841217; cv=none; b=BIaXRq34G3gOE2H2MR3yep9olt0J2QUe3s/ywntFUoeVOMs0gn/MZgKrDJxlD8XrHn44zcxDue18LXjlnKjn5UntLa25+Tdns/RDSKjHIfAjEopaX9UAPC7AlcT6zPI3GF/9CmeZjnv3CJE5nAzRh8G/zUnuYk9NMN14vIIcd9U=
+	t=1724844397; cv=none; b=B5rtHuIikJQIs5k6W6+tLjnL0DyKxvKmpqCWmnZ/CjQNO3LERDTmPu1YoXhfPFEnjZd78e+xOhv8EnrbTlktkpNFL/RFzixJVDsv873z/iJEoNbSiTZXy5mfWAzCpjwODHmy/LSrFbHEaej2KbN2YBzzdd9tGuVZkAh7FOI70AA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724841217; c=relaxed/simple;
-	bh=cPZgE31BSHwwP95dmqEz0ZNgyoyAIhKJPLIMk9rRdfE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bWEl/pIjfVmu98CZEreiNpiKgaXpv2i3dawDClmoJZIeOEnXUr2owtPEL6OPfLIKr7HvpBz3KfCnCAqR6BuwGsfUh+usclFvz4xyCKq3FlY1bsI+1rqfs7PBJX5IOuAI9Xa5iUjiVCz5lXaRY7kyGBV3zJZd7JI95O1DkQKNPs8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZfAUOrA4; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1724844397; c=relaxed/simple;
+	bh=1lW4rHkYfKN6aTUGiJr17kgBBwohBBWY1TtkDVc3V88=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ff+v8Lz6kcSjLSFtnrG6O1hTdeJ/TJQWAxUqoP9nuYXKGFmy6W176Aseinih3v7r7SiseqSZI9ssQP5vySNUtwUJk/YuTcG313tSsrm25zzCL5G8phAxPpNfoRYWBUyF9tBYKkgjtuASRwk6JHfFEAKbMGhA+9sINahcYtSiaoE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=U6eLyfwM; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZfAUOrA4"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC6B1C98EC0;
-	Wed, 28 Aug 2024 10:33:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724841216;
-	bh=cPZgE31BSHwwP95dmqEz0ZNgyoyAIhKJPLIMk9rRdfE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ZfAUOrA4+4PzUIlLfwx0pZzjjMSWEwQzTUICw7S+nyRjSvVasQjwzTTKkWt5+VGUU
-	 snpNxm8aDorQtx2+eoDhq5hjE7V2fmP1Y4yVZkDZ7Az3sQBzwKR4QqC3jX+LM9X3Rp
-	 byiEdTEwUHqvU3eO792QkR3MI00yEyYXKsmZK2FPPX6nutKv/IgkOujyyNDE47XTjG
-	 3GcB+TQpnQVHPf6o7tRjIEnqzPMK7Yvci5uJeqREZ9I18yHVzTq7HrZ62RMHkAYsd+
-	 TPAVJgCyAb24sCuJGpMQUAIqQAVLxRiEHdDtD5g/WI34U22SQM0IrmtRGgQM3jEOj+
-	 izlByCP+HD/Tw==
-Date: Wed, 28 Aug 2024 12:33:30 +0200
-From: Alejandro Colomar <alx@kernel.org>
-To: Yafang Shao <laoar.shao@gmail.com>
-Cc: akpm@linux-foundation.org, torvalds@linux-foundation.org, 
-	justinstitt@google.com, ebiederm@xmission.com, alexei.starovoitov@gmail.com, 
-	rostedt@goodmis.org, catalin.marinas@arm.com, penguin-kernel@i-love.sakura.ne.jp, 
-	linux-mm@kvack.org, linux-fsdevel@vger.kernel.org, 
-	linux-trace-kernel@vger.kernel.org, audit@vger.kernel.org, linux-security-module@vger.kernel.org, 
-	selinux@vger.kernel.org, bpf@vger.kernel.org, netdev@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org, Simon Horman <horms@kernel.org>, 
-	Matthew Wilcox <willy@infradead.org>
-Subject: Re: [PATCH v8 6/8] mm/util: Deduplicate code in
- {kstrdup,kstrndup,kmemdup_nul}
-Message-ID: <bbdhr62fk7jts6b4wok6hpbjtoiyzofbithwlq7kl5dkabn3bz@3lf47k4xrmhc>
-References: <20240828030321.20688-1-laoar.shao@gmail.com>
- <20240828030321.20688-7-laoar.shao@gmail.com>
- <byi4tx6l2lrbs5w6oxypr44ldntlh4kp56vnsza3iuztwb37oa@2qtdx2kgz4bq>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="U6eLyfwM"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1724844395;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=qCsKHhEXZlOWdQXJLRcvaixcQZE/bIQcZ4s3f8ZjN3E=;
+	b=U6eLyfwM8BYCFDcwilfqB8m/I78634u/Z8AgeMq5unzwSiJ9TwlHyZCHJrintvXis4WOaM
+	jdpUF/7US+zx5Ko+srtt8hFJv8dQAqevmwQQmOBPpUgZw0CLVfZ40fDHoEEI7Y4nwfsTRl
+	kzZO8tGbvgvHGAl+2DUkwhmdXoIuVQY=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-3-Sr36sfm7Om2lnfvSfixrrA-1; Wed,
+ 28 Aug 2024 07:26:31 -0400
+X-MC-Unique: Sr36sfm7Om2lnfvSfixrrA-1
+Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 941AB1955BF1;
+	Wed, 28 Aug 2024 11:26:29 +0000 (UTC)
+Received: from ws.redhat.com (unknown [10.96.134.128])
+	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id C07991956048;
+	Wed, 28 Aug 2024 11:26:26 +0000 (UTC)
+From: Ricardo Robaina <rrobaina@redhat.com>
+To: audit@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Ricardo Robaina <rrobaina@redhat.com>,
+	paul@paul-moore.com,
+	eparis@redhat.com,
+	rgb@redhat.com
+Subject: [PATCH v2] audit: use task_tgid_nr() instead of task_pid_nr()
+Date: Wed, 28 Aug 2024 08:25:06 -0300
+Message-ID: <20240828112528.954163-1-rrobaina@redhat.com>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="xaakvknay6p4srmg"
-Content-Disposition: inline
-In-Reply-To: <byi4tx6l2lrbs5w6oxypr44ldntlh4kp56vnsza3iuztwb37oa@2qtdx2kgz4bq>
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
 
+In a few audit records, PIDs were being recorded with task_pid_nr()
+instead of task_tgid_nr().
 
---xaakvknay6p4srmg
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-From: Alejandro Colomar <alx@kernel.org>
-To: Yafang Shao <laoar.shao@gmail.com>
-Cc: akpm@linux-foundation.org, torvalds@linux-foundation.org, 
-	justinstitt@google.com, ebiederm@xmission.com, alexei.starovoitov@gmail.com, 
-	rostedt@goodmis.org, catalin.marinas@arm.com, penguin-kernel@i-love.sakura.ne.jp, 
-	linux-mm@kvack.org, linux-fsdevel@vger.kernel.org, 
-	linux-trace-kernel@vger.kernel.org, audit@vger.kernel.org, linux-security-module@vger.kernel.org, 
-	selinux@vger.kernel.org, bpf@vger.kernel.org, netdev@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org, Simon Horman <horms@kernel.org>, 
-	Matthew Wilcox <willy@infradead.org>
-Subject: Re: [PATCH v8 6/8] mm/util: Deduplicate code in
- {kstrdup,kstrndup,kmemdup_nul}
-References: <20240828030321.20688-1-laoar.shao@gmail.com>
- <20240828030321.20688-7-laoar.shao@gmail.com>
- <byi4tx6l2lrbs5w6oxypr44ldntlh4kp56vnsza3iuztwb37oa@2qtdx2kgz4bq>
-MIME-Version: 1.0
-In-Reply-To: <byi4tx6l2lrbs5w6oxypr44ldntlh4kp56vnsza3iuztwb37oa@2qtdx2kgz4bq>
+$ grep "task_pid_nr" kernel/audit*.c
+audit.c:       task_pid_nr(current),
+auditfilter.c: pid = task_pid_nr(current);
+auditsc.c:     audit_log_format(ab, " pid=%u", task_pid_nr(current));
 
-On Wed, Aug 28, 2024 at 12:32:53PM GMT, Alejandro Colomar wrote:
-> On Wed, Aug 28, 2024 at 11:03:19AM GMT, Yafang Shao wrote:
-> > These three functions follow the same pattern. To deduplicate the code,
-> > let's introduce a common helper __kmemdup_nul().
-> >=20
-> > Suggested-by: Andrew Morton <akpm@linux-foundation.org>
-> > Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
-> > Cc: Simon Horman <horms@kernel.org>
-> > Cc: Matthew Wilcox <willy@infradead.org>
-> > Cc: Alejandro Colomar <alx@kernel.org>
-> > ---
->=20
-> Reviewed-by: Alejandro Colomar <alx@kernel.org>
+For single-thread applications, the process id (pid) and the thread
+group id (tgid) are the same. However, on multi-thread applications,
+task_pid_nr() returns the current thread id (user-space's TID), while
+task_tgid_nr() returns the main thread id (user-space's PID). Since
+the users are more interested in the process id (pid), rather than the
+thread id (tid), this patch converts these callers to the correct method.
 
-(Or maybe I should say
+Link: https://github.com/linux-audit/audit-kernel/issues/126
 
-Co-developed-by: Alejandro Colomar <alx@kernel.org>
-Signed-off-by: Alejandro Colomar <alx@kernel.org>
+Reviewed-by: Richard Guy Briggs <rgb@redhat.com>
+Signed-off-by: Ricardo Robaina <rrobaina@redhat.com>
+---
+V1 -> V2: Added a more detailed commit description
 
-)
+ kernel/audit.c       | 2 +-
+ kernel/auditfilter.c | 2 +-
+ kernel/auditsc.c     | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
+diff --git a/kernel/audit.c b/kernel/audit.c
+index e7a62ebbf4d1..9f6b86acab62 100644
+--- a/kernel/audit.c
++++ b/kernel/audit.c
+@@ -1612,7 +1612,7 @@ static void audit_log_multicast(int group, const char *op, int err)
+ 	cred = current_cred();
+ 	tty = audit_get_tty();
+ 	audit_log_format(ab, "pid=%u uid=%u auid=%u tty=%s ses=%u",
+-			 task_pid_nr(current),
++			 task_tgid_nr(current),
+ 			 from_kuid(&init_user_ns, cred->uid),
+ 			 from_kuid(&init_user_ns, audit_get_loginuid(current)),
+ 			 tty ? tty_name(tty) : "(none)",
+diff --git a/kernel/auditfilter.c b/kernel/auditfilter.c
+index d6ef4f4f9cba..470041c49a44 100644
+--- a/kernel/auditfilter.c
++++ b/kernel/auditfilter.c
+@@ -1344,7 +1344,7 @@ int audit_filter(int msgtype, unsigned int listtype)
+ 
+ 			switch (f->type) {
+ 			case AUDIT_PID:
+-				pid = task_pid_nr(current);
++				pid = task_tgid_nr(current);
+ 				result = audit_comparator(pid, f->op, f->val);
+ 				break;
+ 			case AUDIT_UID:
+diff --git a/kernel/auditsc.c b/kernel/auditsc.c
+index 6f0d6fb6523f..cd57053b4a69 100644
+--- a/kernel/auditsc.c
++++ b/kernel/auditsc.c
+@@ -2933,7 +2933,7 @@ void __audit_log_nfcfg(const char *name, u8 af, unsigned int nentries,
+ 	audit_log_format(ab, "table=%s family=%u entries=%u op=%s",
+ 			 name, af, nentries, audit_nfcfgs[op].s);
+ 
+-	audit_log_format(ab, " pid=%u", task_pid_nr(current));
++	audit_log_format(ab, " pid=%u", task_tgid_nr(current));
+ 	audit_log_task_context(ab); /* subj= */
+ 	audit_log_format(ab, " comm=");
+ 	audit_log_untrustedstring(ab, get_task_comm(comm, current));
+-- 
+2.46.0
 
->=20
-> Cheers,
-> Alex
->=20
-> >  mm/util.c | 68 ++++++++++++++++++++++---------------------------------
-> >  1 file changed, 27 insertions(+), 41 deletions(-)
-> >=20
-> > diff --git a/mm/util.c b/mm/util.c
-> > index 9a77a347c385..42714fe13e24 100644
-> > --- a/mm/util.c
-> > +++ b/mm/util.c
-> > @@ -45,33 +45,41 @@ void kfree_const(const void *x)
-> >  EXPORT_SYMBOL(kfree_const);
-> > =20
-> >  /**
-> > - * kstrdup - allocate space for and copy an existing string
-> > - * @s: the string to duplicate
-> > + * __kmemdup_nul - Create a NUL-terminated string from @s, which might=
- be unterminated.
-> > + * @s: The data to copy
-> > + * @len: The size of the data, not including the NUL terminator
-> >   * @gfp: the GFP mask used in the kmalloc() call when allocating memory
-> >   *
-> > - * Return: newly allocated copy of @s or %NULL in case of error
-> > + * Return: newly allocated copy of @s with NUL-termination or %NULL in
-> > + * case of error
-> >   */
-> > -noinline
-> > -char *kstrdup(const char *s, gfp_t gfp)
-> > +static __always_inline char *__kmemdup_nul(const char *s, size_t len, =
-gfp_t gfp)
-> >  {
-> > -	size_t len;
-> >  	char *buf;
-> > =20
-> > -	if (!s)
-> > +	/* '+1' for the NUL terminator */
-> > +	buf =3D kmalloc_track_caller(len + 1, gfp);
-> > +	if (!buf)
-> >  		return NULL;
-> > =20
-> > -	len =3D strlen(s) + 1;
-> > -	buf =3D kmalloc_track_caller(len, gfp);
-> > -	if (buf) {
-> > -		memcpy(buf, s, len);
-> > -		/* During memcpy(), the string might be updated to a new value,
-> > -		 * which could be longer than the string when strlen() is
-> > -		 * called. Therefore, we need to add a NUL termimator.
-> > -		 */
-> > -		buf[len - 1] =3D '\0';
-> > -	}
-> > +	memcpy(buf, s, len);
-> > +	/* Ensure the buf is always NUL-terminated, regardless of @s. */
-> > +	buf[len] =3D '\0';
-> >  	return buf;
-> >  }
-> > +
-> > +/**
-> > + * kstrdup - allocate space for and copy an existing string
-> > + * @s: the string to duplicate
-> > + * @gfp: the GFP mask used in the kmalloc() call when allocating memory
-> > + *
-> > + * Return: newly allocated copy of @s or %NULL in case of error
-> > + */
-> > +noinline
-> > +char *kstrdup(const char *s, gfp_t gfp)
-> > +{
-> > +	return s ? __kmemdup_nul(s, strlen(s), gfp) : NULL;
-> > +}
-> >  EXPORT_SYMBOL(kstrdup);
-> > =20
-> >  /**
-> > @@ -106,19 +114,7 @@ EXPORT_SYMBOL(kstrdup_const);
-> >   */
-> >  char *kstrndup(const char *s, size_t max, gfp_t gfp)
-> >  {
-> > -	size_t len;
-> > -	char *buf;
-> > -
-> > -	if (!s)
-> > -		return NULL;
-> > -
-> > -	len =3D strnlen(s, max);
-> > -	buf =3D kmalloc_track_caller(len+1, gfp);
-> > -	if (buf) {
-> > -		memcpy(buf, s, len);
-> > -		buf[len] =3D '\0';
-> > -	}
-> > -	return buf;
-> > +	return s ? __kmemdup_nul(s, strnlen(s, max), gfp) : NULL;
-> >  }
-> >  EXPORT_SYMBOL(kstrndup);
-> > =20
-> > @@ -192,17 +188,7 @@ EXPORT_SYMBOL(kvmemdup);
-> >   */
-> >  char *kmemdup_nul(const char *s, size_t len, gfp_t gfp)
-> >  {
-> > -	char *buf;
-> > -
-> > -	if (!s)
-> > -		return NULL;
-> > -
-> > -	buf =3D kmalloc_track_caller(len + 1, gfp);
-> > -	if (buf) {
-> > -		memcpy(buf, s, len);
-> > -		buf[len] =3D '\0';
-> > -	}
-> > -	return buf;
-> > +	return s ? __kmemdup_nul(s, len, gfp) : NULL;
-> >  }
-> >  EXPORT_SYMBOL(kmemdup_nul);
-> > =20
-> > --=20
-> > 2.43.5
-> >=20
->=20
-> --=20
-> <https://www.alejandro-colomar.es/>
-
-
-
---=20
-<https://www.alejandro-colomar.es/>
-
---xaakvknay6p4srmg
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE6jqH8KTroDDkXfJAnowa+77/2zIFAmbO/PoACgkQnowa+77/
-2zLPnw/6A+aBCutQmKak+5R0meV1Cxil2Ncoh02Vf0xc2uWghVz4ES9qrmIq3vsF
-s+1JFTqZm983+114HxnK1NGfs30MiLs9PSiFvqtK77V4LW4I6V+eSKfjCywWH3ep
-s+0O51nVwX4a6ys2pW6q1Jb1JNPSjZovOQi1OVe+TWTtpHJSdqvsiYoLyEK9b41L
-f0wj/lJ4R7XhNBo/9WqpOW73pOub4Lx+RQThi87449z+mpiaKsaFZIZSlLv0nEvH
-9VNnxKYmTQOzE7kHiEUoVSL7sC0DTU+FIsw1nF7an9UmEpTcvCHmEKQHpPerKs1T
-EoGHKtPiLY3U23B5fw4zxheJaIAQCDFM73XwYGhtluwQToyS4nswC2sjYJXB0Tyy
-8SrkG+Lubl3mMRHY/WlBBkBumKo9GYRbIiuVU2N/Xsn0AdNViOy7mQTGdeGmh9qz
-l0pU6qnyso0Bdeaum22hOW/SgHwU1zvy8LVZwYkaWjMpDkuJKM2W5rvA1MGnHisR
-DkXA953cx17eO33YRMFpuRthuA7X2/qNmEj3d6elhUP3x9ea9YLRl1PC9j0jIgRA
-PiZXrJuFNeQpp27Qz6k4PxWbBmPjzZyleFwGtvZ86qbaRzFWZo2gCQZrrPckac2X
-6fs3M2nM+8tZ6ZaqFeEb+kMnIRB3fZo7I59kFr6OEmgHSZsWCGM=
-=+lO+
------END PGP SIGNATURE-----
-
---xaakvknay6p4srmg--
