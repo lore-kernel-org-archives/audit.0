@@ -1,105 +1,127 @@
-Received: from mail-qk1-f169.google.com (mail-qk1-f169.google.com [209.85.222.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C71271AC8AD
-	for <audit@vger.kernel.org>; Wed, 28 Aug 2024 20:48:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2897212B73;
+	Thu, 29 Aug 2024 00:17:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724878111; cv=none; b=lGT1jVN+GQrTtH0G0HubqV6BF/oLOklrVSv2rV9pv9QlA45pstsOiwBUWcuMgwRm1lGOoNOSMTX5WD6cpk4Dv+AKyLHoko6mtfk8vSB0H/mowzkErvBdQlsFzFpRuPdeA4ZREuFDaE4K2ZZhQBa//Hvyw3hvbtNLrUJlPhPQrk4=
+	t=1724890676; cv=none; b=sd/h1hYIBobj7RWJvgqx+T94TgNNzBAL4rtOE8iGCc3bYQVPnIMU6JjePjbmyj4I3v8Vc5wufbut5eLOgDFYSXqEdW+BsvsRtezXenweAXp42r+xbP1C9tdhtvwUyKOS9E5UZTrVdw17P0Lq9iV+urZ6JBG/vaiFi1fcXlJVFrM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724878111; c=relaxed/simple;
-	bh=gJaEHXrTeNSaE4eFCVkHF+bcWMfkiaVOpQZnIb9GD4U=;
-	h=Date:Message-ID:MIME-Version:Content-Type:Content-Disposition:
-	 From:To:Cc:Subject:References:In-Reply-To; b=bcJV0r8xEXhlRtjS+expDO7aQzAV8ur/sksFehmEPOBRtu1lPXeZ5EovO37beTpgapdhAXI6PVYnWGU3B/uegsRHwUVFil/L93Tw6q+BEwUQXXwkYMV2VWrimImSDkG5+vO4uZjNZiqgblxDQkSGEbHHSjI8rfFR28AhHxHlE7s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=GlWXGPnB; arc=none smtp.client-ip=209.85.222.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+	s=arc-20240116; t=1724890676; c=relaxed/simple;
+	bh=wqwfbglmiOW3zEjrozGHbRY21H9OrGw1J7tCUk4qVjg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qP/9xmiK9tj0vtuh8LUMZI5X/zTJpN7h/b2cKzLMUr0Jt5oFv97Xs3VKCGD3dmGe/5ravgj2isvyy7X4KaVKea1LQEZb3tGBnpySRo7UKki0d4tpywUEkTEljcNupr+weZ99YHUStMLGs2tuPt7t1RC4CC1O82PA2rTTFOd+r9A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Q7q2uKup; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="GlWXGPnB"
-Received: by mail-qk1-f169.google.com with SMTP id af79cd13be357-7a7f8b0b7d0so49878685a.2
-        for <audit@vger.kernel.org>; Wed, 28 Aug 2024 13:48:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1724878108; x=1725482908; darn=vger.kernel.org;
-        h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
-         :content-disposition:mime-version:message-id:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=MFm1oliNMku3718rpHjj5GFBtdpffkYvzVOrkmijuG0=;
-        b=GlWXGPnBBJwQNRZ8oLVwjXsh7T5iM2cG9JlXwHU1itcKLBeDEMbJi3T4tg/IXcNM3x
-         gGBFE7P6UB+joqEbiY9rKvE42MLeC/zou62AZS+f2L87xCvcvy7KO+o7TrYGo7f8/vPo
-         +lUMlgSNm7h/wdm5TmocX3Y0HJuLo2XMQrwErHNcApFyooGIceUNGmQ0ALSBK2Krok18
-         SSaCDxpLyFo9ds3kIcCZhR++WxgSDig6cFOuGUUELIhDpsEDnJXk7tXa5oUSQkYNVtMi
-         ILFYNhy0qCkpFUUOU6MIUCdqJJI2iKS0BrTEdewXbdULdSfaaWnQMD7Mhx8UlIJPMb3P
-         BgpQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724878108; x=1725482908;
-        h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
-         :content-disposition:mime-version:message-id:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=MFm1oliNMku3718rpHjj5GFBtdpffkYvzVOrkmijuG0=;
-        b=j8NA6NHI+X/4Bl2zDIYfkMPB+n/HpR3gfTFm5nf7m1heBhnE8KW9vv1OqfmEOqd1Ug
-         PgGaYycmTY7FJKmyH/ZHg/bjB3pApkk7aX3INb8mEFdP/BM+TRHXYItbk2dlo9ZdXFbF
-         fjyoK589G278DqSTvj0MYSR+pulk1YtlvGMB7jW6XK48EV2ObV0qJqhSdflcZh2/qski
-         3OJqhy0lldbNdhmLWZ5ClTpofkcLj8ZYN1cIVytingda4oxoZo5BAeL5cJmq6CNfZyM0
-         8vjZQHD9zu0qMjv2B+XMRE0Q5X4yjqRHjxwIv4x8NfunJ3R+jN6gUc2/psVQhPneIPG2
-         fNgA==
-X-Forwarded-Encrypted: i=1; AJvYcCW7H9ixo3X0wvefq947t3UPgDLExTX9uI5vWVn8UVyk0Y3+6wh0xhTDURIgp/3PsiBNqJ3dYA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzN15/El3OtwvjvKGWJZ5t/oLCiPn3L69WgvpSP+w3wTADWfHo2
-	eNcv+RB9ZKncy7zlN66KZ1kHhAOpVAVvgV1+++2lhY7TuP1aX3UBwbjRPVTJZQ==
-X-Google-Smtp-Source: AGHT+IHAdwjDarEQRu2k18EI8XasHntWYP53AaFrsz5sI5yRSFmJR7fmGFZ2aT0hMkzM5kEv5sHRug==
-X-Received: by 2002:a05:620a:1a98:b0:79d:7d6e:e02b with SMTP id af79cd13be357-7a804267f40mr64537685a.70.1724878107666;
-        Wed, 28 Aug 2024 13:48:27 -0700 (PDT)
-Received: from localhost ([70.22.175.108])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7a80236a344sm35923085a.81.2024.08.28.13.48.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Aug 2024 13:48:27 -0700 (PDT)
-Date: Wed, 28 Aug 2024 16:48:26 -0400
-Message-ID: <49419bd051ccdb64de7222e2d17aa77d@paul-moore.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Q7q2uKup"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA5D1C4CEC0;
+	Thu, 29 Aug 2024 00:17:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1724890675;
+	bh=wqwfbglmiOW3zEjrozGHbRY21H9OrGw1J7tCUk4qVjg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Q7q2uKupXiWrXEb5VBisQRcVpWz1lLcSeE7zINvaSJm8aB8JKzaa1Qlj4qvHMl9T/
+	 mB0q0BY6SVtNcYAr1aQd4hYDHFHib8zZ9wUNt5pkZkagn7QUYxvdthCYydJEcS6isS
+	 EIaBZgHBZegmK+8STHem6es+CstqnY94jKsuJoGG9Eu4OXFZpHJMWmXP/XUZReh9Ty
+	 SwdIv0b0X/rYgMw8zApCJK8AIPIiB13V8lLrSIAOdunytxsuwfeR+sQxj1xQwuY7Db
+	 UT7C88ojT+76hQqBGXasE9vK2f5kOA2shjJvfoKnyQ6Bq2qrQ6C6FSIanWfsDiAHqV
+	 G4c5NZzYW7RGA==
+Date: Wed, 28 Aug 2024 17:17:55 -0700
+From: Kees Cook <kees@kernel.org>
+To: Alejandro Colomar <alx@kernel.org>
+Cc: Yafang Shao <laoar.shao@gmail.com>, akpm@linux-foundation.org,
+	torvalds@linux-foundation.org, justinstitt@google.com,
+	ebiederm@xmission.com, alexei.starovoitov@gmail.com,
+	rostedt@goodmis.org, catalin.marinas@arm.com,
+	penguin-kernel@i-love.sakura.ne.jp, linux-mm@kvack.org,
+	linux-fsdevel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+	audit@vger.kernel.org, linux-security-module@vger.kernel.org,
+	selinux@vger.kernel.org, bpf@vger.kernel.org,
+	netdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
+	Matus Jokay <matus.jokay@stuba.sk>,
+	"Serge E. Hallyn" <serge@hallyn.com>
+Subject: Re: [PATCH v8 1/8] Get rid of __get_task_comm()
+Message-ID: <202408281712.F78440FF@keescook>
+References: <20240828030321.20688-1-laoar.shao@gmail.com>
+ <20240828030321.20688-2-laoar.shao@gmail.com>
+ <lql4y2nvs3ewadszhmv4m6fnqja4ff4ymuurpidlwvgf4twvru@esnh37a2jxbd>
+ <n2fxqs3tekvljezaqpfnwhsmjymch4vb47y744zwmy7urf3flv@zvjtepkem4l7>
+ <CALOAHbBAYHjDnKBVw63B8JBFc6U-2RNUX9L=ryA2Gbz7nnJfsQ@mail.gmail.com>
+ <7839453E-CA06-430A-A198-92EB906F94D9@kernel.org>
+ <ynrircglkinhherehtjz7woq55te55y4ol4rtxhfh75pvle3d5@uxp5esxt4slq>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 
-Content-Type: text/plain; charset=utf-8 
-Content-Disposition: inline 
-Content-Transfer-Encoding: 8bit
-From: Paul Moore <paul@paul-moore.com>
-To: Ricardo Robaina <rrobaina@redhat.com>, audit@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc: Ricardo Robaina <rrobaina@redhat.com>, eparis@redhat.com, rgb@redhat.com
-Subject: Re: [PATCH v2] audit: use task_tgid_nr() instead of task_pid_nr()
-References: <20240828112528.954163-1-rrobaina@redhat.com>
-In-Reply-To: <20240828112528.954163-1-rrobaina@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ynrircglkinhherehtjz7woq55te55y4ol4rtxhfh75pvle3d5@uxp5esxt4slq>
 
-On Aug 28, 2024 Ricardo Robaina <rrobaina@redhat.com> wrote:
+On Wed, Aug 28, 2024 at 05:09:08PM +0200, Alejandro Colomar wrote:
+> Hi Kees,
 > 
-> In a few audit records, PIDs were being recorded with task_pid_nr()
-> instead of task_tgid_nr().
+> On Wed, Aug 28, 2024 at 06:48:39AM GMT, Kees Cook wrote:
 > 
-> $ grep "task_pid_nr" kernel/audit*.c
-> audit.c:       task_pid_nr(current),
-> auditfilter.c: pid = task_pid_nr(current);
-> auditsc.c:     audit_log_format(ab, " pid=%u", task_pid_nr(current));
+> [...]
 > 
-> For single-thread applications, the process id (pid) and the thread
-> group id (tgid) are the same. However, on multi-thread applications,
-> task_pid_nr() returns the current thread id (user-space's TID), while
-> task_tgid_nr() returns the main thread id (user-space's PID). Since
-> the users are more interested in the process id (pid), rather than the
-> thread id (tid), this patch converts these callers to the correct method.
+> > >Thank you for your suggestion. How does the following commit log look
+> > >to you? Does it meet your expectations?
+> > >
+> > >    string: Use ARRAY_SIZE() in strscpy()
+> > >
+> > >    We can use ARRAY_SIZE() instead to clarify that they are regular characters.
+> > >
+> > >    Co-developed-by: Alejandro Colomar <alx@kernel.org>
+> > >    Signed-off-by: Alejandro Colomar <alx@kernel.org>
+> > >    Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
+> > >
+> > >diff --git a/arch/um/include/shared/user.h b/arch/um/include/shared/user.h
+> > >index bbab79c0c074..07216996e3a9 100644
+> > >--- a/arch/um/include/shared/user.h
+> > >+++ b/arch/um/include/shared/user.h
+> > >@@ -14,7 +14,7 @@
+> > >  * copying too much infrastructure for my taste, so userspace files
+> > >  * get less checking than kernel files.
+> > >  */
+> > >-#define ARRAY_SIZE(x) (sizeof(x) / sizeof((x)[0]))
+> > >+#define ARRAY_SIZE(x) (sizeof(x) / sizeof((x)[0]) + __must_be_array(x))
+> > >
+> > > /* This is to get size_t and NULL */
+> > > #ifndef __UM_HOST__
+> > >@@ -60,7 +60,7 @@ static inline void print_hex_dump(const char *level,
+> > >const char *prefix_str,
+> > > extern int in_aton(char *str);
+> > > extern size_t strlcat(char *, const char *, size_t);
+> > > extern size_t sized_strscpy(char *, const char *, size_t);
+> > >-#define strscpy(dst, src)      sized_strscpy(dst, src, sizeof(dst))
+> > >+#define strscpy(dst, src)      sized_strscpy(dst, src, ARRAY_SIZE(dst))
+> > 
+> > Uh, but why? strscpy() copies bytes, not array elements. Using sizeof() is already correct and using ARRAY_SIZE() could lead to unexpectedly small counts (in admittedly odd situations).
+> > 
+> > What is the problem you're trying to solve here?
 > 
-> Link: https://github.com/linux-audit/audit-kernel/issues/126
+> I suggested that here:
+> <https://lore.kernel.org/all/2jxak5v6dfxlpbxhpm3ey7oup4g2lnr3ueurfbosf5wdo65dk4@srb3hsk72zwq/>
 > 
-> Reviewed-by: Richard Guy Briggs <rgb@redhat.com>
-> Signed-off-by: Ricardo Robaina <rrobaina@redhat.com>
-> ---
-> V1 -> V2: Added a more detailed commit description
-> 
->  kernel/audit.c       | 2 +-
->  kernel/auditfilter.c | 2 +-
->  kernel/auditsc.c     | 2 +-
->  3 files changed, 3 insertions(+), 3 deletions(-)
+> There, you'll find the rationale (and also for avoiding the _pad calls
+> where not necessary --I ignore if it's necessary here--).
 
-Looks good to me, merged into audit/dev, thanks!
+Right, so we only use byte strings for strscpy(), so sizeof() is
+sufficient. There's no technical need to switch to ARRAY_SIZE(), and I'd
+like to minimize any changes to such core APIs without a good reason.
 
---
-paul-moore.com
+And for the _pad change, we are also doing strncpy() replacement via
+case-by-case analysis, but with a common function like get_task_comm(),
+I don't want to change the behavior without a complete audit of the
+padding needs of every caller. Since that's rather a lot for this series,
+I'd rather we just leave the existing behavior as-is, and if padding
+removal is wanted after that, we can do it on a case-by-case basis then.
+
+-Kees
+
+-- 
+Kees Cook
