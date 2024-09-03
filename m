@@ -1,55 +1,55 @@
-Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com [209.85.219.182])
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 892E71EC002
-	for <audit@vger.kernel.org>; Tue,  3 Sep 2024 21:21:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52098126BF4
+	for <audit@vger.kernel.org>; Tue,  3 Sep 2024 21:23:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725398520; cv=none; b=qQaQy2WYciD4CZvolBHOgRGHACD3z0HTf0dBD40ZVEf4sWDbc7MjE/zsemPs2AFcSubeBhox3esMxrdLiM3iI8rYvDkKCU4lnWmmBPp4KBaBtXUoyBJtTLnq6QMzuz34vVbzbu4ZXXE+A9H9+kI7+jpX/oYHDZVBFk+393N2bT4=
+	t=1725398586; cv=none; b=OUOr5y7m2oI5cyh6vTva9bE/HSWFa4C8UaMLCFTZYiLSMdcNzN1MPNxC6kqi8XZt2JP4OMDbOgHzZairXH/Bciebo/LmwNxdDxw73j+Xb6DZ8Q2tqAp4FERif/tgnh1/UX+cSPE6/EJ99vsfbbGwe//MSay3+4vH/f9+j9GBeEM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725398520; c=relaxed/simple;
-	bh=aRGN7Q4oM29wnNN5CoLkvA83kVg3g0cMPRDuipkS0t0=;
+	s=arc-20240116; t=1725398586; c=relaxed/simple;
+	bh=jO2uDQBQnhOE+b3Vs86Pj9s/3kQUgRcS0rRhGWRV3/8=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=S2LCmf7meUsKDzdtaHpwgpRhdgFQkLkUhz80eouMLEGTFy4PDE3OCmBdmh5guFoBoplEyk5N8XHpPezejAjPRzmJFNXQisaD0yMCloYpobs+EJyGm27b0MnKbRRfWKdiYePE1+l2Zc0ugjhACSfwISbILi2kRzjenTeIkoxfehw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=VKkui1ra; arc=none smtp.client-ip=209.85.219.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+	 To:Cc:Content-Type; b=ec3MvmWRaWxY/CxLFt7jeHwTMYMcj7uPXPZRagza187UZxAUmIuc3e85K9RoieQtB+lQNQRHV/RTp+f4vHHrxNiGbYb8u4yLozE42WpC2JCJce54IofaRmNw3NZKVeeq6bjF6MEIidQNkPEOce9V1E0DX00T7PC+p+kH/falu9g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=bKvtYAoE; arc=none smtp.client-ip=209.85.214.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="VKkui1ra"
-Received: by mail-yb1-f182.google.com with SMTP id 3f1490d57ef6-e026a2238d8so5988612276.0
-        for <audit@vger.kernel.org>; Tue, 03 Sep 2024 14:21:58 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="bKvtYAoE"
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-20573eb852aso445285ad.1
+        for <audit@vger.kernel.org>; Tue, 03 Sep 2024 14:23:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1725398517; x=1726003317; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1725398584; x=1726003384; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=FXA0xSJQlYROteWSt6u0tfLG7BWHJLI4oFboUAe4mGQ=;
-        b=VKkui1ralVYvfFdS6OxBiNHusDBd0Coj0aSqjZajrE/b2HibjedB4lHoxMYOVLOYiL
-         FiQUqIdqJBuGE5UvHDmTlblb6ui6ti3H7UPBx9MbhQAFk0nO4zZ5KWfqZNlXxe/PVlG4
-         Fzne0V+xOipUWmes70o8E6jtoLVvFSuDaDrA3RGHTA9rS13mlAB8TS981F3TOQVcPznL
-         Pf0cD79sAP5x/JSI45SSBuasSumxGIB5tFhA+0FwJc3BunTd5F+l8jCV76ECqB1na6S4
-         b5/86LTSlPpD7eBpkOtJpMxmLtmn74v9qGeAKTkU2PgWsy0mqlflUY/NIHZeTWkghA4F
-         K8ng==
+        bh=UBCYUVY+kyEAQihHfAIpXMzgk6XSFFHDEmSopvaE4g8=;
+        b=bKvtYAoEyzCTl+bNb9QNqbO5k8hexcEI8R5qHQfSv00dAD9dYSDTwR/wOhcDVfnLQF
+         4qsrqFl8e9pV6satWxpbu+5JGdUt6ScDvo+onldpoARImKj4KLk9FWR7PAaSDovstkZJ
+         CZM0Y8kKhO6UkjyNTagz7CT7D3XriJ6Ugs/cTZw8EKTHJiz1IqXLoWvQyor63XIxS8A5
+         prHV4vlet4D5fSyFMh/nj9iY111b0pcYvv2Y94dDL62FV5CERwQIkLslNRVm3DC1N/d8
+         epXOG04xeAuIGGtYhX+K2bnMnf7Miiz2/Sg/eczCei55TRo5te11TWlE+b/pNonreN0y
+         xwlQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725398517; x=1726003317;
+        d=1e100.net; s=20230601; t=1725398584; x=1726003384;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=FXA0xSJQlYROteWSt6u0tfLG7BWHJLI4oFboUAe4mGQ=;
-        b=Y1N7Z2nhneX0jZyN8kiEry0K70DQyf4g2jYVdl1yGL+XopCyXivoO0F1IJtTR2tgcl
-         A2QCedz6qbTcMOX3ydMwFzAoD2DFOGwsvaxg9fOmzjXVg7jzPj9fUOQCYqh1ND3XwS+W
-         GpjCTQ/b5NgbDnLb2jOdzGd1n6nTlZirmahjRLhTsyEl+ExDPsczk2X0NPk9YtOR4f5T
-         Tbf6YIKXZIYUhpznAO2k441KJYKG0oV8aKx1y6kNaauQ/TXSk1gMtFObmhKjn817JzjF
-         at+qJwgclsdWYD7Alrd7z1JlBKPPtGurtyw675MohQbwmqxlJ29EAZg3z+zPdFjGL+1a
-         305w==
-X-Forwarded-Encrypted: i=1; AJvYcCXQ8iRGTJEpsN8e+lfO40KiteGGBtAWoqQ07DObQrEUL7Ta+whhfJfsdqgAj1/PI41L0fFugQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyi7TcbPXGDOblAltLO1QrNSIQTdWXrbb0IHUcauG5PpuY9TLgx
-	yT2UII38RdlrjQbB3nj6g62nwZEgPsGPX3STwK8dvYyCA5xQv70R6EZ008kN5FAczp3pCviTadw
-	/eLjbHiv2y+RLmfIB/C2lKsuo95tOIpEVV0PM
-X-Google-Smtp-Source: AGHT+IH8n7CPH3uJVFcHVFs1uxYm7rpNIiyWYnL1DNE3C5hXZTHnf1EuK+wvQeq/lHzwj1Wxe4LAt4MQvfX7taYRwRs=
-X-Received: by 2002:a05:6902:2788:b0:e1a:af1e:d3c7 with SMTP id
- 3f1490d57ef6-e1aaf1ed70emr9898856276.46.1725398517432; Tue, 03 Sep 2024
- 14:21:57 -0700 (PDT)
+        bh=UBCYUVY+kyEAQihHfAIpXMzgk6XSFFHDEmSopvaE4g8=;
+        b=Ubhv1YqDsgIS8EFkFeBwNBsF1f9pIeQtBYLUBlgHq3N8o3SjregHHKVz6+l/aOqcy4
+         bc9BdDXh/5dN5EG5Rxsa8LxAKd04DQ1wyZdMNyJSfnVUHhk55YxOVS+/hSM7zQFYNOia
+         ekeMU3A0xOYMP2E2g61y0VrtFou7rXq2QZCmcpag79UDZE88WTRNhnq9CRIdYjstW7p7
+         hu0cpKVjca9waNIOtwTLyK25BSkkhsGdLt6HGKup+zZr0+aDSXTD7YuVI96jz8bFKGGx
+         p+z1/pgX4mojs7wrtBWlgHaKe0zDwswr9tQUwSeC6ASkGWoJsrsKeq2W5LHitbG2/9Ur
+         D0JQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXL83hLwMH4C+5+EAoMa+80Mc/Mz82I/YMI74Wc8EOTMOkG9T7Duak0uCy3mUxmLN5yIiUZVQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxyBP4lk7iOFp0TKBFG530hhsB/0rU8rmn7f1sTPosc2TuUvN13
+	Rs8HSXJ7Rs4b3m96nvwOCj6ZWC+1S1XKOVNXuqI36gHvi4jGEgY3fJ16PFfxfkoLpPb14eMQwh1
+	d7ChJlOhgKm4QtMOZJg+OZfPgkoEB298Aia+C
+X-Google-Smtp-Source: AGHT+IGrH1VC2unY7qDM/hzJ5+tZtVXSRYKJ4GEGN+T3NsiZnSUBdB37jw0R28zr1qAGFIUyrd/mpxuW+gMPnLXeFFY=
+X-Received: by 2002:a17:902:e749:b0:205:950e:1c85 with SMTP id
+ d9443c01a7336-205950e1cf6mr97417405ad.10.1725398584234; Tue, 03 Sep 2024
+ 14:23:04 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
@@ -60,20 +60,21 @@ References: <000000000000f11da7062091eb85@google.com> <87ikve78p5.ffs@tglx>
  <CAHC9VhTDqe8pYbmuNUu-Mdq6rmLo17z+eUTiOFh_PegbN99b-w@mail.gmail.com>
  <202409031223.018C3D1@keescook> <87seug791l.ffs@tglx>
 In-Reply-To: <87seug791l.ffs@tglx>
-From: Paul Moore <paul@paul-moore.com>
-Date: Tue, 3 Sep 2024 17:21:46 -0400
-Message-ID: <CAHC9VhTAjuoGQerDwjwwiVGuvWM1ugxxUMjSshH1gTfcC0BJ0g@mail.gmail.com>
+From: Aleksandr Nogikh <nogikh@google.com>
+Date: Tue, 3 Sep 2024 23:22:52 +0200
+Message-ID: <CANp29Y5qbxYhLzq7vwjkp-jsCX3OVfUcokk76Zbbs5pBC7uS6w@mail.gmail.com>
 Subject: Re: [syzbot] [kernel?] WARNING in audit_log_start
 To: Thomas Gleixner <tglx@linutronix.de>
-Cc: Kees Cook <kees@kernel.org>, 
+Cc: Kees Cook <kees@kernel.org>, Paul Moore <paul@paul-moore.com>, 
 	syzbot <syzbot+4576eaa688ef747b8d6c@syzkaller.appspotmail.com>, 
 	linux-kernel@vger.kernel.org, luto@kernel.org, peterz@infradead.org, 
 	syzkaller-bugs@googlegroups.com, audit@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Sep 3, 2024 at 4:54=E2=80=AFPM Thomas Gleixner <tglx@linutronix.de>=
- wrote:
+On Tue, Sep 3, 2024 at 10:54=E2=80=AFPM Thomas Gleixner <tglx@linutronix.de=
+> wrote:
+>
 > On Tue, Sep 03 2024 at 12:24, Kees Cook wrote:
 > > On Tue, Sep 03, 2024 at 03:22:17PM -0400, Paul Moore wrote:
 > >> > >  might_alloc include/linux/sched/mm.h:337 [inline]
@@ -109,10 +110,17 @@ On Tue, Sep 3, 2024 at 4:54=E2=80=AFPM Thomas Gleixner <tglx@linutronix.de>=
 1908f9e>] audit_log_start+0x37e/0xa30
 >
 > I have no idea how that state would leak accross schedule_timeout().
+>
 
-Okay, with no obvious root cause and no reproducer, I'm going to
-ignore this for now.  If we start to see this pop up on real systems
-and/or syzbot finds a reproducer we can dig into it more.
+There has been a spike in strange crash reports on linux-next lately,
+supposedly due to this large patch series:
+https://lore.kernel.org/all/20240727102732.960974693@infradead.org/
+So if this report is not easily explainable, possibly it is best to
+take it with a grain of salt..
 
---=20
-paul-moore.com
+Aleksandr
+
+> Thanks,
+>
+>         tglx
+>
