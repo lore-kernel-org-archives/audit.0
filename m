@@ -1,88 +1,97 @@
-Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com [209.85.160.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 917D61448C1
-	for <audit@vger.kernel.org>; Tue,  3 Sep 2024 20:35:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CADD9188917;
+	Tue,  3 Sep 2024 20:54:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725395719; cv=none; b=oeuBsHi98qUWOfiQW73cxhdyT8NBu2nzQypvnidTJfxOKqL/F5QCW3X/lLXgLlhds+k51atqtw+7SiPlilRZbYCu2h7ZDVVU1v000NIYnf5Mvv3BXLABC5R0XS/MtteMmkOviIREzCyUWD1+Ft1SZtSS3macCRi9ujJbYeIPrPY=
+	t=1725396858; cv=none; b=LHj7Wo5emrZD0AbUbm/aLeKdhg0e6KAzv1NMOPZR4k8H2aVtLAfCOIUI/Yztot0xJLhwNQ8Atc1UDg6pWqvXmxpqDWkOeczimgvYwkHm5+4RMVf8YZDdiP8lYVHh5CrEKxxJ8e3290Mx4Md+5rOYCDveRDQ56sHUkg0/uJqa9Vo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725395719; c=relaxed/simple;
-	bh=PGab2PBLy8ilaHjN16wooXfKRYH+bb9OT2olp6FLY0M=;
-	h=Date:Message-ID:MIME-Version:Content-Type:Content-Disposition:
-	 From:To:Cc:Subject:References:In-Reply-To; b=I6J8Alh9r8itx5x3RBj7aIyXrEZtx6OXkOAyen1LYRX9UgN7s/JkLsL6SFxwtPaHMqS5UCpyUl81HVkVtxz/Yha+EybiNT8ddnHne2whWypzya60apAANdjGAkSVhKz7vS2pPYdbgY/ARWIXFEuG6skVBtRKxGMcFqmx0j9JqMc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=ILZzlSnO; arc=none smtp.client-ip=209.85.160.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+	s=arc-20240116; t=1725396858; c=relaxed/simple;
+	bh=h8pyLcGsMX1aXwow837+ar2LRu2tlGdcTwMdN9G99Jg=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=Trq8E4GreiL0ai/xARAh4W+lMqAUH++Axxo46mYMgDgFTgFy2+9IlQIWCr0PCDKb+6qSW8zzVJZ8eTJ7vSWr+tS284uLEXjcE/2l2LJlk1kBd26jEBpTTPKMou1RPhCbwKHWIEwfX7x9PNzbaoFYCF/B03GQbrbEUk/iVHuwxwU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=U6wKcsmG; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=nxMGCq2G; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="ILZzlSnO"
-Received: by mail-qt1-f175.google.com with SMTP id d75a77b69052e-4568fe680a3so24276411cf.0
-        for <audit@vger.kernel.org>; Tue, 03 Sep 2024 13:35:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1725395716; x=1726000516; darn=vger.kernel.org;
-        h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
-         :content-disposition:mime-version:message-id:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=kUvKwr5FBy0p26tX1KDMmzLdItJ1zXZxagEcjZYvcO0=;
-        b=ILZzlSnOC7F2tWne33qWGVV6SciB2kaU9DmEBHPPDgYeIB+cW4+0rusyfyyS0m9fT+
-         k7Xm7Sgxb4VvdqZhkO6UdfNy9aiqtkBcoYNioP0cIgqbM6HNejh7kCcJLIL37uq3F/H0
-         otlPJeCJd/NNXpYNOg4LyvkNaNjo5F7LQBpEWUoYe08BkfaW528XmDY6dbOtCVkoe13T
-         +wdvTQKAryGOGCyLqRFRhPQmntK3GBiDXi09XgdIF/Hi808yySKoENMJQSxfU2azWnIv
-         3RjNV2Boc6Aex+4cjqoQc066X3vX0Gmj5HPqJq/IePSmypJ3OeL561/JXMz4jQwBAea7
-         xUjg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725395716; x=1726000516;
-        h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
-         :content-disposition:mime-version:message-id:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=kUvKwr5FBy0p26tX1KDMmzLdItJ1zXZxagEcjZYvcO0=;
-        b=fh6rbEZwCTrqX0vjvjWSgH950aXuCKM9YJBzZ2wYSrRyOMESFl/liF2ILve46os9pN
-         i+ERxFeX9mpEUOp0qe1LEFu8Cm6qAdQ3jDCD4SZTW0yJL/PNW6djnD1CjmySkjnUdATu
-         CJ0+uzAUpBwg+2qI0QfCxIwJjnoN7+n1l4PcZvoPXB1apgR2jLxkUlDk9YkERr1ZEQyN
-         ODVbrqNyK7buCUCJG/W2eTRmEbKABOGQZe/Bn2BkaZ9O+02WWr1xY8RK0BNwguHgI6k5
-         Je4xhuDRlN3ljGKbeqtcWkaUsBTrGQUk5XHt2EjsOjTBwQA3YQhokYXyrIdzLym+b0UU
-         CJNQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUsDQZg25k4VjyapiOi35R2LiS8+4WmV1lM3jscRSaNqKyfB8T2+spZbQKzSG35bQRk2tHK6A==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz58o/+0LPRuWOvJMsqc7+2RCTL8zrBy6Ft7SrQUFnKl4J4/0GT
-	WIxSn8fa3/Lj6T/BpujY6Tc4/f0aZ0MgO9p/UOPbYpcfX5lBu+KQl4lICKPThg==
-X-Google-Smtp-Source: AGHT+IFnXVhxbcLTuK7EcpysVAtGsWnR7yNflsyrXV/nKS5r+eL1YkxLvnDNGiC0MN35WHxMEAOirw==
-X-Received: by 2002:a05:622a:1e98:b0:457:9b12:2297 with SMTP id d75a77b69052e-457e2dc9ec5mr47844931cf.35.1725395716387;
-        Tue, 03 Sep 2024 13:35:16 -0700 (PDT)
-Received: from localhost ([70.22.175.108])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-45682ce3058sm52870231cf.52.2024.09.03.13.35.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Sep 2024 13:35:15 -0700 (PDT)
-Date: Tue, 03 Sep 2024 16:35:15 -0400
-Message-ID: <fb52142f466d0c5852293b83bc7d3650@paul-moore.com>
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="U6wKcsmG";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="nxMGCq2G"
+From: Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1725396854;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Y+D+yIk15l0SvEQ0rI80F0C0VgX0cJLMxkQR7hxFB6Q=;
+	b=U6wKcsmGQanALeJCQvSK6tTTLkHPmcU41do8r7dLc5oJJmISBAaXdczSiYJJf38YjdN6D2
+	NF4VyqdO+3QvL2PDyKDPPlQV7GXazj7X0uVEQ9rRbQkMxXOaS0HMy47kPWI3R6Ytu8D1QX
+	YGo8duleqaNlQJzg44dLD5NPlebBigSTIa7P3ZgL/6I2BgMsqg4ifMfK0CLAiLjEvGpPeb
+	qGPyaZALMYJEdETcjtZVfx2KJEOSkxVqYEZfR77NZvExdo6L3M4lV7eMDXtLb+i9KybrIZ
+	BLsqDfl2f54MfqJ95BTrIHIP/B0n8n9H6/3/Tkd23+qQXWPOfsI/Y5Xkml3Vxw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1725396854;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Y+D+yIk15l0SvEQ0rI80F0C0VgX0cJLMxkQR7hxFB6Q=;
+	b=nxMGCq2Gm4P85gCKipUAHcMybaCKFpCJO+/NpMjAPT2Ks/m9xDRe6oCKvFdE93lPh5aHx8
+	xSNLbQquWthKD9DQ==
+To: Kees Cook <kees@kernel.org>, Paul Moore <paul@paul-moore.com>
+Cc: syzbot <syzbot+4576eaa688ef747b8d6c@syzkaller.appspotmail.com>,
+ linux-kernel@vger.kernel.org, luto@kernel.org, peterz@infradead.org,
+ syzkaller-bugs@googlegroups.com, audit@vger.kernel.org
+Subject: Re: [syzbot] [kernel?] WARNING in audit_log_start
+In-Reply-To: <202409031223.018C3D1@keescook>
+References: <000000000000f11da7062091eb85@google.com> <87ikve78p5.ffs@tglx>
+ <CAHC9VhTDqe8pYbmuNUu-Mdq6rmLo17z+eUTiOFh_PegbN99b-w@mail.gmail.com>
+ <202409031223.018C3D1@keescook>
+Date: Tue, 03 Sep 2024 22:54:14 +0200
+Message-ID: <87seug791l.ffs@tglx>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 
-Content-Type: text/plain; charset=utf-8 
-Content-Disposition: inline 
-Content-Transfer-Encoding: 8bit
-From: Paul Moore <paul@paul-moore.com>
-To: Hongbo Li <lihongbo22@huawei.com>, <eparis@redhat.com>
-Cc: <lihongbo22@huawei.com>, <audit@vger.kernel.org>
-Subject: Re: [PATCH] audit: Make use of str_enabled_disabled() helper
-References: <20240831095251.4163011-1-lihongbo22@huawei.com>
-In-Reply-To: <20240831095251.4163011-1-lihongbo22@huawei.com>
+MIME-Version: 1.0
+Content-Type: text/plain
 
-On Aug 31, 2024 Hongbo Li <lihongbo22@huawei.com> wrote:
-> 
-> Use str_enabled_disabled() helper instead of open
-> coding the same.
-> 
-> Signed-off-by: Hongbo Li <lihongbo22@huawei.com>
-> ---
->  kernel/audit.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+On Tue, Sep 03 2024 at 12:24, Kees Cook wrote:
+> On Tue, Sep 03, 2024 at 03:22:17PM -0400, Paul Moore wrote:
+>> > >  might_alloc include/linux/sched/mm.h:337 [inline]
+>> > >  slab_pre_alloc_hook mm/slub.c:3987 [inline]
+>> > >  slab_alloc_node mm/slub.c:4065 [inline]
+>> > >  kmem_cache_alloc_noprof+0x5d/0x2a0 mm/slub.c:4092
+>> > >  audit_buffer_alloc kernel/audit.c:1790 [inline]
+>> > >  audit_log_start+0x15e/0xa30 kernel/audit.c:1912
+>> > >  audit_seccomp+0x63/0x1f0 kernel/auditsc.c:3007
+>> 
+>> The audit_seccomp() function allocates an audit buffer using
+>> GFP_KERNEL, which should be the source of the might_sleep.  We can fix
+>> that easily enough by moving to GFP_ATOMIC (either for just this code
+>> path or all callers, need to check that), but I just want to confirm
+>> that we can't sleep here?  I haven't dug into the syscall code in a
+>> while, so I don't recall all the details, but it seems odd to me that
+>> we can't safely sleep here ...
+>
+> I had a similar question.. this is at syscall entry time. What is
+> suddenly different here? We've been doing seccomp logging here for
+> years...
 
-We're at that point in the development cycle where I don't normally
-accept much other than bug fixes, but this is trivial enough to
-merge.  Merged into audit/dev.
+Correct.
 
---
-paul-moore.com
+syscall_enter_from_user_mode() enables interrupts. At that point
+preempt_count is 0. So after that the task can sleep and schedule.
+Nothing in the call chain leading up to the allocation disables
+preemption or interrupts.
+
+From the actual console log:
+
+do not call blocking ops when !TASK_RUNNING; state=2 set at [<ffffffff81908f9e>] audit_log_start+0x37e/0xa30
+
+I have no idea how that state would leak accross schedule_timeout().
+
+Thanks,
+
+        tglx
+
