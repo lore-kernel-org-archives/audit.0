@@ -1,185 +1,128 @@
-Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com [209.85.219.176])
+Received: from sonic306-26.consmr.mail.ne1.yahoo.com (sonic306-26.consmr.mail.ne1.yahoo.com [66.163.189.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E566719F470
-	for <audit@vger.kernel.org>; Thu, 19 Sep 2024 16:05:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A63D1A0B06
+	for <audit@vger.kernel.org>; Thu, 19 Sep 2024 17:07:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.163.189.88
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726761943; cv=none; b=DYu9RcKrz6OpkRVjwQYx3foOe7UoEyguVAOaR6gI/gIdldZbAuKQRLLMb7WreVi+oZ1ID46ZQ291SADTcp+8rnnSNvb0IGUu9gtO2dyx1NLtHYkSUgZPjAus3I8Ka2cfcz5n9UPxPLGADaPKaXE29utaEDP9VqPVwKO2ooBhmVs=
+	t=1726765664; cv=none; b=ZAiELDygOLKb+J9nQpapDhfmJUOL7JGGNazwWWEZGCyLc1ykSSQB6h5Kc4I3MUoWbmopZhb6myxkXvsrXiyVLYyKKlZnrXfCFJWhRWXw1d3TCMfcJNmSy4lcY1sz4WpIjH4vVf7B4mMWDCHIhgccZTgdW1i2zx4/zTxFVR3Z8+A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726761943; c=relaxed/simple;
-	bh=YuGyoFlR3zsbYKdnvpdwmpjvDsWB5PPm0aXY6r9+KtA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=RRg1djr/95trQ1mOSefT3LU9D9oZbDABmwoiogOvSuiosXaQVv5PnHXu/gEyP/H2rUp4sTprmSPp/V4GnIVh0PGkCbs0QQHvyCVGP+X90LabcozzHCRuQo92gYK3JYlMjJNw9lJBGJ6JZzYdMKGCgIvZEz0JFxhPi0p1i2fidiU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=bNZs5mgy; arc=none smtp.client-ip=209.85.219.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+	s=arc-20240116; t=1726765664; c=relaxed/simple;
+	bh=s6dpP8TCSV6IMkh/sXJtSdJX6jRTNUzsaaCEGL9iuoo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=rm5CO8y/iiZ282SlAVHvgTo1t6wWsr7dXMGU7EtOb4DzJpPZk1nwp3LpP9DPAgMlETJykM7PS5GwJp039DlQBzaL3cBmAtNqi27U7ZMs3yoFDz6T0/AJFyCvNZjJD613G57VZ0vSO90OhOyYmjRcxJTwkwnV04sP9un873sAIiM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com; spf=none smtp.mailfrom=schaufler-ca.com; dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b=h+n+LgvQ; arc=none smtp.client-ip=66.163.189.88
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=schaufler-ca.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="bNZs5mgy"
-Received: by mail-yb1-f176.google.com with SMTP id 3f1490d57ef6-e03caab48a2so902003276.1
-        for <audit@vger.kernel.org>; Thu, 19 Sep 2024 09:05:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1726761941; x=1727366741; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=HdUdhIPwwI6AU/7Ra680ydg6oDI8v4ajBh4UcdHCeXo=;
-        b=bNZs5mgy9dFzZ/mWanHF1KqJB70V5B0LAtEP1sAdTMW3aXptpIJZJSB+Qpw/bQSG4N
-         7Aq7uFC74smuR4bEfrV1O0ith88CgbcXn4Y+jg6qpDIHN7XC2t/Q+dCSO/PdLSYqdC9+
-         IVE7UWq2isHST5wsJvQAH2siA/ENdaeQg8vdAk9LijqVXwpWIZoZMXm05QNd32G/vuND
-         33LoiOn3WGFCx+ybozZ4Vc7caFMaOpc8lR8dFdy80kDKrFQyRo3voEx0Ajwoh8MFMrRN
-         JxwSWve+EJNHZl5+FEfewffqCgVudhO2zpY1BUvS5b5l40KfVhMnZbhkR5N3qFiKLXVm
-         Triw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726761941; x=1727366741;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=HdUdhIPwwI6AU/7Ra680ydg6oDI8v4ajBh4UcdHCeXo=;
-        b=XaFT22Q6g7tV2Ssg+J623RXxJ31o97O30QjzS8qFvxeeitNcWTTDhXL6aRPTNsEzf4
-         HhSEcKfQcNBTNAmbUkg0tO+hq45ehRD8caAIhCptB7ufNf3Pm6TXFW9/rmv2y071Fh9W
-         FCjUEnCJd4VstdQ318JjXk53Ksmth9E3AP6rr/8RpUzkAJPhhNR6gNKucXQ8IX18POxy
-         m/y+1ln43r/vwv2ARUqYoh1Z25MMldk/MuxKC5un6NQ+8BB2VdVryuGbIT6ZrLVAsUQv
-         2tcwmfZqQJPnDVW59PBPblPf+bx3H7/HXCKNex2H2usg0DMqm3BOZweK24HJXaG5MCld
-         06XA==
-X-Gm-Message-State: AOJu0Yy+xp5IEL3hnD4Ms5sCtBdNGUu06j+ebuA93taTNkDzA1NZnkRM
-	V0SV1KOZTNrxrYBN9sm9idq11jhhVDM4lEcnEDbwH/m3Gl87es2L5CIjEAizAqPDvBMg2ADYhJj
-	4rB2XKiNuOPBQe7fTqpbHpKhjYz5b0R+qIjId
-X-Google-Smtp-Source: AGHT+IGFfsCLFlXzIE4WL4lQnY+XmKm9FIKr65q8ol/AeEEWv1q+PbbdIPzm2vHXkvsahYdpARV3nr7pGfpfrshTuL0=
-X-Received: by 2002:a25:a282:0:b0:e20:1e5f:bc9a with SMTP id
- 3f1490d57ef6-e202769c379mr3068158276.11.1726761940768; Thu, 19 Sep 2024
- 09:05:40 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b="h+n+LgvQ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1726765661; bh=tWBQybOl3FT+mudZjl+fbkJNchg9vZbkctoIw4///uc=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=h+n+LgvQEnWVcZlArlwt1rAxpByU7REL+iAXwKI3Kn15C0WMBLpNDjJOQwlG8XfVAiqCcZ1V2Z2ZrTshS2FbLCH8x2MDmwaQJNgoSHHpCV6C/jnQq8bCSA5ZTTZvDNe9rDbiteF5N56G3aGAHlQmy0DA6trb+DdpI0YlZF/UOC/jhOgtzEh4/Y0DmX/KFl6sDKDeNcH05PpuYBkqQbEEzBtEx27PIj12q9+Zy2HHPb134kVClrF2/aUsqpCEaSUUONNWdwu64GbR0JGjWjy2Ykv1+9kaPPTpfh2eZRFmdiB7i6rLUItXHXYIhJDJPA00pykBs7BeIuoLfKnQ83M+qg==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1726765661; bh=tjJAwemaQf1GLwVSMWqg0eTgXdXxHMS96SGreQXTYsz=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=TIP4PHjjYCX/V5v3wa6uAgx4lRA91R1sM7CrGmK0/WORij6QqKUVwIxoYEwxpj8Cv3VNrdxzL3gTL6fQ6aj2fmjMVivwMFKu5HsXryhd6fguMIIRQ2CqIa5B6emzf4aVO/QMvEjMhGcd7SbKeLQqY2CDt3H/dP0r6BOavPMmBeU8DkxjQyv/k5L8uK+UIgfazb1ml5VvBhTZvwykE8w+Ic35bAKe0FdJy2mJv3k3T04AKM4zeP1Z/YTGQyg9ggbrttl+K6Dp92sRNzbJB7DXWXeh1ayhccOxLifY+Lay3pfu0FYC4SfqWNkxgPKuIBMseTiUWEIOS7nNfgDSFI+Nfg==
+X-YMail-OSG: lhgDsYIVM1ldXeGLHXo.hMlxhMWAWE75l0jD_OdxCFnweh4ImU2HnTB60Zo3np6
+ lMF75rzgcRu_2HtWTQu_qXKjrTBj4m9znuw9W7sgJNXyWbQ8IFdH9VgC9v0sEmX2yaMRKVD.WlWp
+ KtE.Fk.0sTSZULG26b167sSVmB_VDPQ_5wW856hqgNxvPAcJ2kD3h1b.7FNemdF01dxon.h8st_y
+ Y4EMZsDwrVHGXXU19RLTTCuyO7THML6.dMXcbvoSawIGx6EiP2BLUaogYkWsAd.qyqrFAFDNEry8
+ kbmywmL6cEJo7ntqx6C0.Fjfn_J12dWxhpKxUqjKs5rN6Grbr3PeOAF.Lp2pJtryFakmLomhslzJ
+ dnyrJTztxyKjRhc6ESecMS074DjjA2VrF7tvHqk9e6Cx8oEVRdPmQ3LY6tMi6cViuCmhjJAefKId
+ o.SvkGRXCIEean7lPmCB1Ls17bfHrgIl4JyeA7aMjBtYUsX8BaIou2hfP52JEpmVtd5Dbjfb56C4
+ ziYanxU38lFoBaymT7pveHuqU8RbjLwjTnKkxmB3zleMTto7knfaPZvMc7EDs9TW9jT4nBhYXKJi
+ 7yna2NKhLlnt9bkb.xGx_fD70M3bZAYIDa9ROu1W1a.KO3Y6W9UWBXL2DqOzOhmlQrv8P_0nqfXQ
+ MeOhxpI5iRzSb_oT3oHqxHgcN6FPJKwFbS5UbqZnwcIky6Wmp3To7yGGts4V2FGKMR6ALk75a0uh
+ LqFBmRxRIQ9f7.u9eEJryPXQi02OTIVg4CzibVEeYVfJok0ezSlcmle4_yoztgJM9Nj4B0J7jiD9
+ JEtiQ8pHSGNhFVTpGp8A7v.squytLRMsW7K1WRrdxdUIxe.y4RZXDGdb2YAycW5IM9205DlfDcjW
+ gjAI8DHBVANfWA31moTm6BeVab7Vhw5jP5kpAK_ux4lag6ix9VYFdF_SIfNQztsq8DY0rg6MsGwz
+ I4R.vjkxLD9iI1zGAj0reVeZjm4cdivYwgo20Obn4zfAnrqZYokGmQjKkKIurDO4fKqQ7q1rz8ZT
+ Fg_6TXzLPFz_qLSB8CCxFhlXjWbD4wxL_6Ut8NwooPB3b449Gfn_ccPSKqxJIyHhHHf.EGTaxzo_
+ H0A9pHvmvvOPKxB.lNNOI8uWC_ybPu_H.bYNsPv4JSSdj2lBxA.fMCesYVNC.ULYznj4GLghU4ok
+ qHATxOcdt0Uxho5GSXzqSArl3mom9bWW7YzLciafizMOffOA9k7bHhN_78IMd_qje8bHNvoLASUK
+ lO2XqHQTtADG.vRGlwpxnIhTEHSKUce34hUJ5aU12FfAbfCM5yaOBlyMy9qnozIL9G.tU.Yxp36w
+ sHJGZ1AI9B6jWSSAM.iOnW9HoOtaZ7UnSl6NNlZXp3iC7yY4ENyIBq5UTXyZ7Nf6nTCW3sIX6DgZ
+ zfaBu2O.hxN6A3JuDj8KhzZOjECECF_ssL_LeHSODGMttlOg4QLt8o2U2GCFdtziZYP1P0jcPbBY
+ 9sQCxPYwgFCkrCwqB67nsq7_D5v2qlwUObCMpW340saHohQ7HX5RImpQbOpFrakQLGa_T9UDHP0V
+ GVebeHqbgh4RW8YDoUqm0avOOnaBHKyuIjx_wcAU6O6ZeY3CT1rUhpfLYbiGxIWzR6XBUDNSsRLF
+ Be1jn6m78kQOELGmnRnuabs8lrnm3wLaxxoCXTHLQ5TlAHhzjs9RoeukaeqwhHZzzYwQrgub4iYY
+ 9_MfRe4iRh7IGt8SjCRMBVrPNt3HcaaoGBSn81olYZ5QiYzb4AVdSoJmYGQraRKleAXUGsvB3_g4
+ kCStkdsWOblkNFW9F_Q32.Z3S.udXAKYhw6vCwFUcOYTCYjGXVwecSzoUSOl6KbQWrEsW1oyqoqb
+ CID5hwO3oS0S0sDj0BZFqdQrIj7gYb4o5vhwc_rNWWt2dofu9l3Jbui5BwD93VVWzA878K3ATdZI
+ Ry6tTHzE3sxY_CL2eIon7vwgaoeb5zbCAzlO7rJjkKRukKjbQ6aTAYYr37sggdCHDY9gvfsWQKqv
+ QWT3xULax4ffxbsvCBeJrn_Wci3QmcL6Mqa7v75s7pyoBkn3_LEudWaSfqDUGMklb3nH3L0NLUbl
+ ESSFOF.yE2g9oQaBZK_X23MmwUNYniyg2GNEC1Ecu77bcIz6PLSE2wJct4NJvLnQRKn0bnGJZ3ne
+ x3b_H.cKUKx6v87y6in0_l9KsvhGQMkfks.ycrDfladTfNOO9sGdCbYPRUuX6lcyK_DTlRU7wwUa
+ 7szHj_v.tZAqFHK_JbMVlmyRRqEvTBWJoi9EH4FgYOrWLjmrmo2KAAh3YUSEMtmv4TSIhsZbT33d
+ gnXAwlyUoXRZeSs97GFVvz6LKqCKIZCY-
+X-Sonic-MF: <casey@schaufler-ca.com>
+X-Sonic-ID: f29536d4-e4d7-45f4-9d3f-96fc955a69a6
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic306.consmr.mail.ne1.yahoo.com with HTTP; Thu, 19 Sep 2024 17:07:41 +0000
+Received: by hermes--production-gq1-5d95dc458-4hqnr (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 4f620351a53c03e30d3a3c39e442e2df;
+          Thu, 19 Sep 2024 16:37:13 +0000 (UTC)
+Message-ID: <1a38172e-ef03-4a87-9200-cfbe20c3bb77@schaufler-ca.com>
+Date: Thu, 19 Sep 2024 09:37:11 -0700
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <66ec25cb.050a0220.92ef1.001e.GAE@google.com>
-In-Reply-To: <66ec25cb.050a0220.92ef1.001e.GAE@google.com>
-From: Paul Moore <paul@paul-moore.com>
-Date: Thu, 19 Sep 2024 12:05:29 -0400
-Message-ID: <CAHC9VhRpDPTopxgOEbDt1d_XyDVNzaA7++6UojWXidbpBHjeVA@mail.gmail.com>
+User-Agent: Mozilla Thunderbird
 Subject: Re: [syzbot] [audit?] general protection fault in smack_log_callback
-To: syzbot <syzbot+044fdf24e96093584232@syzkaller.appspotmail.com>
-Cc: audit@vger.kernel.org, casey@schaufler-ca.com, eparis@redhat.com, 
-	jmorris@namei.org, john.johansen@canonical.com, linux-kernel@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, serge@hallyn.com, 
-	syzkaller-bugs@googlegroups.com
-Content-Type: multipart/mixed; boundary="00000000000017a5ae06227b1880"
+To: Paul Moore <paul@paul-moore.com>,
+ syzbot <syzbot+044fdf24e96093584232@syzkaller.appspotmail.com>
+Cc: audit@vger.kernel.org, eparis@redhat.com, jmorris@namei.org,
+ john.johansen@canonical.com, linux-kernel@vger.kernel.org,
+ linux-security-module@vger.kernel.org, serge@hallyn.com,
+ syzkaller-bugs@googlegroups.com, Casey Schaufler <casey@schaufler-ca.com>
+References: <66ec25cb.050a0220.92ef1.001e.GAE@google.com>
+ <CAHC9VhRpDPTopxgOEbDt1d_XyDVNzaA7++6UojWXidbpBHjeVA@mail.gmail.com>
+Content-Language: en-US
+From: Casey Schaufler <casey@schaufler-ca.com>
+In-Reply-To: <CAHC9VhRpDPTopxgOEbDt1d_XyDVNzaA7++6UojWXidbpBHjeVA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Mailer: WebService/1.1.22645 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
 
---00000000000017a5ae06227b1880
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+On 9/19/2024 9:05 AM, Paul Moore wrote:
+> On Thu, Sep 19, 2024 at 9:23 AM syzbot
+> <syzbot+044fdf24e96093584232@syzkaller.appspotmail.com> wrote:
+>> Hello,
+>>
+>> syzbot found the following issue on:
+>>
+>> HEAD commit:    bdf56c7580d2 Merge tag 'slab-for-6.12' of git://git.kernel..
+>> git tree:       upstream
+>> console output: https://syzkaller.appspot.com/x/log.txt?x=12584b00580000
+>> kernel config:  https://syzkaller.appspot.com/x/.config?x=4540f5bcdd31e3de
+>> dashboard link: https://syzkaller.appspot.com/bug?extid=044fdf24e96093584232
+>> compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
+>> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=155cffc7980000
+>> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16ad24a9980000
+>>
+>> Downloadable assets:
+>> disk image: https://storage.googleapis.com/syzbot-assets/cec9f3c675f1/disk-bdf56c75.raw.xz
+>> vmlinux: https://storage.googleapis.com/syzbot-assets/21e06ae5b159/vmlinux-bdf56c75.xz
+>> kernel image: https://storage.googleapis.com/syzbot-assets/1e936c954b8b/bzImage-bdf56c75.xz
+>>
+>> The issue was bisected to:
+>>
+>> commit 5f8d28f6d7d568dbbc8c5bce94894474c07afd4f
+>> Author: Casey Schaufler <casey@schaufler-ca.com>
+>> Date:   Wed Jul 10 21:32:26 2024 +0000
+>>
+>>     lsm: infrastructure management of the key security blob
+>>
+>> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1124d69f980000
+>> final oops:     https://syzkaller.appspot.com/x/report.txt?x=1324d69f980000
+>> console output: https://syzkaller.appspot.com/x/log.txt?x=1524d69f980000
+> I just posted a patch which I believe should fix the problem, but I'd
+> like to get Casey's ACK on it before submitting upstream as it does
+> touch Smack code; lore link below:
 
-On Thu, Sep 19, 2024 at 9:23=E2=80=AFAM syzbot
-<syzbot+044fdf24e96093584232@syzkaller.appspotmail.com> wrote:
+Thanks for jumping on this. Your build and test cycle is faster than mine.
+
 >
-> Hello,
+> https://lore.kernel.org/linux-security-module/20240919155740.29539-2-paul@paul-moore.com
 >
-> syzbot found the following issue on:
+> .. in the meantime, I'm attaching the patch here so syzbot can verify
+> that it solves the problem.
 >
-> HEAD commit:    bdf56c7580d2 Merge tag 'slab-for-6.12' of git://git.kerne=
-l..
-> git tree:       upstream
-> console output: https://syzkaller.appspot.com/x/log.txt?x=3D12584b0058000=
-0
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=3D4540f5bcdd31e=
-3de
-> dashboard link: https://syzkaller.appspot.com/bug?extid=3D044fdf24e960935=
-84232
-> compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Deb=
-ian) 2.40
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=3D155cffc7980=
-000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=3D16ad24a998000=
-0
+> #syz test
 >
-> Downloadable assets:
-> disk image: https://storage.googleapis.com/syzbot-assets/cec9f3c675f1/dis=
-k-bdf56c75.raw.xz
-> vmlinux: https://storage.googleapis.com/syzbot-assets/21e06ae5b159/vmlinu=
-x-bdf56c75.xz
-> kernel image: https://storage.googleapis.com/syzbot-assets/1e936c954b8b/b=
-zImage-bdf56c75.xz
->
-> The issue was bisected to:
->
-> commit 5f8d28f6d7d568dbbc8c5bce94894474c07afd4f
-> Author: Casey Schaufler <casey@schaufler-ca.com>
-> Date:   Wed Jul 10 21:32:26 2024 +0000
->
->     lsm: infrastructure management of the key security blob
->
-> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=3D1124d69f98=
-0000
-> final oops:     https://syzkaller.appspot.com/x/report.txt?x=3D1324d69f98=
-0000
-> console output: https://syzkaller.appspot.com/x/log.txt?x=3D1524d69f98000=
-0
-
-I just posted a patch which I believe should fix the problem, but I'd
-like to get Casey's ACK on it before submitting upstream as it does
-touch Smack code; lore link below:
-
-https://lore.kernel.org/linux-security-module/20240919155740.29539-2-paul@p=
-aul-moore.com
-
-... in the meantime, I'm attaching the patch here so syzbot can verify
-that it solves the problem.
-
-#syz test
-
---=20
-paul-moore.com
-
---00000000000017a5ae06227b1880
-Content-Type: text/x-patch; charset="US-ASCII"; name="01-lsm-key_blob_fix.patch"
-Content-Disposition: attachment; filename="01-lsm-key_blob_fix.patch"
-Content-Transfer-Encoding: base64
-Content-ID: <f_m19hg97b0>
-X-Attachment-Id: f_m19hg97b0
-
-c2VsaW51eCxzbWFjazogcHJvcGVybHkgcmVmZXJlbmNlIHRoZSBMU00gYmxvYiBpbiBzZWN1cml0
-eV93YXRjaF9rZXkoKQoKRnJvbTogUGF1bCBNb29yZSA8cGF1bEBwYXVsLW1vb3JlLmNvbT4KClVu
-Zm9ydHVuYXRlbHkgd2hlbiB3ZSBtaWdyYXRlZCB0aGUgbGlmZWN5Y2xlIG1hbmFnZW1lbnQgb2Yg
-dGhlIGtleSBMU00KYmxvYiB0byB0aGUgTFNNIGZyYW1ld29yayB3ZSBmb3Jnb3QgdG8gY29udmVy
-dCB0aGUgc2VjdXJpdHlfd2F0Y2hfa2V5KCkKY2FsbGJhY2tzIGZvciBTRUxpbnV4IGFuZCBTbWFj
-ay4gIFRoaXMgcGF0Y2ggY29ycmVjdHMgdGhpcyBieSBtYWtpbmcgdXNlCm9mIHRoZSBzZWxpbnV4
-X2tleSgpIGFuZCBzbWFja19rZXkoKSBoZWxwZXIgZnVuY3Rpb25zIHJlc3BlY3RpdmVseS4KClRo
-aXMgcGF0Y2ggYWxzbyByZW1vdmVzIHNvbWUgaW5wdXQgY2hlY2tpbmcgaW4gdGhlIFNtYWNrIGNh
-bGxiYWNrIGFzIGl0CmlzIG5vIGxvbmdlciBuZWVkZWQuCgpSZXBvcnRlZC1ieTogc3l6Ym90KzA0
-NGZkZjI0ZTk2MDkzNTg0MjMyQHN5emthbGxlci5hcHBzcG90bWFpbC5jb20KRml4ZXM6IDVmOGQy
-OGY2ZDdkNSAoImxzbTogaW5mcmFzdHJ1Y3R1cmUgbWFuYWdlbWVudCBvZiB0aGUga2V5IHNlY3Vy
-aXR5IGJsb2IiKQpTaWduZWQtb2ZmLWJ5OiBQYXVsIE1vb3JlIDxwYXVsQHBhdWwtbW9vcmUuY29t
-PgotLS0KIHNlY3VyaXR5L3NlbGludXgvaG9va3MuYyAgIHwgICAgMiArLQogc2VjdXJpdHkvc21h
-Y2svc21hY2tfbHNtLmMgfCAgIDEzICsrKy0tLS0tLS0tLS0KIDIgZmlsZXMgY2hhbmdlZCwgNCBp
-bnNlcnRpb25zKCspLCAxMSBkZWxldGlvbnMoLSkKCmRpZmYgLS1naXQgYS9zZWN1cml0eS9zZWxp
-bnV4L2hvb2tzLmMgYi9zZWN1cml0eS9zZWxpbnV4L2hvb2tzLmMKaW5kZXggODFmYmZhNWI4MGQ0
-Li42N2JhYTQ4N2NmN2EgMTAwNjQ0Ci0tLSBhL3NlY3VyaXR5L3NlbGludXgvaG9va3MuYworKysg
-Yi9zZWN1cml0eS9zZWxpbnV4L2hvb2tzLmMKQEAgLTY3MjAsNyArNjcyMCw3IEBAIHN0YXRpYyBp
-bnQgc2VsaW51eF9rZXlfZ2V0c2VjdXJpdHkoc3RydWN0IGtleSAqa2V5LCBjaGFyICoqX2J1ZmZl
-cikKICNpZmRlZiBDT05GSUdfS0VZX05PVElGSUNBVElPTlMKIHN0YXRpYyBpbnQgc2VsaW51eF93
-YXRjaF9rZXkoc3RydWN0IGtleSAqa2V5KQogewotCXN0cnVjdCBrZXlfc2VjdXJpdHlfc3RydWN0
-ICprc2VjID0ga2V5LT5zZWN1cml0eTsKKwlzdHJ1Y3Qga2V5X3NlY3VyaXR5X3N0cnVjdCAqa3Nl
-YyA9IHNlbGludXhfa2V5KGtleSk7CiAJdTMyIHNpZCA9IGN1cnJlbnRfc2lkKCk7CiAKIAlyZXR1
-cm4gYXZjX2hhc19wZXJtKHNpZCwga3NlYy0+c2lkLCBTRUNDTEFTU19LRVksIEtFWV9fVklFVywg
-TlVMTCk7CmRpZmYgLS1naXQgYS9zZWN1cml0eS9zbWFjay9zbWFja19sc20uYyBiL3NlY3VyaXR5
-L3NtYWNrL3NtYWNrX2xzbS5jCmluZGV4IGRhMGMyYmZmYmQwOC4uNTYzZmI0MDRmNjU5IDEwMDY0
-NAotLS0gYS9zZWN1cml0eS9zbWFjay9zbWFja19sc20uYworKysgYi9zZWN1cml0eS9zbWFjay9z
-bWFja19sc20uYwpAQCAtNDYyOSwxNiArNDYyOSw5IEBAIHN0YXRpYyBpbnQgc21hY2tfd2F0Y2hf
-a2V5KHN0cnVjdCBrZXkgKmtleSkKIHsKIAlzdHJ1Y3Qgc21rX2F1ZGl0X2luZm8gYWQ7CiAJc3Ry
-dWN0IHNtYWNrX2tub3duICp0a3AgPSBzbWtfb2ZfY3VycmVudCgpOworCXN0cnVjdCBzbWFja19r
-bm93biAqKmJsb2IgPSBzbWFja19rZXkoa2V5KTsKIAlpbnQgcmM7CiAKLQlpZiAoa2V5ID09IE5V
-TEwpCi0JCXJldHVybiAtRUlOVkFMOwotCS8qCi0JICogSWYgdGhlIGtleSBoYXNuJ3QgYmVlbiBp
-bml0aWFsaXplZCBnaXZlIGl0IGFjY2VzcyBzbyB0aGF0Ci0JICogaXQgbWF5IGRvIHNvLgotCSAq
-LwotCWlmIChrZXktPnNlY3VyaXR5ID09IE5VTEwpCi0JCXJldHVybiAwOwogCS8qCiAJICogVGhp
-cyBzaG91bGQgbm90IG9jY3VyCiAJICovCkBAIC00NjUzLDggKzQ2NDYsOCBAQCBzdGF0aWMgaW50
-IHNtYWNrX3dhdGNoX2tleShzdHJ1Y3Qga2V5ICprZXkpCiAJYWQuYS51LmtleV9zdHJ1Y3Qua2V5
-ID0ga2V5LT5zZXJpYWw7CiAJYWQuYS51LmtleV9zdHJ1Y3Qua2V5X2Rlc2MgPSBrZXktPmRlc2Ny
-aXB0aW9uOwogI2VuZGlmCi0JcmMgPSBzbWtfYWNjZXNzKHRrcCwga2V5LT5zZWN1cml0eSwgTUFZ
-X1JFQUQsICZhZCk7Ci0JcmMgPSBzbWtfYnVfbm90ZSgia2V5IHdhdGNoIiwgdGtwLCBrZXktPnNl
-Y3VyaXR5LCBNQVlfUkVBRCwgcmMpOworCXJjID0gc21rX2FjY2Vzcyh0a3AsICpibG9iLCBNQVlf
-UkVBRCwgJmFkKTsKKwlyYyA9IHNta19idV9ub3RlKCJrZXkgd2F0Y2giLCB0a3AsICpibG9iLCBN
-QVlfUkVBRCwgcmMpOwogCXJldHVybiByYzsKIH0KICNlbmRpZiAvKiBDT05GSUdfS0VZX05PVElG
-SUNBVElPTlMgKi8K
---00000000000017a5ae06227b1880--
