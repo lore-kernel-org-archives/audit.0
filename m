@@ -1,73 +1,103 @@
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 843512BCF7
-	for <audit@vger.kernel.org>; Thu, 19 Sep 2024 19:37:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 580BD18EFC5;
+	Sun, 22 Sep 2024 00:49:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726774625; cv=none; b=TuxjFFAjJIFPSmb9F9DQtQ9vIokdVNYrZU+efj5rGzTDWuszkZVPXh1Vzb6GodXMctTfKBshISd+04gprsL8ejo0SN0ybVub4i629CNwDkPUknq2BHuY5mPe0a9omB6T/qY/x8SLSIEj+G6hRnc4fMuPkF+54Vw3I5T6exvyRJg=
+	t=1726966147; cv=none; b=gQD8CWDvVJ+pzWpaHKiXn424vi5CFrLG7OHq7frq9uzMQty91tHYaoXybQiydKEs0NzXVLyf4qOP+Wmw3f0sGDfKPUzs8X51zBjRPegASr7F/7Dw95o0oWDCUS92oEA/+sCl2D9aiiNUpzozCfQ9TPdM5MitbOLT5W4LAICohQY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726774625; c=relaxed/simple;
-	bh=h7cJFJvH2bii7WYkqUdFJoFaaZT4B06F01W+siRkutA=;
-	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
-	 Content-Type; b=J1TK7mb1dFTvxgst9C2s2oZcpk3JGTnGH/XVCZ1iPIBEVZc1is13UyGws3FiSiu5jxw08paJAOVNt5DYSQxoNHhkwZglOG82PZFv4/qtoUa0fKteHwmzMSKn6qAIrB5BNONhp/boNqyQU+RvQj8oe2/Qqugmhs5k4ZDP3lTBvkk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.200
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-il1-f200.google.com with SMTP id e9e14a558f8ab-3a049f9738fso15011625ab.3
-        for <audit@vger.kernel.org>; Thu, 19 Sep 2024 12:37:04 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726774623; x=1727379423;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0CRNWnXG6C62pd73O5+0DURKFiurkyy58Iv9yEaQuwU=;
-        b=e80N9BfTAjA6ELOC2JTBS3Qtyk9H/uuY/vgXb/XbetATy24/evA3Zu/S3kpWE+h0II
-         k2ubZriz8mU3cnuuhbV/Z8M8cIXzGFuKZG7TkENSQR+7Yg09Bb9EIZP0QobKE2H7XUmc
-         Uve1M7DqPjA1orL0hSCbVrOT1LT8h9KPYf7FQhho5tbo+7RM4k+/ZcYqiqW7oneeumld
-         l6UyIPBZnh4ZjW414YsQB5PfMw5VnZ4ABw4AIwKjYKRswKUAuA5q9JGZjqdfxvGHtmaA
-         Th7+WtHsuvWd+izuOSjx/6H9YFxaKz1TtURzC7A2doxxTZJXJRPyH3PICBxPBw3lq+RA
-         p3Rw==
-X-Gm-Message-State: AOJu0Yx4PguSpM9ISBxtUEQs+thvUgjlqD9n7LCl2ntlJBOBiGLRDwoG
-	Xn9mdw5vw3xDOZRYQPb1AALpLFJ1Ah8KW8zSc4OmWnIDkqVBHJOZiiBAsoJHJCnyBbDRDO8HfM8
-	sdunpMI7eOr5KUvRLxgTmJY0WTHLZfNe98XnlkM5OlTBZqOfcryuV5iM=
-X-Google-Smtp-Source: AGHT+IEWigGKNkyjia5d2sn1U9cVlDImOMi4LZBpan1NY7y3ryjmidJ6A3/FBWMdIrvH645kOzaYezjv0UDb5xZ8rJdIberjuPNM
+	s=arc-20240116; t=1726966147; c=relaxed/simple;
+	bh=H6FLgymN+EvqaI2jCLVxaOQjwpiv6Oos9XrGRUPQoDM=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=dOC60rKouRx+qw/OEXcm0R2qDNNitwMtw648ISx51ZZUE4EjHD9OprJf2hTJ4FGcAjiK96f7j1lYcnIjTlmWb+vnVY73jGDH1KJFaYukqv3+nUCTLg8eMFYeQFK3KQovQJ2z7DbKGncfwbyahOR3+bgTnlryYNGV2p8lc5kQyiE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=AylD5jAS; arc=none smtp.client-ip=62.89.141.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="AylD5jAS"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=linux.org.uk; s=zeniv-20220401; h=Sender:Content-Type:MIME-Version:
+	Message-ID:Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:
+	Content-ID:Content-Description:In-Reply-To:References;
+	bh=dL4fqJSchammBoaFLHOQnJXekzu+Kyp9nHrzvajQPpE=; b=AylD5jASxY0z570bzQpKvl1bJc
+	zgpmhoabY6c1jYzEjfl2plFWjc8ByTlRKMR+ahEzz2+vi+reKlvp0eCWNsSABhpkBk4h/tXSY99N0
+	lsnaFwNmvDms0xydutg37zf9sYLGqTT9qUeRGFNM5Ldz0p5/uGgib3DVRmAP27iG5zE+J4oxWve+S
+	vlYF5VyXOK04xJo9xgUWLY5mb6iGEa65Ug24fftDQq/jkpyPL4c9vD0prj6bsw66lkAl44fUqhbo2
+	YRNsGImD2q0RUeUZCGSkOE5U08AQ7TRAP0f0yoq2+vJk5DgwpYlk6o+/ExoEf+glJu+78cQp7AhHr
+	Oz8tYhBg==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.98 #2 (Red Hat Linux))
+	id 1ssAmb-0000000EWZO-1SnI;
+	Sun, 22 Sep 2024 00:49:01 +0000
+Date: Sun, 22 Sep 2024 01:49:01 +0100
+From: Al Viro <viro@zeniv.linux.org.uk>
+To: linux-fsdevel@vger.kernel.org
+Cc: audit@vger.kernel.org, io-uring@vger.kernel.org
+Subject: [RFC] struct filename, io_uring and audit troubles
+Message-ID: <20240922004901.GA3413968@ZenIV>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:13a5:b0:3a0:a71b:75e5 with SMTP id
- e9e14a558f8ab-3a0c8c808admr7797375ab.7.1726774623498; Thu, 19 Sep 2024
- 12:37:03 -0700 (PDT)
-Date: Thu, 19 Sep 2024 12:37:03 -0700
-In-Reply-To: <CAHC9VhRpDPTopxgOEbDt1d_XyDVNzaA7++6UojWXidbpBHjeVA@mail.gmail.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <66ec7d5f.050a0220.29194.0043.GAE@google.com>
-Subject: Re: [syzbot] [audit?] general protection fault in smack_log_callback
-From: syzbot <syzbot+044fdf24e96093584232@syzkaller.appspotmail.com>
-To: audit@vger.kernel.org, casey@schaufler-ca.com, eparis@redhat.com, 
-	jmorris@namei.org, john.johansen@canonical.com, linux-kernel@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, paul@paul-moore.com, serge@hallyn.com, 
-	syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Sender: Al Viro <viro@ftp.linux.org.uk>
 
-Hello,
+	Looks like things like async unlink might fuck the audit
+very badly.  io_uring does getname() in originating thread and uses the
+result at the time of operation, which can happen in a different thread.
+Moreover, by that time the original syscall might have very well returned.
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+	The trouble is, getname() establishes linkage between the struct
+filename and struct audit_name; filename->aname and audit_name->name
+respectively.  struct filename can get moved from one thread to another;
+struct audit_name is very much tied to audit_context, which is per-thread
+- first few (5, currently) audit_name instances are embedded into
+audit_context.	The rest gets allocated dynamically, but all of them
+are placed on audit_context::names_list.
 
-Reported-by: syzbot+044fdf24e96093584232@syzkaller.appspotmail.com
-Tested-by: syzbot+044fdf24e96093584232@syzkaller.appspotmail.com
+	At audit_free_names() they are all wiped out - references
+back to filename instances are dropped, dynamically allocated ones
+are freed, and while embedded ones survive, they are zeroed out on
+reuse by audit_alloc_name().  audit_free_names() is called on each
+audit_reset_context(), which is done by __audit_syscall_exit() and
+(in states other than AUDIT_SYSCALL_CONTEXT) __audit_uring_exit().
 
-Tested on:
+	Linkage from filename to audit_name is used by __audit_inode().
+It definitely expects the reference back to filename to be stable.
+And in situation when io_uring has offloaded a directory operation to
+helper thread, that is not guaranteed.
 
-commit:         2004cef1 Merge tag 'sched-core-2024-09-19' of git://gi..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=1784c427980000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=38d475ce6711b8b4
-dashboard link: https://syzkaller.appspot.com/bug?extid=044fdf24e96093584232
-compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=162b369f980000
+	Another fun bit is that both audit_inode() and audit_inode_child()
+may bump the refcount on struct filename.  Which can get really fishy
+if they get called by helper thread while the originator is exiting the
+syscall - putname() from audit_free_names() in originator vs. refcount
+increment in helper is Not Nice(tm), what with the refcount not being
+atomic.
 
-Note: testing is done by a robot and is best-effort only.
+	Potential solutions:
+
+* don't bother with audit_name creation and linkage in getname(); do that
+when we start using the sucker.  Doing that from __set_nameidata() will
+catch the majority of the stuff that ever gets audit_inode* called for it
+(the only exceptions are mq_open(2) and mq_unlink(2)).  Unfortunately,
+each audit_name instance gets spewed into logs, so we would need to
+bring the rest of that shite in, including the things like symlink
+bodies (note that for io_uring-originating symlink we'd need that done
+in do_symlinkat()), etc.  Unpleasant, that.
+
+* make refcount atomic, add a pointer to audit_context or even task_struct
+in audit_name, have the "use name->aname if the type is acceptable"
+logics in audit_inode dependent upon the name->aname->owner matching
+what we want.  With some locking to make the check itself safe.
+
+* make refcount atomic, get rid of ->aname and have audit_inode() scan
+the names_list for entries with matching ->name and type - and that
+before the existing scan with ->name->name comparisons.
+
+* something else?
+
+	Suggestions _not_ involving creative uses of TARDIS would
+be welcome.
