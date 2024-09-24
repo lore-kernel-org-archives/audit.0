@@ -1,138 +1,123 @@
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com [209.85.128.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F05312D744;
-	Tue, 24 Sep 2024 07:01:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1941C1C3D
+	for <audit@vger.kernel.org>; Tue, 24 Sep 2024 11:15:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727161303; cv=none; b=t1FBYPLnA9kX1rJheCNWfnM0VEkkX9ySQg0lGrvBjIJP65Y+w3uMO1xJlwXPcbGOf1LmOOIcslrKWOCMP5A59xLrLi28x4M7vDe8/Y9Dmxk94T2q/zog+0sctrQ6Ggp2XGzoBNg5lPGDBSvp6BdJ8B9bVSD0ptkpvLvISDzmdUI=
+	t=1727176522; cv=none; b=fJ/jHCts/VcBRvPQF37NaNDGh8ZS/wZpYulooONjI6hyBSVSpBbS5NJGvvm++joeyl2yHOOA4nJ0trUtB6ULGDjbBnufGdHiLZTs+Cym/sNWgJ1BlPxX3WX6BkNs5bxYrWcof2OA2coUhQgVD3Sx3jrDknOby0xJNcYGueH8Zgs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727161303; c=relaxed/simple;
-	bh=/zc15OtL50R5ltUAno2Uw31GPiLRuYoLkSNiAeRttGw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cWeAx///g01pGLtPAXLGxrDt9KTw/Z2FhS6bmPZD18vH2iWCa+eD3mtU4dP/5jREfObjYmw6+Y1ntV2x1T7akAIGghcsMhwpZvlo3TizSo/lJ0MUiJl4WuSK8DxqvM4FiU4UC1Uk8lkUjVQ2SyttWMUG6AmjaMXw1/omqwg0rqE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=tUyKA44/; arc=none smtp.client-ip=62.89.141.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
+	s=arc-20240116; t=1727176522; c=relaxed/simple;
+	bh=9FI9xAMCHBNmhI/DaYI1b7ZOqlOzY6QcewMETRn+Y/g=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=st8AWEiUBHrvVlbIazX2tYXefzeXrhK0/Y7a4kr16KLqsSbvJDLYAPRUvVOrStvE0GVpn1n2QCSKfthgbwn0Is+2xM9heZNqm8LtEUGfDouqiBVa7bkYEHNx835vvQsOWVq3uxNSytqI0S2e1e5HrUUVQ/l6G4Hm+T+6u6i6T9g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=zIIoIV2G; arc=none smtp.client-ip=209.85.128.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="tUyKA44/"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=DseX3OnE4dAn+GJ4ArHvah3JrgIc9TBmDYLlTAQ6yLg=; b=tUyKA44/DJC7yPsogJgdWX2Nb0
-	dakqFbD8CwlzCgpkmqbD8dFE55i/3Ar3RG3im6FKliPx3ZjDxGEuIYnF4EhjCuO0FJ2l6I1c+7ESm
-	HEhrbAilI0xBiYMnWAN62JV7oNDVzLVlz73FhVte+mSgb939DAYMo812KgTofBwiF3Ufdg2Z83ZYI
-	LJZomYO9MU4zH4vKoENIiaqw0SNCNXb790it1rqHA2777fT1K6KVKV9Dg9mOeQTxsPnrhF62JG81z
-	h/wxL2ltnikZ9uvMTiGO9B7eAkJ8yuOC4NwLlEt/alYZLgvOtgEu2nHv/46rGe/BXiZfnUC7cVJwS
-	LyIAVCfA==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.98 #2 (Red Hat Linux))
-	id 1sszYH-0000000F5JV-1Q14;
-	Tue, 24 Sep 2024 07:01:37 +0000
-Date: Tue, 24 Sep 2024 08:01:37 +0100
-From: Al Viro <viro@zeniv.linux.org.uk>
-To: Paul Moore <paul@paul-moore.com>
-Cc: Jens Axboe <axboe@kernel.dk>, linux-fsdevel@vger.kernel.org,
-	audit@vger.kernel.org, io-uring@vger.kernel.org
-Subject: Re: [RFC] struct filename, io_uring and audit troubles
-Message-ID: <20240924070137.GE3550746@ZenIV>
-References: <20240922004901.GA3413968@ZenIV>
- <20240923015044.GE3413968@ZenIV>
- <62104de8-6e9a-4566-bf85-f4c8d55bdb36@kernel.dk>
- <CAHC9VhQMGsL1tZrAbpwTHCriwZE2bzxAd+-7MSO+bPZe=N6+aA@mail.gmail.com>
- <20240923144841.GA3550746@ZenIV>
- <CAHC9VhSuDVW2Dmb6bA3CK6k77cPEv2vMqv3w4FfGvtcRDmgL3A@mail.gmail.com>
- <20240923203659.GD3550746@ZenIV>
- <CAHC9VhSq=6MK=HKCJ8KCjYNQZ4j_eCSgTpuYyHtk2T-_m2Br3Q@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="zIIoIV2G"
+Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-6ddceaaa9f4so42278117b3.2
+        for <audit@vger.kernel.org>; Tue, 24 Sep 2024 04:15:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1727176519; x=1727781319; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=LcmWd7rhU3F8u3+OG+sqswVZPydo9kgTuDZb6jS8fh4=;
+        b=zIIoIV2GmP7Kx2Q2Q9J1b06zG0dS1urqq8Y6w4n41MkttoNPuBawFaY0dCT7AkOFRU
+         ERv3z/3OTXM3C6CuBGlCIx9GgyRbJP20/ggsn1D6MuoSkHnJCv2yRnxKkKmLXcmRgf4t
+         ouMdaQHcVp4fXfcwcddPk+prVfaZbd6HgmTJ0DZiko/7whN3ba8VRpk1LM42rrRa4Ymk
+         uCTgM0eQNx8yY+NdS6Hf+B9AXkn3uoKwgOlGG6HLbc2Iirq+L5vtCYk1pl6601pppFlt
+         ZvVqqwc+n1ahwFB28JfoSJF7XM+t9xGd7LQG5MoJujFNWr9gyP+YQ57ABdNwl+AbOLqP
+         cRPw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1727176519; x=1727781319;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=LcmWd7rhU3F8u3+OG+sqswVZPydo9kgTuDZb6jS8fh4=;
+        b=XlUM8sAs1/EZwJDgY72o954gzYYICnwAyfvPsX1r+WkwlhqyYxdMzmLg3Jdebvqd6s
+         1In3m9rsdXIMYmABL4MAycbiOamxuRQWdfqyHB6Xuk374025FDM5ukDPhG+F4hNKr29F
+         vh63blMzUQPAPwGlCjSluCzoiCuxPEZLI05ztC6PfKWNX9DVP9feebT921suX65FxPha
+         eqDDQDyp0Q9O3RTD3LcUEk+8PFawkUOLY0DYH7M7BW6JWarZ7h7pIrukL+ONZzDadGD9
+         7XQUrBbWSDdhzFCR87W71dVeEg1zMdyuge4q5RM/1nbfaDMJKwhCGLQ/C3Z/hY1TiAdX
+         bi+w==
+X-Forwarded-Encrypted: i=1; AJvYcCWM6PGg+lW99sJMWdLKJlvW/zY/Hu02yUDcFkv+mvx5h+85q5wMzLpOcC1GwId6W2m1hIu7YA==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy04KGhcC4dmYLFoWO1mTaVBaNH2xt59p+waebUs4GSNm6dPOcR
+	dJl1uMxFh3c2M/9xQTaXYn899sP91wxVqR3O7RTE+z5fSefNNxiP8ee1+IPD50LaYwNCw3vC/gj
+	6qc2zxg==
+X-Google-Smtp-Source: AGHT+IEv1rdaR3GUb9IwW3Dmmojo2CNTa7E6hkdkv5LH3UOd53lsITQUVJZofBU6aeuKOo0A+OiSTQ==
+X-Received: by 2002:a05:690c:4713:b0:6dd:ce4c:2f4c with SMTP id 00721157ae682-6dfeed5715emr92447957b3.16.1727176518778;
+        Tue, 24 Sep 2024 04:15:18 -0700 (PDT)
+Received: from ?IPV6:2600:381:1d13:f852:a731:c08e:e897:179a? ([2600:381:1d13:f852:a731:c08e:e897:179a])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-6e20d15b3c8sm2081067b3.78.2024.09.24.04.15.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 24 Sep 2024 04:15:17 -0700 (PDT)
+Message-ID: <fb2d2ec3-f0c6-4116-a574-eef8f79afee4@kernel.dk>
+Date: Tue, 24 Sep 2024 05:15:13 -0600
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHC9VhSq=6MK=HKCJ8KCjYNQZ4j_eCSgTpuYyHtk2T-_m2Br3Q@mail.gmail.com>
-Sender: Al Viro <viro@ftp.linux.org.uk>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC] struct filename, io_uring and audit troubles
+To: Al Viro <viro@zeniv.linux.org.uk>
+Cc: linux-fsdevel@vger.kernel.org, audit@vger.kernel.org,
+ io-uring@vger.kernel.org
+References: <20240922004901.GA3413968@ZenIV> <20240923015044.GE3413968@ZenIV>
+ <62104de8-6e9a-4566-bf85-f4c8d55bdb36@kernel.dk>
+ <20240923150745.GB3550746@ZenIV>
+Content-Language: en-US
+From: Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <20240923150745.GB3550746@ZenIV>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Mon, Sep 23, 2024 at 08:11:51PM -0400, Paul Moore wrote:
-> > Umm...  IIRC, sgrubb had been involved in the spec-related horrors, but
-> > that was a long time ago...
+On 9/23/24 9:07 AM, Al Viro wrote:
+> On Mon, Sep 23, 2024 at 12:30:48AM -0600, Jens Axboe wrote:
 > 
-> Yep, he was.  Last I spoke to Steve a year or so ago, audit was no
-> longer part of his job description; Steve still maintains his
-> userspace audit tools, but that is a nights/weekends job as far as I
-> understand.
+>> 1) Just don't reuse the entry. Then we can drop the struct
+>>    filename->aname completely as well. Yes that might incur an extra
+>>    alloc for the odd case of audit_enabled and being deep enough that
+>>    the preallocated names have been used, but doesn't anyone really
+>>    care? It'll be noise in the overhead anyway. Side note - that would
+>>    unalign struct filename again. Would be nice to drop audit_names from
+>>    a core fs struct...
 > 
-> The last time I was involved in any audit/CC spec related work was
-> well over a decade ago now, and all of those CC protection profiles
-> have long since expired and been replaced.
+> You'll get different output in logs, though.  Whether that breaks userland
+> setups/invalidates certifications/etc.... fuck knows.
 
-Interesting...  I guess eparis would be the next victim^Wpossible source
-of information.
- 
-> >         * get rid of the "repeated getname() on the same address is going to
-> > give you the same object" - that can't be relied upon without audit, for one
-> > thing and for another... having a syscall that takes two pathnames that gives
-> > different audit log (if not predicate evaluation) in cases when those are
-> > identical pointers vs. strings with identical contenst is, IMO, somewhat
-> > undesirable.  That kills filename->uaddr.
+No idea about that... But I'd say without strong evidence that this
+breaks userland for something as odd as audit, well... And honestly
+really a layering problem that struct filename has an audit link in
+there.
+
+> If anything, a loop through the list, searching for matching entry would
+> be safer in that respect.  Order of the items... might or might not be
+> an issue - see above.
 > 
-> /uaddr/uptr/ if I'm following you correctly, but yeah, that all seems good.
-
-*nod*
-
-> >         * looking at the users of that stuff, I would probably prefer to
-> > separate getname*() from insertion into audit context.  It's not that
-> > tricky - __set_nameidata() catches *everything* that uses nd->name (i.e.
-> > all that audit_inode() calls in fs/namei.c use).
+>> 2) Add a ref to struct audit_names, RCU kfree it when it drops to zero.
+>>    This would mean dropping struct audit_context->preallocated_names, as
 > 
-> That should be a pretty significant simplification, that sounds good to me.
+> Costly, that.
+
+For sure. And you could keep preallocated_names if you rcu free the
+context too. But I strongly believe that approach #1 is, by far, the
+cheaper alternative. If we can tolerate the ordering potentially
+changing.
+
+>>    otherwise we'd run into trouble there if a context gets blown away
+>>    while someone else has a ref to that audit_names struct. We could do
+>>    this without a ref as well, as long as we can store an audit_context
+>>    pointer in struct audit_names and be able to validate it under RCU.
+>>    If ctx doesn't match, don't use it.
 > 
-> > ... What remains is
-> >         do_symlinkat() for symlink body
-> >         fs_index() on the argument (if we want to bother - it's a part
-> > of weird Missed'em'V sysfs(2) syscall; I sincerely doubt that there's
-> > anybody who'd use it)
-> 
-> We probably should bother, folks that really care about audit don't
-> like blind spots.  Perhaps make it a separate patch if it isn't too
-> ugly to split it out.
+> That's one of the variants I mentioned upthread...
 
-Heh...  I suggest you to look at the manpage of that thing.
+Sorry, still away on travels and conferences, so haven't been keeping up
+on replies.
 
-sysfs(1, "ext2") => echo $((`sed -ne "/\text2$/=" </proc/filesystems` - 1))
-sysfs(2, 10) => sed -ne "11s/.*\t//p" </proc/filesystems
-sysfs(3) => wc -l </proc/filesystems
-
-Yes, really - find position of filesystem type in the list of registered
-filesystems by name (0-based numeration), find the name of filesystem
-type by position and find the number of registered filesystem types.
-Missed'em'V had no synthetic filesystems...
-
-And the string is, of course, not a pathname of any sort, so I'd argue that
-spewing PATH record into audit log is a bug.  Not that the number you get
-from sysfs(1, something) had been usable for anything other than passing it
-to sysfs(2, number) and getting the same string back - you can't pass that
-number to mount(2) or anything of that kind.  I suspect that the only
-reason this syscall exists is some binary emulation - introduced in 1.1.11,
-not supported by glibc at least since 2014 (and almost certainly way before
-that).
-
-> >         That's all it takes.  With that done, we can kill ->aname;
-> > just look in the ->names_list for the first entry with given ->name -
-> > as in, given struct filename * value, no need to look inside.
-> 
-> Seems reasonable to me.  I can't imagine these special cases being any
-> worse than what we have now in fs/namei.c, and if nothing else having
-> a single catch point for the bulk of the VFS lookups makes it worth it
-> as far as I'm concerned.
-
-Huh?  Right now we allocate audit_names at getname_flags()/getname_kernel()
-time; grep for audit_getname() - that's as centralized as it gets.
-What I want to do is somewhat _de_centralize it; that way they would not
-go anywhere other than audit_context of the thread actually doing the
-work.
-
-There is a lot of calls of audit_inode(), but I'm not planning to touch
-any of those.
+-- 
+Jens Axboe
