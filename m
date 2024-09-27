@@ -1,140 +1,122 @@
-Received: from mail-vs1-f53.google.com (mail-vs1-f53.google.com [209.85.217.53])
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D19EC18C1F;
-	Fri, 27 Sep 2024 08:58:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D73C418DF9E
+	for <audit@vger.kernel.org>; Fri, 27 Sep 2024 14:57:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.198
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727427485; cv=none; b=RSaQfqPiL6gEx7MR+stae+M7VlfB1BaZaZnRHeGMAd20771EAkWBwyaJK0kCRZKswDKPPhhFLYN6G/Cv87DckLqkbHY6P2JKwtEpqnzcPQtxKNQYN0U56emsdwCC4kzKsb1Ud6TX5jD3zLHFTzlr3oQ2ODesnvlFTI0Xl+NWcUE=
+	t=1727449046; cv=none; b=CCGsShbwt4opu+SxVcUvh7BTCYQ2LPFrzNm32v/HSNV9CVDBf2IJTOIpuAZxHOftBdkFhXiyDUxn2ZgvuIyXfOicrDdUYj+KvvBulcLgjHybUmuZYt9VnOYulKm/UEX+Apy9NeXyy04Y9eklvqqGqg0PMDQmVblM/yPRhymfYa8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727427485; c=relaxed/simple;
-	bh=pEp5gXfIjEbg1ta4gdp8fy84aFsgcENp6aqfPlh6iqM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=hJZWOmteWdSYbFZE6Uohme4xxBsSm/nNpu/lBbKBfNsdem1U4CeHDRWdQDqMAMd+I0Ea/HjOMtu5mtrI84atwtvSmJZq0qDz6/T++9q7RAm4n/mFpwRLK43TEYfFlOXh6gZLsWM6s9y/g09caFpc3VBIreyCFYurWfFQyLbNCXo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gqAazClv; arc=none smtp.client-ip=209.85.217.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gqAazClv"
-Received: by mail-vs1-f53.google.com with SMTP id ada2fe7eead31-4a3075662b6so344760137.1;
-        Fri, 27 Sep 2024 01:58:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1727427483; x=1728032283; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Eg8VUnCWU6xpmCG+ce1Tu7r95og6PEk5nWNUF8PLnD0=;
-        b=gqAazClv8s0ANTY895QSRiOBzehxWHAxTajzp8+L4oMVqITx1Rc1ZRR9N9zO3Vk1iS
-         0E0oCx/nlNg97ah1qOH5riadZAAUmcSvNTYO5+8cO82PLUIPlS/cfntRZC9yPsZp5BNq
-         HZigxvF8s1kAqeM4oah+T9Tu7K/saEbRk9nxIw4DIvRuG/wE2jmZ+lLUJ0nSO9Dx2xMF
-         0I10U74DdkKzjVpgTDGlNKXooe+uatFavOqUsEAAcqBFLrRAjiPMFMCrJtoLD3RBJ5An
-         kmon8czuYyTN9mFTIFXEn+V4NwEhigt5kZsoBpPbFRmrglYrNA4EqqQsJbKRRvYNpG4I
-         noGg==
+	s=arc-20240116; t=1727449046; c=relaxed/simple;
+	bh=aACLd1HVm5A3MbjVTv1ksxXh1Ym9nluxq3Z6+2dQyGU=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=TVeojXJgxxwtARjho1l54RVVVyvPpr4DP0sRtrFDI52RIAagHtA9VoEGs9dz0rx/JNRc/6+xCDvvf5NcT5kWnQqkj+TrwvdfrGm+5peByPP1Q7OYOc/cDfclNH6jvYRemP18nE9n27IqO8IwpHPjDl8svzjxxOUzoaBPrcR3ajY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.198
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-il1-f198.google.com with SMTP id e9e14a558f8ab-3a3440fc2d3so16447215ab.2
+        for <audit@vger.kernel.org>; Fri, 27 Sep 2024 07:57:24 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727427483; x=1728032283;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Eg8VUnCWU6xpmCG+ce1Tu7r95og6PEk5nWNUF8PLnD0=;
-        b=gv9fLOBopnpIo0Vc3onAwq98+o1AmwfsGOzUyG8gbGravcS6kGattnVwcEWUJUJe40
-         +0OOaYz2ANAIKW0RBypiVzAdT1I3PPoxhOlVSraoYfh2Bvxgo0knFVqOXuiZGWQJ/0uI
-         wNEBBqoz2gsSku0wksBpFcUDb4BUZnjJQ5uzKu3fioSEbsV0pTWGrFkuQ01jqemwx+0B
-         Lti5Sm19C0rU2s/Z1M0gTtzA1hyMkguLjTvVPMb3XU/fyRpveYS6rj1uJ0AiB2JqyjVk
-         qom0D4uTvulcKDDjVr8ygshXwLmd/7QDhYBW9C/c/49306qMxXO6s7s0LoNKBHccM8yq
-         ZzlA==
-X-Forwarded-Encrypted: i=1; AJvYcCU2kNwiVal/pbxQT4WCA9SZmuyu4dEISqslPuFr2sq3fPC9fh4lTuNtOeMwBn7eFImzsyFFI6xRhuhFf81Yz1wZL1wQ@vger.kernel.org, AJvYcCV2d0D0BsiKzXbQwL2TqwG+DY84lebb4Cux4G3ododFoAY6h2IDdKJbj2Rirj5VI/GV5D4wQlxe+CgYaZXOIQ==@vger.kernel.org, AJvYcCVBl/qvinXfWiUkGDVSQEEFr34DlHiFhgvil23df4xrDTJaQwe8+RbTWWC7NSxrKM2HLeN0@vger.kernel.org, AJvYcCWv54scAvVjhxJ7pezM8EjvxB7WchzIL10MLmaFUD5N0HnHJDuhrh3OttX2qEFrQFjslKvAbekh@vger.kernel.org, AJvYcCX9euyxmhyykrVUsgOdHzuNKV/u6O+k37wODRkiEsSzy6g1Zc4McDVPNUsKwU5fVqUshNJjLg==@vger.kernel.org, AJvYcCXd2/Cf5XF8BV7pfNUiXvazo1DtVaAEBfxUYPzvDHrcZrXX9wPyDY7dwNKWJ6jM7wdBSmSTZMDWtvu24YZf0jTXd+AvdPDG@vger.kernel.org, AJvYcCXuBnXWcCYL00ekJ2MlOU2kOwc6+ENoSoMdNGRjknOmTeVb81bBrChPPP9VJ0o7LFuwo9fkrerckw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxlZYuYIBAqeuADDiwDH4QGdEkax+KYdlNITZDIn6qmDW0w1eWE
-	ziTAFLcqCrTmyw7kYJrLRlLAjg2pJLbz0YY1FjnOza6HmFweOxsxMhgfO6ZnU2yzL/YdMhgEvO0
-	CMEi91DmBjgQJjf1VLr4BwrAZDmk=
-X-Google-Smtp-Source: AGHT+IHlhccJP6o8YVDcpGsoOKh73nleQWjN6gMlntdM8azrnOLgCbN569DWouWNGBJF/Vf+8gknJS6h6du5PlKNbYc=
-X-Received: by 2002:a05:6102:2ac4:b0:49b:e9fc:14d2 with SMTP id
- ada2fe7eead31-4a2d7ff9815mr2856108137.23.1727427482685; Fri, 27 Sep 2024
- 01:58:02 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1727449044; x=1728053844;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=0xkgwMbQgM4PLhYy/OePrJC+8JN5fe1sloTLNJAWIP4=;
+        b=s1T6vtiNb0Avxriqf7CdMEfFFeBBdydEq2d9FyF3QU5wTWNvcIvXNDrmSEnLlU+Fp3
+         kljAM93sYo0mCuxsuAOMzPxmp7ilC93+hhTx7DKS7mcErq7g159XVcwepFyYPCvk7jyQ
+         MGaBp0AumwhqhhS0M6gJsCFiLcc+G1OqPGrhe0lX4jw9aQpSEXN8VdSZz77qGnf95wvf
+         JZqMWmmRjhF+wwiS7UMCVlrCfdgQus8KktJrkGEJodvYuV7+6dXEihqfQyZkPZLz5RYu
+         deJr3drtqb5m+I4XhT6ZDpHco4RlRoXeaco9x0EE7m5Y9fyHyBn+Y+Oc2PTpJZtNkRbd
+         TSmg==
+X-Gm-Message-State: AOJu0YxhuKXhpD0OlLsA46TgVtuDQC5DCZxtbFtEN4fg6B3dEbMKVF6N
+	3ZLl6qhAHRe8hd2eI+M8Ed8/usv6kMrByBaYONeJ9lq95TLj2iXueyz1O3YdskIZCiKq8kYaVEO
+	oxq8V9Y3+zI+hyD+EiLye6TgYUXPofM5fLtlnM+4FBJmKvlGNHI4UZQo=
+X-Google-Smtp-Source: AGHT+IEsT3GDTB54UWYXuubiasjTBrWxV41Ptm6OmBtZuzyDYm7HU+Djxnl5+1vvZTa2ZMIj5o2aBz4Cfaw0fQkRnFALKHWDUWJu
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240817025624.13157-1-laoar.shao@gmail.com> <20240817025624.13157-6-laoar.shao@gmail.com>
- <CAHp75VdpG=yQVaJLR3J5puwj4FYWtXzaHkC1TdmiqfJu1s9PpA@mail.gmail.com>
-In-Reply-To: <CAHp75VdpG=yQVaJLR3J5puwj4FYWtXzaHkC1TdmiqfJu1s9PpA@mail.gmail.com>
-From: Yafang Shao <laoar.shao@gmail.com>
-Date: Fri, 27 Sep 2024 16:57:26 +0800
-Message-ID: <CALOAHbBHV_xB88AD8azVXZQzdowLtU6EHewFGUtPHQE9K6GQ_Q@mail.gmail.com>
-Subject: Re: [PATCH v7 5/8] mm/util: Fix possible race condition in kstrdup()
-To: Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc: akpm@linux-foundation.org, torvalds@linux-foundation.org, alx@kernel.org, 
-	justinstitt@google.com, ebiederm@xmission.com, alexei.starovoitov@gmail.com, 
-	rostedt@goodmis.org, catalin.marinas@arm.com, 
-	penguin-kernel@i-love.sakura.ne.jp, linux-mm@kvack.org, 
-	linux-fsdevel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
-	audit@vger.kernel.org, linux-security-module@vger.kernel.org, 
-	selinux@vger.kernel.org, bpf@vger.kernel.org, netdev@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org
+X-Received: by 2002:a05:6e02:1a0a:b0:39f:36f3:1957 with SMTP id
+ e9e14a558f8ab-3a345148113mr34247145ab.3.1727449044070; Fri, 27 Sep 2024
+ 07:57:24 -0700 (PDT)
+Date: Fri, 27 Sep 2024 07:57:24 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <66f6c7d4.050a0220.38ace9.0026.GAE@google.com>
+Subject: [syzbot] [kernel?] KCSAN: assert: race in dequeue_entities
+From: syzbot <syzbot+0ec1e96c2cdf5c0e512a@syzkaller.appspotmail.com>
+To: audit@vger.kernel.org, eparis@redhat.com, linux-kernel@vger.kernel.org, 
+	paul@paul-moore.com, syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Fri, Sep 27, 2024 at 1:35=E2=80=AFAM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
->
-> On Thu, Sep 26, 2024 at 7:44=E2=80=AFPM Yafang Shao <laoar.shao@gmail.com=
-> wrote:
-> >
-> > In kstrdup(), it is critical to ensure that the dest string is always
-> > NUL-terminated. However, potential race condidtion can occur between a
->
-> condition
->
-> > writer and a reader.
-> >
-> > Consider the following scenario involving task->comm:
-> >
-> >     reader                    writer
-> >
-> >   len =3D strlen(s) + 1;
-> >                              strlcpy(tsk->comm, buf, sizeof(tsk->comm))=
-;
-> >   memcpy(buf, s, len);
-> >
-> > In this case, there is a race condition between the reader and the
-> > writer. The reader calculate the length of the string `s` based on the
->
-> calculates
->
-> > old value of task->comm. However, during the memcpy(), the string `s`
-> > might be updated by the writer to a new value of task->comm.
-> >
-> > If the new task->comm is larger than the old one, the `buf` might not b=
-e
-> > NUL-terminated. This can lead to undefined behavior and potential
-> > security vulnerabilities.
-> >
-> > Let's fix it by explicitly adding a NUL-terminator.
->
-> memcpy() is not atomic AFAIK, meaning that the new string can be also
-> shorter and when memcpy() already copied past the new NUL. I would
-> amend the explanation to include this as well.
->
-> ...
->
-> > +               /* During memcpy(), the string might be updated to a ne=
-w value,
-> > +                * which could be longer than the string when strlen() =
-is
-> > +                * called. Therefore, we need to add a null termimator.
->
-> /*
->  * The wrong comment style. Besides that a typo
->  * in the word 'terminator'. Please, run codespell on your changes.
->  * Also use the same form: NUL-terminator when you are talking
->  * about '\0' and not NULL.
->  */
+Hello,
 
-Thank you for pointing out these errors and for recommending the use
-of codespell.
-Will fix them in the next version.
+syzbot found the following issue on:
 
---=20
-Regards
-Yafang
+HEAD commit:    075dbe9f6e3c Merge tag 'soc-ep93xx-dt-6.12' of git://git.k..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=15f07a80580000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=86254f9e0a8f2c98
+dashboard link: https://syzkaller.appspot.com/bug?extid=0ec1e96c2cdf5c0e512a
+compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
+
+Unfortunately, I don't have any reproducer for this issue yet.
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/1be80941df60/disk-075dbe9f.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/494a9ac89c09/vmlinux-075dbe9f.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/919788d8c731/bzImage-075dbe9f.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+0ec1e96c2cdf5c0e512a@syzkaller.appspotmail.com
+
+audit: type=1400 audit(6022412112.141:243086): avc:  denied  { read } for  pid=2950 comm="syslogd" name="log" dev="sda1" ino=1915 scontext=system_u:system_r:syslogd_t tcontext=system_u:object_r:var_t tclass=lnk_file permissive=0
+audit: type=1400 audit(6022412112.181:243087): avc:  denied  { read } for  pid=2950 comm="syslogd" name="log" dev="sda1" ino=1915 scontext=system_u:system_r:syslogd_t tcontext=system_u:object_r:var_t tclass=lnk_file permissive=0
+==================================================================
+BUG: KCSAN: assert: race in __block_task kernel/sched/sched.h:2770 [inline]
+BUG: KCSAN: assert: race in dequeue_entities+0x6df/0x760 kernel/sched/fair.c:7177
+
+race at unknown origin, with assert no writes to 0xffff888101764268 of 4 bytes by task 29 on cpu 1:
+ __block_task kernel/sched/sched.h:2770 [inline]
+ dequeue_entities+0x6df/0x760 kernel/sched/fair.c:7177
+ pick_next_entity kernel/sched/fair.c:5627 [inline]
+ pick_task_fair kernel/sched/fair.c:8856 [inline]
+ pick_next_task_fair+0x7d/0x410 kernel/sched/fair.c:8876
+ __pick_next_task kernel/sched/core.c:5955 [inline]
+ pick_next_task kernel/sched/core.c:6477 [inline]
+ __schedule+0x284/0x940 kernel/sched/core.c:6629
+ __schedule_loop kernel/sched/core.c:6752 [inline]
+ schedule+0x55/0xc0 kernel/sched/core.c:6767
+ kauditd_thread+0x56b/0x650 kernel/audit.c:911
+ kthread+0x1d1/0x210 kernel/kthread.c:389
+ ret_from_fork+0x4b/0x60 arch/x86/kernel/process.c:147
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:244
+
+value changed: 0x00000000 -> 0x00000001
+
+Reported by Kernel Concurrency Sanitizer on:
+CPU: 1 UID: 0 PID: 29 Comm: kauditd Not tainted 6.11.0-syzkaller-11558-g075dbe9f6e3c #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/13/2024
+==================================================================
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
