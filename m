@@ -1,122 +1,119 @@
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D73C418DF9E
-	for <audit@vger.kernel.org>; Fri, 27 Sep 2024 14:57:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.198
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB4FC18454E;
+	Sat, 28 Sep 2024 21:14:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727449046; cv=none; b=CCGsShbwt4opu+SxVcUvh7BTCYQ2LPFrzNm32v/HSNV9CVDBf2IJTOIpuAZxHOftBdkFhXiyDUxn2ZgvuIyXfOicrDdUYj+KvvBulcLgjHybUmuZYt9VnOYulKm/UEX+Apy9NeXyy04Y9eklvqqGqg0PMDQmVblM/yPRhymfYa8=
+	t=1727558068; cv=none; b=ZUU5QgHo4I/1dUkA6x4z7dy/0vU7IHZo8CNH2TlC5J5RP7uIckxthaYpBo8KMls1jZt9CMVqlRjVNGp6l/HxC+oOXEwPR4aCydQTSnfMsAGJyB3iZoqxGapXxzHMDx8e0r2ls1FnMMz22p0sRFOeWdsF7iuswoHozPepnkij/Ds=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727449046; c=relaxed/simple;
-	bh=aACLd1HVm5A3MbjVTv1ksxXh1Ym9nluxq3Z6+2dQyGU=;
-	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=TVeojXJgxxwtARjho1l54RVVVyvPpr4DP0sRtrFDI52RIAagHtA9VoEGs9dz0rx/JNRc/6+xCDvvf5NcT5kWnQqkj+TrwvdfrGm+5peByPP1Q7OYOc/cDfclNH6jvYRemP18nE9n27IqO8IwpHPjDl8svzjxxOUzoaBPrcR3ajY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.198
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-il1-f198.google.com with SMTP id e9e14a558f8ab-3a3440fc2d3so16447215ab.2
-        for <audit@vger.kernel.org>; Fri, 27 Sep 2024 07:57:24 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727449044; x=1728053844;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=0xkgwMbQgM4PLhYy/OePrJC+8JN5fe1sloTLNJAWIP4=;
-        b=s1T6vtiNb0Avxriqf7CdMEfFFeBBdydEq2d9FyF3QU5wTWNvcIvXNDrmSEnLlU+Fp3
-         kljAM93sYo0mCuxsuAOMzPxmp7ilC93+hhTx7DKS7mcErq7g159XVcwepFyYPCvk7jyQ
-         MGaBp0AumwhqhhS0M6gJsCFiLcc+G1OqPGrhe0lX4jw9aQpSEXN8VdSZz77qGnf95wvf
-         JZqMWmmRjhF+wwiS7UMCVlrCfdgQus8KktJrkGEJodvYuV7+6dXEihqfQyZkPZLz5RYu
-         deJr3drtqb5m+I4XhT6ZDpHco4RlRoXeaco9x0EE7m5Y9fyHyBn+Y+Oc2PTpJZtNkRbd
-         TSmg==
-X-Gm-Message-State: AOJu0YxhuKXhpD0OlLsA46TgVtuDQC5DCZxtbFtEN4fg6B3dEbMKVF6N
-	3ZLl6qhAHRe8hd2eI+M8Ed8/usv6kMrByBaYONeJ9lq95TLj2iXueyz1O3YdskIZCiKq8kYaVEO
-	oxq8V9Y3+zI+hyD+EiLye6TgYUXPofM5fLtlnM+4FBJmKvlGNHI4UZQo=
-X-Google-Smtp-Source: AGHT+IEsT3GDTB54UWYXuubiasjTBrWxV41Ptm6OmBtZuzyDYm7HU+Djxnl5+1vvZTa2ZMIj5o2aBz4Cfaw0fQkRnFALKHWDUWJu
+	s=arc-20240116; t=1727558068; c=relaxed/simple;
+	bh=jktDOh0pQJ6Jkqsq+yKW1qQ5mo20RTE6ds51doxTD2g=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=bK9BJ5hpGNTo4Y9ie7e2MM+45cK5udPexRhlLkOcyLv5Bfn/doZA6Cs5lxIQaYs8QSbPuNZkoSDrewTnaaTqeuYA4fz4utizlFn4Jf9Q60KqEX2kw+43AmaQ0y5zsb64yUOsSEx46ZGeyuV6a54VcGcl8FzTIrMVsq1rnZYUXB0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=g9tqavMY; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="g9tqavMY"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F384C4CEC3;
+	Sat, 28 Sep 2024 21:14:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1727558067;
+	bh=jktDOh0pQJ6Jkqsq+yKW1qQ5mo20RTE6ds51doxTD2g=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=g9tqavMYyNMNsLQ90Hv8A7KbaPkFXwEzrTr5sUcx3Go75HmSrEM5AGbS3oGkbdlel
+	 B6eeA9RvWWVqPZh9Wyg+F2ooAJEJP2A9vmlOpz3KGgnUCCaozlOpVXmu34F4CSTbVW
+	 VYi3AeJ+So0qIkRNXn0E4ZMxj7wF4lRw5UT4Z9kANXoElsoElSAq/nMKw4C30aQ1eq
+	 FyUyaqsM2A7JG0XC1b589UzBaWfIb8SBg8crnH5eMbtpFnuBXzJZorS5YemcfRe1yg
+	 2gYtwluBB821Xd++PBJbJ5ISoXfK7xESIT3aL16deLWzsV9vCOeNQKEJ+OF0s25yqT
+	 cS+Ic0n7Zt0/Q==
+Date: Sat, 28 Sep 2024 14:14:27 -0700
+From: Kees Cook <kees@kernel.org>
+To: Yafang Shao <laoar.shao@gmail.com>
+Cc: akpm@linux-foundation.org, torvalds@linux-foundation.org,
+	alx@kernel.org, justinstitt@google.com, ebiederm@xmission.com,
+	alexei.starovoitov@gmail.com, rostedt@goodmis.org,
+	catalin.marinas@arm.com, penguin-kernel@i-love.sakura.ne.jp,
+	linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org, audit@vger.kernel.org,
+	linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+	bpf@vger.kernel.org, netdev@vger.kernel.org,
+	dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH v7 5/8] mm/util: Fix possible race condition in kstrdup()
+Message-ID: <202409281411.3C42A3703C@keescook>
+References: <20240817025624.13157-1-laoar.shao@gmail.com>
+ <20240817025624.13157-6-laoar.shao@gmail.com>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1a0a:b0:39f:36f3:1957 with SMTP id
- e9e14a558f8ab-3a345148113mr34247145ab.3.1727449044070; Fri, 27 Sep 2024
- 07:57:24 -0700 (PDT)
-Date: Fri, 27 Sep 2024 07:57:24 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <66f6c7d4.050a0220.38ace9.0026.GAE@google.com>
-Subject: [syzbot] [kernel?] KCSAN: assert: race in dequeue_entities
-From: syzbot <syzbot+0ec1e96c2cdf5c0e512a@syzkaller.appspotmail.com>
-To: audit@vger.kernel.org, eparis@redhat.com, linux-kernel@vger.kernel.org, 
-	paul@paul-moore.com, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240817025624.13157-6-laoar.shao@gmail.com>
 
-Hello,
+On Sat, Aug 17, 2024 at 10:56:21AM +0800, Yafang Shao wrote:
+> In kstrdup(), it is critical to ensure that the dest string is always
+> NUL-terminated. However, potential race condidtion can occur between a
+> writer and a reader.
+> 
+> Consider the following scenario involving task->comm:
+> 
+>     reader                    writer
+> 
+>   len = strlen(s) + 1;
+>                              strlcpy(tsk->comm, buf, sizeof(tsk->comm));
+>   memcpy(buf, s, len);
+> 
+> In this case, there is a race condition between the reader and the
+> writer. The reader calculate the length of the string `s` based on the
+> old value of task->comm. However, during the memcpy(), the string `s`
+> might be updated by the writer to a new value of task->comm.
+> 
+> If the new task->comm is larger than the old one, the `buf` might not be
+> NUL-terminated. This can lead to undefined behavior and potential
+> security vulnerabilities.
+> 
+> Let's fix it by explicitly adding a NUL-terminator.
 
-syzbot found the following issue on:
+So, I'm fine with adding this generally, but I'm not sure we can
+construct these helpers to be universally safe against the strings
+changing out from under them. This situation is distinct to the 'comm'
+member, so I'd like to focus on helpers around 'comm' access behaving in
+a reliable fashion.
 
-HEAD commit:    075dbe9f6e3c Merge tag 'soc-ep93xx-dt-6.12' of git://git.k..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=15f07a80580000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=86254f9e0a8f2c98
-dashboard link: https://syzkaller.appspot.com/bug?extid=0ec1e96c2cdf5c0e512a
-compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
+-Kees
 
-Unfortunately, I don't have any reproducer for this issue yet.
+> 
+> Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> ---
+>  mm/util.c | 8 +++++++-
+>  1 file changed, 7 insertions(+), 1 deletion(-)
+> 
+> diff --git a/mm/util.c b/mm/util.c
+> index 983baf2bd675..4542d8a800d9 100644
+> --- a/mm/util.c
+> +++ b/mm/util.c
+> @@ -62,8 +62,14 @@ char *kstrdup(const char *s, gfp_t gfp)
+>  
+>  	len = strlen(s) + 1;
+>  	buf = kmalloc_track_caller(len, gfp);
+> -	if (buf)
+> +	if (buf) {
+>  		memcpy(buf, s, len);
+> +		/* During memcpy(), the string might be updated to a new value,
+> +		 * which could be longer than the string when strlen() is
+> +		 * called. Therefore, we need to add a null termimator.
+> +		 */
+> +		buf[len - 1] = '\0';
+> +	}
+>  	return buf;
+>  }
+>  EXPORT_SYMBOL(kstrdup);
+> -- 
+> 2.43.5
+> 
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/1be80941df60/disk-075dbe9f.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/494a9ac89c09/vmlinux-075dbe9f.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/919788d8c731/bzImage-075dbe9f.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+0ec1e96c2cdf5c0e512a@syzkaller.appspotmail.com
-
-audit: type=1400 audit(6022412112.141:243086): avc:  denied  { read } for  pid=2950 comm="syslogd" name="log" dev="sda1" ino=1915 scontext=system_u:system_r:syslogd_t tcontext=system_u:object_r:var_t tclass=lnk_file permissive=0
-audit: type=1400 audit(6022412112.181:243087): avc:  denied  { read } for  pid=2950 comm="syslogd" name="log" dev="sda1" ino=1915 scontext=system_u:system_r:syslogd_t tcontext=system_u:object_r:var_t tclass=lnk_file permissive=0
-==================================================================
-BUG: KCSAN: assert: race in __block_task kernel/sched/sched.h:2770 [inline]
-BUG: KCSAN: assert: race in dequeue_entities+0x6df/0x760 kernel/sched/fair.c:7177
-
-race at unknown origin, with assert no writes to 0xffff888101764268 of 4 bytes by task 29 on cpu 1:
- __block_task kernel/sched/sched.h:2770 [inline]
- dequeue_entities+0x6df/0x760 kernel/sched/fair.c:7177
- pick_next_entity kernel/sched/fair.c:5627 [inline]
- pick_task_fair kernel/sched/fair.c:8856 [inline]
- pick_next_task_fair+0x7d/0x410 kernel/sched/fair.c:8876
- __pick_next_task kernel/sched/core.c:5955 [inline]
- pick_next_task kernel/sched/core.c:6477 [inline]
- __schedule+0x284/0x940 kernel/sched/core.c:6629
- __schedule_loop kernel/sched/core.c:6752 [inline]
- schedule+0x55/0xc0 kernel/sched/core.c:6767
- kauditd_thread+0x56b/0x650 kernel/audit.c:911
- kthread+0x1d1/0x210 kernel/kthread.c:389
- ret_from_fork+0x4b/0x60 arch/x86/kernel/process.c:147
- ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:244
-
-value changed: 0x00000000 -> 0x00000001
-
-Reported by Kernel Concurrency Sanitizer on:
-CPU: 1 UID: 0 PID: 29 Comm: kauditd Not tainted 6.11.0-syzkaller-11558-g075dbe9f6e3c #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/13/2024
-==================================================================
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
-If the report is already addressed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want to overwrite report's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the report is a duplicate of another one, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
+-- 
+Kees Cook
