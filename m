@@ -1,106 +1,112 @@
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp-bc0f.mail.infomaniak.ch (smtp-bc0f.mail.infomaniak.ch [45.157.188.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64C1119DF95
-	for <audit@vger.kernel.org>; Thu, 10 Oct 2024 06:24:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D3F91CCB26
+	for <audit@vger.kernel.org>; Thu, 10 Oct 2024 15:27:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.157.188.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728541474; cv=none; b=tILchaUQvYCQhIY1eiX81C9b0o8Ah31f7txTWsJISKg2HhrK9setIVa4H0bwBRQID0CBqPdUM1zXu8lcHKI5kjLz3e1Ldk0ohU+QCCLbfrgMX4QtAwiPsSpcImGq1xwZbsNMKfZLDDW6J2DxFF16Wxxj306JFVs1agGgjiHDxN4=
+	t=1728574028; cv=none; b=BYKop5T1QJphCZ+fqWFMWBSjLIN37OoLWsuOn074y40UGjl6I3oJG450tMYexlB+uY5/lyGRMqXN+CAHYRl4mApHogMsbNsqM+yZokQo+IyEyAgYEzZz4Z5HmhVUyu8Y7dmsQNbQZ8Zz9WnXshWrkfQzsv9CAZDEFlBKPpq9rEE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728541474; c=relaxed/simple;
-	bh=06v5ByD0afjFJR2Gk//6r4sYzvL051t2rbG6jI+cafg=;
+	s=arc-20240116; t=1728574028; c=relaxed/simple;
+	bh=b9m/+J0NHIYt2XBf4REoel7im/5tGdJ8vx2caisRitU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=edZtXBloFsY9Ashd2i4TELCiuvoNCMQ7luY0EGq2uATXC6EyJwOA6435YB5c6jtSKoHZyU9xCagAM2hZ+tHQ/W4hXH9K1+AB3ToFu8MtmsBHcMcBDW4wQTYJafrD2d7skPYJzHtd2cK24XcHJ6QxqNRSSLD3/iWfHlCrUDSDdu4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sigma-star.at; spf=pass smtp.mailfrom=sigma-star.at; dkim=pass (2048-bit key) header.d=sigma-star.at header.i=@sigma-star.at header.b=B3Kpe3aD; arc=none smtp.client-ip=209.85.221.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sigma-star.at
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sigma-star.at
+	 MIME-Version:Content-Type; b=J58Vz6ikHbvdGDNx+yChbf2sDbZ2PGgaCLkhAwgx5QfAaQQHrnqQh8cE2yXGMVdcoIvBihk39F6bgSbMc8V5/N8Lnncf/VzK196qyVEHfaLrl7uPLoaAODc49t/f3rceXTMSz+MHDULt0nAx0Gsil45Q+MWUKZmGKMWEi8vMOZk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=kxzGWNz8; arc=none smtp.client-ip=45.157.188.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sigma-star.at header.i=@sigma-star.at header.b="B3Kpe3aD"
-Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-37d47eff9acso235570f8f.3
-        for <audit@vger.kernel.org>; Wed, 09 Oct 2024 23:24:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sigma-star.at; s=google; t=1728541470; x=1729146270; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=06v5ByD0afjFJR2Gk//6r4sYzvL051t2rbG6jI+cafg=;
-        b=B3Kpe3aDsmbhLLtHzo8VK9ZpJpX9MSQFynq5TpP5EuIR49OtIOPRJ/nGrPm95ikCCp
-         RR89gCfBX4c307B0Zsgj+IEXmtHG5nJKycwd1i/7EZI26k0sC706MGx1O39DnkL9Ujbc
-         k5kVkTnP1BTZIIwHEA/gnrp57IQVqb3cQc83JAdlllqaJuqW4Wu5Qkjk8E8SzljDurFw
-         4MzvtfPm3oeoWZjHlGEXyPCCxyRl+XyVHEhd72zkV+zoU6cBrMcP4pN6EAd29IAhfP7E
-         qSRMDbauUOLspb7O5yxGfMcYHsadvZYMkHlPF9zx5SgEtGknn/RrPGwdXjrVff94er9y
-         uPkA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728541470; x=1729146270;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=06v5ByD0afjFJR2Gk//6r4sYzvL051t2rbG6jI+cafg=;
-        b=MYamj9IwOfzVG/rvRAqPUnuXGQ5f0PDq2OwXljiQPR6cY9m9XT2fZCwagyWptk9Yod
-         69FFNk7ogT3lyDEFF1pDZ2VQ5PxRtBzfnqBSG5v+mC0SCp6q7nKMhHb68xdN0AgRnLvQ
-         wCWrMyRh4bYrQFqPqjYXI1WBAivW+ICDarnkZPVlcfd5iJhCf43OdavNtzQdNMg6EIE0
-         F5cK9auDK/YchVp8rLhbKeNOLGG+TGRo/4OeFLL46fZjT8HhXS71Na6J2pkwdkFEz1vV
-         CZqMXqRxmkqai378weLG7e/64YEt8wD6V2PnsiwP1WDxVKB62y6hoOYxmxIdTe2kxjgU
-         KW0Q==
-X-Forwarded-Encrypted: i=1; AJvYcCX9fDUewZYdXg1i9Iol5tlDHR7067hRurpgG7UONHeh4ZndZrTsiOu/JbzB5RX2PvxtxLIX0g==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzg8y4tA1NYVW7f5oltMXFb+yXTCR3ubjM+Yw+dMfqSRJdAsPKi
-	xCAtzAO3oxuDZM2BVnu1qsthX88rkAQJiy3Zoy9UXbGeEOXOLLsLfXrfAAQ5yS4=
-X-Google-Smtp-Source: AGHT+IFb4UsVqlsnmRzalMlOFhL03MP9RKPAZIFBzAhHFTnSb9JuNURPjg2Y03goJMWBnZPtgCszsA==
-X-Received: by 2002:a5d:5606:0:b0:37d:4937:c9eb with SMTP id ffacd0b85a97d-37d4937cbd4mr887313f8f.21.1728541470555;
-        Wed, 09 Oct 2024 23:24:30 -0700 (PDT)
-Received: from blindfold.localnet ([82.150.214.1])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-37d4b6bd127sm605077f8f.36.2024.10.09.23.24.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Oct 2024 23:24:30 -0700 (PDT)
-From: Richard Weinberger <richard@sigma-star.at>
-To: Richard Weinberger <richard@nod.at>, upstream@sigma-star.at
-Cc: netfilter-devel@vger.kernel.org, coreteam@netfilter.org, netdev@vger.kernel.org, linux-kernel@vger.kernel.org, pabeni@redhat.com, kuba@kernel.org, edumazet@google.com, davem@davemloft.net, kadlec@netfilter.org, pablo@netfilter.org, rgb@redhat.com, upstream+net@sigma-star.at, audit@vger.kernel.org, linux-security-module@vger.kernel.org, Paul Moore <paul@paul-moore.com>
-Subject: Re: [PATCH] netfilter: Record uid and gid in xt_AUDIT
-Date: Thu, 10 Oct 2024 08:24:28 +0200
-Message-ID: <4370155.VQJxnDRnGh@somecomputer>
-In-Reply-To: <CAHC9VhSbAM3iWxhO+rgJ0d0qOtrSouw0McrjstuP5xQw3=A35Q@mail.gmail.com>
-References: <20241009203218.26329-1-richard@nod.at> <CAHC9VhSbAM3iWxhO+rgJ0d0qOtrSouw0McrjstuP5xQw3=A35Q@mail.gmail.com>
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="kxzGWNz8"
+Received: from smtp-4-0000.mail.infomaniak.ch (unknown [IPv6:2001:1600:7:10:40ca:feff:fe05:0])
+	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4XPYX23TrVz6C1;
+	Thu, 10 Oct 2024 17:26:58 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
+	s=20191114; t=1728574018;
+	bh=AvPae8614W2IhRWzUsWrgc6FU1WWWePg3y3V213ZELM=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=kxzGWNz8JdR99s0m1e7yN3Ny21/+iH2p9EBA4vF4rLkWIt1vU6NxgFwpsBOQaYgml
+	 cWhnNyw/uaMeE1SxnntnZ3bF1Xjo+IHSiHdHf1Qm5SCSmgA6MBkgOGpNkjYgQ9Hz2Q
+	 13aB+ZJzPIuua1hXfXD5ZzhcgDehAH4SKr1acYAU=
+Received: from unknown by smtp-4-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4XPYX172zpzBF7;
+	Thu, 10 Oct 2024 17:26:57 +0200 (CEST)
+From: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
+To: Christian Brauner <brauner@kernel.org>,
+	Paul Moore <paul@paul-moore.com>
+Cc: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
+	linux-fsdevel@vger.kernel.org,
+	linux-nfs@vger.kernel.org,
+	linux-security-module@vger.kernel.org,
+	audit@vger.kernel.org,
+	Stephen Smalley <stephen.smalley.work@gmail.com>,
+	Ondrej Mosnacek <omosnace@redhat.com>
+Subject: [RFC PATCH v1 3/7] selinux: Fix inode numbers in error messages
+Date: Thu, 10 Oct 2024 17:26:43 +0200
+Message-ID: <20241010152649.849254-3-mic@digikod.net>
+In-Reply-To: <20241010152649.849254-1-mic@digikod.net>
+References: <20241010152649.849254-1-mic@digikod.net>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Infomaniak-Routing: alpha
 
-Am Donnerstag, 10. Oktober 2024, 00:02:44 CEST schrieb Paul Moore:
-> [CC'ing the audit and LSM lists for obvious reasons]
->=20
-> If we're logging the subjective credentials of the skb's associated
-> socket, we really should also log the socket's LSM secctx similar to
-> what we do with audit_log_task() and audit_log_task_context().
-> Unfortunately, I don't believe we currently have a LSM interface that
-> return the secctx from a sock/socket, although we do have
-> security_inode_getsecctx() which *should* yield the same result using
-> SOCK_INODE(sk->sk_socket).
+Use the new inode_get_ino() helper to log the user space's view of
+inode's numbers instead of the private kernel values.
 
-Hm, I thought about that but saw 2173c519d5e91 ("audit: normalize NETFILTER=
-_PKT").
-It removed usage of audit_log_secctx() and many other, IMHO, useful fields.
-What about skb->secctx?
+Cc: Paul Moore <paul@paul-moore.com>
+Cc: Stephen Smalley <stephen.smalley.work@gmail.com>
+Cc: Ondrej Mosnacek <omosnace@redhat.com>
+Signed-off-by: Mickaël Salaün <mic@digikod.net>
+---
+ security/selinux/hooks.c | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
->=20
-> I should also mention that I'm currently reviewing a patchset which is
-> going to add proper support for multiple LSMs in audit which will
-> likely impact this work.
->=20
-> https://lore.kernel.org/linux-security-module/20241009173222.12219-1-case=
-y@schaufler-ca.com/
-
-Ok!
-
-Thanks,
-//richard
-=20
-=2D-=20
-=E2=80=8B=E2=80=8B=E2=80=8B=E2=80=8B=E2=80=8Bsigma star gmbh | Eduard-Bodem=
-=2DGasse 6, 6020 Innsbruck, AUT
-UID/VAT Nr: ATU 66964118 | FN: 374287y
-
+diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
+index fc926d3cac6e..60b31b35f475 100644
+--- a/security/selinux/hooks.c
++++ b/security/selinux/hooks.c
+@@ -1384,8 +1384,8 @@ static int inode_doinit_use_xattr(struct inode *inode, struct dentry *dentry,
+ 	if (rc < 0) {
+ 		kfree(context);
+ 		if (rc != -ENODATA) {
+-			pr_warn("SELinux: %s:  getxattr returned %d for dev=%s ino=%ld\n",
+-				__func__, -rc, inode->i_sb->s_id, inode->i_ino);
++			pr_warn("SELinux: %s:  getxattr returned %d for dev=%s ino=%llu\n",
++				__func__, -rc, inode->i_sb->s_id, inode_get_ino(inode));
+ 			return rc;
+ 		}
+ 		*sid = def_sid;
+@@ -1396,13 +1396,13 @@ static int inode_doinit_use_xattr(struct inode *inode, struct dentry *dentry,
+ 					     def_sid, GFP_NOFS);
+ 	if (rc) {
+ 		char *dev = inode->i_sb->s_id;
+-		unsigned long ino = inode->i_ino;
++		u64 ino = inode_get_ino(inode);
+ 
+ 		if (rc == -EINVAL) {
+-			pr_notice_ratelimited("SELinux: inode=%lu on dev=%s was found to have an invalid context=%s.  This indicates you may need to relabel the inode or the filesystem in question.\n",
++			pr_notice_ratelimited("SELinux: inode=%llu on dev=%s was found to have an invalid context=%s.  This indicates you may need to relabel the inode or the filesystem in question.\n",
+ 					      ino, dev, context);
+ 		} else {
+-			pr_warn("SELinux: %s:  context_to_sid(%s) returned %d for dev=%s ino=%ld\n",
++			pr_warn("SELinux: %s:  context_to_sid(%s) returned %d for dev=%s ino=%llu\n",
+ 				__func__, context, -rc, dev, ino);
+ 		}
+ 	}
+@@ -3324,8 +3324,8 @@ static void selinux_inode_post_setxattr(struct dentry *dentry, const char *name,
+ 					   &newsid);
+ 	if (rc) {
+ 		pr_err("SELinux:  unable to map context to SID"
+-		       "for (%s, %lu), rc=%d\n",
+-		       inode->i_sb->s_id, inode->i_ino, -rc);
++		       "for (%s, %llu), rc=%d\n",
++		       inode->i_sb->s_id, inode_get_ino(inode), -rc);
+ 		return;
+ 	}
+ 
+-- 
+2.46.1
 
