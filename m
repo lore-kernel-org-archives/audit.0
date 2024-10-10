@@ -1,175 +1,106 @@
-Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
+Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFA0B1DFE2B
-	for <audit@vger.kernel.org>; Wed,  9 Oct 2024 22:02:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64C1119DF95
+	for <audit@vger.kernel.org>; Thu, 10 Oct 2024 06:24:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728511378; cv=none; b=VebECXaU08wIDe5CprlsykSg/mWuGAQkCr4jMPrcSeQNk/ChQJskQLr52I6fSDQO3hscZ21a7tvnc5PpVkKlZlAUm1DyJGKkxxphET0yj4xLTxKiI/sqMM+/QDLULiFBTG+AAKufF+dpRbu6F/Nfoi/sZ0nBtdn/SoNkxtGzHxk=
+	t=1728541474; cv=none; b=tILchaUQvYCQhIY1eiX81C9b0o8Ah31f7txTWsJISKg2HhrK9setIVa4H0bwBRQID0CBqPdUM1zXu8lcHKI5kjLz3e1Ldk0ohU+QCCLbfrgMX4QtAwiPsSpcImGq1xwZbsNMKfZLDDW6J2DxFF16Wxxj306JFVs1agGgjiHDxN4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728511378; c=relaxed/simple;
-	bh=uZxY76m36ydLtto+ybFprLgpvUQq3up5tcHkr6TI6eY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ozgXJFDj6rYT5uWsZ5zs9P5SMWuROpSuyrhHvNCer5eeE/rdvP1E2Ws2TewmxZeOUVLLjKJSXANcjivMjg+w2cDvG81lll0+fD1Tb6JBU6cVtucCXMhljqRhIhL9wQ2qe9/NeXkLXfgYU1ToXTMLj8msHASV0h1umS6wE9N/j6c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=G9kM3YPp; arc=none smtp.client-ip=209.85.128.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+	s=arc-20240116; t=1728541474; c=relaxed/simple;
+	bh=06v5ByD0afjFJR2Gk//6r4sYzvL051t2rbG6jI+cafg=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=edZtXBloFsY9Ashd2i4TELCiuvoNCMQ7luY0EGq2uATXC6EyJwOA6435YB5c6jtSKoHZyU9xCagAM2hZ+tHQ/W4hXH9K1+AB3ToFu8MtmsBHcMcBDW4wQTYJafrD2d7skPYJzHtd2cK24XcHJ6QxqNRSSLD3/iWfHlCrUDSDdu4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sigma-star.at; spf=pass smtp.mailfrom=sigma-star.at; dkim=pass (2048-bit key) header.d=sigma-star.at header.i=@sigma-star.at header.b=B3Kpe3aD; arc=none smtp.client-ip=209.85.221.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sigma-star.at
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sigma-star.at
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="G9kM3YPp"
-Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-6e2fef23839so3111037b3.2
-        for <audit@vger.kernel.org>; Wed, 09 Oct 2024 15:02:55 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=sigma-star.at header.i=@sigma-star.at header.b="B3Kpe3aD"
+Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-37d47eff9acso235570f8f.3
+        for <audit@vger.kernel.org>; Wed, 09 Oct 2024 23:24:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1728511375; x=1729116175; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=sigma-star.at; s=google; t=1728541470; x=1729146270; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=qALeGv0lrJMi11SU4W4SJLWzuz/xtDH2PNt93jl4Qu0=;
-        b=G9kM3YPp9bL6B52kT7rJeGOWinOt1yjMDHhQRztJguXcw0jHVefIgME54gtjrc5ye6
-         OA6b+ty0PnLoAQvOQmk4DzQqKI+jPadjfU8Jhb9YrCAtc9mX9gahlAN9nf0hW/PFlDzH
-         tFkXluKxDDm2ssCoiKUfUKMz1kFb6j5S6zBwviRsZQ1Cqi5B6E6s9B0F1YOSeKUZgHol
-         QRxiNjP5i2L4CA3NsiOuXSm3T4fDbNlL/tD1Q9GkclUbV2DyfOM+JPO/ikR1NqKUimK6
-         ggllE1I/v6dRZk8GFZFU6TOunreyTJEla7i3jTfU7cd9WqSUUN0K6UY8j25Za7Va9veB
-         Z6oA==
+        bh=06v5ByD0afjFJR2Gk//6r4sYzvL051t2rbG6jI+cafg=;
+        b=B3Kpe3aDsmbhLLtHzo8VK9ZpJpX9MSQFynq5TpP5EuIR49OtIOPRJ/nGrPm95ikCCp
+         RR89gCfBX4c307B0Zsgj+IEXmtHG5nJKycwd1i/7EZI26k0sC706MGx1O39DnkL9Ujbc
+         k5kVkTnP1BTZIIwHEA/gnrp57IQVqb3cQc83JAdlllqaJuqW4Wu5Qkjk8E8SzljDurFw
+         4MzvtfPm3oeoWZjHlGEXyPCCxyRl+XyVHEhd72zkV+zoU6cBrMcP4pN6EAd29IAhfP7E
+         qSRMDbauUOLspb7O5yxGfMcYHsadvZYMkHlPF9zx5SgEtGknn/RrPGwdXjrVff94er9y
+         uPkA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728511375; x=1729116175;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1728541470; x=1729146270;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=qALeGv0lrJMi11SU4W4SJLWzuz/xtDH2PNt93jl4Qu0=;
-        b=pKYDp5iRvSbLoaGv2KbFF4e+qO3J7NHx6Ulo5vBNFoSmlqCIUkj4IKJUKG70j0mHqE
-         qG8y/NPz/5a71Q+YxT0PFq+dLQu9WGufqAR7LTq/2YlEkKXxNNEJkQ5SnjvWNpuJH6ac
-         RtP9y1sP/gXuhilt2QrNyE0aKMx1CBNdkrr5Tza6FT8U5l4Qn71P7lM9xs+mhlts5j/6
-         BgyafBAchobWFtEiXp+ad+s3xHz70xYNK+DYwVj1X1zrQJcEoRVxyrtRk1QW1TlTnd/b
-         p5AOWDNLs1Yg4vR8dYJKa9YEfccPMEByvfVoADMbmWIpec0HyHHNlSm0u6wFt8NL68Yh
-         s+xQ==
-X-Forwarded-Encrypted: i=1; AJvYcCV4sAeN816Zmsqx3DfpU86THyNGLoncLJOyKGnhjPq2zhU03d+RCIQYfWxIfm0NOKrrcelTFg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxU2A+1FAKuO8l03bgb0fM8MHhG/4j+UfZlZzvs0lwmEeFe+gPz
-	mckghurO564z8aict5Efh6USnSnYI7ENs+XiSfOc01i6MdKU2YEiyFJo3KD3slEw7CQqFhoLK7S
-	chgULSGhnyrowHXwfFoumUBAMk+Acz1IkFIaD
-X-Google-Smtp-Source: AGHT+IG1hXmGzW6t4TPA1Xvx/ba3I0vLTALPaDTo/4Z8b9Pf7FLaaDUI4r/rqTzCQTCNGBbiARVnORqzWvm00b3PHNQ=
-X-Received: by 2002:a05:690c:5083:b0:6e3:3227:ec64 with SMTP id
- 00721157ae682-6e33227eff0mr792437b3.35.1728511374654; Wed, 09 Oct 2024
- 15:02:54 -0700 (PDT)
+        bh=06v5ByD0afjFJR2Gk//6r4sYzvL051t2rbG6jI+cafg=;
+        b=MYamj9IwOfzVG/rvRAqPUnuXGQ5f0PDq2OwXljiQPR6cY9m9XT2fZCwagyWptk9Yod
+         69FFNk7ogT3lyDEFF1pDZ2VQ5PxRtBzfnqBSG5v+mC0SCp6q7nKMhHb68xdN0AgRnLvQ
+         wCWrMyRh4bYrQFqPqjYXI1WBAivW+ICDarnkZPVlcfd5iJhCf43OdavNtzQdNMg6EIE0
+         F5cK9auDK/YchVp8rLhbKeNOLGG+TGRo/4OeFLL46fZjT8HhXS71Na6J2pkwdkFEz1vV
+         CZqMXqRxmkqai378weLG7e/64YEt8wD6V2PnsiwP1WDxVKB62y6hoOYxmxIdTe2kxjgU
+         KW0Q==
+X-Forwarded-Encrypted: i=1; AJvYcCX9fDUewZYdXg1i9Iol5tlDHR7067hRurpgG7UONHeh4ZndZrTsiOu/JbzB5RX2PvxtxLIX0g==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzg8y4tA1NYVW7f5oltMXFb+yXTCR3ubjM+Yw+dMfqSRJdAsPKi
+	xCAtzAO3oxuDZM2BVnu1qsthX88rkAQJiy3Zoy9UXbGeEOXOLLsLfXrfAAQ5yS4=
+X-Google-Smtp-Source: AGHT+IFb4UsVqlsnmRzalMlOFhL03MP9RKPAZIFBzAhHFTnSb9JuNURPjg2Y03goJMWBnZPtgCszsA==
+X-Received: by 2002:a5d:5606:0:b0:37d:4937:c9eb with SMTP id ffacd0b85a97d-37d4937cbd4mr887313f8f.21.1728541470555;
+        Wed, 09 Oct 2024 23:24:30 -0700 (PDT)
+Received: from blindfold.localnet ([82.150.214.1])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-37d4b6bd127sm605077f8f.36.2024.10.09.23.24.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Oct 2024 23:24:30 -0700 (PDT)
+From: Richard Weinberger <richard@sigma-star.at>
+To: Richard Weinberger <richard@nod.at>, upstream@sigma-star.at
+Cc: netfilter-devel@vger.kernel.org, coreteam@netfilter.org, netdev@vger.kernel.org, linux-kernel@vger.kernel.org, pabeni@redhat.com, kuba@kernel.org, edumazet@google.com, davem@davemloft.net, kadlec@netfilter.org, pablo@netfilter.org, rgb@redhat.com, upstream+net@sigma-star.at, audit@vger.kernel.org, linux-security-module@vger.kernel.org, Paul Moore <paul@paul-moore.com>
+Subject: Re: [PATCH] netfilter: Record uid and gid in xt_AUDIT
+Date: Thu, 10 Oct 2024 08:24:28 +0200
+Message-ID: <4370155.VQJxnDRnGh@somecomputer>
+In-Reply-To: <CAHC9VhSbAM3iWxhO+rgJ0d0qOtrSouw0McrjstuP5xQw3=A35Q@mail.gmail.com>
+References: <20241009203218.26329-1-richard@nod.at> <CAHC9VhSbAM3iWxhO+rgJ0d0qOtrSouw0McrjstuP5xQw3=A35Q@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241009203218.26329-1-richard@nod.at>
-In-Reply-To: <20241009203218.26329-1-richard@nod.at>
-From: Paul Moore <paul@paul-moore.com>
-Date: Wed, 9 Oct 2024 18:02:44 -0400
-Message-ID: <CAHC9VhSbAM3iWxhO+rgJ0d0qOtrSouw0McrjstuP5xQw3=A35Q@mail.gmail.com>
-Subject: Re: [PATCH] netfilter: Record uid and gid in xt_AUDIT
-To: Richard Weinberger <richard@nod.at>
-Cc: netfilter-devel@vger.kernel.org, coreteam@netfilter.org, 
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org, pabeni@redhat.com, 
-	kuba@kernel.org, edumazet@google.com, davem@davemloft.net, 
-	kadlec@netfilter.org, pablo@netfilter.org, rgb@redhat.com, 
-	upstream+net@sigma-star.at, audit@vger.kernel.org, 
-	linux-security-module@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="UTF-8"
 
-On Wed, Oct 9, 2024 at 4:33=E2=80=AFPM Richard Weinberger <richard@nod.at> =
-wrote:
->
-> When recording audit events for new outgoing connections,
-> it is helpful to log the user info of the associated socket,
-> if available.
-> Therefore, check if the skb has a socket, and if it does,
-> log the owning fsuid/fsgid.
->
-> Signed-off-by: Richard Weinberger <richard@nod.at>
-> ---
->  net/netfilter/xt_AUDIT.c | 27 +++++++++++++++++++++++++--
->  1 file changed, 25 insertions(+), 2 deletions(-)
->
-> diff --git a/net/netfilter/xt_AUDIT.c b/net/netfilter/xt_AUDIT.c
-> index b6a015aee0cec..d88b5442beaa6 100644
-> --- a/net/netfilter/xt_AUDIT.c
-> +++ b/net/netfilter/xt_AUDIT.c
-> @@ -9,16 +9,19 @@
->  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
->
->  #include <linux/audit.h>
-> +#include <linux/cred.h>
-> +#include <linux/file.h>
-> +#include <linux/if_arp.h>
->  #include <linux/module.h>
->  #include <linux/skbuff.h>
->  #include <linux/tcp.h>
->  #include <linux/udp.h>
-> -#include <linux/if_arp.h>
->  #include <linux/netfilter/x_tables.h>
->  #include <linux/netfilter/xt_AUDIT.h>
->  #include <linux/netfilter_bridge/ebtables.h>
-> -#include <net/ipv6.h>
->  #include <net/ip.h>
-> +#include <net/ipv6.h>
-> +#include <net/sock.h>
->
->  MODULE_LICENSE("GPL");
->  MODULE_AUTHOR("Thomas Graf <tgraf@redhat.com>");
-> @@ -66,7 +69,9 @@ static bool audit_ip6(struct audit_buffer *ab, struct s=
-k_buff *skb)
->  static unsigned int
->  audit_tg(struct sk_buff *skb, const struct xt_action_param *par)
->  {
-> +       struct sock *sk =3D skb->sk;
->         struct audit_buffer *ab;
-> +       bool got_uidgid =3D false;
->         int fam =3D -1;
->
->         if (audit_enabled =3D=3D AUDIT_OFF)
-> @@ -99,6 +104,24 @@ audit_tg(struct sk_buff *skb, const struct xt_action_=
-param *par)
->         if (fam =3D=3D -1)
->                 audit_log_format(ab, " saddr=3D? daddr=3D? proto=3D-1");
->
-> +       if (sk && sk_fullsock(sk)) {
-> +               read_lock_bh(&sk->sk_callback_lock);
-> +               if (sk->sk_socket && sk->sk_socket->file) {
-> +                       const struct file *file =3D sk->sk_socket->file;
-> +                       const struct cred *cred =3D file->f_cred;
-> +
-> +                       audit_log_format(ab, " uid=3D%u gid=3D%u",
-> +                                        from_kuid(&init_user_ns, cred->f=
-suid),
-> +                                        from_kgid(&init_user_ns, cred->f=
-sgid));
+Am Donnerstag, 10. Oktober 2024, 00:02:44 CEST schrieb Paul Moore:
+> [CC'ing the audit and LSM lists for obvious reasons]
+>=20
+> If we're logging the subjective credentials of the skb's associated
+> socket, we really should also log the socket's LSM secctx similar to
+> what we do with audit_log_task() and audit_log_task_context().
+> Unfortunately, I don't believe we currently have a LSM interface that
+> return the secctx from a sock/socket, although we do have
+> security_inode_getsecctx() which *should* yield the same result using
+> SOCK_INODE(sk->sk_socket).
 
-[CC'ing the audit and LSM lists for obvious reasons]
+Hm, I thought about that but saw 2173c519d5e91 ("audit: normalize NETFILTER=
+_PKT").
+It removed usage of audit_log_secctx() and many other, IMHO, useful fields.
+What about skb->secctx?
 
-If we're logging the subjective credentials of the skb's associated
-socket, we really should also log the socket's LSM secctx similar to
-what we do with audit_log_task() and audit_log_task_context().
-Unfortunately, I don't believe we currently have a LSM interface that
-return the secctx from a sock/socket, although we do have
-security_inode_getsecctx() which *should* yield the same result using
-SOCK_INODE(sk->sk_socket).
+>=20
+> I should also mention that I'm currently reviewing a patchset which is
+> going to add proper support for multiple LSMs in audit which will
+> likely impact this work.
+>=20
+> https://lore.kernel.org/linux-security-module/20241009173222.12219-1-case=
+y@schaufler-ca.com/
 
-I should also mention that I'm currently reviewing a patchset which is
-going to add proper support for multiple LSMs in audit which will
-likely impact this work.
+Ok!
 
-https://lore.kernel.org/linux-security-module/20241009173222.12219-1-casey@=
-schaufler-ca.com/
+Thanks,
+//richard
+=20
+=2D-=20
+=E2=80=8B=E2=80=8B=E2=80=8B=E2=80=8B=E2=80=8Bsigma star gmbh | Eduard-Bodem=
+=2DGasse 6, 6020 Innsbruck, AUT
+UID/VAT Nr: ATU 66964118 | FN: 374287y
 
-> +                       got_uidgid =3D true;
-> +               }
-> +               read_unlock_bh(&sk->sk_callback_lock);
-> +       }
-> +
-> +       if (!got_uidgid)
-> +               audit_log_format(ab, " uid=3D? gid=3D?");
-> +
->         audit_log_end(ab);
->
->  errout:
-> --
-> 2.35.3
 
---=20
-paul-moore.com
