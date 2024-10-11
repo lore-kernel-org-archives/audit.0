@@ -1,34 +1,34 @@
-Received: from smtp-bc0e.mail.infomaniak.ch (smtp-bc0e.mail.infomaniak.ch [45.157.188.14])
+Received: from smtp-8fac.mail.infomaniak.ch (smtp-8fac.mail.infomaniak.ch [83.166.143.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03D302139A8
-	for <audit@vger.kernel.org>; Fri, 11 Oct 2024 11:04:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.157.188.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E03B91CF291
+	for <audit@vger.kernel.org>; Fri, 11 Oct 2024 11:19:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=83.166.143.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728644681; cv=none; b=BqElfQz5YaAOkZkReONvQ5I7rQ2fi9FT/1+Vjd4yGHMheQzrMZPeuSCeUyhCgVNw+3anbooCevmtCPNvVrsww2u03DnGmFFQBSVWxxy8IsMXwzuQPr/uF6qv37apn8isLMhHqgrUAyZMvYEicFJO+kF3yMBGyYlbheEU9vjdgL0=
+	t=1728645581; cv=none; b=ki3qu3phR3LC0YPKrfwNxqS1w4e9iAPCl8jyBnbwC2Sd9Nqpmox0Y8AvYPaElpAmb7h+dvRP2fjtAaxJyjORPJ2tm7N8768MrwOE8uwEKFv4rTHTCko1Nn0kEatlXGDuIKd7pgA8jgcyxbl2Ek/cmPIclEHFx3Ydw1B2GG23/eU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728644681; c=relaxed/simple;
-	bh=VPyiv+boH04rAQzfKWU+RIvEJ7tilQRTQhwpGsC5gxk=;
+	s=arc-20240116; t=1728645581; c=relaxed/simple;
+	bh=qaoTFtDtuKvN3gsXVywkTUkR1MviKQuz8Y2Vpraq7uA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uTM3JNDYzxXZgZkYN5PFTmdQZKbuMT+VrG+UBu12XiDzN4RiG1ridMtCT2fkwUYz58yC5FpStnGZqXBPN/WLPJFQ64BdMdhL8FhoAnFeo3dem92Abm2upo8zKQz4CP25VjtdXCO0bxx4UEc/di6Khh8Amy4AA97ZYKz6xyjzV8o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=lof0Uk0J; arc=none smtp.client-ip=45.157.188.14
+	 Content-Type:Content-Disposition:In-Reply-To; b=LvRwSSLN4yFxTXyIUhgjl8Y/zxjdPySzV/gX6b04awtH8kVDC+gPgXpNwaF7OuP+vBkiZCKjKGJYtmX8pgKaAkEQ79PYYXVYKEqLE2OaU65z4Pk3ldgyCD/uLFnxV5WUsfcn95R1OZcaX6/iTRq5oRe6EqzvE5Rhu3AiVp/rRXE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=eFoppcVT; arc=none smtp.client-ip=83.166.143.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="lof0Uk0J"
-Received: from smtp-3-0001.mail.infomaniak.ch (unknown [IPv6:2001:1600:4:17::246c])
-	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4XQ3fk1NhtztFY;
-	Fri, 11 Oct 2024 13:04:30 +0200 (CEST)
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="eFoppcVT"
+Received: from smtp-3-0000.mail.infomaniak.ch (unknown [IPv6:2001:1600:4:17::246b])
+	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4XQ3nh1pq4zvRX;
+	Fri, 11 Oct 2024 13:10:32 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
-	s=20191114; t=1728644670;
-	bh=9Pi1LmPYo8qdspv2MNYu5cluFjYOEW3JdL7e9mPBGs0=;
+	s=20191114; t=1728645032;
+	bh=fLaZhNPzPWt64tLwirmcQQOFzj4xkc6GdwBhQK7+n60=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=lof0Uk0J4x/gqYHL7OJpFodgrdbjpTEceSXVnOOrTYQJK0i/79vIk5ONQnB9gMNmo
-	 KsKXExCdvaiWj+OaL8ZTEJlda4kZTb1dHmIQdcmg8qtqunQOuh4BCDubt/Mzd2y8si
-	 Ux72qe9snzSuQ9q18rKRnItjSaPNPnQMnuu+iFk0=
-Received: from unknown by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4XQ3fj0d9szRdk;
-	Fri, 11 Oct 2024 13:04:29 +0200 (CEST)
-Date: Fri, 11 Oct 2024 13:04:25 +0200
+	b=eFoppcVTErdptDIhM+WzvnoPQJNLqG3zF3+Kj5diqudUtFsvut7TQSc7KWs8t/TvB
+	 CCmR5vnlVbxJl+KpmL4Aj+FNAUycgvJ4aQYkg0qK2Lxb7IX/FVT9SDITiSGymgRKYH
+	 wCOYIZ3IPp9m6973K2nZMwiF/vER5QE0FA7k86JY=
+Received: from unknown by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4XQ3ng4fykzJby;
+	Fri, 11 Oct 2024 13:10:31 +0200 (CEST)
+Date: Fri, 11 Oct 2024 13:10:28 +0200
 From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
 To: Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
 Cc: Christian Brauner <brauner@kernel.org>, 
@@ -38,9 +38,10 @@ Cc: Christian Brauner <brauner@kernel.org>,
 	Jan Kara <jack@suse.cz>
 Subject: Re: [RFC PATCH v1 1/7] fs: Add inode_get_ino() and implement
  get_ino() for NFS
-Message-ID: <20241011.Di7Yoh5ikeiX@digikod.net>
+Message-ID: <20241011.if2Iech3noos@digikod.net>
 References: <20241010152649.849254-1-mic@digikod.net>
  <70645876-0dfe-449b-9cb6-678ce885a073@I-love.SAKURA.ne.jp>
+ <a5fb2a24-d109-41fd-b00a-afe5280b6ffc@I-love.SAKURA.ne.jp>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
@@ -50,41 +51,29 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <70645876-0dfe-449b-9cb6-678ce885a073@I-love.SAKURA.ne.jp>
+In-Reply-To: <a5fb2a24-d109-41fd-b00a-afe5280b6ffc@I-love.SAKURA.ne.jp>
 X-Infomaniak-Routing: alpha
 
-On Fri, Oct 11, 2024 at 07:12:17PM +0900, Tetsuo Handa wrote:
-> On 2024/10/11 0:26, Mickaël Salaün wrote:
-> > When a filesystem manages its own inode numbers, like NFS's fileid shown
-> > to user space with getattr(), other part of the kernel may still expose
-> > the private inode->ino through kernel logs and audit.
+On Fri, Oct 11, 2024 at 07:54:58PM +0900, Tetsuo Handa wrote:
+> On 2024/10/11 19:12, Tetsuo Handa wrote:
+> > On 2024/10/11 0:26, Mickaël Salaün wrote:
+
+> >> Another issue is on 32-bit architectures, on which ino_t is 32 bits,
+> >> whereas the user space's view of an inode number can still be 64 bits.
+> > 
+> > Currently, ino_t is 32bits on 32-bit architectures, isn't it?
+> > Why do you need to use 64bits on 32-bit architectures?
 > 
-> I can't catch what you are trying to do. What is wrong with that?
-
-My understanding is that tomoyo_get_attributes() is used to log or
-expose access requests to user space, including inode numbers.  Is that
-correct?  If yes, then the inode numbers might not reflect what user
-space sees with stat(2).
-
+> Changing from 32bits to 64bits for communicating with userspace programs
+> breaks userspace programs using "ino_t" (or "unsigned long") for handling
+> inode numbers, doesn't it? Attempt to change from %lu to %llu will not be
+> acceptable unless the upper 32bits are guaranteed to be 0 on 32-bit
+> architectures.
 > 
-> > Another issue is on 32-bit architectures, on which ino_t is 32 bits,
-> > whereas the user space's view of an inode number can still be 64 bits.
-> 
-> Currently, ino_t is 32bits on 32-bit architectures, isn't it?
-> Why do you need to use 64bits on 32-bit architectures?
+> Since syslogd/auditd are not the only programs that parse kernel logs and
+> audit logs, updating only syslogd/auditd is not sufficient. We must not break
+> existing userspace programs, and thus we can't change the format string.
 
-ino_t is indeed 32 bits on 32-bit architectures, but user space can
-still get a 64-bit stat->ino value.
-
-> 
-> > Add a new inode_get_ino() helper calling the new struct
-> > inode_operations' get_ino() when set, to get the user space's view of an
-> > inode number.  inode_get_ino() is called by generic_fillattr().
-> 
-> What does the user space's view of an inode number mean?
-
-It's the value user space gets with stat(2).
-
-> What does the kernel space's view of an inode number mean?
-
-It's struct inode->i_ino and ino_t variables.
+This might only break user space that wrongfully uses 32-bit variables
+to store 64-bit values.  According to the UAPI, inode numbers should be
+64 bits.
