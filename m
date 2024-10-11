@@ -1,103 +1,95 @@
-Received: from mail-qk1-f173.google.com (mail-qk1-f173.google.com [209.85.222.173])
+Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB2ECC8C7
-	for <audit@vger.kernel.org>; Fri, 11 Oct 2024 01:20:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A1F9EAF1
+	for <audit@vger.kernel.org>; Fri, 11 Oct 2024 01:38:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728609656; cv=none; b=ADROxdijQWDNWaXuHuee6cNX4opUkrWSKS5tfqz6faBtn2c0vik2R/VnEL2OJKpXTSKdPIZ8sB63ZJ4PcZGPlHz5HZr8AgMCZ8dzRqt7/CekZwi6cL2+OoUekHAuBRk9w3Zc+l7XUhPdME85r5jiFyYoIXqrcNzFQNAuO4achbE=
+	t=1728610737; cv=none; b=r7lHSOT//OdPC6nBqKlFM3Vsx6u49FPtZKd6TUXin+w4tB4e02BB06CCncZlY+uU662ohlb6NZ17rLk4Yw/A53EUklBK+pc9/Oy9azjmcTpCRVrzKcXi+KdvZqVPH77rJLWHKxVCWfZcPPhuX58PZgogzne7knPVCJKHlJSDows=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728609656; c=relaxed/simple;
-	bh=J86F7ed2RT/zbDTY0+kRdaTBCoGcZk0+nMD5IAWs8Sg=;
-	h=Date:Message-ID:MIME-Version:Content-Type:From:To:Cc:Subject:
-	 References:In-Reply-To; b=ClljWQe8N3ifgXBXylY3cPmyrTlmfYK26vXU67vpUrI1OS0OErlcMn57wAwJJDp0RRU/DFdC/NqDGeEKPQercAIm13N+due7j18kW2owL7aWJpBVLP7es/kq7JWvxT5nhoD/lG8MJhBDzRhg9m5sHNE9pct8nguz4MFZdfJ9zUQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=WDyTdPCg; arc=none smtp.client-ip=209.85.222.173
+	s=arc-20240116; t=1728610737; c=relaxed/simple;
+	bh=9tJXSsQ9fSvcpkQGEvBg2L68OGr0KwcdVp0VeMEtExA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Gl0gyUKt8bcLpSOk5lye/S3WxQWjUx4LeI0r6ThQH/zzTBQiqwMHL39bziFlsMtyVbVVKX2XR+fwUrxrmZ4d/mP5wU+rujd/NkdcJGlfDk5XXCfWaoDdiIpIAYJY9X0tq9w69s4L5EtL01MgV1Yrd+uan9gRJFq327EhQrSJIW0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=JSCg7dbs; arc=none smtp.client-ip=209.85.128.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="WDyTdPCg"
-Received: by mail-qk1-f173.google.com with SMTP id af79cd13be357-7afcf9f3c96so147996585a.1
-        for <audit@vger.kernel.org>; Thu, 10 Oct 2024 18:20:54 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="JSCg7dbs"
+Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-6e2772f7df9so14594267b3.2
+        for <audit@vger.kernel.org>; Thu, 10 Oct 2024 18:38:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1728609654; x=1729214454; darn=vger.kernel.org;
-        h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
-         :mime-version:message-id:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=eIiCQI9CBnA2xpryLIp9qGO7nsfK27rCMlDOpUtgb4s=;
-        b=WDyTdPCgraeqYTt7M+8bPd38vqtzwxYszswMBFI0zkQIP7SWxDr5bnu84setloM3gu
-         J9lv0qgujJvhfEApub6LH0bU/33cm3cB2ikeoWBZAlNeaVi7bfyVpILBx45RM87lUnnW
-         Cqls/X89EhK2+7n5YaTfxzoXnn6SLsOEtRLtk6obQN3fLejPQLDXHC2AB/zqhO4g4cz8
-         1YUZHuPO8ObAKSUJDgyHvXBIcU6k0+WcQdU6LL6SFk4eY5XzysjhSYSX1w1LVa2gb2OT
-         soYIGQl4NEoInNFmhykq0BG2xnBC/aYBE1aBXkkvJVVPo8rkybJCiLemYAzoMP4j0Rxg
-         AJlA==
+        d=paul-moore.com; s=google; t=1728610735; x=1729215535; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VRcd9cwIZFh48Jk9iJ5FWFlPG9snV80qLzRLo6hXxJo=;
+        b=JSCg7dbsLrzz2Z4F7/4WhtnEh8Ni8l0mm6RCMLDgsI2tctqgNbvd5Gl4acrgKk7mtw
+         82HqGBD8uC8gf+svvHOMvucERy7YIRytPO1b14sAaDoCjXK4kgUqOi28GftMSHmvQEVx
+         HeflE8bxjuuADOiB8wnDYcwZy3JAC0fwyPj819EBeZBpnFFg3Jmc27yIeaikX7o5o4nD
+         3bQLiR7XNRBJSMQXJCaqlt0qCkf/B2R1DcErvCqPFedM2i2JoJf+AWSMNcceyPovU3uZ
+         kRLskDTU2vvEdO/MVMdQewQNhlpBXqy7PxkUey+1M9gf1as0jxayQ0CeUPG0U1ypTbA/
+         VTKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728609654; x=1729214454;
-        h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
-         :mime-version:message-id:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=eIiCQI9CBnA2xpryLIp9qGO7nsfK27rCMlDOpUtgb4s=;
-        b=I6TGegcJE8DnAShg6pA3y6vsOkqwKX8aV0/FHpzI/v3EeMvDhkpWW8Ya3xpu/FmVYJ
-         RKnSVbyUGfFljJfuvp2POqrk1+UylZXDUQXbxqAQJb+oWHD9uZph0vXvj5aauv2GiPPU
-         HO4kAr6QmJFhY9ACW30WFewEvKkCl3SuuJiw0DF/9vzuQk+Z0uEHprc6qxwLKTYX/AJD
-         TpEWzpCX1DtPnzCykBrelEckv8IzMRnwTIrvP6NlmNZYShsNOVM1xrvHNWN7FKPEQkYM
-         uePN2XbELuo4dRl8VmdY8QbpkeC9VxmsIfAqlIEEGr+ezDQj1IcOw0ayrJhEN1SaXszM
-         9jZA==
-X-Forwarded-Encrypted: i=1; AJvYcCUeJtR6ylKjN54UfePrkeFIjqZCAm5oRt3rSCtqPMoVfrUAl0ZDOgc44uw+D46fxg62X9XnCQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxnPyeTLtCtqimLqUBum+0/q6AMXD0MinPtrg3W8XyZpnNEKgEI
-	RHgO0+STJBw59cvAzP2HE0RMzYQcGVzTSjUS6Kyo/RsX82ILWh8a3loylDORJQ==
-X-Google-Smtp-Source: AGHT+IEbxunoS+zDqrd+m3js/aSOeihIlUwdEL4xLbaY1TX77dBsJbM5oDghN1hUr2RgEyIZ1k4zXQ==
-X-Received: by 2002:a05:620a:28cc:b0:7a9:c8f3:999c with SMTP id af79cd13be357-7b11a364686mr199609785a.5.1728609653748;
-        Thu, 10 Oct 2024 18:20:53 -0700 (PDT)
-Received: from localhost ([70.22.175.108])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7b11c0a8902sm2964985a.31.2024.10.10.18.20.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Oct 2024 18:20:53 -0700 (PDT)
-Date: Thu, 10 Oct 2024 21:20:52 -0400
-Message-ID: <bafd35c50bbcd62ee69e0d3c5f6b112d@paul-moore.com>
+        d=1e100.net; s=20230601; t=1728610735; x=1729215535;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=VRcd9cwIZFh48Jk9iJ5FWFlPG9snV80qLzRLo6hXxJo=;
+        b=rIgQHBoG1O3zv5kN9kxkEKuvgAZwhHMqS2nICXMUyNV3y3NHiNDWTfMKpm1aBuwASi
+         o61KRT5Edg8PGqgCS2A/erNYkZP8HNURRKs/ly/2i1Pu1AK6UWnzuqUSn88j8PLXjNMa
+         GBzZX53axJGlogG/DYC5eAJyJCowzjEBnuoKy93ZHN1e9dOnBPbnD7+z91EpaPP7GBP/
+         b6CTr1GxsLDl7pyUP6UM8qb8z1qnndf/eovXWVDaZK2aQmN4TLfYxb0rppzbGWoRIdWK
+         9+HrlpjcoI00YAkSQolFm/fZ0laMBbB0MkKERV0gg4yOkuPD0oMgJxQS+NJNwY7JKPrz
+         GEJg==
+X-Forwarded-Encrypted: i=1; AJvYcCX6EQlyzw97VRElst6qVHJ9VQgVAXNyxNAtbW+REWUJi43sN6vX6lQcxyp4w6dXHN21eRmnTg==@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywo0+hRcVxC7V6uLPN7sWKr52hpE/7oEgIjEnbQu3uHcPs4eYp5
+	VPhFbVS/dzipTZbgKTVDfm7B+0UnxmP0lxP95kXxUC3PGk8Sm4pOnY1vt/R7Up6Mv+PqNwbOZFK
+	kZzTNleYSwqSk5c51dU+5gsc2tcoXd2qwRNHY
+X-Google-Smtp-Source: AGHT+IFvoAiqQTsFIOJfK+l/01uP1b8r2mlIlEpP49rC76iACwSSk+CMcgg9Ira3XeXkyuN2zyckIivG5f2h/gWZomE=
+X-Received: by 2002:a05:6902:124f:b0:e29:6b8:af3 with SMTP id
+ 3f1490d57ef6-e2919df898fmr992944276.44.1728610735214; Thu, 10 Oct 2024
+ 18:38:55 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 
-Content-Type: text/plain; charset=UTF-8 
-Content-Transfer-Encoding: 8bit
+MIME-Version: 1.0
+References: <20241010152649.849254-2-mic@digikod.net> <c4260a81d3c0ebe54c191b432ca33140@paul-moore.com>
+In-Reply-To: <c4260a81d3c0ebe54c191b432ca33140@paul-moore.com>
 From: Paul Moore <paul@paul-moore.com>
-To: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>, Christian Brauner <brauner@kernel.org>
-Cc: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>, linux-fsdevel@vger.kernel.org, linux-nfs@vger.kernel.org, linux-security-module@vger.kernel.org, audit@vger.kernel.org, Mimi Zohar <zohar@linux.ibm.com>, Roberto Sassu <roberto.sassu@huawei.com>, Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, Eric Snowberg <eric.snowberg@oracle.com>
-Subject: Re: [PATCH RFC v1 4/7] integrity: Fix inode numbers in audit records
-References: <20241010152649.849254-4-mic@digikod.net>
-In-Reply-To: <20241010152649.849254-4-mic@digikod.net>
+Date: Thu, 10 Oct 2024 21:38:44 -0400
+Message-ID: <CAHC9VhSJOWD93H0nPTCdKpbM2dDnq65+JVF1khPmEbX_KhHxsQ@mail.gmail.com>
+Subject: Re: [PATCH RFC v1 2/7] audit: Fix inode numbers
+To: =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>, 
+	Christian Brauner <brauner@kernel.org>
+Cc: linux-fsdevel@vger.kernel.org, linux-nfs@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, audit@vger.kernel.org, 
+	Eric Paris <eparis@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Oct 10, 2024 =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net> wrote:
-> 
-> Use the new inode_get_ino() helper to log the user space's view of
-> inode's numbers instead of the private kernel values.
-> 
-> Cc: Mimi Zohar <zohar@linux.ibm.com>
-> Cc: Roberto Sassu <roberto.sassu@huawei.com>
-> Cc: Dmitry Kasatkin <dmitry.kasatkin@gmail.com>
-> Cc: Eric Snowberg <eric.snowberg@oracle.com>
-> Signed-off-by: Mickaël Salaün <mic@digikod.net>
-> ---
->  security/integrity/integrity_audit.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+On Thu, Oct 10, 2024 at 9:20=E2=80=AFPM Paul Moore <paul@paul-moore.com> wr=
+ote:
+> On Oct 10, 2024 =3D?UTF-8?q?Micka=3DC3=3DABl=3D20Sala=3DC3=3DBCn?=3D <mic=
+@digikod.net> wrote:
+> >
+> > Use the new inode_get_ino() helper to log the user space's view of
+> > inode's numbers instead of the private kernel values.
+> >
+> > Cc: Paul Moore <paul@paul-moore.com>
+> > Cc: Eric Paris <eparis@redhat.com>
+> > Signed-off-by: Micka=C3=ABl Sala=C3=BCn <mic@digikod.net>
+> > ---
+> >  security/lsm_audit.c | 10 +++++-----
+> >  1 file changed, 5 insertions(+), 5 deletions(-)
+>
+> Acked-by: Paul Moore <paul@paul-moore.com>
 
-Should we also need to update the inode value used in hmac_add_misc()?
+It looks like patch 1/7 still needs some revisions, and an ACK from
+the NFS/VFS folks, but once that's sorted I can send the patchset up
+to Linus marked for stable.
 
-diff --git a/security/integrity/evm/evm_crypto.c b/security/integrity/evm/evm_crypto.c
-index 7c06ffd633d2..68ae454e187f 100644
---- a/security/integrity/evm/evm_crypto.c
-+++ b/security/integrity/evm/evm_crypto.c
-@@ -155,7 +155,7 @@ static void hmac_add_misc(struct shash_desc *desc, struct inode *inode,
-         * signatures
-         */
-        if (type != EVM_XATTR_PORTABLE_DIGSIG) {
--               hmac_misc.ino = inode->i_ino;
-+               hmac_misc.ino = inode_get_ino(inode->i_ino);
-                hmac_misc.generation = inode->i_generation;
-        }
-        /* The hmac uid and gid must be encoded in the initial user
-
---
+--=20
 paul-moore.com
