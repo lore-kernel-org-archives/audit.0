@@ -1,95 +1,140 @@
-Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
+Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A1F9EAF1
-	for <audit@vger.kernel.org>; Fri, 11 Oct 2024 01:38:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B1861F7067
+	for <audit@vger.kernel.org>; Fri, 11 Oct 2024 03:08:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728610737; cv=none; b=r7lHSOT//OdPC6nBqKlFM3Vsx6u49FPtZKd6TUXin+w4tB4e02BB06CCncZlY+uU662ohlb6NZ17rLk4Yw/A53EUklBK+pc9/Oy9azjmcTpCRVrzKcXi+KdvZqVPH77rJLWHKxVCWfZcPPhuX58PZgogzne7knPVCJKHlJSDows=
+	t=1728616093; cv=none; b=Yee7tB4dTv3T1L6/2Qkddg3XcLikyYOLzKYxV8zAI3LLJ8Ey/CSj/EUYHtjC9nbHkAD18hlwMmEc0WR4oEDnTG7gUd2EjSTWsiD6mn7/Kgef9MDo4PtWiNRMSiJrxMkkhslN7ZxYr+D0v7P4ig9o4RNizE/iY6eb9rFlpRn3FfQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728610737; c=relaxed/simple;
-	bh=9tJXSsQ9fSvcpkQGEvBg2L68OGr0KwcdVp0VeMEtExA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Gl0gyUKt8bcLpSOk5lye/S3WxQWjUx4LeI0r6ThQH/zzTBQiqwMHL39bziFlsMtyVbVVKX2XR+fwUrxrmZ4d/mP5wU+rujd/NkdcJGlfDk5XXCfWaoDdiIpIAYJY9X0tq9w69s4L5EtL01MgV1Yrd+uan9gRJFq327EhQrSJIW0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=JSCg7dbs; arc=none smtp.client-ip=209.85.128.175
+	s=arc-20240116; t=1728616093; c=relaxed/simple;
+	bh=gW94NmI73PiDXzWaRhJN3by7GzK2SB61EYnd+RU+SXA=;
+	h=Date:Message-ID:MIME-Version:Content-Type:From:To:Cc:Subject:
+	 References:In-Reply-To; b=cLLH8GMWjrke5R0abbPjyEgi1uZ9glnWi2OSqxgR60fcK6NUOz5xI3F+/K8fTiNqC/bkqA2MOibG0kFsZM36SU9h0cADk9xkRcwi2DZa37w2qGJCUHAb037QOxIxmQVaZBoqeqCqpUk9kRVMbV3cBHFpuC3rRc5VKUwFEjyaLys=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=UZ0XzDby; arc=none smtp.client-ip=209.85.160.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="JSCg7dbs"
-Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-6e2772f7df9so14594267b3.2
-        for <audit@vger.kernel.org>; Thu, 10 Oct 2024 18:38:56 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="UZ0XzDby"
+Received: by mail-qt1-f179.google.com with SMTP id d75a77b69052e-45f0a0f9687so14992501cf.3
+        for <audit@vger.kernel.org>; Thu, 10 Oct 2024 20:08:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1728610735; x=1729215535; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VRcd9cwIZFh48Jk9iJ5FWFlPG9snV80qLzRLo6hXxJo=;
-        b=JSCg7dbsLrzz2Z4F7/4WhtnEh8Ni8l0mm6RCMLDgsI2tctqgNbvd5Gl4acrgKk7mtw
-         82HqGBD8uC8gf+svvHOMvucERy7YIRytPO1b14sAaDoCjXK4kgUqOi28GftMSHmvQEVx
-         HeflE8bxjuuADOiB8wnDYcwZy3JAC0fwyPj819EBeZBpnFFg3Jmc27yIeaikX7o5o4nD
-         3bQLiR7XNRBJSMQXJCaqlt0qCkf/B2R1DcErvCqPFedM2i2JoJf+AWSMNcceyPovU3uZ
-         kRLskDTU2vvEdO/MVMdQewQNhlpBXqy7PxkUey+1M9gf1as0jxayQ0CeUPG0U1ypTbA/
-         VTKg==
+        d=paul-moore.com; s=google; t=1728616091; x=1729220891; darn=vger.kernel.org;
+        h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
+         :mime-version:message-id:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=NBk1BYCe6DiQlB7u6jhmsN4dxnIYnOFQt3USnG0/ZxE=;
+        b=UZ0XzDbyYnSzfpGshfhQilxkudVsilmBYpKi7XvEWwxa1g+JHwXOuC9KeXQtCcBqK5
+         Blop1tff5scgPx2X9In44yEOR83CvGj4wwgTmo75eFnW+ccRyVhh70l9oZQnm3nmcs4h
+         zpOx/nEcB+48GQ0gVDEgb3pRUaRwkK/qLA73eAcY31/sGAQDBGT8QvNHX0fgtn3wfTCi
+         mrVxyhFoSMwzogBmDrQvWdzucKo/6vXKIv/i9mnMqf/DyyAJLOQz2bHEiKaRSGx5PQES
+         g1bpGUULdZtV/Mr+31L/jOc7V58dsf4x0GRdkvY6Z7PnjqapIJ7KJtXaXZBgTA441xNM
+         sQ0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728610735; x=1729215535;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=VRcd9cwIZFh48Jk9iJ5FWFlPG9snV80qLzRLo6hXxJo=;
-        b=rIgQHBoG1O3zv5kN9kxkEKuvgAZwhHMqS2nICXMUyNV3y3NHiNDWTfMKpm1aBuwASi
-         o61KRT5Edg8PGqgCS2A/erNYkZP8HNURRKs/ly/2i1Pu1AK6UWnzuqUSn88j8PLXjNMa
-         GBzZX53axJGlogG/DYC5eAJyJCowzjEBnuoKy93ZHN1e9dOnBPbnD7+z91EpaPP7GBP/
-         b6CTr1GxsLDl7pyUP6UM8qb8z1qnndf/eovXWVDaZK2aQmN4TLfYxb0rppzbGWoRIdWK
-         9+HrlpjcoI00YAkSQolFm/fZ0laMBbB0MkKERV0gg4yOkuPD0oMgJxQS+NJNwY7JKPrz
-         GEJg==
-X-Forwarded-Encrypted: i=1; AJvYcCX6EQlyzw97VRElst6qVHJ9VQgVAXNyxNAtbW+REWUJi43sN6vX6lQcxyp4w6dXHN21eRmnTg==@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywo0+hRcVxC7V6uLPN7sWKr52hpE/7oEgIjEnbQu3uHcPs4eYp5
-	VPhFbVS/dzipTZbgKTVDfm7B+0UnxmP0lxP95kXxUC3PGk8Sm4pOnY1vt/R7Up6Mv+PqNwbOZFK
-	kZzTNleYSwqSk5c51dU+5gsc2tcoXd2qwRNHY
-X-Google-Smtp-Source: AGHT+IFvoAiqQTsFIOJfK+l/01uP1b8r2mlIlEpP49rC76iACwSSk+CMcgg9Ira3XeXkyuN2zyckIivG5f2h/gWZomE=
-X-Received: by 2002:a05:6902:124f:b0:e29:6b8:af3 with SMTP id
- 3f1490d57ef6-e2919df898fmr992944276.44.1728610735214; Thu, 10 Oct 2024
- 18:38:55 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1728616091; x=1729220891;
+        h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
+         :mime-version:message-id:date:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=NBk1BYCe6DiQlB7u6jhmsN4dxnIYnOFQt3USnG0/ZxE=;
+        b=CZifFP/nOf44M15Ryf60fyrD2zsnnqoU+JEMztrfqPPl5WMuOmqJcJD+BlfwwHHtTx
+         7R/pAGe/vIlrDB4cXJXHTD4tKLyESiQMbWFiz2YzxgLRE01gOOyQ/pq1hV2oFWT6XmFw
+         t3aggSPiMprFGodheMZI+7v1HUKL1sY3SPUgY3TesAdLrjSmw2yzxzfdorG9FGke8LM1
+         zSBsmaa33/zzRSr9azpIxS+xBXJz8yOPq4EV+7JT0tlniI33JrTM9mT299H5N6laShii
+         nLkiiENk+pSuc4YWYakZ1CYttaSjEfQqjz0A9VMr+IrZENDAWHMTFQoahiMs99DazJPQ
+         gbmQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVtcCeR4GCgzTB3jkrirBLaXYeRkfXQrzUNZDsiod1TiXQYgaHDUKpGjmKHFTSXPAJe/rLlOg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwO7Wp+PUrbzW+/5DVHFktdTIQ/s62LbxXsgiqglf9wj9MqWop9
+	JwYOi3AuJNKXxVNa029ni4483aNL6RfNeJI/q1nWQFDR49OHCdDwlZVUW+0vxCKFbPRLT3LVtyY
+	=
+X-Google-Smtp-Source: AGHT+IFIbv+OlmL3pBDaxxtxV8FVN6u4fxW5kLN1uhrom9lCfz4zEXObG0lu7ct0SSx801Obl/QRcg==
+X-Received: by 2002:a05:622a:2cb:b0:45b:16b:ecb7 with SMTP id d75a77b69052e-4604bb962camr17699621cf.1.1728616091095;
+        Thu, 10 Oct 2024 20:08:11 -0700 (PDT)
+Received: from localhost ([70.22.175.108])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-460427905adsm11358401cf.15.2024.10.10.20.08.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Oct 2024 20:08:10 -0700 (PDT)
+Date: Thu, 10 Oct 2024 23:08:09 -0400
+Message-ID: <9dbed0bc4172063c43aaae0fc9af542f@paul-moore.com>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20241010152649.849254-2-mic@digikod.net> <c4260a81d3c0ebe54c191b432ca33140@paul-moore.com>
-In-Reply-To: <c4260a81d3c0ebe54c191b432ca33140@paul-moore.com>
+MIME-Version: 1.0 
+Content-Type: text/plain; charset=UTF-8 
+Content-Transfer-Encoding: 8bit
 From: Paul Moore <paul@paul-moore.com>
-Date: Thu, 10 Oct 2024 21:38:44 -0400
-Message-ID: <CAHC9VhSJOWD93H0nPTCdKpbM2dDnq65+JVF1khPmEbX_KhHxsQ@mail.gmail.com>
-Subject: Re: [PATCH RFC v1 2/7] audit: Fix inode numbers
-To: =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>, 
-	Christian Brauner <brauner@kernel.org>
-Cc: linux-fsdevel@vger.kernel.org, linux-nfs@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, audit@vger.kernel.org, 
-	Eric Paris <eparis@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+To: Casey Schaufler <casey@schaufler-ca.com>, casey@schaufler-ca.com, linux-security-module@vger.kernel.org
+Cc: jmorris@namei.org, serge@hallyn.com, keescook@chromium.org, john.johansen@canonical.com, penguin-kernel@i-love.sakura.ne.jp, stephen.smalley.work@gmail.com, linux-kernel@vger.kernel.org, selinux@vger.kernel.org, mic@digikod.net, audit@vger.kernel.org
+Subject: Re: [PATCH v4 5/13] LSM: Use lsm_prop in security_ipc_getsecid
+References: <20241009173222.12219-6-casey@schaufler-ca.com>
+In-Reply-To: <20241009173222.12219-6-casey@schaufler-ca.com>
 
-On Thu, Oct 10, 2024 at 9:20=E2=80=AFPM Paul Moore <paul@paul-moore.com> wr=
-ote:
-> On Oct 10, 2024 =3D?UTF-8?q?Micka=3DC3=3DABl=3D20Sala=3DC3=3DBCn?=3D <mic=
-@digikod.net> wrote:
-> >
-> > Use the new inode_get_ino() helper to log the user space's view of
-> > inode's numbers instead of the private kernel values.
-> >
-> > Cc: Paul Moore <paul@paul-moore.com>
-> > Cc: Eric Paris <eparis@redhat.com>
-> > Signed-off-by: Micka=C3=ABl Sala=C3=BCn <mic@digikod.net>
-> > ---
-> >  security/lsm_audit.c | 10 +++++-----
-> >  1 file changed, 5 insertions(+), 5 deletions(-)
->
-> Acked-by: Paul Moore <paul@paul-moore.com>
+On Oct  9, 2024 Casey Schaufler <casey@schaufler-ca.com> wrote:
+> 
+> There may be more than one LSM that provides IPC data for auditing.
+> Change security_ipc_getsecid() to fill in a lsm_prop structure instead
+> of the u32 secid.  Change the name to security_ipc_getlsmprop() to
+> reflect the change.
+> 
+> Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
+> Cc: audit@vger.kernel.org
+> Cc: linux-security-module@vger.kernel.org
+> Cc: selinux@vger.kernel.org
+> ---
+>  include/linux/lsm_hook_defs.h |  4 ++--
+>  include/linux/security.h      | 22 +++++++++++++++++-----
+>  kernel/auditsc.c              |  5 ++---
+>  security/security.c           | 14 +++++++-------
+>  security/selinux/hooks.c      |  9 ++++++---
+>  security/smack/smack_lsm.c    | 16 +++++++++-------
+>  6 files changed, 43 insertions(+), 27 deletions(-)
+> 
+> diff --git a/include/linux/lsm_hook_defs.h b/include/linux/lsm_hook_defs.h
+> index ed6ea0b1ec57..6ef2a345ea03 100644
+> --- a/include/linux/lsm_hook_defs.h
+> +++ b/include/linux/lsm_hook_defs.h
+> @@ -256,8 +256,8 @@ LSM_HOOK(void, LSM_RET_VOID, task_to_inode, struct task_struct *p,
+>  	 struct inode *inode)
+>  LSM_HOOK(int, 0, userns_create, const struct cred *cred)
+>  LSM_HOOK(int, 0, ipc_permission, struct kern_ipc_perm *ipcp, short flag)
+> -LSM_HOOK(void, LSM_RET_VOID, ipc_getsecid, struct kern_ipc_perm *ipcp,
+> -	 u32 *secid)
+> +LSM_HOOK(void, LSM_RET_VOID, ipc_getlsmprop, struct kern_ipc_perm *ipcp,
+> +	 struct lsm_prop *prop)
+>  LSM_HOOK(int, 0, msg_msg_alloc_security, struct msg_msg *msg)
+>  LSM_HOOK(void, LSM_RET_VOID, msg_msg_free_security, struct msg_msg *msg)
+>  LSM_HOOK(int, 0, msg_queue_alloc_security, struct kern_ipc_perm *perm)
+> diff --git a/include/linux/security.h b/include/linux/security.h
+> index 5652baa4ca3c..15aef5f68e77 100644
+> --- a/include/linux/security.h
+> +++ b/include/linux/security.h
+> @@ -289,6 +289,17 @@ static inline const char *kernel_load_data_id_str(enum kernel_load_data_id id)
+>  	return kernel_load_data_str[id];
+>  }
+>  
+> +/**
+> + * lsmprop_init - initialize a lsm_prop structure
+> + * @prop: Pointer to the data to initialize
+> + *
+> + * Set all secid for all modules to the specified value.
+> + */
+> +static inline void lsmprop_init(struct lsm_prop *prop)
+> +{
+> +	memset(prop, 0, sizeof(*prop));
+> +}
+> +
+>  #ifdef CONFIG_SECURITY
+>  
+>  /**
+> @@ -297,7 +308,7 @@ static inline const char *kernel_load_data_id_str(enum kernel_load_data_id id)
+>   *
+>   * Returns true if there is a value set, false otherwise
+>   */
+> -static inline bool lsm_prop_is_set(struct lsm_prop *prop)
+> +static inline bool lsmprop_is_set(struct lsm_prop *prop)
 
-It looks like patch 1/7 still needs some revisions, and an ACK from
-the NFS/VFS folks, but once that's sorted I can send the patchset up
-to Linus marked for stable.
+See my comment in patch 4/13 about naming it this way from the start.
 
---=20
+--
 paul-moore.com
