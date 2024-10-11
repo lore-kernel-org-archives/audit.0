@@ -1,64 +1,64 @@
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+Received: from smtp-190c.mail.infomaniak.ch (smtp-190c.mail.infomaniak.ch [185.125.25.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8251E2178FF;
-	Fri, 11 Oct 2024 12:54:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE3E1218D72
+	for <audit@vger.kernel.org>; Fri, 11 Oct 2024 13:20:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.25.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728651279; cv=none; b=oA3Yjs0jM47QNkauNj3SF+bJnNhDVHmwaQoZZYJZHLoo2nPrhn5yI6yPhwbDsK2Dgn9bjS87lpRiUIBsGUSwQqzA5X4XcGC7roA/pKtHeBCbUSan4PPJ9VGuuToojnH+6HBqPLyt5+F+Tao4L+yAPTt07KF1VjBaY86kSXCD3r8=
+	t=1728652838; cv=none; b=PXyf4PjoBVfbnpEOnBxqYB1uY0DlErI/x9owQZRZ1P6aqH6FRWOv/hcgbrhaW2Y86NKFabyADCEA1PT6LRlmBI5Lc8wyccTsH1Pf+yiTHPtKpw8AeCoAOPGgK5SLYDjKfn7CQzd7VbsAQVTVOiwO7fUzTGQBzCaiMMxcvpc0CiQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728651279; c=relaxed/simple;
-	bh=hUF503SshZFnhDTc/TnXqrKN0/ZZy1/GZ3WEZ0BbrjI=;
+	s=arc-20240116; t=1728652838; c=relaxed/simple;
+	bh=ZXF83piWzI3Zr1ZbvAwOoHydCarQmxoJOvM0bNPBoQw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gHM+f3ZIjal4ywvVSQDj/avcAy/AtLp5N8GeieDRvnPeQpvkUYtxrLdsXS84iDXyOfXJ+h25es6RpKowjoxfA1QNaEW8pcILgkXMNIeFCp8J6lEAVd8Ysx+mQmK3fTsa7mdrVj31QnNuKfoG9EBf7yyiFAltaMOcYm9HDElluQA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=cB3SRmzC; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org
+	 Content-Type:Content-Disposition:In-Reply-To; b=BH84yYkrVR5PF7D3ng+iaPPj1QiG4l9ajMHRCZMaX7MFIi+KhDJtjOjePr3CgT7WZjpxPJLwskYfCeOcHiflyzwUSdDPhc9GZMdE6/GKGZ8WPk+UMNnMPMtDvepRsjZ7oewNTyCGsnD+URgyxRE2vUhXzO/XlDBvA3E5g8PvWX4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=E9+1MEB8; arc=none smtp.client-ip=185.125.25.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="cB3SRmzC"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Transfer-Encoding
-	:Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-	Sender:Reply-To:Content-ID:Content-Description;
-	bh=hUF503SshZFnhDTc/TnXqrKN0/ZZy1/GZ3WEZ0BbrjI=; b=cB3SRmzCdneY8cgh56Eemb7PlF
-	yFL6JsxdLZw5J8sO/8eTqXbSXxtqP/5OUxS4fTzQszsMfug6ufol/YKP9zR9hgGAsxGpJn7/OIA7Y
-	Ukt8xNXuhKMm7AVpf6e6cWMkWl0ucqIU9AQCuG5Dqf5evD9ueIIVwZig66QEMgv5oOZ8EsZYjPBDo
-	8EQdNBwT74H5jk801UgF8s7AsRA1dP6osrdrTbCE9jwZcSKgFXSMtx8mxCpmQTj0W6uO3Hs0u8OLz
-	0P9712ZQ2x8pfTIzp9Cs0aaqyI0VsWlkNsiL4vEsLaK7SR+lY1B87x+OKc/uCzFemw2KDF+YXd3ya
-	E4T692cA==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.98 #2 (Red Hat Linux))
-	id 1szFAD-0000000GMXd-1Y70;
-	Fri, 11 Oct 2024 12:54:37 +0000
-Date: Fri, 11 Oct 2024 05:54:37 -0700
-From: Christoph Hellwig <hch@infradead.org>
-To: =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>
-Cc: Christoph Hellwig <hch@infradead.org>,
-	Christian Brauner <brauner@kernel.org>,
-	Paul Moore <paul@paul-moore.com>, linux-fsdevel@vger.kernel.org,
-	linux-nfs@vger.kernel.org, linux-security-module@vger.kernel.org,
-	audit@vger.kernel.org, Trond Myklebust <trondmy@kernel.org>,
-	Anna Schumaker <anna@kernel.org>,
-	Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="E9+1MEB8"
+Received: from smtp-3-0001.mail.infomaniak.ch (unknown [IPv6:2001:1600:4:17::246c])
+	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4XQ6gk1wpTz1bb;
+	Fri, 11 Oct 2024 15:20:34 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
+	s=20191114; t=1728652834;
+	bh=t6ZV+Aef3oPv3lyEENojOAVZ16/VitLu0VzEYiYccvU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=E9+1MEB8gIvfq69xVhtuLunwoxi8XY6JouvIgYwzQr8dxGYAT/pg8XE3hjMK1v44X
+	 YECUDqbUYgrRKVY3rtpl8SB7jCklNWUWxzQaHoHIOZKPmm/tOXHQcSh7hbds6pKOnT
+	 QOezwOMY5Pei4iq+1PSR/02UNXI2NHErgpd8Swe8=
+Received: from unknown by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4XQ6gj3zvGz7HN;
+	Fri, 11 Oct 2024 15:20:33 +0200 (CEST)
+Date: Fri, 11 Oct 2024 15:20:30 +0200
+From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
+To: Christoph Hellwig <hch@infradead.org>
+Cc: Christian Brauner <brauner@kernel.org>, 
+	Paul Moore <paul@paul-moore.com>, linux-fsdevel@vger.kernel.org, linux-nfs@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, audit@vger.kernel.org, Trond Myklebust <trondmy@kernel.org>, 
+	Anna Schumaker <anna@kernel.org>, Alexander Viro <viro@zeniv.linux.org.uk>, 
+	Jan Kara <jack@suse.cz>
 Subject: Re: [RFC PATCH v1 1/7] fs: Add inode_get_ino() and implement
  get_ino() for NFS
-Message-ID: <ZwkgDd1JO2kZBobc@infradead.org>
+Message-ID: <20241011.yai6KiDa7ieg@digikod.net>
 References: <20241010152649.849254-1-mic@digikod.net>
  <ZwkaVLOFElypvSDX@infradead.org>
  <20241011.ieghie3Aiye4@digikod.net>
+ <ZwkgDd1JO2kZBobc@infradead.org>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20241011.ieghie3Aiye4@digikod.net>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+In-Reply-To: <ZwkgDd1JO2kZBobc@infradead.org>
+X-Infomaniak-Routing: alpha
 
-On Fri, Oct 11, 2024 at 02:47:14PM +0200, Mickaël Salaün wrote:
-> How to get the inode number with ->getattr and only a struct inode?
+On Fri, Oct 11, 2024 at 05:54:37AM -0700, Christoph Hellwig wrote:
+> On Fri, Oct 11, 2024 at 02:47:14PM +0200, MickaÃ«l SalaÃ¼n wrote:
+> > How to get the inode number with ->getattr and only a struct inode?
+> 
+> You get a struct kstat and extract it from that.
 
-You get a struct kstat and extract it from that.
-
+Yes, but how do you call getattr() without a path?
