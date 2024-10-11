@@ -1,92 +1,87 @@
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
+Received: from mail-qv1-f50.google.com (mail-qv1-f50.google.com [209.85.219.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E12E1D31BB
-	for <audit@vger.kernel.org>; Thu, 10 Oct 2024 20:40:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 383BAD529
+	for <audit@vger.kernel.org>; Fri, 11 Oct 2024 01:20:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728592828; cv=none; b=YAZZvc7rNACq+fhHY6PUfPhtsNTE/e3Ugmg3hMg3BwJ5hWDxW8pvpcJ3e+iygTatoSCcqMLs6q2oXiuehuTJtPXC2x9CFjM9874XQbXzsjFJcAUDlGwmz6MgqsrwWFtWH5bSr5UxP8yxRkKjb5+6ac2rtqw8iFzCZrKKbPVO6c8=
+	t=1728609654; cv=none; b=PmAg/gtIzPiMKqPqVQLhn58NkTixsW4shootxCn8pbFQOe8d7usSHKijxw7qHbLgyWClglewisCJMrdb7qYDLjO5/2xTqU3Rjvhi2iE4bMcQmEA30CkcCoTC8fskwDsDbRA0eLACIkRDdW2NaTaLuFgHAGUzfYhxKUyTg+C7GHM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728592828; c=relaxed/simple;
-	bh=zkZ6yU7DAD7YlmNJhmdip7MiifrOdjdqdbURkrcZAYA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Zpa3pXh6K1P2sH1wgJzlje7SMWCPp4nFjJPV140Fd1VpwO6rf6vxS6isaQhJRKGuqYX37Zx9ZP3QCbXSVmP4yJ1u1AA3Lw80cg1ipejzN6ERRAAReMkq8GXpTDwf9iChGhvVlRjGgeB7X+LIXyC2DD0mLOP+sfM10Jk0R9xOYJU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sigma-star.at; spf=pass smtp.mailfrom=sigma-star.at; dkim=pass (2048-bit key) header.d=sigma-star.at header.i=@sigma-star.at header.b=Vb26OtuE; arc=none smtp.client-ip=209.85.221.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sigma-star.at
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sigma-star.at
+	s=arc-20240116; t=1728609654; c=relaxed/simple;
+	bh=yslYLZ3UmvXQ3tXwi9DG46llkHldFxew638wc6nmTfk=;
+	h=Date:Message-ID:MIME-Version:Content-Type:From:To:Cc:Subject:
+	 References:In-Reply-To; b=TLLrK4ladWRm/hZ5UkcevLHnBDV0NcLEteEJc8HwAvIBErHiz31KAUeZsPTVZZW917d6dTUEr+A9voJ5OqetjORV9gqkHRmpU8Nm0+ELwhkjPeJ55xWH7+bgAuAtUEWd/NRL40Tfx7NJkuS0/6FR/gkc8LDuuJGVMZZLdxJRbDE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=M/3NUOpU; arc=none smtp.client-ip=209.85.219.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sigma-star.at header.i=@sigma-star.at header.b="Vb26OtuE"
-Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-37d51055097so461043f8f.3
-        for <audit@vger.kernel.org>; Thu, 10 Oct 2024 13:40:26 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="M/3NUOpU"
+Received: by mail-qv1-f50.google.com with SMTP id 6a1803df08f44-6cbd57cc35bso16835026d6.1
+        for <audit@vger.kernel.org>; Thu, 10 Oct 2024 18:20:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sigma-star.at; s=google; t=1728592825; x=1729197625; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rO42RQZBShP/lWCFh96DLSqblFSQl/8nGpu3kPW9gUQ=;
-        b=Vb26OtuEA5psk8oKRqbL9ncjFN+fSdcc05gol3AShlW2GBEilMuCE6vjNCikA1j0av
-         eWCcEDeJpfgjg0IYatYWao+zQpeqOYdbX1rTPuNPto9IPiRQ1i71tx1Oy1eTbnFgTVZK
-         lCj63PU0FWQphuTL4NmojGHEjHrlBTCtzL0u/fkNzI7EoiDptj01HX4ejt5TpvtehKBH
-         4DnXHvkq3zpeSbAl3osmghVDT1OlCL4tRuzRcehauHhq/MudRbtdgsW6ilXKiHvwNFnp
-         aQsSHKcfMlRUxwQk9FOLyhUoMa2aIpkvni8hbR2vHTchk71lgYxig+asFofWr470cchd
-         P0zg==
+        d=paul-moore.com; s=google; t=1728609651; x=1729214451; darn=vger.kernel.org;
+        h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
+         :mime-version:message-id:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DSYc5T3VWRhsmruLA3gY07A0OlNZL+RmUFs8WfbL2kA=;
+        b=M/3NUOpUqIoQ77RRYcYI/jJyZ/Xtik7haqQnRIc03MpHO+vtxDG2so4zK5yXMlOE70
+         esudG/z4yLG0d93IWpHOIDMhnwsPhvUSVQKzYI4U+RDv9nSGCIMc1aRQ8RgzC5/wTPO5
+         HmOyi5mXt6Ny+XHkhUuDcMaqWDk917J9DPurXoUOLSIDv4k2rMy8mK5O6tsbdHqgbNAt
+         qsWSihDuCmm2NYTlAhzp/Ysf1wkBA1JxdPenX97Qf67FGbBgF61TxwWWj1mK0F72B0OU
+         daZDc9DYyhJMId9SRHG1EcNLVI9r4z3RXRwF37OnDmv8CRz2LjSmJpk7hPPeAueeZqPG
+         M1Cw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728592825; x=1729197625;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=rO42RQZBShP/lWCFh96DLSqblFSQl/8nGpu3kPW9gUQ=;
-        b=hcCLfvZADKBl4h7tzLJszLbbsV4MpykdNyj7kP9vKPqg1M/Qhsc+g3ZgiON9s5nlKT
-         W/+FWQURGcqRwnH74fw0BkLPxbU32dJLFA0Lkn73jPqGCBPgWy+ap1Wa0f5C2yJcuuY1
-         4zeYSy1e03ICzhfBTIIbq7PnpZT+oecY6gX2a2tYLEUwz0y71z9HgUppu3TSmnyXwiJD
-         zXWch2vuBLAYHCRRINUer7rGZpx7QZLzJBemsbahZ58nD14dtjbXFctf5vtm3hFjo2lW
-         Ffi0uerllGnh5LofCxHzueuZ05OSuQ7gb8VCpbgQetdd2TlI2N5wOx9TLelZDIO7TLVx
-         ZzrQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXeV+zmGumU6Q14qWV8Rn6Gnf6MEL98161vE8JmuaFBBE94D+EJVMPUMPAEwCDdXumlSlkmmg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzwDz4sNPEywq5K1sCNKQuoc5qZAonPzqJZ2HaameYozVcUi5wL
-	3W+8OFxaX9+25WIoSCwylbD5lLS17Z+q548vlw62mYJgvox7OfCn/A+/tUmmyTg=
-X-Google-Smtp-Source: AGHT+IHxYd9hOLDOuUcfxARzg6HTs3XT+7x6QJejf/5EJIDnBLsxJtYDpjq4FC6Qz2lH63Rfd81qjQ==
-X-Received: by 2002:a5d:4591:0:b0:37d:498a:a233 with SMTP id ffacd0b85a97d-37d552ee198mr196344f8f.43.1728592824756;
-        Thu, 10 Oct 2024 13:40:24 -0700 (PDT)
-Received: from blindfold.localnet (84-115-238-31.cable.dynamic.surfer.at. [84.115.238.31])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-37d4b6a8928sm2339875f8f.7.2024.10.10.13.40.23
+        d=1e100.net; s=20230601; t=1728609651; x=1729214451;
+        h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
+         :mime-version:message-id:date:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=DSYc5T3VWRhsmruLA3gY07A0OlNZL+RmUFs8WfbL2kA=;
+        b=HBERDtun35JWMgnAkzMtSga23xro277wyC7zWpT7hl3lpytBKgE5C1SbOihSu/Vl7r
+         SiHM5mOSNi3uumKeeraI5qCaP7nrLZJpkqdwTFn54hbQG+iq5dj5z8ZmflJ0cMDMQM/i
+         iWzLY9DOW34qFt7tzwEvNjWtNT+am1ePbhI6Lu2jBW19vu7e9MbBrwOpJoOK3Wh5tV8s
+         LQofGqS3OF3Mv8NcDayveaHl7Tei0SNAmaJFOYItyoWx2Wrqb3I7TOasl3OyMVyXZFDI
+         Ofj0YE8HIzkdckcLsqyCOYnu2xosHaZZMbj0ftzKGKQK9TWa9dKfGCEsywJ7rEDJmyd/
+         29qA==
+X-Forwarded-Encrypted: i=1; AJvYcCXN5bOFIeZba0Sr0ZC/tAb+H71x9So+Xu5HNzB+8eddSu6q23AMDwip1Jsg4G12ucnKYU+VNg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwlZo4wRHYEq/fhDqy5seQgfhJiPIq2AYiHElcCX2v1uLTyHm7H
+	t2eL5LMm/2Z7mWnA5PQWW7xnX2PW4BtVWbjdlge0U1cKYhBbWZ013rOXkPDTcQ==
+X-Google-Smtp-Source: AGHT+IEqJeWFt79nQGeuR3bq2NUHrSRVHy+WW2D2IxkX40eKx9WlSMBeeYzd4yPkBCBf4eMRVOJxdw==
+X-Received: by 2002:a05:6214:498b:b0:6cb:d3e2:ea0d with SMTP id 6a1803df08f44-6cbefabae20mr21350876d6.12.1728609651103;
+        Thu, 10 Oct 2024 18:20:51 -0700 (PDT)
+Received: from localhost ([70.22.175.108])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6cbe8608ebasm10941006d6.80.2024.10.10.18.20.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Oct 2024 13:40:24 -0700 (PDT)
-From: Richard Weinberger <richard@sigma-star.at>
-To: Paul Moore <paul@paul-moore.com>
-Cc: Richard Weinberger <richard@nod.at>, upstream@sigma-star.at, netfilter-devel@vger.kernel.org, coreteam@netfilter.org, netdev@vger.kernel.org, linux-kernel@vger.kernel.org, pabeni@redhat.com, kuba@kernel.org, edumazet@google.com, davem@davemloft.net, kadlec@netfilter.org, pablo@netfilter.org, rgb@redhat.com, upstream+net@sigma-star.at, audit@vger.kernel.org, linux-security-module@vger.kernel.org
-Subject: Re: [PATCH] netfilter: Record uid and gid in xt_AUDIT
-Date: Thu, 10 Oct 2024 22:40:22 +0200
-Message-ID: <5924990.Vcsy2DjxtS@somecomputer>
-In-Reply-To: <CAHC9VhRDZVJbhCbVkfs8NC=vAx-QdQwX_jMq51xzoTxFuxSXLg@mail.gmail.com>
-References: <20241009203218.26329-1-richard@nod.at> <4370155.VQJxnDRnGh@somecomputer> <CAHC9VhRDZVJbhCbVkfs8NC=vAx-QdQwX_jMq51xzoTxFuxSXLg@mail.gmail.com>
+        Thu, 10 Oct 2024 18:20:50 -0700 (PDT)
+Date: Thu, 10 Oct 2024 21:20:50 -0400
+Message-ID: <c4260a81d3c0ebe54c191b432ca33140@paul-moore.com>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0 
+Content-Type: text/plain; charset=UTF-8 
+Content-Transfer-Encoding: 8bit
+From: Paul Moore <paul@paul-moore.com>
+To: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>, Christian Brauner <brauner@kernel.org>
+Cc: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>, linux-fsdevel@vger.kernel.org, linux-nfs@vger.kernel.org, linux-security-module@vger.kernel.org, audit@vger.kernel.org, Eric Paris <eparis@redhat.com>
+Subject: Re: [PATCH RFC v1 2/7] audit: Fix inode numbers
+References: <20241010152649.849254-2-mic@digikod.net>
+In-Reply-To: <20241010152649.849254-2-mic@digikod.net>
 
-Am Donnerstag, 10. Oktober 2024, 21:09:31 CEST schrieb Paul Moore:
-> However, as part of that commit we also dropped a number of fields
-> because it wasn't clear that anyone cared about them and if we were
-> going to (re)normalize the NETFILTER_PKT record we figured it would be
-> best to start small and re-add fields as needed to satisfy user
-> requirements.  I'm working under the assumption that if you've taken
-> the time to draft a patch and test it, you have a legitimate need :)
+On Oct 10, 2024 =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net> wrote:
+> 
+> Use the new inode_get_ino() helper to log the user space's view of
+> inode's numbers instead of the private kernel values.
+> 
+> Cc: Paul Moore <paul@paul-moore.com>
+> Cc: Eric Paris <eparis@redhat.com>
+> Signed-off-by: Mickaël Salaün <mic@digikod.net>
+> ---
+>  security/lsm_audit.c | 10 +++++-----
+>  1 file changed, 5 insertions(+), 5 deletions(-)
 
-I'm currently exploring ways to log reliable what users/containers
-create what network connections.
-So, netfilter+conntrack+xt_AUDIT seemed legit to me.
+Acked-by: Paul Moore <paul@paul-moore.com>
 
-Thanks,
-//richard
-
-=2D-=20
-=E2=80=8B=E2=80=8B=E2=80=8B=E2=80=8B=E2=80=8Bsigma star gmbh | Eduard-Bodem=
-=2DGasse 6, 6020 Innsbruck, AUT
-UID/VAT Nr: ATU 66964118 | FN: 374287y
-
-
+--
+paul-moore.com
