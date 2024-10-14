@@ -1,51 +1,44 @@
-Received: from smtp-bc0d.mail.infomaniak.ch (smtp-bc0d.mail.infomaniak.ch [45.157.188.13])
+Received: from smtp-bc0c.mail.infomaniak.ch (smtp-bc0c.mail.infomaniak.ch [45.157.188.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF8A41AB52D
-	for <audit@vger.kernel.org>; Mon, 14 Oct 2024 13:13:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.157.188.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A66414A4F7
+	for <audit@vger.kernel.org>; Mon, 14 Oct 2024 13:30:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.157.188.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728911634; cv=none; b=MYE0/xsQ8FeMnhcHwcMgiTub6FIEcoxifjSjlDRdS40ahu5EDiE/WlTIn7MFwg2J6VseDlq3mKAU0rh7P8RmBINN/0ITGdD9E1g7cEl80c+gNUQRyuP3FY5S6pWjc+MkIybirjjFtGrJbyhGhMVQdq+EiIxsFAacPSassFJF/C4=
+	t=1728912656; cv=none; b=VKq9IBTQqr7vYnTIw11m57JlbFaBlLs/5rdPMjaWY3jc2Wj+8j7DMfo+X1OnCZzcqai9DHgXoq9eJFRaYgBUZM+0Y4iukvOy89NZTgSsLgwGnQKCN6mmsc9+2FNIls37sCqLp7UN3G5YNX1DWwMlDqGa4PKZxPsf9XUHuXr0LAc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728911634; c=relaxed/simple;
-	bh=YZAwdhLxqIVEsN8AzkOH372BYEQdFlQUVF42OlinRyY=;
+	s=arc-20240116; t=1728912656; c=relaxed/simple;
+	bh=2UVqbexnqNci3grd/5BSq40pYQ2u6L0Swq8qIQHkBKc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Svd0bqEBWOmc2kzejpBK/Hq1LYbLWQmPiuh+OYU68of36IYqAc0SqdQoGy/Vw0NpPo34lgi6M5AB49yv4OE7FZE+xJ0xXZJ4vvVIvfYLUzmXAkslzI3E/OoSheY5OZKoZfnnS3A0sfBqW91Ha6PRZM1icYx9li7Yuify4qzfITA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=v993vigk; arc=none smtp.client-ip=45.157.188.13
+	 Content-Type:Content-Disposition:In-Reply-To; b=IxD5cR9UYBC3Wt5A0jJPGcpLN1jnkN1eT63J91bH/b1HpvxycwzsVqgiB+4lqYLqg9idbpgwmuNexyHVj356SF4gC1NQtQJ9MHuZ7+WMBDwfMd8AJV2GGX1nIKwIkXbUPzGwTNcrdR3vawImufzj3VBIeMJ3+d069R8OFzzK1OI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=IXgFt6lR; arc=none smtp.client-ip=45.157.188.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="v993vigk"
-Received: from smtp-4-0000.mail.infomaniak.ch (unknown [IPv6:2001:1600:7:10:40ca:feff:fe05:0])
-	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4XRyNX6m0TzlcM;
-	Mon, 14 Oct 2024 15:13:48 +0200 (CEST)
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="IXgFt6lR"
+Received: from smtp-3-0001.mail.infomaniak.ch (unknown [IPv6:2001:1600:4:17::246c])
+	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4XRymB46ZCzY1y;
+	Mon, 14 Oct 2024 15:30:50 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
-	s=20191114; t=1728911628;
-	bh=Yd8xTfXZsZiPbyGaXM8oxi4qY6znQrMCC6wFQMaJAxg=;
+	s=20191114; t=1728912650;
+	bh=Po6hgLNsaKhPpGljJr4fPdd1Y7bt7xIfi6p+nTtQGvw=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=v993vigkwHSQ+l5Pil6ZeqOGzi3Wn6Wx5mLsxeB7hlZzqMM9EaGIziSps/pGeDj1l
-	 /VHneQcEcsHKkGRF+Qo2W/liXjdSO/njK8zyIPP9sXRuWkao3/+iBL7tY4zdiduUED
-	 jauTWinPO4rysuIze5V6zh4EsvKyDu+ykcY0b658=
-Received: from unknown by smtp-4-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4XRyNX2wWwzFjk;
-	Mon, 14 Oct 2024 15:13:45 +0200 (CEST)
-Date: Mon, 14 Oct 2024 15:13:41 +0200
+	b=IXgFt6lRv5nmZd4eqoFCNKUKNkWSpMmiDNljyTkl0XRtSYm3240gTMrFL8EKWrkJb
+	 t8uAlIcC/5Nk9NxuH7OJB9dwmiPobZxTL4E/sfEZQeEjG9NiCQclAW/2J/sONOu7lE
+	 qA9IT52drx1bUvQt37VPI/OPjq+Z2G0FRxIGGt/0=
+Received: from unknown by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4XRym96Pn1zTsM;
+	Mon, 14 Oct 2024 15:30:49 +0200 (CEST)
+Date: Mon, 14 Oct 2024 15:30:45 +0200
 From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
-To: Christoph Hellwig <hch@infradead.org>
-Cc: Burn Alting <burn.alting@iinet.net.au>, audit@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, linux-nfs@vger.kernel.org, linux-fsdevel@vger.kernel.org
-Subject: Re: [RFC PATCH v1 1/7] fs: Add inode_get_ino() and implement
- get_ino() for NFS
-Message-ID: <20241014.seeN6daap2ta@digikod.net>
-References: <20241011.yai6KiDa7ieg@digikod.net>
- <Zwkm5HADvc5743di@infradead.org>
- <20241011.aetou9haeCah@digikod.net>
- <Zwk4pYzkzydwLRV_@infradead.org>
- <20241011.uu1Bieghaiwu@digikod.net>
- <05cb94c0dda9e1b23fe566c6ecd71b3d1739b95b.camel@kernel.org>
- <0e4e7a6d-09e0-480d-baa9-a2e7522a088a@iinet.net.au>
- <ZwzeGausiU0IDkFy@infradead.org>
- <e0188174-a8ae-461b-b30a-bc7acd545a18@iinet.net.au>
- <Zw0L8ZrEani3uWa5@infradead.org>
+To: Paul Moore <paul@paul-moore.com>
+Cc: Christian Brauner <brauner@kernel.org>, linux-fsdevel@vger.kernel.org, 
+	linux-nfs@vger.kernel.org, linux-security-module@vger.kernel.org, audit@vger.kernel.org, 
+	Eric Paris <eparis@redhat.com>
+Subject: Re: [RFC PATCH v1 2/7] audit: Fix inode numbers
+Message-ID: <20241014.Ahhahz2ux0ga@digikod.net>
+References: <20241010152649.849254-1-mic@digikod.net>
+ <20241010152649.849254-2-mic@digikod.net>
+ <CAHC9VhR8AFZN4tU1oAkaHb+CQDCe2_4T4X0oq7xekxCYkFYv6A@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
@@ -54,27 +47,27 @@ List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <Zw0L8ZrEani3uWa5@infradead.org>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAHC9VhR8AFZN4tU1oAkaHb+CQDCe2_4T4X0oq7xekxCYkFYv6A@mail.gmail.com>
 X-Infomaniak-Routing: alpha
 
-On Mon, Oct 14, 2024 at 05:17:53AM -0700, Christoph Hellwig wrote:
-> On Mon, Oct 14, 2024 at 11:12:25PM +1100, Burn Alting wrote:
-> > > > PATH records is no longer forensically defensible and it's use as a
-> > > > correlation item is of questionable value now?
-> > > 
-> > > What do you mean with forensically defensible?
-> > 
-> > If the auditd system only maintains a 32 bit variable for an inode value,
-> > when it emits an inode number, then how does one categorically state/defend
-> > that the inode value in the audit event is the actual one on the file
-> > system. The PATH record will offer one value (32 bits) but the returned
-> > inode value from a stat will return another (the actual 64 bit value).
-> > Basically auditd would not be recording the correct value.
+On Fri, Oct 11, 2024 at 05:34:21PM -0400, Paul Moore wrote:
+> On Thu, Oct 10, 2024 at 11:26 AM Mickaël Salaün <mic@digikod.net> wrote:
+> >
+> > Use the new inode_get_ino() helper to log the user space's view of
+> > inode's numbers instead of the private kernel values.
+> >
+> > Cc: Paul Moore <paul@paul-moore.com>
+> > Cc: Eric Paris <eparis@redhat.com>
+> > Signed-off-by: Mickaël Salaün <mic@digikod.net>
+> > ---
+> >  security/lsm_audit.c | 10 +++++-----
+> >  1 file changed, 5 insertions(+), 5 deletions(-)
 > 
-> Does auditd only track 32-bit inodes?  If yes, it is fundamentally
-> broken.
+> While answering some off-list questions regarding audit, I realized
+> we've got similar issues with audit_name->ino and audit_watch->ino.
+> It would be nice if you could also fix that in this patchset.
 
-auditd logs 32-bit inodes on 32-bit architecture, whereas it should
-always log 64-bit inodes.  The goal of this patch series is to fix this
-this issue for auditd and other kernel logs (and to backport these
-fixes).
+I can do that with the next version, but I'm wondering how it would fit
+with the UAPI's struct audit_rule_data which has only 32-bit
+fields/values.  Does 64-bit inode filtering currently work?
