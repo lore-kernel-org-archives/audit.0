@@ -1,131 +1,150 @@
-Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com [209.85.219.179])
+Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com [209.85.219.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5857A40858
-	for <audit@vger.kernel.org>; Thu, 17 Oct 2024 19:33:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1461D1D0DC4
+	for <audit@vger.kernel.org>; Thu, 17 Oct 2024 20:21:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729193611; cv=none; b=ZEOSIgNqwBd45/6PILa7ckKCzuw/AFciaYaK0ob2S4W01maRnL+FsY21aXjIthb8RE7+BwgY38ojx/kqBb6DMjHYZV9e7J/SkKaTvgzYxwwvjG0oe0VQKZIPjKQGl+NFCbwbMoMsUf708Y7msvDpozEPlPi/eKSucIpxE2kE48U=
+	t=1729196512; cv=none; b=Ra+d+BJ0VTXojYQTk3kXc0VvAGkj3h6yTqP51kFc5+7ZqHTq0xPI7oHn3PxtdmmeKUerteWBGvb0DDqzoQ98b0T7ED5oaZ9GMVfhWIOlf4kJAJxr0Mp+j98s5pfXAm3DOfysfGi9c6viZo2ygro9MFbgrGtpvaCGOF4dWUGQVmM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729193611; c=relaxed/simple;
-	bh=YPykuqBMoGYJGme4tDpOMLGEXVLGvtgHPmv5wQkHB8k=;
+	s=arc-20240116; t=1729196512; c=relaxed/simple;
+	bh=2Z5WKoLPYT+lT5L20jzLpq8I6hZFsPuZELk5THlcVg4=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=h+CByoK6vyh/ngXxeiWbWy8bYfFh0MWRwQKCBRpNpefq23fgQ+lvf5vaUnQHM1D3epnoNIgZJlye/oVtXSh2di+c+N+var7m+qoKMvjEsClUwMrtZw7Ejwufzs5ComsWuvsW2kl55fRNQZkls4MOa7fmZW/k5qnpuwPKO/UuHc8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=aSBR9ZJ0; arc=none smtp.client-ip=209.85.219.179
+	 To:Cc:Content-Type; b=da4wlxiWnj/hufAUl5n9T3lk7D66MZecBq6RU3s9jrGbEnqziihT0MSI/hlFIWqZud9074CBBcV8nlY/ZPnn5melORnUDlhKvHiFTT3auskExRBuMk/9Mbs5qIX5R5yzci1jfXCxFgeWjUTqNqv9IVyDd4kTThoNyniN8cCP/sk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=L/BUWMkn; arc=none smtp.client-ip=209.85.219.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="aSBR9ZJ0"
-Received: by mail-yb1-f179.google.com with SMTP id 3f1490d57ef6-e2975432b8cso1582919276.1
-        for <audit@vger.kernel.org>; Thu, 17 Oct 2024 12:33:26 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="L/BUWMkn"
+Received: by mail-yb1-f175.google.com with SMTP id 3f1490d57ef6-e29218d34f8so1068287276.1
+        for <audit@vger.kernel.org>; Thu, 17 Oct 2024 13:21:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1729193605; x=1729798405; darn=vger.kernel.org;
+        d=paul-moore.com; s=google; t=1729196506; x=1729801306; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=DKg/nPc/+ukx/a7yPgUnKPP0QkFDMNNuytqTQbZzVJY=;
-        b=aSBR9ZJ0W/7neo0Nc6mhtj5o+J0a1GLH4xqw1TSDFaEuQpXckThy8exJy0mleTJl4A
-         2/DxGsEj1QgaFlBl7NeRboZYnTMH4Qkv0zAfEnr8FcgxQO/zvwv3DBvXrVrD81DKpOH3
-         3k1y1SbLrhLsI24uAtw6RnRX4SUakIZRHKtJ5ckVpabjXFrCrJ62kx08tCZ/CL7GKLTM
-         LEDNOhvuly42Vgei1ApswM+Vcufzi1KhQOtnK3sBHiqUKDtUOgNj4mWfetdgjUnx5xpz
-         un/cdn2Fr+2MCKsfB/542DySTbJ3nSfnW9wgnQtJXs5GcWElgAJyiQ98RqPpg4jswLsY
-         tetQ==
+        bh=ZkT9XPOVz4nESR8taQmQTNvM14toSm1aIM8trf17CDA=;
+        b=L/BUWMknNZmilGvb7bqBhmlu4PQv2K5I4RqEgEw4syBgh037dj/0qGVVnI9Qix3FMc
+         U8rxqujESY4UpZa+GOM/LpnVxAhF7yD0WrPYDm85Auq1/hNbQjuuAElmB//hcnpb8y1f
+         h6mFwMFK30JTCeUV5IHpRBXf2dqukUBq+USdkl0HI0zb1mkoQzXX258TPGELRKbWYUSE
+         FZ5kqqVp74xzn7fLtN61tYN1/872cdm5O4mgIEue9yBn4HxHpsI3XId+agGRqpZiX1bJ
+         n0YVWlzUz4e6RxRIdzFppMALZOow3m2abWQIQsCG/hqH4TqBkimWwQLw5+qdpo8YtJMx
+         c2qw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729193605; x=1729798405;
+        d=1e100.net; s=20230601; t=1729196506; x=1729801306;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=DKg/nPc/+ukx/a7yPgUnKPP0QkFDMNNuytqTQbZzVJY=;
-        b=U/UCGZ0W8V1O4Baq/vpNAtEzdfFdzk/R7u6wC7cLTGD7wzbMZVxRnvtyJKApdMyLoy
-         8WacgGrp9NYLgHMkCIOh4IG8ylbXE+1dKYvFJMMsIdKZAuPx4CM0G4BtWnNrqkjNlDU+
-         YRIAI1gTIBhRppkhYqHVDO3JfKra1Gom9/LYcVXMdIEzbHaSJcPkOwWALpG3872qB7Td
-         tJxlkNRUwJMOlA+XsXk+ouSS0ILCu/P8Pj9FL4Apx/ijWqQ7CFjmlogyoUb8fcqclT6H
-         2YF8xaZ4FAgdWUPqp5D2cnGgPPSSSlppOAWxYjNGx/I0Na+QPqQnwEa1btoY0XUIq7kr
-         X8pA==
-X-Forwarded-Encrypted: i=1; AJvYcCVovqP4m4pdHLauFP3Zy9aJ7WQ+DRYN+q4gf2f2VGTBiaFnuSShhnzBv/HIpasLQ8sl80E17g==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwM+0G5aKj+fP+wGj7R68B7T9KXDDGlm0cc9qzfCsvXPIh1NstL
-	7HaFptDszYBDjpn+09ueCp+YL4kKrYB+N5wVhAZUSmAy20hxkKZOFhyZO27gs0FjGsAGmKHz9qJ
-	NQCOyf6F3ifzVCetnaTnAD3goargQHmP55E2q
-X-Google-Smtp-Source: AGHT+IHqNlDwRQptEKepQlbF2NzrA/nSCVn1VxVzRtHF0swGyfbLRzfteDR6Jn0EgFt4fQ+MI6qNV15rO4NFEdU9doo=
-X-Received: by 2002:a05:6902:10c6:b0:e29:485:f57c with SMTP id
- 3f1490d57ef6-e2919da6c94mr19703866276.29.1729193605114; Thu, 17 Oct 2024
- 12:33:25 -0700 (PDT)
+        bh=ZkT9XPOVz4nESR8taQmQTNvM14toSm1aIM8trf17CDA=;
+        b=lwA/elXKWuskEjp/8cTkOdDNG5B6nYL3X68EpLRSadf9Ci6dGktlTU1r3o0GJ4x3DQ
+         +ZY001Y/P9maqaUzMgOSRb84sPIzBLfUx65pMjfjpXoMHy9i3rkS2fTh3ZD1m5L+3QlU
+         xVtXKGyoW+Z7xoOaBp0fE3hq5HopMZuDCR/iHMg6b2Tt0CxPnS7uUiQY6suz0+hM5oiX
+         ZAxLVIWPKKwzzI7tCwHdtlx7wDpFq2sjt2uQYqsB1dw8AB/govC3oAwouHLSAe+DjS1S
+         1pwI7d4tVotHsPhhCJ6XJNRhOmvIMETuJZfXsuhkkbEfZnm7fpDylFyiwKObYHrOdQBJ
+         SX4Q==
+X-Forwarded-Encrypted: i=1; AJvYcCWoY3qLWbpsTX1O4xgg+RsiFOJwfRzvtTLkluseok4XTN1zJFe5uYv+jbG5DryhS0QOfmdtZA==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx15MGDShyO9/oyrHNw1SdYBGpO51o3kf37ICpMlwQOR8sBiLk9
+	4kd/EX/L5ariA3UlDne1A8ne0zWZnZyUpk1+u+WCHwjdkjE26drGQMMiIwyP55ls9XXj6F2Otc6
+	LbrU0pYa7ebTue7/ncEd2/+vvoyX1amm+daLj
+X-Google-Smtp-Source: AGHT+IFQ19Riv0f6yE9SxFB8BFiwD1UmDvqOz9Z/MXc/PMUECV9xW4KWUKcr3czucY0z9CXixZ3ple6+ZcJ+8qufymY=
+X-Received: by 2002:a25:9b07:0:b0:e28:c6be:4ce6 with SMTP id
+ 3f1490d57ef6-e2bafe21356mr353527276.28.1729196506045; Thu, 17 Oct 2024
+ 13:21:46 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241016131917.17193-1-fw@strlen.de> <Zw_PY7MXqNDOWE71@calendula>
- <20241016161044.GC6576@breakpoint.cc> <ZxE6H03jhdp3gONB@calendula>
-In-Reply-To: <ZxE6H03jhdp3gONB@calendula>
+References: <20241010152649.849254-1-mic@digikod.net> <20241016-mitdenken-bankdaten-afb403982468@brauner>
+ <CAHC9VhRd7cRXWYJ7+QpGsQkSyF9MtNGrwnnTMSNf67PQuqOC8A@mail.gmail.com>
+ <5bbddc8ba332d81cbea3fce1ca7b0270093b5ee0.camel@hammerspace.com>
+ <CAHC9VhQVBAJzOd19TeGtA0iAnmccrQ3-nq16FD7WofhRLgqVzw@mail.gmail.com>
+ <ZxEmDbIClGM1F7e6@infradead.org> <CAHC9VhTtjTAXdt_mYEFXMRLz+4WN2ZR74ykDqknMFYWaeTNbww@mail.gmail.com>
+ <5a5cfe8cb8155c2bb91780cc75816751213e28d7.camel@kernel.org>
+In-Reply-To: <5a5cfe8cb8155c2bb91780cc75816751213e28d7.camel@kernel.org>
 From: Paul Moore <paul@paul-moore.com>
-Date: Thu, 17 Oct 2024 15:33:14 -0400
-Message-ID: <CAHC9VhQxp4_qhuuKip7qP_Jz-ysv1RZ1o83iARCRP7Psh_dBNQ@mail.gmail.com>
-Subject: Re: [PATCH nf-next v3 0/5] netfilter: nf_tables: reduce set element
- transaction size
-To: Pablo Neira Ayuso <pablo@netfilter.org>
-Cc: Florian Westphal <fw@strlen.de>, netfilter-devel@vger.kernel.org, rgb@redhat.com, 
-	audit@vger.kernel.org
+Date: Thu, 17 Oct 2024 16:21:34 -0400
+Message-ID: <CAHC9VhR=-MMA3JoUABhwdqkraDp_vvsK2k7Nh0NA4yomtn855w@mail.gmail.com>
+Subject: Re: [RFC PATCH v1 1/7] fs: Add inode_get_ino() and implement
+ get_ino() for NFS
+To: Jeff Layton <jlayton@kernel.org>
+Cc: Christoph Hellwig <hch@infradead.org>, Trond Myklebust <trondmy@hammerspace.com>, 
+	"brauner@kernel.org" <brauner@kernel.org>, "jack@suse.cz" <jack@suse.cz>, "mic@digikod.net" <mic@digikod.net>, 
+	"linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>, "anna@kernel.org" <anna@kernel.org>, 
+	"linux-security-module@vger.kernel.org" <linux-security-module@vger.kernel.org>, 
+	"audit@vger.kernel.org" <audit@vger.kernel.org>, 
+	"linux-nfs@vger.kernel.org" <linux-nfs@vger.kernel.org>, 
+	"viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Oct 17, 2024 at 12:24=E2=80=AFPM Pablo Neira Ayuso <pablo@netfilter=
-.org> wrote:
->
-> Cc'ing audit ML.
-
-Thank you.
-
-> On Wed, Oct 16, 2024 at 06:10:44PM +0200, Florian Westphal wrote:
-> > Pablo Neira Ayuso <pablo@netfilter.org> wrote:
-> > > > This is bad, but I do not know if we can change things to make
-> > > > nft_audit NOT do that.  Hence add a new workaround patch that
-> > > > inflates the length based on the number of set elements in the
-> > > > container structure.
+On Thu, Oct 17, 2024 at 1:05=E2=80=AFPM Jeff Layton <jlayton@kernel.org> wr=
+ote:
+> On Thu, 2024-10-17 at 11:15 -0400, Paul Moore wrote:
+> > On Thu, Oct 17, 2024 at 10:58=E2=80=AFAM Christoph Hellwig <hch@infrade=
+ad.org> wrote:
+> > > On Thu, Oct 17, 2024 at 10:54:12AM -0400, Paul Moore wrote:
+> > > > Okay, good to know, but I was hoping that there we could come up wi=
+th
+> > > > an explicit list of filesystems that maintain their own private ino=
+de
+> > > > numbers outside of inode-i_ino.
 > > >
-> > > It actually shows the number of entries that have been updated, right=
-?
-> > >
-> > > Before this series, there was a 1:1 mapping between transaction and
-> > > objects so it was easier to infer it from the number of transaction
-> > > objects.
+> > > Anything using iget5_locked is a good start.  Add to that file system=
+s
+> > > implementing their own inode cache (at least xfs and bcachefs).
 > >
-> > Yes, but... for element add (but not create), we used to not do anythin=
-g
-> > (no-op), so we did not allocate a new transaction and pretend request
-> > did not exist.
->
-> You refer to element updates above, those used to be elided, yes. Now
-> they are shown. I think that is correct.
->
-> > Now we can enter update path, so we do allocate a transaction, hence,
-> > audit record changes.
+> > Also good to know, thanks.  However, at this point the lack of a clear
+> > answer is making me wonder a bit more about inode numbers in the view
+> > of VFS developers; do you folks care about inode numbers?  I'm not
+> > asking to start an argument, it's a genuine question so I can get a
+> > better understanding about the durability and sustainability of
+> > inode->i_no.  If all of you (the VFS folks) aren't concerned about
+> > inode numbers, I suspect we are going to have similar issues in the
+> > future and we (the LSM folks) likely need to move away from reporting
+> > inode numbers as they aren't reliably maintained by the VFS layer.
 > >
-> > What if we add an internal special-case 'flush' op in the future?
 >
-> You mean, if 'flush' does not get expanded to one delete transaction
-> for each element. Yes, that would require to look at ->nelems as in
-> this patch.
+> Like Christoph said, the kernel doesn't care much about inode numbers.
 >
-> > It will break, and the workaround added in this series needs to be
-> > extended.
-> >
-> > Same for an other change that could elide a transaction request, or,
-> > add expand something to multiple ones (as flush currently does).
-> >
-> > Its doesn't *break* audit, but it changes the output.
+> People care about them though, and sometimes we have things in the
+> kernel that report them in some fashion (tracepoints, procfiles, audit
+> events, etc.). Having those match what the userland stat() st_ino field
+> tells you is ideal, and for the most part that's the way it works.
 >
-> My understanding is that audit is exposing the entries that have been
-> added/updated/deleted, which is already sparse: Note that nftables
-> audit works at 'table' granurality.
->
-> IIRC, one of the audit maintainers mentioned it should be possible to
-> add chain and set to the audit logs in the future, such change would
-> necessarily change the audit logs output.
+> The main exception is when people use 32-bit interfaces (somewhat rare
+> these days), or they have a 32-bit kernel with a filesystem that has a
+> 64-bit inode number space (NFS being one of those). The NFS client has
+> basically hacked around this for years by tracking its own fileid field
+> in its inode.
 
-For those of us joining the conversation late, can you provide a quick
-summary of what you want to change in audit and why?
+When I asked if the VFS dev cared about inode numbers this is more of
+what I was wondering about.  Regardless of if the kernel itself uses
+inode numbers for anything, it does appear that users do care about
+inode numbers to some extent, and I wanted to know if the VFS devs
+viewed the inode numbers as a first order UAPI interface/thing, or if
+it was of lesser importance and not something the kernel was going to
+provide much of a guarantee around.  Once again, I'm not asking this
+to start a war, I'm just trying to get some perspective from the VFS
+dev side of things.
+
+> A lot of the changes can probably be automated via coccinelle. I'd
+> probably start by turning all of the direct i_ino accesses into static
+> inline wrapper function calls. The hard part will be parceling out that
+> work into digestable chunks. If you can avoid "flag day" changes, then
+> that's ideal.  You'd want a patch per subsystem so you can collect
+> ACKs.
+>
+> The hardest part will probably be the format string changes. I'm not
+> sure you can easily use coccinelle for that, so that may need to be
+> done by hand or scripted with python or something.
+
+Out of curiosity, is this on anyone's roadmap?  I've already got
+enough work in security land to keep myself occupied until I'm hit by
+that mythical bus, so I can't volunteer in good conscience, but I (and
+many others in security land) would be grateful for a single,
+consistent way to fetch inode numbers :)
 
 --=20
 paul-moore.com
