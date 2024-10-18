@@ -1,96 +1,89 @@
-Received: from ganesha.gnumonks.org (ganesha.gnumonks.org [213.95.27.120])
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F3021D5142;
-	Thu, 17 Oct 2024 22:53:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.95.27.120
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A9003BB24;
+	Fri, 18 Oct 2024 05:15:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729205631; cv=none; b=P0KEhLBz6w8CBOgAEiM47yPJ3Wkqf2CV1N6c8VXWCw6istridd8YNsWthadDbT7EpQCAYZCpgYYRAhXYyVC0xFTQrew2dcMHu2cSjRCgG/wu817juHFLfUY4Qf6ukZ2NmC4SPxkLaAz/is4dKlv8K+YrdXfAboSiESZWID4gVOM=
+	t=1729228549; cv=none; b=kE4CdBt1TiUL8ucnfGFOpNYwEVfKhIPjlr5YuX8is5if2WbbIaw+4Tfd1vcf85hJgteed5KYl9uf9QTlH5ba1Gnlq+gGr4ldY3cL+/X1rtSuT+Pvm5W+sV/8kVfaCXqUxHPm5464OEOl3JQaOGB8oRmGYAHWNPX2abzPPquwz6Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729205631; c=relaxed/simple;
-	bh=LhdvZpxNLLpfSmVtoOjyngMU5RMwJVe0sTtbH6Uxp1U=;
+	s=arc-20240116; t=1729228549; c=relaxed/simple;
+	bh=osd+Afx7KZ986PJ9Yt3tyik2H2xn0VcmGztB3We7urE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=o6BTs1LJ8LnbjThdDhZDbIWLjlSVuJaHRuhDtHlUhQXm9qC0GV/Mmj0tor+KV7bGUbMFmwSk7eqc3vA7VV4ISaLo404mAeVkgtOvXnoSWR8RNKA8sXfg7YYTX+nI90WYFi7xqztrcuyK4QcvozoInnp9GId0ztFQET7tTGAy8hs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=netfilter.org; spf=pass smtp.mailfrom=gnumonks.org; arc=none smtp.client-ip=213.95.27.120
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=netfilter.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gnumonks.org
-Received: from [78.30.37.63] (port=44738 helo=gnumonks.org)
-	by ganesha.gnumonks.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <pablo@gnumonks.org>)
-	id 1t1ZNC-00GDho-S3; Fri, 18 Oct 2024 00:53:43 +0200
-Date: Fri, 18 Oct 2024 00:53:38 +0200
-From: Pablo Neira Ayuso <pablo@netfilter.org>
-To: Paul Moore <paul@paul-moore.com>
-Cc: Florian Westphal <fw@strlen.de>, netfilter-devel@vger.kernel.org,
-	rgb@redhat.com, audit@vger.kernel.org
-Subject: Re: [PATCH nf-next v3 0/5] netfilter: nf_tables: reduce set element
- transaction size
-Message-ID: <ZxGVch7AsOT5Ef_s@calendula>
-References: <20241016131917.17193-1-fw@strlen.de>
- <Zw_PY7MXqNDOWE71@calendula>
- <20241016161044.GC6576@breakpoint.cc>
- <ZxE6H03jhdp3gONB@calendula>
- <CAHC9VhQxp4_qhuuKip7qP_Jz-ysv1RZ1o83iARCRP7Psh_dBNQ@mail.gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=iluWzqD0F92UU57BksjkIiY8pqnU78p0OtWT0OGe9XeNO1NTjE4X+CDv5MP8vLMkOYxl2+Qxw5iNyTm0MsAr8rLxemeG9bEK+7frCISAYKaAxbssPPtQBftScrs0g4W+uln4SHFDD5106jB6A8RZsPQFTD6YdL4kB2tWcyflBaY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=z/x7GOEn; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="z/x7GOEn"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+	:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=cny8j9MGeLy8h+jkGZlUWGSEbbVf30O3fi+EU6iRwhQ=; b=z/x7GOEnr7yw3kxAzfoJLMNa5k
+	IL6FU8B2K6hoU03mRWfliedPompXVDs8XQYa2tDu0wC9yFVHxbQJKD13AoaZ219Z8yLYUtp3nQDvU
+	kuOjL3bnKLyDzaujihKXe5u3kRL1w6LkoRelIuJ8L1Fx+73DKtx/5eD9711svAPybTJnoizGMt7tX
+	FPhNgzj58xPH+Er6VmW2KFibBlFl4QCHUK/ui6x8ZOz0t+FoLaITw9vev06DgOSE5/GRk7yJ7Mtm2
+	dvLtFgT0HDl0BU3kieH05pri7onhxBQ8DrL3aLQDOyJLyWNGDMszvaFdlHdrGV4utOA3217I/9FXv
+	9+8VSDmQ==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.98 #2 (Red Hat Linux))
+	id 1t1fKz-0000000Gwbz-05nQ;
+	Fri, 18 Oct 2024 05:15:45 +0000
+Date: Thu, 17 Oct 2024 22:15:44 -0700
+From: Christoph Hellwig <hch@infradead.org>
+To: Jan Kara <jack@suse.cz>
+Cc: Christoph Hellwig <hch@infradead.org>, Paul Moore <paul@paul-moore.com>,
+	Trond Myklebust <trondmy@hammerspace.com>,
+	"brauner@kernel.org" <brauner@kernel.org>,
+	"mic@digikod.net" <mic@digikod.net>,
+	"linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+	"anna@kernel.org" <anna@kernel.org>,
+	"linux-security-module@vger.kernel.org" <linux-security-module@vger.kernel.org>,
+	"audit@vger.kernel.org" <audit@vger.kernel.org>,
+	"linux-nfs@vger.kernel.org" <linux-nfs@vger.kernel.org>,
+	"viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>
+Subject: Re: [RFC PATCH v1 1/7] fs: Add inode_get_ino() and implement
+ get_ino() for NFS
+Message-ID: <ZxHvAN85R9gP0bml@infradead.org>
+References: <20241010152649.849254-1-mic@digikod.net>
+ <20241016-mitdenken-bankdaten-afb403982468@brauner>
+ <CAHC9VhRd7cRXWYJ7+QpGsQkSyF9MtNGrwnnTMSNf67PQuqOC8A@mail.gmail.com>
+ <5bbddc8ba332d81cbea3fce1ca7b0270093b5ee0.camel@hammerspace.com>
+ <CAHC9VhQVBAJzOd19TeGtA0iAnmccrQ3-nq16FD7WofhRLgqVzw@mail.gmail.com>
+ <ZxEmDbIClGM1F7e6@infradead.org>
+ <CAHC9VhTtjTAXdt_mYEFXMRLz+4WN2ZR74ykDqknMFYWaeTNbww@mail.gmail.com>
+ <ZxEsX9aAtqN2CbAj@infradead.org>
+ <20241017164338.kzl7uotdyvhu5wv5@quack3>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAHC9VhQxp4_qhuuKip7qP_Jz-ysv1RZ1o83iARCRP7Psh_dBNQ@mail.gmail.com>
-X-Spam-Score: -1.9 (-)
+In-Reply-To: <20241017164338.kzl7uotdyvhu5wv5@quack3>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 
-On Thu, Oct 17, 2024 at 03:33:14PM -0400, Paul Moore wrote:
-> > On Wed, Oct 16, 2024 at 06:10:44PM +0200, Florian Westphal wrote:
-> For those of us joining the conversation late, can you provide a quick
-> summary of what you want to change in audit and why?
+On Thu, Oct 17, 2024 at 06:43:38PM +0200, Jan Kara wrote:
+> On Thu 17-10-24 08:25:19, Christoph Hellwig wrote:
+> > On Thu, Oct 17, 2024 at 11:15:49AM -0400, Paul Moore wrote:
+> > > Also good to know, thanks.  However, at this point the lack of a clear
+> > > answer is making me wonder a bit more about inode numbers in the view
+> > > of VFS developers; do you folks care about inode numbers?
+> > 
+> > The VFS itself does not care much about inode numbers.  The Posix API
+> > does, although btrfs ignores that and seems to get away with that
+> > (mostly because applications put in btrfs-specific hacks).
+> 
+> Well, btrfs plays tricks with *device* numbers, right? Exactly so that
+> st_ino + st_dev actually stay unique for each file. Whether it matters for
+> audit I don't dare to say :). Bcachefs does not care and returns non-unique
+> inode numbers.
 
-Florian said:
+But st_ino + st_dev is the only thing Posix and thus historically Linux
+has guaranteed to applications.  So if st_dev is unique, but you need
+an unknown scope in which it is unique it might as well not be for
+that purpose.  And I think for any kind of audit report that is true
+as well.
 
-"I failed to realize that nft_audit leaks one implementation detail
-to userspace: the length of the transaction log."
-
-        table=t1 family=2 entries=4 op=nft_register_set
-
-He is referring to the 'entries' key.
-
-So far, every object gets one transaction, but now batching several
-objects in one transaction is possible.
-
-We have been discussing what the expected semantics for this audit log
-key is:
-
-- If this is the transaction log length, then the internal update of the
-  transaction logic results in a smaller number of 'entries' in the
-  audit log.
-- If 'entries' refers to the number of "affected" objects by this
-  operation, then this means we have to carry a "workaround" in
-  the kernel.
-
-This is because:
-
-1) Element updates are now supported, this currently handles it as a
-   _REGISTER operation according to enum audit_nfcfgop. This changed
-   the semantics of the add command, now it is "add if it does not exist,
-   otherwise update what it already exists". Before, updates where simply
-   elided (not counted by 'entries' key) because they were not supported.
-   That is, 'entries' now tell how many set element has been added OR
-   updated. I think this is fine, this is consistent with chain updates
-   where 'entries' also report added OR updated chains. The difference
-   is that old kernel do not count updates (because they are elided).
-
-2) There is ongoing work to add more internal transaction batching, ie.
-   use one single transaction for several elements. This requires a
-   special case to bump the 'entries' key to add the elements that the
-   transaction batch contains, see:
-
-https://patchwork.ozlabs.org/project/netfilter-devel/patch/20241016131917.17193-4-fw@strlen.de/
-
-   There is a nft_audit.sh selftest and Florian thinks this is a
-   "workaround" patch only to make this test happy, because 'entries'
-   refers to the transaction log length (which is now smaller given the
-   internal transaction batching approach to accumulate several elements
-   is used).
