@@ -1,124 +1,154 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f169.google.com (mail-qk1-f169.google.com [209.85.222.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D21D1EF083;
-	Mon, 21 Oct 2024 14:04:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 649F01FF02E
+	for <audit@vger.kernel.org>; Mon, 21 Oct 2024 23:39:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729519491; cv=none; b=bhu+qKYyOrdFR1dNfk2oDOPNOztkAbOgXbehHUjL2xsCylf5vF5JtaU3HNb2WGdeR/0Q9/obj95rpBJ82n6xiujW5ttgIVlORn8aLYvRi14VxVFjDBpLX1p1iJ7ohmPzoQskFEYJrAUnh/p4JmiTtw2y/+kqw7SRowa32d49mJ8=
+	t=1729553992; cv=none; b=JjzfdPprsf8DDGfZOClCERsbTpmFGlPHwpG6WzdoK1l3WWcscSLeEdDGG6aE3CAMZrrYSzJdZLn1QNQckezO/01/GNL0RLNpq9US/yaX+2dty0pSjSGiV3N8EA2r4tsateM7n/4x7vBhL9dv0vNchIcfEs7Qp5XIFkgkWXxOKEc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729519491; c=relaxed/simple;
-	bh=hrH2V6c/8cK4Iw7xtP5MFio7Xe3xp/y84khNAEgpvGQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jpIFV1UVj8UIYHdNVdrlfe5uLGDtDCL1AUvjwR+H+ZHkQ7nFdCyClkdR7VICbcAAu/XAa9el3BFeymK6doBhZGGe1asWbmaSo3P6PeWbRfAYSN6uowmfGDNglZcZ48Mi0REWY2in6/97UKug2m6f2uo3z6jk5viaGbdyAff6tuk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CPaq+kI6; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1729553992; c=relaxed/simple;
+	bh=9Mjk+knGxo9nQGglniMu8WtjiPcCZiTfSPn+6KQqmgY=;
+	h=Date:Message-ID:MIME-Version:Content-Type:From:To:Cc:Subject:
+	 References:In-Reply-To; b=PASlkixFNKIxK52OcjxyfK2sPXPxj8uHO0+ZuGizQljpO9cq6DKqMfx3amtH3S6vyvcCRV4e9q9D1awBxpfd6a/0BgRepDy4CQXWBKY/PA84lfRzSXaOIIfmseSyvisSr8ooeBvRyCWG/T8KSei16OWk/iWwYsbTye0Vn5JaRJ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=B4FRDqRK; arc=none smtp.client-ip=209.85.222.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CPaq+kI6"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69A51C4CEC3;
-	Mon, 21 Oct 2024 14:04:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1729519491;
-	bh=hrH2V6c/8cK4Iw7xtP5MFio7Xe3xp/y84khNAEgpvGQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=CPaq+kI6GVcjfPmwaGq9FXFlYBJvoHxZV/L57+ykmug4wnEiR0yeQ+L7KsXnTkBlk
-	 EWdrxGMrr8NTVJCOxBBIbhSUCrMRoJBIBCd/5EcZGF28QvFqihqt3Hvj+clBMfRism
-	 oI1TUNBbANJ4mSpP96LvbrNNm4LVWdHMZgNCc3Od77fs+ljcCkQAqCDJNK5h1OgP0o
-	 /ka04wbmSeTV/nAb5RL8kjMfQiwYzKYTq3aOE9+G6jUOW6Nli/HX+WB1UMU7Qj5e0A
-	 aFqkMV2YWOmKk46vzH69vSuR1AV/4olauY3VurzktTRwf7T3W6fEZPHE2FwJAF0W11
-	 rFDdYwLnzgRRQ==
-Date: Mon, 21 Oct 2024 16:04:45 +0200
-From: Christian Brauner <brauner@kernel.org>
-To: Jeff Layton <jlayton@kernel.org>
-Cc: Paul Moore <paul@paul-moore.com>, 
-	Christoph Hellwig <hch@infradead.org>, Trond Myklebust <trondmy@hammerspace.com>, 
-	"jack@suse.cz" <jack@suse.cz>, "mic@digikod.net" <mic@digikod.net>, 
-	"linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>, "anna@kernel.org" <anna@kernel.org>, 
-	"linux-security-module@vger.kernel.org" <linux-security-module@vger.kernel.org>, "audit@vger.kernel.org" <audit@vger.kernel.org>, 
-	"linux-nfs@vger.kernel.org" <linux-nfs@vger.kernel.org>, "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>
-Subject: Re: [RFC PATCH v1 1/7] fs: Add inode_get_ino() and implement
- get_ino() for NFS
-Message-ID: <20241021-geldpolitik-holzschnitt-b7f87ef4df02@brauner>
-References: <20241010152649.849254-1-mic@digikod.net>
- <20241016-mitdenken-bankdaten-afb403982468@brauner>
- <CAHC9VhRd7cRXWYJ7+QpGsQkSyF9MtNGrwnnTMSNf67PQuqOC8A@mail.gmail.com>
- <5bbddc8ba332d81cbea3fce1ca7b0270093b5ee0.camel@hammerspace.com>
- <CAHC9VhQVBAJzOd19TeGtA0iAnmccrQ3-nq16FD7WofhRLgqVzw@mail.gmail.com>
- <ZxEmDbIClGM1F7e6@infradead.org>
- <CAHC9VhTtjTAXdt_mYEFXMRLz+4WN2ZR74ykDqknMFYWaeTNbww@mail.gmail.com>
- <5a5cfe8cb8155c2bb91780cc75816751213e28d7.camel@kernel.org>
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="B4FRDqRK"
+Received: by mail-qk1-f169.google.com with SMTP id af79cd13be357-7b149ef910eso419138685a.3
+        for <audit@vger.kernel.org>; Mon, 21 Oct 2024 16:39:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1729553989; x=1730158789; darn=vger.kernel.org;
+        h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
+         :mime-version:message-id:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5e2lRCBhF/0lrzI1nrw+s1eH3A9IyPYDFt7tmHKeZEQ=;
+        b=B4FRDqRKcaXEsQ//LBESnkawFmz/cI2L8teK23drofWiu86po54i+Jmpgw0/dFNdze
+         YQCu1kUfCGmgBgvwV0yAepGWwGWwfxf3x/ebdrE/kRYvCytocfehOmw+dpLludhxI2DQ
+         D/BKYp5q5VHz9Vo6sw2ITl5PvT2Dm3Xc0kn92xekAY2E+uMIO6eTKI60FcFQO4eGUT31
+         OUZwJkyBDdfmV8HOqqyg8UXmc/5vzIFEESga7lB0uJWyQCydBW3U3KVwd3+e2E4LQgQ7
+         ITjgpVIgQ/2d+WElpNBfZK/TN54B6wNxU59bYyX3G6N2H5WSfuZHVcD/30USnOEkkyY7
+         15rA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1729553989; x=1730158789;
+        h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
+         :mime-version:message-id:date:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=5e2lRCBhF/0lrzI1nrw+s1eH3A9IyPYDFt7tmHKeZEQ=;
+        b=HXr/sGVWL+uMpj/Kw0n3k42Nv5C5al3Lc6Jv2/q8uhRkBF4HekB51DxNr4kqctHksV
+         3txc7pbt0E3hLPh78aeHhw4gHff3GI65+G5OOy4/WCvgWEa4Z19TGY5Lq98+VxQy6xAS
+         bstCvp0st2anwzGWAY7X7DKGMt8KMSOfmjUIIZ7cIWsW5MAUB5f1YTVe68Suh3z9nPx1
+         Ae/M5krOlKBnGYngPRl9lF91WFWYRVamxfYHM2ivztW/NN7GmuqDYiHLrEZQs7ugQWCP
+         EEhpZfd0AO4txpTyXZ3iaHmuHxlHiGVtjBd53OZZzPOdr4iTSfO8jPbDAbuj0tl5stHg
+         0RIw==
+X-Forwarded-Encrypted: i=1; AJvYcCXYdoI9jF5jL794E2W2CGJE2wpfdVONTlI1n5BoUvw1VZbhWM+ReUme15HsC+CfGM1Xiz/0bw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwIs0OOk6E3YhZw324UeokZsGngqOvhl92BHuRdA9P/BO08jPwR
+	3UZk6Bo6vRqSuiGW4JSocXg22E83zGMNp6ss6hGWevE+WF5olZCrcWcK28LKxg==
+X-Google-Smtp-Source: AGHT+IGc+EQuKBMmGMWGtVywnHwWIVFIhDEjXA67LbbrFi385rmMBG2jWd5aax6vHPWRTUq/OlgvAA==
+X-Received: by 2002:a05:6214:44a1:b0:6cb:9b65:5c75 with SMTP id 6a1803df08f44-6cde15d2f09mr209558626d6.32.1729553989320;
+        Mon, 21 Oct 2024 16:39:49 -0700 (PDT)
+Received: from localhost ([70.22.175.108])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6ce008fe843sm23160626d6.45.2024.10.21.16.39.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Oct 2024 16:39:48 -0700 (PDT)
+Date: Mon, 21 Oct 2024 19:39:48 -0400
+Message-ID: <dad74779768e7c00d2a3c9bf8c60045d@paul-moore.com>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <5a5cfe8cb8155c2bb91780cc75816751213e28d7.camel@kernel.org>
+MIME-Version: 1.0 
+Content-Type: text/plain; charset=UTF-8 
+Content-Transfer-Encoding: 8bit 
+X-Mailer: pstg-pwork:20241021_1626/pstg-lib:20241021_1624/pstg-pwork:20241021_1626
+From: Paul Moore <paul@paul-moore.com>
+To: Casey Schaufler <casey@schaufler-ca.com>, casey@schaufler-ca.com, linux-security-module@vger.kernel.org
+Cc: jmorris@namei.org, serge@hallyn.com, keescook@chromium.org, john.johansen@canonical.com, penguin-kernel@i-love.sakura.ne.jp, stephen.smalley.work@gmail.com, linux-kernel@vger.kernel.org, selinux@vger.kernel.org, mic@digikod.net, linux-integrity@vger.kernel.org, netdev@vger.kernel.org, audit@vger.kernel.org, netfilter-devel@vger.kernel.org, linux-nfs@vger.kernel.org, Todd Kjos <tkjos@google.com>
+Subject: Re: [PATCH v2 1/6] LSM: Ensure the correct LSM context releaser
+References: <20241014151450.73674-2-casey@schaufler-ca.com>
+In-Reply-To: <20241014151450.73674-2-casey@schaufler-ca.com>
 
-On Thu, Oct 17, 2024 at 01:05:54PM -0400, Jeff Layton wrote:
-> On Thu, 2024-10-17 at 11:15 -0400, Paul Moore wrote:
-> > On Thu, Oct 17, 2024 at 10:58 AM Christoph Hellwig <hch@infradead.org> wrote:
-> > > On Thu, Oct 17, 2024 at 10:54:12AM -0400, Paul Moore wrote:
-> > > > Okay, good to know, but I was hoping that there we could come up with
-> > > > an explicit list of filesystems that maintain their own private inode
-> > > > numbers outside of inode-i_ino.
-> > > 
-> > > Anything using iget5_locked is a good start.  Add to that file systems
-> > > implementing their own inode cache (at least xfs and bcachefs).
-> > 
-> > Also good to know, thanks.  However, at this point the lack of a clear
-> > answer is making me wonder a bit more about inode numbers in the view
-> > of VFS developers; do you folks care about inode numbers?  I'm not
-> > asking to start an argument, it's a genuine question so I can get a
-> > better understanding about the durability and sustainability of
-> > inode->i_no.  If all of you (the VFS folks) aren't concerned about
-> > inode numbers, I suspect we are going to have similar issues in the
-> > future and we (the LSM folks) likely need to move away from reporting
-> > inode numbers as they aren't reliably maintained by the VFS layer.
-> > 
+On Oct 14, 2024 Casey Schaufler <casey@schaufler-ca.com> wrote:
 > 
-> Like Christoph said, the kernel doesn't care much about inode numbers.
+> Add a new lsm_context data structure to hold all the information about a
+> "security context", including the string, its size and which LSM allocated
+> the string. The allocation information is necessary because LSMs have
+> different policies regarding the lifecycle of these strings. SELinux
+> allocates and destroys them on each use, whereas Smack provides a pointer
+> to an entry in a list that never goes away.
 > 
-> People care about them though, and sometimes we have things in the
-> kernel that report them in some fashion (tracepoints, procfiles, audit
-> events, etc.). Having those match what the userland stat() st_ino field
-> tells you is ideal, and for the most part that's the way it works.
+> Update security_release_secctx() to use the lsm_context instead of a
+> (char *, len) pair. Change its callers to do likewise.  The LSMs
+> supporting this hook have had comments added to remind the developer
+> that there is more work to be done.
 > 
-> The main exception is when people use 32-bit interfaces (somewhat rare
-> these days), or they have a 32-bit kernel with a filesystem that has a
-> 64-bit inode number space (NFS being one of those). The NFS client has
-> basically hacked around this for years by tracking its own fileid field
-> in its inode. That's really a waste though. That could be converted
-> over to use i_ino instead if it were always wide enough.
+> The BPF security module provides all LSM hooks. While there has yet to
+> be a known instance of a BPF configuration that uses security contexts,
+> the possibility is real. In the existing implementation there is
+> potential for multiple frees in that case.
 > 
-> It'd be better to stop with these sort of hacks and just fix this the
-> right way once and for all, by making i_ino 64 bits everywhere.
-> 
-> A lot of the changes can probably be automated via coccinelle. I'd
-> probably start by turning all of the direct i_ino accesses into static
-> inline wrapper function calls. The hard part will be parceling out that
-> work into digestable chunks. If you can avoid "flag day" changes, then
-> that's ideal.  You'd want a patch per subsystem so you can collect
-> ACKs. 
-> 
-> The hardest part will probably be the format string changes. I'm not
-> sure you can easily use coccinelle for that, so that may need to be
-> done by hand or scripted with python or something.
+> Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
+> Cc: linux-integrity@vger.kernel.org
+> Cc: netdev@vger.kernel.org
+> Cc: audit@vger.kernel.org
+> Cc: netfilter-devel@vger.kernel.org
+> To: Pablo Neira Ayuso <pablo@netfilter.org>
+> Cc: linux-nfs@vger.kernel.org
+> Cc: Todd Kjos <tkjos@google.com>
+> Reviewed-by: Serge Hallyn <sergeh@kernel.org>
+> ---
+>  drivers/android/binder.c                | 24 ++++++-------
+>  fs/ceph/xattr.c                         |  6 +++-
+>  fs/nfs/nfs4proc.c                       |  8 +++--
+>  fs/nfsd/nfs4xdr.c                       |  8 +++--
+>  include/linux/lsm_hook_defs.h           |  2 +-
+>  include/linux/security.h                | 35 +++++++++++++++++--
+>  include/net/scm.h                       | 11 +++---
+>  kernel/audit.c                          | 30 ++++++++---------
+>  kernel/auditsc.c                        | 23 +++++++------
+>  net/ipv4/ip_sockglue.c                  | 10 +++---
+>  net/netfilter/nf_conntrack_netlink.c    | 10 +++---
+>  net/netfilter/nf_conntrack_standalone.c |  9 +++--
+>  net/netfilter/nfnetlink_queue.c         | 13 ++++---
+>  net/netlabel/netlabel_unlabeled.c       | 45 +++++++++++--------------
+>  net/netlabel/netlabel_user.c            | 11 +++---
+>  security/apparmor/include/secid.h       |  2 +-
+>  security/apparmor/secid.c               | 11 ++++--
+>  security/security.c                     |  8 ++---
+>  security/selinux/hooks.c                | 11 ++++--
+>  19 files changed, 167 insertions(+), 110 deletions(-)
 
-The problem where we're dealing with 64 bit inode numbers even on 32 bit
-systems is one problem and porting struct inode to use a 64 bit type for
-i_ino is a good thing that I agree we should explore.
+...
 
-I'm still not sure how that would stolve the audit problem though. The
-inode numbers that audit reports, even if always 64 bit, are not unique
-with e.g., btrfs and bcachefs. Audit would need to report additional
-information for both filesystems like the subvolume number which would
-make this consistent.
+> diff --git a/net/netlabel/netlabel_unlabeled.c b/net/netlabel/netlabel_unlabeled.c
+> index 1bc2d0890a9f..8303bbcfc543 100644
+> --- a/net/netlabel/netlabel_unlabeled.c
+> +++ b/net/netlabel/netlabel_unlabeled.c
+> @@ -1127,14 +1122,14 @@ static int netlbl_unlabel_staticlist_gen(u32 cmd,
+>  		secid = addr6->secid;
+>  	}
+>  
+> -	ret_val = security_secid_to_secctx(secid, &secctx, &secctx_len);
+> +	ret_val = security_secid_to_secctx(secid, &ctx.context, &ctx.len);
+>  	if (ret_val != 0)
+>  		goto list_cb_failure;
+>  	ret_val = nla_put(cb_arg->skb,
+>  			  NLBL_UNLABEL_A_SECCTX,
+> -			  secctx_len,
+> -			  secctx);
+> -	security_release_secctx(secctx, secctx_len);
+> +			  ctx.len,
+> +			  ctx.context);
 
-We should port to 64 bit and yes that'll take some time. Then audit may
-want to grow support to report additional information such as the
-subvolume number. And that can be done in various ways without having to
-burden struct inode_operations with any of this. Or, document the 20
-year reality that audit inode numbers aren't unique on some filesystems.
+Nitpicky alignment issue; please keep the arguments aligned as they
+are currently.
+
+> +	security_release_secctx(&ctx);
+>  	if (ret_val != 0)
+>  		goto list_cb_failure;
+>  
+
+--
+paul-moore.com
