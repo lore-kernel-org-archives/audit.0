@@ -1,33 +1,33 @@
-Received: from smtp-190d.mail.infomaniak.ch (smtp-190d.mail.infomaniak.ch [185.125.25.13])
+Received: from smtp-bc0b.mail.infomaniak.ch (smtp-bc0b.mail.infomaniak.ch [45.157.188.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F63A1BDAB8
-	for <audit@vger.kernel.org>; Tue, 22 Oct 2024 16:10:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.25.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C46D91C0DC5
+	for <audit@vger.kernel.org>; Tue, 22 Oct 2024 16:10:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.157.188.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729613442; cv=none; b=N5gVj4Dt42cbAmcv4K0KTOECoq+pxr22U+XI3J82ACMIsI/1G7XbKfcq9RaVyU/wR1vrn9IexChlzv3LrxP7lK2ge9+jDnq08L4cABiyayk9tCoOMC9ceo7F2ReDfG/1M79pb923eeUS/ooRqktKv8bJCpKcZ1ZFjJCbvA8WgTw=
+	t=1729613446; cv=none; b=RKMEV7VYHHk7FUV5ESxgCmQYb879+DNZvWxsE6nQwlu0fbTY9K4HFLV+irQcxWVD6WDI1aEPI2faCw4a1AhQsE2hNachUJRXnRrxct84A6YOobvjlN5t28hbsHl5tEzWasrHvRS8mAy4VeJ1iXuyB/krw3fbNEWHQfJxIJnAlT8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729613442; c=relaxed/simple;
-	bh=kZv6/PhbP7J5pxayWAbXtkpzTHCgWjbVAn3a0JLUYh0=;
+	s=arc-20240116; t=1729613446; c=relaxed/simple;
+	bh=G9TEg3HND4LdWjYAiNhvnUyB/nAl4YVa85872ufJ0jw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=DwCKSC6FOMSv2OvzFj5r0S2bnH1mIMMDzKFKd5j3ewAdUpGBwhUCf/kTdCeF4YN9PIW+B0wT5dNWip45I7IutJOrfo7PdNcsOyrwFW7ELsa0USvLIeHAtSvRP5aDrbN9xp0BdR1vxj1+gR+Mhf8OJfcDXxReueULahc9iIvRGRs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=LUmlfbTo; arc=none smtp.client-ip=185.125.25.13
+	 MIME-Version:Content-Type; b=LcQEGTrWT4UV3uDysRkwYWZQmVLzjVoEwgcK4V8LdJfD0K6vRdt9afSlx2PwbeKH9JEWNSEwIqBO9VWDWiWDkcpTXxVmf/IlTmyrdT/G3HwFXQHFerG2itisAiuNj3Zn4uS56PxpmKLFBdw44+0Olxnd17R0BKfGEummaAWbixk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=1C4rHIsb; arc=none smtp.client-ip=45.157.188.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="LUmlfbTo"
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="1C4rHIsb"
 Received: from smtp-4-0001.mail.infomaniak.ch (unknown [IPv6:2001:1600:7:10:40ca:feff:fe05:1])
-	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4XXxwt506Jz1BWm;
-	Tue, 22 Oct 2024 18:10:38 +0200 (CEST)
+	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4XXxwq72dhz1BWj;
+	Tue, 22 Oct 2024 18:10:35 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
-	s=20191114; t=1729613438;
-	bh=3Ve6yuPT5FwORVe2zeYvy54uPJqtXG32ke83iyO8jcM=;
+	s=20191114; t=1729613435;
+	bh=UlOuSO/p6IwMwoHL3XID4K4bzg4p/fofuCyDr7AkBj0=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=LUmlfbTo2grw9nX/t2dsQYzcviD+2TyFUuzcDqdASyu6vIZVhlAM5Ju1N5WudaSFe
-	 MD59m4YToB0gEFIIsojq5z2GPVeHYIU3fZfuREneW9KtPLMRre3V+G7rutNg4UXZQV
-	 gIU0RPDR3UvCA+rjpAH52nx28mGOy26ODe3AoORY=
-Received: from unknown by smtp-4-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4XXxws6v0Sz6Tk;
-	Tue, 22 Oct 2024 18:10:37 +0200 (CEST)
+	b=1C4rHIsbDLoqGpXA2BKX3pB5r+q6FRnp9tugaz1n59n9kmQ1/Ma1yuqxSell4TulT
+	 By9x9JZq0idBUrepthlZxwqnPaLZ603K2zb9wVUNLuVHuKe6GHyACRvkZ7eO+WPjD+
+	 H0NE3GFLelvafjwj6A3zZaZ2Y0cin77IDdJCxsZU=
+Received: from unknown by smtp-4-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4XXxwq1jZjz6gb;
+	Tue, 22 Oct 2024 18:10:35 +0200 (CEST)
 From: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
 To: Eric Paris <eparis@redhat.com>,
 	Paul Moore <paul@paul-moore.com>,
@@ -53,9 +53,9 @@ Cc: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
 	audit@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-security-module@vger.kernel.org
-Subject: [RFC PATCH v2 14/14] landlock: Control log events with LANDLOCK_RESTRICT_SELF_LOGLESS
-Date: Tue, 22 Oct 2024 18:10:09 +0200
-Message-ID: <20241022161009.982584-15-mic@digikod.net>
+Subject: [RFC PATCH v2 12/14] landlock: Log TCP bind and connect denials
+Date: Tue, 22 Oct 2024 18:10:07 +0200
+Message-ID: <20241022161009.982584-13-mic@digikod.net>
 In-Reply-To: <20241022161009.982584-1-mic@digikod.net>
 References: <20241022161009.982584-1-mic@digikod.net>
 Precedence: bulk
@@ -68,179 +68,161 @@ Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Infomaniak-Routing: alpha
 
-Most of the time we want to log denied access because they should not
-happen and such information helps diagnose issues.  However, when
-sandboxing processes that we know will try to access denied resources
-(e.g. unknown, bogus, or malicious binary), we might want to not log
-related access requests that might fill up logs.
+Add audit support to socket_bind and socket_connect hooks.
 
-To disable any log for a specific Landlock domain, add a
-LANDLOCK_RESTRICT_SELF_LOGLESS optional flag to the
-landlock_restrict_self() system call.
+Audit record sample:
 
-Because this flag is set for a specific Landlock domain, it makes it
-possible to selectively mask some access requests that would be logged
-by a parent domain, which might be handy for unprivileged processes to
-limit logs.  However, system administrators should still use the audit
-filtering mechanism.
-
-There is intentionally no audit nor sysctl configuration to re-enable
-these logless domains.  This is delegated to the user space program.
-
-Increment the Landlock ABI version to reflect this interface change.
+  DENY:    domain=4533720601 blockers=net_connect_tcp daddr=127.0.0.1 dest=80
+  SYSCALL: arch=c000003e syscall=42 success=no exit=-13 ...
 
 Cc: Günther Noack <gnoack@google.com>
-Cc: Paul Moore <paul@paul-moore.com>
-Closes: https://github.com/landlock-lsm/linux/issues/3
+Cc: Konstantin Meskhidze <konstantin.meskhidze@huawei.com>
+Cc: Mikhail Ivanov <ivanov.mikhail1@huawei-partners.com>
 Signed-off-by: Mickaël Salaün <mic@digikod.net>
-Link: https://lore.kernel.org/r/20241022161009.982584-15-mic@digikod.net
+Link: https://lore.kernel.org/r/20241022161009.982584-13-mic@digikod.net
 ---
+ security/landlock/audit.c | 11 +++++++++
+ security/landlock/audit.h |  1 +
+ security/landlock/net.c   | 52 ++++++++++++++++++++++++++++++++++++---
+ 3 files changed, 60 insertions(+), 4 deletions(-)
 
-We could export and use audit_filter() to avoid computing the youngest
-denied layer, but I'm not sure it's worth it.
-
-We need to patch the samples/landlock/sandboxer to use
-LANDLOCK_RESTRICT_SELF_LOGLESS because it is a sandboxer, but at the
-same time it is useful to test this patch series without this flag.
----
- include/uapi/linux/landlock.h | 14 ++++++++++++++
- security/landlock/audit.c     | 13 ++++++++-----
- security/landlock/domain.h    |  1 +
- security/landlock/syscalls.c  | 25 ++++++++++++++++++++-----
- 4 files changed, 43 insertions(+), 10 deletions(-)
-
-diff --git a/include/uapi/linux/landlock.h b/include/uapi/linux/landlock.h
-index 33745642f787..3b31d373ef74 100644
---- a/include/uapi/linux/landlock.h
-+++ b/include/uapi/linux/landlock.h
-@@ -62,6 +62,20 @@ struct landlock_ruleset_attr {
- #define LANDLOCK_CREATE_RULESET_VERSION			(1U << 0)
- /* clang-format on */
- 
-+/*
-+ * sys_landlock_restrict_self() flags:
-+ *
-+ * - %LANDLOCK_RESTRICT_SELF_LOGLESS: Do not create any log related to the
-+ *   enforced restrictions.  This should only be set by tools launching unknown
-+ *   or untrusted programs (e.g. a sandbox tool, container runtime, system
-+ *   service manager).  Because programs sandboxing themselves should fix any
-+ *   denied access, they should not set this flag to be aware of potential
-+ *   issues reported by system's logs (i.e. audit).
-+ */
-+/* clang-format off */
-+#define LANDLOCK_RESTRICT_SELF_LOGLESS			(1U << 0)
-+/* clang-format on */
-+
- /**
-  * enum landlock_rule_type - Landlock rule type
-  *
 diff --git a/security/landlock/audit.c b/security/landlock/audit.c
-index b551812b8bc9..9235590997d7 100644
+index 898c95ebe847..c31a4a8719ee 100644
 --- a/security/landlock/audit.c
 +++ b/security/landlock/audit.c
-@@ -401,11 +401,6 @@ void landlock_log_denial(const struct landlock_ruleset *const domain,
- 	if (!audit_enabled)
- 		return;
+@@ -41,6 +41,12 @@ static const char *const fs_access_strings[] = {
+ };
+ static_assert(ARRAY_SIZE(fs_access_strings) == LANDLOCK_NUM_ACCESS_FS);
  
--	ab = audit_log_start(audit_context(), GFP_ATOMIC | __GFP_NOWARN,
--			     AUDIT_LANDLOCK_DENY);
--	if (!ab)
--		return;
--
- 	missing = request->access;
- 	if (missing) {
- 		size_t youngest_layer;
-@@ -426,6 +421,14 @@ void landlock_log_denial(const struct landlock_ruleset *const domain,
- 			get_hierarchy(domain, request->layer_plus_one - 1);
++static const char *const net_access_strings[] = {
++	[BIT_INDEX(LANDLOCK_ACCESS_NET_BIND_TCP)] = "net_bind_tcp",
++	[BIT_INDEX(LANDLOCK_ACCESS_NET_CONNECT_TCP)] = "net_connect_tcp",
++};
++static_assert(ARRAY_SIZE(net_access_strings) == LANDLOCK_NUM_ACCESS_NET);
++
+ static __attribute_const__ const char *
+ get_blocker(const enum landlock_request_type type,
+ 	    const unsigned long access_bit)
+@@ -58,6 +64,11 @@ get_blocker(const enum landlock_request_type type,
+ 		if (WARN_ON_ONCE(access_bit >= ARRAY_SIZE(fs_access_strings)))
+ 			return "unknown";
+ 		return fs_access_strings[access_bit];
++
++	case LANDLOCK_REQUEST_NET_ACCESS:
++		if (WARN_ON_ONCE(access_bit >= ARRAY_SIZE(net_access_strings)))
++			return "unknown";
++		return net_access_strings[access_bit];
  	}
  
-+	if (READ_ONCE(youngest_denied->log_status) == LANDLOCK_LOG_DISABLED)
-+		return;
-+
-+	ab = audit_log_start(audit_context(), GFP_ATOMIC | __GFP_NOWARN,
-+			     AUDIT_LANDLOCK_DENY);
-+	if (!ab)
-+		return;
-+
- 	audit_log_format(ab, "domain=%llu blockers=", youngest_denied->id);
- 	log_blockers(ab, request->type, missing);
- 	audit_log_lsm_data(ab, &request->audit);
-diff --git a/security/landlock/domain.h b/security/landlock/domain.h
-index 1374497d9a9b..765d5689fbb0 100644
---- a/security/landlock/domain.h
-+++ b/security/landlock/domain.h
-@@ -22,6 +22,7 @@
- enum landlock_log_status {
- 	LANDLOCK_LOG_PENDING = 0,
- 	LANDLOCK_LOG_RECORDED,
-+	LANDLOCK_LOG_DISABLED,
+ 	WARN_ON_ONCE(1);
+diff --git a/security/landlock/audit.h b/security/landlock/audit.h
+index 320394fd6b84..1075b0c8401f 100644
+--- a/security/landlock/audit.h
++++ b/security/landlock/audit.h
+@@ -18,6 +18,7 @@ enum landlock_request_type {
+ 	LANDLOCK_REQUEST_PTRACE = 1,
+ 	LANDLOCK_REQUEST_FS_CHANGE_LAYOUT,
+ 	LANDLOCK_REQUEST_FS_ACCESS,
++	LANDLOCK_REQUEST_NET_ACCESS,
  };
  
- /**
-diff --git a/security/landlock/syscalls.c b/security/landlock/syscalls.c
-index 335067e36feb..48c26ed8c099 100644
---- a/security/landlock/syscalls.c
-+++ b/security/landlock/syscalls.c
-@@ -151,7 +151,12 @@ static const struct file_operations ruleset_fops = {
- 	.write = fop_dummy_write,
- };
+ /*
+diff --git a/security/landlock/net.c b/security/landlock/net.c
+index 27872d0f7e11..c21afd6e0b4d 100644
+--- a/security/landlock/net.c
++++ b/security/landlock/net.c
+@@ -7,10 +7,12 @@
+  */
  
--#define LANDLOCK_ABI_VERSION 6
-+/*
-+ * The Landlock ABI version should be incremented for each new Landlock-related
-+ * user space visible change (e.g. Landlock syscalls).  Only increment this
-+ * version once per Linux release.
-+ */
-+#define LANDLOCK_ABI_VERSION 7
+ #include <linux/in.h>
++#include <linux/lsm_audit.h>
+ #include <linux/net.h>
+ #include <linux/socket.h>
+ #include <net/ipv6.h>
  
- /**
-  * sys_landlock_create_ruleset - Create a new ruleset
-@@ -452,7 +457,7 @@ SYSCALL_DEFINE4(landlock_add_rule, const int, ruleset_fd,
-  * sys_landlock_restrict_self - Enforce a ruleset on the calling thread
-  *
-  * @ruleset_fd: File descriptor tied to the ruleset to merge with the target.
-- * @flags: Must be 0.
-+ * @flags: Supported value: %LANDLOCK_RESTRICT_SELF_LOGLESS.
-  *
-  * This system call enables to enforce a Landlock ruleset on the current
-  * thread.  Enforcing a ruleset requires that the task has %CAP_SYS_ADMIN in its
-@@ -478,6 +483,7 @@ SYSCALL_DEFINE2(landlock_restrict_self, const int, ruleset_fd, const __u32,
- 	struct cred *new_cred;
- 	struct landlock_cred_security *new_llcred;
- 	int err;
-+	bool is_logless = false;
++#include "audit.h"
+ #include "common.h"
+ #include "cred.h"
+ #include "limits.h"
+@@ -56,6 +58,10 @@ static int current_check_access_socket(struct socket *const sock,
+ 	};
+ 	const struct landlock_ruleset *const dom =
+ 		landlock_match_ruleset(landlock_get_current_domain(), any_net);
++	struct lsm_network_audit audit_net = {};
++	struct landlock_request request = {
++		.type = LANDLOCK_REQUEST_NET_ACCESS,
++	};
  
- 	if (!is_initialized())
- 		return -EOPNOTSUPP;
-@@ -490,9 +496,12 @@ SYSCALL_DEFINE2(landlock_restrict_self, const int, ruleset_fd, const __u32,
- 	    !ns_capable_noaudit(current_user_ns(), CAP_SYS_ADMIN))
- 		return -EPERM;
+ 	if (!dom)
+ 		return 0;
+@@ -72,18 +78,49 @@ static int current_check_access_socket(struct socket *const sock,
  
--	/* No flag for now. */
--	if (flags)
--		return -EINVAL;
-+	if (flags) {
-+		if (flags == LANDLOCK_RESTRICT_SELF_LOGLESS)
-+			is_logless = true;
-+		else
-+			return -EINVAL;
-+	}
- 
- 	/* Gets and checks the ruleset. */
- 	ruleset = get_ruleset_from_fd(ruleset_fd, FMODE_CAN_READ);
-@@ -517,6 +526,12 @@ SYSCALL_DEFINE2(landlock_restrict_self, const int, ruleset_fd, const __u32,
- 		goto out_put_creds;
- 	}
- 
-+	if (is_logless) {
-+#ifdef CONFIG_AUDIT
-+		new_dom->hierarchy->log_status = LANDLOCK_LOG_DISABLED;
-+#endif /* CONFIG_AUDIT */
-+	}
+ 	switch (address->sa_family) {
+ 	case AF_UNSPEC:
+-	case AF_INET:
++	case AF_INET: {
++		const struct sockaddr_in *addr4;
 +
- 	/* Replaces the old (prepared) domain. */
- 	landlock_put_ruleset(new_llcred->domain);
- 	new_llcred->domain = new_dom;
+ 		if (addrlen < sizeof(struct sockaddr_in))
+ 			return -EINVAL;
+-		port = ((struct sockaddr_in *)address)->sin_port;
++
++		addr4 = (struct sockaddr_in *)address;
++		port = addr4->sin_port;
++
++		if (access_request == LANDLOCK_ACCESS_NET_CONNECT_TCP) {
++			audit_net.dport = port;
++			audit_net.v4info.daddr = addr4->sin_addr.s_addr;
++		} else if (access_request == LANDLOCK_ACCESS_NET_BIND_TCP) {
++			audit_net.sport = port;
++			audit_net.v4info.saddr = addr4->sin_addr.s_addr;
++		} else {
++			WARN_ON_ONCE(1);
++		}
+ 		break;
++	}
+ 
+ #if IS_ENABLED(CONFIG_IPV6)
+-	case AF_INET6:
++	case AF_INET6: {
++		const struct sockaddr_in6 *addr6;
++
+ 		if (addrlen < SIN6_LEN_RFC2133)
+ 			return -EINVAL;
+-		port = ((struct sockaddr_in6 *)address)->sin6_port;
++
++		addr6 = (struct sockaddr_in6 *)address;
++		port = addr6->sin6_port;
++		audit_net.v6info.saddr = addr6->sin6_addr;
++
++		if (access_request == LANDLOCK_ACCESS_NET_CONNECT_TCP) {
++			audit_net.dport = port;
++			audit_net.v6info.daddr = addr6->sin6_addr;
++		} else if (access_request == LANDLOCK_ACCESS_NET_BIND_TCP) {
++			audit_net.sport = port;
++			audit_net.v6info.saddr = addr6->sin6_addr;
++		} else {
++			WARN_ON_ONCE(1);
++		}
+ 		break;
++	}
+ #endif /* IS_ENABLED(CONFIG_IPV6) */
+ 
+ 	default:
+@@ -152,6 +189,13 @@ static int current_check_access_socket(struct socket *const sock,
+ 				   ARRAY_SIZE(layer_masks)))
+ 		return 0;
+ 
++	audit_net.family = address->sa_family;
++	request.audit.type = LSM_AUDIT_DATA_NET;
++	request.audit.u.net = &audit_net;
++	request.access = access_request;
++	request.layer_masks = &layer_masks;
++	request.layer_masks_size = ARRAY_SIZE(layer_masks);
++	landlock_log_denial(dom, &request);
+ 	return -EACCES;
+ }
+ 
 -- 
 2.47.0
 
