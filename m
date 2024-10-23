@@ -1,96 +1,119 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com [209.85.219.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8678C1E7C16
-	for <audit@vger.kernel.org>; Wed, 23 Oct 2024 21:14:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 270E1155757
+	for <audit@vger.kernel.org>; Wed, 23 Oct 2024 21:21:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729718066; cv=none; b=p8BQXVU/P5LUjJl/9XkWitYngkdmgUmvYiYJ+PR6xalwxuRVRF6L4r2XdzdDBgFdaZgol7k5EJo8HksVCWCp9uN6KqG6DAE5EWiXlSGdehPgNZ7bdnkFjcWAdcptTU0SeACxw4DOgy1PNo7Azop5TZp7+WjhLpoulAOdZZwDhaA=
+	t=1729718491; cv=none; b=MdPQw7F5eOCN/JcEVFV0HYpb1JDeV9w1oIUqHqT3aQixL+VlWQnjR6/T2jVhYF1AMhuDWesdnlaauCEgtMQXrAdw1zBQvjnCXC5SGParTVh6tH2cYmu4Wu6azcWOFNs1KeSQVx9SB5Itbquq64UWodSyl88Wjco4gPtjPU1pVv8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729718066; c=relaxed/simple;
-	bh=8nQwDzRZMEEccD2/QDJcj2ANlOCR6o7eEanPcy3VeIc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-type; b=jv7OMB7yFEr422Pn08xRbUj9TxJOyHuEu+0R5YDNn3dHtg6iOghGYwrQabxfscnPeFdQZji2TBhGk/MtADMTU5XoyZlzCeNxmOiir7Cfx4qKiijYjYzkcB5WlvkyZ/UDZreACHGnHP48sOiMuDOM/ZXQY52TnbOzoH1PcdfzJvo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=UBMraUEF; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1729718491; c=relaxed/simple;
+	bh=JRcAZKD+I8w8/3Fv7UE0rYpbqBIZNz+DntRIdFr9Uug=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=oGzd/a0YK2ub/tjMWsTX7AGasH4gJelBzp8YLZuIyi7UhSTTC64EeGmx6CfdSKFLPtHglTrdgbQxqp3W6ED7myaSrLrWfXyGhM0zH7vHqksmHoSfQwrKDC9MTxM8oRG9Xfx1rYPxEbv5PnKWULqBqfCDh3HedbjBykx5D4IBWIw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=Az9ZJHMD; arc=none smtp.client-ip=209.85.219.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="UBMraUEF"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1729718062;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=EhHsFXeHGq8GrsrwQBQKdWbjYOo8uENaYKPAHKoXKFI=;
-	b=UBMraUEFOXprJb8co9du5sFXPSXrKtF4Bqd/6d2keevdrh5N83L9MvW/0zi3+diZDCyfnU
-	l00tpjflfviJLPXgOKI2fiDiaorRv21Twaw/Zb6cGOpwWAYheFwIFewrbVci17r97834Fc
-	PXTKXwYHDBaWNtDrr2FlkIo9+bfK+70=
-Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-528-0u1JrsP0MNW569a32udyUw-1; Wed,
- 23 Oct 2024 17:14:19 -0400
-X-MC-Unique: 0u1JrsP0MNW569a32udyUw-1
-Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 5285F195609E;
-	Wed, 23 Oct 2024 21:14:17 +0000 (UTC)
-Received: from madcap2.tricolour.com (unknown [10.22.58.9])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id C3D7E300018D;
-	Wed, 23 Oct 2024 21:14:14 +0000 (UTC)
-From: Richard Guy Briggs <rgb@redhat.com>
-To: Linux-Audit Mailing List <linux-audit@lists.linux-audit.osci.io>,
-	LKML <linux-kernel@vger.kernel.org>,
-	linux-modules@vger.kernel.org,
-	Linux Kernel Audit Mailing List <audit@vger.kernel.org>
-Cc: Paul Moore <paul@paul-moore.com>,
-	Eric Paris <eparis@parisplace.org>,
-	Steve Grubb <sgrubb@redhat.com>,
-	Richard Guy Briggs <rgb@redhat.com>
-Subject: [PATCH v1] audit,module: restore audit logging in load failure case
-Date: Wed, 23 Oct 2024 17:13:20 -0400
-Message-ID: <999cdd694f951acd2f4ad665fe7ab97d0834e162.1729717542.git.rgb@redhat.com>
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="Az9ZJHMD"
+Received: by mail-yb1-f180.google.com with SMTP id 3f1490d57ef6-e290d48d3f7so274027276.3
+        for <audit@vger.kernel.org>; Wed, 23 Oct 2024 14:21:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1729718488; x=1730323288; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=72UVV+2r/h+iMp+5rXpOpE6KXuW+xAaVxADIUv6H0bw=;
+        b=Az9ZJHMDjx52BwG8wFgOp/yyL4lASo8V9rnNDxIJVq15kJqQPTkJljszNn6C/iv4C0
+         PGIyNmESB7ck99dQ9UC5/BTHCJIMO1MwqFZ+YaNPGFXdjROSp079kSEp95r9N6bNrHzL
+         dQjgVFPXSJLzuU+EasB57DwkccOkvhDCPCUrLq1iw3RNK1IDC5cp2rnHlJkPYAIMvQ/B
+         YpVjhNinRok7OiHTszM+6KTjRlYm5UsYNVR0w8CxkYkaGqgCXHtZuTaB+CIf7U4EhIzc
+         yjiau7UMt65P+Lor8w00HGraorygK9m63TgbvruT/h3h/GRi/d4LfU8B1TKmpM5uDTxB
+         0lqA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1729718488; x=1730323288;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=72UVV+2r/h+iMp+5rXpOpE6KXuW+xAaVxADIUv6H0bw=;
+        b=Fahss5SvTRuIMDtvXpTUJYTrwKwJ0IyE/ktB3TUSXoZ0h7cmxolSL0D13L9y7BjKF7
+         mzM2WkZnkCWwmcMIsT4w0IGgScmuDyub25tcAKgERcBipoFhezPiWkYje93n65xZEGSm
+         Y1laGp5We+L4S0G6rib8C/1+HLWsPwM82L+HmZcQCis7wO7UJ0AmDwlmJq1UU+lCaUsC
+         KUf09kJPmsNYV1iGJLEarAUpFosPHAi0W2yQA5YSPGXkuArQGKFCv3d9GgRlfj+Bgxpv
+         86xdiyaeghmXAb0mbEf/CmVWFMdKPeCZ+rdfhLzaq0/1PcN2eXAqk4BKEFwGZ+9uNV0Q
+         ooAg==
+X-Forwarded-Encrypted: i=1; AJvYcCWdcgbFtoaQYAV0zqU/M3MG3t2n318hrTTGvv1UHL+J0/tKGjCBUuXTtkfyHE4t3HFFQMacYw==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxu8CVsogP+FTMM+K2V5k8GO6slwHuk41LmT5AE7nMOTdJx2KMZ
+	NI1Edx3DlVr3ny/AmphtAl5qgtEIhOdxpiu99L1QiNLaIJVx/q79KY9IKmq/TMrgeTpkvyPAgr6
+	m7nnlJhxi1ckLuSgDhSjFIQgGbz+qv4f5L09R
+X-Google-Smtp-Source: AGHT+IFBbjED2EqikbdKhShjtfVb5PRKFRyT8EjmGDbN4ros8SSqreVtmvDbJs34rwQZ69DrleLNnaVEWKWJEe87q7c=
+X-Received: by 2002:a05:6902:98f:b0:e20:2245:6f9c with SMTP id
+ 3f1490d57ef6-e2e3a65ebc3mr4443602276.26.1729718488086; Wed, 23 Oct 2024
+ 14:21:28 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
+References: <20241022161009.982584-1-mic@digikod.net> <20241022161009.982584-2-mic@digikod.net>
+ <7751320f-cad0-477a-bed0-923dadfcf1cd@roeck-us.net>
+In-Reply-To: <7751320f-cad0-477a-bed0-923dadfcf1cd@roeck-us.net>
+From: Paul Moore <paul@paul-moore.com>
+Date: Wed, 23 Oct 2024 17:21:16 -0400
+Message-ID: <CAHC9VhTH5FNnkZwOSZzRfE5jJTo=tHqvrcb11MwmJzQvquV8JQ@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 01/14] lsm: Only build lsm_audit.c if CONFIG_AUDIT
+ is set
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>, 
+	Eric Paris <eparis@redhat.com>, =?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>, 
+	"Serge E . Hallyn" <serge@hallyn.com>, Ben Scarlato <akhna@google.com>, 
+	Casey Schaufler <casey@schaufler-ca.com>, Charles Zaffery <czaffery@roblox.com>, 
+	James Morris <jmorris@namei.org>, Jann Horn <jannh@google.com>, Jeff Xu <jeffxu@google.com>, 
+	Jorge Lucangeli Obes <jorgelo@google.com>, Kees Cook <kees@kernel.org>, 
+	Konstantin Meskhidze <konstantin.meskhidze@huawei.com>, Matt Bobrowski <mattbobrowski@google.com>, 
+	Mikhail Ivanov <ivanov.mikhail1@huawei-partners.com>, 
+	Praveen K Paladugu <prapal@linux.microsoft.com>, Robert Salvet <robert.salvet@roblox.com>, 
+	Shervin Oloumi <enlightened@google.com>, Song Liu <song@kernel.org>, 
+	Tahera Fahimi <fahimitahera@gmail.com>, audit@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-The move of the module sanity check to earlier skipped the audit logging
-call in the case of failure and to a place where the previously used
-context is unavailable.
+On Wed, Oct 23, 2024 at 2:51=E2=80=AFPM Guenter Roeck <linux@roeck-us.net> =
+wrote:
+>
+> On Tue, Oct 22, 2024 at 06:09:56PM +0200, Micka=C3=ABl Sala=C3=BCn wrote:
+> > When CONFIG_AUDIT is set, its CONFIG_NET dependency is also set, and th=
+e
+> > dev_get_by_index and init_net symbols (used by dump_common_audit_data)
+> > are found by the linker.  dump_common_audit_data() should then failed t=
+o
+> > build when CONFIG_NET is not set. However, because the compiler is
+> > smart, it knows that audit_log_start() always return NULL when
+> > !CONFIG_AUDIT, and it doesn't build the body of common_lsm_audit().  As
+> > a side effect, dump_common_audit_data() is not built and the linker
+> > doesn't error out because of missing symbols.
+> >
+> > Let's only build lsm_audit.o when CONFIG_AUDIT is set.
+>
+> CONFIG_AUDIT and CONFIG_SECURITY are independent of each other.
+> With CONFIG_SECURITY=3Dn and CONFIG_AUDIT=3Dy, we now get:
 
-Add an audit logging call for the module loading failure case and get
-the module name when possible.
+Yes, unfortunately the error was seen during linux-next testing too.
+I'm removing patch 1/14 from lsm/dev now.
 
-Link: https://issues.redhat.com/browse/RHEL-52839
-Fixes: 02da2cbab452 ("module: move check_modinfo() early to early_mod_check()")
-Signed-off-by: Richard Guy Briggs <rgb@redhat.com>
----
- kernel/module/main.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+> Error log:
+> arm-linux-gnueabi-ld: security/lsm_audit.o: in function `audit_log_lsm_da=
+ta':
+> security/lsm_audit.c:417:(.text+0x5e4): undefined reference to `lockdown_=
+reasons'
+> arm-linux-gnueabi-ld: security/lsm_audit.c:417:(.text+0x5e8): undefined r=
+eference to `lockdown_reasons'
+> make[3]: *** [scripts/Makefile.vmlinux:78: vmlinux] Error 1
+> make[2]: *** [Makefile:1178: vmlinux] Error 2
+> make[1]: *** [Makefile:224: __sub-make] Error 2
+> make: *** [Makefile:224: __sub-make] Error 2
 
-diff --git a/kernel/module/main.c b/kernel/module/main.c
-index 49b9bca9de12..1f482532ef66 100644
---- a/kernel/module/main.c
-+++ b/kernel/module/main.c
-@@ -3057,8 +3057,10 @@ static int load_module(struct load_info *info, const char __user *uargs,
- 	 * failures once the proper module was allocated and
- 	 * before that.
- 	 */
--	if (!module_allocated)
-+	if (!module_allocated) {
-+		audit_log_kern_module(info->name ? info->name : "(unavailable)");
- 		mod_stat_bump_becoming(info, flags);
-+	}
- 	free_copy(info, flags);
- 	return err;
- }
--- 
-2.43.5
-
+--=20
+paul-moore.com
