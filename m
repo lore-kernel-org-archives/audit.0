@@ -1,325 +1,428 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EED81714B8;
-	Fri, 25 Oct 2024 07:39:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ECE1420F3F5;
+	Fri, 25 Oct 2024 15:18:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729841997; cv=none; b=YCIHx0kHIH8pq9twmN3fXHbczfhmq9DnBYULk2sGtLgKCMtzA7bUL4AHpJi4+tqrRNxikQTLEjjBbAH4RMO6E15nNLNahcOoXZwvWAhZn/22K8awlSzeobRkbsHgHPf3XTWqBttyKn+7O1TGhtELOg2e7jQHo7wh8ysCDQRgqdI=
+	t=1729869497; cv=none; b=UNiqN0Zp5wLyOujqG7GjJeg8NTdzaUpA9Tw3HeRGPl4T0YHyIoSBIiZPsW5W2xjmM9TriQKLD5E1CBVKT6LL+N9ATOSbTItfRrEwxeXc7EMf5npv7Kh8BTAq/o7cDendcTlXBIePgn4I9tbQ1zosTEozIavSXPfoZCBF9ZfirJk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729841997; c=relaxed/simple;
-	bh=YNh9X+sKu3F4oHhz2LxLQxpn+h6J6qjTFKyLVPjNTcQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QSWf8m3lWHFONeCG9+FL0t7Z3YtSrHM4w0VNoJPnYs9w+n6oUsoHw5ciYxhilUqBz6g9PpeQNaIy3KCLQM/5I6ro7ZndSUH8YsnJF1+mdOhb3SNtmdKh44gMoBq7CI2rpMkIUp+EBSK5+WKmHksEdpqOgPPi7r2FeZZ35/VU1mU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ly2SHXeA; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1729869497; c=relaxed/simple;
+	bh=yvo/kBUymHvCb+JUMGdtykJClLo6Asc5Iy2562Ew7Qg=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=kYIXM/tEfp8eVh7xVeMYwBsWvSOOeUux8P3ntsM+FSEv7UyV3oB6TlmRgRpQOJ9NNV74U9B8O3tscaKFPw0PNryJqmxpgMakjcwnhPbDb9qaDEzHu/liosD5aXe0hUf8kqtZzPxTz1YuXqLsXS4A+ouEGsVb8IRuYW/QZMuURy4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=reI8OX7f; arc=none smtp.client-ip=13.77.154.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ly2SHXeA"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1729841995; x=1761377995;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=YNh9X+sKu3F4oHhz2LxLQxpn+h6J6qjTFKyLVPjNTcQ=;
-  b=ly2SHXeAAGQU9Hlb+pzRjTeZN+htqV6QGHyxNHKtXdmMdWqhWTaR5DKB
-   NE4pnJr/jkG63uMaDzT0d46dmkN2TIxxVWgCBt6Z6xL4maASybq2S4z/7
-   Q2gAxYRzJ0+VkEB2SUdHaQtP5YBKjr49L6cKLXgrTFv87wfqdsKjHQkL/
-   03oDBFPYawz5IWhYFN7+y8SaQ8aFTjiUXMOOJFHu8vLfYd1h13Fsam5rj
-   7Bdz2w7H41cmlwlV2yWGjxNj+RprX3jZc5xPlH/jcj+Z2rUZ4pcT9pk97
-   tg3ePTSoYPMh5FZxHZqQX7LyUMOQE96r8wy8mqUjs/4rdcCx+ekNm505S
-   g==;
-X-CSE-ConnectionGUID: o4XCv7eYRImN8+R4QMxwcw==
-X-CSE-MsgGUID: 6wwltDTJRIWKTVj7CUtuUg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="40610777"
-X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="40610777"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2024 00:39:51 -0700
-X-CSE-ConnectionGUID: FMQpQUSYStW/aAdih13W3Q==
-X-CSE-MsgGUID: k69e6RSbSJ2UkOTx059wDw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,231,1725346800"; 
-   d="scan'208";a="85632622"
-Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by orviesa005.jf.intel.com with ESMTP; 25 Oct 2024 00:39:48 -0700
-Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1t4EvB-000Xme-1f;
-	Fri, 25 Oct 2024 07:39:45 +0000
-Date: Fri, 25 Oct 2024 15:38:56 +0800
-From: kernel test robot <lkp@intel.com>
-To: Richard Guy Briggs <rgb@redhat.com>,
-	Linux-Audit Mailing List <linux-audit@lists.linux-audit.osci.io>,
-	LKML <linux-kernel@vger.kernel.org>, linux-modules@vger.kernel.org,
-	Linux Kernel Audit Mailing List <audit@vger.kernel.org>
-Cc: oe-kbuild-all@lists.linux.dev, Paul Moore <paul@paul-moore.com>,
-	Eric Paris <eparis@parisplace.org>, Steve Grubb <sgrubb@redhat.com>,
-	Richard Guy Briggs <rgb@redhat.com>
-Subject: Re: [PATCH v1] audit,module: restore audit logging in load failure
- case
-Message-ID: <202410251446.xzMTe7Yk-lkp@intel.com>
-References: <999cdd694f951acd2f4ad665fe7ab97d0834e162.1729717542.git.rgb@redhat.com>
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="reI8OX7f"
+Received: from pwmachine.localnet (84-115-216-151.cable.dynamic.surfer.at [84.115.216.151])
+	by linux.microsoft.com (Postfix) with ESMTPSA id EB143211A5B4;
+	Fri, 25 Oct 2024 08:18:08 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com EB143211A5B4
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1729869494;
+	bh=nI0uI5G09AGa0LcwoqlAJHlp79iY6kVb3cSVEl3GJvo=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=reI8OX7fPwx7agFCGOa1ErdswW7GIZMtUqr6xuAQ8JnbZ2YgvPBXCsCMGktxWymZd
+	 svPvSY1pNRLyRUOkIxishluUywWYI82kg1RYv+aGaiAID+L0ogFAGHX+NWgAuHo4mg
+	 adqz7mchgFABb+ilpHSmyLNmvIJa73E9c5YqPO2w=
+From: Francis Laniel <flaniel@linux.microsoft.com>
+To: Eric Paris <eparis@redhat.com>, Paul Moore <paul@paul-moore.com>, =?ISO-8859-1?Q?G=FCnther?= Noack <gnoack@google.com>, "Serge E . Hallyn" <serge@hallyn.com>, =?ISO-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>
+Cc: =?ISO-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>, Ben Scarlato <akhna@google.com>, Casey Schaufler <casey@schaufler-ca.com>, Charles Zaffery <czaffery@roblox.com>, James Morris <jmorris@namei.org>, Jann Horn <jannh@google.com>, Jeff Xu <jeffxu@google.com>, Jorge Lucangeli Obes <jorgelo@google.com>, Kees Cook <kees@kernel.org>, Konstantin Meskhidze <konstantin.meskhidze@huawei.com>, Matt Bobrowski <mattbobrowski@google.com>, Mikhail Ivanov <ivanov.mikhail1@huawei-partners.com>, Praveen K Paladugu <prapal@linux.microsoft.com>, Robert Salvet <robert.salvet@roblox.com>, Shervin Oloumi <enlightened@google.com>, Song Liu <song@kernel.org>, Tahera Fahimi <fahimitahera@gmail.com>, audit@vger.kernel.org, linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
+Subject: Re: [RFC PATCH v2 04/14] landlock: Add unique ID generator
+Date: Fri, 25 Oct 2024 17:18:06 +0200
+Message-ID: <1962333.tdWV9SEqCh@pwmachine>
+In-Reply-To: <20241022161009.982584-5-mic@digikod.net>
+References: <20241022161009.982584-1-mic@digikod.net> <20241022161009.982584-5-mic@digikod.net>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <999cdd694f951acd2f4ad665fe7ab97d0834e162.1729717542.git.rgb@redhat.com>
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
 
-Hi Richard,
+Hi!
 
-kernel test robot noticed the following build warnings:
+Le mardi 22 octobre 2024, 18:09:59 CEST Micka=EBl Sala=FCn a =E9crit :
+> Landlock IDs can be generated to uniquely identify Landlock objects.
+> For now, only Landlock domains get an ID at creation time.
+>=20
+> These IDs have important properties:
+> * They are unique during the lifetime of the running system thanks to
+>   the 64-bit values: at worse, 2^60 - 2*2^32 useful IDs.
+> * They are always greater than 2^32 and must then be stored in 64-bit
+>   integer types.
+> * The initial ID (at boot time) is randomly picked between 2^32 and
+>   2^33, which limits collisions in logs between different boots.
+> * IDs are sequential, which enables users to order them.
+> * IDs may not be consecutive but increase with a random 2^4 step, which
+>   limits side channels.
+>=20
+> Such IDs can be exposed to unprivileged processes, even if it is not the
+> case with this audit patch series.  The domain IDs will be useful for
+> user space to identify sandboxes and get their properties.
+>=20
+> Cc: G=FCnther Noack <gnoack@google.com>
+> Cc: Paul Moore <paul@paul-moore.com>
+> Signed-off-by: Micka=EBl Sala=FCn <mic@digikod.net>
+> Link: https://lore.kernel.org/r/20241022161009.982584-5-mic@digikod.net
+> ---
+>=20
+> Changes since v1:
+> * New patch.
+> ---
+>  security/landlock/.kunitconfig               |   2 +
+>  security/landlock/Makefile                   |   2 +
+>  security/landlock/id.c                       | 242 +++++++++++++++++++
+>  security/landlock/id.h                       |  25 ++
+>  security/landlock/setup.c                    |   2 +
+>  tools/testing/kunit/configs/all_tests.config |   2 +
+>  6 files changed, 275 insertions(+)
+>  create mode 100644 security/landlock/id.c
+>  create mode 100644 security/landlock/id.h
+>=20
+> diff --git a/security/landlock/.kunitconfig b/security/landlock/.kunitcon=
+fig
+> index 03e119466604..f9423f01ac5b 100644
+> --- a/security/landlock/.kunitconfig
+> +++ b/security/landlock/.kunitconfig
+> @@ -1,4 +1,6 @@
+> +CONFIG_AUDIT=3Dy
+>  CONFIG_KUNIT=3Dy
+> +CONFIG_NET=3Dy
+>  CONFIG_SECURITY=3Dy
+>  CONFIG_SECURITY_LANDLOCK=3Dy
+>  CONFIG_SECURITY_LANDLOCK_KUNIT_TEST=3Dy
+> diff --git a/security/landlock/Makefile b/security/landlock/Makefile
+> index b4538b7cf7d2..e1777abbc413 100644
+> --- a/security/landlock/Makefile
+> +++ b/security/landlock/Makefile
+> @@ -4,3 +4,5 @@ landlock-y :=3D setup.o syscalls.o object.o ruleset.o \
+>  	cred.o task.o fs.o
+>=20
+>  landlock-$(CONFIG_INET) +=3D net.o
+> +
+> +landlock-$(CONFIG_AUDIT) +=3D id.o
+> diff --git a/security/landlock/id.c b/security/landlock/id.c
+> new file mode 100644
+> index 000000000000..5d0b7743c308
+> --- /dev/null
+> +++ b/security/landlock/id.c
+> @@ -0,0 +1,242 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Landlock LSM - Unique identification number generator
+> + *
+> + * Copyright =A9 2024 Microsoft Corporation
+> + */
+> +
+> +#include <kunit/test.h>
+> +#include <linux/atomic.h>
+> +#include <linux/random.h>
+> +#include <linux/spinlock.h>
+> +
+> +#include "common.h"
+> +#include "id.h"
+> +
+> +#define COUNTER_PRE_INIT 0
+> +
+> +static atomic64_t global_counter =3D ATOMIC64_INIT(COUNTER_PRE_INIT);
+> +
+> +static void __init init_id(atomic64_t *const counter, const u32
+> random_32bits) +{
+> +	u64 init;
+> +
+> +	/*
+> +	 * Ensures sure 64-bit values are always used by user space (or may
+> +	 * fail with -EOVERFLOW), and makes this testable.
+> +	 */
+> +	init =3D 1ULL << 32;
+> +
+> +	/*
+> +	 * Makes a large (2^32) boot-time value to limit ID collision in logs
+> +	 * from different boots, and to limit info leak about the number of
+> +	 * initially (relative to the reader) created elements (e.g. domains).
+> +	 */
+> +	init +=3D random_32bits;
+> +
+> +	/* Sets first or ignores.  This will be the first ID. */
+> +	atomic64_cmpxchg(counter, COUNTER_PRE_INIT, init);
+> +}
+> +
+> +#ifdef CONFIG_SECURITY_LANDLOCK_KUNIT_TEST
+> +
+> +static void test_init_min(struct kunit *const test)
+> +{
+> +	atomic64_t counter =3D ATOMIC64_INIT(COUNTER_PRE_INIT);
+> +
+> +	init_id(&counter, 0);
+> +	KUNIT_EXPECT_EQ(test, atomic64_read(&counter), 1ULL + U32_MAX);
+> +}
+> +
+> +static void test_init_max(struct kunit *const test)
+> +{
+> +	atomic64_t counter =3D ATOMIC64_INIT(COUNTER_PRE_INIT);
+> +
+> +	init_id(&counter, ~0);
+> +	KUNIT_EXPECT_EQ(test, atomic64_read(&counter), 1 + (2ULL * U32_MAX));
+> +}
+> +
+> +static void test_init_once(struct kunit *const test)
+> +{
+> +	const u64 first_init =3D 1ULL + U32_MAX;
+> +	atomic64_t counter =3D ATOMIC64_INIT(COUNTER_PRE_INIT);
+> +
+> +	init_id(&counter, 0);
+> +	KUNIT_EXPECT_EQ(test, atomic64_read(&counter), first_init);
+> +
+> +	init_id(&counter, ~0);
+> +	KUNIT_EXPECT_EQ(test, atomic64_read(&counter), first_init);
+> +}
+> +
+> +#endif /* CONFIG_SECURITY_LANDLOCK_KUNIT_TEST */
+> +
+> +void __init landlock_init_id(void)
+> +{
+> +	return init_id(&global_counter, get_random_u32());
+> +}
+> +
+> +/*
+> + * It's not worth it to try to hide the monotonic counter because it can
+> still + * be inferred (with N counter ranges), and if we are allowed to
+> read the inode + * number we should also be allowed to read the time
+> creation anyway, and it + * can be handy to store and sort domain IDs for
+> user space.
+> + *
+> + * Returns the value of global_counter and increment it to let some space
+> for + * the next one.
+> + */
+> +static u64 get_id(size_t number_of_ids, atomic64_t *const counter,
+> +		  u8 random_4bits)
+> +{
+> +	u64 id, step;
+> +
+> +	/*
+> +	 * We should return at least 1 ID, and we may need a set of=20
+consecutive
+> +	 * ones (e.g. to generate a set of inodes).
+> +	 */
+> +	if (WARN_ON_ONCE(number_of_ids <=3D 0))
+> +		number_of_ids =3D 1;
+> +
+> +	/*
+> +	 * Blurs the next ID guess with 1/16 ratio.  We get 2^(64 - 4) -
+> +	 * (2 * 2^32), so a bit less than 2^60 available IDs, which should be
+> +	 * much more than enough considering the number of CPU cycles required
+> +	 * to get a new ID (e.g. a full landlock_restrict_self() call), and=20
+the
+> +	 * cost of draining all available IDs during the system's uptime.
+> +	 */
+> +	random_4bits =3D random_4bits % (1 << 4);
+> +	step =3D number_of_ids + random_4bits;
+> +
+> +	/* It is safe to cast a signed atomic to an unsigned value. */
+> +	id =3D atomic64_fetch_add(step, counter);
+> +
+> +	/* Warns if landlock_init_id() was not called. */
+> +	WARN_ON_ONCE(id =3D=3D COUNTER_PRE_INIT);
+> +	return id;
+> +}
+> +
+> +#ifdef CONFIG_SECURITY_LANDLOCK_KUNIT_TEST
+> +
+> +static void test_range1_rand0(struct kunit *const test)
+> +{
+> +	atomic64_t counter;
+> +	u64 init;
+> +
+> +	init =3D get_random_u32();
+> +	atomic64_set(&counter, init);
+> +	KUNIT_EXPECT_EQ(test, get_id(1, &counter, 0), init);
+> +	KUNIT_EXPECT_EQ(test,
+> +			get_id(get_random_u8(), &counter, get_random_u8()),
+> +			init + 1);
+> +}
+> +
+> +static void test_range1_rand1(struct kunit *const test)
+> +{
+> +	atomic64_t counter;
+> +	u64 init;
+> +
+> +	init =3D get_random_u32();
+> +	atomic64_set(&counter, init);
+> +	KUNIT_EXPECT_EQ(test, get_id(1, &counter, 1), init);
+> +	KUNIT_EXPECT_EQ(test,
+> +			get_id(get_random_u8(), &counter, get_random_u8()),
+> +			init + 2);
+> +}
+> +
+> +static void test_range1_rand16(struct kunit *const test)
+> +{
+> +	atomic64_t counter;
+> +	u64 init;
+> +
+> +	init =3D get_random_u32();
+> +	atomic64_set(&counter, init);
+> +	KUNIT_EXPECT_EQ(test, get_id(1, &counter, 16), init);
+> +	KUNIT_EXPECT_EQ(test,
+> +			get_id(get_random_u8(), &counter, get_random_u8()),
+> +			init + 1);
+> +}
+> +
+> +static void test_range2_rand0(struct kunit *const test)
+> +{
+> +	atomic64_t counter;
+> +	u64 init;
+> +
+> +	init =3D get_random_u32();
+> +	atomic64_set(&counter, init);
+> +	KUNIT_EXPECT_EQ(test, get_id(2, &counter, 0), init);
+> +	KUNIT_EXPECT_EQ(test,
+> +			get_id(get_random_u8(), &counter, get_random_u8()),
+> +			init + 2);
+> +}
+> +
+> +static void test_range2_rand1(struct kunit *const test)
+> +{
+> +	atomic64_t counter;
+> +	u64 init;
+> +
+> +	init =3D get_random_u32();
+> +	atomic64_set(&counter, init);
+> +	KUNIT_EXPECT_EQ(test, get_id(2, &counter, 1), init);
+> +	KUNIT_EXPECT_EQ(test,
+> +			get_id(get_random_u8(), &counter, get_random_u8()),
+> +			init + 3);
+> +}
+> +
+> +static void test_range2_rand2(struct kunit *const test)
+> +{
+> +	atomic64_t counter;
+> +	u64 init;
+> +
+> +	init =3D get_random_u32();
+> +	atomic64_set(&counter, init);
+> +	KUNIT_EXPECT_EQ(test, get_id(2, &counter, 2), init);
+> +	KUNIT_EXPECT_EQ(test,
+> +			get_id(get_random_u8(), &counter, get_random_u8()),
+> +			init + 4);
+> +}
+> +
+> +static void test_range2_rand16(struct kunit *const test)
+> +{
+> +	atomic64_t counter;
+> +	u64 init;
+> +
+> +	init =3D get_random_u32();
+> +	atomic64_set(&counter, init);
+> +	KUNIT_EXPECT_EQ(test, get_id(2, &counter, 16), init);
+> +	KUNIT_EXPECT_EQ(test,
+> +			get_id(get_random_u8(), &counter, get_random_u8()),
+> +			init + 2);
+> +}
+> +
+> +#endif /* CONFIG_SECURITY_LANDLOCK_KUNIT_TEST */
+> +
+> +u64 landlock_get_id(size_t number_of_ids)
+> +{
+> +	return get_id(number_of_ids, &global_counter, get_random_u8());
+> +}
+> +
+> +#ifdef CONFIG_SECURITY_LANDLOCK_KUNIT_TEST
+> +
+> +static struct kunit_case test_cases[] =3D {
+> +	/* clang-format off */
+> +	KUNIT_CASE(test_init_min),
+> +	KUNIT_CASE(test_init_max),
+> +	KUNIT_CASE(test_init_once),
+> +	KUNIT_CASE(test_range1_rand0),
+> +	KUNIT_CASE(test_range1_rand1),
+> +	KUNIT_CASE(test_range1_rand16),
+> +	KUNIT_CASE(test_range2_rand0),
+> +	KUNIT_CASE(test_range2_rand1),
+> +	KUNIT_CASE(test_range2_rand2),
+> +	KUNIT_CASE(test_range2_rand16),
+> +	{}
+> +	/* clang-format on */
+> +};
+> +
+> +static struct kunit_suite test_suite =3D {
+> +	.name =3D "landlock_id",
+> +	.test_cases =3D test_cases,
+> +};
+> +
+> +kunit_test_suite(test_suite);
+> +
+> +#endif /* CONFIG_SECURITY_LANDLOCK_KUNIT_TEST */
+> diff --git a/security/landlock/id.h b/security/landlock/id.h
+> new file mode 100644
+> index 000000000000..689ba7607472
+> --- /dev/null
+> +++ b/security/landlock/id.h
+> @@ -0,0 +1,25 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only */
+> +/*
+> + * Landlock LSM - Unique identification number generator
+> + *
+> + * Copyright =A9 2024 Microsoft Corporation
+> + */
+> +
+> +#ifndef _SECURITY_LANDLOCK_ID_H
+> +#define _SECURITY_LANDLOCK_ID_H
+> +
+> +#ifdef CONFIG_AUDIT
+> +
+> +void __init landlock_init_id(void);
+> +
+> +u64 landlock_get_id(size_t number_of_ids);
+> +
+> +#else /* CONFIG_AUDIT */
+> +
+> +static inline void __init landlock_init_id(void)
+> +{
+> +}
 
-[auto build test WARNING on mcgrof/modules-next]
-[also build test WARNING on linus/master v6.12-rc4 next-20241024]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Should the function have the same signature than when CONFIG_AUDIT is set?
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Richard-Guy-Briggs/audit-module-restore-audit-logging-in-load-failure-case/20241024-051515
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git modules-next
-patch link:    https://lore.kernel.org/r/999cdd694f951acd2f4ad665fe7ab97d0834e162.1729717542.git.rgb%40redhat.com
-patch subject: [PATCH v1] audit,module: restore audit logging in load failure case
-config: x86_64-randconfig-121-20241025 (https://download.01.org/0day-ci/archive/20241025/202410251446.xzMTe7Yk-lkp@intel.com/config)
-compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241025/202410251446.xzMTe7Yk-lkp@intel.com/reproduce)
+> +#endif /* CONFIG_AUDIT */
+> +
+> +#endif /* _SECURITY_LANDLOCK_ID_H */
+> diff --git a/security/landlock/setup.c b/security/landlock/setup.c
+> index 28519a45b11f..d297083efcb1 100644
+> --- a/security/landlock/setup.c
+> +++ b/security/landlock/setup.c
+> @@ -13,6 +13,7 @@
+>  #include "common.h"
+>  #include "cred.h"
+>  #include "fs.h"
+> +#include "id.h"
+>  #include "net.h"
+>  #include "setup.h"
+>  #include "task.h"
+> @@ -33,6 +34,7 @@ const struct lsm_id landlock_lsmid =3D {
+>=20
+>  static int __init landlock_init(void)
+>  {
+> +	landlock_init_id();
+>  	landlock_add_cred_hooks();
+>  	landlock_add_task_hooks();
+>  	landlock_add_fs_hooks();
+> diff --git a/tools/testing/kunit/configs/all_tests.config
+> b/tools/testing/kunit/configs/all_tests.config index
+> b3b00269a52a..ea1f824ae70f 100644
+> --- a/tools/testing/kunit/configs/all_tests.config
+> +++ b/tools/testing/kunit/configs/all_tests.config
+> @@ -44,6 +44,8 @@ CONFIG_DAMON_DBGFS_DEPRECATED=3Dy
+>=20
+>  CONFIG_REGMAP_BUILD=3Dy
+>=20
+> +CONFIG_AUDIT=3Dy
+> +
+>  CONFIG_SECURITY=3Dy
+>  CONFIG_SECURITY_APPARMOR=3Dy
+>  CONFIG_SECURITY_LANDLOCK=3Dy
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410251446.xzMTe7Yk-lkp@intel.com/
+Best regards.
 
-sparse warnings: (new ones prefixed by >>)
->> kernel/module/main.c:3336:50: sparse: sparse: incorrect type in argument 1 (different modifiers) @@     expected char *name @@     got char const * @@
-   kernel/module/main.c:3336:50: sparse:     expected char *name
-   kernel/module/main.c:3336:50: sparse:     got char const *
 
-vim +3336 kernel/module/main.c
-
-  3124	
-  3125	/*
-  3126	 * Allocate and load the module: note that size of section 0 is always
-  3127	 * zero, and we rely on this for optional sections.
-  3128	 */
-  3129	static int load_module(struct load_info *info, const char __user *uargs,
-  3130			       int flags)
-  3131	{
-  3132		struct module *mod;
-  3133		bool module_allocated = false;
-  3134		long err = 0;
-  3135		char *after_dashes;
-  3136	
-  3137		/*
-  3138		 * Do the signature check (if any) first. All that
-  3139		 * the signature check needs is info->len, it does
-  3140		 * not need any of the section info. That can be
-  3141		 * set up later. This will minimize the chances
-  3142		 * of a corrupt module causing problems before
-  3143		 * we even get to the signature check.
-  3144		 *
-  3145		 * The check will also adjust info->len by stripping
-  3146		 * off the sig length at the end of the module, making
-  3147		 * checks against info->len more correct.
-  3148		 */
-  3149		err = module_sig_check(info, flags);
-  3150		if (err)
-  3151			goto free_copy;
-  3152	
-  3153		/*
-  3154		 * Do basic sanity checks against the ELF header and
-  3155		 * sections. Cache useful sections and set the
-  3156		 * info->mod to the userspace passed struct module.
-  3157		 */
-  3158		err = elf_validity_cache_copy(info, flags);
-  3159		if (err)
-  3160			goto free_copy;
-  3161	
-  3162		err = early_mod_check(info, flags);
-  3163		if (err)
-  3164			goto free_copy;
-  3165	
-  3166		/* Figure out module layout, and allocate all the memory. */
-  3167		mod = layout_and_allocate(info, flags);
-  3168		if (IS_ERR(mod)) {
-  3169			err = PTR_ERR(mod);
-  3170			goto free_copy;
-  3171		}
-  3172	
-  3173		module_allocated = true;
-  3174	
-  3175		audit_log_kern_module(mod->name);
-  3176	
-  3177		/* Reserve our place in the list. */
-  3178		err = add_unformed_module(mod);
-  3179		if (err)
-  3180			goto free_module;
-  3181	
-  3182		/*
-  3183		 * We are tainting your kernel if your module gets into
-  3184		 * the modules linked list somehow.
-  3185		 */
-  3186		module_augment_kernel_taints(mod, info);
-  3187	
-  3188		/* To avoid stressing percpu allocator, do this once we're unique. */
-  3189		err = percpu_modalloc(mod, info);
-  3190		if (err)
-  3191			goto unlink_mod;
-  3192	
-  3193		/* Now module is in final location, initialize linked lists, etc. */
-  3194		err = module_unload_init(mod);
-  3195		if (err)
-  3196			goto unlink_mod;
-  3197	
-  3198		init_param_lock(mod);
-  3199	
-  3200		/*
-  3201		 * Now we've got everything in the final locations, we can
-  3202		 * find optional sections.
-  3203		 */
-  3204		err = find_module_sections(mod, info);
-  3205		if (err)
-  3206			goto free_unload;
-  3207	
-  3208		err = check_export_symbol_versions(mod);
-  3209		if (err)
-  3210			goto free_unload;
-  3211	
-  3212		/* Set up MODINFO_ATTR fields */
-  3213		setup_modinfo(mod, info);
-  3214	
-  3215		/* Fix up syms, so that st_value is a pointer to location. */
-  3216		err = simplify_symbols(mod, info);
-  3217		if (err < 0)
-  3218			goto free_modinfo;
-  3219	
-  3220		err = apply_relocations(mod, info);
-  3221		if (err < 0)
-  3222			goto free_modinfo;
-  3223	
-  3224		err = post_relocation(mod, info);
-  3225		if (err < 0)
-  3226			goto free_modinfo;
-  3227	
-  3228		flush_module_icache(mod);
-  3229	
-  3230		/* Now copy in args */
-  3231		mod->args = strndup_user(uargs, ~0UL >> 1);
-  3232		if (IS_ERR(mod->args)) {
-  3233			err = PTR_ERR(mod->args);
-  3234			goto free_arch_cleanup;
-  3235		}
-  3236	
-  3237		init_build_id(mod, info);
-  3238	
-  3239		/* Ftrace init must be called in the MODULE_STATE_UNFORMED state */
-  3240		ftrace_module_init(mod);
-  3241	
-  3242		/* Finally it's fully formed, ready to start executing. */
-  3243		err = complete_formation(mod, info);
-  3244		if (err)
-  3245			goto ddebug_cleanup;
-  3246	
-  3247		err = prepare_coming_module(mod);
-  3248		if (err)
-  3249			goto bug_cleanup;
-  3250	
-  3251		mod->async_probe_requested = async_probe;
-  3252	
-  3253		/* Module is ready to execute: parsing args may do that. */
-  3254		after_dashes = parse_args(mod->name, mod->args, mod->kp, mod->num_kp,
-  3255					  -32768, 32767, mod,
-  3256					  unknown_module_param_cb);
-  3257		if (IS_ERR(after_dashes)) {
-  3258			err = PTR_ERR(after_dashes);
-  3259			goto coming_cleanup;
-  3260		} else if (after_dashes) {
-  3261			pr_warn("%s: parameters '%s' after `--' ignored\n",
-  3262			       mod->name, after_dashes);
-  3263		}
-  3264	
-  3265		/* Link in to sysfs. */
-  3266		err = mod_sysfs_setup(mod, info, mod->kp, mod->num_kp);
-  3267		if (err < 0)
-  3268			goto coming_cleanup;
-  3269	
-  3270		if (is_livepatch_module(mod)) {
-  3271			err = copy_module_elf(mod, info);
-  3272			if (err < 0)
-  3273				goto sysfs_cleanup;
-  3274		}
-  3275	
-  3276		/* Get rid of temporary copy. */
-  3277		free_copy(info, flags);
-  3278	
-  3279		codetag_load_module(mod);
-  3280	
-  3281		/* Done! */
-  3282		trace_module_load(mod);
-  3283	
-  3284		return do_init_module(mod);
-  3285	
-  3286	 sysfs_cleanup:
-  3287		mod_sysfs_teardown(mod);
-  3288	 coming_cleanup:
-  3289		mod->state = MODULE_STATE_GOING;
-  3290		destroy_params(mod->kp, mod->num_kp);
-  3291		blocking_notifier_call_chain(&module_notify_list,
-  3292					     MODULE_STATE_GOING, mod);
-  3293		klp_module_going(mod);
-  3294	 bug_cleanup:
-  3295		mod->state = MODULE_STATE_GOING;
-  3296		/* module_bug_cleanup needs module_mutex protection */
-  3297		mutex_lock(&module_mutex);
-  3298		module_bug_cleanup(mod);
-  3299		mutex_unlock(&module_mutex);
-  3300	
-  3301	 ddebug_cleanup:
-  3302		ftrace_release_mod(mod);
-  3303		synchronize_rcu();
-  3304		kfree(mod->args);
-  3305	 free_arch_cleanup:
-  3306		module_arch_cleanup(mod);
-  3307	 free_modinfo:
-  3308		free_modinfo(mod);
-  3309	 free_unload:
-  3310		module_unload_free(mod);
-  3311	 unlink_mod:
-  3312		mutex_lock(&module_mutex);
-  3313		/* Unlink carefully: kallsyms could be walking list. */
-  3314		list_del_rcu(&mod->list);
-  3315		mod_tree_remove(mod);
-  3316		wake_up_all(&module_wq);
-  3317		/* Wait for RCU-sched synchronizing before releasing mod->list. */
-  3318		synchronize_rcu();
-  3319		mutex_unlock(&module_mutex);
-  3320	 free_module:
-  3321		mod_stat_bump_invalid(info, flags);
-  3322		/* Free lock-classes; relies on the preceding sync_rcu() */
-  3323		for_class_mod_mem_type(type, core_data) {
-  3324			lockdep_free_key_range(mod->mem[type].base,
-  3325					       mod->mem[type].size);
-  3326		}
-  3327	
-  3328		module_deallocate(mod, info);
-  3329	 free_copy:
-  3330		/*
-  3331		 * The info->len is always set. We distinguish between
-  3332		 * failures once the proper module was allocated and
-  3333		 * before that.
-  3334		 */
-  3335		if (!module_allocated) {
-> 3336			audit_log_kern_module(info->name ? info->name : "(unavailable)");
-  3337			mod_stat_bump_becoming(info, flags);
-  3338		}
-  3339		free_copy(info, flags);
-  3340		return err;
-  3341	}
-  3342	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
