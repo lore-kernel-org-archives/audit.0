@@ -1,210 +1,332 @@
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6E1E166F23;
-	Fri, 25 Oct 2024 15:25:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BFB31885BE;
+	Mon, 28 Oct 2024 05:56:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729869956; cv=none; b=qzbUI0WwbJ3turLVF6Lzl30BvPQnaaCuTacKbhq402hYGo+8xy7sg25w6tXbqdElTIDgBV3i0DaNRGnYBQWbAfkjvLVpmN3zxQYph+4WcA9qLdZK61YGjjGKyPHxk49vlRIM550b7uh/LbeF4RJKl8d22ZAZ0sGE2QK4MiwB9zA=
+	t=1730094978; cv=none; b=Y9gnB1oALnUim55rwjQmfVsOWIcOJjq7ek6tCr+izW4e6mAJoA74JqsFS9re5A0OGZUpXxCWUA4C1nntKbwxw3sB2KFZfIfw+3mO79PdXBaU9d/wvdkspotLMcvFnjWghrjqtjtlVksBu6+mVHEJQZtNznNIqwqvKu6nO2feJ7M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729869956; c=relaxed/simple;
-	bh=hbsFD+YaFzPHyt/eMlC7hsrHeIOi0W22CnfP4S4x5aA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=giHaSqqmDeYvY9GyJoJQViiDK+q0mdcd/9GFvvXdh4BSg0Mijzqj5ehOBMwNA3VHux2c0FSt/VsZK7YVnUmSVARolHK4O3KI0V6T7FNm8OSEnZt4B5lJmheD2BVBpm2XzohJErFaSvhtq8vsO+r1ZDYFc1zigb5cE0hL8UW09WI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=XoTpv3v3; arc=none smtp.client-ip=13.77.154.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
+	s=arc-20240116; t=1730094978; c=relaxed/simple;
+	bh=QBDLZpz+h+e5UehtO06ip2OGJXJ+vu2UmeJfqKj+pAw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=s1jCIZkynT0e9yevuQngSaG/GSjBBrFDsb/xmRDIlnBiBY+infOip1+qw1buHwvLD9nSB5nYR1yEwRIjJDf5mULNvkYazh8pX1M934ARLGDSDczZd0q5+PMVV8d93G+VBv7GcpAuLruP/8QAaeD8tCF6/J3ldYu79+J4cUKeuU4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nIBDDrC/; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="XoTpv3v3"
-Received: from pwmachine.localnet (84-115-216-151.cable.dynamic.surfer.at [84.115.216.151])
-	by linux.microsoft.com (Postfix) with ESMTPSA id B1591211A5B7;
-	Fri, 25 Oct 2024 08:25:47 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com B1591211A5B7
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1729869953;
-	bh=ANP6GkLuBGGbk8Pcly384KRE+EVRs/CpCPPDX92ra0g=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=XoTpv3v3SQM6EUslxPlPW3Y8UdsJCExgZ3ENt9zw/vUJYqTyblxacqY+ZfoJd5ydK
-	 u9uOxO7LWOo8uoFgJVqN/asWTR22pXkIG/xSon8YnjnbvwfCx/OZxunMALjP5kcXJg
-	 20LKlshhJLLKk7kktnSDKIYZDcklnZh0BQxmQT38=
-From: Francis Laniel <flaniel@linux.microsoft.com>
-To: Eric Paris <eparis@redhat.com>, Paul Moore <paul@paul-moore.com>, =?ISO-8859-1?Q?G=FCnther?= Noack <gnoack@google.com>, "Serge E . Hallyn" <serge@hallyn.com>, =?ISO-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>
-Cc: =?ISO-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>, Ben Scarlato <akhna@google.com>, Casey Schaufler <casey@schaufler-ca.com>, Charles Zaffery <czaffery@roblox.com>, James Morris <jmorris@namei.org>, Jann Horn <jannh@google.com>, Jeff Xu <jeffxu@google.com>, Jorge Lucangeli Obes <jorgelo@google.com>, Kees Cook <kees@kernel.org>, Konstantin Meskhidze <konstantin.meskhidze@huawei.com>, Matt Bobrowski <mattbobrowski@google.com>, Mikhail Ivanov <ivanov.mikhail1@huawei-partners.com>, Praveen K Paladugu <prapal@linux.microsoft.com>, Robert Salvet <robert.salvet@roblox.com>, Shervin Oloumi <enlightened@google.com>, Song Liu <song@kernel.org>, Tahera Fahimi <fahimitahera@gmail.com>, audit@vger.kernel.org, linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
-Subject: Re: [RFC PATCH v2 12/14] landlock: Log TCP bind and connect denials
-Date: Fri, 25 Oct 2024 17:25:45 +0200
-Message-ID: <2345615.iZASKD2KPV@pwmachine>
-In-Reply-To: <20241022161009.982584-13-mic@digikod.net>
-References: <20241022161009.982584-1-mic@digikod.net> <20241022161009.982584-13-mic@digikod.net>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nIBDDrC/"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1730094976; x=1761630976;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=QBDLZpz+h+e5UehtO06ip2OGJXJ+vu2UmeJfqKj+pAw=;
+  b=nIBDDrC/kHHgQrs0ocGPbGpJkJ6kfjP0V0cNK2Fm6+xBXEbYUn/3CTGH
+   zUC/GW96ED0n1mvfpqSqglHYwUPqNDspQvd9NuficKfisjsoe6ocrZoj5
+   PUxKo+mJEZHhWT/W81EN82JjNDJ8mLzQzw2J2aXSICyQJC8Z4kbMwXW/k
+   6U0XgvE7USOiZhI6bBLYVY/TmE98Vaw+/d3oz2N9U0o7V3Gq9pPScMvNl
+   Gbq/ZklXadmBHbUEX+dE3671AbxsoVf3Bkwwed8yHTe18d1mZp5SLM9qk
+   A6tNZjYMX5IyEvDOpMwX3jIEJKbKx/csOuBOOp08Q9wNP08k8d6rpVmEW
+   Q==;
+X-CSE-ConnectionGUID: woCMfektTU22UQHP6wzalQ==
+X-CSE-MsgGUID: RDj1fF1tQHSzly8DUsaOSA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="29817231"
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="29817231"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2024 22:56:15 -0700
+X-CSE-ConnectionGUID: KRcTFeykS82ZftaEE399aA==
+X-CSE-MsgGUID: uDvhalE3TxOqmYrkBlan2w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,238,1725346800"; 
+   d="scan'208";a="86094628"
+Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
+  by fmviesa005.fm.intel.com with ESMTP; 27 Oct 2024 22:56:12 -0700
+Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1t5Ija-000bJg-0V;
+	Mon, 28 Oct 2024 05:56:10 +0000
+Date: Mon, 28 Oct 2024 13:55:42 +0800
+From: kernel test robot <lkp@intel.com>
+To: Richard Guy Briggs <rgb@redhat.com>,
+	Linux-Audit Mailing List <linux-audit@lists.linux-audit.osci.io>,
+	LKML <linux-kernel@vger.kernel.org>, linux-modules@vger.kernel.org,
+	Linux Kernel Audit Mailing List <audit@vger.kernel.org>
+Cc: oe-kbuild-all@lists.linux.dev, Paul Moore <paul@paul-moore.com>,
+	Eric Paris <eparis@parisplace.org>, Steve Grubb <sgrubb@redhat.com>,
+	Richard Guy Briggs <rgb@redhat.com>
+Subject: Re: [PATCH v1] audit,module: restore audit logging in load failure
+ case
+Message-ID: <202410281314.56S1Nfqd-lkp@intel.com>
+References: <999cdd694f951acd2f4ad665fe7ab97d0834e162.1729717542.git.rgb@redhat.com>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="iso-8859-1"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <999cdd694f951acd2f4ad665fe7ab97d0834e162.1729717542.git.rgb@redhat.com>
 
-Le mardi 22 octobre 2024, 18:10:07 CEST Micka=EBl Sala=FCn a =E9crit :
-> Add audit support to socket_bind and socket_connect hooks.
->=20
-> Audit record sample:
->=20
->   DENY:    domain=3D4533720601 blockers=3Dnet_connect_tcp daddr=3D127.0.0=
-=2E1
-> dest=3D80 SYSCALL: arch=3Dc000003e syscall=3D42 success=3Dno exit=3D-13 .=
-=2E.
->=20
-> Cc: G=FCnther Noack <gnoack@google.com>
-> Cc: Konstantin Meskhidze <konstantin.meskhidze@huawei.com>
-> Cc: Mikhail Ivanov <ivanov.mikhail1@huawei-partners.com>
-> Signed-off-by: Micka=EBl Sala=FCn <mic@digikod.net>
-> Link: https://lore.kernel.org/r/20241022161009.982584-13-mic@digikod.net
-> ---
->  security/landlock/audit.c | 11 +++++++++
->  security/landlock/audit.h |  1 +
->  security/landlock/net.c   | 52 ++++++++++++++++++++++++++++++++++++---
->  3 files changed, 60 insertions(+), 4 deletions(-)
->=20
-> diff --git a/security/landlock/audit.c b/security/landlock/audit.c
-> index 898c95ebe847..c31a4a8719ee 100644
-> --- a/security/landlock/audit.c
-> +++ b/security/landlock/audit.c
-> @@ -41,6 +41,12 @@ static const char *const fs_access_strings[] =3D {
->  };
->  static_assert(ARRAY_SIZE(fs_access_strings) =3D=3D LANDLOCK_NUM_ACCESS_F=
-S);
->=20
-> +static const char *const net_access_strings[] =3D {
-> +	[BIT_INDEX(LANDLOCK_ACCESS_NET_BIND_TCP)] =3D "net_bind_tcp",
-> +	[BIT_INDEX(LANDLOCK_ACCESS_NET_CONNECT_TCP)] =3D "net_connect_tcp",
-> +};
-> +static_assert(ARRAY_SIZE(net_access_strings) =3D=3D LANDLOCK_NUM_ACCESS_=
-NET);
-> +
->  static __attribute_const__ const char *
->  get_blocker(const enum landlock_request_type type,
->  	    const unsigned long access_bit)
-> @@ -58,6 +64,11 @@ get_blocker(const enum landlock_request_type type,
->  		if (WARN_ON_ONCE(access_bit >=3D ARRAY_SIZE(fs_access_strings)))
->  			return "unknown";
->  		return fs_access_strings[access_bit];
-> +
-> +	case LANDLOCK_REQUEST_NET_ACCESS:
-> +		if (WARN_ON_ONCE(access_bit >=3D ARRAY_SIZE(net_access_strings)))
-> +			return "unknown";
-> +		return net_access_strings[access_bit];
->  	}
->=20
->  	WARN_ON_ONCE(1);
-> diff --git a/security/landlock/audit.h b/security/landlock/audit.h
-> index 320394fd6b84..1075b0c8401f 100644
-> --- a/security/landlock/audit.h
-> +++ b/security/landlock/audit.h
-> @@ -18,6 +18,7 @@ enum landlock_request_type {
->  	LANDLOCK_REQUEST_PTRACE =3D 1,
->  	LANDLOCK_REQUEST_FS_CHANGE_LAYOUT,
->  	LANDLOCK_REQUEST_FS_ACCESS,
-> +	LANDLOCK_REQUEST_NET_ACCESS,
->  };
->=20
->  /*
-> diff --git a/security/landlock/net.c b/security/landlock/net.c
-> index 27872d0f7e11..c21afd6e0b4d 100644
-> --- a/security/landlock/net.c
-> +++ b/security/landlock/net.c
-> @@ -7,10 +7,12 @@
->   */
->=20
->  #include <linux/in.h>
-> +#include <linux/lsm_audit.h>
->  #include <linux/net.h>
->  #include <linux/socket.h>
->  #include <net/ipv6.h>
->=20
-> +#include "audit.h"
->  #include "common.h"
->  #include "cred.h"
->  #include "limits.h"
-> @@ -56,6 +58,10 @@ static int current_check_access_socket(struct socket
-> *const sock, };
->  	const struct landlock_ruleset *const dom =3D
->  		landlock_match_ruleset(landlock_get_current_domain(), any_net);
-> +	struct lsm_network_audit audit_net =3D {};
-> +	struct landlock_request request =3D {
-> +		.type =3D LANDLOCK_REQUEST_NET_ACCESS,
-> +	};
->=20
->  	if (!dom)
->  		return 0;
-> @@ -72,18 +78,49 @@ static int current_check_access_socket(struct socket
-> *const sock,
->=20
->  	switch (address->sa_family) {
->  	case AF_UNSPEC:
-> -	case AF_INET:
-> +	case AF_INET: {
-> +		const struct sockaddr_in *addr4;
-> +
->  		if (addrlen < sizeof(struct sockaddr_in))
->  			return -EINVAL;
-> -		port =3D ((struct sockaddr_in *)address)->sin_port;
-> +
-> +		addr4 =3D (struct sockaddr_in *)address;
-> +		port =3D addr4->sin_port;
-> +
-> +		if (access_request =3D=3D LANDLOCK_ACCESS_NET_CONNECT_TCP) {
-> +			audit_net.dport =3D port;
-> +			audit_net.v4info.daddr =3D addr4->sin_addr.s_addr;
-> +		} else if (access_request =3D=3D LANDLOCK_ACCESS_NET_BIND_TCP) {
-> +			audit_net.sport =3D port;
-> +			audit_net.v4info.saddr =3D addr4->sin_addr.s_addr;
-> +		} else {
-> +			WARN_ON_ONCE(1);
-> +		}
->  		break;
-> +	}
->=20
->  #if IS_ENABLED(CONFIG_IPV6)
-> -	case AF_INET6:
-> +	case AF_INET6: {
-> +		const struct sockaddr_in6 *addr6;
-> +
->  		if (addrlen < SIN6_LEN_RFC2133)
->  			return -EINVAL;
-> -		port =3D ((struct sockaddr_in6 *)address)->sin6_port;
-> +
-> +		addr6 =3D (struct sockaddr_in6 *)address;
-> +		port =3D addr6->sin6_port;
-> +		audit_net.v6info.saddr =3D addr6->sin6_addr;
+Hi Richard,
 
-You set this for all access_request, but not for IPv4, is this done on=20
-purpose?
+kernel test robot noticed the following build warnings:
 
-> +
-> +		if (access_request =3D=3D LANDLOCK_ACCESS_NET_CONNECT_TCP) {
-> +			audit_net.dport =3D port;
-> +			audit_net.v6info.daddr =3D addr6->sin6_addr;
-> +		} else if (access_request =3D=3D LANDLOCK_ACCESS_NET_BIND_TCP) {
-> +			audit_net.sport =3D port;
-> +			audit_net.v6info.saddr =3D addr6->sin6_addr;
-> +		} else {
-> +			WARN_ON_ONCE(1);
-> +		}
->  		break;
-> +	}
->  #endif /* IS_ENABLED(CONFIG_IPV6) */
->=20
->  	default:
-> @@ -152,6 +189,13 @@ static int current_check_access_socket(struct socket
-> *const sock, ARRAY_SIZE(layer_masks)))
->  		return 0;
->=20
-> +	audit_net.family =3D address->sa_family;
-> +	request.audit.type =3D LSM_AUDIT_DATA_NET;
-> +	request.audit.u.net =3D &audit_net;
-> +	request.access =3D access_request;
-> +	request.layer_masks =3D &layer_masks;
-> +	request.layer_masks_size =3D ARRAY_SIZE(layer_masks);
-> +	landlock_log_denial(dom, &request);
->  	return -EACCES;
->  }
+[auto build test WARNING on mcgrof/modules-next]
+[also build test WARNING on linus/master v6.12-rc5 next-20241025]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Richard-Guy-Briggs/audit-module-restore-audit-logging-in-load-failure-case/20241024-051515
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git modules-next
+patch link:    https://lore.kernel.org/r/999cdd694f951acd2f4ad665fe7ab97d0834e162.1729717542.git.rgb%40redhat.com
+patch subject: [PATCH v1] audit,module: restore audit logging in load failure case
+config: x86_64-defconfig (https://download.01.org/0day-ci/archive/20241028/202410281314.56S1Nfqd-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-12) 11.3.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241028/202410281314.56S1Nfqd-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410281314.56S1Nfqd-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   kernel/module/main.c: In function 'load_module':
+>> kernel/module/main.c:3336:63: warning: passing argument 1 of 'audit_log_kern_module' discards 'const' qualifier from pointer target type [-Wdiscarded-qualifiers]
+    3336 |                 audit_log_kern_module(info->name ? info->name : "(unavailable)");
+         |                                       ~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~
+   In file included from kernel/module/main.c:57:
+   include/linux/audit.h:522:48: note: expected 'char *' but argument is of type 'const char *'
+     522 | static inline void audit_log_kern_module(char *name)
+         |                                          ~~~~~~^~~~
 
 
+vim +3336 kernel/module/main.c
+
+  3124	
+  3125	/*
+  3126	 * Allocate and load the module: note that size of section 0 is always
+  3127	 * zero, and we rely on this for optional sections.
+  3128	 */
+  3129	static int load_module(struct load_info *info, const char __user *uargs,
+  3130			       int flags)
+  3131	{
+  3132		struct module *mod;
+  3133		bool module_allocated = false;
+  3134		long err = 0;
+  3135		char *after_dashes;
+  3136	
+  3137		/*
+  3138		 * Do the signature check (if any) first. All that
+  3139		 * the signature check needs is info->len, it does
+  3140		 * not need any of the section info. That can be
+  3141		 * set up later. This will minimize the chances
+  3142		 * of a corrupt module causing problems before
+  3143		 * we even get to the signature check.
+  3144		 *
+  3145		 * The check will also adjust info->len by stripping
+  3146		 * off the sig length at the end of the module, making
+  3147		 * checks against info->len more correct.
+  3148		 */
+  3149		err = module_sig_check(info, flags);
+  3150		if (err)
+  3151			goto free_copy;
+  3152	
+  3153		/*
+  3154		 * Do basic sanity checks against the ELF header and
+  3155		 * sections. Cache useful sections and set the
+  3156		 * info->mod to the userspace passed struct module.
+  3157		 */
+  3158		err = elf_validity_cache_copy(info, flags);
+  3159		if (err)
+  3160			goto free_copy;
+  3161	
+  3162		err = early_mod_check(info, flags);
+  3163		if (err)
+  3164			goto free_copy;
+  3165	
+  3166		/* Figure out module layout, and allocate all the memory. */
+  3167		mod = layout_and_allocate(info, flags);
+  3168		if (IS_ERR(mod)) {
+  3169			err = PTR_ERR(mod);
+  3170			goto free_copy;
+  3171		}
+  3172	
+  3173		module_allocated = true;
+  3174	
+  3175		audit_log_kern_module(mod->name);
+  3176	
+  3177		/* Reserve our place in the list. */
+  3178		err = add_unformed_module(mod);
+  3179		if (err)
+  3180			goto free_module;
+  3181	
+  3182		/*
+  3183		 * We are tainting your kernel if your module gets into
+  3184		 * the modules linked list somehow.
+  3185		 */
+  3186		module_augment_kernel_taints(mod, info);
+  3187	
+  3188		/* To avoid stressing percpu allocator, do this once we're unique. */
+  3189		err = percpu_modalloc(mod, info);
+  3190		if (err)
+  3191			goto unlink_mod;
+  3192	
+  3193		/* Now module is in final location, initialize linked lists, etc. */
+  3194		err = module_unload_init(mod);
+  3195		if (err)
+  3196			goto unlink_mod;
+  3197	
+  3198		init_param_lock(mod);
+  3199	
+  3200		/*
+  3201		 * Now we've got everything in the final locations, we can
+  3202		 * find optional sections.
+  3203		 */
+  3204		err = find_module_sections(mod, info);
+  3205		if (err)
+  3206			goto free_unload;
+  3207	
+  3208		err = check_export_symbol_versions(mod);
+  3209		if (err)
+  3210			goto free_unload;
+  3211	
+  3212		/* Set up MODINFO_ATTR fields */
+  3213		setup_modinfo(mod, info);
+  3214	
+  3215		/* Fix up syms, so that st_value is a pointer to location. */
+  3216		err = simplify_symbols(mod, info);
+  3217		if (err < 0)
+  3218			goto free_modinfo;
+  3219	
+  3220		err = apply_relocations(mod, info);
+  3221		if (err < 0)
+  3222			goto free_modinfo;
+  3223	
+  3224		err = post_relocation(mod, info);
+  3225		if (err < 0)
+  3226			goto free_modinfo;
+  3227	
+  3228		flush_module_icache(mod);
+  3229	
+  3230		/* Now copy in args */
+  3231		mod->args = strndup_user(uargs, ~0UL >> 1);
+  3232		if (IS_ERR(mod->args)) {
+  3233			err = PTR_ERR(mod->args);
+  3234			goto free_arch_cleanup;
+  3235		}
+  3236	
+  3237		init_build_id(mod, info);
+  3238	
+  3239		/* Ftrace init must be called in the MODULE_STATE_UNFORMED state */
+  3240		ftrace_module_init(mod);
+  3241	
+  3242		/* Finally it's fully formed, ready to start executing. */
+  3243		err = complete_formation(mod, info);
+  3244		if (err)
+  3245			goto ddebug_cleanup;
+  3246	
+  3247		err = prepare_coming_module(mod);
+  3248		if (err)
+  3249			goto bug_cleanup;
+  3250	
+  3251		mod->async_probe_requested = async_probe;
+  3252	
+  3253		/* Module is ready to execute: parsing args may do that. */
+  3254		after_dashes = parse_args(mod->name, mod->args, mod->kp, mod->num_kp,
+  3255					  -32768, 32767, mod,
+  3256					  unknown_module_param_cb);
+  3257		if (IS_ERR(after_dashes)) {
+  3258			err = PTR_ERR(after_dashes);
+  3259			goto coming_cleanup;
+  3260		} else if (after_dashes) {
+  3261			pr_warn("%s: parameters '%s' after `--' ignored\n",
+  3262			       mod->name, after_dashes);
+  3263		}
+  3264	
+  3265		/* Link in to sysfs. */
+  3266		err = mod_sysfs_setup(mod, info, mod->kp, mod->num_kp);
+  3267		if (err < 0)
+  3268			goto coming_cleanup;
+  3269	
+  3270		if (is_livepatch_module(mod)) {
+  3271			err = copy_module_elf(mod, info);
+  3272			if (err < 0)
+  3273				goto sysfs_cleanup;
+  3274		}
+  3275	
+  3276		/* Get rid of temporary copy. */
+  3277		free_copy(info, flags);
+  3278	
+  3279		codetag_load_module(mod);
+  3280	
+  3281		/* Done! */
+  3282		trace_module_load(mod);
+  3283	
+  3284		return do_init_module(mod);
+  3285	
+  3286	 sysfs_cleanup:
+  3287		mod_sysfs_teardown(mod);
+  3288	 coming_cleanup:
+  3289		mod->state = MODULE_STATE_GOING;
+  3290		destroy_params(mod->kp, mod->num_kp);
+  3291		blocking_notifier_call_chain(&module_notify_list,
+  3292					     MODULE_STATE_GOING, mod);
+  3293		klp_module_going(mod);
+  3294	 bug_cleanup:
+  3295		mod->state = MODULE_STATE_GOING;
+  3296		/* module_bug_cleanup needs module_mutex protection */
+  3297		mutex_lock(&module_mutex);
+  3298		module_bug_cleanup(mod);
+  3299		mutex_unlock(&module_mutex);
+  3300	
+  3301	 ddebug_cleanup:
+  3302		ftrace_release_mod(mod);
+  3303		synchronize_rcu();
+  3304		kfree(mod->args);
+  3305	 free_arch_cleanup:
+  3306		module_arch_cleanup(mod);
+  3307	 free_modinfo:
+  3308		free_modinfo(mod);
+  3309	 free_unload:
+  3310		module_unload_free(mod);
+  3311	 unlink_mod:
+  3312		mutex_lock(&module_mutex);
+  3313		/* Unlink carefully: kallsyms could be walking list. */
+  3314		list_del_rcu(&mod->list);
+  3315		mod_tree_remove(mod);
+  3316		wake_up_all(&module_wq);
+  3317		/* Wait for RCU-sched synchronizing before releasing mod->list. */
+  3318		synchronize_rcu();
+  3319		mutex_unlock(&module_mutex);
+  3320	 free_module:
+  3321		mod_stat_bump_invalid(info, flags);
+  3322		/* Free lock-classes; relies on the preceding sync_rcu() */
+  3323		for_class_mod_mem_type(type, core_data) {
+  3324			lockdep_free_key_range(mod->mem[type].base,
+  3325					       mod->mem[type].size);
+  3326		}
+  3327	
+  3328		module_deallocate(mod, info);
+  3329	 free_copy:
+  3330		/*
+  3331		 * The info->len is always set. We distinguish between
+  3332		 * failures once the proper module was allocated and
+  3333		 * before that.
+  3334		 */
+  3335		if (!module_allocated) {
+> 3336			audit_log_kern_module(info->name ? info->name : "(unavailable)");
+  3337			mod_stat_bump_becoming(info, flags);
+  3338		}
+  3339		free_copy(info, flags);
+  3340		return err;
+  3341	}
+  3342	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
