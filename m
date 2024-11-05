@@ -1,123 +1,141 @@
-Received: from mail-ua1-f52.google.com (mail-ua1-f52.google.com [209.85.222.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F22DD1CC17C
-	for <audit@vger.kernel.org>; Fri,  1 Nov 2024 17:54:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DE5A1D47DC
+	for <audit@vger.kernel.org>; Tue,  5 Nov 2024 12:38:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730483696; cv=none; b=LEYM6DIrWgl70A4Kd9ongFwoUNyiwqi5EIIcmLX9jrY2ZuHNorKxDvqIewQS7He8dAhCW4Xnl+5nXfI3jP6AUdG5GwiRktpwJhQiyeU0yLw4A+vWlEIqVzddquSgvW6PwNcfanPkkHzjrie6BRhq2GzgV08A33ThUe3ZhDoKgHg=
+	t=1730810338; cv=none; b=sVqRVaVpLH+iphpvinbxMmpUgaRoXlcMnvO6HU4Zn6UHiVOQyutMmTHe72RFLTqcTpJiWckLyl3C7UWmJpbggQNy9uqFXBiiRcSKdTKtZKvL+h6cIQjlsZbecAB5/Gfu+g8t04ZT/QmlOonKzK3itkmPHTdmaBo/Snrpg0pRIXo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730483696; c=relaxed/simple;
-	bh=XuRVQd+uI/fEZIMs+isDw/LGu3FojnLyngs9SvWfAbQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=koVXulAguOeiIH6XiNOWjApWYB3/IL8RBd04W3cIEcsgzq83/75lg0ZT4+fislcZ/FXO9Hppc+JDtHLfIOHdLbzC1VYEX77ZUMpBQ8HLTl0GaXVp5cY6yiOBDY+DSIx2sk+BmlT5iLX3/yh/Pvl2vqpwP2v2bWfLjqaKoEg90T4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=Bxfcj5jq; arc=none smtp.client-ip=209.85.222.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+	s=arc-20240116; t=1730810338; c=relaxed/simple;
+	bh=8vpLGRsbdzrgowyBxatraUmVvFAaJH8vb/3SuBlujxQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=pI/asSJMnt/ethZ/DdHu+2UwOpqYXoFvJ/e8MXmZwZUFWiMCQMWMfGytA+wEIf+iofXBns2s8dzY3FiAR3WpEzv1bfhpcv+fIyg9V++UDJrsWfB/MiY08GdGD1awI83N2TSv5Mq6CXPQP5iNVxEK8RnY0IilPb0Y/dL9AXpSPSk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=BYtAHjyf; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="Bxfcj5jq"
-Received: by mail-ua1-f52.google.com with SMTP id a1e0cc1a2514c-84fb86af725so597921241.0
-        for <audit@vger.kernel.org>; Fri, 01 Nov 2024 10:54:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1730483694; x=1731088494; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XuRVQd+uI/fEZIMs+isDw/LGu3FojnLyngs9SvWfAbQ=;
-        b=Bxfcj5jqjhoXFeGMFLaVHza5iJgkjyIuJaeZS4e6KR8kIIJC5+IYXTH4u8gRR/xsPr
-         bPIs7J3sDjrN2CqtoE0p8/nK6rLg84aZh1ADRhyY+RjMy07HNuflxG1aYvZIG+drH7Ui
-         iNKwDWcxUQvc+jQatdYyP71a0pTtkKIh/6j+YCT3j8tWj2xxLvCLVVlCK1FWqTAkux9/
-         Nmf+ch0FHo6+/2YxyztE2FRE0tII2Hr1Qge3KspYaLT363R/QbjmlunQbAHnMQsdLsQp
-         DB9lE6KAMrT0OY/8Z4OUkJnMb1ETupOVag2lZxORLPGu6NG3xOIX+uGIqrUhK3WWSBy3
-         Ju2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730483694; x=1731088494;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=XuRVQd+uI/fEZIMs+isDw/LGu3FojnLyngs9SvWfAbQ=;
-        b=jTL/0OvXcv2KNa837Y3aFOUOTnJBb5jbv2neQjqX6M+6L7AfL0RQ3QI8Cjzq3jnp/e
-         z89ZTqccrvQODpnLgc5AihAtByJBsEtBmVenHjJgw06/zKH0pdVa7GFM9ea9DIZ6zT7U
-         dfXx8GdEOgv43M4XNcZg166oeFuQb4tGuk4T9ZwyRACnIfn4Hs8A6mcHpL+mZ8vr7Emk
-         Fd9i3njMIfckNdOMbwSzhJn9ui4R+9tM6A7qAXp18qiD7t5NumldsRy4GOCjM307vW8V
-         K49vLkpE5x5eNMi9CyWKFetHWZyEW17ThVZTnuY62TIMkf6ueKaCtiXBeoYjDp2WxhL0
-         xy9Q==
-X-Forwarded-Encrypted: i=1; AJvYcCXNSjYDxoW1yP2ROJ7FOhGSk1itiCZ84BxnU9VTeokz591ARu3BNxU2lrHhWqYHsLZTRlcxHA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyQqXl8PrhyFUW3RHKXFGRM2vLeOuXYj8c41DmUaQqS4Sg1EHGL
-	WlFGkVEEb74/kKASHeXDApw2Rmg8kHn4lw48PlE+N6p7VtsngEbxhIrTsxzXAfjRlFBZtCfJHmC
-	XYSY7nXFCoYKVMDfqHQn8eLyUFxf8DAPsrp7y
-X-Google-Smtp-Source: AGHT+IGsE4qjrOhlqC4OJb9cUFtYG/Io0uUOjSSRLwaJ/zVTvuHnCYeP5oQx993rVYYkkRD54yed9fa034djjSzDRQ4=
-X-Received: by 2002:a05:6102:41a1:b0:4a3:ac2b:bfff with SMTP id
- ada2fe7eead31-4a962ef5a46mr4954235137.22.1730483693833; Fri, 01 Nov 2024
- 10:54:53 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="BYtAHjyf"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1730810335;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=LoG48yjHOEp53ZdqtnIWg0fqBNZJBlJaQRNwyMDWelo=;
+	b=BYtAHjyfOksHjlhZCZD3RIuNUiB+nzkUzSeW1r1ADmEDGYGvjOHawbPiqDKdVKQsUBuRWT
+	mztT56da8Fyxvc719e4frg+atE8DzqWq1TZmFoWjlU31IwU85QLc8MTowEa/ZmGFn+ce7x
+	iYa8Bry7Q+RZeDGe0b4unmItwp9b9GE=
+Received: from mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-586-F26dhSz-Npa44YvTYstkwQ-1; Tue,
+ 05 Nov 2024 07:38:52 -0500
+X-MC-Unique: F26dhSz-Npa44YvTYstkwQ-1
+Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id B46891955F69;
+	Tue,  5 Nov 2024 12:38:51 +0000 (UTC)
+Received: from ws.redhat.com (unknown [10.96.134.147])
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 2C75630001A3;
+	Tue,  5 Nov 2024 12:38:48 +0000 (UTC)
+From: Ricardo Robaina <rrobaina@redhat.com>
+To: audit@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Ricardo Robaina <rrobaina@redhat.com>,
+	paul@paul-moore.com,
+	eparis@redhat.com,
+	rgb@redhat.com
+Subject: [PATCH v1] audit: fix suffixed '/' filename matching in __audit_inode_child()
+Date: Tue,  5 Nov 2024 09:37:39 -0300
+Message-ID: <20241105123807.1257948-1-rrobaina@redhat.com>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241023212158.18718-3-casey@schaufler-ca.com>
- <68a956fa44249434dedf7d13cd949b35@paul-moore.com> <ZyQPfFvPD72rx4ME@calendula>
- <ZyQRgL_jWdvKgRl-@calendula> <dd727620-9823-4701-aaf1-080b03fb6ccd@schaufler-ca.com>
- <ZySCeoe3kVqKTyUh@calendula> <6a405591-40c5-4db6-bed5-8133a80b55f7@schaufler-ca.com>
- <CAHC9VhRZg5ODurJrXWbZ+DaAdEGVJYn9MhNi+bV0f4Di12P5xA@mail.gmail.com>
- <CAHC9VhQ+ig=GY1CeVGj1OrsyZtMAMBwst03b-oZ+eC2mLnqjNg@mail.gmail.com> <6fd788a9-b051-4c5e-8618-362a8632cb97@schaufler-ca.com>
-In-Reply-To: <6fd788a9-b051-4c5e-8618-362a8632cb97@schaufler-ca.com>
-From: Paul Moore <paul@paul-moore.com>
-Date: Fri, 1 Nov 2024 13:54:42 -0400
-Message-ID: <CAHC9VhQA0L-H-9BPhXCFKMpgs4_Xk+fOip7L7s98wRK-UhS43A@mail.gmail.com>
-Subject: Re: [PATCH v3 2/5] LSM: Replace context+len with lsm_context
-To: Casey Schaufler <casey@schaufler-ca.com>
-Cc: Pablo Neira Ayuso <pablo@netfilter.org>, linux-security-module@vger.kernel.org, 
-	jmorris@namei.org, serge@hallyn.com, keescook@chromium.org, 
-	john.johansen@canonical.com, penguin-kernel@i-love.sakura.ne.jp, 
-	stephen.smalley.work@gmail.com, linux-kernel@vger.kernel.org, 
-	selinux@vger.kernel.org, mic@digikod.net, netdev@vger.kernel.org, 
-	audit@vger.kernel.org, netfilter-devel@vger.kernel.org, 
-	Todd Kjos <tkjos@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
 
-On Fri, Nov 1, 2024 at 12:59=E2=80=AFPM Casey Schaufler <casey@schaufler-ca=
-.com> wrote:
-> On 11/1/2024 9:42 AM, Paul Moore wrote:
-> > On Fri, Nov 1, 2024 at 12:35=E2=80=AFPM Paul Moore <paul@paul-moore.com=
-> wrote:
-> >> On Fri, Nov 1, 2024 at 12:14=E2=80=AFPM Casey Schaufler <casey@schaufl=
-er-ca.com> wrote:
-> >>> On 11/1/2024 12:25 AM, Pablo Neira Ayuso wrote:
-> >>>> On Thu, Oct 31, 2024 at 04:58:13PM -0700, Casey Schaufler wrote:
-> >>>>> On 10/31/2024 4:23 PM, Pablo Neira Ayuso wrote:
-> >>>>>> On Fri, Nov 01, 2024 at 12:15:16AM +0100, Pablo Neira Ayuso wrote:
-> >>>>>>> Hi Paul,
-> >>>>>>>
-> >>>>>>> This patch breaks nf_conntrack_netlink, Casey mentioned that he w=
-ill
-> >>>>>>> post another series.
-> >>>>> I have a fix, it is pretty simple. How about I send a 6/5 patch for=
- it?
-> >>>> No idea. I don't know what is the status of this series. I would
-> >>>> suggest to repost a new series.
-> >>> I will post v4 shortly. Thanks for the feedback.
-> >> Please just post a fix against v2 using lsm/dev as a base.
-> > That should have been "against *v3* using lsm/dev as a base".
-> >
-> > Also, since I didn't explicitly mention it, if I don't see a fix by
-> > dinner time tonight (US East Coast), I'll revert this patchset, but
-> > I'd like to avoid that if possible.
->
-> I will have this as quickly as I can. The patch is easy, but the overhead
-> may slow it down a bit. I should have it in time to avoid the revert.
+When the user specifies a directory to delete with the suffix '/',
+the audit record fails to collect the filename, resulting in the
+following logs:
 
-It turns out there is no rush on this as it looks like the Rust
-bindings are going to be the one that ends up pushing this out past
-the next merge window as there is a conflict with changes to the Rust
-LSM helpers in the VFS tree.
+ type=PATH msg=audit(10/30/2024 14:11:17.796:6304) : item=2 name=(null)
+ type=PATH msg=audit(10/30/2024 14:11:17.796:6304) : item=1 name=(null)
 
-We still obviously need to the fix, so please keep going with the fix
-based against v3; I'm going to move the v3 patchset from lsm/dev to
-lsm/dev-staging, this will still allow for the usual LSM testing but
-will shield it from linux-next.
+It happens because the value of the variables dname, and n->name->name
+in __audit_inode_child() differ only by the suffix '/'. This commit
+treats this corner case by cleaning the input and passing the correct
+filename to audit_compare_dname_path().
 
---=20
-paul-moore.com
+Steps to reproduce the issue:
+
+ # auditctl -w /tmp
+ $ mkdir /tmp/foo
+ $ rm -r /tmp/foo/ or rmdir /tmp/foo/
+ # ausearch -i | grep PATH | tail -3
+
+This patch is based on a GitHub patch/PR by user @hqh2010.
+https://github.com/linux-audit/audit-kernel/pull/148
+
+Signed-off-by: Ricardo Robaina <rrobaina@redhat.com>
+---
+ kernel/auditsc.c | 18 ++++++++++++++++--
+ 1 file changed, 16 insertions(+), 2 deletions(-)
+
+diff --git a/kernel/auditsc.c b/kernel/auditsc.c
+index 6f0d6fb6523f..d4fbac6b71a8 100644
+--- a/kernel/auditsc.c
++++ b/kernel/auditsc.c
+@@ -2419,7 +2419,8 @@ void __audit_inode_child(struct inode *parent,
+ 	struct audit_names *n, *found_parent = NULL, *found_child = NULL;
+ 	struct audit_entry *e;
+ 	struct list_head *list = &audit_filter_list[AUDIT_FILTER_FS];
+-	int i;
++	int i, dlen, nlen;
++	char *fn = NULL;
+ 
+ 	if (context->context == AUDIT_CTX_UNUSED)
+ 		return;
+@@ -2443,6 +2444,7 @@ void __audit_inode_child(struct inode *parent,
+ 	if (inode)
+ 		handle_one(inode);
+ 
++	dlen = strlen(dname->name);
+ 	/* look for a parent entry first */
+ 	list_for_each_entry(n, &context->names_list, list) {
+ 		if (!n->name ||
+@@ -2450,15 +2452,27 @@ void __audit_inode_child(struct inode *parent,
+ 		     n->type != AUDIT_TYPE_UNKNOWN))
+ 			continue;
+ 
++		/* special case, entry name has the sufix "/" */
++		nlen = strlen(n->name->name);
++		if (dname->name[dlen - 1] != '/' && n->name->name[nlen - 1] == '/') {
++			fn = kmalloc(PATH_MAX, GFP_KERNEL);
++			if (!fn) {
++				audit_panic("out of memory in __audit_inode_child()");
++				return;
++			}
++			strscpy(fn, n->name->name, nlen);
++		}
++
+ 		if (n->ino == parent->i_ino && n->dev == parent->i_sb->s_dev &&
+ 		    !audit_compare_dname_path(dname,
+-					      n->name->name, n->name_len)) {
++					      fn ? fn : n->name->name, n->name_len)) {
+ 			if (n->type == AUDIT_TYPE_UNKNOWN)
+ 				n->type = AUDIT_TYPE_PARENT;
+ 			found_parent = n;
+ 			break;
+ 		}
+ 	}
++	kfree(fn);
+ 
+ 	cond_resched();
+ 
+-- 
+2.47.0
+
