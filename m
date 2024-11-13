@@ -1,212 +1,99 @@
-Received: from smtp-190d.mail.infomaniak.ch (smtp-190d.mail.infomaniak.ch [185.125.25.13])
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D6311FF7C4
-	for <audit@vger.kernel.org>; Wed, 13 Nov 2024 15:21:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.25.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 501532AF12;
+	Wed, 13 Nov 2024 23:04:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731511314; cv=none; b=F/BfWFLz4hc5jksauk3XaMa44BzJ+PG6Ql+Zoz9f2aFo/BJKe/QYmDrZH4P7+Ca+InzLKOPDHa/5B21BF9nK97eXTJjMNr10wZ2zLTPYnbkVYBuSinbFamaq82C1OuufJQ3SVZXAEWX+VkQ+TpX1FSvcEBuZDftQg2GWhIqsQBg=
+	t=1731539071; cv=none; b=bZPkX8apgEw5ceBnpZZVYY2BfHp/Km7x7wB3OWdmXiaI94cmf0CBvKxuijDadsimeAEWVwbj14ZnXbsssrYkVFwevfCo8gZ3Y4OGzQTTkN0lCXLvgrnshH+GnMwAvICFHzVU5oIgCSajjl9393eyZB3PSCC+s8ajoBM2ZSg4eRk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731511314; c=relaxed/simple;
-	bh=oQqLj+VTG52Pd8JpuUEISAjkJSUrTrwueurA5xER+Qs=;
+	s=arc-20240116; t=1731539071; c=relaxed/simple;
+	bh=uR9NATavVdqBFxZjrZU/rolzN5aVtKkj87DhUnu+qvo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kdCDAKTHc7ifv5FJxEbveaPrlxXYxyOgsYK6bMVyJoFa9XMYkhzPNZ1LvpI0wqxa8Yf/FrCGmuWLvghfXrn2ihn4M6eh3jt5wcGrzD+camIq5eHhpN5MrsDpF6Ja3uWHE4CR5yeu6gwhtW47q+NEQWkFZgHCPjFGSfUBH9ZZExo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=ZaXq2ZJ7; arc=none smtp.client-ip=185.125.25.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
+	 Content-Type:Content-Disposition:In-Reply-To; b=pYmYi2GH7rpyECxwI9edykFqhHaEwOWxKA64Fw5ByF9yPbjxu1cuFKq/nhSGtwP3YgLkQm0dFYNj3sY6BxRDtZtaWrRjEdF7p6ZzipC7isVyaigRJe1rFbKb7nSU+Nm3NQF2Sl2mgv/KM5O8hjMmEx8m9oOQ0SvarBtNF8bt6ks=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=eG9Qqb6b; arc=none smtp.client-ip=62.89.141.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="ZaXq2ZJ7"
-Received: from smtp-4-0001.mail.infomaniak.ch (smtp-4-0001.mail.infomaniak.ch [10.7.10.108])
-	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4XpRpN2n0nzpPM;
-	Wed, 13 Nov 2024 16:21:48 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
-	s=20191114; t=1731511308;
-	bh=jjAbEbcMySB+5Dq2slVS7gS9u4ZlQ2TKG5y+0STveNU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ZaXq2ZJ7B1AxWTWiQ6a8wWVNQ+PYgUTTajpNs6/os/UM5l6BwL2w2L69DnzrLQ+Xu
-	 uynFLpcTj2mvRQak4nYaVr02NmIFyPITeB1LWzTHB5DWDrbokFJ75IO2vmoQr4U/L7
-	 QsYd6Uy++HS//FMbOxYqwlE1v6KmLauZTJK+AsGU=
-Received: from unknown by smtp-4-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4XpRpM3hdMzbrt;
-	Wed, 13 Nov 2024 16:21:47 +0100 (CET)
-Date: Wed, 13 Nov 2024 16:21:47 +0100
-From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
-To: Francis Laniel <flaniel@linux.microsoft.com>
-Cc: Eric Paris <eparis@redhat.com>, Paul Moore <paul@paul-moore.com>, 
-	=?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>, "Serge E . Hallyn" <serge@hallyn.com>, 
-	Ben Scarlato <akhna@google.com>, Casey Schaufler <casey@schaufler-ca.com>, 
-	Charles Zaffery <czaffery@roblox.com>, James Morris <jmorris@namei.org>, Jann Horn <jannh@google.com>, 
-	Jeff Xu <jeffxu@google.com>, Jorge Lucangeli Obes <jorgelo@google.com>, 
-	Kees Cook <kees@kernel.org>, Konstantin Meskhidze <konstantin.meskhidze@huawei.com>, 
-	Matt Bobrowski <mattbobrowski@google.com>, Mikhail Ivanov <ivanov.mikhail1@huawei-partners.com>, 
-	Praveen K Paladugu <prapal@linux.microsoft.com>, Robert Salvet <robert.salvet@roblox.com>, 
-	Shervin Oloumi <enlightened@google.com>, Song Liu <song@kernel.org>, 
-	Tahera Fahimi <fahimitahera@gmail.com>, audit@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-security-module@vger.kernel.org
-Subject: Re: [RFC PATCH v2 12/14] landlock: Log TCP bind and connect denials
-Message-ID: <20241113.oThieDiehaa8@digikod.net>
-References: <20241022161009.982584-1-mic@digikod.net>
- <20241022161009.982584-13-mic@digikod.net>
- <2345615.iZASKD2KPV@pwmachine>
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="eG9Qqb6b"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=ze0AbtK166ELiFcHD2qD6VO3tkL8ltMTzPW7ESfMS2I=; b=eG9Qqb6b4qVRwKx52HYWlCGQKu
+	EKNAe1TNUzisKBHDy1aiDZ/rhiH45kTi4ANYu8UHm7NWUxw4bIez0/AWCrJYhLAnHuXqBOckLFNxy
+	JVTOalp3dA0usILZ2AbpvZ8HzS66mMB51z1Sg6zQ9BHebEa7t0bQsYqzJFmE5jo03Aq1wSj7xhDC/
+	LM/K0U5kYR6eiGuQ8om9rgMSEDZ5S4DJIWou57URgZQW8iqyJQTDyfcn/H8iA0IqdVxvJWb3GHANS
+	yKdqLCnCbmLgikI85penRw5urAVNhGhuKzRLiTb0EU4zXbSssYRASXFxZLmBxSGE4tQtGAJWLuC7s
+	vUfPz2Bg==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.98 #2 (Red Hat Linux))
+	id 1tBMPR-0000000EgPX-3yG9;
+	Wed, 13 Nov 2024 23:04:26 +0000
+Date: Wed, 13 Nov 2024 23:04:25 +0000
+From: Al Viro <viro@zeniv.linux.org.uk>
+To: Paul Moore <paul@paul-moore.com>
+Cc: Ricardo Robaina <rrobaina@redhat.com>, audit@vger.kernel.org,
+	linux-kernel@vger.kernel.org, eparis@redhat.com, rgb@redhat.com
+Subject: Re: [PATCH v1] audit: fix suffixed '/' filename matching in
+  __audit_inode_child()
+Message-ID: <20241113230425.GJ3387508@ZenIV>
+References: <20241105123807.1257948-1-rrobaina@redhat.com>
+ <2d9292c28df34c50c1c0d1cbf6ce3b52@paul-moore.com>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <2345615.iZASKD2KPV@pwmachine>
-X-Infomaniak-Routing: alpha
+In-Reply-To: <2d9292c28df34c50c1c0d1cbf6ce3b52@paul-moore.com>
+Sender: Al Viro <viro@ftp.linux.org.uk>
 
-On Fri, Oct 25, 2024 at 05:25:45PM +0200, Francis Laniel wrote:
-> Le mardi 22 octobre 2024, 18:10:07 CEST Mickaël Salaün a écrit :
-> > Add audit support to socket_bind and socket_connect hooks.
-> > 
-> > Audit record sample:
-> > 
-> >   DENY:    domain=4533720601 blockers=net_connect_tcp daddr=127.0.0.1
-> > dest=80 SYSCALL: arch=c000003e syscall=42 success=no exit=-13 ...
-> > 
-> > Cc: Günther Noack <gnoack@google.com>
-> > Cc: Konstantin Meskhidze <konstantin.meskhidze@huawei.com>
-> > Cc: Mikhail Ivanov <ivanov.mikhail1@huawei-partners.com>
-> > Signed-off-by: Mickaël Salaün <mic@digikod.net>
-> > Link: https://lore.kernel.org/r/20241022161009.982584-13-mic@digikod.net
-> > ---
-> >  security/landlock/audit.c | 11 +++++++++
-> >  security/landlock/audit.h |  1 +
-> >  security/landlock/net.c   | 52 ++++++++++++++++++++++++++++++++++++---
-> >  3 files changed, 60 insertions(+), 4 deletions(-)
-> > 
-> > diff --git a/security/landlock/audit.c b/security/landlock/audit.c
-> > index 898c95ebe847..c31a4a8719ee 100644
-> > --- a/security/landlock/audit.c
-> > +++ b/security/landlock/audit.c
-> > @@ -41,6 +41,12 @@ static const char *const fs_access_strings[] = {
-> >  };
-> >  static_assert(ARRAY_SIZE(fs_access_strings) == LANDLOCK_NUM_ACCESS_FS);
-> > 
-> > +static const char *const net_access_strings[] = {
-> > +	[BIT_INDEX(LANDLOCK_ACCESS_NET_BIND_TCP)] = "net_bind_tcp",
-> > +	[BIT_INDEX(LANDLOCK_ACCESS_NET_CONNECT_TCP)] = "net_connect_tcp",
-> > +};
-> > +static_assert(ARRAY_SIZE(net_access_strings) == LANDLOCK_NUM_ACCESS_NET);
-> > +
-> >  static __attribute_const__ const char *
-> >  get_blocker(const enum landlock_request_type type,
-> >  	    const unsigned long access_bit)
-> > @@ -58,6 +64,11 @@ get_blocker(const enum landlock_request_type type,
-> >  		if (WARN_ON_ONCE(access_bit >= ARRAY_SIZE(fs_access_strings)))
-> >  			return "unknown";
-> >  		return fs_access_strings[access_bit];
-> > +
-> > +	case LANDLOCK_REQUEST_NET_ACCESS:
-> > +		if (WARN_ON_ONCE(access_bit >= ARRAY_SIZE(net_access_strings)))
-> > +			return "unknown";
-> > +		return net_access_strings[access_bit];
-> >  	}
-> > 
-> >  	WARN_ON_ONCE(1);
-> > diff --git a/security/landlock/audit.h b/security/landlock/audit.h
-> > index 320394fd6b84..1075b0c8401f 100644
-> > --- a/security/landlock/audit.h
-> > +++ b/security/landlock/audit.h
-> > @@ -18,6 +18,7 @@ enum landlock_request_type {
-> >  	LANDLOCK_REQUEST_PTRACE = 1,
-> >  	LANDLOCK_REQUEST_FS_CHANGE_LAYOUT,
-> >  	LANDLOCK_REQUEST_FS_ACCESS,
-> > +	LANDLOCK_REQUEST_NET_ACCESS,
-> >  };
-> > 
-> >  /*
-> > diff --git a/security/landlock/net.c b/security/landlock/net.c
-> > index 27872d0f7e11..c21afd6e0b4d 100644
-> > --- a/security/landlock/net.c
-> > +++ b/security/landlock/net.c
-> > @@ -7,10 +7,12 @@
-> >   */
-> > 
-> >  #include <linux/in.h>
-> > +#include <linux/lsm_audit.h>
-> >  #include <linux/net.h>
-> >  #include <linux/socket.h>
-> >  #include <net/ipv6.h>
-> > 
-> > +#include "audit.h"
-> >  #include "common.h"
-> >  #include "cred.h"
-> >  #include "limits.h"
-> > @@ -56,6 +58,10 @@ static int current_check_access_socket(struct socket
-> > *const sock, };
-> >  	const struct landlock_ruleset *const dom =
-> >  		landlock_match_ruleset(landlock_get_current_domain(), any_net);
-> > +	struct lsm_network_audit audit_net = {};
-> > +	struct landlock_request request = {
-> > +		.type = LANDLOCK_REQUEST_NET_ACCESS,
-> > +	};
-> > 
-> >  	if (!dom)
-> >  		return 0;
-> > @@ -72,18 +78,49 @@ static int current_check_access_socket(struct socket
-> > *const sock,
-> > 
-> >  	switch (address->sa_family) {
-> >  	case AF_UNSPEC:
-> > -	case AF_INET:
-> > +	case AF_INET: {
-> > +		const struct sockaddr_in *addr4;
-> > +
-> >  		if (addrlen < sizeof(struct sockaddr_in))
-> >  			return -EINVAL;
-> > -		port = ((struct sockaddr_in *)address)->sin_port;
-> > +
-> > +		addr4 = (struct sockaddr_in *)address;
-> > +		port = addr4->sin_port;
-> > +
-> > +		if (access_request == LANDLOCK_ACCESS_NET_CONNECT_TCP) {
-> > +			audit_net.dport = port;
-> > +			audit_net.v4info.daddr = addr4->sin_addr.s_addr;
-> > +		} else if (access_request == LANDLOCK_ACCESS_NET_BIND_TCP) {
-> > +			audit_net.sport = port;
-> > +			audit_net.v4info.saddr = addr4->sin_addr.s_addr;
-> > +		} else {
-> > +			WARN_ON_ONCE(1);
-> > +		}
-> >  		break;
-> > +	}
-> > 
-> >  #if IS_ENABLED(CONFIG_IPV6)
-> > -	case AF_INET6:
-> > +	case AF_INET6: {
-> > +		const struct sockaddr_in6 *addr6;
-> > +
-> >  		if (addrlen < SIN6_LEN_RFC2133)
-> >  			return -EINVAL;
-> > -		port = ((struct sockaddr_in6 *)address)->sin6_port;
-> > +
-> > +		addr6 = (struct sockaddr_in6 *)address;
-> > +		port = addr6->sin6_port;
-> > +		audit_net.v6info.saddr = addr6->sin6_addr;
+On Mon, Nov 11, 2024 at 05:06:43PM -0500, Paul Moore wrote:
+
+> This is completely untested, I didn't even compile it, but what about
+> something like the following?  We do add an extra strlen(), but that is
+> going to be faster than the alloc/copy.
 > 
-> You set this for all access_request, but not for IPv4, is this done on 
-> purpose?
+> diff --git a/kernel/auditfilter.c b/kernel/auditfilter.c
+> index 470041c49a44..c30c2ee9fb77 100644
+> --- a/kernel/auditfilter.c
+> +++ b/kernel/auditfilter.c
+> @@ -1320,10 +1320,13 @@ int audit_compare_dname_path(const struct qstr *dname, const char *path, int par
+>                 return 1;
+>  
+>         parentlen = parentlen == AUDIT_NAME_FULL ? parent_len(path) : parentlen;
+> -       if (pathlen - parentlen != dlen)
+> -               return 1;
+> -
+>         p = path + parentlen;
+> +       pathlen = strlen(p);
 
-Indeed, this is a bug, I'll remove this line.  Thanks!
+Huh?  We have
+        pathlen = strlen(path);
+several lines prior to this.  So unless parentlen + path manages to exceed
+strlen(path) (in which case your strlen() is really asking for trouble),
+this is simply
+	pathlen -= parentlen;
 
-> 
-> > +
-> > +		if (access_request == LANDLOCK_ACCESS_NET_CONNECT_TCP) {
-> > +			audit_net.dport = port;
-> > +			audit_net.v6info.daddr = addr6->sin6_addr;
-> > +		} else if (access_request == LANDLOCK_ACCESS_NET_BIND_TCP) {
-> > +			audit_net.sport = port;
-> > +			audit_net.v6info.saddr = addr6->sin6_addr;
-> > +		} else {
-> > +			WARN_ON_ONCE(1);
-> > +		}
-> >  		break;
-> > +	}
-> >  #endif /* IS_ENABLED(CONFIG_IPV6) */
-> > 
-> >  	default:
+What am I missing here?  And while we are at it,
+	parentlen = parentlen == AUDIT_NAME_FULL ? parent_len(path) : parentlen;
+is a bloody awful way to spell
+	if (parentlen == AUDIT_NAME_FULL)
+		parentlen = parent_len(path);
+What's more, parent_len(path) starts with *yet* *another* strlen(path),
+followed by really awful crap - we trim the trailing slashes (if any),
+then search for the last slash before that...  is that really worth
+the chance to skip that strncmp()?
+
+
+> +       if (p[pathlen - 1] == '/')
+> +               pathlen--;
+> +
+> +       if (pathlen != dlen)
+> +               return 1;
+>  
+>         return strncmp(p, dname->name, dlen);
+
+... which really should've been memcmp(), at that.
