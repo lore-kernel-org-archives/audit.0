@@ -1,102 +1,121 @@
-Received: from mail-qv1-f44.google.com (mail-qv1-f44.google.com [209.85.219.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp-190e.mail.infomaniak.ch (smtp-190e.mail.infomaniak.ch [185.125.25.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74DF221A4D0
-	for <audit@vger.kernel.org>; Tue, 12 Nov 2024 23:02:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61E511632F0
+	for <audit@vger.kernel.org>; Wed, 13 Nov 2024 15:18:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.25.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731452530; cv=none; b=fmFgkvu7fK2EPhpGogi5eaih/rk2uZaJ8ln74pLbvTai5Xzx2E7avJxgVWFWtBFSW48ymkZBCUDg0usaWGde3XC5xDCuMNo7OoAIMCa6yIZuHctePIRHQNR3KmiqBi7Yd3c4i+ut+2hgOGCWk/K+2o44Ic2cU2gFDdRou7cfLLo=
+	t=1731511124; cv=none; b=kEli4Q9EqMacMXtH/mdxZcY016EBjJSFnhACoJ2xgW+Q0mUYc3liZ9yPfTyudFUJAc5HOHp9V0CFJNC4eCyKId6WBB8XsmdEd2seQC8tpcsEH43qwmVfH8AZgbkx67nYBws7V41+u//64Micc2mx6JP5f7jBk2WTi5bOgI8kVa4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731452530; c=relaxed/simple;
-	bh=oXE/JCUWwOWdH1ArXUKVHZt/YMdSbhxhDdtUen0sUJc=;
-	h=Date:Message-ID:From:To:Cc:Subject; b=FiqZoaf9XTuDCcXZ+5dB02TuzmGjZjb56O/ERCgy12G2UeMnaS8aQBe3ZmFWmknlTYa44ysKLG8K5vFVqy2RyciAhmNUGXw7Tdd9IAUZvpUN236ZrrbDAiMmzrkotJP4wYHnwsYXqbHslEz3njE9S3j86PubUPFBC62ie/ti9U8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=W+LJZjGn; arc=none smtp.client-ip=209.85.219.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+	s=arc-20240116; t=1731511124; c=relaxed/simple;
+	bh=mYlUJN1gBFD5HKODNMC7Blm9B6/ZeU8V3DHCo45FeaA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ANaA5OhMGFZ3UjY9Y5GmFR7pOZdgzOnOKbsscbMek1jog1nSl95Ezo9bjHWLT3VJJNFocJBVegCOFr3pJZp36TYgCMYzoK7a+QVBGweG2hpVrbnN3VUctbUui/loOAQx1ci5Eut8ld35wLHzzB3ghRTlbW1GBULaGQwwvn1ze/U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=H7pSYD1f; arc=none smtp.client-ip=185.125.25.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="W+LJZjGn"
-Received: by mail-qv1-f44.google.com with SMTP id 6a1803df08f44-6cbcc2bd800so1524866d6.0
-        for <audit@vger.kernel.org>; Tue, 12 Nov 2024 15:02:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1731452527; x=1732057327; darn=vger.kernel.org;
-        h=subject:cc:to:from:message-id:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=L7xEoBRAFYilH4gOtSGNPMLQUcKTFHiJXH7d62mAZnI=;
-        b=W+LJZjGnxx9+eHtPlLqOJ6cmqrikUYMLzdY2jBmbvbxb6NYTubChiP4fPmKXbmdwsM
-         UwuRRW5OZXoGwcoZIitXFn1/x1Z9KesBD85YUT0uDrk9kYktA1kRlmuPsGrMg/uwcR2D
-         glLDm5/DBS90mbZscwRu+ItTvlqOTlT/Z/CbUVAjAdwKIMplLK6cd8XHlL+eNtL+dXnP
-         LueoOQYg9OlKDG9x3Dlz6oUW8+F+GRZ9ta8ZzXjCuzNZjwMuR3t6K+nuJVmgUYsj8THR
-         kboI4NGntSzycBbAzcvG/JsQnvcz+6zS1yWrvcMlL2y3Hnbdub+ouFu9dj18lmJH2RgP
-         yp3g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731452527; x=1732057327;
-        h=subject:cc:to:from:message-id:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=L7xEoBRAFYilH4gOtSGNPMLQUcKTFHiJXH7d62mAZnI=;
-        b=vTg/GhHlZzx1booixunDUue7GzpikEvs09v/hlpT0FaMRY1XrufndzbQa41b3O21jk
-         5iJhHziQUBxo8TnUcHMR5jenAGedN4D5ukRN9Cil5WFtkKIDAD+ccN/uA6+yN4Efv09u
-         oSSorLewZSPXpyW1lvkWizYDVipFsgJtwtdxPboqrx2dqAFpRDWvbLWtcpGuv8qz5ZLp
-         YHUh7ACl76f8gCoiWnSYcJZCxtgUcUGVMltf7w7bWsm4sSd//Kj6SMUdlLGfZJIefbgT
-         /MDv04OwgLOdasGXLc48lt6UGDm7RJ5I+olM/WaHXAJNFHJVE9Mu+YP+XX5HEp3EZSSC
-         q5zw==
-X-Gm-Message-State: AOJu0Yx7h7XUai18CAgyy30ZJolOhFWg3CI5j4+xKJozNVva8jyqtVr4
-	Px3FYgs6ZIQuYZsSQX94fZAA1nzvlaF++HVkVHe3MnNO8TpC6veq6x3MAG4Spg==
-X-Google-Smtp-Source: AGHT+IE8XaRudr0FHcnzEs2CiXPkIf+iQYeUtcxKDuo5WOIofga5lhyAVyTfz/1Bzfrk9SW5Rr9A9A==
-X-Received: by 2002:a05:6214:202b:b0:6c3:6477:16e7 with SMTP id 6a1803df08f44-6d39d58a359mr307643696d6.11.1731452527325;
-        Tue, 12 Nov 2024 15:02:07 -0800 (PST)
-Received: from localhost ([70.22.175.108])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7b32ab8d35dsm641236085a.0.2024.11.12.15.02.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Nov 2024 15:02:07 -0800 (PST)
-Date: Tue, 12 Nov 2024 18:02:06 -0500
-Message-ID: <454ead68c33bd0ec6297a6931451f174@paul-moore.com>
-From: Paul Moore <paul@paul-moore.com>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: audit@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] audit/audit-pr-20241112
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="H7pSYD1f"
+Received: from smtp-3-0000.mail.infomaniak.ch (smtp-3-0000.mail.infomaniak.ch [10.4.36.107])
+	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4XpRkd6L5Pzwxp;
+	Wed, 13 Nov 2024 16:18:33 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
+	s=20191114; t=1731511113;
+	bh=MLSSXV5vV/3ILf2Fs3lIEhU7AyFQKoGO0eFMitslUCo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=H7pSYD1fX2Z++3ImtIykQcrNY9c3kG7QvodKsh6W2qISLIxE5GiUo1CcNI9oldnxq
+	 6zHiELOQAA1bhKhd+Cl5VSeE7btdtPdlZ+cTJx3hwz0BwIP7b9q0HLtvFRx7FNusyI
+	 kWmzptE8/QZkKvvyjXWv/28U4S45DVjJU4pA9Dmw=
+Received: from unknown by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4XpRkb6yJPzgd3;
+	Wed, 13 Nov 2024 16:18:31 +0100 (CET)
+Date: Wed, 13 Nov 2024 16:18:31 +0100
+From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
+To: Francis Laniel <flaniel@linux.microsoft.com>
+Cc: Eric Paris <eparis@redhat.com>, Paul Moore <paul@paul-moore.com>, 
+	=?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>, "Serge E . Hallyn" <serge@hallyn.com>, 
+	Ben Scarlato <akhna@google.com>, Casey Schaufler <casey@schaufler-ca.com>, 
+	Charles Zaffery <czaffery@roblox.com>, James Morris <jmorris@namei.org>, Jann Horn <jannh@google.com>, 
+	Jeff Xu <jeffxu@google.com>, Jorge Lucangeli Obes <jorgelo@google.com>, 
+	Kees Cook <kees@kernel.org>, Konstantin Meskhidze <konstantin.meskhidze@huawei.com>, 
+	Matt Bobrowski <mattbobrowski@google.com>, Mikhail Ivanov <ivanov.mikhail1@huawei-partners.com>, 
+	Praveen K Paladugu <prapal@linux.microsoft.com>, Robert Salvet <robert.salvet@roblox.com>, 
+	Shervin Oloumi <enlightened@google.com>, Song Liu <song@kernel.org>, 
+	Tahera Fahimi <fahimitahera@gmail.com>, audit@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-security-module@vger.kernel.org
+Subject: Re: [RFC PATCH v2 04/14] landlock: Add unique ID generator
+Message-ID: <20241113.oQue0Ohj3aef@digikod.net>
+References: <20241022161009.982584-1-mic@digikod.net>
+ <20241022161009.982584-5-mic@digikod.net>
+ <1962333.tdWV9SEqCh@pwmachine>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1962333.tdWV9SEqCh@pwmachine>
+X-Infomaniak-Routing: alpha
 
-Linus,
+On Fri, Oct 25, 2024 at 05:18:06PM +0200, Francis Laniel wrote:
+> Hi!
+> 
+> Le mardi 22 octobre 2024, 18:09:59 CEST Mickaël Salaün a écrit :
+> > Landlock IDs can be generated to uniquely identify Landlock objects.
+> > For now, only Landlock domains get an ID at creation time.
+> > 
+> > These IDs have important properties:
+> > * They are unique during the lifetime of the running system thanks to
+> >   the 64-bit values: at worse, 2^60 - 2*2^32 useful IDs.
+> > * They are always greater than 2^32 and must then be stored in 64-bit
+> >   integer types.
+> > * The initial ID (at boot time) is randomly picked between 2^32 and
+> >   2^33, which limits collisions in logs between different boots.
+> > * IDs are sequential, which enables users to order them.
+> > * IDs may not be consecutive but increase with a random 2^4 step, which
+> >   limits side channels.
+> > 
+> > Such IDs can be exposed to unprivileged processes, even if it is not the
+> > case with this audit patch series.  The domain IDs will be useful for
+> > user space to identify sandboxes and get their properties.
+> > 
+> > Cc: Günther Noack <gnoack@google.com>
+> > Cc: Paul Moore <paul@paul-moore.com>
+> > Signed-off-by: Mickaël Salaün <mic@digikod.net>
+> > Link: https://lore.kernel.org/r/20241022161009.982584-5-mic@digikod.net
+> > ---
 
-I'm expecting to have spotty network access later this week and early
-into next so I'm sending my v6.13 merge window pull requests a bit
-earlier than normal.  The audit patches are minimal this time around
-with one patch to correct some kdoc function parameters and one to
-leverage the `str_yes_no()` function; nothing very exciting.
+> > diff --git a/security/landlock/id.h b/security/landlock/id.h
+> > new file mode 100644
+> > index 000000000000..689ba7607472
+> > --- /dev/null
+> > +++ b/security/landlock/id.h
+> > @@ -0,0 +1,25 @@
+> > +/* SPDX-License-Identifier: GPL-2.0-only */
+> > +/*
+> > + * Landlock LSM - Unique identification number generator
+> > + *
+> > + * Copyright © 2024 Microsoft Corporation
+> > + */
+> > +
+> > +#ifndef _SECURITY_LANDLOCK_ID_H
+> > +#define _SECURITY_LANDLOCK_ID_H
+> > +
+> > +#ifdef CONFIG_AUDIT
+> > +
+> > +void __init landlock_init_id(void);
+> > +
+> > +u64 landlock_get_id(size_t number_of_ids);
+> > +
+> > +#else /* CONFIG_AUDIT */
+> > +
+> > +static inline void __init landlock_init_id(void)
+> > +{
+> > +}
+> 
+> Should the function have the same signature than when CONFIG_AUDIT is set?
 
--Paul
-
---
-The following changes since commit 9852d85ec9d492ebef56dc5f229416c925758edc:
-
-  Linux 6.12-rc1 (2024-09-29 15:06:19 -0700)
-
-are available in the Git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/audit.git
-    tags/audit-pr-20241112
-
-for you to fetch changes up to 89282beaf75d81c9e04da7bc7c97bb261c2a0204:
-
-  audit: Use str_yes_no() helper function (2024-10-22 19:16:50 -0400)
-
-----------------------------------------------------------------
-audit/stable-6.13 PR 20241112
-----------------------------------------------------------------
-
-Julia Lawall (1):
-      audit: Reorganize kerneldoc parameter names
-
-Thorsten Blum (1):
-      audit: Use str_yes_no() helper function
-
- kernel/audit.c   |    2 +-
- kernel/auditsc.c |    8 ++++----
- 2 files changed, 5 insertions(+), 5 deletions(-)
-
---
-paul-moore.com
+The API is the same, only the static inline changes, which is what we
+need to do in a header file.
