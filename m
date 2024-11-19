@@ -1,71 +1,63 @@
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A672B183CCA;
-	Sun, 17 Nov 2024 12:25:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3244619DF99;
+	Tue, 19 Nov 2024 02:23:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731846328; cv=none; b=peEy5TPddAbekjb+CxxKwwcOyU5nRzmLXf29TFmo6qkglRFfq+JjRxQcHllvjgdX4uI2hVsNWwWlJSbkmRbRIyrdOlzPF1nEk5LDknuPAhKlflSX3kFizdFN8MCnyjYWLckaIPP/+ixYHi1Z39pd7jh+QUIU0Ko6KFeJe7stcaQ=
+	t=1731983016; cv=none; b=Fajex7KWTS9q3feptIlQJjzJMwaMFLbdAGs8mbj4JspDW16eW5BdHI7PP0ClXII7u0UPyjHb+JpaHiFbjVh+xPQmCjKCZUphsv/+WXOxxO7JInbvyV7Cw9jsdiLieTuzoOk4gBdNqm1kOsYJGANpPPNdEAKomATJFPZsqvGDbGY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731846328; c=relaxed/simple;
-	bh=2Vzu3RlYgWlUg+kP8l3nTLXS8GOcuKbfykkwWU/BOFg=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=LNQ/gtUOCrqCVL+bkvrll8bT2wbdXPTXG/AQzCW4TNqBig9lun9ZzyhGtaoC8TmFCule8Yti7BWeCAriCC+bdZRkdQJNsC5ycPVA0+rOU5HuQ013kHkoKAw+9UV6Jvu0Txm96BfjvUC8xIX0YFwaUlYTEi5x8JaXgd1B/c5Wj/A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ellerman.id.au; spf=pass smtp.mailfrom=ellerman.id.au; dkim=fail (2048-bit key) header.d=ellerman.id.au header.i=@ellerman.id.au header.b=mTU1+u6c reason="signature verification failed"; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ellerman.id.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ellerman.id.au
+	s=arc-20240116; t=1731983016; c=relaxed/simple;
+	bh=MOSsfs2FaX3O9mJNMXBwA6+Mc6kGGXxmP6Hgj4ZLQ0k=;
+	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=h+YTwQ4+esFO5AD+QxJq7llqilP+iEHPqcL2gFXicUCaOaJTOgUSeZNN0K9H4TQvyRXPmukFQjQ9ptX0sXLdgHd+3Ux2x38zGaXNBEUDm+MeARS4q1S/Z03zTBiU0e0gulFMHC4pg7V4Li1qc2WqwVGXrJGQi8KJ891P1HvR2Yw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qkYI3h10; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=ellerman.id.au header.i=@ellerman.id.au header.b="mTU1+u6c"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-	s=201909; t=1731846322;
-	bh=tp2Q+8b3zGUBih3afpuzhAn88G4uKrpXKwQ9ivMWqHM=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=mTU1+u6copmZDAjfqnXWv+2ujIPjQ3JtoGu9so550WGMXDTKHgPRUtKWL5WTQKacA
-	 ukYIXyZnvXaIaM7phYyg2ffevuNcZwkVM+fGzA0yJe4hA6ivVJfsyMN2k5es56Dca2
-	 xnyEpYxwi2vRkSTSXt4SDnE54vHeCtrhpgtS0p+MhXC1a/iPqUZ6noNUE4xD/tX6x3
-	 9xyLmagErBzssEeKDZj2zkr4owFCFT2YctuTq6qJ9KGCJplX90TRwhVHol5EujIAFV
-	 JLHuHIFQhKPYuj26daIFU9Gqj0sP+YYyQFfmqJ5wJevMLVh4tXn5ub20TQGEUboHP9
-	 4WeeB6bi4EbDw==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Xrqhp5Zp2z4xf5;
-	Sun, 17 Nov 2024 23:25:14 +1100 (AEDT)
-From: Michael Ellerman <patch-notifications@ellerman.id.au>
-To: linux-gpio@vger.kernel.org, Julia Lawall <Julia.Lawall@inria.fr>
-Cc: kernel-janitors@vger.kernel.org, audit@vger.kernel.org, linux-mtd@lists.infradead.org, Zhihao Cheng <chengzhihao1@huawei.com>, "Rafael J. Wysocki" <rafael@kernel.org>, linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org, dri-devel@lists.freedesktop.org, linux-usb@vger.kernel.org, linux-mm@kvack.org, maple-tree@lists.infradead.org, alsa-devel@alsa-project.org, Sanyog Kale <sanyog.r.kale@intel.com>, Pierre-Louis Bossart <pierre-louis.bossart@linux.dev>, dccp@vger.kernel.org, linux-fsdevel@vger.kernel.org, Jan Kara <jack@suse.cz>, drbd-dev@lists.linbit.com, linux-sound@vger.kernel.org, linux-kernel@vger.kernel.org, linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org, netdev@vger.kernel.org, nvdimm@lists.linux.dev, linux-leds@vger.kernel.org, Nicholas Piggin <npiggin@gmail.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, Naveen N Rao <naveen@kernel.org>, Madhavan Srinivasan <maddy@linux.ibm.com>, linuxppc-dev@lists.ozlabs.org, tipc-discussion@lists.sourceforge.
- net, Robin Murphy <robin.murphy@arm.com>, iommu@lists.linux.dev, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, linux-trace-kernel@vger.kernel.org, Neil Brown <neilb@suse.de>, Olga Kornievskaia <okorniev@redhat.com>, Dai Ngo <Dai.Ngo@oracle.com>, Tom Talpey <tom@talpey.com>, linux-nfs@vger.kernel.org, amd-gfx@lists.freedesktop.org, linux-wireless@vger.kernel.org, intel-wired-lan@lists.osuosl.org
-In-Reply-To: <20240930112121.95324-1-Julia.Lawall@inria.fr>
-References: <20240930112121.95324-1-Julia.Lawall@inria.fr>
-Subject: Re: (subset) [PATCH 00/35] Reorganize kerneldoc parameter names
-Message-Id: <173184539760.890800.14513086226459117952.b4-ty@ellerman.id.au>
-Date: Sun, 17 Nov 2024 23:09:57 +1100
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qkYI3h10"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BB27C4CECC;
+	Tue, 19 Nov 2024 02:23:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1731983016;
+	bh=MOSsfs2FaX3O9mJNMXBwA6+Mc6kGGXxmP6Hgj4ZLQ0k=;
+	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+	b=qkYI3h10OgewT4ds1QH0XcT1T2urs4p5uq43V1fV8/e5AzkgLg1MapXQw1PmWo71y
+	 FNcoxsKGt68BPEp3d0K2nR2AYCaGj6KPzHGLHtDKzyHmqiaawLzKEpJSI7N93CkRFs
+	 UYVyFv0nDfCGPepXl9p7lSlOuInhhmcSF52wSoDB+xPmXnbOnv0sMZJvbFs3VU9dG9
+	 GiVmm3iuIGGQfcxrb8Dx3+PoyzHmvl+mmysE95WQ5YLZ60PJOVd7hPfJfKm3HKaE9Q
+	 Jxglf7rKYh4gej7k1wiJ3MYd/eb3xT9EEe4chuJai622EiTKaYmV5EInn9h89Vy9Bw
+	 lfmv//3MP4fNw==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id AE0483809A80;
+	Tue, 19 Nov 2024 02:23:48 +0000 (UTC)
+Subject: Re: [GIT PULL] audit/audit-pr-20241112
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <454ead68c33bd0ec6297a6931451f174@paul-moore.com>
+References: <454ead68c33bd0ec6297a6931451f174@paul-moore.com>
+X-PR-Tracked-List-Id: <audit.vger.kernel.org>
+X-PR-Tracked-Message-Id: <454ead68c33bd0ec6297a6931451f174@paul-moore.com>
+X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/audit.git tags/audit-pr-20241112
+X-PR-Tracked-Commit-Id: 89282beaf75d81c9e04da7bc7c97bb261c2a0204
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: a8220b0ca79844bf5abb40ff067fb1db18eb79f0
+Message-Id: <173198302726.73657.15818512109972331671.pr-tracker-bot@kernel.org>
+Date: Tue, 19 Nov 2024 02:23:47 +0000
+To: Paul Moore <paul@paul-moore.com>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, audit@vger.kernel.org, linux-kernel@vger.kernel.org
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
 
-On Mon, 30 Sep 2024 13:20:46 +0200, Julia Lawall wrote:
-> Reorganize kerneldoc parameter names to match the parameter
-> order in the function header.
-> 
-> The misordered cases were identified using the following
-> Coccinelle semantic patch:
-> 
-> // <smpl>
-> @initialize:ocaml@
-> @@
-> 
-> [...]
+The pull request you sent on Tue, 12 Nov 2024 18:02:06 -0500:
 
-Applied to powerpc/next.
+> https://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/audit.git tags/audit-pr-20241112
 
-[11/35] powerpc/ps3: Reorganize kerneldoc parameter names
-        https://git.kernel.org/powerpc/c/276e036e5844116e563fa90f676c625bb742cc57
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/a8220b0ca79844bf5abb40ff067fb1db18eb79f0
 
-cheers
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
