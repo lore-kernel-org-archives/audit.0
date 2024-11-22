@@ -1,33 +1,33 @@
-Received: from smtp-8fa8.mail.infomaniak.ch (smtp-8fa8.mail.infomaniak.ch [83.166.143.168])
+Received: from smtp-190d.mail.infomaniak.ch (smtp-190d.mail.infomaniak.ch [185.125.25.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 544711DF969
-	for <audit@vger.kernel.org>; Fri, 22 Nov 2024 14:34:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=83.166.143.168
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81FD113A41F
+	for <audit@vger.kernel.org>; Fri, 22 Nov 2024 14:34:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.25.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732286068; cv=none; b=CY/QhnrGCvUvBgjRyWtehS6Bbe3GODwdk/cFdMTqPxuNaXZqewWsZyiDqEs0gPDgy4P4V4dmDM8w1+JxPIeQiSQbZMfo9owdOy0FeNi9WE9O+45LVsfR3+OfSmm3d0/StB1BGX6fRa3C4cA2s2HFkxiA3R1l7DaeU8ZWRt0xS/o=
+	t=1732286068; cv=none; b=FDcywpycuqYG3/ytwKsVAkS4RycDOJSNFmBlraoTllS/lh9mCzOUpA58U1eF3wmKowO3pjXTw84NoMK+sasj7DhKiIoPd/fAh+TRNyfieMLSRtfQVbz9q7mwU/g+lhrBPiNuYHIS8IusTzrLL93WOuiEDASZu1bnR+Gvwg3rT/g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1732286068; c=relaxed/simple;
-	bh=NXBj20PThBt2iYjCNczmjasmi25mDb//0DutqK1ZARY=;
+	bh=9/HAE6oN/4DdnJq2+IQRF9EYrlCmzEbE13r49t9ClLA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=FiW0w+B0UF6xiBlz+OGBeipQhIBC+1it9KguUTYHb4b4fRA8sGCX8MaXvzv8G7AEd9i10dOlUmDgGbhkfUf6EUWCzyZCxzgIqs/NB/sxN7EYVioDiVZHDcLK9bqvT5v2p0ZeNZP5tpLkmu3B5G7J51DpTeFi7v6/wgYfWA3BdRo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=fvB/RVu5; arc=none smtp.client-ip=83.166.143.168
+	 MIME-Version:Content-Type; b=XogogPk9hwIxPG95OD5nWGxMcr0bnqktORmUPtXWfTgaBA92pmGUh5f4/1x6VO0BT7jGs47zQybfOcKAjgVpCdB2dO0hv2wP88+7NiRYqh+zPPNiOnHeDYTKqxS56GYVdEh2zOSnl56OpdtVVTLojqsVQPE8MJn5V6TlFU9xXrs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=vcI8UqR6; arc=none smtp.client-ip=185.125.25.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="fvB/RVu5"
-Received: from smtp-3-0000.mail.infomaniak.ch (smtp-3-0000.mail.infomaniak.ch [10.4.36.107])
-	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4XvyKW64hpzZt2;
-	Fri, 22 Nov 2024 15:34:23 +0100 (CET)
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="vcI8UqR6"
+Received: from smtp-4-0000.mail.infomaniak.ch (smtp-4-0000.mail.infomaniak.ch [10.7.10.107])
+	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4XvyKN230Kzcpc;
+	Fri, 22 Nov 2024 15:34:16 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
-	s=20191114; t=1732286063;
-	bh=5WW+XuNU4PWZC+NUFAz/gM/xUoHdoTRRxfIsHVe7bck=;
+	s=20191114; t=1732286056;
+	bh=4hM4h0jTTGz2zSWVoAgOj7GvhIjSm/gA9AToINwA4lw=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=fvB/RVu52UfxBRXo+4Z+quhLghOUgKVFPZCkPm461OE+ub1R0VcVpmHXDpOBxQ+hS
-	 Kmr0k3l8xz+8MhHsDG1nbko4Moijj4JjifcSM5C9jNYeBX4L2GDzfgSpvfSiDYLKR7
-	 VJnYqnAe8x7bv0//AGd4h+EVTCUZCwqkdg7jCTPc=
-Received: from unknown by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4XvyKW1wzCzjZ3;
-	Fri, 22 Nov 2024 15:34:23 +0100 (CET)
+	b=vcI8UqR6Fhm4XC/bHBEiAK2EdNHJQjf5LYbcl19m7zVyrcTFadZIGUfCCcY3lu5ux
+	 19yFvTwgxwyZodlVr5B8vptopvuBUJYyLoIEwLhZjm5lnTw1BNDlL2S2s++Cs7ym65
+	 QPYdrfKFg8QkHyVqYN1E3jO4rGOS6pWxRoOtm/b4=
+Received: from unknown by smtp-4-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4XvyKM3njzzmn4;
+	Fri, 22 Nov 2024 15:34:15 +0100 (CET)
 From: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
 To: Eric Paris <eparis@redhat.com>,
 	Paul Moore <paul@paul-moore.com>,
@@ -55,9 +55,9 @@ Cc: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
 	audit@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-security-module@vger.kernel.org
-Subject: [PATCH v3 16/23] landlock: Log truncate and ioctl denials
-Date: Fri, 22 Nov 2024 15:33:46 +0100
-Message-ID: <20241122143353.59367-17-mic@digikod.net>
+Subject: [PATCH v3 10/23] landlock: Log domain properties and release
+Date: Fri, 22 Nov 2024 15:33:40 +0100
+Message-ID: <20241122143353.59367-11-mic@digikod.net>
 In-Reply-To: <20241122143353.59367-1-mic@digikod.net>
 References: <20241122143353.59367-1-mic@digikod.net>
 Precedence: bulk
@@ -70,555 +70,418 @@ Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Infomaniak-Routing: alpha
 
-Add audit support to the file_truncate and file_ioctl hooks.
+TODO: Update sample with audit's creation time and now-removed parent
+hierarchy
 
-Add a deny_masks_t type and related helpers to store the domain's layer
-level per optional access rights (i.e. FS_TRUNCATE and FS_IOCTL_DEV)
-when opening a file, which cannot be inferred later.
+Asynchronously log domain information when it first denies an access.
+This minimize the amount of generated logs, which makes it possible to
+always log denials since they should not happen (except with the new
+LANDLOCK_RESTRICT_SELF_LOGLESS flag).  These records are identified by
+AUDIT_LANDLOCK_DOM_INFO.
 
-Add KUnit tests.
+Log domain deletion with the AUDIT_LANDLOCK_DOM_DROP record type when
+a domain was previously logged.  This makes it possible for user space
+to free potential resources when a domain ID will never show again.
 
-Audit event sample:
+The logged domain properties include:
+- the domain ID
+- creation time
+- its creator's PID
+- its creator's UID
+- its creator's executable path (exe)
+- its creator's command line (comm)
 
-  type=LL_DENY [...]: domain=195ba459b blockers=fs_ioctl_dev path="/dev/tty" dev="devtmpfs" ino=9
+This require each domain to save some task properties at creation time:
+time, PID, credentials, exe path, and comm.
+
+It should be noted that we cannot use audit event's serial numbers
+because there may not be any related event.  However, it is still useful
+to use the same potential timestamp instead of a close one.  What really
+matter is how old the related Landlock domain is, not the uniquiness of
+the creation time.  If audit is not enabled, Landlock creates its own
+timestamp.  This timestamp will be exposed to user space with a future
+unprivileged interface.
+
+Audit event sample for a first denial:
+
+  type=LL_DENY msg=audit(1732186800.349:44): domain=195ba459b blockers=ptrace opid=1 ocomm="systemd"
+  type=LL_DOM_INFO msg=audit(1732186800.349:44): domain=195ba459b creation=1732186800.345 pid=300 uid=0 exe="/root/sandboxer" comm="sandboxer"
+  type=SYSCALL msg=audit(1732186800.349:44): arch=c000003e syscall=101 success=no [...] pid=300 auid=0
+
+Audit event sample for logged domains deletion:
+
+  type=LL_DOM_DROP msg=audit(1732186800.393:45): domain=195ba459b
 
 Cc: Günther Noack <gnoack@google.com>
+Cc: Paul Moore <paul@paul-moore.com>
 Signed-off-by: Mickaël Salaün <mic@digikod.net>
-Link: https://lore.kernel.org/r/20241122143353.59367-17-mic@digikod.net
+Link: https://lore.kernel.org/r/20241122143353.59367-11-mic@digikod.net
 ---
+
+Questions:
+- Should we also log the creator's loginuid?
+- Should we also log the creator's sessionid?
 
 Changes since v2:
-- Fix !CONFIG_AUDIT build warning.
-- Rename ACCESS_FS_OPTIONAL to _LANDLOCK_ACCESS_FS_OPTIONAL.
----
- security/landlock/access.h |  23 +++++++
- security/landlock/audit.c  | 102 ++++++++++++++++++++++++++--
- security/landlock/audit.h  |   4 ++
- security/landlock/domain.c | 133 +++++++++++++++++++++++++++++++++++++
- security/landlock/domain.h |   8 +++
- security/landlock/fs.c     |  51 ++++++++++++++
- security/landlock/fs.h     |   9 +++
- 7 files changed, 325 insertions(+), 5 deletions(-)
+- Fix docstring.
+- Fix log_status check in log_hierarchy() to also log
+  LANDLOCK_LOG_DISABLED.
+- Add audit's creation time to domain's properties.
+- Use hexadecimal notation for domain IDs.
+- Remove domain's parent records: parent domains are not really useful
+  in the logs.  They will be available with the upcoming introspection
+  feature though.
+- Extend commit message with audit's timestamp explanation.
 
-diff --git a/security/landlock/access.h b/security/landlock/access.h
-index 1e302775cc23..99125c7f9732 100644
---- a/security/landlock/access.h
-+++ b/security/landlock/access.h
-@@ -28,6 +28,12 @@
- 	LANDLOCK_ACCESS_FS_REFER)
- /* clang-format on */
+Changes since v1:
+- Add a ruleset's version for atomic logs.
+- Rebased on the TCP patch series.
+- Rename operation using "_" instead of "-".
+- Rename AUDIT_LANDLOCK to AUDIT_LANDLOCK_RULESET.
+- Only log when audit is enabled, but always set domain IDs.
+- Don't log task's PID/TID with log_task() because it would be redundant
+  with the SYSCALL record.
+- Remove race condition when logging ruleset creation and logging
+  ruleset modification while the related file descriptor was already
+  registered but the ruleset creation not logged yet.
+- Fix domain drop logs.
+- Move the domain drop record from the previous patch into this one.
+- Do not log domain creation but log first domain use instead.
+- Save task's properties that sandbox themselves.
+---
+ include/uapi/linux/audit.h   |  2 +
+ security/landlock/audit.c    | 74 ++++++++++++++++++++++++++++++++++++
+ security/landlock/audit.h    |  7 ++++
+ security/landlock/domain.c   | 41 ++++++++++++++++++++
+ security/landlock/domain.h   | 43 +++++++++++++++++++++
+ security/landlock/ruleset.c  |  7 ++++
+ security/landlock/ruleset.h  |  1 +
+ security/landlock/syscalls.c |  1 +
+ 8 files changed, 176 insertions(+)
+
+diff --git a/include/uapi/linux/audit.h b/include/uapi/linux/audit.h
+index 60c909c396c0..a72f7b3403be 100644
+--- a/include/uapi/linux/audit.h
++++ b/include/uapi/linux/audit.h
+@@ -147,6 +147,8 @@
+ #define AUDIT_IPE_CONFIG_CHANGE	1421	/* IPE config change */
+ #define AUDIT_IPE_POLICY_LOAD	1422	/* IPE policy load */
+ #define AUDIT_LANDLOCK_DENY	1423	/* Landlock denial */
++#define AUDIT_LANDLOCK_DOM_INFO	1424	/* Landlock domain properties */
++#define AUDIT_LANDLOCK_DOM_DROP	1425	/* Landlock domain release */
  
-+/* clang-format off */
-+#define _LANDLOCK_ACCESS_FS_OPTIONAL ( \
-+	LANDLOCK_ACCESS_FS_TRUNCATE | \
-+	LANDLOCK_ACCESS_FS_IOCTL_DEV)
-+/* clang-format on */
-+
- typedef u16 access_mask_t;
- 
- /* Makes sure all filesystem access rights can be stored. */
-@@ -60,6 +66,23 @@ typedef u16 layer_mask_t;
- /* Makes sure all layers can be checked. */
- static_assert(BITS_PER_TYPE(layer_mask_t) >= LANDLOCK_MAX_NUM_LAYERS);
- 
-+/*
-+ * Tracks domains responsible of a denied access.  This is required to avoid
-+ * storing in each object the full layer_masks[] required by update_request().
-+ */
-+typedef u8 deny_masks_t;
-+
-+/*
-+ * Makes sure all optional access rights can be tied to a layer index (cf.
-+ * get_deny_mask).
-+ */
-+static_assert(BITS_PER_TYPE(deny_masks_t) >=
-+	      (HWEIGHT(LANDLOCK_MAX_NUM_LAYERS - 1) *
-+	       HWEIGHT(_LANDLOCK_ACCESS_FS_OPTIONAL)));
-+
-+/* LANDLOCK_MAX_NUM_LAYERS must be a power of two (cf. deny_masks_t assert). */
-+static_assert(HWEIGHT(LANDLOCK_MAX_NUM_LAYERS) == 1);
-+
- /* Upgrades with all initially denied by default access rights. */
- static inline struct access_masks
- landlock_upgrade_handled_access_masks(struct access_masks access_masks)
+ #define AUDIT_FIRST_KERN_ANOM_MSG   1700
+ #define AUDIT_LAST_KERN_ANOM_MSG    1799
 diff --git a/security/landlock/audit.c b/security/landlock/audit.c
-index 8a7657d12478..e51c8ea14aec 100644
+index eab6b3a8a231..2d0a96797dd4 100644
 --- a/security/landlock/audit.c
 +++ b/security/landlock/audit.c
-@@ -13,10 +13,12 @@
- #include <linux/uidgid.h>
- #include <uapi/linux/landlock.h>
+@@ -8,8 +8,11 @@
+ #include <kunit/test.h>
+ #include <linux/audit.h>
+ #include <linux/lsm_audit.h>
++#include <linux/pid.h>
++#include <linux/uidgid.h>
  
-+#include "access.h"
  #include "audit.h"
- #include "common.h"
- #include "cred.h"
++#include "cred.h"
  #include "domain.h"
-+#include "fs.h"
  #include "ruleset.h"
  
- static const char *const fs_access_strings[] = {
-@@ -252,22 +254,111 @@ static void test_get_denied_layer(struct kunit *const test)
- 
- #endif /* CONFIG_SECURITY_LANDLOCK_KUNIT_TEST */
- 
-+static size_t
-+get_level_from_deny_masks(access_mask_t *const access_request,
-+			  const access_mask_t all_existing_optional_access,
-+			  const deny_masks_t deny_masks)
-+{
-+	const unsigned long access_opt = all_existing_optional_access;
-+	const unsigned long access_req = *access_request;
-+	access_mask_t missing = 0;
-+	size_t youngest_layer = 0;
-+	size_t access_index = 0;
-+	unsigned long access_bit;
-+
-+	/* This will require change with new object types. */
-+	WARN_ON_ONCE(access_opt != _LANDLOCK_ACCESS_FS_OPTIONAL);
-+
-+	for_each_set_bit(access_bit, &access_opt,
-+			 BITS_PER_TYPE(access_mask_t)) {
-+		if (access_req & BIT(access_bit)) {
-+			const size_t layer =
-+				(deny_masks >> (access_index * 4)) &
-+				(LANDLOCK_MAX_NUM_LAYERS - 1);
-+
-+			if (layer > youngest_layer) {
-+				youngest_layer = layer;
-+				missing = BIT(access_bit);
-+			} else if (layer == youngest_layer) {
-+				missing |= BIT(access_bit);
-+			}
-+		}
-+		access_index++;
-+	}
-+
-+	*access_request = missing;
-+	return youngest_layer;
-+}
-+
-+#ifdef CONFIG_SECURITY_LANDLOCK_KUNIT_TEST
-+
-+static void test_get_level_from_deny_masks(struct kunit *const test)
-+{
-+	deny_masks_t deny_mask;
-+	access_mask_t access;
-+
-+	/* truncate:0 ioctl_dev:2 */
-+	deny_mask = 0x20;
-+
-+	access = LANDLOCK_ACCESS_FS_TRUNCATE;
-+	KUNIT_EXPECT_EQ(test, 0,
-+			get_level_from_deny_masks(&access,
-+						  _LANDLOCK_ACCESS_FS_OPTIONAL,
-+						  deny_mask));
-+	KUNIT_EXPECT_EQ(test, access, LANDLOCK_ACCESS_FS_TRUNCATE);
-+
-+	access = LANDLOCK_ACCESS_FS_TRUNCATE | LANDLOCK_ACCESS_FS_IOCTL_DEV;
-+	KUNIT_EXPECT_EQ(test, 2,
-+			get_level_from_deny_masks(&access,
-+						  _LANDLOCK_ACCESS_FS_OPTIONAL,
-+						  deny_mask));
-+	KUNIT_EXPECT_EQ(test, access, LANDLOCK_ACCESS_FS_IOCTL_DEV);
-+
-+	/* truncate:15 ioctl_dev:15 */
-+	deny_mask = 0xff;
-+
-+	access = LANDLOCK_ACCESS_FS_TRUNCATE;
-+	KUNIT_EXPECT_EQ(test, 15,
-+			get_level_from_deny_masks(&access,
-+						  _LANDLOCK_ACCESS_FS_OPTIONAL,
-+						  deny_mask));
-+	KUNIT_EXPECT_EQ(test, access, LANDLOCK_ACCESS_FS_TRUNCATE);
-+
-+	access = LANDLOCK_ACCESS_FS_TRUNCATE | LANDLOCK_ACCESS_FS_IOCTL_DEV;
-+	KUNIT_EXPECT_EQ(test, 15,
-+			get_level_from_deny_masks(&access,
-+						  _LANDLOCK_ACCESS_FS_OPTIONAL,
-+						  deny_mask));
-+	KUNIT_EXPECT_EQ(test, access,
-+			LANDLOCK_ACCESS_FS_TRUNCATE |
-+				LANDLOCK_ACCESS_FS_IOCTL_DEV);
-+}
-+
-+#endif /* CONFIG_SECURITY_LANDLOCK_KUNIT_TEST */
-+
- static bool is_valid_request(const struct landlock_request *const request)
- {
- 	if (WARN_ON_ONCE(!(!!request->layer_plus_one ^ !!request->access)))
- 		return false;
- 
- 	if (request->access) {
--		if (WARN_ON_ONCE(!request->layer_masks))
-+		if (WARN_ON_ONCE(!(!!request->layer_masks ^
-+				   !!request->all_existing_optional_access)))
- 			return false;
- 	} else {
--		if (WARN_ON_ONCE(request->layer_masks))
-+		if (WARN_ON_ONCE(request->layer_masks ||
-+				 request->all_existing_optional_access))
- 			return false;
- 	}
- 
- 	if (WARN_ON_ONCE(!!request->layer_masks ^ !!request->layer_masks_size))
- 		return false;
- 
-+	if (request->deny_masks) {
-+		if (WARN_ON_ONCE(!request->all_existing_optional_access))
-+			return false;
-+	}
-+
- 	return true;
+@@ -30,6 +33,41 @@ static void log_blockers(struct audit_buffer *const ab,
+ 	audit_log_format(ab, "%s", get_blocker(type));
  }
  
-@@ -308,9 +399,9 @@ void landlock_log_denial(const struct landlock_ruleset *const domain,
- 				domain, &missing, request->layer_masks,
- 				request->layer_masks_size);
- 		} else {
--			/* This will change with the next commit. */
--			WARN_ON_ONCE(1);
--			youngest_layer = domain->num_layers;
-+			youngest_layer = get_level_from_deny_masks(
-+				&missing, request->all_existing_optional_access,
-+				request->deny_masks);
- 		}
- 		youngest_denied = get_hierarchy(domain, youngest_layer);
- 	} else {
-@@ -366,6 +457,7 @@ static struct kunit_case test_cases[] = {
- 	/* clang-format off */
- 	KUNIT_CASE(test_get_hierarchy),
- 	KUNIT_CASE(test_get_denied_layer),
-+	KUNIT_CASE(test_get_level_from_deny_masks),
- 	{}
- 	/* clang-format on */
- };
++static void log_node(struct landlock_hierarchy *const node)
++{
++	struct audit_buffer *ab;
++
++	if (WARN_ON_ONCE(!node))
++		return;
++
++	/* Ignores already logged domains.  */
++	if (READ_ONCE(node->log_status) == LANDLOCK_LOG_RECORDED)
++		return;
++
++	ab = audit_log_start(audit_context(), GFP_ATOMIC,
++			     AUDIT_LANDLOCK_DOM_INFO);
++	if (!ab)
++		return;
++
++	WARN_ON_ONCE(node->id == 0);
++	audit_log_format(ab, "domain=%llx creation=%llu.%03lu pid=%d uid=%u",
++			 node->id,
++			 /* See audit_log_start() */
++			 (unsigned long long)node->creation.tv_sec,
++			 node->creation.tv_nsec / 1000000, pid_nr(node->pid),
++			 from_kuid(&init_user_ns, node->cred->uid));
++	audit_log_d_path(ab, " exe=", &node->exe);
++	audit_log_format(ab, " comm=");
++	audit_log_untrustedstring(ab, node->comm);
++	audit_log_end(ab);
++
++	/*
++	 * There may be race condition leading to logging of the same domain
++	 * several times but that is OK.
++	 */
++	WRITE_ONCE(node->log_status, LANDLOCK_LOG_RECORDED);
++}
++
+ static struct landlock_hierarchy *
+ get_hierarchy(const struct landlock_ruleset *const domain, const size_t layer)
+ {
+@@ -116,6 +154,42 @@ void landlock_log_denial(const struct landlock_ruleset *const domain,
+ 	log_blockers(ab, request->type);
+ 	audit_log_lsm_data(ab, &request->audit);
+ 	audit_log_end(ab);
++
++	/* Logs this domain if it is the first time. */
++	log_node(youngest_denied);
++}
++
++/**
++ * landlock_log_drop_domain - Create an audit record when a domain is deleted
++ *
++ * Only domains which previously appeared in the audit logs are logged again.
++ * This is useful to know when a domain will never show again in the audit log.
++ *
++ * This record is not directly tied to a syscall entry.
++ *
++ * Called by the cred_free() hook, in an uninterruptible context.
++ */
++void landlock_log_drop_domain(const struct landlock_ruleset *const domain)
++{
++	struct audit_buffer *ab;
++
++	if (WARN_ON_ONCE(!domain->hierarchy))
++		return;
++
++	if (!audit_enabled)
++		return;
++
++	/* Ignores domains that were not logged.  */
++	if (READ_ONCE(domain->hierarchy->log_status) != LANDLOCK_LOG_RECORDED)
++		return;
++
++	ab = audit_log_start(audit_context(), GFP_ATOMIC,
++			     AUDIT_LANDLOCK_DOM_DROP);
++	if (!ab)
++		return;
++
++	audit_log_format(ab, "domain=%llx", domain->hierarchy->id);
++	audit_log_end(ab);
+ }
+ 
+ #ifdef CONFIG_SECURITY_LANDLOCK_KUNIT_TEST
 diff --git a/security/landlock/audit.h b/security/landlock/audit.h
-index 25fc8333cddc..320394fd6b84 100644
+index f33095afcd2f..7a1b1652f21b 100644
 --- a/security/landlock/audit.h
 +++ b/security/landlock/audit.h
-@@ -42,6 +42,10 @@ struct landlock_request {
- 	/* Required fields for requests with layer masks. */
- 	const layer_mask_t (*layer_masks)[];
- 	size_t layer_masks_size;
-+
-+	/* Required fields for requests with deny masks. */
-+	const access_mask_t all_existing_optional_access;
-+	deny_masks_t deny_masks;
- };
+@@ -36,11 +36,18 @@ struct landlock_request {
  
  #ifdef CONFIG_AUDIT
+ 
++void landlock_log_drop_domain(const struct landlock_ruleset *const domain);
++
+ void landlock_log_denial(const struct landlock_ruleset *const domain,
+ 			 const struct landlock_request *const request);
+ 
+ #else /* CONFIG_AUDIT */
+ 
++static inline void
++landlock_log_drop_domain(const struct landlock_ruleset *const domain)
++{
++}
++
+ static inline void
+ landlock_log_denial(const struct landlock_ruleset *const domain,
+ 		    const struct landlock_request *const request)
 diff --git a/security/landlock/domain.c b/security/landlock/domain.c
-index 69b15c059583..4b3b82c88815 100644
+index 965e4dc21975..69b15c059583 100644
 --- a/security/landlock/domain.c
 +++ b/security/landlock/domain.c
-@@ -5,7 +5,10 @@
+@@ -5,17 +5,58 @@
   * Copyright © 2024 Microsoft Corporation
   */
  
-+#include <kunit/test.h>
- #include <linux/audit.h>
-+#include <linux/bitops.h>
-+#include <linux/bits.h>
- #include <linux/cred.h>
- #include <linux/file.h>
- #include <linux/mm.h>
-@@ -14,6 +17,8 @@
- #include <linux/sched.h>
- #include <linux/timekeeping.h>
- 
-+#include "access.h"
-+#include "common.h"
++#include <linux/audit.h>
++#include <linux/cred.h>
++#include <linux/file.h>
++#include <linux/mm.h>
++#include <linux/path.h>
++#include <linux/pid.h>
++#include <linux/sched.h>
++#include <linux/timekeeping.h>
++
  #include "domain.h"
  #include "id.h"
  
-@@ -60,3 +65,131 @@ void landlock_init_current_hierarchy(struct landlock_hierarchy *const hierarchy)
- 	hierarchy->exe = get_current_exe();
- 	get_task_comm(hierarchy->comm, current);
++static struct path get_current_exe(void)
++{
++	struct path exe_path = {};
++	struct file *exe_file;
++	struct mm_struct *mm = current->mm;
++
++	if (!mm)
++		return exe_path;
++
++	exe_file = get_mm_exe_file(mm);
++	if (!exe_file)
++		return exe_path;
++
++	exe_path = exe_file->f_path;
++	path_get(&exe_path);
++	fput(exe_file);
++	return exe_path;
++}
++
+ /**
+  * landlock_init_current_hierarchy - Partially initialize landlock_hierarchy
+  *
+  * @hierarchy: The hierarchy to initialize.
+  *
++ * The current task is referenced as the domain creator.  The subjective
++ * credentials must not be in an overridden state.
++ *
+  * @hierarchy->parent and @hierarchy->usage should already be set.
+  */
+ void landlock_init_current_hierarchy(struct landlock_hierarchy *const hierarchy)
+ {
++	hierarchy->creation = audit_get_ctime(audit_context());
++	if (!hierarchy->creation.tv_sec)
++		ktime_get_coarse_real_ts64(&hierarchy->creation);
++
++	hierarchy->log_status = LANDLOCK_LOG_PENDING;
+ 	hierarchy->id = landlock_get_id(1);
++	WARN_ON_ONCE(current_cred() != current_real_cred());
++	hierarchy->cred = get_current_cred();
++	hierarchy->pid = get_pid(task_pid(current));
++	hierarchy->exe = get_current_exe();
++	get_task_comm(hierarchy->comm, current);
  }
-+
-+static deny_masks_t
-+get_layer_deny_mask(const access_mask_t all_existing_optional_access,
-+		    const unsigned long access_bit, const size_t layer)
-+{
-+	unsigned long access_weight;
-+
-+	/* This may require change with new object types. */
-+	WARN_ON_ONCE(all_existing_optional_access !=
-+		     _LANDLOCK_ACCESS_FS_OPTIONAL);
-+
-+	if (WARN_ON_ONCE(layer >= LANDLOCK_MAX_NUM_LAYERS))
-+		return 0;
-+
-+	access_weight = hweight_long(all_existing_optional_access &
-+				     GENMASK(access_bit, 0));
-+	if (WARN_ON_ONCE(access_weight < 1))
-+		return 0;
-+
-+	return layer
-+	       << ((access_weight - 1) * HWEIGHT(LANDLOCK_MAX_NUM_LAYERS - 1));
-+}
-+
-+#ifdef CONFIG_SECURITY_LANDLOCK_KUNIT_TEST
-+
-+static void test_get_layer_deny_mask(struct kunit *const test)
-+{
-+	const unsigned long truncate = BIT_INDEX(LANDLOCK_ACCESS_FS_TRUNCATE);
-+	const unsigned long ioctl_dev = BIT_INDEX(LANDLOCK_ACCESS_FS_IOCTL_DEV);
-+
-+	KUNIT_EXPECT_EQ(test, 0,
-+			get_layer_deny_mask(_LANDLOCK_ACCESS_FS_OPTIONAL,
-+					    truncate, 0));
-+	KUNIT_EXPECT_EQ(test, 0x3,
-+			get_layer_deny_mask(_LANDLOCK_ACCESS_FS_OPTIONAL,
-+					    truncate, 3));
-+
-+	KUNIT_EXPECT_EQ(test, 0,
-+			get_layer_deny_mask(_LANDLOCK_ACCESS_FS_OPTIONAL,
-+					    ioctl_dev, 0));
-+	KUNIT_EXPECT_EQ(test, 0xf0,
-+			get_layer_deny_mask(_LANDLOCK_ACCESS_FS_OPTIONAL,
-+					    ioctl_dev, 15));
-+}
-+
-+#endif /* CONFIG_SECURITY_LANDLOCK_KUNIT_TEST */
-+
-+deny_masks_t
-+landlock_get_deny_masks(const access_mask_t all_existing_optional_access,
-+			const access_mask_t optional_access,
-+			const layer_mask_t (*const layer_masks)[],
-+			const size_t layer_masks_size)
-+{
-+	const unsigned long access_opt = optional_access;
-+	unsigned long access_bit;
-+	deny_masks_t deny_masks = 0;
-+
-+	/* This may require change with new object types. */
-+	WARN_ON_ONCE(access_opt !=
-+		     (optional_access & all_existing_optional_access));
-+
-+	if (WARN_ON_ONCE(!layer_masks))
-+		return 0;
-+
-+	if (WARN_ON_ONCE(!access_opt))
-+		return 0;
-+
-+	for_each_set_bit(access_bit, &access_opt, layer_masks_size) {
-+		const layer_mask_t mask = (*layer_masks)[access_bit];
-+
-+		if (!mask)
-+			continue;
-+
-+		/* __fls(1) == 0 */
-+		deny_masks |= get_layer_deny_mask(all_existing_optional_access,
-+						  access_bit, __fls(mask));
-+	}
-+	return deny_masks;
-+}
-+
-+#ifdef CONFIG_SECURITY_LANDLOCK_KUNIT_TEST
-+
-+static void test_landlock_get_deny_masks(struct kunit *const test)
-+{
-+	const layer_mask_t layers1[BITS_PER_TYPE(access_mask_t)] = {
-+		[BIT_INDEX(LANDLOCK_ACCESS_FS_EXECUTE)] = BIT_ULL(0) |
-+							  BIT_ULL(9),
-+		[BIT_INDEX(LANDLOCK_ACCESS_FS_TRUNCATE)] = BIT_ULL(1),
-+		[BIT_INDEX(LANDLOCK_ACCESS_FS_IOCTL_DEV)] = BIT_ULL(2) |
-+							    BIT_ULL(0),
-+	};
-+
-+	KUNIT_EXPECT_EQ(test, 0x1,
-+			landlock_get_deny_masks(_LANDLOCK_ACCESS_FS_OPTIONAL,
-+						LANDLOCK_ACCESS_FS_TRUNCATE,
-+						&layers1, ARRAY_SIZE(layers1)));
-+	KUNIT_EXPECT_EQ(test, 0x20,
-+			landlock_get_deny_masks(_LANDLOCK_ACCESS_FS_OPTIONAL,
-+						LANDLOCK_ACCESS_FS_IOCTL_DEV,
-+						&layers1, ARRAY_SIZE(layers1)));
-+	KUNIT_EXPECT_EQ(
-+		test, 0x21,
-+		landlock_get_deny_masks(_LANDLOCK_ACCESS_FS_OPTIONAL,
-+					LANDLOCK_ACCESS_FS_TRUNCATE |
-+						LANDLOCK_ACCESS_FS_IOCTL_DEV,
-+					&layers1, ARRAY_SIZE(layers1)));
-+}
-+
-+#endif /* CONFIG_SECURITY_LANDLOCK_KUNIT_TEST */
-+
-+#ifdef CONFIG_SECURITY_LANDLOCK_KUNIT_TEST
-+
-+static struct kunit_case test_cases[] = {
-+	/* clang-format off */
-+	KUNIT_CASE(test_get_layer_deny_mask),
-+	KUNIT_CASE(test_landlock_get_deny_masks),
-+	{}
-+	/* clang-format on */
-+};
-+
-+static struct kunit_suite test_suite = {
-+	.name = "landlock_domain",
-+	.test_cases = test_cases,
-+};
-+
-+kunit_test_suite(test_suite);
-+
-+#endif /* CONFIG_SECURITY_LANDLOCK_KUNIT_TEST */
 diff --git a/security/landlock/domain.h b/security/landlock/domain.h
-index 4a2864a66047..ffc8b1bb58be 100644
+index f82d831ca0a7..4a2864a66047 100644
 --- a/security/landlock/domain.h
 +++ b/security/landlock/domain.h
-@@ -18,6 +18,8 @@
- #include <linux/sched.h>
- #include <linux/time64.h>
+@@ -10,8 +10,18 @@
+ #ifndef _SECURITY_LANDLOCK_DOMAIN_H
+ #define _SECURITY_LANDLOCK_DOMAIN_H
  
-+#include "access.h"
++#include <linux/cred.h>
+ #include <linux/mm.h>
++#include <linux/path.h>
++#include <linux/pid.h>
+ #include <linux/refcount.h>
++#include <linux/sched.h>
++#include <linux/time64.h>
 +
- enum landlock_log_status {
- 	LANDLOCK_LOG_PENDING = 0,
- 	LANDLOCK_LOG_RECORDED,
-@@ -98,6 +100,12 @@ static inline void landlock_put_hierarchy(struct landlock_hierarchy *hierarchy)
++enum landlock_log_status {
++	LANDLOCK_LOG_PENDING = 0,
++	LANDLOCK_LOG_RECORDED,
++};
+ 
+ /**
+  * struct landlock_hierarchy - Node in a domain hierarchy
+@@ -29,10 +39,37 @@ struct landlock_hierarchy {
+ 	refcount_t usage;
  
  #ifdef CONFIG_AUDIT
- void landlock_init_current_hierarchy(struct landlock_hierarchy *const hierarchy);
-+
-+deny_masks_t
-+landlock_get_deny_masks(const access_mask_t all_existing_optional_access,
-+			const access_mask_t optional_access,
-+			const layer_mask_t (*const layer_masks)[],
-+			size_t layer_masks_size);
- #else /* CONFIG_AUDIT */
- static inline void
- landlock_init_current_hierarchy(struct landlock_hierarchy *const hierarchy)
-diff --git a/security/landlock/fs.c b/security/landlock/fs.c
-index f38c7a60b9bf..6404961ecbc7 100644
---- a/security/landlock/fs.c
-+++ b/security/landlock/fs.c
-@@ -246,6 +246,17 @@ is_masked_device_ioctl_compat(const unsigned int cmd)
- 	}
- }
- 
-+static void
-+update_request(struct landlock_request *const request,
-+	       const struct landlock_file_security *const file_security,
-+	       const access_mask_t access)
-+{
-+	request->access = access;
-+#ifdef CONFIG_AUDIT
-+	request->deny_masks = file_security->deny_masks;
-+#endif /* CONFIG_AUDIT */
-+}
-+
- /* Ruleset management */
- 
- static struct landlock_object *get_inode_object(struct inode *const inode)
-@@ -1653,6 +1664,11 @@ static int hook_file_open(struct file *const file)
- 	 * file access rights in the opened struct file.
- 	 */
- 	landlock_file(file)->allowed_access = allowed_access;
-+#ifdef CONFIG_AUDIT
-+	landlock_file(file)->deny_masks = landlock_get_deny_masks(
-+		_LANDLOCK_ACCESS_FS_OPTIONAL, optional_access, &layer_masks,
-+		ARRAY_SIZE(layer_masks));
-+#endif /* CONFIG_AUDIT */
- 
- 	if ((open_access_request & allowed_access) == open_access_request)
- 		return 0;
-@@ -1665,6 +1681,15 @@ static int hook_file_open(struct file *const file)
- 
- static int hook_file_truncate(struct file *const file)
- {
-+	struct landlock_request request = {
-+		.type = LANDLOCK_REQUEST_FS_ACCESS,
-+		.audit = {
-+			.type = LSM_AUDIT_DATA_FILE,
-+			.u.file = file,
-+		},
-+		.all_existing_optional_access = _LANDLOCK_ACCESS_FS_OPTIONAL,
-+	};
-+
- 	/*
- 	 * Allows truncation if the truncate right was available at the time of
- 	 * opening the file, to get a consistent access check as for read, write
-@@ -1677,12 +1702,24 @@ static int hook_file_truncate(struct file *const file)
- 	 */
- 	if (landlock_file(file)->allowed_access & LANDLOCK_ACCESS_FS_TRUNCATE)
- 		return 0;
-+
-+	update_request(&request, landlock_file(file),
-+		       LANDLOCK_ACCESS_FS_TRUNCATE);
-+	landlock_log_denial(landlock_cred(file->f_cred)->domain, &request);
- 	return -EACCES;
- }
- 
- static int hook_file_ioctl(struct file *file, unsigned int cmd,
- 			   unsigned long arg)
- {
-+	struct landlock_request request = {
-+		.type = LANDLOCK_REQUEST_FS_ACCESS,
-+		.audit = {
-+			.type = LSM_AUDIT_DATA_FILE,
-+			.u.file = file,
-+		},
-+		.all_existing_optional_access = _LANDLOCK_ACCESS_FS_OPTIONAL,
-+	};
- 	access_mask_t allowed_access = landlock_file(file)->allowed_access;
- 
- 	/*
-@@ -1700,12 +1737,23 @@ static int hook_file_ioctl(struct file *file, unsigned int cmd,
- 	if (is_masked_device_ioctl(cmd))
- 		return 0;
- 
-+	update_request(&request, landlock_file(file),
-+		       LANDLOCK_ACCESS_FS_IOCTL_DEV);
-+	landlock_log_denial(landlock_cred(file->f_cred)->domain, &request);
- 	return -EACCES;
- }
- 
- static int hook_file_ioctl_compat(struct file *file, unsigned int cmd,
- 				  unsigned long arg)
- {
-+	struct landlock_request request = {
-+		.type = LANDLOCK_REQUEST_FS_ACCESS,
-+		.audit = {
-+			.type = LSM_AUDIT_DATA_FILE,
-+			.u.file = file,
-+		},
-+		.all_existing_optional_access = _LANDLOCK_ACCESS_FS_OPTIONAL,
-+	};
- 	access_mask_t allowed_access = landlock_file(file)->allowed_access;
- 
- 	/*
-@@ -1723,6 +1771,9 @@ static int hook_file_ioctl_compat(struct file *file, unsigned int cmd,
- 	if (is_masked_device_ioctl_compat(cmd))
- 		return 0;
- 
-+	update_request(&request, landlock_file(file),
-+		       LANDLOCK_ACCESS_FS_IOCTL_DEV);
-+	landlock_log_denial(landlock_cred(file->f_cred)->domain, &request);
- 	return -EACCES;
- }
- 
-diff --git a/security/landlock/fs.h b/security/landlock/fs.h
-index d445f411c26a..9f52c9b37898 100644
---- a/security/landlock/fs.h
-+++ b/security/landlock/fs.h
-@@ -53,6 +53,15 @@ struct landlock_file_security {
- 	 * needed to authorize later operations on the open file.
- 	 */
- 	access_mask_t allowed_access;
-+
-+#ifdef CONFIG_AUDIT
 +	/**
-+	 * @deny_masks: Domain layer levels that deny an optional access (see
-+	 * _LANDLOCK_ACCESS_FS_OPTIONAL).
++	 * @log_status: Whether this domain should be logged or not.  Because
++	 * concurrent log entries may be created at the same time, it is still
++	 * possible to have several domain records of the same domain.
 +	 */
-+	deny_masks_t deny_masks;
++	enum landlock_log_status log_status;
+ 	/**
+ 	 * @id: Landlock domain ID, sets once at domain creation time.
+ 	 */
+ 	u64 id;
++	/**
++	 * @creation: Time of the domain creation (i.e. syscall entry as used
++	 * in audit context).
++	 */
++	struct timespec64 creation;
++	/**
++	 * @cred: Credential of the domain's creator.
++	 */
++	const struct cred *cred;
++	/**
++	 * @pid: Creator's PID.
++	 */
++	struct pid *pid;
++	/**
++	 * @exe: Creator's exe path.
++	 */
++	struct path exe;
++	/**
++	 * @comm: Command line of the domain's creator at creation time.
++	 */
++	char comm[TASK_COMM_LEN];
+ #endif /* CONFIG_AUDIT */
+ };
+ 
+@@ -48,6 +85,12 @@ static inline void landlock_put_hierarchy(struct landlock_hierarchy *hierarchy)
+ 	while (hierarchy && refcount_dec_and_test(&hierarchy->usage)) {
+ 		const struct landlock_hierarchy *const freeme = hierarchy;
+ 
++#ifdef CONFIG_AUDIT
++		put_cred(hierarchy->cred);
++		put_pid(hierarchy->pid);
++		path_put(&hierarchy->exe);
 +#endif /* CONFIG_AUDIT */
 +
- 	/**
- 	 * @fown_domain: Domain of the task that set the PID that may receive a
- 	 * signal e.g., SIGURG when writing MSG_OOB to the related socket.
+ 		hierarchy = hierarchy->parent;
+ 		kfree(freeme);
+ 	}
+diff --git a/security/landlock/ruleset.c b/security/landlock/ruleset.c
+index 7a88fd9b2473..4619c7f63d05 100644
+--- a/security/landlock/ruleset.c
++++ b/security/landlock/ruleset.c
+@@ -508,6 +508,9 @@ static void free_ruleset_work(struct work_struct *const work)
+ void landlock_put_ruleset_deferred(struct landlock_ruleset *const ruleset)
+ {
+ 	if (ruleset && refcount_dec_and_test(&ruleset->usage)) {
++		/* Logs with the current context. */
++		landlock_log_drop_domain(ruleset);
++
+ 		INIT_WORK(&ruleset->work_free, free_ruleset_work);
+ 		schedule_work(&ruleset->work_free);
+ 	}
+@@ -519,6 +522,10 @@ void landlock_put_ruleset_deferred(struct landlock_ruleset *const ruleset)
+  * @parent: Parent domain.
+  * @ruleset: New ruleset to be merged.
+  *
++ * The current task is referenced as the domain creator.  The subjective
++ * credentials must not be in an overridden state (see
++ * landlock_init_current_hierarchy).
++ *
+  * Returns the intersection of @parent and @ruleset, or returns @parent if
+  * @ruleset is empty, or returns a duplicate of @ruleset if @parent is empty.
+  */
+diff --git a/security/landlock/ruleset.h b/security/landlock/ruleset.h
+index 39169b6860e3..73636f214aac 100644
+--- a/security/landlock/ruleset.h
++++ b/security/landlock/ruleset.h
+@@ -12,6 +12,7 @@
+ #include <linux/mutex.h>
+ #include <linux/rbtree.h>
+ #include <linux/refcount.h>
++#include <linux/sched.h>
+ #include <linux/workqueue.h>
+ 
+ #include "access.h"
+diff --git a/security/landlock/syscalls.c b/security/landlock/syscalls.c
+index c097d356fa45..335067e36feb 100644
+--- a/security/landlock/syscalls.c
++++ b/security/landlock/syscalls.c
+@@ -26,6 +26,7 @@
+ #include <linux/uaccess.h>
+ #include <uapi/linux/landlock.h>
+ 
++#include "audit.h"
+ #include "cred.h"
+ #include "fs.h"
+ #include "limits.h"
 -- 
 2.47.0
 
