@@ -1,33 +1,33 @@
-Received: from smtp-1909.mail.infomaniak.ch (smtp-1909.mail.infomaniak.ch [185.125.25.9])
+Received: from smtp-bc08.mail.infomaniak.ch (smtp-bc08.mail.infomaniak.ch [45.157.188.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A37FA13B2A5
-	for <audit@vger.kernel.org>; Fri, 22 Nov 2024 14:34:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.25.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E99CB1DE8A7
+	for <audit@vger.kernel.org>; Fri, 22 Nov 2024 14:34:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.157.188.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732286060; cv=none; b=DGNk9nt/PH2dXx5LBLFKS62I9uMXAEGdJq7wRndhpoLiZ2SHxKtoyMzT02c+GPVVshFyJbDozNO2i3x/yYEdmgD7jHDUVplhESzihg4OiDB8oL8nHsedKGH56molXqT+YTl4tosthKpDewOGLwgCgcU3F81ciqFRJx/VwLS4vZo=
+	t=1732286063; cv=none; b=otAhbyoRbt6mroqKgxkwDbvtqQtleUBB/P4r1RH5wC3ASSVgmaTkfDLjW3ExubGaptHUZui7yCZz/YFpKYfmq4Pl+wUcfzggULhBH9juKqPBg+2+HmB2s0w5OGly6hO3yd1B4Givl8dVcQVfrRXp7Ti3pDNlNbwswu6Xc1XWix4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732286060; c=relaxed/simple;
-	bh=NuT0tcq/43zDLvDEY8JWunzl/WOg4jV/JJW5DYCdEdc=;
+	s=arc-20240116; t=1732286063; c=relaxed/simple;
+	bh=r9ftnbbE8+eDuDA3+7n9COnZvjC1aYV3g18xqvTZxnA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Mebqxzc2eoiDzHqsK7Q09XD53/RY6+g4uD4OUala6QRhJdCHNHrERRi67HC4mEJaWk44LSVUYK4uccG7tlJknO8py/ogghc6gHmk4Qs1Ex1mKc2e6SgSkItR6xMxrYgh/ZBjyML4aDkfacosENgP77YPb9Laq7T0jFedqaR5/ts=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=YyjWljcv; arc=none smtp.client-ip=185.125.25.9
+	 MIME-Version:Content-Type; b=NwxkGnl4yqYinuHAhA8mz1L0CLVAiH3d/+zNyOqg0BL7nhY6NffGHeLEFmklXtYM1Sr5dDNkKIqychuS6NanpNMH5PQXm0g9PLg1SSOEDxsaeJGKth3sxBtdlScbnT/5vGad+fMqQn9G5hl1QLR4UwcjqHma6/REpUxFRgODFR0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=rsDw6lvl; arc=none smtp.client-ip=45.157.188.8
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="YyjWljcv"
-Received: from smtp-4-0001.mail.infomaniak.ch (unknown [IPv6:2001:1600:7:10:40ca:feff:fe05:1])
-	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4XvyKF5G5jzcBZ;
-	Fri, 22 Nov 2024 15:34:09 +0100 (CET)
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="rsDw6lvl"
+Received: from smtp-3-0000.mail.infomaniak.ch (unknown [IPv6:2001:1600:4:17::246b])
+	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4XvyKR1C0Bzjcn;
+	Fri, 22 Nov 2024 15:34:19 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
-	s=20191114; t=1732286049;
-	bh=8Ei6RdWiyTIEr0sm3nOOSbLrW31UhPKYLCfZTJ/6SdU=;
+	s=20191114; t=1732286059;
+	bh=Tr09ZZYMmyRN9g3gpEskXCFWHcXDgxBCb8vxALpa40g=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=YyjWljcvGeJieGlqZKPvWq1H43r2bNPIPvh5Z1hXmzTAeRzubP75L/J6jMCWoGF19
-	 15BGkb/JRQxrEeXtxpEYZDgbG2QrmUZ3NZ2tj6vqu/vVdQHrCjQTgPDpzW2LGU087A
-	 oeOhbGIl0AI1r5gLoZo1esDwOuhrtiHKB8WnANbU=
-Received: from unknown by smtp-4-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4XvyKF09LzzlDf;
-	Fri, 22 Nov 2024 15:34:09 +0100 (CET)
+	b=rsDw6lvl4iF2+us577286u/6fbvYgIUoVM04ftvujWeYE4UqaiMENZ+5R0/XXarIp
+	 qN1kw68U1e1VqslNRj1wXqYbslk7JnGfuuyrqby4T/Q1mVsMYLtoB5Tn5HWFV9hHv+
+	 7cSz8vS++DEVobITGRCfv0N2XB+BV2zYilr+chJ8=
+Received: from unknown by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4XvyKQ2jynzlnp;
+	Fri, 22 Nov 2024 15:34:18 +0100 (CET)
 From: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
 To: Eric Paris <eparis@redhat.com>,
 	Paul Moore <paul@paul-moore.com>,
@@ -55,9 +55,9 @@ Cc: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
 	audit@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-security-module@vger.kernel.org
-Subject: [PATCH v3 05/23] landlock: Move access types
-Date: Fri, 22 Nov 2024 15:33:35 +0100
-Message-ID: <20241122143353.59367-6-mic@digikod.net>
+Subject: [PATCH v3 12/23] landlock: Align partial refer access checks with final ones
+Date: Fri, 22 Nov 2024 15:33:42 +0100
+Message-ID: <20241122143353.59367-13-mic@digikod.net>
 In-Reply-To: <20241122143353.59367-1-mic@digikod.net>
 References: <20241122143353.59367-1-mic@digikod.net>
 Precedence: bulk
@@ -70,225 +70,76 @@ Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Infomaniak-Routing: alpha
 
-Move LANDLOCK_ACCESS_FS_INITIALLY_DENIED, access_mask_t, struct
-access_mask, and struct access_masks_all to a dedicated access.h file.
+Fix a logical issue that could have been visible if the source or the
+destination of a rename/link action was allowed for either the source or
+the destination but not both.  However, this logical bug is unreachable
+because either:
+- the rename/link action is allowed by the access rights tied to the
+  same mount point (without relying on access rights in a parent mount
+  point) and the access request is allowed (i.e. allow_parent1 and
+  allow_parent2 are true in current_check_refer_path),
+- or a common rule in a parent mount point updates the access check for
+  the source and the destination (cf. is_access_to_paths_allowed).
 
-Rename LANDLOCK_ACCESS_FS_INITIALLY_DENIED to
-_LANDLOCK_ACCESS_FS_INITIALLY_DENIED to make it clear that it's not part
-of UAPI.  Add some newlines when appropriate.
+See the following layout1.refer_part_mount_tree_is_allowed test that
+work with and without this fix.
 
-This file will be extended with following commits, and it will help to
-avoid dependency loops.
+This fix does not impact current code but it is required for the audit
+support.
 
 Cc: Günther Noack <gnoack@google.com>
 Signed-off-by: Mickaël Salaün <mic@digikod.net>
-Link: https://lore.kernel.org/r/20241122143353.59367-6-mic@digikod.net
+Link: https://lore.kernel.org/r/20241122143353.59367-13-mic@digikod.net
 ---
 
 Changes since v2:
-- Rebased on the (now merged) masks improvement patches.
-- Move ACCESS_FS_OPTIONAL to a following patch introducing deny_masks_t,
-  spotted by Francis Laniel.
-- Move and rename LANDLOCK_ACCESS_FS_INITIALLY_DENIED to
-  _LANDLOCK_ACCESS_FS_INITIALLY_DENIED.
-
-Changes since v1:
-- New patch
+- New patch.
 ---
- security/landlock/access.h  | 62 +++++++++++++++++++++++++++++++++++++
- security/landlock/fs.c      |  3 +-
- security/landlock/fs.h      |  1 +
- security/landlock/ruleset.c |  1 +
- security/landlock/ruleset.h | 47 ++--------------------------
- 5 files changed, 68 insertions(+), 46 deletions(-)
- create mode 100644 security/landlock/access.h
+ security/landlock/fs.c | 14 +++++++++++++-
+ 1 file changed, 13 insertions(+), 1 deletion(-)
 
-diff --git a/security/landlock/access.h b/security/landlock/access.h
-new file mode 100644
-index 000000000000..a64694287d2c
---- /dev/null
-+++ b/security/landlock/access.h
-@@ -0,0 +1,62 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/*
-+ * Landlock LSM - Access types and helpers
-+ *
-+ * Copyright © 2016-2020 Mickaël Salaün <mic@digikod.net>
-+ * Copyright © 2018-2020 ANSSI
-+ * Copyright © 2024 Microsoft Corporation
-+ */
-+
-+#ifndef _SECURITY_LANDLOCK_ACCESS_H
-+#define _SECURITY_LANDLOCK_ACCESS_H
-+
-+#include <linux/bitops.h>
-+#include <linux/build_bug.h>
-+#include <linux/kernel.h>
-+#include <uapi/linux/landlock.h>
-+
-+#include "limits.h"
-+
-+/*
-+ * All access rights that are denied by default whether they are handled or not
-+ * by a ruleset/layer.  This must be ORed with all ruleset->access_masks[]
-+ * entries when we need to get the absolute handled access masks.
-+ */
-+/* clang-format off */
-+#define _LANDLOCK_ACCESS_FS_INITIALLY_DENIED ( \
-+	LANDLOCK_ACCESS_FS_REFER)
-+/* clang-format on */
-+
-+typedef u16 access_mask_t;
-+
-+/* Makes sure all filesystem access rights can be stored. */
-+static_assert(BITS_PER_TYPE(access_mask_t) >= LANDLOCK_NUM_ACCESS_FS);
-+/* Makes sure all network access rights can be stored. */
-+static_assert(BITS_PER_TYPE(access_mask_t) >= LANDLOCK_NUM_ACCESS_NET);
-+/* Makes sure all scoped rights can be stored. */
-+static_assert(BITS_PER_TYPE(access_mask_t) >= LANDLOCK_NUM_SCOPE);
-+/* Makes sure for_each_set_bit() and for_each_clear_bit() calls are OK. */
-+static_assert(sizeof(unsigned long) >= sizeof(access_mask_t));
-+
-+/* Ruleset access masks. */
-+struct access_masks {
-+	access_mask_t fs : LANDLOCK_NUM_ACCESS_FS;
-+	access_mask_t net : LANDLOCK_NUM_ACCESS_NET;
-+	access_mask_t scope : LANDLOCK_NUM_SCOPE;
-+};
-+
-+union access_masks_all {
-+	struct access_masks masks;
-+	u32 all;
-+};
-+
-+/* Makes sure all fields are covered. */
-+static_assert(sizeof(typeof_member(union access_masks_all, masks)) ==
-+	      sizeof(typeof_member(union access_masks_all, all)));
-+
-+typedef u16 layer_mask_t;
-+
-+/* Makes sure all layers can be checked. */
-+static_assert(BITS_PER_TYPE(layer_mask_t) >= LANDLOCK_MAX_NUM_LAYERS);
-+
-+#endif /* _SECURITY_LANDLOCK_ACCESS_H */
 diff --git a/security/landlock/fs.c b/security/landlock/fs.c
-index d911c924843f..3da5f1945158 100644
+index 171012efb559..ddadc465581e 100644
 --- a/security/landlock/fs.c
 +++ b/security/landlock/fs.c
-@@ -36,6 +36,7 @@
- #include <uapi/linux/fiemap.h>
- #include <uapi/linux/landlock.h>
+@@ -567,6 +567,12 @@ static void test_no_more_access(struct kunit *const test)
+ #undef NMA_TRUE
+ #undef NMA_FALSE
  
-+#include "access.h"
- #include "common.h"
- #include "cred.h"
- #include "fs.h"
-@@ -393,7 +394,7 @@ get_handled_fs_accesses(const struct landlock_ruleset *const domain)
- {
- 	/* Handles all initially denied by default access rights. */
- 	return landlock_union_access_masks(domain).fs |
--	       LANDLOCK_ACCESS_FS_INITIALLY_DENIED;
-+	       _LANDLOCK_ACCESS_FS_INITIALLY_DENIED;
++static bool is_layer_masks_allowed(
++	layer_mask_t (*const layer_masks)[LANDLOCK_NUM_ACCESS_FS])
++{
++	return !memchr_inv(layer_masks, 0, sizeof(*layer_masks));
++}
++
+ /*
+  * Removes @layer_masks accesses that are not requested.
+  *
+@@ -584,7 +590,8 @@ scope_to_request(const access_mask_t access_request,
+ 
+ 	for_each_clear_bit(access_bit, &access_req, ARRAY_SIZE(*layer_masks))
+ 		(*layer_masks)[access_bit] = 0;
+-	return !memchr_inv(layer_masks, 0, sizeof(*layer_masks));
++
++	return is_layer_masks_allowed(layer_masks);
  }
  
- static const struct access_masks any_fs = {
-diff --git a/security/landlock/fs.h b/security/landlock/fs.h
-index 1487e1f023a1..d445f411c26a 100644
---- a/security/landlock/fs.h
-+++ b/security/landlock/fs.h
-@@ -13,6 +13,7 @@
- #include <linux/init.h>
- #include <linux/rcupdate.h>
+ #ifdef CONFIG_SECURITY_LANDLOCK_KUNIT_TEST
+@@ -773,9 +780,14 @@ static bool is_access_to_paths_allowed(
+ 	if (WARN_ON_ONCE(domain->num_layers < 1 || !layer_masks_parent1))
+ 		return false;
  
-+#include "access.h"
- #include "ruleset.h"
- #include "setup.h"
- 
-diff --git a/security/landlock/ruleset.c b/security/landlock/ruleset.c
-index a93bdbf52fff..cae69f2f01d9 100644
---- a/security/landlock/ruleset.c
-+++ b/security/landlock/ruleset.c
-@@ -20,6 +20,7 @@
- #include <linux/spinlock.h>
- #include <linux/workqueue.h>
- 
-+#include "access.h"
- #include "limits.h"
- #include "object.h"
- #include "ruleset.h"
-diff --git a/security/landlock/ruleset.h b/security/landlock/ruleset.h
-index 631e24d4ffe9..2f29b9f40392 100644
---- a/security/landlock/ruleset.h
-+++ b/security/landlock/ruleset.h
-@@ -9,58 +9,15 @@
- #ifndef _SECURITY_LANDLOCK_RULESET_H
- #define _SECURITY_LANDLOCK_RULESET_H
- 
--#include <linux/bitops.h>
--#include <linux/build_bug.h>
--#include <linux/kernel.h>
- #include <linux/mutex.h>
- #include <linux/rbtree.h>
- #include <linux/refcount.h>
- #include <linux/workqueue.h>
--#include <uapi/linux/landlock.h>
- 
-+#include "access.h"
- #include "limits.h"
- #include "object.h"
- 
--/*
-- * All access rights that are denied by default whether they are handled or not
-- * by a ruleset/layer.  This must be ORed with all ruleset->access_masks[]
-- * entries when we need to get the absolute handled access masks.
-- */
--/* clang-format off */
--#define LANDLOCK_ACCESS_FS_INITIALLY_DENIED ( \
--	LANDLOCK_ACCESS_FS_REFER)
--/* clang-format on */
--
--typedef u16 access_mask_t;
--/* Makes sure all filesystem access rights can be stored. */
--static_assert(BITS_PER_TYPE(access_mask_t) >= LANDLOCK_NUM_ACCESS_FS);
--/* Makes sure all network access rights can be stored. */
--static_assert(BITS_PER_TYPE(access_mask_t) >= LANDLOCK_NUM_ACCESS_NET);
--/* Makes sure all scoped rights can be stored. */
--static_assert(BITS_PER_TYPE(access_mask_t) >= LANDLOCK_NUM_SCOPE);
--/* Makes sure for_each_set_bit() and for_each_clear_bit() calls are OK. */
--static_assert(sizeof(unsigned long) >= sizeof(access_mask_t));
--
--/* Ruleset access masks. */
--struct access_masks {
--	access_mask_t fs : LANDLOCK_NUM_ACCESS_FS;
--	access_mask_t net : LANDLOCK_NUM_ACCESS_NET;
--	access_mask_t scope : LANDLOCK_NUM_SCOPE;
--};
--
--union access_masks_all {
--	struct access_masks masks;
--	u32 all;
--};
--
--/* Makes sure all fields are covered. */
--static_assert(sizeof(typeof_member(union access_masks_all, masks)) ==
--	      sizeof(typeof_member(union access_masks_all, all)));
--
--typedef u16 layer_mask_t;
--/* Makes sure all layers can be checked. */
--static_assert(BITS_PER_TYPE(layer_mask_t) >= LANDLOCK_MAX_NUM_LAYERS);
--
- /**
-  * struct landlock_layer - Access rights for a given layer
-  */
-@@ -366,7 +323,7 @@ landlock_get_fs_access_mask(const struct landlock_ruleset *const ruleset,
- {
- 	/* Handles all initially denied by default access rights. */
- 	return ruleset->access_masks[layer_level].fs |
--	       LANDLOCK_ACCESS_FS_INITIALLY_DENIED;
-+	       _LANDLOCK_ACCESS_FS_INITIALLY_DENIED;
- }
- 
- static inline access_mask_t
++	allowed_parent1 = is_layer_masks_allowed(layer_masks_parent1);
++
+ 	if (unlikely(layer_masks_parent2)) {
+ 		if (WARN_ON_ONCE(!dentry_child1))
+ 			return false;
++
++		allowed_parent2 = is_layer_masks_allowed(layer_masks_parent2);
++
+ 		/*
+ 		 * For a double request, first check for potential privilege
+ 		 * escalation by looking at domain handled accesses (which are
 -- 
 2.47.0
 
