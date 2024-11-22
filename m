@@ -1,130 +1,172 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp-bc0f.mail.infomaniak.ch (smtp-bc0f.mail.infomaniak.ch [45.157.188.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E3301DE4D1
-	for <audit@vger.kernel.org>; Fri, 22 Nov 2024 12:19:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E6CF7082A
+	for <audit@vger.kernel.org>; Fri, 22 Nov 2024 14:34:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.157.188.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732277948; cv=none; b=h+j29KqWskJdfdCZCr9ZOlmw3nnWYfkyhx17JL08y4IoH5/uKVN9FHgC9P1sWY0QasktmaWPsusOaH8n01iXWo61DafNWbMNiu1XfB+nZ6sJnoWNfaE3MXoXpKMjfiVE6ghmQoTbEoScZq/M+JrdQLE7X8wySfIWcGBFSarcyb4=
+	t=1732286056; cv=none; b=cRqLI/AZdnLezRY9xB62HU38zXGN3497+u0r5C6oUdTCYEzL59XNfn0mTnw1pFp9BsxOgjgKPjGD5wuatVcAR9mPh24eBLQB6Ah9sJQVNLtYPXk8B+uoY2y7BFlbcZNdqwW8qeVpPx6tgupWLlS4mPrYnuBI4Hjwo6tEhfJqHCU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732277948; c=relaxed/simple;
-	bh=VWXwxT6C04496A1cVsoRh7lUJvhum687xzhvABnJSZQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=emzKrxS8H9qZjA9Rwo1rAjeRvIxxIBVwY/QqlF6VfvyGt3UKYMTh/BvYzeSRhIxOmMhUwm2esBH/FpZJbb6CNDQ8B0L5fj/YZrzpH9QChugdZgnmXiQ+xTP6bjfvQPpU4W64EPii8wwba/sODYiLQS/YW/T+A5vVCSmg4XX7zd0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=BbNLgyJN; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1732286056; c=relaxed/simple;
+	bh=oj/6mcirhBGSz78MkVxQZgxWtQyM37QmbXlg51RuIoE=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=GrEIQFZQxlS+NCfyIJ8KvnaUmTaMDsf46CZSbOqHa6IkOp7ZBqm507rbaG09IP79cLJ1xeG5FjV7pGQjVTK5uMO9/rJVXXet4fiA43ar8EgU99QXG1JhljkxEwOjWmiWhznCjffWwU8THhYHDN026DOOu8j1b8fYDhKBeFTQS1k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=L3S9+VSv; arc=none smtp.client-ip=45.157.188.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="BbNLgyJN"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1732277945;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=GcHNY1eSU0YYTVzz1uNfEpo2YJnO5f/D5LNtLBfIkp0=;
-	b=BbNLgyJNZlOX/suFUXzs7ibVixXuJM47SovsONBRdvxgXTONglTq+DiW+NxgVL0RHYa9A/
-	e7XuireiSUniXQG15YyNCVZmxE+Yh7HWBYGtT2dqp5zpBv5ji/o5p5HXLqrP7C/ZGCok/3
-	HLa00nOQke7Ocu3xp8G0zbfn27ci4bw=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-317-IuhjdbhZPr-L8WOfN6osVg-1; Fri,
- 22 Nov 2024 07:19:02 -0500
-X-MC-Unique: IuhjdbhZPr-L8WOfN6osVg-1
-X-Mimecast-MFC-AGG-ID: IuhjdbhZPr-L8WOfN6osVg
-Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id A500C1956048;
-	Fri, 22 Nov 2024 12:19:00 +0000 (UTC)
-Received: from ws.redhat.com (unknown [10.96.134.69])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id BA2C030001A0;
-	Fri, 22 Nov 2024 12:18:57 +0000 (UTC)
-From: Ricardo Robaina <rrobaina@redhat.com>
-To: audit@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: paul@paul-moore.com,
-	eparis@redhat.com,
-	rgb@redhat.com,
-	viro@zeniv.linux.org.uk,
-	Ricardo Robaina <rrobaina@redhat.com>
-Subject: [PATCH v2] audit: fix suffixed '/' filename matching in __audit_inode_child()
-Date: Fri, 22 Nov 2024 09:18:43 -0300
-Message-ID: <20241122121843.641573-1-rrobaina@redhat.com>
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="L3S9+VSv"
+Received: from smtp-4-0000.mail.infomaniak.ch (unknown [IPv6:2001:1600:7:10:40ca:feff:fe05:0])
+	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4XvyK84CR0zdhH;
+	Fri, 22 Nov 2024 15:34:04 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
+	s=20191114; t=1732286044;
+	bh=t/jeJLYng7iwFnD7UmSkTCH0JnlFPYPzlVzfF2WGADk=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=L3S9+VSvysJWYQqUlRssyyXMNPfahLvq0LusLrc09cn3ux7e16vB9JTg/p8xgM6aU
+	 JX9vqipiE4WEmB4oQYUv8lNxOc0uHQv+2nMu4u8dogJLHB3DgcXxx9bLoVFTNSSKMk
+	 SFxlkPdBicP8mKz22XvI1QjMw33tI3gHfgtsGVec=
+Received: from unknown by smtp-4-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4XvyK76d31znDH;
+	Fri, 22 Nov 2024 15:34:03 +0100 (CET)
+From: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
+To: Eric Paris <eparis@redhat.com>,
+	Paul Moore <paul@paul-moore.com>,
+	=?UTF-8?q?G=C3=BCnther=20Noack?= <gnoack@google.com>,
+	"Serge E . Hallyn" <serge@hallyn.com>
+Cc: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
+	Ben Scarlato <akhna@google.com>,
+	Casey Schaufler <casey@schaufler-ca.com>,
+	Charles Zaffery <czaffery@roblox.com>,
+	Francis Laniel <flaniel@linux.microsoft.com>,
+	James Morris <jmorris@namei.org>,
+	Jann Horn <jannh@google.com>,
+	Jeff Xu <jeffxu@google.com>,
+	Jorge Lucangeli Obes <jorgelo@google.com>,
+	Kees Cook <kees@kernel.org>,
+	Konstantin Meskhidze <konstantin.meskhidze@huawei.com>,
+	Matt Bobrowski <mattbobrowski@google.com>,
+	Mikhail Ivanov <ivanov.mikhail1@huawei-partners.com>,
+	Phil Sutter <phil@nwl.cc>,
+	Praveen K Paladugu <prapal@linux.microsoft.com>,
+	Robert Salvet <robert.salvet@roblox.com>,
+	Shervin Oloumi <enlightened@google.com>,
+	Song Liu <song@kernel.org>,
+	Tahera Fahimi <fahimitahera@gmail.com>,
+	audit@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-security-module@vger.kernel.org
+Subject: [PATCH v3 01/23] lsm: Only build lsm_audit.c if CONFIG_SECURITY and CONFIG_AUDIT are set
+Date: Fri, 22 Nov 2024 15:33:31 +0100
+Message-ID: <20241122143353.59367-2-mic@digikod.net>
+In-Reply-To: <20241122143353.59367-1-mic@digikod.net>
+References: <20241122143353.59367-1-mic@digikod.net>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
+X-Infomaniak-Routing: alpha
 
-When the user specifies a directory to delete with the suffix '/',
-the audit record fails to collect the filename, resulting in the
-following logs:
+When CONFIG_AUDIT is set, its CONFIG_NET dependency is also set, and the
+dev_get_by_index and init_net symbols (used by dump_common_audit_data)
+are found by the linker.  dump_common_audit_data() should then failed to
+build when CONFIG_NET is not set. However, because the compiler is
+smart, it knows that audit_log_start() always return NULL when
+!CONFIG_AUDIT, and it doesn't build the body of common_lsm_audit().  As
+a side effect, dump_common_audit_data() is not built and the linker
+doesn't error out because of missing symbols.
 
- type=PATH msg=audit(10/30/2024 14:11:17.796:6304) : item=2 name=(null)
- type=PATH msg=audit(10/30/2024 14:11:17.796:6304) : item=1 name=(null)
+Let's only build lsm_audit.o when CONFIG_SECURITY and CONFIG_AUDIT are
+both set, which is checked with the new CONFIG_HAS_SECURITY_AUDIT.
 
-It happens because the value of the variables dname, and n->name->name
-in __audit_inode_child() differ only by the suffix '/'. This commit
-treats this corner case by handling pathname's trailing slashes in
-audit_compare_dname_path().
+ipv4_skb_to_auditdata() and ipv6_skb_to_auditdata() are only used by
+Smack if CONFIG_AUDIT is set, so they don't need fake implementations.
 
-Steps to reproduce the issue:
+Because common_lsm_audit() is used in multiple places without
+CONFIG_AUDIT checks, add a fake implementation.
 
- # auditctl -w /tmp
- $ mkdir /tmp/foo
- $ rm -r /tmp/foo/
- # ausearch -i | grep PATH | tail -3
-
-The first version of this patch was based on a GitHub patch/PR by
-user @hqh2010 [1].
-
-Link: https://github.com/linux-audit/audit-kernel/pull/148 [1]
-
-Suggested-by: Paul Moore <paul@paul-moore.com>
-Reviewed-by: Richard Guy Briggs <rgb@redhat.com>
-Reviewed-by: Al Viro <viro@zeniv.linux.org.uk>
-Signed-off-by: Ricardo Robaina <rrobaina@redhat.com>
-
+Cc: Casey Schaufler <casey@schaufler-ca.com>
+Cc: James Morris <jmorris@namei.org>
+Cc: Paul Moore <paul@paul-moore.com>
+Cc: Serge E. Hallyn <serge@hallyn.com>
+Signed-off-by: Mickaël Salaün <mic@digikod.net>
+Link: https://lore.kernel.org/r/20241122143353.59367-2-mic@digikod.net
 ---
-v2: handling pathname's trailing slashes in audit_compare_dname_path()
-v1: https://lore.kernel.org/audit/20241114040948.GK3387508@ZenIV/T/#t
----
- kernel/auditfilter.c | 15 +++++++++++----
- 1 file changed, 11 insertions(+), 4 deletions(-)
 
-diff --git a/kernel/auditfilter.c b/kernel/auditfilter.c
-index 470041c49a44..8ddccdb4a2a7 100644
---- a/kernel/auditfilter.c
-+++ b/kernel/auditfilter.c
-@@ -1319,13 +1319,20 @@ int audit_compare_dname_path(const struct qstr *dname, const char *path, int par
- 	if (pathlen < dlen)
- 		return 1;
+Changes since v2:
+- Add CONFIG_HAS_SECURITY_AUDIT to fix the build with AUDIT &&
+  !SECURITY, reported by Guenter Roeck.
+---
+ include/linux/lsm_audit.h | 14 ++++++++++++++
+ security/Kconfig          |  5 +++++
+ security/Makefile         |  2 +-
+ 3 files changed, 20 insertions(+), 1 deletion(-)
+
+diff --git a/include/linux/lsm_audit.h b/include/linux/lsm_audit.h
+index 97a8b21eb033..c2b01380262c 100644
+--- a/include/linux/lsm_audit.h
++++ b/include/linux/lsm_audit.h
+@@ -116,14 +116,28 @@ struct common_audit_data {
+ #define v4info fam.v4
+ #define v6info fam.v6
  
--	parentlen = parentlen == AUDIT_NAME_FULL ? parent_len(path) : parentlen;
--	if (pathlen - parentlen != dlen)
--		return 1;
-+	if (parentlen == AUDIT_NAME_FULL)
-+		parentlen = parent_len(path);
- 
- 	p = path + parentlen;
- 
--	return strncmp(p, dname->name, dlen);
-+	/* handle trailing slashes */
-+	pathlen -= parentlen;
-+	while (p[pathlen - 1] == '/')
-+		pathlen--;
++#ifdef CONFIG_AUDIT
 +
-+	if (pathlen != dlen)
-+		return 1;
-+
-+	return memcmp(p, dname->name, dlen);
- }
+ int ipv4_skb_to_auditdata(struct sk_buff *skb,
+ 		struct common_audit_data *ad, u8 *proto);
  
- int audit_filter(int msgtype, unsigned int listtype)
++#if IS_ENABLED(CONFIG_IPV6)
+ int ipv6_skb_to_auditdata(struct sk_buff *skb,
+ 		struct common_audit_data *ad, u8 *proto);
++#endif /* IS_ENABLED(CONFIG_IPV6) */
+ 
+ void common_lsm_audit(struct common_audit_data *a,
+ 	void (*pre_audit)(struct audit_buffer *, void *),
+ 	void (*post_audit)(struct audit_buffer *, void *));
+ 
++#else /* CONFIG_AUDIT */
++
++static inline void common_lsm_audit(struct common_audit_data *a,
++	void (*pre_audit)(struct audit_buffer *, void *),
++	void (*post_audit)(struct audit_buffer *, void *))
++{
++}
++
++#endif /* CONFIG_AUDIT */
++
+ #endif
+diff --git a/security/Kconfig b/security/Kconfig
+index 28e685f53bd1..f10dbf15c294 100644
+--- a/security/Kconfig
++++ b/security/Kconfig
+@@ -64,6 +64,11 @@ config SECURITY
+ 
+ 	  If you are unsure how to answer this question, answer N.
+ 
++config HAS_SECURITY_AUDIT
++	def_bool y
++	depends on AUDIT
++	depends on SECURITY
++
+ config SECURITYFS
+ 	bool "Enable the securityfs filesystem"
+ 	help
+diff --git a/security/Makefile b/security/Makefile
+index cc0982214b84..22ff4c8bd8ce 100644
+--- a/security/Makefile
++++ b/security/Makefile
+@@ -15,7 +15,7 @@ obj-$(CONFIG_SECURITY)			+= security.o
+ obj-$(CONFIG_SECURITYFS)		+= inode.o
+ obj-$(CONFIG_SECURITY_SELINUX)		+= selinux/
+ obj-$(CONFIG_SECURITY_SMACK)		+= smack/
+-obj-$(CONFIG_SECURITY)			+= lsm_audit.o
++obj-$(CONFIG_HAS_SECURITY_AUDIT)	+= lsm_audit.o
+ obj-$(CONFIG_SECURITY_TOMOYO)		+= tomoyo/
+ obj-$(CONFIG_SECURITY_APPARMOR)		+= apparmor/
+ obj-$(CONFIG_SECURITY_YAMA)		+= yama/
 -- 
 2.47.0
 
