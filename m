@@ -1,33 +1,33 @@
-Received: from smtp-42a8.mail.infomaniak.ch (smtp-42a8.mail.infomaniak.ch [84.16.66.168])
+Received: from smtp-bc0a.mail.infomaniak.ch (smtp-bc0a.mail.infomaniak.ch [45.157.188.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A05681E0490
-	for <audit@vger.kernel.org>; Fri, 22 Nov 2024 14:34:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=84.16.66.168
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB60D13CA93
+	for <audit@vger.kernel.org>; Fri, 22 Nov 2024 14:40:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.157.188.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732286077; cv=none; b=fekD2z4qd8GI0tHQsMWhUwVV1QqwDGAN4eIR62rVe+5lBju8x2MZx16PTioxZ1Es/KnzStGmCsOVQlQ5E4QuTJ3NO6VCnAARdPQFYr84zbZZazsfLUt3DG6XDXQSJXNgM/nCJjJ8gW5GX5QDQX+AmL7LZMnNP8xW7QmXNLxZbos=
+	t=1732286413; cv=none; b=qgioBGC/6SotcP+vrq9GvxWl1wPBWQm0ih88Fi/DaLI4FsD/FpSP7FICpFLpASPMJBgEaaE/eV5IYDGOtJsHdceIaynxGn/VLlvrBsOzHmfEE3+9A9QZfGIu8dm8sdIyxpHX5G23z1MjcJBvHhhrvCGxbUnLvxaXioTWkIWtyL8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732286077; c=relaxed/simple;
-	bh=36b7Lyz3k8FScTc5AXG1dY/03AGd/FzjGBeIK5Rrh6o=;
+	s=arc-20240116; t=1732286413; c=relaxed/simple;
+	bh=9Fxkj6Lw7DP1eAfNHnWrp7Twfjs6P7rVD5OBZe4cpq8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Mn/kxtql3xe9RHmvFyhf87jqkMRZ0b8KF4StpC8+5jkdlg9fiI9lP/qI6dTMgRb7WcRE1frhRmizWf83Vi/CPprShxdK5JSfA1+j8RqFAf02ud9ZbgHwoVlsvvXDdQGrU6LncJIrKNdUsv3jKDcPjLc+6Lw3rpZst5veXS5jWLg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=r8HHBOBo; arc=none smtp.client-ip=84.16.66.168
+	 MIME-Version:Content-Type; b=mCHni4SUrcUEFWEvfPOEP3yf9S35wJZIJ8RVMcpsD6N6vkfWvm7253Uajje2EQbieKn2sb/LwpyXUvUgKlD3BH32LXsPEajbzRIeNEFOZzAyrqyqgZebppGaJvitwm8uWz7Lu8sXXuj6LEdQ0gylEkXbLB8VHcOdqJ3LwS10F0M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=q6BM95T0; arc=none smtp.client-ip=45.157.188.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="r8HHBOBo"
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="q6BM95T0"
 Received: from smtp-3-0000.mail.infomaniak.ch (smtp-3-0000.mail.infomaniak.ch [10.4.36.107])
-	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4XvyKh0XG5zj9g;
-	Fri, 22 Nov 2024 15:34:32 +0100 (CET)
+	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4XvyKG6yVGzlKF;
+	Fri, 22 Nov 2024 15:34:10 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
-	s=20191114; t=1732286071;
-	bh=zplGSbTIB54PAhZp2mb0y83mOQueBGo/UaXX9cN25G4=;
+	s=20191114; t=1732286050;
+	bh=w3WVR4dmJCr/E++3tly2leydnVO6iM/bONHgj5qQ1yI=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=r8HHBOBoxJTalyzqRRUChQvrA0j19XWI4RyAyrcpebIx7xf4wESqk0DXKKZkl4LgQ
-	 1wGQ6ZyOWgHUsKYfI0cemIeuUpAY3dPntjxxGV0hi4kkd9zf/3jt5EUSHn+yKlTs77
-	 6j2YYaixRFk3IgNmNoHtaOACW/LkCzcjnLA84vcQ=
-Received: from unknown by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4XvyKg2NbzzjZ6;
-	Fri, 22 Nov 2024 15:34:31 +0100 (CET)
+	b=q6BM95T0+P8uMIKRgmgG7gxiJuT4hmcDLlWAlHYvGEL7lgBaMIdIKUH8wkHbEJdK5
+	 BlroYM60s3HtzWnhD59eIRDiFFftfL//m0J8IlkjXv2wBX7N2fkQUARVW3O9aXMPf9
+	 RPbomBAvJwrMnUAnIG7swAf5t/VavRlx0Iwzqx9o=
+Received: from unknown by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4XvyKG274Lzm5q;
+	Fri, 22 Nov 2024 15:34:10 +0100 (CET)
 From: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
 To: Eric Paris <eparis@redhat.com>,
 	Paul Moore <paul@paul-moore.com>,
@@ -55,9 +55,9 @@ Cc: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
 	audit@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-security-module@vger.kernel.org
-Subject: [PATCH v3 23/23] selftests/landlock: Add audit tests for ptrace
-Date: Fri, 22 Nov 2024 15:33:53 +0100
-Message-ID: <20241122143353.59367-24-mic@digikod.net>
+Subject: [PATCH v3 06/23] landlock: Simplify initially denied access rights
+Date: Fri, 22 Nov 2024 15:33:36 +0100
+Message-ID: <20241122143353.59367-7-mic@digikod.net>
 In-Reply-To: <20241122143353.59367-1-mic@digikod.net>
 References: <20241122143353.59367-1-mic@digikod.net>
 Precedence: bulk
@@ -70,182 +70,98 @@ Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Infomaniak-Routing: alpha
 
-Add tests for all ptrace actions.  This improve all the ptrace tests by
-making sure that the restrictions comes from Landlock, and with the
-expected objects.  These are like enhanced errno checks.
-
-Test coverage for security/landlock is 93.3% of 1604 lines according to
-gcc/gcov-14.
+Upgrade domain's handled access masks when creating a domain from a
+ruleset, instead of converting them at runtime.  This is more consistent
+and helps with audit support.
 
 Cc: Günther Noack <gnoack@google.com>
-Cc: Paul Moore <paul@paul-moore.com>
 Signed-off-by: Mickaël Salaün <mic@digikod.net>
-Link: https://lore.kernel.org/r/20241122143353.59367-24-mic@digikod.net
+Link: https://lore.kernel.org/r/20241122143353.59367-7-mic@digikod.net
 ---
 
 Changes since v2:
 - New patch.
 ---
- .../testing/selftests/landlock/ptrace_test.c  | 62 +++++++++++++++++--
- 1 file changed, 58 insertions(+), 4 deletions(-)
+ security/landlock/access.h  | 17 ++++++++++++++++-
+ security/landlock/fs.c      | 10 +---------
+ security/landlock/ruleset.c |  3 ++-
+ 3 files changed, 19 insertions(+), 11 deletions(-)
 
-diff --git a/tools/testing/selftests/landlock/ptrace_test.c b/tools/testing/selftests/landlock/ptrace_test.c
-index a19db4d0b3bd..592927059cc3 100644
---- a/tools/testing/selftests/landlock/ptrace_test.c
-+++ b/tools/testing/selftests/landlock/ptrace_test.c
-@@ -4,6 +4,7 @@
-  *
-  * Copyright © 2017-2020 Mickaël Salaün <mic@digikod.net>
-  * Copyright © 2019-2020 ANSSI
-+ * Copyright © 2024 Microsoft Corporation
+diff --git a/security/landlock/access.h b/security/landlock/access.h
+index a64694287d2c..1e302775cc23 100644
+--- a/security/landlock/access.h
++++ b/security/landlock/access.h
+@@ -20,7 +20,8 @@
+ /*
+  * All access rights that are denied by default whether they are handled or not
+  * by a ruleset/layer.  This must be ORed with all ruleset->access_masks[]
+- * entries when we need to get the absolute handled access masks.
++ * entries when we need to get the absolute handled access masks, see
++ * landlock_upgrade_handled_access_masks().
   */
+ /* clang-format off */
+ #define _LANDLOCK_ACCESS_FS_INITIALLY_DENIED ( \
+@@ -59,4 +60,18 @@ typedef u16 layer_mask_t;
+ /* Makes sure all layers can be checked. */
+ static_assert(BITS_PER_TYPE(layer_mask_t) >= LANDLOCK_MAX_NUM_LAYERS);
  
- #define _GNU_SOURCE
-@@ -17,6 +18,7 @@
- #include <sys/wait.h>
- #include <unistd.h>
- 
-+#include "audit.h"
- #include "common.h"
- 
- /* Copied from security/yama/yama_lsm.c */
-@@ -85,9 +87,27 @@ static int get_yama_ptrace_scope(void)
- 	return ret;
- }
- 
--/* clang-format off */
--FIXTURE(hierarchy) {};
--/* clang-format on */
-+static int matches_log_ptrace(struct __test_metadata *const _metadata,
-+			      struct audit_state *const state, const pid_t opid)
++/* Upgrades with all initially denied by default access rights. */
++static inline struct access_masks
++landlock_upgrade_handled_access_masks(struct access_masks access_masks)
 +{
-+	static const char log_template[] = REGEX_LANDLOCK_PREFIX
-+		" blockers=ptrace opid=%d ocomm=\"ptrace_test\"$";
-+	char log_match[sizeof(log_template) + 10];
-+	int log_match_len;
++	/*
++	 * All access rights that are denied by default whether they are
++	 * explicitly handled or not.
++	 */
++	if (access_masks.fs)
++		access_masks.fs |= _LANDLOCK_ACCESS_FS_INITIALLY_DENIED;
 +
-+	log_match_len =
-+		snprintf(log_match, sizeof(log_match), log_template, opid);
-+	if (log_match_len > sizeof(log_match))
-+		return -E2BIG;
-+
-+	// TODO: return -errno with AUDIT_SYSCALL
-+	return !audit_match_record(state, AUDIT_LANDLOCK_DENY, log_match);
++	return access_masks;
 +}
 +
-+FIXTURE(hierarchy)
-+{
-+	struct audit_state state;
-+};
- 
- FIXTURE_VARIANT(hierarchy)
- {
-@@ -245,10 +265,15 @@ FIXTURE_VARIANT_ADD(hierarchy, deny_with_forked_domain) {
- 
- FIXTURE_SETUP(hierarchy)
- {
-+	disable_caps(_metadata);
-+	set_cap(_metadata, CAP_AUDIT_CONTROL);
-+	EXPECT_EQ(0, audit_init(&self->state));
-+	clear_cap(_metadata, CAP_AUDIT_CONTROL);
+ #endif /* _SECURITY_LANDLOCK_ACCESS_H */
+diff --git a/security/landlock/fs.c b/security/landlock/fs.c
+index 3da5f1945158..9779170d9199 100644
+--- a/security/landlock/fs.c
++++ b/security/landlock/fs.c
+@@ -389,14 +389,6 @@ static bool is_nouser_or_private(const struct dentry *dentry)
+ 		unlikely(IS_PRIVATE(d_backing_inode(dentry))));
  }
  
--FIXTURE_TEARDOWN(hierarchy)
-+FIXTURE_TEARDOWN_PARENT(hierarchy)
- {
-+	EXPECT_EQ(0, audit_cleanup(NULL));
- }
- 
- /* Test PTRACE_TRACEME and PTRACE_ATTACH for parent and child. */
-@@ -261,6 +286,7 @@ TEST_F(hierarchy, trace)
- 	char buf_parent;
- 	long ret;
- 	bool can_read_child, can_trace_child, can_read_parent, can_trace_parent;
-+	struct audit_records records;
- 
- 	yama_ptrace_scope = get_yama_ptrace_scope();
- 	ASSERT_LE(0, yama_ptrace_scope);
-@@ -336,17 +362,26 @@ TEST_F(hierarchy, trace)
- 		err_proc_read = test_ptrace_read(parent);
- 		if (can_read_parent) {
- 			EXPECT_EQ(0, err_proc_read);
-+			EXPECT_EQ(0, matches_log_ptrace(_metadata, &self->state,
-+							parent));
- 		} else {
- 			EXPECT_EQ(EACCES, err_proc_read);
-+			EXPECT_EQ(1, matches_log_ptrace(_metadata, &self->state,
-+							parent));
- 		}
- 
- 		/* Tests PTRACE_ATTACH on the parent. */
- 		ret = ptrace(PTRACE_ATTACH, parent, NULL, 0);
- 		if (can_trace_parent) {
- 			EXPECT_EQ(0, ret);
-+			EXPECT_EQ(0, matches_log_ptrace(_metadata, &self->state,
-+							parent));
- 		} else {
- 			EXPECT_EQ(-1, ret);
- 			EXPECT_EQ(EPERM, errno);
-+			EXPECT_EQ(!can_read_parent,
-+				  matches_log_ptrace(_metadata, &self->state,
-+						     parent));
- 		}
- 		if (ret == 0) {
- 			ASSERT_EQ(parent, waitpid(parent, &status, 0));
-@@ -358,9 +393,15 @@ TEST_F(hierarchy, trace)
- 		ret = ptrace(PTRACE_TRACEME);
- 		if (can_trace_child) {
- 			EXPECT_EQ(0, ret);
-+			EXPECT_EQ(0, matches_log_ptrace(_metadata, &self->state,
-+							parent));
- 		} else {
- 			EXPECT_EQ(-1, ret);
- 			EXPECT_EQ(EPERM, errno);
-+			/* We should indeed see the parent process. */
-+			EXPECT_EQ(!can_read_child,
-+				  matches_log_ptrace(_metadata, &self->state,
-+						     parent));
- 		}
- 
- 		/*
-@@ -408,17 +449,25 @@ TEST_F(hierarchy, trace)
- 	err_proc_read = test_ptrace_read(child);
- 	if (can_read_child) {
- 		EXPECT_EQ(0, err_proc_read);
-+		EXPECT_EQ(0,
-+			  matches_log_ptrace(_metadata, &self->state, child));
+-static access_mask_t
+-get_handled_fs_accesses(const struct landlock_ruleset *const domain)
+-{
+-	/* Handles all initially denied by default access rights. */
+-	return landlock_union_access_masks(domain).fs |
+-	       _LANDLOCK_ACCESS_FS_INITIALLY_DENIED;
+-}
+-
+ static const struct access_masks any_fs = {
+ 	.fs = ~0,
+ };
+@@ -788,7 +780,7 @@ static bool is_access_to_paths_allowed(
+ 		 * a superset of the meaningful requested accesses).
+ 		 */
+ 		access_masked_parent1 = access_masked_parent2 =
+-			get_handled_fs_accesses(domain);
++			landlock_union_access_masks(domain).fs;
+ 		is_dom_check = true;
  	} else {
- 		EXPECT_EQ(EACCES, err_proc_read);
-+		EXPECT_EQ(1,
-+			  matches_log_ptrace(_metadata, &self->state, child));
+ 		if (WARN_ON_ONCE(dentry_child1 || dentry_child2))
+diff --git a/security/landlock/ruleset.c b/security/landlock/ruleset.c
+index cae69f2f01d9..dbc528f5f3b7 100644
+--- a/security/landlock/ruleset.c
++++ b/security/landlock/ruleset.c
+@@ -385,7 +385,8 @@ static int merge_ruleset(struct landlock_ruleset *const dst,
+ 		err = -EINVAL;
+ 		goto out_unlock;
  	}
+-	dst->access_masks[dst->num_layers - 1] = src->access_masks[0];
++	dst->access_masks[dst->num_layers - 1] =
++		landlock_upgrade_handled_access_masks(src->access_masks[0]);
  
- 	/* Tests PTRACE_ATTACH on the child. */
- 	ret = ptrace(PTRACE_ATTACH, child, NULL, 0);
- 	if (can_trace_child) {
- 		EXPECT_EQ(0, ret);
-+		EXPECT_EQ(0,
-+			  matches_log_ptrace(_metadata, &self->state, child));
- 	} else {
- 		EXPECT_EQ(-1, ret);
- 		EXPECT_EQ(EPERM, errno);
-+		EXPECT_EQ(!can_read_child,
-+			  matches_log_ptrace(_metadata, &self->state, child));
- 	}
- 
- 	if (ret == 0) {
-@@ -434,6 +483,11 @@ TEST_F(hierarchy, trace)
- 	if (WIFSIGNALED(status) || !WIFEXITED(status) ||
- 	    WEXITSTATUS(status) != EXIT_SUCCESS)
- 		_metadata->exit_code = KSFT_FAIL;
-+
-+	/* Makes sure there is no superfluous logged records. */
-+	audit_count_records(&self->state, &records);
-+	EXPECT_EQ(0, records.deny);
-+	EXPECT_EQ(0, records.info);
- }
- 
- TEST_HARNESS_MAIN
+ 	/* Merges the @src inode tree. */
+ 	err = merge_tree(dst, src, LANDLOCK_KEY_INODE);
 -- 
 2.47.0
 
