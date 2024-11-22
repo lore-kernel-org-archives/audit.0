@@ -1,33 +1,33 @@
-Received: from smtp-42ac.mail.infomaniak.ch (smtp-42ac.mail.infomaniak.ch [84.16.66.172])
+Received: from smtp-42a8.mail.infomaniak.ch (smtp-42a8.mail.infomaniak.ch [84.16.66.168])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CF6D1DEFDC;
-	Fri, 22 Nov 2024 14:34:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=84.16.66.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0922C1DEFC7
+	for <audit@vger.kernel.org>; Fri, 22 Nov 2024 14:34:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=84.16.66.168
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732286064; cv=none; b=nn70/c2bmebfh65pn5Jc367Dsv7NFcLdprbjZLMbEQkqkWzrplLIoHiXO1qIw6zcEVv7isa5ZO/SqS1gneU0igIGlX6N+b6lEmqD8sHEC829foF/p1oJl1SYZjyAhr/RuTgs2z032Aw8OJLdCWNN73qx95tgV47M+jyYCrbsIec=
+	t=1732286065; cv=none; b=p/wC7pGa/DJlxI4/kOYf7ajfcgftStTT/1/jBEPVO0DRDI8SrcOohmyeHRXRAAwsAXHEn0S6XkO34HnjApsL67BochpF0v/BzmhO5qxX94+ntn3f8LHPzWnDMSSwuONLy966EVVygpBZC94bKHIIl8+BxbAhXWDvIiVd5g+4G4Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732286064; c=relaxed/simple;
-	bh=oA5h+lIhIMGHdMq3GlqkFyWUv2dO2b0FhZB7G/chb0g=;
+	s=arc-20240116; t=1732286065; c=relaxed/simple;
+	bh=5jhXIrCKW9G90gP+X+JAGYcArPkac3fHOXKVNwSJI20=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=AoaiFzbb/C7JT6CXCLPGkjROhZ1JhJtj0oddUtwFKEPugi8PbqbD/gfPWmza41Gjpl+QEG7xBNf6/kjCTWIQy0USTx5EswTsuD6tA4KSOjjgrQy29tMaHQo0rcMXg0cw3qFJi+lk/IqgbKzYjoalyiiMfHVsG6ocAq48LOhV8U0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=JWzgivDs; arc=none smtp.client-ip=84.16.66.172
+	 MIME-Version:Content-Type; b=Bt2cIfgv/TsEFRCnmUFYckIJyOpF/EAsrxjD8YebEY556/OPHmWVwf8gNFaGKBUJH/W1XD1xpFNcB56ZrI2CCjnqhXk7A0UijMRgSCmsQXXfwwRtYHVxyGR55rRqfT3EYD19j+0S7FgyevF11RZFoFMknnbHspZUqqsQlq0ctiY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=rZvMXWQJ; arc=none smtp.client-ip=84.16.66.168
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="JWzgivDs"
-Received: from smtp-3-0000.mail.infomaniak.ch (unknown [IPv6:2001:1600:4:17::246b])
-	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4XvyKM0JPgzjT6;
-	Fri, 22 Nov 2024 15:34:15 +0100 (CET)
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="rZvMXWQJ"
+Received: from smtp-3-0000.mail.infomaniak.ch (smtp-3-0000.mail.infomaniak.ch [10.4.36.107])
+	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4XvyKS3jrhzZsx;
+	Fri, 22 Nov 2024 15:34:20 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
-	s=20191114; t=1732286054;
-	bh=1sr0WCuh3QxUACqP8dYROb6HbctHZuOp4t4pm8z1faM=;
+	s=20191114; t=1732286060;
+	bh=+NTh0aRLS4WQhSiSk2pWdvUKQlq2NLeswsQdqGHb16Q=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=JWzgivDsxbicKpp6/jeidUMoxCaM87H0dcpCfAXfXbYXRuB1R6g12hzW26BtQH6Yq
-	 vvG9cbTvUbgW0pCJHhPlapUrQtozAIJTx+S0xXNKmePgjfssojBIhhYOyIy/Nhim56
-	 2HAn0wEymjIeBxgVVWfDm4yyY36ijJTY2G0d7xGQ=
-Received: from unknown by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4XvyKK5y5jzlKK;
-	Fri, 22 Nov 2024 15:34:13 +0100 (CET)
+	b=rZvMXWQJJE1Hrk7rMLICf+JRABO9hjsv/AjjE2WomOaE+zZHQum7xuOmVVu3TnXPl
+	 p+y53yHGANGNRdMicklvaUH9p+9pv97o/pzhG7TXE7WHKDB5grJquGJlhxjv2TR8Xn
+	 wemY3kzzewoCcAy0ZPSsEA2iKEbuX0RHlDbaPey8=
+Received: from unknown by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4XvyKR5CDzzkXR;
+	Fri, 22 Nov 2024 15:34:19 +0100 (CET)
 From: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
 To: Eric Paris <eparis@redhat.com>,
 	Paul Moore <paul@paul-moore.com>,
@@ -55,9 +55,9 @@ Cc: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
 	audit@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-security-module@vger.kernel.org
-Subject: [PATCH v3 09/23] audit: Add a new audit_get_ctime() helper
-Date: Fri, 22 Nov 2024 15:33:39 +0100
-Message-ID: <20241122143353.59367-10-mic@digikod.net>
+Subject: [PATCH v3 13/23] selftests/landlock: Add test to check partial access in a mount tree
+Date: Fri, 22 Nov 2024 15:33:43 +0100
+Message-ID: <20241122143353.59367-14-mic@digikod.net>
 In-Reply-To: <20241122143353.59367-1-mic@digikod.net>
 References: <20241122143353.59367-1-mic@digikod.net>
 Precedence: bulk
@@ -70,102 +70,119 @@ Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Infomaniak-Routing: alpha
 
-It may be useful to synchronize with the audit's timestamp e.g., to
-identify asynchronous events as being created with a previous audit
-record (see next commit).
+Add layout1.refer_part_mount_tree_is_allowed to test the masked logical
+issue regarding collect_domain_accesses() calls followed by the
+is_access_to_paths_allowed() check in current_check_refer_path().  See
+previous commit.
 
-auditsc_get_stamp() does more than just getting a timestamp, so add a
-new helper instead of exposing it and risking side effects.
+This test should work without the previous fix as well, but it enables
+us to make sure future changes will not have impact regarding this
+behavior.
 
-It should be noted that we cannot reliably expose event's serial numbers
-because there may not be any related event, which would then create
-holes in the sequence of serial numbers.
-
-Cc: Eric Paris <eparis@redhat.com>
-Cc: Paul Moore <paul@paul-moore.com>
+Cc: Günther Noack <gnoack@google.com>
 Signed-off-by: Mickaël Salaün <mic@digikod.net>
-Link: https://lore.kernel.org/r/20241122143353.59367-10-mic@digikod.net
+Link: https://lore.kernel.org/r/20241122143353.59367-14-mic@digikod.net
 ---
 
 Changes since v2:
 - New patch.
 ---
- include/linux/audit.h |  8 ++++++++
- kernel/auditsc.c      | 21 ++++++++++++++++++---
- 2 files changed, 26 insertions(+), 3 deletions(-)
+ tools/testing/selftests/landlock/fs_test.c | 54 ++++++++++++++++++++--
+ 1 file changed, 50 insertions(+), 4 deletions(-)
 
-diff --git a/include/linux/audit.h b/include/linux/audit.h
-index 0050ef288ab3..cff07525c6ae 100644
---- a/include/linux/audit.h
-+++ b/include/linux/audit.h
-@@ -12,6 +12,7 @@
- #include <linux/sched.h>
- #include <linux/ptrace.h>
- #include <linux/audit_arch.h>
-+#include <linux/time64.h>
- #include <uapi/linux/audit.h>
- #include <uapi/linux/netfilter/nf_tables.h>
- #include <uapi/linux/fanotify.h>
-@@ -408,6 +409,7 @@ extern int __audit_socketcall(int nargs, unsigned long *args);
- extern int __audit_sockaddr(int len, void *addr);
- extern void __audit_fd_pair(int fd1, int fd2);
- extern void __audit_mq_open(int oflag, umode_t mode, struct mq_attr *attr);
-+extern struct timespec64 audit_get_ctime(const struct audit_context *ctx);
- extern void __audit_mq_sendrecv(mqd_t mqdes, size_t msg_len, unsigned int msg_prio, const struct timespec64 *abs_timeout);
- extern void __audit_mq_notify(mqd_t mqdes, const struct sigevent *notification);
- extern void __audit_mq_getsetattr(mqd_t mqdes, struct mq_attr *mqstat);
-@@ -653,6 +655,12 @@ static inline int audit_sockaddr(int len, void *addr)
- }
- static inline void audit_mq_open(int oflag, umode_t mode, struct mq_attr *attr)
- { }
-+static inline struct timespec64 audit_get_ctime(const struct audit_context *ctx)
-+{
-+	struct timespec64 t = {};
-+
-+	return t;
-+}
- static inline void audit_mq_sendrecv(mqd_t mqdes, size_t msg_len,
- 				     unsigned int msg_prio,
- 				     const struct timespec64 *abs_timeout)
-diff --git a/kernel/auditsc.c b/kernel/auditsc.c
-index cd57053b4a69..3b7dcb47f5af 100644
---- a/kernel/auditsc.c
-+++ b/kernel/auditsc.c
-@@ -2511,6 +2511,22 @@ void __audit_inode_child(struct inode *parent,
- }
- EXPORT_SYMBOL_GPL(__audit_inode_child);
+diff --git a/tools/testing/selftests/landlock/fs_test.c b/tools/testing/selftests/landlock/fs_test.c
+index 6788762188fe..42ce1e79ba82 100644
+--- a/tools/testing/selftests/landlock/fs_test.c
++++ b/tools/testing/selftests/landlock/fs_test.c
+@@ -85,6 +85,9 @@ static const char file1_s3d1[] = TMP_DIR "/s3d1/f1";
+ /* dir_s3d2 is a mount point. */
+ static const char dir_s3d2[] = TMP_DIR "/s3d1/s3d2";
+ static const char dir_s3d3[] = TMP_DIR "/s3d1/s3d2/s3d3";
++static const char file1_s3d3[] = TMP_DIR "/s3d1/s3d2/s3d3/f1";
++static const char dir_s3d4[] = TMP_DIR "/s3d1/s3d2/s3d4";
++static const char file1_s3d4[] = TMP_DIR "/s3d1/s3d2/s3d4/f1";
  
-+/**
-+ * audit_get_ctime - get creation time of audit_context
-+ *
-+ * @ctx: audit_context for the task
-+ *
-+ * Returns an empty timespec64 if ctx is NULL.
-+ */
-+struct timespec64 audit_get_ctime(const struct audit_context *ctx)
+ /*
+  * layout1 hierarchy:
+@@ -108,8 +111,11 @@ static const char dir_s3d3[] = TMP_DIR "/s3d1/s3d2/s3d3";
+  * │           └── f2
+  * └── s3d1
+  *     ├── f1
+- *     └── s3d2
+- *         └── s3d3
++ *     └── s3d2 [mount point]
++ *         ├── s3d3
++ *         │   └── f1
++ *         └── s3d4
++ *             └── f1
+  */
+ 
+ static bool fgrep(FILE *const inf, const char *const str)
+@@ -358,7 +364,8 @@ static void create_layout1(struct __test_metadata *const _metadata)
+ 	ASSERT_EQ(0, mount_opt(&mnt_tmp, dir_s3d2));
+ 	clear_cap(_metadata, CAP_SYS_ADMIN);
+ 
+-	ASSERT_EQ(0, mkdir(dir_s3d3, 0700));
++	create_file(_metadata, file1_s3d3);
++	create_file(_metadata, file1_s3d4);
+ }
+ 
+ static void remove_layout1(struct __test_metadata *const _metadata)
+@@ -378,7 +385,8 @@ static void remove_layout1(struct __test_metadata *const _metadata)
+ 	EXPECT_EQ(0, remove_path(dir_s2d2));
+ 
+ 	EXPECT_EQ(0, remove_path(file1_s3d1));
+-	EXPECT_EQ(0, remove_path(dir_s3d3));
++	EXPECT_EQ(0, remove_path(file1_s3d3));
++	EXPECT_EQ(0, remove_path(file1_s3d4));
+ 	set_cap(_metadata, CAP_SYS_ADMIN);
+ 	umount(dir_s3d2);
+ 	clear_cap(_metadata, CAP_SYS_ADMIN);
+@@ -2444,6 +2452,44 @@ TEST_F_FORK(layout1, refer_mount_root_deny)
+ 	EXPECT_EQ(0, close(root_fd));
+ }
+ 
++TEST_F_FORK(layout1, refer_part_mount_tree_is_allowed)
 +{
-+	struct timespec64 t = {};
++	const struct rule layer1[] = {
++		{
++			/* Parent mount point. */
++			.path = dir_s3d1,
++			.access = LANDLOCK_ACCESS_FS_REFER |
++				  LANDLOCK_ACCESS_FS_MAKE_REG,
++		},
++		{
++			/*
++			 * Removing the source file is allowed because its
++			 * access rights are already a superset of the
++			 * destination.
++			 */
++			.path = dir_s3d4,
++			.access = LANDLOCK_ACCESS_FS_REFER |
++				  LANDLOCK_ACCESS_FS_MAKE_REG |
++				  LANDLOCK_ACCESS_FS_REMOVE_FILE,
++		},
++		{},
++	};
++	int ruleset_fd;
 +
-+	if (ctx)
-+		return ctx->ctime;
-+	return t;
++	ASSERT_EQ(0, unlink(file1_s3d3));
++	ruleset_fd = create_ruleset(_metadata,
++				    LANDLOCK_ACCESS_FS_REFER |
++					    LANDLOCK_ACCESS_FS_MAKE_REG |
++					    LANDLOCK_ACCESS_FS_REMOVE_FILE,
++				    layer1);
++
++	ASSERT_LE(0, ruleset_fd);
++	enforce_ruleset(_metadata, ruleset_fd);
++	ASSERT_EQ(0, close(ruleset_fd));
++
++	ASSERT_EQ(0, rename(file1_s3d4, file1_s3d3));
 +}
 +
- /**
-  * auditsc_get_stamp - get local copies of audit_context values
-  * @ctx: audit_context for the task
-@@ -2526,9 +2542,8 @@ int auditsc_get_stamp(struct audit_context *ctx,
- 		return 0;
- 	if (!ctx->serial)
- 		ctx->serial = audit_serial();
--	t->tv_sec  = ctx->ctime.tv_sec;
--	t->tv_nsec = ctx->ctime.tv_nsec;
--	*serial    = ctx->serial;
-+	*t = audit_get_ctime(ctx);
-+	*serial = ctx->serial;
- 	if (!ctx->prio) {
- 		ctx->prio = 1;
- 		ctx->current_state = AUDIT_STATE_RECORD;
+ TEST_F_FORK(layout1, reparent_link)
+ {
+ 	const struct rule layer1[] = {
 -- 
 2.47.0
 
