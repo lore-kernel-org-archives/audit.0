@@ -1,193 +1,318 @@
-Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com [209.85.128.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp-bc0c.mail.infomaniak.ch (smtp-bc0c.mail.infomaniak.ch [45.157.188.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 445C428E8
-	for <audit@vger.kernel.org>; Wed, 27 Nov 2024 05:43:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05A381FAC51
+	for <audit@vger.kernel.org>; Wed, 27 Nov 2024 12:08:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.157.188.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732686189; cv=none; b=p+oRqpnKAY4vEdLg+YS78SKnKO1gKYhIngYE7fO2cU0vVeaX4at4cnT0yjRnhLrOfKO+R/ke5eLW/+SL0+vvIBxBWQDwKlpnwBhq3ZmUGdQq6JSgxxXTtu12UESVeo+LVxnKjoxSiqH/P75a98U1nzZcc9a8IzpXGnu1Vvprr5s=
+	t=1732709288; cv=none; b=aj2Vhr+Rin9qYgx1Lp8OQaNfVt1PIkYQNDLquKgt4KLtPWLnS454KoEJF/pusaiDnVsqa0upyR9O5HGMWtsC5Z5QvtzM1816ey1P/VGHU4VHbPYKBr/t79hjpk/9K+Ho1bgfYLA+F71FKFL1HMauwuSAUeM2G0HVqZmDEW+Xr9M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732686189; c=relaxed/simple;
-	bh=eFQXbOKlo4QI9fdpsg6S7Lp8wDnYBlKqK3Tc2d4MUy0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=P03QggPHT7U5YnXSs9GvqNyenHb4NwwheQKxE6q/hZaw6MmRuGnIPyJx/DU+nQtym8joLIMGt4mHJDa2jKyMmhzmfRpQMpScBJWi+J99gwu43wpkQV1K48IJSG2uDKWOGxnM+qPvNvfH7WYgZzGqN18j4xynMKAlLajSZ6XF/hM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=bS8j9MwL; arc=none smtp.client-ip=209.85.128.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+	s=arc-20240116; t=1732709288; c=relaxed/simple;
+	bh=WJvqmQ+xhf09Z/4BHWJrHRCdWSsCIF0Rns9cQyeF/5o=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=REKu1y+bcomnqQ8wLXHO5y6HeUMK1kBdRfQFWXuEf51kV7ZXVUg+FbO8bP93T0xE6S6UZIRhrFwTkYdazKTPj3D6n2ymSxuwfek9V+xTh+ow8tX0fU5wU9VCies1JV8gmIgvo91eeAsAIjufgpPy3EMOht/iyHW+k8LfKw/c/kA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=g1huBdDD; arc=none smtp.client-ip=45.157.188.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="bS8j9MwL"
-Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-6ee7a48377cso60406637b3.3
-        for <audit@vger.kernel.org>; Tue, 26 Nov 2024 21:43:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1732686186; x=1733290986; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5aaAX4RZQ1xLyXXEaIAjcxe7Kvkm0fdu7E5v2P3w9co=;
-        b=bS8j9MwL83KFVahhEHuR+MLqtRZJBC5ekXQNqJ/MedMrsqFMJtvK1YRzdnhuVScdEc
-         ITIEP0K4o5wPHwIgkMko/5Oxw+jDMAx7yOc5FjZ9gadlQlCnngWrs7mddiywdLX8FNbR
-         ONRjNRL4p+npsGakz0/t6TK50mdmF8QDkSIdFTlnuej0brWl3MqppmwkEW+W6tkWnIDB
-         gKglTcY6il8466l59mvYOsNAqNXa0tN5Mm6HVtoiw8ZFGxCxRUWo7vbRRtaFmz0nniL4
-         /w+B7kp1fvjDoLBA8W81U1CElKXOE6NyCc6aPlZiaRo2gsS7exwb56pqcUVem3vehJUf
-         kPaQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732686186; x=1733290986;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5aaAX4RZQ1xLyXXEaIAjcxe7Kvkm0fdu7E5v2P3w9co=;
-        b=uS57xt63lRDZFUdBKgJEauwMmfONh0EsCnBfCIHHDvyWV6R/Z4XtnHf2WQJA81/o5p
-         DKV7BluquhLh9bFgwnLKzvqZU8nMdu8UpV+9elSJZ98ZLSK4Bkr3T/han2zpt+89nZEH
-         atgQPEfNhkgldgrKNipMlC/GzC9yeNHU0HzzEs19yoRz+uzXUZjcFO18tj1WDO/FbIub
-         z1vIejM3s8bjvBuV4mVwCH/vjKg0jBr7lZDItkF7cndcshXIsxMRqsPKqEEGwBO0vX0i
-         Yxff7bdSmGWg39b+3u3Tgk59WOhqHk0tDpTo6HcyLgzTcHNgGKa42mbdDSRBem/sQxhG
-         GtWw==
-X-Gm-Message-State: AOJu0YxFx5PNEoG2xkoAlp8gNE8m4jbZ9duK3yDf42EjdsWuyxziVmBz
-	eYctxuEb2DIOw0pm6Zug1AHZ0VuX0XeNQ9fNEqaBfd5ESHxI2+8t0Wq+KygRkKWma6NbPZEdYIY
-	Kz+sFMPGEyhA+yLnc9ZhdwYFAkdAmjxRr4PjO
-X-Gm-Gg: ASbGncvv+6GNCjR5D1OEPROMDKva9qi/1FrNdWm1/23CJFOHbT12JNApXqmYni/zM+q
-	2ODsEWSzYkA0Ui6JJUkQI1zICrejhew==
-X-Google-Smtp-Source: AGHT+IEfi5hkYi2FmLWoEuKrh1fKpnEV3WPMq0hcFnZS8ZxKTwfYhJ2oW3fPYtzBTSWpy0L6yeV6LzTMjR/NV6TC0W8=
-X-Received: by 2002:a05:690c:4d09:b0:6ee:86da:3a55 with SMTP id
- 00721157ae682-6ef3727ab7cmr25755157b3.28.1732686186260; Tue, 26 Nov 2024
- 21:43:06 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="g1huBdDD"
+Received: from smtp-3-0000.mail.infomaniak.ch (unknown [IPv6:2001:1600:4:17::246b])
+	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4XyyrD0rP1z5tJ;
+	Wed, 27 Nov 2024 13:07:56 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
+	s=20191114; t=1732709275;
+	bh=EiGftrje5ypKE9pthGsmxW8FbQHmXEJU7gSd9a+4HlM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=g1huBdDDKh9YdHXR1cyODB59m89R8VP4E3M6d2uBBMxZbdmukk2nJbsqg9XRqZBmv
+	 GblAPD3Lp4aNwCzXn/6jEWKjx6arQH8KXY6huvaZLAdSe3dkzgnUk3M+3R5eGvVm4Y
+	 A4UqPR125v5nlUN/dUsitWlLPXQxSEnwxVdEjnCA=
+Received: from unknown by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4Xyyr86nX0z8bb;
+	Wed, 27 Nov 2024 13:07:52 +0100 (CET)
+Date: Wed, 27 Nov 2024 13:07:48 +0100
+From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
+To: Jeff Xu <jeffxu@google.com>
+Cc: Jeff Xu <jeffxu@chromium.org>, Al Viro <viro@zeniv.linux.org.uk>, 
+	Christian Brauner <brauner@kernel.org>, Kees Cook <keescook@chromium.org>, 
+	Paul Moore <paul@paul-moore.com>, Serge Hallyn <serge@hallyn.com>, 
+	Adhemerval Zanella Netto <adhemerval.zanella@linaro.org>, Alejandro Colomar <alx@kernel.org>, 
+	Aleksa Sarai <cyphar@cyphar.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	Andy Lutomirski <luto@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Casey Schaufler <casey@schaufler-ca.com>, Christian Heimes <christian@python.org>, 
+	Dmitry Vyukov <dvyukov@google.com>, Elliott Hughes <enh@google.com>, 
+	Eric Biggers <ebiggers@kernel.org>, Eric Chiang <ericchiang@google.com>, 
+	Fan Wu <wufan@linux.microsoft.com>, Florian Weimer <fweimer@redhat.com>, 
+	Geert Uytterhoeven <geert@linux-m68k.org>, James Morris <jamorris@linux.microsoft.com>, 
+	Jan Kara <jack@suse.cz>, Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Jordan R Abrahams <ajordanr@google.com>, Lakshmi Ramasubramanian <nramas@linux.microsoft.com>, 
+	Linus Torvalds <torvalds@linux-foundation.org>, Luca Boccassi <bluca@debian.org>, 
+	Luis Chamberlain <mcgrof@kernel.org>, "Madhavan T . Venkataraman" <madvenka@linux.microsoft.com>, 
+	Matt Bobrowski <mattbobrowski@google.com>, Matthew Garrett <mjg59@srcf.ucam.org>, 
+	Matthew Wilcox <willy@infradead.org>, Miklos Szeredi <mszeredi@redhat.com>, 
+	Mimi Zohar <zohar@linux.ibm.com>, Nicolas Bouchinet <nicolas.bouchinet@ssi.gouv.fr>, 
+	Scott Shell <scottsh@microsoft.com>, Shuah Khan <shuah@kernel.org>, 
+	Stephen Rothwell <sfr@canb.auug.org.au>, Steve Dower <steve.dower@python.org>, 
+	Steve Grubb <sgrubb@redhat.com>, Theodore Ts'o <tytso@mit.edu>, 
+	Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>, Vincent Strubel <vincent.strubel@ssi.gouv.fr>, 
+	Xiaoming Ni <nixiaoming@huawei.com>, Yin Fengwei <fengwei.yin@intel.com>, 
+	kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, Eric Paris <eparis@redhat.com>, audit@vger.kernel.org
+Subject: Re: [PATCH v21 1/6] exec: Add a new AT_EXECVE_CHECK flag to
+ execveat(2)
+Message-ID: <20241127.aizae7eeHohn@digikod.net>
+References: <20241112191858.162021-1-mic@digikod.net>
+ <20241112191858.162021-2-mic@digikod.net>
+ <CABi2SkVRJC_7qoU56mDt3Ch7U9GnVeRogUt9wc9=32OtG6aatw@mail.gmail.com>
+ <20241120.Uy8ahtai5oku@digikod.net>
+ <CABi2SkUx=7zummB4JCqEfb37p6MORR88y7S0E_YxJND_8dGaKA@mail.gmail.com>
+ <20241121.uquee7ohRohn@digikod.net>
+ <CABi2SkVHW9MBm=quZPdim_pM=BPaUD-8jRjG6G8OyQ8fQVsm0A@mail.gmail.com>
+ <20241122.akooL5pie0th@digikod.net>
+ <CALmYWFuYVHHz7aoxk+U=auLLT4xvJdzyOyzQ2u+E0kM3uc_rTw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241105123807.1257948-1-rrobaina@redhat.com> <2d9292c28df34c50c1c0d1cbf6ce3b52@paul-moore.com>
- <20241113230425.GJ3387508@ZenIV> <19328b27f98.28a7.85c95baa4474aabc7814e68940a78392@paul-moore.com>
- <20241114040948.GK3387508@ZenIV>
-In-Reply-To: <20241114040948.GK3387508@ZenIV>
-From: Paul Moore <paul@paul-moore.com>
-Date: Wed, 27 Nov 2024 00:42:55 -0500
-Message-ID: <CAHC9VhTyp6ao8n0EVp_JdgRXFfP0nLkf0YMKPmiAurFJ_CM0fQ@mail.gmail.com>
-Subject: Re: [PATCH v1] audit: fix suffixed '/' filename matching in __audit_inode_child()
-To: Al Viro <viro@zeniv.linux.org.uk>, Ricardo Robaina <rrobaina@redhat.com>
-Cc: audit@vger.kernel.org, linux-kernel@vger.kernel.org, eparis@redhat.com, 
-	rgb@redhat.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CALmYWFuYVHHz7aoxk+U=auLLT4xvJdzyOyzQ2u+E0kM3uc_rTw@mail.gmail.com>
+X-Infomaniak-Routing: alpha
 
-On Wed, Nov 13, 2024 at 11:09=E2=80=AFPM Al Viro <viro@zeniv.linux.org.uk> =
-wrote:
-> On Wed, Nov 13, 2024 at 10:23:55PM -0500, Paul Moore wrote:
-> > > And while we are at it,
-> > > parentlen =3D parentlen =3D=3D AUDIT_NAME_FULL ? parent_len(path) : p=
-arentlen;
-> > > is a bloody awful way to spell
-> > > if (parentlen =3D=3D AUDIT_NAME_FULL)
-> > >  parentlen =3D parent_len(path);
-> > > What's more, parent_len(path) starts with *yet* *another* strlen(path=
-),
-> > > followed by really awful crap - we trim the trailing slashes (if any)=
-,
-> > > then search for the last slash before that...  is that really worth
-> > > the chance to skip that strncmp()?
+On Mon, Nov 25, 2024 at 09:38:51AM -0800, Jeff Xu wrote:
+> On Fri, Nov 22, 2024 at 6:50 AM Mickaël Salaün <mic@digikod.net> wrote:
 > >
-> > Pretty much all of the audit code is awkward at best Al, you should kno=
-w
-> > that.
->
-> Do I ever...
->
-> > We're not going to fix it all in one patch, and considering the nature
-> > of this patch effort, I think there is going to be a lot of value in ke=
-eping
-> > the initial fix patch to a minimum to ease backporting.  We can improve=
- on
-> > some of those other issues in a second patch or at a later time.
-> >
-> > As a reminder to everyone, patches are always welcome.  Fixing things i=
-s a
-> > great way to channel disgust into something much more useful.
->
-> > >
-> > > > +       if (p[pathlen - 1] =3D=3D '/')
-> > > > +               pathlen--;
-> > > > +
-> > > > +       if (pathlen !=3D dlen)
-> > > > +               return 1;
+> > On Thu, Nov 21, 2024 at 10:27:40AM -0800, Jeff Xu wrote:
+> > > On Thu, Nov 21, 2024 at 5:40 AM Mickaël Salaün <mic@digikod.net> wrote:
 > > > >
-> > > > return strncmp(p, dname->name, dlen);
-> > >
-> > > ... which really should've been memcmp(), at that.
+> > > > On Wed, Nov 20, 2024 at 08:06:07AM -0800, Jeff Xu wrote:
+> > > > > On Wed, Nov 20, 2024 at 1:42 AM Mickaël Salaün <mic@digikod.net> wrote:
+> > > > > >
+> > > > > > On Tue, Nov 19, 2024 at 05:17:00PM -0800, Jeff Xu wrote:
+> > > > > > > On Tue, Nov 12, 2024 at 11:22 AM Mickaël Salaün <mic@digikod.net> wrote:
+> > > > > > > >
+> > > > > > > > Add a new AT_EXECVE_CHECK flag to execveat(2) to check if a file would
+> > > > > > > > be allowed for execution.  The main use case is for script interpreters
+> > > > > > > > and dynamic linkers to check execution permission according to the
+> > > > > > > > kernel's security policy. Another use case is to add context to access
+> > > > > > > > logs e.g., which script (instead of interpreter) accessed a file.  As
+> > > > > > > > any executable code, scripts could also use this check [1].
+> > > > > > > >
+> > > > > > > > This is different from faccessat(2) + X_OK which only checks a subset of
+> > > > > > > > access rights (i.e. inode permission and mount options for regular
+> > > > > > > > files), but not the full context (e.g. all LSM access checks).  The main
+> > > > > > > > use case for access(2) is for SUID processes to (partially) check access
+> > > > > > > > on behalf of their caller.  The main use case for execveat(2) +
+> > > > > > > > AT_EXECVE_CHECK is to check if a script execution would be allowed,
+> > > > > > > > according to all the different restrictions in place.  Because the use
+> > > > > > > > of AT_EXECVE_CHECK follows the exact kernel semantic as for a real
+> > > > > > > > execution, user space gets the same error codes.
+> > > > > > > >
+> > > > > > > > An interesting point of using execveat(2) instead of openat2(2) is that
+> > > > > > > > it decouples the check from the enforcement.  Indeed, the security check
+> > > > > > > > can be logged (e.g. with audit) without blocking an execution
+> > > > > > > > environment not yet ready to enforce a strict security policy.
+> > > > > > > >
+> > > > > > > > LSMs can control or log execution requests with
+> > > > > > > > security_bprm_creds_for_exec().  However, to enforce a consistent and
+> > > > > > > > complete access control (e.g. on binary's dependencies) LSMs should
+> > > > > > > > restrict file executability, or mesure executed files, with
+> > > > > > > > security_file_open() by checking file->f_flags & __FMODE_EXEC.
+> > > > > > > >
+> > > > > > > > Because AT_EXECVE_CHECK is dedicated to user space interpreters, it
+> > > > > > > > doesn't make sense for the kernel to parse the checked files, look for
+> > > > > > > > interpreters known to the kernel (e.g. ELF, shebang), and return ENOEXEC
+> > > > > > > > if the format is unknown.  Because of that, security_bprm_check() is
+> > > > > > > > never called when AT_EXECVE_CHECK is used.
+> > > > > > > >
+> > > > > > > > It should be noted that script interpreters cannot directly use
+> > > > > > > > execveat(2) (without this new AT_EXECVE_CHECK flag) because this could
+> > > > > > > > lead to unexpected behaviors e.g., `python script.sh` could lead to Bash
+> > > > > > > > being executed to interpret the script.  Unlike the kernel, script
+> > > > > > > > interpreters may just interpret the shebang as a simple comment, which
+> > > > > > > > should not change for backward compatibility reasons.
+> > > > > > > >
+> > > > > > > > Because scripts or libraries files might not currently have the
+> > > > > > > > executable permission set, or because we might want specific users to be
+> > > > > > > > allowed to run arbitrary scripts, the following patch provides a dynamic
+> > > > > > > > configuration mechanism with the SECBIT_EXEC_RESTRICT_FILE and
+> > > > > > > > SECBIT_EXEC_DENY_INTERACTIVE securebits.
+> > > > > > > >
+> > > > > > > > This is a redesign of the CLIP OS 4's O_MAYEXEC:
+> > > > > > > > https://github.com/clipos-archive/src_platform_clip-patches/blob/f5cb330d6b684752e403b4e41b39f7004d88e561/1901_open_mayexec.patch
+> > > > > > > > This patch has been used for more than a decade with customized script
+> > > > > > > > interpreters.  Some examples can be found here:
+> > > > > > > > https://github.com/clipos-archive/clipos4_portage-overlay/search?q=O_MAYEXEC
+> > > > > > > >
+> > > > > > > > Cc: Al Viro <viro@zeniv.linux.org.uk>
+> > > > > > > > Cc: Christian Brauner <brauner@kernel.org>
+> > > > > > > > Cc: Kees Cook <keescook@chromium.org>
+> > > > > > > > Cc: Paul Moore <paul@paul-moore.com>
+> > > > > > > > Reviewed-by: Serge Hallyn <serge@hallyn.com>
+> > > > > > > > Link: https://docs.python.org/3/library/io.html#io.open_code [1]
+> > > > > > > > Signed-off-by: Mickaël Salaün <mic@digikod.net>
+> > > > > > > > Link: https://lore.kernel.org/r/20241112191858.162021-2-mic@digikod.net
+> > > > > > > > ---
+> > > > > > > >
+> > > > > > > > Changes since v20:
+> > > > > > > > * Rename AT_CHECK to AT_EXECVE_CHECK, requested by Amir Goldstein and
+> > > > > > > >   Serge Hallyn.
+> > > > > > > > * Move the UAPI documentation to a dedicated RST file.
+> > > > > > > > * Add Reviewed-by: Serge Hallyn
+> > > > > > > >
+> > > > > > > > Changes since v19:
+> > > > > > > > * Remove mention of "role transition" as suggested by Andy.
+> > > > > > > > * Highlight the difference between security_bprm_creds_for_exec() and
+> > > > > > > >   the __FMODE_EXEC check for LSMs (in commit message and LSM's hooks) as
+> > > > > > > >   discussed with Jeff.
+> > > > > > > > * Improve documentation both in UAPI comments and kernel comments
+> > > > > > > >   (requested by Kees).
+> > > > > > > >
+> > > > > > > > New design since v18:
+> > > > > > > > https://lore.kernel.org/r/20220104155024.48023-3-mic@digikod.net
+> > > > > > > > ---
+> > > > > > > >  Documentation/userspace-api/check_exec.rst | 34 ++++++++++++++++++++++
+> > > > > > > >  Documentation/userspace-api/index.rst      |  1 +
+> > > > > > > >  fs/exec.c                                  | 20 +++++++++++--
+> > > > > > > >  include/linux/binfmts.h                    |  7 ++++-
+> > > > > > > >  include/uapi/linux/fcntl.h                 |  4 +++
+> > > > > > > >  kernel/audit.h                             |  1 +
+> > > > > > > >  kernel/auditsc.c                           |  1 +
+> > > > > > > >  security/security.c                        | 10 +++++++
+> > > > > > > >  8 files changed, 75 insertions(+), 3 deletions(-)
+> > > > > > > >  create mode 100644 Documentation/userspace-api/check_exec.rst
+> > > > > > > >
+> > > > > > > > diff --git a/Documentation/userspace-api/check_exec.rst b/Documentation/userspace-api/check_exec.rst
+> > > > > > > > new file mode 100644
+> > > > > > > > index 000000000000..ad1aeaa5f6c0
+> > > > > > > > --- /dev/null
+> > > > > > > > +++ b/Documentation/userspace-api/check_exec.rst
+> > > > > > > > @@ -0,0 +1,34 @@
+> > > > > > > > +===================
+> > > > > > > > +Executability check
+> > > > > > > > +===================
+> > > > > > > > +
+> > > > > > > > +AT_EXECVE_CHECK
+> > > > > > > > +===============
+> > > > > > > > +
+> > > > > > > > +Passing the ``AT_EXECVE_CHECK`` flag to :manpage:`execveat(2)` only performs a
+> > > > > > > > +check on a regular file and returns 0 if execution of this file would be
+> > > > > > > > +allowed, ignoring the file format and then the related interpreter dependencies
+> > > > > > > > +(e.g. ELF libraries, script's shebang).
+> > > > > > > > +
+> > > > > > > > +Programs should always perform this check to apply kernel-level checks against
+> > > > > > > > +files that are not directly executed by the kernel but passed to a user space
+> > > > > > > > +interpreter instead.  All files that contain executable code, from the point of
+> > > > > > > > +view of the interpreter, should be checked.  However the result of this check
+> > > > > > > > +should only be enforced according to ``SECBIT_EXEC_RESTRICT_FILE`` or
+> > > > > > > > +``SECBIT_EXEC_DENY_INTERACTIVE.``.
+> > > > > > > Regarding "should only"
+> > > > > > > Userspace (e.g. libc) could decide to enforce even when
+> > > > > > > SECBIT_EXEC_RESTRICT_FILE=0), i.e. if it determines not-enforcing
+> > > > > > > doesn't make sense.
+> > > > > >
+> > > > > > User space is always in control, but I don't think it would be wise to
+> > > > > > not follow the configuration securebits (in a generic system) because
+> > > > > > this could result to unattended behaviors (I don't have a specific one
+> > > > > > in mind but...).  That being said, configuration and checks are
+> > > > > > standalones and specific/tailored systems are free to do the checks they
+> > > > > > want.
+> > > > > >
+> > > > > In the case of dynamic linker, we can always enforce honoring the
+> > > > > execveat(AT_EXECVE_CHECK) result, right ? I can't think of a case not
+> > > > > to,  the dynamic linker doesn't need to check the
+> > > > > SECBIT_EXEC_RESTRICT_FILE bit.
+> > > >
+> > > > If the library file is not allowed to be executed by *all* access
+> > > > control systems (not just mount and file permission, but all LSMs), then
+> > > > the AT_EXECVE_CHECK will fail, which is OK as long as it is not a hard
+> > > > requirement.
+> > > Yes. specifically for the library loading case, I can't think of a
+> > > case where we need to by-pass LSMs.  (letting user space to by-pass
+> > > LSM check seems questionable in concept, and should only be used when
+> > > there aren't other solutions). In the context of SELINUX enforcing
+> > > mode,  we will want to enforce it. In the context of process level LSM
+> > > such as landlock,  the process can already decide for itself by
+> > > selecting the policy for its own domain, it is unnecessary to use
+> > > another opt-out solution.
 > >
-> > Agreed. See above.
->
-> OK, my primary interest here is to separate struct filename from that stu=
-ff
-> as much as possible.  So we will end up stomping on the same ground for
-> a while here.  FWIW, my current filename-related pile is in #next.filenam=
-e;
-> there will be a lot more on the VFS side, but one of the obvious targets =
-is
-> ->aname, so __audit_inode() and its vicinity will get affected.  We'll ne=
-ed
-> to coordinate that stuff.
+> > My answer wasn't clear.  The execveat(AT_EXECVE_CHECK) can and should
+> > always be done, but user space should only enforce restrictions
+> > according to the securebits.
+> >
+> I knew this part (AT_EXESCVE_CHECK is called always)
+> Since the securebits are enforced by userspace, setting it to 0 is
+> equivalent to opt-out enforcement, that is what I meant by opt-out.
 
-[Sorry for the delay, it took me a bit longer than expected to get
-through my inbox upon returning home, but I should be mostly caught up
-now.]
+OK, that was confusing because these bits are set to 0 by default (for
+compatibility reasons).
 
-We've talked a bit in other threads about the struct filename changes
-you're working on, and while I haven't looked at your next.filename
-branch, the stuff you were talking about doing made sense.  As far as
-cross-tree conflicts go, I don't think we'll have too many problems
-there as I don't foresee any major audit work happening in the
-immediate future; sure we'll likely have a small number of fixes but
-those should be easy enough to manage with your changes.  I'm assuming
-your next.filename finds its way into linux-next?  If so, that should
-give us a heads-up regarding conflicts.  If there is a nasty
-collision, I'm confident we can figure something out.
+> 
+> > It doesn't make sense to talk about user space "bypassing" kernel
+> > checks.  This patch series provides a feature to enable user space to
+> > enforce (at its level) the same checks as the kernel.
+> >
+> > There is no opt-out solution, but compatibility configuration bits
+> > through securebits (which can also be set by LSMs).
+> >
+> > To answer your question about the dynamic linker, there should be no
+> > difference of behavior with a script interpreter.  Both should check
+> > executability but only enforce restriction according to the securebits
+> > (as explained in the documentation).  Doing otherwise on a generic
+> > distro could lead to unexpected behaviors (e.g. if a user enforced a
+> > specific SELinux policy that doesn't allow execution of library files).
+> >
+> > >
+> > > There is one case where I see a difference:
+> > > ld.so a.out (when a.out is on non-exec mount)
+> > >
+> > > If the dynamic linker doesn't read SECBIT_EXEC_RESTRICT_FILE setting,
+> > > above will always fail. But that is more of a bugfix.
+> >
+> > No, the dynamic linker should only enforce restrictions according to the
+> > securebits, otherwise a user space update (e.g. with a new dynamic
+> > linker ignoring the securebits) could break an existing system.
+> >
+> OK. upgrade is a valid concern. Previously, I was just thinking about
+> a new LSM based on this check, not existing LSM policies.
+> Do you happen to know which SELinux policy/LSM could break ? i.e. it
+> will be applied to libraries once we add AT_EXESCVE_CHECK in the
+> dynamic linker.
 
-> Anyway, regarding audit_compare_dname_path(), handling just the last '/' =
-is
-> not enough - there might be any number of trailing slashes, not just one.
+We cannot assume anything about LSM policies because of custom and
+private ones.
 
-Good reminder, thanks.  I see that Ricardo has sent an updated patch,
-I haven't looked at it yet (waiting for the merge window to close),
-but hopefully he has taken that into account (hint: now would be a
-good time to verify that Ricardo <g>).
+> We could give heads up and prepare for that.
+> 
+> > >
+> > > >Relying on the securebits to know if this is a hard
+> > > > requirement or not enables system administrator and distros to control
+> > > > this potential behavior change.
+> > > >
+> > > I think, for the dynamic linker, it can be a hard requirement.
+> >
+> > Not on a generic distro.
+> >
+> Ok. Maybe this can be done through a configuration option for the
+> dynamic linker.
 
-> Another fun issue with looking for matches is this:
->
-> mkdir /tmp/foo
-> mkdir /tmp/foo/bar
-> mkdir /tmp/blah
-> ln -s ../foo/bar/baz /tmp/blah/barf
-> echo crap > /tmp/blah/barf
->
-> The last one will create a regular file "baz" in /tmp/foo/bar and write
-> "crap\n" into it.  With the only pathname passed to open(2) being
-> "/tmp/blah/barf".  And there may be a longer chain of symlinks like that.
->
-> What do you want to see reported in such case?
+Yes, we could have a built-time option (disabled by default) for the
+dynamic linker to enforce that.
 
-In the absence of anyone pushing third party requirements on the audit
-subsystem to meet various security certification goals, my guiding
-light has been to try and do the simplest thing that makes sense.
-Looking at this quickly, there are three different types of events:
-mkdir, symlink, and a file lookup/write.
+> 
+> The consideration I have is: securebits is currently designed to
+> control both dynamic linker and shell scripts.
+> The case for dynamic linker is simpler than scripts cases, (non-exec
+> mount, and perhaps some LSM policies for libraries) and distributions
+> such as ChromeOS can enforce the dynamic linker case ahead of scripts
+> interrupter cases, i.e. without waiting for python/shell being
+> upgraded, that can take sometimes.
 
-The mkdir events in the example above are trivial, you log the usual
-info when walking the pathname and call it good.
-
-The symlink is mostly the same as mkdir, but you've got the relative
-path to contend with so the current working directory is more
-important and should be logged as well.
-
-The file lookup/write can be a bit more complicated if we have all of
-the symlink information as part of the pathname lookup/walk, but if we
-don't have that I think we can manage with just the "/tmp/blah/barf".
-Users/admins that really care about links will likely be logging the
-various link*/symlink*/unlink* syscalls for the directories/files they
-care about.
-
-Of course if anyone has any requirements or reasoned opinions about
-what we should log here, I'd love to hear it.  This includes you Al.
-
---=20
-paul-moore.com
+For secure systems, the end goal is to always enforce such restrictions,
+so once interpretation/execution of a set of file types (e.g. ELF
+libraries) are tested enough in such a system, we can remove the
+securebits checks for the related library/executable (e.g. ld.so) and
+consider that they are always set, independently of the current
+user/credentials.
