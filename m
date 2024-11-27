@@ -1,160 +1,193 @@
-Received: from fout-b6-smtp.messagingengine.com (fout-b6-smtp.messagingengine.com [202.12.124.149])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com [209.85.128.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CF2DBE46;
-	Tue, 26 Nov 2024 16:27:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.149
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 445C428E8
+	for <audit@vger.kernel.org>; Wed, 27 Nov 2024 05:43:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732638425; cv=none; b=d95P/KMOitO/UlnUiHJ4HqKPW/ZagBpGRUsKF//cBlcydMpTD5ehTGyJSsnOdURyVlcAlTVcBOrM1wwlRFhXPyl1GB3QVa/QOGBGNQ61j3m+5FvBLFD4dJrz9uqrefwYnkGnfpCcC5zsnFUmSf0OHJ/usHO/7YV6h5ZK75yAymQ=
+	t=1732686189; cv=none; b=p+oRqpnKAY4vEdLg+YS78SKnKO1gKYhIngYE7fO2cU0vVeaX4at4cnT0yjRnhLrOfKO+R/ke5eLW/+SL0+vvIBxBWQDwKlpnwBhq3ZmUGdQq6JSgxxXTtu12UESVeo+LVxnKjoxSiqH/P75a98U1nzZcc9a8IzpXGnu1Vvprr5s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732638425; c=relaxed/simple;
-	bh=tdF3p5jMfre5WPiRhxJ6n7OSlkK3elNOqhBX4D1qj+I=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=pGkBc3j0HpC/BMPEj24hzKWn+GKq9bRFkwIxJsXDFY90yXupUn1dKMB4k/MzChrzk/6u62LoBnZikIXT92wwXcDnEmThL2fESsGplhrKaOX+gjRJdKPWUJmk3ma+8rzwf5zBPOkqjMVX/0MhX0dPusboXOYGoOE284yOOqHQ6Jo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=qGlB97sx; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=TfsZIWC8; arc=none smtp.client-ip=202.12.124.149
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	s=arc-20240116; t=1732686189; c=relaxed/simple;
+	bh=eFQXbOKlo4QI9fdpsg6S7Lp8wDnYBlKqK3Tc2d4MUy0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=P03QggPHT7U5YnXSs9GvqNyenHb4NwwheQKxE6q/hZaw6MmRuGnIPyJx/DU+nQtym8joLIMGt4mHJDa2jKyMmhzmfRpQMpScBJWi+J99gwu43wpkQV1K48IJSG2uDKWOGxnM+qPvNvfH7WYgZzGqN18j4xynMKAlLajSZ6XF/hM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=bS8j9MwL; arc=none smtp.client-ip=209.85.128.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="qGlB97sx";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="TfsZIWC8"
-Received: from phl-compute-10.internal (phl-compute-10.phl.internal [10.202.2.50])
-	by mailfout.stl.internal (Postfix) with ESMTP id 547161140199;
-	Tue, 26 Nov 2024 11:27:02 -0500 (EST)
-Received: from phl-imap-11 ([10.202.2.101])
-  by phl-compute-10.internal (MEProxy); Tue, 26 Nov 2024 11:27:02 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm3; t=1732638422;
-	 x=1732724822; bh=JEcS3cFLegK0rV+tV4ShlO64Vj4HRyL/7l6/xZXe0Ts=; b=
-	qGlB97sxykjDRisvkkVbxsMQHNOEAI6fkyCQbhNeNJVTEjTEAZTp0Ep/BmFdJl7Y
-	VWjd/Z6Zclv/PtgZyJhH0bCPa6C3nj7EVCi0AJn8zsS46BvB/YOD1bsH9QMF+aX2
-	MBWcu85db/Tlu3Y2bLHlGijtKRN6F+8yIMVAunfs05WNbV9sJ17lrX9W0dqg3VO6
-	ahJTaPtXqp/4lyI2UuVTGMQh8DPthbDTyyd9Nq+3KMADq40xfmE7l9K1vvfdsQqq
-	RzezTDxBWS8OYsDPKv2KO76TVUWSkGwymaBiIp1VT5tlDgaRHoeI8KyjTu4CuLEX
-	zmN/34y4vDRD58pXJ9GrbA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1732638422; x=
-	1732724822; bh=JEcS3cFLegK0rV+tV4ShlO64Vj4HRyL/7l6/xZXe0Ts=; b=T
-	fsZIWC8hhuhSDlbSYAx0O7kEeJRXQeJOnM03R8mkpsjKnPXn3b8/LY94dszKqvFr
-	ZT45pI2/cLtrBPqlFa+7iWTlp3JsxHDlXhR1oJZumxx25qgK65V9cl4e6tJDYv3P
-	hRz1nsDiBxXODnAAIbAKigWFAOZgF6X+m665dHyLpknxpFMbH7+RCtxFceIET3mg
-	C7bIClY87RqkLndLSCN06QMhePt4twNmGup03NywQ/REl4vk4MUV7uBKDPjexAd3
-	4AsVSf0NKW1N89T0guq5v9aPHlgQueCZ+okRknC57iORmxBP4dEVfx4toLEjc6hD
-	Z3p59cScd2Sy9uM88XZPQ==
-X-ME-Sender: <xms:1fZFZ9zBWL-wOzuf78R6UtqJswZcbdreBoq8fNGd5vuSSuLDgDglAA>
-    <xme:1fZFZ9ROvP0M-CA_5uq-NUERuJalH-pRKpo6EahTevj3ZrPd8UwBC8pwlX9HuEF_r
-    y4UdGDckYrWCGADvIQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddrgeejgdekhecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdpuffr
-    tefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnth
-    hsucdlqddutddtmdenucfjughrpefoggffhffvvefkjghfufgtgfesthejredtredttden
-    ucfhrhhomhepfdetrhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdrug
-    gvqeenucggtffrrghtthgvrhhnpeefhfehteffuddvgfeigefhjeetvdekteekjeefkeek
-    leffjeetvedvgefhhfeihfenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluh
-    hsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhn
-    uggsrdguvgdpnhgspghrtghpthhtohepuddvpdhmohguvgepshhmthhpohhuthdprhgtph
-    htthhopehlrghorghrrdhshhgrohesghhmrghilhdrtghomhdprhgtphhtthhopehguhhs
-    thgrvhhorghrsheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepkhgvvghssehkvghrnh
-    gvlhdrohhrghdprhgtphhtthhopegrnhguvghrshdrrhhogigvlhhlsehlihhnrghrohdr
-    ohhrghdprhgtphhtthhopegurghnrdgtrghrphgvnhhtvghrsehlihhnrghrohdrohhrgh
-    dprhgtphhtthhopehnrghrvghshhdrkhgrmhgsohhjuheslhhinhgrrhhordhorhhgpdhr
-    tghpthhtoheplhhkfhhtqdhtrhhirghgvgeslhhishhtshdrlhhinhgrrhhordhorhhgpd
-    hrtghpthhtoheprhgvghhrvghsshhiohhnsheslhhishhtshdrlhhinhhugidruggvvhdp
-    rhgtphhtthhopehprghulhesphgruhhlqdhmohhorhgvrdgtohhm
-X-ME-Proxy: <xmx:1fZFZ3Vg0LJ-BaMH0XPy9Ekjv_rc2ELuSnWcbn3kF1NlXbE51x18uw>
-    <xmx:1fZFZ_ibIQCFPeXS-hU56vxBYIbn_n347eNkjQnKO3YYJWxSIlg3yg>
-    <xmx:1fZFZ_D8U1W8u3mnAgqhRoAbVYB-jaHjJ0V_06J9FPVqb26Po8Z3Wg>
-    <xmx:1fZFZ4LuKJhxliIAtgFfwmdNNcFubpCM8PNfSxQfo63iH-GSIeyEew>
-    <xmx:1vZFZ8KlvwVB_BnmaG2gXMCvhqWnxzFTEYucLR9e43_jb6v9WmFJDQgi>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id A0EB42220071; Tue, 26 Nov 2024 11:27:01 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="bS8j9MwL"
+Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-6ee7a48377cso60406637b3.3
+        for <audit@vger.kernel.org>; Tue, 26 Nov 2024 21:43:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1732686186; x=1733290986; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5aaAX4RZQ1xLyXXEaIAjcxe7Kvkm0fdu7E5v2P3w9co=;
+        b=bS8j9MwL83KFVahhEHuR+MLqtRZJBC5ekXQNqJ/MedMrsqFMJtvK1YRzdnhuVScdEc
+         ITIEP0K4o5wPHwIgkMko/5Oxw+jDMAx7yOc5FjZ9gadlQlCnngWrs7mddiywdLX8FNbR
+         ONRjNRL4p+npsGakz0/t6TK50mdmF8QDkSIdFTlnuej0brWl3MqppmwkEW+W6tkWnIDB
+         gKglTcY6il8466l59mvYOsNAqNXa0tN5Mm6HVtoiw8ZFGxCxRUWo7vbRRtaFmz0nniL4
+         /w+B7kp1fvjDoLBA8W81U1CElKXOE6NyCc6aPlZiaRo2gsS7exwb56pqcUVem3vehJUf
+         kPaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1732686186; x=1733290986;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=5aaAX4RZQ1xLyXXEaIAjcxe7Kvkm0fdu7E5v2P3w9co=;
+        b=uS57xt63lRDZFUdBKgJEauwMmfONh0EsCnBfCIHHDvyWV6R/Z4XtnHf2WQJA81/o5p
+         DKV7BluquhLh9bFgwnLKzvqZU8nMdu8UpV+9elSJZ98ZLSK4Bkr3T/han2zpt+89nZEH
+         atgQPEfNhkgldgrKNipMlC/GzC9yeNHU0HzzEs19yoRz+uzXUZjcFO18tj1WDO/FbIub
+         z1vIejM3s8bjvBuV4mVwCH/vjKg0jBr7lZDItkF7cndcshXIsxMRqsPKqEEGwBO0vX0i
+         Yxff7bdSmGWg39b+3u3Tgk59WOhqHk0tDpTo6HcyLgzTcHNgGKa42mbdDSRBem/sQxhG
+         GtWw==
+X-Gm-Message-State: AOJu0YxFx5PNEoG2xkoAlp8gNE8m4jbZ9duK3yDf42EjdsWuyxziVmBz
+	eYctxuEb2DIOw0pm6Zug1AHZ0VuX0XeNQ9fNEqaBfd5ESHxI2+8t0Wq+KygRkKWma6NbPZEdYIY
+	Kz+sFMPGEyhA+yLnc9ZhdwYFAkdAmjxRr4PjO
+X-Gm-Gg: ASbGncvv+6GNCjR5D1OEPROMDKva9qi/1FrNdWm1/23CJFOHbT12JNApXqmYni/zM+q
+	2ODsEWSzYkA0Ui6JJUkQI1zICrejhew==
+X-Google-Smtp-Source: AGHT+IEfi5hkYi2FmLWoEuKrh1fKpnEV3WPMq0hcFnZS8ZxKTwfYhJ2oW3fPYtzBTSWpy0L6yeV6LzTMjR/NV6TC0W8=
+X-Received: by 2002:a05:690c:4d09:b0:6ee:86da:3a55 with SMTP id
+ 00721157ae682-6ef3727ab7cmr25755157b3.28.1732686186260; Tue, 26 Nov 2024
+ 21:43:06 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Tue, 26 Nov 2024 17:26:41 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Naresh Kamboju" <naresh.kamboju@linaro.org>, audit@vger.kernel.org,
- "open list" <linux-kernel@vger.kernel.org>, lkft-triage@lists.linaro.org,
- "Linux Regressions" <regressions@lists.linux.dev>
-Cc: "Eric Paris" <eparis@redhat.com>, "Paul Moore" <paul@paul-moore.com>,
- "Dan Carpenter" <dan.carpenter@linaro.org>,
- "Anders Roxell" <anders.roxell@linaro.org>,
- "Yafang Shao" <laoar.shao@gmail.com>,
- "Gustavo A. R. Silva" <gustavoars@kernel.org>, "Kees Cook" <kees@kernel.org>
-Message-Id: <4153e658-0ca9-469c-ae96-4ac615d894b8@app.fastmail.com>
-In-Reply-To: <29ab783d-86e2-4528-a6ad-083f8baf56d1@app.fastmail.com>
-References: 
- <CA+G9fYvWkS-8f9kOBTzixjGSNN8262StoVv2ERk7mRKcU+p+BA@mail.gmail.com>
- <29ab783d-86e2-4528-a6ad-083f8baf56d1@app.fastmail.com>
-Subject: Re: include/linux/fortify-string.h:293:17: error: call to '__write_overflow'
- declared with attribute error: detected write beyond size of object (1st
- parameter)
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+References: <20241105123807.1257948-1-rrobaina@redhat.com> <2d9292c28df34c50c1c0d1cbf6ce3b52@paul-moore.com>
+ <20241113230425.GJ3387508@ZenIV> <19328b27f98.28a7.85c95baa4474aabc7814e68940a78392@paul-moore.com>
+ <20241114040948.GK3387508@ZenIV>
+In-Reply-To: <20241114040948.GK3387508@ZenIV>
+From: Paul Moore <paul@paul-moore.com>
+Date: Wed, 27 Nov 2024 00:42:55 -0500
+Message-ID: <CAHC9VhTyp6ao8n0EVp_JdgRXFfP0nLkf0YMKPmiAurFJ_CM0fQ@mail.gmail.com>
+Subject: Re: [PATCH v1] audit: fix suffixed '/' filename matching in __audit_inode_child()
+To: Al Viro <viro@zeniv.linux.org.uk>, Ricardo Robaina <rrobaina@redhat.com>
+Cc: audit@vger.kernel.org, linux-kernel@vger.kernel.org, eparis@redhat.com, 
+	rgb@redhat.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Nov 26, 2024, at 16:12, Arnd Bergmann wrote:
-> On Tue, Nov 26, 2024, at 15:58, Naresh Kamboju wrote:
->> Build error:
->> ---------
->> In function 'sized_strscpy',
->>     inlined from '__audit_ptrace' at kernel/auditsc.c:2732:2:
->> include/linux/fortify-string.h:293:17: error: call to
->> '__write_overflow' declared with attribute error: detected write
->> beyond size of object (1st parameter)
->>   293 |                 __write_overflow();
->>       |                 ^~~~~~~~~~~~~~~~~~
->> In function 'sized_strscpy',
->>     inlined from 'audit_signal_info_syscall' at kernel/auditsc.c:2759:3:
->> include/linux/fortify-string.h:293:17: error: call to
->> '__write_overflow' declared with attribute error: detected write
->> beyond size of object (1st parameter)
->>   293 |                 __write_overflow();
->>       |                 ^~~~~~~~~~~~~~~~~~
->> make[4]: *** [scripts/Makefile.build:229: kernel/auditsc.o] Error 1
+On Wed, Nov 13, 2024 at 11:09=E2=80=AFPM Al Viro <viro@zeniv.linux.org.uk> =
+wrote:
+> On Wed, Nov 13, 2024 at 10:23:55PM -0500, Paul Moore wrote:
+> > > And while we are at it,
+> > > parentlen =3D parentlen =3D=3D AUDIT_NAME_FULL ? parent_len(path) : p=
+arentlen;
+> > > is a bloody awful way to spell
+> > > if (parentlen =3D=3D AUDIT_NAME_FULL)
+> > >  parentlen =3D parent_len(path);
+> > > What's more, parent_len(path) starts with *yet* *another* strlen(path=
+),
+> > > followed by really awful crap - we trim the trailing slashes (if any)=
+,
+> > > then search for the last slash before that...  is that really worth
+> > > the chance to skip that strncmp()?
+> >
+> > Pretty much all of the audit code is awkward at best Al, you should kno=
+w
+> > that.
 >
-> I have run into this specific one before but failed to
-> come up with a working fix.
+> Do I ever...
 >
-> I think the specific warning started with
+> > We're not going to fix it all in one patch, and considering the nature
+> > of this patch effort, I think there is going to be a lot of value in ke=
+eping
+> > the initial fix patch to a minimum to ease backporting.  We can improve=
+ on
+> > some of those other issues in a second patch or at a later time.
+> >
+> > As a reminder to everyone, patches are always welcome.  Fixing things i=
+s a
+> > great way to channel disgust into something much more useful.
 >
-> https://lore.kernel.org/all/20240828030321.20688-3-laoar.shao@gmail.com/
+> > >
+> > > > +       if (p[pathlen - 1] =3D=3D '/')
+> > > > +               pathlen--;
+> > > > +
+> > > > +       if (pathlen !=3D dlen)
+> > > > +               return 1;
+> > > >
+> > > > return strncmp(p, dname->name, dlen);
+> > >
+> > > ... which really should've been memcmp(), at that.
+> >
+> > Agreed. See above.
 >
-> but reverting that just replaces it with a slightly different
-> warning. In my randconfig tree I have a patch that comments out
-> the two security_task_getlsmprop_obj(), and I don't think I get
-> warnings at the moment, but I no longer see why I would have done
-> that.
+> OK, my primary interest here is to separate struct filename from that stu=
+ff
+> as much as possible.  So we will end up stomping on the same ground for
+> a while here.  FWIW, my current filename-related pile is in #next.filenam=
+e;
+> there will be a lot more on the VFS side, but one of the obvious targets =
+is
+> ->aname, so __audit_inode() and its vicinity will get affected.  We'll ne=
+ed
+> to coordinate that stuff.
 
-Update: this seems to reliably avoid the warning, but I'm
-still a bit lost about what exactly gcc warns about. I assume
-this is a false-positive warning somewhere.
+[Sorry for the delay, it took me a bit longer than expected to get
+through my inbox upon returning home, but I should be mostly caught up
+now.]
 
-Added Kees and Gustavo to Cc in case they know what's going on.
+We've talked a bit in other threads about the struct filename changes
+you're working on, and while I haven't looked at your next.filename
+branch, the stuff you were talking about doing made sense.  As far as
+cross-tree conflicts go, I don't think we'll have too many problems
+there as I don't foresee any major audit work happening in the
+immediate future; sure we'll likely have a small number of fixes but
+those should be easy enough to manage with your changes.  I'm assuming
+your next.filename finds its way into linux-next?  If so, that should
+give us a heads-up regarding conflicts.  If there is a nasty
+collision, I'm confident we can figure something out.
 
-      Arnd
+> Anyway, regarding audit_compare_dname_path(), handling just the last '/' =
+is
+> not enough - there might be any number of trailing slashes, not just one.
 
-diff --git a/kernel/audit.h b/kernel/audit.h
-index 0211cb307d30..31cc41b167ae 100644
---- a/kernel/audit.h
-+++ b/kernel/audit.h
-@@ -145,7 +145,9 @@ struct audit_context {
- 	kuid_t		    target_uid;
- 	unsigned int	    target_sessionid;
- 	struct lsm_prop	    target_ref;
--	char		    target_comm[TASK_COMM_LEN];
-+	struct_group(_target_comm,
-+		char	    target_comm[TASK_COMM_LEN];
-+	);
- 
- 	struct audit_tree_refs *trees, *first_trees;
- 	struct list_head killed_trees;
+Good reminder, thanks.  I see that Ricardo has sent an updated patch,
+I haven't looked at it yet (waiting for the merge window to close),
+but hopefully he has taken that into account (hint: now would be a
+good time to verify that Ricardo <g>).
+
+> Another fun issue with looking for matches is this:
+>
+> mkdir /tmp/foo
+> mkdir /tmp/foo/bar
+> mkdir /tmp/blah
+> ln -s ../foo/bar/baz /tmp/blah/barf
+> echo crap > /tmp/blah/barf
+>
+> The last one will create a regular file "baz" in /tmp/foo/bar and write
+> "crap\n" into it.  With the only pathname passed to open(2) being
+> "/tmp/blah/barf".  And there may be a longer chain of symlinks like that.
+>
+> What do you want to see reported in such case?
+
+In the absence of anyone pushing third party requirements on the audit
+subsystem to meet various security certification goals, my guiding
+light has been to try and do the simplest thing that makes sense.
+Looking at this quickly, there are three different types of events:
+mkdir, symlink, and a file lookup/write.
+
+The mkdir events in the example above are trivial, you log the usual
+info when walking the pathname and call it good.
+
+The symlink is mostly the same as mkdir, but you've got the relative
+path to contend with so the current working directory is more
+important and should be logged as well.
+
+The file lookup/write can be a bit more complicated if we have all of
+the symlink information as part of the pathname lookup/walk, but if we
+don't have that I think we can manage with just the "/tmp/blah/barf".
+Users/admins that really care about links will likely be logging the
+various link*/symlink*/unlink* syscalls for the directories/files they
+care about.
+
+Of course if anyone has any requirements or reasoned opinions about
+what we should log here, I'd love to hear it.  This includes you Al.
+
+--=20
+paul-moore.com
