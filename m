@@ -1,371 +1,107 @@
-Received: from smtp-8fab.mail.infomaniak.ch (smtp-8fab.mail.infomaniak.ch [83.166.143.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02563184524;
-	Fri, 29 Nov 2024 11:06:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=83.166.143.171
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.3])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 58C2E1632D2
+	for <audit@vger.kernel.org>; Mon,  2 Dec 2024 01:21:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.3
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732878389; cv=none; b=AU3TH3BSgcffOEZqLvdXcPG7zsCNJXCgrWF404h4KioLrnBJYV+kwKIlj1cbSPCFqP/J8ukLNS/7IfSJ+AKZPSKe7NRFBPZ9xaDDulkdw/z33bhJgI2tKa4jqwClbOvtC2EpGt4rfZ9GWM6vBOxtBP2fOzR3B53SAEFu707a0hw=
+	t=1733102499; cv=none; b=rqp3H2MOhoZXF5OQQIWGmZbkcpNCbYFV01LyHeksH6A2TVg/CuUzUMDzTtEZmiVcQprTyj6h++tXCPH9F3j6HczLNwKMkEecRCE/k0Iz3QTZz766ooOm1l+Nhb9n9b/a0DWKkzUMhxSHk1kgwbMz4mHFmxjUK1+8XZtAbK2dnag=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732878389; c=relaxed/simple;
-	bh=lj4eDYqbYdjupZipJN8fhEJ7s26lsXctGr4H6NmwG84=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NAL2XL3cNl1/iy/joj+HKrb1VF1bJVNXFZypSbPx4yNh/OeRQpPh3OFv6R7w8s1TJNjy/2ccMJgGb6UjaZqfU1VINDeQLXf+jbu9xak69kf+GTRgQuQVgbYHAqRAQYvpGvi7dEcrhf1jo/ctbeh/GtgI0/2crAq0puaSUX2yTAE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=sWFCzKZt; arc=none smtp.client-ip=83.166.143.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
+	s=arc-20240116; t=1733102499; c=relaxed/simple;
+	bh=h37FQeWqEAfYDoNzAEiN61QOTKLR9s1TA0+T5JaWMVc=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=kKwnymOXQUv0yvFPH1ZgZ08boSs2I2Kty7ChxwmPfpndZYQe323gxtjIOLJQYH6SXkA7iq8zF1hDj6YdGqtx+xvFRHDCCl+prKRlc+o8SAgXjr65q09Mo/1owdgQggUvj/SyGt4mwJEvZcwQGro3HRE1HAZIKkVtgcHaDPV65C4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=hmBlJOZp; arc=none smtp.client-ip=220.197.31.3
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="sWFCzKZt"
-Received: from smtp-4-0001.mail.infomaniak.ch (unknown [IPv6:2001:1600:7:10:40ca:feff:fe05:1])
-	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4Y09N66zVLzZxv;
-	Fri, 29 Nov 2024 12:06:14 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
-	s=20191114; t=1732878374;
-	bh=sk5O8qlAHiV7cMD7GbstXdEJp+CIadyhGsvX+tNEQ9c=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=sWFCzKZtvOt/w/6oU3RMKFOEl57k/tiOpt8ZWBGddK6gFGlwChg0IEHNlTaToXGAJ
-	 HNbdFBgXfi6FwnSKKQZMFpzdWKZM6K171POLw8lV4JeTk2CKqaF1La/BTP4qhjJMmy
-	 qsIGymwaMjEBZBrIIUjevgDqdVxgbGBMZnUkxvZ4=
-Received: from unknown by smtp-4-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4Y09N60dsvzGSY;
-	Fri, 29 Nov 2024 12:06:13 +0100 (CET)
-Date: Fri, 29 Nov 2024 12:06:11 +0100
-From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
-To: Mimi Zohar <zohar@linux.ibm.com>
-Cc: linux-integrity@vger.kernel.org, roberto.sassu@huawei.com, 
-	linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org, audit@vger.kernel.org, 
-	Paul Moore <paul@paul-moore.com>
-Subject: Re: [PATCH] ima: instantiate the bprm_creds_for_exec() hook
-Message-ID: <20241129.keeDathoo3Oh@digikod.net>
-References: <20241127210234.121546-1-zohar@linux.ibm.com>
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="hmBlJOZp"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=HStnT
+	OZHnW8G3VwSWyU2OLVzOmApbcEaPS8zDDtrIno=; b=hmBlJOZpi+WEX66DoMKPy
+	kfJP3bPjeq+bDu1EesdV2ptFsTAoC7DQlduVtUfZRsvMOUOnjA4R7i3Lrixf5tWt
+	spkP/qLcamqFL8+8ruZKQw38Ag7UlosrKq/IY3cU0IuxHW1yfPK0h9tHH3KiElhk
+	wEuANvVcX4f/45MsnYXfik=
+Received: from localhost.localdomain (unknown [116.128.244.169])
+	by gzsmtp4 (Coremail) with SMTP id PygvCgCHRE+ZC01nEsScAw--.60688S2;
+	Mon, 02 Dec 2024 09:21:30 +0800 (CST)
+From: 15074444048@163.com
+To: audit@vger.kernel.org
+Cc: 15074444048@163.com,
+	lihaojie <lihaojie@kylinos.cn>
+Subject: [PATCH] kernel/audit: Use struct_group() for memcpy() region
+Date: Mon,  2 Dec 2024 09:21:37 +0800
+Message-Id: <20241202012137.26451-1-15074444048@163.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20241127210234.121546-1-zohar@linux.ibm.com>
-X-Infomaniak-Routing: alpha
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:PygvCgCHRE+ZC01nEsScAw--.60688S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7WF13tF17JrWfKw4xAryUGFg_yoW8uryUpF
+	n8CayDGrW7JFy8Ar48AF4kuryYqw1rGw13GF93Jw1fAr98trykKF48KF47Was0y3WF9r92
+	9FsYvayaywsrJa7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0z_CzuAUUUUU=
+X-CM-SenderInfo: rprvilauuukiiuy6il2tof0z/1tbiLg6pUGdNB063hQAAsI
 
-For reference, here is the base patch series:
-https://lore.kernel.org/all/20241112191858.162021-1-mic@digikod.net/
+From: lihaojie <lihaojie@kylinos.cn>
 
-CCing audit@
+In preparation for FORTIFY_SOURCE performing compile-time and run-time
+field bounds checking for memcpy(), memmove(), and memset(), avoid
+intentionally writing across neighboring fields.
 
-On Wed, Nov 27, 2024 at 04:02:34PM -0500, Mimi Zohar wrote:
-> Like direct file execution (e.g. ./script.sh), indirect file execution
-> (e.g. sh script.sh) needs to be measured and appraised.  Instantiate
-> the new security_bprm_creds_for_exec() hook to measure and verify the
-> indirect file's integrity.  Unlike direct file execution, indirect file
-> execution integrity is optionally enforced by the interpreter.
-> 
-> Update the audit messages to differentiate between kernel and userspace
-> enforced integrity.
+Use struct_group() in struct audit_context around members target_comm[],
+This will allow memcpy() and sizeof() to more easily reason about sizes,
+improve readability, and avoid future warnings about writing beyond the
+end of target_comm[].
 
-I'm not sure to see the full picture.  What is the difference between
-execveat() calls and execveat() + AT_EXECVE_CHECK calls?  Both are from
-user space, the only difference is that the first can lead to a full
-execution, but the intent is the same.
+"pahole" shows no size nor member offset changes to struct vlan_ethhdr.
+"objdump -d" shows no object code changes.
 
-> 
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
-> ---
->  security/integrity/ima/ima_appraise.c | 84 ++++++++++++++++++++-------
->  security/integrity/ima/ima_main.c     | 22 +++++++
->  2 files changed, 86 insertions(+), 20 deletions(-)
-> 
-> diff --git a/security/integrity/ima/ima_appraise.c b/security/integrity/ima/ima_appraise.c
-> index 656c709b974f..b5f8e49cde9d 100644
-> --- a/security/integrity/ima/ima_appraise.c
-> +++ b/security/integrity/ima/ima_appraise.c
-> @@ -8,6 +8,7 @@
->  #include <linux/module.h>
->  #include <linux/init.h>
->  #include <linux/file.h>
-> +#include <linux/binfmts.h>
->  #include <linux/fs.h>
->  #include <linux/xattr.h>
->  #include <linux/magic.h>
-> @@ -16,6 +17,7 @@
->  #include <linux/fsverity.h>
->  #include <keys/system_keyring.h>
->  #include <uapi/linux/fsverity.h>
-> +#include <linux/securebits.h>
->  
->  #include "ima.h"
->  
-> @@ -276,7 +278,8 @@ static int calc_file_id_hash(enum evm_ima_xattr_type type,
->   */
->  static int xattr_verify(enum ima_hooks func, struct ima_iint_cache *iint,
->  			struct evm_ima_xattr_data *xattr_value, int xattr_len,
-> -			enum integrity_status *status, const char **cause)
-> +			enum integrity_status *status, const char **cause,
-> +			bool is_check)
->  {
->  	struct ima_max_digest_data hash;
->  	struct signature_v2_hdr *sig;
-> @@ -292,9 +295,11 @@ static int xattr_verify(enum ima_hooks func, struct ima_iint_cache *iint,
->  		if (*status != INTEGRITY_PASS_IMMUTABLE) {
->  			if (iint->flags & IMA_DIGSIG_REQUIRED) {
->  				if (iint->flags & IMA_VERITY_REQUIRED)
-> -					*cause = "verity-signature-required";
-> +					*cause = !is_check ? "verity-signature-required" :
-> +						"verity-signature-required(userspace)";
+Signed-off-by: lihaojie <lihaojie@kylinos.cn>
+---
+ kernel/audit.h   | 5 ++++-
+ kernel/auditsc.c | 4 ++--
+ 2 files changed, 6 insertions(+), 3 deletions(-)
 
-This looks simpler (same for all following checks):
-is_check ? "verity-signature-required(userspace)" : "verity-signature-required";
+diff --git a/kernel/audit.h b/kernel/audit.h
+index 0211cb307d30..20483670ea02 100644
+--- a/kernel/audit.h
++++ b/kernel/audit.h
+@@ -145,7 +145,10 @@ struct audit_context {
+ 	kuid_t		    target_uid;
+ 	unsigned int	    target_sessionid;
+ 	struct lsm_prop	    target_ref;
+-	char		    target_comm[TASK_COMM_LEN];
++
++	struct_group(comm,
++		char target_comm[TASK_COMM_LEN];
++	);
+ 
+ 	struct audit_tree_refs *trees, *first_trees;
+ 	struct list_head killed_trees;
+diff --git a/kernel/auditsc.c b/kernel/auditsc.c
+index 91afdd0d036e..e279762463b0 100644
+--- a/kernel/auditsc.c
++++ b/kernel/auditsc.c
+@@ -2729,7 +2729,7 @@ void __audit_ptrace(struct task_struct *t)
+ 	context->target_uid = task_uid(t);
+ 	context->target_sessionid = audit_get_sessionid(t);
+ 	security_task_getlsmprop_obj(t, &context->target_ref);
+-	memcpy(context->target_comm, t->comm, TASK_COMM_LEN);
++	memcpy(&context->comm, t->comm, TASK_COMM_LEN);
+ }
+ 
+ /**
+@@ -2756,7 +2756,7 @@ int audit_signal_info_syscall(struct task_struct *t)
+ 		ctx->target_uid = t_uid;
+ 		ctx->target_sessionid = audit_get_sessionid(t);
+ 		security_task_getlsmprop_obj(t, &ctx->target_ref);
+-		memcpy(ctx->target_comm, t->comm, TASK_COMM_LEN);
++		memcpy(&ctx->comm, t->comm, TASK_COMM_LEN);
+ 		return 0;
+ 	}
+ 
+-- 
+2.25.1
 
->  				else
-> -					*cause = "IMA-signature-required";
-> +					*cause = !is_check ? "IMA-signature-required" :
-> +						"IMA-signature-required(userspace)";
->  				*status = INTEGRITY_FAIL;
->  				break;
->  			}
-> @@ -314,7 +319,8 @@ static int xattr_verify(enum ima_hooks func, struct ima_iint_cache *iint,
->  		else
->  			rc = -EINVAL;
->  		if (rc) {
-> -			*cause = "invalid-hash";
-> +			*cause = !is_check ? "invalid-hash" :
-> +				"invalid-hash(userspace)";
->  			*status = INTEGRITY_FAIL;
->  			break;
->  		}
-> @@ -325,14 +331,16 @@ static int xattr_verify(enum ima_hooks func, struct ima_iint_cache *iint,
->  
->  		mask = IMA_DIGSIG_REQUIRED | IMA_VERITY_REQUIRED;
->  		if ((iint->flags & mask) == mask) {
-> -			*cause = "verity-signature-required";
-> +			*cause = !is_check ? "verity-signature-required" :
-> +				"verity-signature-required(userspace)";
->  			*status = INTEGRITY_FAIL;
->  			break;
->  		}
->  
->  		sig = (typeof(sig))xattr_value;
->  		if (sig->version >= 3) {
-> -			*cause = "invalid-signature-version";
-> +			*cause = !is_check ? "invalid-signature-version" :
-> +				"invalid-signature-version(userspace)";
->  			*status = INTEGRITY_FAIL;
->  			break;
->  		}
-> @@ -353,7 +361,8 @@ static int xattr_verify(enum ima_hooks func, struct ima_iint_cache *iint,
->  						     iint->ima_hash->digest,
->  						     iint->ima_hash->length);
->  		if (rc) {
-> -			*cause = "invalid-signature";
-> +			*cause = !is_check ? "invalid-signature" :
-> +				"invalid-signature(userspace)";
->  			*status = INTEGRITY_FAIL;
->  		} else {
->  			*status = INTEGRITY_PASS;
-> @@ -364,7 +373,8 @@ static int xattr_verify(enum ima_hooks func, struct ima_iint_cache *iint,
->  
->  		if (iint->flags & IMA_DIGSIG_REQUIRED) {
->  			if (!(iint->flags & IMA_VERITY_REQUIRED)) {
-> -				*cause = "IMA-signature-required";
-> +				*cause = !is_check ? "IMA-signature-required" :
-> +					"IMA-signature-required(userspace)";
->  				*status = INTEGRITY_FAIL;
->  				break;
->  			}
-> @@ -372,7 +382,8 @@ static int xattr_verify(enum ima_hooks func, struct ima_iint_cache *iint,
->  
->  		sig = (typeof(sig))xattr_value;
->  		if (sig->version != 3) {
-> -			*cause = "invalid-signature-version";
-> +			*cause = !is_check ? "invalid-signature-version" :
-> +				"invalid-signature-version(userspace)";
->  			*status = INTEGRITY_FAIL;
->  			break;
->  		}
-> @@ -382,7 +393,8 @@ static int xattr_verify(enum ima_hooks func, struct ima_iint_cache *iint,
->  				       container_of(&hash.hdr,
->  					       struct ima_digest_data, hdr));
->  		if (rc) {
-> -			*cause = "sigv3-hashing-error";
-> +			*cause = !is_check ? "sigv3-hashing-error" :
-> +				"sigv3-hashing-error(userspace)";
->  			*status = INTEGRITY_FAIL;
->  			break;
->  		}
-> @@ -392,7 +404,8 @@ static int xattr_verify(enum ima_hooks func, struct ima_iint_cache *iint,
->  					     xattr_len, hash.digest,
->  					     hash.hdr.length);
->  		if (rc) {
-> -			*cause = "invalid-verity-signature";
-> +			*cause = !is_check ? "invalid-verity-signature" :
-> +				"invalid-verify-signature(userspace)";
->  			*status = INTEGRITY_FAIL;
->  		} else {
->  			*status = INTEGRITY_PASS;
-> @@ -401,7 +414,8 @@ static int xattr_verify(enum ima_hooks func, struct ima_iint_cache *iint,
->  		break;
->  	default:
->  		*status = INTEGRITY_UNKNOWN;
-> -		*cause = "unknown-ima-data";
-> +		*cause = !is_check ? "unknown-ima-data" :
-> +			"unknown-ima-data(userspace)";
->  		break;
->  	}
->  
-> @@ -469,6 +483,18 @@ int ima_check_blacklist(struct ima_iint_cache *iint,
->  	return rc;
->  }
->  
-> +static int is_bprm_creds_for_exec(enum ima_hooks func, struct file *file)
-> +{
-> +	struct linux_binprm *bprm = NULL;
-> +
-> +	if (func == BPRM_CHECK) {
-> +		bprm = container_of(&file, struct linux_binprm, file);
-> +		if (bprm->is_check)
-> +			return 1;
-> +	}
-> +	return 0;
-> +}
-> +
->  /*
->   * ima_appraise_measurement - appraise file measurement
->   *
-> @@ -489,11 +515,24 @@ int ima_appraise_measurement(enum ima_hooks func, struct ima_iint_cache *iint,
->  	enum integrity_status status = INTEGRITY_UNKNOWN;
->  	int rc = xattr_len;
->  	bool try_modsig = iint->flags & IMA_MODSIG_ALLOWED && modsig;
-> +	bool is_check = false;
->  
->  	/* If not appraising a modsig, we need an xattr. */
->  	if (!(inode->i_opflags & IOP_XATTR) && !try_modsig)
->  		return INTEGRITY_UNKNOWN;
->  
-> +	/*
-> +	 * Unlike any of the other LSM hooks where the kernel enforces file
-> +	 * integrity, enforcing file integrity for the bprm_creds_for_exec()
-> +	 * LSM hook is left up to the discretion of the script interpreter
-> +	 * (userspace).
-> +	 *
-> +	 * Since the SECBIT_EXEC_RESTRICT_FILE flag is just a hint as to
-> +	 * userspace intentions, simply annotate the audit messages indicating
-> +	 * a userspace based query.
-> +	 */
-> +	is_check = is_bprm_creds_for_exec(func, file);
-> +
->  	/* If reading the xattr failed and there's no modsig, error out. */
->  	if (rc <= 0 && !try_modsig) {
->  		if (rc && rc != -ENODATA)
-> @@ -501,11 +540,14 @@ int ima_appraise_measurement(enum ima_hooks func, struct ima_iint_cache *iint,
->  
->  		if (iint->flags & IMA_DIGSIG_REQUIRED) {
->  			if (iint->flags & IMA_VERITY_REQUIRED)
-> -				cause = "verity-signature-required";
-> +				cause = !is_check ? "verity-signature-required" :
-> +					"verity-signature-required(userspace)";
->  			else
-> -				cause = "IMA-signature-required";
-> +				cause = !is_check ? "IMA-signature-required" :
-> +					"IMA-signature-required(userspace)";
->  		} else {
-> -			cause = "missing-hash";
-> +			cause = !is_check ? "missing-hash" :
-> +				"missing-hash(userspace)";
->  		}
->  
->  		status = INTEGRITY_NOLABEL;
-> @@ -531,14 +573,15 @@ int ima_appraise_measurement(enum ima_hooks func, struct ima_iint_cache *iint,
->  			break;
->  		fallthrough;
->  	case INTEGRITY_NOLABEL:		/* No security.evm xattr. */
-> -		cause = "missing-HMAC";
-> +		cause = !is_check ? "missing-HMAC" : "missing-HMAC(userspace)";
->  		goto out;
->  	case INTEGRITY_FAIL_IMMUTABLE:
->  		set_bit(IMA_DIGSIG, &iint->atomic_flags);
-> -		cause = "invalid-fail-immutable";
-> +		cause = !is_check ? "invalid-fail-immutable" :
-> +		       "invalid-fail-immutable(userspace)";
->  		goto out;
->  	case INTEGRITY_FAIL:		/* Invalid HMAC/signature. */
-> -		cause = "invalid-HMAC";
-> +		cause = !is_check ? "invalid-HMAC" : "invalid-HMAC(userspace)";
->  		goto out;
->  	default:
->  		WARN_ONCE(true, "Unexpected integrity status %d\n", status);
-> @@ -546,7 +589,7 @@ int ima_appraise_measurement(enum ima_hooks func, struct ima_iint_cache *iint,
->  
->  	if (xattr_value)
->  		rc = xattr_verify(func, iint, xattr_value, xattr_len, &status,
-> -				  &cause);
-> +				  &cause, is_check);
->  
->  	/*
->  	 * If we have a modsig and either no imasig or the imasig's key isn't
-> @@ -568,7 +611,8 @@ int ima_appraise_measurement(enum ima_hooks func, struct ima_iint_cache *iint,
->  	    ((inode->i_sb->s_iflags & SB_I_UNTRUSTED_MOUNTER) ||
->  	     (iint->flags & IMA_FAIL_UNVERIFIABLE_SIGS))) {
->  		status = INTEGRITY_FAIL;
-> -		cause = "unverifiable-signature";
-> +		cause = !is_check ? "unverifiable-signature" :
-> +			"unverifiable-signature(userspace)";
->  		integrity_audit_msg(AUDIT_INTEGRITY_DATA, inode, filename,
->  				    op, cause, rc, 0);
-
-Instead of adding new causes, another option would be to add a new audit
-record type (e.g. AUDIT_INTEGRITY_DATA_CHECK).  This would help filter
-these new kind of messages and I guess scale better.
-
-Another alternative would be to extend the audit message with a new
-field (e.g. "check=1"), but that would not help for efficient filtering.
-
->  	} else if (status != INTEGRITY_PASS) {
-> diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
-> index 06132cf47016..2b5d6bae77a4 100644
-> --- a/security/integrity/ima/ima_main.c
-> +++ b/security/integrity/ima/ima_main.c
-> @@ -554,6 +554,27 @@ static int ima_bprm_check(struct linux_binprm *bprm)
->  				   MAY_EXEC, CREDS_CHECK);
->  }
->  
-> +/**
-> + * ima_bprm_creds_for_exec - based on policy, collect/store/appraise measurement.
-> + * @bprm: contains the linux_binprm structure
-> + *
-> + * Based on the IMA policy and the execvat(2) AT_CHECK flag, measure and
-> + * appraise the integrity of a file to be executed by script interpreters.
-> + * Unlike any of the other LSM hooks where the kernel enforces file integrity,
-> + * enforcing file integrity is left up to the discretion of the script
-> + * interpreter (userspace).
-> + *
-> + * On success return 0.  On integrity appraisal error, assuming the file
-> + * is in policy and IMA-appraisal is in enforcing mode, return -EACCES.
-> + */
-> +static int ima_bprm_creds_for_exec(struct linux_binprm *bprm)
-> +{
-> +	if (!bprm->is_check)
-> +		return 0;
-> +
-> +	return ima_bprm_check(bprm);
-> +}
-> +
->  /**
->   * ima_file_check - based on policy, collect/store measurement.
->   * @file: pointer to the file to be measured
-> @@ -1177,6 +1198,7 @@ static int __init init_ima(void)
->  
->  static struct security_hook_list ima_hooks[] __ro_after_init = {
->  	LSM_HOOK_INIT(bprm_check_security, ima_bprm_check),
-> +	LSM_HOOK_INIT(bprm_creds_for_exec, ima_bprm_creds_for_exec),
-
-Why not replace bprm_check_security with bprm_creds_for_exec
-implementation altogether?
-
->  	LSM_HOOK_INIT(file_post_open, ima_file_check),
->  	LSM_HOOK_INIT(inode_post_create_tmpfile, ima_post_create_tmpfile),
->  	LSM_HOOK_INIT(file_release, ima_file_free),
-> -- 
-> 2.47.0
-> 
-> 
