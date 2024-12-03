@@ -1,102 +1,147 @@
-Received: from mail-qv1-f44.google.com (mail-qv1-f44.google.com [209.85.219.44])
+Received: from mail-oa1-f48.google.com (mail-oa1-f48.google.com [209.85.160.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 353C6224F0;
-	Tue,  3 Dec 2024 04:04:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 930631632DA;
+	Tue,  3 Dec 2024 06:04:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733198642; cv=none; b=sxAZBizlBhMd56HGmEgWnJRHVvGNcEsODXUah6STcy3i542vn4ieHQGEJDFZcyX1RGkoFtn1FdtbRpzL6+EjDFID2UoKESG6tNmQqTc9j1Ji0yo9EPl8/Tv8mOEKVNS6HEX5XeKdck4bHIDJ0OlFTC5Q+ZU9a+c03waXQ5sbnok=
+	t=1733205850; cv=none; b=VQRsVlHCiCqFYtOQXIdW5GRL4Q+Jc0S7oXldaigcUH6fnyC9hbK3W0ePUdwyHU3pV2ljYBOy0aubImvduoey6XM0z86qGfRPYE5BdVvrT4MUfshekTmLs/hulUBqfxaWZoci2qsKCeXcpuTCqVkB62QA0gmokWWGNsMSVZwa3Co=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733198642; c=relaxed/simple;
-	bh=irN2mDb4DxV5lPd68poaTr/FFEji/3swiAZceNn9oj8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=NHlMbpyWusdcN1Xnjrv8TWmQJ5zT5n67mxyI7lEy55ECwrtetktdwx5X9mNQKmZZpMqzI7B0cN7ZmDI9FROhtM0diVyzjB4ZPQc3nXcRXmSXo+4EIPsHT8eRqvg/jwXuC8q3PFZPqQ9ZbUK5LBck+gMf+3y6L3485zacXS7dohE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FHqUe7ii; arc=none smtp.client-ip=209.85.219.44
+	s=arc-20240116; t=1733205850; c=relaxed/simple;
+	bh=LKWkIYeNaeUX1VbYiO4MEr1omwRKKa0CAEDzdnG6YDI=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=K+QbfcPwTp87L7Ab86YUqPBDqXtTTUVeQYio8uwRHyX7zijPgqxgQUcmiJAXZ4drCqyIqiTEQre2mrRe3hlxOwuSJOXJgoqyjw2ej856mZnWhqiyhvPcO0rJbDO2QjWrrV65LNgr3xJ4xEkTMVEDGYv+Svsvsm8FSq/yiSxD9rU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kVYNs+u6; arc=none smtp.client-ip=209.85.160.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FHqUe7ii"
-Received: by mail-qv1-f44.google.com with SMTP id 6a1803df08f44-6d8843c44cfso32626186d6.3;
-        Mon, 02 Dec 2024 20:04:00 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kVYNs+u6"
+Received: by mail-oa1-f48.google.com with SMTP id 586e51a60fabf-29e70c9dc72so921881fac.0;
+        Mon, 02 Dec 2024 22:04:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1733198640; x=1733803440; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=x7bUwi0TttiL+apQ7VoSfHS8nkT7Ms37eJEkRC/4J0U=;
-        b=FHqUe7iiu/D5ltHd+SaTR1HC90uWm9LL1w8u4Gndp8TB1svNx39qQe8LNyQ2u5WGgq
-         ZXrM/ux7/CPMT8WFnmT5g2dXHxfPtaYUn6t2x2geTF1dc1bByceYH4BXtQT+TkR5oqTB
-         C7PTrsRiHLPjmnCydu41bVcQYKwXKCO2FnnQQao8ywUHvvCnAjJGXWZalmVDdL8Lvo8I
-         TfCaipTW3iqjl0hOPorjysZ5rDBaUSmkQJQqiDHoiaDfYgzpisxusfvcDS2Thrl0w/ju
-         XJHlrN1Z+gL9VuxJs2miBaNWTbgkstMxx4r/9nIIbVuqEOmQWnYkcDvPg9l1IsyejrW7
-         b7Lg==
+        d=gmail.com; s=20230601; t=1733205847; x=1733810647; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=58nYp1zWf0X7j1NYT3FBTG8N4TZB7I5pgvtXv7XqyBs=;
+        b=kVYNs+u6FoPic8FvXZvQ55fD50gOtoQpRRLts4RZGgZvslRICEmkvIF43dgpUobuzE
+         2T48BnOX55yDwijnnrdvyNRbeyHgXQc30EL3pLxArEdZ05kYxTf49MyDIvb00dXoHV6B
+         9qfCHwKf9VdQi/eeA7ScE9zj5bKuORO0fhyJMNWsaZb3gcXoUrpJvbeMthZlL7MbE3gj
+         K9V7qAl9L78IJb4XRG8JFOBGrWS/SbXqXlQpbtMGwS87bRhZkV5BGAaqlCuv0/J551cH
+         P0Zxiw8DHBjuHwwNIZwZx4gbAxqwuCcV9rSoVO7rcZpDqCzEbf0hN8nM5d9sC+m3Wne8
+         X+rw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733198640; x=1733803440;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=x7bUwi0TttiL+apQ7VoSfHS8nkT7Ms37eJEkRC/4J0U=;
-        b=di/Xc0f5kKibsybdWjNGOeMCIAQOJEVe2HSBvb3Yva7RNx5d76Kl62i2kfm16vBYXn
-         PZEWX03gJkGvK3GW/LvepXkXbabxL8XI9pdqxznQm1T5eywprHv/bklrsqHbCJMxkRhO
-         tNElwyo9yJgO/HvE2DGbNuTdt/NKH609oT4Qp9l7foA5Ae/iiNaghzUItKeS9Iga65Up
-         Lw7T0TuOCURJcN86hw1FI4Xl+eE6pwtt0HYFvU2us9SD8UcvohK21Me3xgFzqBiO4HFT
-         xHXKADSt3Sa4L2t+6K+L72GRP8sec1uzjr/0XEXC6gNEYIxXj+7RfxK/bP0mOHpsWfXB
-         5CZg==
-X-Forwarded-Encrypted: i=1; AJvYcCUhjtyF39pVZOLFAjoUZUKStdYI1mtr8aa9ypITPdGvp+W4gd0tUJXcmeKupaVG+zwPXSvSZ03kz/tIO1TM62l/@vger.kernel.org, AJvYcCVuj3yps8SELHNaKh4kiDw6jEaCqwMt/qIHovwmYdePYS4qbiHlY7JAlohX1zTEJMSFL4cDE1PGv4Wgsl4B@vger.kernel.org, AJvYcCWUJfhTB/KaZVsEGC6yo7vjqCFQLkG16xXq+xh8lvJwTkx3CZlqEnXRiwDamYoiC0IQp2JhsA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzV5vbCcgGruytclDREAX0/IvUAhxyrS8oKInkst7g06efYyRQL
-	m9NXymAhnrWwI238SpxenSwjtjBbFfqQVsr/sKEHs+L9W1xF5yu96nUJIsNp5fGFV0wgKthJZb1
-	LAmLWihe591QOkBMX2FVb3ACNh4I=
-X-Gm-Gg: ASbGncuTQOahAIcXMeFCn+IrotYodb+kjTDzUF9GDnmNxuPNGdsih6TQiqQ7hT86tHa
-	uPlGwH2fKMBo15I2sqAzBBcecKjtklLo89g==
-X-Google-Smtp-Source: AGHT+IF27TuPPXjjFmy32fsLtg/YixfsUo7fDoj7bds6GLocP9vjpQesILvwjCmKlDjIl6dNP5TWJMJN6XEWHJ6Yfjw=
-X-Received: by 2002:ad4:5ae2:0:b0:6d8:86c8:c29a with SMTP id
- 6a1803df08f44-6d8b72e08femr23550396d6.10.1733198640226; Mon, 02 Dec 2024
- 20:04:00 -0800 (PST)
+        d=1e100.net; s=20230601; t=1733205847; x=1733810647;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=58nYp1zWf0X7j1NYT3FBTG8N4TZB7I5pgvtXv7XqyBs=;
+        b=PZaEKgd+61hbLLO/ghthp3XhwiFik/p81wpiXeqK+TjuZQySn/kOA/oBunUmaOQaGN
+         0O/UcVDsBwGbagNS+jfPIGD5A/7WjuK89zZG0ort/yFaqylekP2QmAahEpKONFztTwfJ
+         +RLJywpljPJkBb3hrF1aVma6MauklFR731EwQJTp+kg52jf/7RqmIkHNE7QyD2LJjOYH
+         OzpNtVLw47L92/mIepeaMsH784Bx5abvoHU3w75uL+3FFmJvXYNNU2LdjVOT4MJcYneT
+         R8/h9BEpYLEx1dzaY6KlwyumV5fn6ktvcW2SsVzDymRJK7XKbkUp/r1UgqQSqa2z1Uwx
+         eN8w==
+X-Forwarded-Encrypted: i=1; AJvYcCVBtgC224euinuabAgFwuFgHjR4+CezqUwCLc2LLGFuetaSbepeB47W7GNNZGfoP9fChDEaP5cqpVA45S/Y@vger.kernel.org, AJvYcCW25QysZaMgiemOzO1s2ADx3Bn1eMB3KmQamcTEWgj765tWwxrtQnR+t7ISvALH2UGfvDLSbg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxXvldF4rfFr8GtgpmpYvn3UWiO3iq08bnP07f5PXg7tzSQh8uj
+	m8g1BTg+mcuqCTucDT1bjyy0j/6zEv55gRU89laz8ege5UAPV0nc
+X-Gm-Gg: ASbGnctCurA+lfe+CYGGCLEUOGf3rEmIewLYwivQTbZZCUKCo8ljrDKdfn8kc0bt7NC
+	HUlVgQq2ccYTveG9KNPsz1UlXbCUaaXAxkAjJLXz3TUZzu+ckpePvCWROoZizKBTJnSltlJHapK
+	yrgYKZw7hwOTC3BQKgxLX7DhF5nM5LaVUfmKx9NdO+UI+v2ptESs6oevvOsd/XqwasqylXQx7sg
+	5irPBWcN7MrtpS8eJyk165wWsUet3vDZ00lFuT/PlzMh9+imhz21uEAGk7676oaIMCEzI5EwHw5
+X-Google-Smtp-Source: AGHT+IGCA+XGSbmmnllYuaCoWFwK1ZCSMRimh3uYTeqBCIVvvpkEM0dAcJdycqkYNiBsiePc9nFjOA==
+X-Received: by 2002:a05:6870:b293:b0:29e:362b:2148 with SMTP id 586e51a60fabf-29e88690b23mr1141350fac.19.1733205847522;
+        Mon, 02 Dec 2024 22:04:07 -0800 (PST)
+Received: from localhost.localdomain ([180.159.118.224])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7fc9c385ef8sm8861201a12.56.2024.12.02.22.04.04
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Mon, 02 Dec 2024 22:04:06 -0800 (PST)
+From: Yafang Shao <laoar.shao@gmail.com>
+To: paul@paul-moore.com,
+	keescook@chromium.org
+Cc: qiuxu.zhuo@intel.com,
+	rostedt@goodmis.org,
+	lkp@intel.com,
+	audit@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Yafang shao <laoar.shao@gmail.com>,
+	Kees Cook <kees@kernel.org>
+Subject: [PATCH] auditsc: Implement a workaround for a GCC bug triggered by task comm changes
+Date: Tue,  3 Dec 2024 14:03:50 +0800
+Message-Id: <20241203060350.69472-1-laoar.shao@gmail.com>
+X-Mailer: git-send-email 2.37.1 (Apple Git-137.1)
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CY8PR11MB713438072B901F890913803F89362@CY8PR11MB7134.namprd11.prod.outlook.com>
- <CAHC9VhR6t_LLB5nc=kqqE5FpN4ftxZYidQ8F5x1Lzowf1H9juw@mail.gmail.com>
-In-Reply-To: <CAHC9VhR6t_LLB5nc=kqqE5FpN4ftxZYidQ8F5x1Lzowf1H9juw@mail.gmail.com>
-From: Yafang Shao <laoar.shao@gmail.com>
-Date: Tue, 3 Dec 2024 12:03:24 +0800
-Message-ID: <CALOAHbCz7mpxv3Dt9jJtJJ2g=A6Nf_rn687BHgOmrzQt3Udv_w@mail.gmail.com>
-Subject: Re: v6.13-rc1 build errors from kernel/auditsc.c
-To: Paul Moore <paul@paul-moore.com>
-Cc: "Zhuo, Qiuxu" <qiuxu.zhuo@intel.com>, Kees Cook <keescook@chromium.org>, 
-	Eric Paris <eparis@redhat.com>, "audit@vger.kernel.org" <audit@vger.kernel.org>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Tue, Dec 3, 2024 at 11:35=E2=80=AFAM Paul Moore <paul@paul-moore.com> wr=
-ote:
->
-> On Mon, Dec 2, 2024 at 10:19=E2=80=AFPM Zhuo, Qiuxu <qiuxu.zhuo@intel.com=
-> wrote:
-> >
-> > Hi,
-> >
-> > I got the following build errors from kernel/auditsc.c file.
-> >
-> > The GCC version      : 7.5.0
-> > Kernel version         : v6.13-rc1
-> > The bisect commit : 286d7a54c8a2 ("auditsc: replace memcpy() with strsc=
-py()")
->
-> Unfortunately this is a known GCC bug, see the lore link below.  Kees,
-> Yafang, do you have any more information or compiler-based workarounds
-> for this bug?
->
-> https://lore.kernel.org/all/CALOAHbBB-__eyERw82QnS3Wmgi7_BpPaacY2urVmpWX3=
-ZkVtvQ@mail.gmail.com/
+From: Yafang shao <laoar.shao@gmail.com>
 
-I'll prepare a patch based on Kees's changes soon. For now, let's
-implement a workaround.
+A build failure has been reported with the following details:
 
---=20
-Regards
-Yafang
+   In file included from include/linux/string.h:390,
+                    from include/linux/bitmap.h:13,
+                    from include/linux/cpumask.h:12,
+                    from include/linux/smp.h:13,
+                    from include/linux/lockdep.h:14,
+                    from include/linux/spinlock.h:63,
+                    from include/linux/wait.h:9,
+                    from include/linux/wait_bit.h:8,
+                    from include/linux/fs.h:6,
+                    from kernel/auditsc.c:37:
+   In function 'sized_strscpy',
+       inlined from '__audit_ptrace' at kernel/auditsc.c:2732:2:
+>> include/linux/fortify-string.h:293:17: error: call to '__write_overflow' declared with attribute error: detected write beyond size of object (1st parameter)
+     293 |                 __write_overflow();
+         |                 ^~~~~~~~~~~~~~~~~~
+   In function 'sized_strscpy',
+       inlined from 'audit_signal_info_syscall' at kernel/auditsc.c:2759:3:
+>> include/linux/fortify-string.h:293:17: error: call to '__write_overflow' declared with attribute error: detected write beyond size of object (1st parameter)
+     293 |                 __write_overflow();
+         |                 ^~~~~~~~~~~~~~~~~~
+
+The issue appears to be a GCC bug, though the root cause remains
+unclear at this time. For now, let's implement a workaround.
+
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202410171420.1V00ICVG-lkp@intel.com/
+Reported-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+Closes: https://lore.kernel.org/all/20241128182435.57a1ea6f@gandalf.local.home/
+Reported-by: "Zhuo, Qiuxu" <qiuxu.zhuo@intel.com>
+Closes: https://lore.kernel.org/all/CY8PR11MB71348E568DBDA576F17DAFF389362@CY8PR11MB7134.namprd11.prod.outlook.com/
+Originally-by: Kees Cook <kees@kernel.org>
+Link: https://lore.kernel.org/linux-hardening/202410171059.C2C395030@keescook/
+Signed-off-by: Yafang shao <laoar.shao@gmail.com>
+Tested-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+---
+ kernel/auditsc.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/kernel/auditsc.c b/kernel/auditsc.c
+index 279ba5c420a4..561d96affe9f 100644
+--- a/kernel/auditsc.c
++++ b/kernel/auditsc.c
+@@ -2728,8 +2728,8 @@ void __audit_ptrace(struct task_struct *t)
+ 	context->target_auid = audit_get_loginuid(t);
+ 	context->target_uid = task_uid(t);
+ 	context->target_sessionid = audit_get_sessionid(t);
+-	security_task_getlsmprop_obj(t, &context->target_ref);
+ 	strscpy(context->target_comm, t->comm);
++	security_task_getlsmprop_obj(t, &context->target_ref);
+ }
+ 
+ /**
+@@ -2755,8 +2755,8 @@ int audit_signal_info_syscall(struct task_struct *t)
+ 		ctx->target_auid = audit_get_loginuid(t);
+ 		ctx->target_uid = t_uid;
+ 		ctx->target_sessionid = audit_get_sessionid(t);
+-		security_task_getlsmprop_obj(t, &ctx->target_ref);
+ 		strscpy(ctx->target_comm, t->comm);
++		security_task_getlsmprop_obj(t, &ctx->target_ref);
+ 		return 0;
+ 	}
+ 
+-- 
+2.43.5
+
