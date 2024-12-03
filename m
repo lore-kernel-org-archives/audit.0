@@ -1,143 +1,106 @@
-Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com [209.85.219.181])
+Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com [209.85.219.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67F93205ACE
-	for <audit@vger.kernel.org>; Tue,  3 Dec 2024 23:13:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FC19207A33
+	for <audit@vger.kernel.org>; Tue,  3 Dec 2024 23:18:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733267624; cv=none; b=mJyw8Q0OoRYlseIm7p5P8Qpn4Wlua2o0AI3vM2HOSl06JGCA+C5Bl/0liPsUtvIP2zGyeKIn86F3wipi6EmjBQwXBVjLzho5uIGfCEhXehWckVSba4AFgxsNmfpURdf89MAU7W9jBNxsq9/IcpCz3hjdYG/FpPdZNukAAmpPdTc=
+	t=1733267931; cv=none; b=O2Dr5DL04YYl0e3CYYSUwRxqylNJ1+/KNyx6CGufI4+EZfks4PqXozVYMHoMsMF3RQpQ8bEoHUhAYBR6OHlzm5pKpvGzEdYu2/mIvLjzzdsb4mShB9c7Ojojbcob2kj0nqtT2x5jsO8OX8tvyaouqEj2rTXpWVSdwOx/neIB6U0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733267624; c=relaxed/simple;
-	bh=T1DfAvfSKT/yTo8pOjR+H0hgWWAEDncbMVCqDAIuFkk=;
+	s=arc-20240116; t=1733267931; c=relaxed/simple;
+	bh=ic6/U0xqaELqdd1v+pvAh6vUGCglKQclSxwyC9Yvs78=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=cJni2CNxoVj++JgMtxGcR2sv590qOgiB4SCiBkzH33PiZlngvzKLDP0sEjQQ8shM/aMZfvuR7EUPzO5vNOM5oRPal1cmPTqmjtKDB64LaxXjnCRNvKkAS+1h2DOuBI/Plczf4VS1AFEN90py8ttF2kxgPy2ObMPU83t/gfvZu4c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=KJmxRgos; arc=none smtp.client-ip=209.85.219.181
+	 To:Cc:Content-Type; b=FO/Lt4v8wtE6/DfyxPtyci8UJkv2+xDRWiHUDxYHgvXTVThTU/UfeGhDBvkcBzZZi7uWezRcBXq7w3hiVHOJV76IQGqRDgecqeWYjC4mFj+JVJRp4gysQZd/L3eTGcK1MSemocXIaBfD4swl+Q9OpSwDDYcUMMboYMi4Ham1Tc0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=KVX48KmV; arc=none smtp.client-ip=209.85.219.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="KJmxRgos"
-Received: by mail-yb1-f181.google.com with SMTP id 3f1490d57ef6-e398273d6ffso4600896276.0
-        for <audit@vger.kernel.org>; Tue, 03 Dec 2024 15:13:41 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="KVX48KmV"
+Received: by mail-yb1-f174.google.com with SMTP id 3f1490d57ef6-e3982e9278bso4975360276.2
+        for <audit@vger.kernel.org>; Tue, 03 Dec 2024 15:18:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1733267620; x=1733872420; darn=vger.kernel.org;
+        d=paul-moore.com; s=google; t=1733267928; x=1733872728; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=xASkeX0kWqgVIiC/SnivnP44lIKmYI/S+xS1gTSLSYo=;
-        b=KJmxRgosPm/tATQcDdyv5ursybaHKu1NdvFXitd9wQsQ6g17bkV6Nr0eLtgx+45Zes
-         w6oZADW0tPTup8nqUe2hoVDtqxhAOqeLI6ZHWvi8Gt+oFQFzO9lwZjdFmf7Ry6urcntt
-         wRfj3rRktpQRavPtMS6jB7ohxX+giG31elXkw+4ficc28WEb05i8gVVHU0k44zXCozl/
-         88cXF2NUUVKpV4i71trk+xpwrgr57psivj/3p0zcOSh8D/OGdHS6CR6lKtzgJxCKgTfM
-         Y5pYzt7vzht3nIap5KQ8TT8E7UwIvjc7TDbS7oj84IAnKU6Piurf5XM03eMuo93Y5J6R
-         zs2w==
+        bh=PFTW7zWB6G5GI8ZW7fCb2LgR3U9wsrMvq3OV+dDm25s=;
+        b=KVX48KmV/6SJGV8hTHFfff+YGRWn+4oK2Rz7ajRRCtW3P5IuO0w7sHi0DNsn0Ieir5
+         kUiFyjm5c79S9sPVLOZj+ybRGgA9Mwzf7+ZI5k4HTXM9Tczk0fy2kfkzv0UmGTU18OMc
+         v/XZC49G+/yTQtq8JGRgpCPee7ge5U4i3l3e5BK8m55bijkUDE5gndt71amHZzUSSBah
+         MDpz41/J7TpiW+iyjjoBdZeyO2cajlC2AKnI/GjbjCkbIMpOD3lUCOkcIBIwLbabqdHi
+         PUdG5dMl/Dl1Kl7wUCsvdlwuq+eHCZezk2dOkXeWUaaAf6Un4dr0Fs93nX51IZOr332O
+         eZhQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733267620; x=1733872420;
+        d=1e100.net; s=20230601; t=1733267928; x=1733872728;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=xASkeX0kWqgVIiC/SnivnP44lIKmYI/S+xS1gTSLSYo=;
-        b=ZMkhDRU4R8gNTavFwPNPW/OyoCY+YdMSAkdcn0isFC3cOhXEJpxK5wuH780kNgZj3R
-         xwAKutpPd1Q/hpj2L7wQ+QzboCphNYyhsVRf4tD878qqZQX570gZ6QwfBdLwVW/FwmMi
-         XxVDSsDN0o8CpScDTyaevftwiY0hfh0LfPSP6aazCq3EbjODdLOC4s5FtAQ3AOhVY1ZM
-         yDhELlrcI1wIUcQXKsbUswJvuKXBLCFZ7alAQtN8XUkozTXCWnhUzg6hfaccERVsLO3J
-         bOQy0ji1XoedzKrA5gKUOP92vvm8P70/464ZNfgCx8/1Swd8ujloffNr2GzZHUFTSUf0
-         Y/ig==
-X-Gm-Message-State: AOJu0YwKZSQySHhXZdFlKIF+IcMBFbFG/yIA9mefIMjb0wBiVaW4oMk2
-	SM/+XnoB6UXyDAgQ1MFG0uWj4NvHF1hDvtuGwDbM6HJ8r3+bvIapfskT6vaTUZkEIxCXYKw4jv1
-	xCWM2m75CBKi2GAgQrkbRLehOebmjeMPAAlMib5Cy2FiP4gg=
-X-Gm-Gg: ASbGncs1QZNWV+8H+l86VkXwkbJEcmyn6CCaNXY2/dz+Vss5Riwu+NwetSjvyxKruKH
-	1zP1+hJah4ipRJz1bLEYY0EhbCaaxPg==
-X-Google-Smtp-Source: AGHT+IHCJEmxXqoCjYRRhl8xD7ltWGOF/UdY3OytCC+CHpRYtE6wde4v6pA4hpza8FOMQpNewFWC1ZB3Lc7czwkL2Hw=
-X-Received: by 2002:a05:6902:1895:b0:e38:b2f3:b7ad with SMTP id
- 3f1490d57ef6-e39d4386e75mr4900384276.45.1733267620306; Tue, 03 Dec 2024
- 15:13:40 -0800 (PST)
+        bh=PFTW7zWB6G5GI8ZW7fCb2LgR3U9wsrMvq3OV+dDm25s=;
+        b=KbaTTj+6N1MrJ4smpjWSPOhO2C9X3WOJ8wvUT0wwBInGJ9pFFkqg3+A7aZGhO8YfBM
+         SUd2y43C6c2Gm6I8jcqhdnUTuPE1wX+q/Cg+IvpH+osdyowgtHs805dNUt35Uq072rrf
+         aqNYPBgBqLB7U0va4+JHXcaFH/PZfAvTnsVFi9O+C03E2PntPHpIrgNbsLP0Qm+ehFsn
+         Ij/J+5RqpHvO76XT+bzDAF8uxfNJAVcu6RJrlyrvUvXXFPinZZ5BpHWTAMMWO6KwYxCI
+         eNCzS92wJtfTnaC+xbN8XtiCfOT5aaGHrtFNvci4MKewoJU6WbA0sbet2NUGDsTXbUwP
+         KYPw==
+X-Gm-Message-State: AOJu0YyyNiMmvHd9N4dasSBsF5o0DRR3YilDdvWhF83dTG/00YFfahwm
+	nELiu1yTdb1xhyAB/gyCLLwZOotWIZUiXcAB2QgvsFn7aRlQmVsJIsGDM1QOh4cKcYQqUZAz2HZ
+	Zsmo5AuhtdjQWVBnZRJ18LeccuXD/qv+GbD13
+X-Gm-Gg: ASbGncsHFZW0aqtav7UWROOB6OVgQaWzVGrzdNMuCCTjHZjMGSCvaOGCDeXP11vUoIa
+	mC4kU8NDX1fPMVCo8QaI1syViwx2g2w==
+X-Google-Smtp-Source: AGHT+IEVrMzjj2AH4PRIkCO/0QHYQKcIZlG7DWYa92Jg7fmbQVttOUzIhDsdJ+rL6jasCznWD6AgVTx1HluchCbFiyI=
+X-Received: by 2002:a05:6902:2185:b0:e39:9346:6684 with SMTP id
+ 3f1490d57ef6-e39d3a2571bmr4744362276.14.1733267928652; Tue, 03 Dec 2024
+ 15:18:48 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241202014217.34580-1-15074444048@163.com>
-In-Reply-To: <20241202014217.34580-1-15074444048@163.com>
+References: <20241203031836.639765-1-15074444048@163.com>
+In-Reply-To: <20241203031836.639765-1-15074444048@163.com>
 From: Paul Moore <paul@paul-moore.com>
-Date: Tue, 3 Dec 2024 18:13:29 -0500
-Message-ID: <CAHC9VhQwifyzueutyzy56D-G=7erf6KK=r__B9RWJY04fN3dJA@mail.gmail.com>
-Subject: Re: [PATCH] kernel/audit: Use struct_group() for memcpy() region
+Date: Tue, 3 Dec 2024 18:18:38 -0500
+Message-ID: <CAHC9VhQ4gffqTJ7-aGy+kzP3kR7TMWcxOfQkqXygmgDr2bSOeQ@mail.gmail.com>
+Subject: Re: [PATCH] kernel/audit: Use __struct_size replace __member_size
 To: 15074444048@163.com
-Cc: audit@vger.kernel.org, eparis@redhat.com, lihaojie <lihaojie@kylinos.cn>
+Cc: audit@vger.kernel.org, eparis@redhat.com, lihaojie <lihaojie@kylinos.cn>, 
+	Kees Cook <kees@kernel.org>, linux-hardening@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sun, Dec 1, 2024 at 8:42=E2=80=AFPM <15074444048@163.com> wrote:
+On Mon, Dec 2, 2024 at 10:18=E2=80=AFPM <15074444048@163.com> wrote:
 >
 > From: lihaojie <lihaojie@kylinos.cn>
 >
-> In preparation for FORTIFY_SOURCE performing compile-time and run-time
-> field bounds checking for memcpy(), memmove(), and memset(), avoid
-> intentionally writing across neighboring fields.
+> Size of destnation less of the size to be written will
+> make future warnings, the size of destnation should be
+> complete
 >
-> Use struct_group() in struct audit_context around members target_comm[],
-> This will allow memcpy() and sizeof() to more easily reason about sizes,
-> improve readability, and avoid future warnings about writing beyond the
-> end of target_comm[].
->
-> "pahole" shows no size nor member offset changes to struct vlan_ethhdr.
-> "objdump -d" shows no object code changes.
-
-That's obviously a cut-n-paste error above, please fix that.
-
-You also sent this patch three times, that's very annoying, please
-don't do that in the future.
-
-Finally, can you provide a link with an explanation as to how the
-struct_group() union/annotations is the only way to do this?  It's
-kinda ugly and if there is another way to do this I would like to
-understand what it entails.
-
 > Signed-off-by: lihaojie <lihaojie@kylinos.cn>
 > ---
->  kernel/audit.h   | 5 ++++-
->  kernel/auditsc.c | 4 ++--
->  2 files changed, 6 insertions(+), 3 deletions(-)
->
-> diff --git a/kernel/audit.h b/kernel/audit.h
-> index 0211cb307d30..20483670ea02 100644
-> --- a/kernel/audit.h
-> +++ b/kernel/audit.h
-> @@ -145,7 +145,10 @@ struct audit_context {
->         kuid_t              target_uid;
->         unsigned int        target_sessionid;
->         struct lsm_prop     target_ref;
-> -       char                target_comm[TASK_COMM_LEN];
-> +
-> +       struct_group(comm,
-> +               char target_comm[TASK_COMM_LEN];
-> +       );
->
->         struct audit_tree_refs *trees, *first_trees;
->         struct list_head killed_trees;
-> diff --git a/kernel/auditsc.c b/kernel/auditsc.c
-> index 91afdd0d036e..e279762463b0 100644
-> --- a/kernel/auditsc.c
-> +++ b/kernel/auditsc.c
-> @@ -2729,7 +2729,7 @@ void __audit_ptrace(struct task_struct *t)
->         context->target_uid =3D task_uid(t);
->         context->target_sessionid =3D audit_get_sessionid(t);
->         security_task_getlsmprop_obj(t, &context->target_ref);
-> -       memcpy(context->target_comm, t->comm, TASK_COMM_LEN);
-> +       memcpy(&context->comm, t->comm, TASK_COMM_LEN);
->  }
->
->  /**
-> @@ -2756,7 +2756,7 @@ int audit_signal_info_syscall(struct task_struct *t=
-)
->                 ctx->target_uid =3D t_uid;
->                 ctx->target_sessionid =3D audit_get_sessionid(t);
->                 security_task_getlsmprop_obj(t, &ctx->target_ref);
-> -               memcpy(ctx->target_comm, t->comm, TASK_COMM_LEN);
-> +               memcpy(&ctx->comm, t->comm, TASK_COMM_LEN);
->                 return 0;
->         }
+>  include/linux/fortify-string.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+
+This isn't an audit change, this is a FORTIFY_SOURCE change and should
+go to the maintainer and mailing list documented in the MAINTAINERS
+file (both added to this reply).
+
+> diff --git a/include/linux/fortify-string.h b/include/linux/fortify-strin=
+g.h
+> index 0d99bf11d260..0504b2c8aab7 100644
+> --- a/include/linux/fortify-string.h
+> +++ b/include/linux/fortify-string.h
+> @@ -277,7 +277,7 @@ extern ssize_t __real_strscpy(char *, const char *, s=
+ize_t) __RENAME(sized_strsc
+>  __FORTIFY_INLINE ssize_t sized_strscpy(char * const POS p, const char * =
+const POS q, size_t size)
+>  {
+>         /* Use string size rather than possible enclosing struct size. */
+> -       const size_t p_size =3D __member_size(p);
+> +       const size_t p_size =3D __struct_size(p);
+>         const size_t q_size =3D __member_size(q);
+>         size_t len;
 >
 > --
 > 2.25.1
