@@ -1,165 +1,311 @@
-Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com [209.85.160.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56D3A1F667F;
-	Wed,  4 Dec 2024 13:54:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 589DE20B213;
+	Wed,  4 Dec 2024 14:58:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733320469; cv=none; b=tGZEJMB5BWw4Hi4pUraOUEuGQ/oTGuq3Y9QCSYUxCe3vX+c8pxWHJPFD8bPlQKqOX9YbqgrzWc4Ofvh/tL/Focl+P9ZidClHkkcf44DbQiCSm/hzsUDb/gfBoK3QAfqye8yQ/8gj+6ARq+1OaXj0DOubQJHW1QexYtRwFnGZktQ=
+	t=1733324285; cv=none; b=DpfXL1m8BfdOqPpc156+HXZwLv9C7HUhTBrz1XrDIFZ3eYSstUyPqdb+3daAAY2hrt1NxwC+DJSLWLoaJH96KFor4PJrEQRqsAOp9kTSCd92f80MclPml0GY382Glabp6LRptH+f3JhcOhv0VO+JYB354U7sIIGxgQygUtjWkfI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733320469; c=relaxed/simple;
-	bh=glB2djWeXag327qCP/wXVgxmC14NcW9oTf9ZFLlGMNg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ChEXVmt+LoEhgyf94sYcKTx7qjvdleTiRwkCl6VhS/ZdCXy65Hi86VHPVn6VNBGugX32+i4JnT6WBRAQGCOC4VvAep6cPxFpKNoixsohyDOxIvp99LDL7BKJS1DG3PKmta/8URiYULumrld37aXxq/80sMxVYGLUKhjnflNuzAo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nDYdWGIn; arc=none smtp.client-ip=209.85.160.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1733324285; c=relaxed/simple;
+	bh=GjhrluYpreCYMFzYbEg2LLnQDJaUUnwaAD8vNIvs5NI=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=THlMcxALepceP+0B6EF+s9aDicUyV/UDTkV8RdWsMNYIc2QrEbw5wR2aBpYf9VtVcC1zCIHUuartCLFv67ZryP/OjUGbXwX81TRGx+XUqnQ1mafmrb+o2/MdUhbFaJBwxEbgMOWTGA8hzAqbE9QsBrtBQifytHxzipjOJyL3jaU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=pTfWWrz8; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nDYdWGIn"
-Received: by mail-qt1-f171.google.com with SMTP id d75a77b69052e-46686a258c2so57330421cf.2;
-        Wed, 04 Dec 2024 05:54:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1733320466; x=1733925266; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RptwRUavW0SsrYigmdi9DJqiFrjgQ2+PoZGqM36Tnes=;
-        b=nDYdWGIn9QXW4+tyYMp98WWE7jCY97SPRs3ybVj47HE9fcxrLwyyqlVln4Kx199LHW
-         3aZZ5lYN5YrQzvPiIA5ZFvIZW3WjJtoGJHu+X9lTSCjzo2AK4C2FxdIOdCAGiu0SZKLv
-         4KvDgFvVsEM29E3MrwzOhUU5ynMrwXYxRtmaALe1u7S3elKwvvYOXAB/cb4or1Jb1R3A
-         jtmrlA+7gtl2mOwbkWGQnubxLWYYMohrgumSjXBMWDDpPgpIszVbocPGGYqoLOmLfdeJ
-         njeNILZ7X5KhN1zMpDWpevmepLXcTJCCUyvBz1zyL4bPQ3wdx/xo0LR6o0tHsc/1FP1A
-         jFSQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733320466; x=1733925266;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RptwRUavW0SsrYigmdi9DJqiFrjgQ2+PoZGqM36Tnes=;
-        b=Kh8/EjFCCFEAe2eWSEHzVGCH+ER1a5pg/wNaqkjmfuzACmQNhpgAgYnTeDf3thxTZL
-         DMHYa4FZZn6BK7dHkg4D4F8eJP9EYTXeJDyLKF5N7G6MURYRQsXejZARFmfL6LbhwCdE
-         sGXrdXxIhSO6nH/VELhuPkCqCvFMdg9RBXxhLslZZVIaQPG3ywufYjo2xjLDz4Zw/sSl
-         eYBjG8qpNsztbGxgvikg/QBhvww7nUagZCicmoIMkndEtPwyc3lyCk4vbFKfxnJ76EE4
-         gHT3Ep3QIQNUslnmZnJNpQOgeop2h62qoRARnZwE/On1ignGkn2lfxQNGX53JkgXxXBG
-         Mr0w==
-X-Forwarded-Encrypted: i=1; AJvYcCVLBJwseCMhkmcug3Ph6A8lSgdBU0G+IXb1/MNF2ufqfYpCFnBBQqJ81eZeCoYMBh6ry88h5XgyxtfE00Xw@vger.kernel.org, AJvYcCX9F+8ZmeU8wzKmYKMy6PZLrry54sIm2tua2KzsyV/W0DSPCmLmgrfx/Lbby85cTVwuc2DzUg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YysQUxPyRTXpJW/+DxzntJO9PvPmuvCViVPm8GVPMm+WFfIkstr
-	kZUgrYC8jVhKxKOFYNKm1wKvy0XjEszBDs63sAuFkwSgykVTy0rrx8riy5fRWLtjjxTg1BWtgG6
-	w3HwAmKQYjF1mqu/TF/CqQ/4bSk0=
-X-Gm-Gg: ASbGnctqLGiDW9n4lvnoESEbceUMPXuNkA/rMmuTGPbWpZcNRrzuwHmCUGC96dlOoV9
-	yVAoeCZDLBsL3iOH0PKvxfVqd49TiiBz/
-X-Google-Smtp-Source: AGHT+IEGXPgm+w6l+jXcgmNgGIg5E/Grvio5jopOy18S00FmbnC1mKUG9PARRRF+/t4dmbFLDflbqcH9aPH/PQ3orjw=
-X-Received: by 2002:a05:620a:2416:b0:7b1:f1d:d0c2 with SMTP id
- af79cd13be357-7b6a5d66510mr794665985a.19.1733320466168; Wed, 04 Dec 2024
- 05:54:26 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="pTfWWrz8"
+Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4B48Bg0w011762;
+	Wed, 4 Dec 2024 14:57:46 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=LbRQWc
+	qh8s2WL9rDyIC61iCEkeVu2qlyk1Orynh7ddI=; b=pTfWWrz8YPcd4ZL1gq+Z/y
+	8EJe0CW62+ZE39Kqrq7WQJjv8w75se7Be8ryIwCW8WqPbMLjAwjU7Htg1H8lI+TI
+	zOGaX6B5Tikb3fMqMXrsArE9pXRomDqvACu8n5nWRjZJ2FaqYdbq0z/T3ANfvrNr
+	FMlvCsSrKx/rFG+JR9KMA3w1OyRdOp4iB8B+codj7axgD+aaYzItaoiAK+yIxJuc
+	Me4+v81B0ws5MZgeEGYsd0gr2Hj5Iz7oGbY7nQr+4FxtYTbT7NPrVnYRYetihY1B
+	Y+aBtjf+mPlDcgdD+pgo4IXdMljITvE2lyPRzBhoeCxTJvmA+6ukaYHpDzZ9DsCA
+	==
+Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 437s4j84ur-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 04 Dec 2024 14:57:45 +0000 (GMT)
+Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma11.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 4B4AiZUe005290;
+	Wed, 4 Dec 2024 14:57:45 GMT
+Received: from smtprelay04.wdc07v.mail.ibm.com ([172.16.1.71])
+	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 438fr1naff-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 04 Dec 2024 14:57:45 +0000
+Received: from smtpav01.wdc07v.mail.ibm.com (smtpav01.wdc07v.mail.ibm.com [10.39.53.228])
+	by smtprelay04.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 4B4Evic947579486
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 4 Dec 2024 14:57:44 GMT
+Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 3FC6A5805B;
+	Wed,  4 Dec 2024 14:57:44 +0000 (GMT)
+Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 450C758055;
+	Wed,  4 Dec 2024 14:57:43 +0000 (GMT)
+Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.61.150.77])
+	by smtpav01.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+	Wed,  4 Dec 2024 14:57:43 +0000 (GMT)
+Message-ID: <a888a94fa38a538f961ad8a3a1bafda5b9870c89.camel@linux.ibm.com>
+Subject: Re: [PATCH v2] ima: instantiate the bprm_creds_for_exec() hook
+From: Mimi Zohar <zohar@linux.ibm.com>
+To: =?ISO-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>
+Cc: linux-integrity@vger.kernel.org, roberto.sassu@huawei.com,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jeff
+ Xu <jeffxu@chromium.org>, Kees Cook <kees@kernel.org>,
+        Paul Moore
+ <paul@paul-moore.com>, audit@vger.kernel.org,
+        Fan Wu
+ <wufan@linux.microsoft.com>
+Date: Wed, 04 Dec 2024 09:57:42 -0500
+In-Reply-To: <20241204.IeZeTheing4e@digikod.net>
+References: <20241203233424.287880-1-zohar@linux.ibm.com>
+	 <20241204.IeZeTheing4e@digikod.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.52.4 (3.52.4-2.fc40) 
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241203060350.69472-1-laoar.shao@gmail.com> <CAHC9VhTRaX02x+KFpsxmguze3R=AAF9yjTtDxf_ghVpQ3XdU2A@mail.gmail.com>
- <CALOAHbDgb5LW+XF1_VHGpr7zcjenMwSQzOy-pTsyV3buOW1N6Q@mail.gmail.com>
- <CAHC9VhSA7U5D0mzg+OmGi5RpDpw-+eufyTEDtLu9m=nkMHe+yA@mail.gmail.com> <CALOAHbBH8p3Xp2JdajHKWzfWxtMvgA_XTBoqi8RVUV1meveFZQ@mail.gmail.com>
-In-Reply-To: <CALOAHbBH8p3Xp2JdajHKWzfWxtMvgA_XTBoqi8RVUV1meveFZQ@mail.gmail.com>
-From: Yafang Shao <laoar.shao@gmail.com>
-Date: Wed, 4 Dec 2024 21:53:50 +0800
-Message-ID: <CALOAHbDZ69ZoCwHXkR=iBfLf_pXwLYQW-3LY8OogB0EpbEPzbw@mail.gmail.com>
-Subject: Re: [PATCH] auditsc: Implement a workaround for a GCC bug triggered
- by task comm changes
-To: Paul Moore <paul@paul-moore.com>
-Cc: keescook@chromium.org, qiuxu.zhuo@intel.com, rostedt@goodmis.org, 
-	lkp@intel.com, audit@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Kees Cook <kees@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: cVyas8FIZ12rnqu1kunuyWJbnyFAfkyv
+X-Proofpoint-ORIG-GUID: cVyas8FIZ12rnqu1kunuyWJbnyFAfkyv
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
+ definitions=2024-10-15_01,2024-10-11_01,2024-09-30_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 suspectscore=0
+ adultscore=0 mlxscore=0 mlxlogscore=999 lowpriorityscore=0 bulkscore=0
+ impostorscore=0 phishscore=0 spamscore=0 malwarescore=0 priorityscore=1501
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2411120000
+ definitions=main-2412040111
 
-On Wed, Dec 4, 2024 at 2:07=E2=80=AFPM Yafang Shao <laoar.shao@gmail.com> w=
-rote:
->
-> On Wed, Dec 4, 2024 at 11:43=E2=80=AFAM Paul Moore <paul@paul-moore.com> =
-wrote:
-> >
-> > On Tue, Dec 3, 2024 at 10:00=E2=80=AFPM Yafang Shao <laoar.shao@gmail.c=
-om> wrote:
-> > > On Wed, Dec 4, 2024 at 6:06=E2=80=AFAM Paul Moore <paul@paul-moore.co=
-m> wrote:
-> > > > On Tue, Dec 3, 2024 at 1:04=E2=80=AFAM Yafang Shao <laoar.shao@gmai=
-l.com> wrote:
-> > > > >
-> > > > > From: Yafang shao <laoar.shao@gmail.com>
-> > > > >
-> > > > > A build failure has been reported with the following details:
-> > > > >
-> > > > >    In file included from include/linux/string.h:390,
-> > > > >                     from include/linux/bitmap.h:13,
-> > > > >                     from include/linux/cpumask.h:12,
-> > > > >                     from include/linux/smp.h:13,
-> > > > >                     from include/linux/lockdep.h:14,
-> > > > >                     from include/linux/spinlock.h:63,
-> > > > >                     from include/linux/wait.h:9,
-> > > > >                     from include/linux/wait_bit.h:8,
-> > > > >                     from include/linux/fs.h:6,
-> > > > >                     from kernel/auditsc.c:37:
-> > > > >    In function 'sized_strscpy',
-> > > > >        inlined from '__audit_ptrace' at kernel/auditsc.c:2732:2:
-> > > > > >> include/linux/fortify-string.h:293:17: error: call to '__write=
-_overflow' declared with attribute error: detected write beyond size of obj=
-ect (1st parameter)
-> > > > >      293 |                 __write_overflow();
-> > > > >          |                 ^~~~~~~~~~~~~~~~~~
-> > > > >    In function 'sized_strscpy',
-> > > > >        inlined from 'audit_signal_info_syscall' at kernel/auditsc=
-.c:2759:3:
-> > > > > >> include/linux/fortify-string.h:293:17: error: call to '__write=
-_overflow' declared with attribute error: detected write beyond size of obj=
-ect (1st parameter)
-> > > > >      293 |                 __write_overflow();
-> > > > >          |                 ^~~~~~~~~~~~~~~~~~
-> > > > >
-> > > > > The issue appears to be a GCC bug, though the root cause remains
-> > > > > unclear at this time. For now, let's implement a workaround.
-> > > > >
-> > > > > Reported-by: kernel test robot <lkp@intel.com>
-> > > > > Closes: https://lore.kernel.org/oe-kbuild-all/202410171420.1V00IC=
-VG-lkp@intel.com/
-> > > > > Reported-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-> > > > > Closes: https://lore.kernel.org/all/20241128182435.57a1ea6f@ganda=
-lf.local.home/
-> > > > > Reported-by: "Zhuo, Qiuxu" <qiuxu.zhuo@intel.com>
-> > > > > Closes: https://lore.kernel.org/all/CY8PR11MB71348E568DBDA576F17D=
-AFF389362@CY8PR11MB7134.namprd11.prod.outlook.com/
-> > > > > Originally-by: Kees Cook <kees@kernel.org>
-> > > > > Link: https://lore.kernel.org/linux-hardening/202410171059.C2C395=
-030@keescook/
-> > > > > Signed-off-by: Yafang shao <laoar.shao@gmail.com>
-> > > > > Tested-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-> > > > > ---
-> > > > >  kernel/auditsc.c | 4 ++--
-> > > > >  1 file changed, 2 insertions(+), 2 deletions(-)
-> > > >
-> > > > Thanks, does anyone have a link to the GCC bug report?  We really
-> > > > should mention that in the commit description and/or metadata.
-> > >
-> > > I came across a GCC bug report [0] while researching online. This
-> > > issue was reportedly fixed in GCC-12.1 [1], yet it seems the same bug
-> > > is still being triggered in GCC-14.2.0[2].
-> > > Should I file a new bug report with GCC to address this?
-> >
-> > I was under the impression that this had already been reported, if it
-> > hasn't, then yes, please report the bug to the GCC team so we can get
-> > this fixed.  Once you have the bug report, please post it here so it
-> > can be included in the commit.
->
-> Sure, I=E2=80=99ll file a new report. However, it seems I need to create =
-a new
-> account for the bug tracker and wait for its approval. Please bear
-> with me=E2=80=94I=E2=80=99ll provide an update as soon as it=E2=80=99s co=
-mpleted.
+On Wed, 2024-12-04 at 11:15 +0100, Micka=C3=ABl Sala=C3=BCn wrote:
+> On Tue, Dec 03, 2024 at 06:34:24PM -0500, Mimi Zohar wrote:
+> > Like direct file execution (e.g. ./script.sh), indirect file exection
+> > (e.g. sh script.sh) needs to be measured and appraised.  Instantiate
+> > the new security_bprm_creds_for_exec() hook to measure and verify the
+> > indirect file's integrity.  Unlike direct file execution, indirect file
+> > execution is optionally enforced by the interpreter.
+> >=20
+> > Differentiate kernel and userspace enforced integrity audit messages.
+> >=20
+>=20
+> I guess there is a missing tag:
+>=20
+> Co-developed-by: Roberto Sassu <roberto.sassu@huawei.com>
 
-JFYI, the bug report has been filed:
-https://gcc.gnu.org/bugzilla/show_bug.cgi?id=3D117912
+Having a different author with multiple "Signed-off-by" implies the patch
+history, but adding the "Co-developed-by" is explicit.  I'll add the Co-
+developed-by tag.
 
---=20
-Regards
-Yafang
+>=20
+> > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> > Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
+>=20
+> With some minor comments, this looks good to me. I'll include this patch
+> or the next one in my patch series.  Thanks!
+
+Thank you.
+
+>=20
+> > ---
+> > Changelog v2:
+> > - Mickael: Use same audit messages with new audit message number
+> > - Stefan Berger: Return boolean from is_bprm_creds_for_exec()=20
+> >=20
+> >  include/uapi/linux/audit.h            |  1 +
+> >  security/integrity/ima/ima_appraise.c | 28 +++++++++++++++++++++++++--
+> >  security/integrity/ima/ima_main.c     | 22 +++++++++++++++++++++
+> >  3 files changed, 49 insertions(+), 2 deletions(-)
+> >=20
+> > diff --git a/include/uapi/linux/audit.h b/include/uapi/linux/audit.h
+> > index 75e21a135483..826337905466 100644
+> > --- a/include/uapi/linux/audit.h
+> > +++ b/include/uapi/linux/audit.h
+> > @@ -161,6 +161,7 @@
+> >  #define AUDIT_INTEGRITY_RULE	    1805 /* policy rule */
+> >  #define AUDIT_INTEGRITY_EVM_XATTR   1806 /* New EVM-covered xattr */
+> >  #define AUDIT_INTEGRITY_POLICY_RULE 1807 /* IMA policy rules */
+> > +#define AUDIT_INTEGRITY_DATA_CHECK  1808 /* Userspace enforced data in=
+tegrity */
+> > =20
+> >  #define AUDIT_KERNEL		2000	/* Asynchronous audit record. NOT A REQUEST=
+. */
+> > =20
+> > diff --git a/security/integrity/ima/ima_appraise.c b/security/integrity=
+/ima/ima_appraise.c
+> > index 656c709b974f..144e0b39fbcd 100644
+> > --- a/security/integrity/ima/ima_appraise.c
+> > +++ b/security/integrity/ima/ima_appraise.c
+> > @@ -8,6 +8,7 @@
+> >  #include <linux/module.h>
+> >  #include <linux/init.h>
+> >  #include <linux/file.h>
+> > +#include <linux/binfmts.h>
+> >  #include <linux/fs.h>
+> >  #include <linux/xattr.h>
+> >  #include <linux/magic.h>
+> > @@ -469,6 +470,18 @@ int ima_check_blacklist(struct ima_iint_cache *iin=
+t,
+> >  	return rc;
+> >  }
+> > =20
+> > +static bool is_bprm_creds_for_exec(enum ima_hooks func, struct file *f=
+ile)
+> > +{
+> > +	struct linux_binprm *bprm =3D NULL;
+> > +
+> > +	if (func =3D=3D BPRM_CHECK) {
+>=20
+> struct linux_binprm *bprm;
+
+Local variables are normally defined at the beginning of the function.
+>=20
+> > +		bprm =3D container_of(&file, struct linux_binprm, file);
+> > +		if (bprm->is_check)
+> > +			return true;
+>=20
+> return bprm->is_check;
+
+Yes, that's better.
+
+>=20
+> > +	}
+> > +	return false;
+> > +}
+> > +
+> >  /*
+> >   * ima_appraise_measurement - appraise file measurement
+> >   *
+> > @@ -483,6 +496,7 @@ int ima_appraise_measurement(enum ima_hooks func, s=
+truct ima_iint_cache *iint,
+> >  			     int xattr_len, const struct modsig *modsig)
+> >  {
+> >  	static const char op[] =3D "appraise_data";
+> > +	int audit_msgno =3D AUDIT_INTEGRITY_DATA;
+> >  	const char *cause =3D "unknown";
+> >  	struct dentry *dentry =3D file_dentry(file);
+> >  	struct inode *inode =3D d_backing_inode(dentry);
+> > @@ -494,6 +508,16 @@ int ima_appraise_measurement(enum ima_hooks func, =
+struct ima_iint_cache *iint,
+> >  	if (!(inode->i_opflags & IOP_XATTR) && !try_modsig)
+> >  		return INTEGRITY_UNKNOWN;
+> > =20
+> > +	/*
+> > +	 * Unlike any of the other LSM hooks where the kernel enforces file
+> > +	 * integrity, enforcing file integrity for the bprm_creds_for_exec()
+> > +	 * LSM hook with the AT_EXECVE_CHECK flag is left up to the discretio=
+n
+> > +	 * of the script interpreter(userspace). Differentiate kernel and
+> > +	 * userspace enforced integrity audit messages.
+> > +	 */
+> > +	if (is_bprm_creds_for_exec(func, file))
+> > +		audit_msgno =3D AUDIT_INTEGRITY_DATA_CHECK;
+> > +
+> >  	/* If reading the xattr failed and there's no modsig, error out. */
+> >  	if (rc <=3D 0 && !try_modsig) {
+> >  		if (rc && rc !=3D -ENODATA)
+> > @@ -569,7 +593,7 @@ int ima_appraise_measurement(enum ima_hooks func, s=
+truct ima_iint_cache *iint,
+> >  	     (iint->flags & IMA_FAIL_UNVERIFIABLE_SIGS))) {
+> >  		status =3D INTEGRITY_FAIL;
+> >  		cause =3D "unverifiable-signature";
+> > -		integrity_audit_msg(AUDIT_INTEGRITY_DATA, inode, filename,
+> > +		integrity_audit_msg(audit_msgno, inode, filename,
+> >  				    op, cause, rc, 0);
+> >  	} else if (status !=3D INTEGRITY_PASS) {
+> >  		/* Fix mode, but don't replace file signatures. */
+> > @@ -589,7 +613,7 @@ int ima_appraise_measurement(enum ima_hooks func, s=
+truct ima_iint_cache *iint,
+> >  			status =3D INTEGRITY_PASS;
+> >  		}
+> > =20
+> > -		integrity_audit_msg(AUDIT_INTEGRITY_DATA, inode, filename,
+> > +		integrity_audit_msg(audit_msgno, inode, filename,
+> >  				    op, cause, rc, 0);
+> >  	} else {
+> >  		ima_cache_flags(iint, func);
+> > diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima=
+/ima_main.c
+> > index 06132cf47016..f0830e6d0cda 100644
+> > --- a/security/integrity/ima/ima_main.c
+> > +++ b/security/integrity/ima/ima_main.c
+> > @@ -554,6 +554,27 @@ static int ima_bprm_check(struct linux_binprm *bpr=
+m)
+> >  				   MAY_EXEC, CREDS_CHECK);
+> >  }
+> > =20
+> > +/**
+> > + * ima_bprm_creds_for_exec - collect/store/appraise measurement.
+> > + * @bprm: contains the linux_binprm structure
+> > + *
+> > + * Based on the IMA policy and the execvat(2) AT_CHECK flag, measure a=
+nd
+>=20
+> AT_EXECVE_CHECK
+
+Thanks, good catch.
+>=20
+> > + * appraise the integrity of a file to be executed by script interpret=
+ers.
+> > + * Unlike any of the other LSM hooks where the kernel enforces file in=
+tegrity,
+> > + * enforcing file integrity is left up to the discretion of the script
+> > + * interpreter (userspace).
+> > + *
+> > + * On success return 0.  On integrity appraisal error, assuming the fi=
+le
+> > + * is in policy and IMA-appraisal is in enforcing mode, return -EACCES=
+.
+> > + */
+> > +static int ima_bprm_creds_for_exec(struct linux_binprm *bprm)
+> > +{
+>=20
+> We could have a comment explaining that ima_bprm_check() will not be
+> called a second time bi the bprm_check_security hook if bprm->is_check
+> is true because this hook would then not be called.  This would not be a
+> security issue anyway, just a useless call.
+
+Proposed comment:
++       /*=20
++        * As security_bprm_check() is called multiple times, both=20
++        * the script and the shebang interpreter are measured, appraised,
++        * and audited. Limit usage of this LSM hook to just measuring,
++        * appraising, and auditing the indirect script execution
++        * (e.g. ./sh example.sh).
++        */
+
+>=20
+> > +	if (!bprm->is_check)
+> > +		return 0;
+> > +
+> > +	return ima_bprm_check(bprm);
+> > +}
+> > +
+> >  /**
+> >   * ima_file_check - based on policy, collect/store measurement.
+> >   * @file: pointer to the file to be measured
+> > @@ -1177,6 +1198,7 @@ static int __init init_ima(void)
+> > =20
+> >  static struct security_hook_list ima_hooks[] __ro_after_init =3D {
+> >  	LSM_HOOK_INIT(bprm_check_security, ima_bprm_check),
+> > +	LSM_HOOK_INIT(bprm_creds_for_exec, ima_bprm_creds_for_exec),
+> >  	LSM_HOOK_INIT(file_post_open, ima_file_check),
+> >  	LSM_HOOK_INIT(inode_post_create_tmpfile, ima_post_create_tmpfile),
+> >  	LSM_HOOK_INIT(file_release, ima_file_free),
+> > --=20
+> > 2.47.0
+> >=20
+> >=20
+
