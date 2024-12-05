@@ -1,160 +1,126 @@
-Received: from mail-qv1-f45.google.com (mail-qv1-f45.google.com [209.85.219.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 296FC1917EE
-	for <audit@vger.kernel.org>; Thu,  5 Dec 2024 03:57:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.45
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.2])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D93C188733
+	for <audit@vger.kernel.org>; Thu,  5 Dec 2024 06:30:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.2
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733371068; cv=none; b=JwiLSITRCG2zvvR26SeffdftFvySIJGopmjB7teLBv3r0yQ1C0+rdvQ4KSz/ZxOut7ddOcNKkiWO9vq8Xn3EH2r/UPtzEQTwwP/jKreybjy2tSHPiqBkJr6s5zr2M4fazJwU8HMZ2L61yxVvXHruAQ1KPHCt3w2oIdvsq1x2Kac=
+	t=1733380257; cv=none; b=D3o5zulA6ox7NhtiDjJi7MhBi/OUIlC8ZVUBly+KG0JLB7bdWfneQMEISZNPomFD3MLi7dKZmr9Fs3hxixRyR7WwE5o2zPye0tJ01bKkcbjzhTBPIleNBhdifd07WLKIhkYcY+x1QzteO5UTQLPlTaCl474LUuhq7R6P6ni5OrI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733371068; c=relaxed/simple;
-	bh=oLRGTb72ejWWk9aFimMv47FZezfMuWjGvZSLQZgea14=;
-	h=Date:Message-ID:MIME-Version:Content-Type:From:To:Cc:Subject:
-	 References:In-Reply-To; b=lwA4YPVUEWCqhHtHaPO06M2RKRPgVXbE8ilN5au1reI4Ykjjc47dIBZP6kZ2hq3VUb7Nl1JZHEr34mI7N88TcNwqvaRlhDWwu8xWOYRVZEO/saJuaAZ+W5l2rKmTyt+H/u0f6CrlqYuxjUi8why7JHaFYk/DG2izrBnExaT4Lcg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=Jggbfd0c; arc=none smtp.client-ip=209.85.219.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+	s=arc-20240116; t=1733380257; c=relaxed/simple;
+	bh=Fm9YrXRysYXyDfff3Ci+cfubWw//QL7Mco9SPMG9zHQ=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=Wjmwfi0gvWIvp8sD48/H3n4iSfcaNY3tlfa+tNQ52cq3NgdT5AU5w/Va/xtiBy7yyKqbgsya9/o8ivHNrITLSX1tj0Nbp1B4nip0Ked0Qu7pWLLMns6oEwOVTJjXQAPv3IIJXVmibRGynXiSWNLTo1KtjufwCHNqrEwKDmyi2fY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=dstoax3H; arc=none smtp.client-ip=220.197.31.2
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="Jggbfd0c"
-Received: by mail-qv1-f45.google.com with SMTP id 6a1803df08f44-6d8cb085d1bso4605436d6.1
-        for <audit@vger.kernel.org>; Wed, 04 Dec 2024 19:57:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1733371066; x=1733975866; darn=vger.kernel.org;
-        h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
-         :mime-version:message-id:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=6Oti3qozRwoHqpzvb7K6NtyZNM2s4uzWDXR9kDcWgEw=;
-        b=Jggbfd0cQuUh6xIIsTe6RnfBfUMDTh0AIjZGDttrdXvz6xYwOV4sKNaVCaKhWIp9BM
-         63Uu0prQcIcBoZj6ZX3RAobxT58g4SlPeGAZ26l9hSeD4malPtj8xgQm6SVx6FwFjXNM
-         sT/40cAnIH9GynQi7qQm2A0dKlyIhdSvCVQ0mYileeDByl4BuAJHYrcOcvYN4lB7HrU6
-         YwGjIqRlh6LYJrBQexPjzWCCSj7l9IWFV1dn3zAp60OmMZt0oZuD0XinsZjqQYWpLVQ5
-         S4y5Nf7q6nquSd8pcdW1CrvN0EPsem9ZbynOfHGHZ0rdMgFPTPRXNcCm+6DZKWCtAYKg
-         CiBw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733371066; x=1733975866;
-        h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
-         :mime-version:message-id:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=6Oti3qozRwoHqpzvb7K6NtyZNM2s4uzWDXR9kDcWgEw=;
-        b=wUPxqVVmfL8Hp/D5jIP/F2VVMWLVGITOQt3BosaxkVB/w8O9aMmM4r4usWjnVf0R0Y
-         I6yXzaJ4IAbHUky+rx566qiVifFa3v7oa+wjVknikk1J5NZKTgZExDnqDZ9EiD0xkJtj
-         0ZNY9t5HqCEbbzY6ecyeI0JVicPTwSB2H6VbCATXXEEwydgnesWQYg/EtbA/qs0ok26Q
-         JGwdc+65LfinmC4u3pxuiJsrUkWWUgYRUSt0Iw0lYR/eAMbAnv9vQ3fZ3XuzQZVHKEn2
-         FXMuNuxlSJU5a00z+shZWjKfc6JLEezF0sUW9VL05XV7y0p14+6Ex5L+7DoLl5JWHKit
-         4bhg==
-X-Forwarded-Encrypted: i=1; AJvYcCV2cPFFmogE+0aPQeJtfQzsJID+GnWmFjPnM7rh4OE2pECCi/WhT8hwucZoNTsiShEcso3QEg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxCNRBOjeF3RyDvFonc6tmJ3BVj9iRWzdY6qmdRShNbS8Dx8SXi
-	KwXnGAoZSomnqhg3mGTgBSSt5tLDe6NnkFNJXeQqe/aoO+jWOLMZhpBwS1Shag==
-X-Gm-Gg: ASbGnctxWLSWHzUWn0ga7Q9iIsqTazKMU419mbw0XEYxio7dVyOm+Pm6o+Qw+ycUyy8
-	y6qPZ8Ce5yxwd7Jxw7fF5Wq0xYxoeca8Gcx0V2uH4Zfo4HH9qmly3cudu2s4RgIch29HMCBnEP6
-	vVViGRD7c46eDkVipgQp/VtMeEbe3TqybA9r2RR2f0EAwXqWtF9Ba7i0UPOUoXg4fbqy7oHXRtv
-	idhl45o7i0CgCwb+IMYZsrbMYiuV114IgFv2E13FcL3
-X-Google-Smtp-Source: AGHT+IFRejNpSwq8ad9CPlSgB0kK8N2HvIpjbURpmP7KEs6utN9/K2cNkEny1rpEWTrXQgButkPo/A==
-X-Received: by 2002:a05:6214:21a8:b0:6d8:916b:1caa with SMTP id 6a1803df08f44-6d8c4656a3amr86825166d6.27.1733371066112;
-        Wed, 04 Dec 2024 19:57:46 -0800 (PST)
-Received: from localhost ([70.22.175.108])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6d8da6977b5sm2522186d6.43.2024.12.04.19.57.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Dec 2024 19:57:45 -0800 (PST)
-Date: Wed, 04 Dec 2024 22:57:45 -0500
-Message-ID: <0539f2c64df66fe4adab6ba9a1030ab1@paul-moore.com>
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="dstoax3H"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=EI71h
+	sm/eCwWFydS1jrp4j5+TkQYohrvk27pq7qwnJk=; b=dstoax3HIRZJx2YwFqGda
+	2WBAPX0YIRhKArhy/RBuymtDYHX69aLrZ+7jltyM16kV35ZET3BilMYOzMz4iTOs
+	ejhdrP5AUfRI1vqNpOLjtsf1nOSXlwpVOu7yqkzwwjsDYzBUkTZYtmtGIgL6wnMC
+	4idhYQWRtZdRoqb0UtUjGI=
+Received: from localhost.localdomain (unknown [116.128.244.169])
+	by gzga-smtp-mtada-g1-4 (Coremail) with SMTP id _____wC3vTB4SFFnbhQ8DA--.41687S2;
+	Thu, 05 Dec 2024 14:30:17 +0800 (CST)
+From: 15074444048@163.com
+To: audit@vger.kernel.org,
+	paul@paul-moore.com,
+	eparis@redhat.com
+Cc: 15074444048@163.com,
+	lihaojie <lihaojie@kylinos.cn>
+Subject: [PATCH v2] kernel/audit: reorder the member of audit_context
+Date: Thu,  5 Dec 2024 14:30:23 +0800
+Message-Id: <20241205063023.744685-1-15074444048@163.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <CAHC9VhQwifyzueutyzy56D-G=7erf6KK=r__B9RWJY04fN3dJA@mail.gmail.com>
+References: <CAHC9VhQwifyzueutyzy56D-G=7erf6KK=r__B9RWJY04fN3dJA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 
-Content-Type: text/plain; charset=UTF-8 
-Content-Transfer-Encoding: 8bit 
-X-Mailer: pstg-pwork:20241204_1752/pstg-lib:20241204_1702/pstg-pwork:20241204_1752
-From: Paul Moore <paul@paul-moore.com>
-To: Yafang Shao <laoar.shao@gmail.com>, keescook@chromium.org
-Cc: qiuxu.zhuo@intel.com, rostedt@goodmis.org, lkp@intel.com, audit@vger.kernel.org, linux-kernel@vger.kernel.org, Yafang shao <laoar.shao@gmail.com>, Kees Cook <kees@kernel.org>
-Subject: Re: [PATCH v2] auditsc: Implement a workaround for a GCC bug triggered  by task comm changes
-References: <20241205021100.86390-1-laoar.shao@gmail.com>
-In-Reply-To: <20241205021100.86390-1-laoar.shao@gmail.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_____wC3vTB4SFFnbhQ8DA--.41687S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxuF1DZrWkZw15KF4DCFy8Xwb_yoW5Gr4rpF
+	4fGa1DKFsrJrZ3Z34xArs7WryY9w18Gw43GFyfJw1fAr98tFy7KF17Ka13uF98ZFWrur17
+	XFsYva4FyanrAa7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07ULmR8UUUUU=
+X-CM-SenderInfo: rprvilauuukiiuy6il2tof0z/1tbiMQisUGdRQYfdHwAAs3
 
-On Dec  4, 2024 Yafang Shao <laoar.shao@gmail.com> wrote:
-> 
-> A build failure has been reported with the following details:
-> 
->    In file included from include/linux/string.h:390,
->                     from include/linux/bitmap.h:13,
->                     from include/linux/cpumask.h:12,
->                     from include/linux/smp.h:13,
->                     from include/linux/lockdep.h:14,
->                     from include/linux/spinlock.h:63,
->                     from include/linux/wait.h:9,
->                     from include/linux/wait_bit.h:8,
->                     from include/linux/fs.h:6,
->                     from kernel/auditsc.c:37:
->    In function 'sized_strscpy',
->        inlined from '__audit_ptrace' at kernel/auditsc.c:2732:2:
-> >> include/linux/fortify-string.h:293:17: error: call to '__write_overflow' declared with attribute error: detected write beyond size of object (1st parameter)
->      293 |                 __write_overflow();
->          |                 ^~~~~~~~~~~~~~~~~~
->    In function 'sized_strscpy',
->        inlined from 'audit_signal_info_syscall' at kernel/auditsc.c:2759:3:
-> >> include/linux/fortify-string.h:293:17: error: call to '__write_overflow' declared with attribute error: detected write beyond size of object (1st parameter)
->      293 |                 __write_overflow();
->          |                 ^~~~~~~~~~~~~~~~~~
-> 
-> The issue appears to be a GCC bug, though the root cause remains
-> unclear at this time. For now, let's implement a workaround.
-> 
-> A bug report has also been filed with GCC [0].
-> 
-> Link: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=117912 [0]
-> 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Closes: https://lore.kernel.org/oe-kbuild-all/202410171420.1V00ICVG-lkp@intel.com/
-> Reported-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-> Closes: https://lore.kernel.org/all/20241128182435.57a1ea6f@gandalf.local.home/
-> Reported-by: Zhuo, Qiuxu <qiuxu.zhuo@intel.com>
-> Closes: https://lore.kernel.org/all/CY8PR11MB71348E568DBDA576F17DAFF389362@CY8PR11MB7134.namprd11.prod.outlook.com/
-> Originally-by: Kees Cook <kees@kernel.org>
-> Link: https://lore.kernel.org/linux-hardening/202410171059.C2C395030@keescook/
-> Signed-off-by: Yafang shao <laoar.shao@gmail.com>
-> Tested-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-> Tested-by: Yafang Shao <laoar.shao@gmail.com>
-> ---
->  kernel/auditsc.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+From: lihaojie <lihaojie@kylinos.cn>
+
+Adjust the positions of target_ref and target_comm to
+reduce their direct proximity. This can prevent the memset
+operation on target_ref from potentially affecting target_comm
+
+The compiler's static analysis tool considers that the memset
+operation might affect the adjacent struct member target_comm,
+potentially causing subsequent writes to target_comm to exceed
+its boundaries. Even if an overflow does not actually occur,
+the compiler may issue a warning because it cannot fully
+determine the safety of the operation.
+
+Verification:
+- "pahole" shows no size nor member offset changes to struct audit_context.
+- "objdump -d" shows no object code changes.
+
+Signed-off-by: lihaojie <lihaojie@kylinos.cn>
+---
+ kernel/audit.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/kernel/audit.h b/kernel/audit.h
+index 0211cb307d30..77c140228a4a 100644
+--- a/kernel/audit.h
++++ b/kernel/audit.h
+@@ -144,8 +144,8 @@ struct audit_context {
+ 	kuid_t		    target_auid;
+ 	kuid_t		    target_uid;
+ 	unsigned int	    target_sessionid;
+-	struct lsm_prop	    target_ref;
+ 	char		    target_comm[TASK_COMM_LEN];
++	struct lsm_prop	    target_ref;
+ 
+ 	struct audit_tree_refs *trees, *first_trees;
+ 	struct list_head killed_trees;
+-- 
+2.25.1
+
+On Tue, Dec 3, 2024 at 6:13 PM Paul Moore <paul@paul-moore.com> wrote:
 >
-> v1->2: Add the link of the GCC bug report
+> That's obviously a cut-n-paste error above, please fix that.
+>
+> You also sent this patch three times, that's very annoying, please
+> don't do that in the future.
+>
+> Finally, can you provide a link with an explanation as to how the
+> struct_group() union/annotations is the only way to do this?  It's
+> kinda ugly and if there is another way to do this I would like to
+> understand what it entails.
 
-Thanks, it looks like the GCC devs have been able to reproduce the
-problem, hopefully we'll have a proper fix soon.  Regardless, we need
-to resolve this in the kernel *now* so I'm going to merge this into the
-audit/stable-6.12 branch and I'll send it up to Linus after it clears
-testing.
+Hi Paul,
 
-> diff --git a/kernel/auditsc.c b/kernel/auditsc.c
-> index 279ba5c420a4..561d96affe9f 100644
-> --- a/kernel/auditsc.c
-> +++ b/kernel/auditsc.c
-> @@ -2728,8 +2728,8 @@ void __audit_ptrace(struct task_struct *t)
->  	context->target_auid = audit_get_loginuid(t);
->  	context->target_uid = task_uid(t);
->  	context->target_sessionid = audit_get_sessionid(t);
-> -	security_task_getlsmprop_obj(t, &context->target_ref);
->  	strscpy(context->target_comm, t->comm);
-> +	security_task_getlsmprop_obj(t, &context->target_ref);
->  }
->  
->  /**
-> @@ -2755,8 +2755,8 @@ int audit_signal_info_syscall(struct task_struct *t)
->  		ctx->target_auid = audit_get_loginuid(t);
->  		ctx->target_uid = t_uid;
->  		ctx->target_sessionid = audit_get_sessionid(t);
-> -		security_task_getlsmprop_obj(t, &ctx->target_ref);
->  		strscpy(ctx->target_comm, t->comm);
-> +		security_task_getlsmprop_obj(t, &ctx->target_ref);
->  		return 0;
->  	}
->  
-> -- 
-> 2.43.5
+Thank you for your feedback.
 
---
-paul-moore.com
+That's obviously a cut-n-paste error above, please fix that.
+
+- Corrected the verification section to refer to struct 
+audit_context instead of struct vlan_ethhdr.
+
+You also sent this patch three times, that's very annoying, please
+don't do that in the future.
+
+- This is my first time submitting a patch to the community, I 
+will pay attention afterwards
+
+Finally, can you provide a link with an explanation as to how the
+struct_group() union/annotations is the only way to do this?  It's
+kinda ugly and if there is another way to do this I would like to
+understand what it entails.
+
+- I found linux codebase change, memcpy() change to strscpy() in 
+audit_ptrace(), struct_group() cannot pass parameters to strscpy()
+so i submit patch v2, please check above.
+
