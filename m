@@ -1,105 +1,104 @@
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 685F2217735;
-	Thu,  5 Dec 2024 15:49:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD4961D618C
+	for <audit@vger.kernel.org>; Thu,  5 Dec 2024 23:06:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733413790; cv=none; b=JYFwySHQUyaZbPKWw9wrQVi66oQ22ZrKb+0M+3Cad5tCfVc11EBY1I0daKVJUHUbiHGv6p/i/vhRDNyOKcVpIQpxsej6pQ3dw1fRSkoGyY2zKDShiWRCUkUZ3O1kxVnHB0wpkHB1cR+tSUh0BLpqe3UutXsWMs+LL0SwojRD0BQ=
+	t=1733439968; cv=none; b=QarKbpqmHI8rf0MpITWANymseRVYKGGxK5Hgh8XPgBMOXO41CsPFmbx4JsrUVBrFRQPBr1+WDGiiI8QPdVf+Lm9GAjfXT33ckjB2bdI7EBytAffe2AUGqJeqgeTDhgB6xOX+iI/in/Yu0uWyBnztx+pH8KPVfmj+zAfOzLQSorw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733413790; c=relaxed/simple;
-	bh=5Y+c4NHFD6cgzhHRlErjUw+WUmpChw84padaTrK+qWc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=JQ8lOIuyrcxryEEc+8kZmjjIkIO2ocvUzlTurDScNS0+piTVEAKum2W5yKzYKBtvz2YINxgz5b4mjNkbjVWThO3HFQbTsQ5h0W15L4GkDSHWjVapKcafqSyulBntXNJAU0bj06cSrKPVBULqs66plNZ41UofixEhjUQlHv9gWVs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=tu9yZa6v; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1733439968; c=relaxed/simple;
+	bh=RSRtkP+Fl4Fu1wv2TYijQ4+N4uCrLGYJmNgMQkiMtOo=;
+	h=Date:Message-ID:From:To:Cc:Subject; b=Maz6Z4F8FrGxLb7xzm5jMVciYLf88PEnOblCYwtZc/u1JUsqcrGs75AAzyQhCDMyOaHQZbPGnY1MTDE05yiQ0d2rd5dQeKgRsCjJefzEQYmt9ci/0ZaNEqJtV2sZdejNFJW9Ur507YaUCTwimRPsHRV8Cd4x/4ZnuJfKFOcvX4M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=cZEf0Ahq; arc=none smtp.client-ip=209.85.160.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="tu9yZa6v"
-Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4B5Cp9La010713;
-	Thu, 5 Dec 2024 15:44:27 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=uvOX/k
-	j0bum17cJw1LcCJxvsbQYNRZs9luwHtHlOAbo=; b=tu9yZa6v1TgZSzNl8wCRbc
-	T7QdCyPuJouGt6QLkeBpFeaN3injwium7tmKJ9AowwRpQrdE41jXehK/Qm4HhknO
-	lnQPliWWC9lj7HZM+hQwMXefPuynlsj3HkBVerGzARjWj1VrqTajVdlFCHMeVoIf
-	ErRfnaOpR8Ra/ae7kqNB+kc09TUpQ+3EDVnWwX1+6Hrh31oo9wq6ctolQeAybvxl
-	XYqvCnuo++1lthxIG77sX2frxNVLZQrZiLMK74lOrjzRZB5CMg8jDxpPamAdEzdS
-	zb2hvGF+RRD+ig306vTx5sbnjDAqHiJQIZr/PpS4QJ/jyc5FQp7vY3nX14HS+sRg
-	==
-Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 43b24rbsqs-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 05 Dec 2024 15:44:27 +0000 (GMT)
-Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma13.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 4B5BlFZc007467;
-	Thu, 5 Dec 2024 15:44:26 GMT
-Received: from smtprelay01.wdc07v.mail.ibm.com ([172.16.1.68])
-	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 438f8jtcye-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 05 Dec 2024 15:44:26 +0000
-Received: from smtpav02.wdc07v.mail.ibm.com (smtpav02.wdc07v.mail.ibm.com [10.39.53.229])
-	by smtprelay01.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 4B5FiP7c50135712
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 5 Dec 2024 15:44:25 GMT
-Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 7C27258058;
-	Thu,  5 Dec 2024 15:44:25 +0000 (GMT)
-Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 4CCBB5805B;
-	Thu,  5 Dec 2024 15:44:24 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-	by smtpav02.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-	Thu,  5 Dec 2024 15:44:24 +0000 (GMT)
-Message-ID: <2a449edc-a642-4e6b-a55f-2eb03e5b15ce@linux.ibm.com>
-Date: Thu, 5 Dec 2024 10:44:23 -0500
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="cZEf0Ahq"
+Received: by mail-qt1-f173.google.com with SMTP id d75a77b69052e-46679337c24so11133991cf.3
+        for <audit@vger.kernel.org>; Thu, 05 Dec 2024 15:06:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1733439964; x=1734044764; darn=vger.kernel.org;
+        h=subject:cc:to:from:message-id:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gB2wprHKOPR1C3FlWr0JxgyEJMDu3YBCaXKrSKkj2to=;
+        b=cZEf0AhqaHnk1Bs5gZ4/uADCelK11qH12xO+5Eco7i+9xeNmjmY58s3OC7ujlqAjPZ
+         wnifc1OYOM2uv2MyHx0VQmbcas/hdu1AQBa1Rndceqn45F/uIcOvkDOg2QnKEnWZHZff
+         /wAyzlJS84dVFoWcBtrRBRCYLw2FEzwkLM9MwNJtqJhG8XpgUZw3zpoKjQJFmok2z7CH
+         yUYokBliUjnGwM/4JUXVZrXO63/TabhUlNfYIz4lYFmOiv3Fvt3RMIMMl/mbE8Moybu3
+         mGtFVKQWrHkqBL5wKFsW7Gz2zqk9VVoeOZ4BHlvoMLYCHoT6ivEUlAoyQya6I/cQgFBU
+         mw7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1733439964; x=1734044764;
+        h=subject:cc:to:from:message-id:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=gB2wprHKOPR1C3FlWr0JxgyEJMDu3YBCaXKrSKkj2to=;
+        b=e+Ihreg9ldYKtop3KnLQxDBCr2iKShF8oo9IPJ7ev6QzbbbWc2j5ObfC4IJluKx7H0
+         h7AHM2we+9qtmlffDPOmu783HgTg94zyD2zCj0F27uoWrU9chVd81qtThaq7czd1rteG
+         /j4R4jFBL4L4qJZep7DPYZZn8Tur0ybRxxzbcw8KqDW7JwmOrcdc4Ek0ONfyGOAE5nGF
+         lELDETBbKH+Zq6moJ9Fjj0y6LJZJ07izr9PdUVVfzmd6lVu6uKgsf0Hvow9MeN1Z0Arj
+         kovlwDUq0UpRF6TI0hkYdlyioGBHnpxn6pLb77mqigbjQMEvEjXHE0GSSCMQiHeMrSFP
+         ScNQ==
+X-Gm-Message-State: AOJu0YwmYgXO6g/uN3jiLGTlCR+cY7nqGAeguRYIdWIt8ISKg3V6AgSX
+	HJDKWgccMXKcooX35d3nT/ucpw7w3GK4Tx065gAQ8Yf6f9hc8Fkt3j/8T/z6ybE0IJyAgR2hPuF
+	vvw==
+X-Gm-Gg: ASbGncsj9DiE0k0ujhkm8IFrnC7xtM5jMujKnQSvbEqjytfSvfivTnjPyro/LuiZk3Y
+	oXy4UqrEDJyb4AjLKzIkpYpAJvvng57NEvCTZ7u7+D+03DZKDNE1Ew+tEjVmzmzyyiM/ss3g7Yd
+	mGZhNcomBlWxxyniA30b1LwVaPkND+Cw0HwMBpyqJlrt6ErWbVoVVOV6xhijyQ5j7lkE9dVq2YO
+	axLW3bjlKzpnk1+VpBx1Qe0chhtq0FbM2whtBfK+VxK
+X-Google-Smtp-Source: AGHT+IH//YJCxBh1r9M6L58qveosoEAxtWbi0tzDXcNc0u1qOZiSVBYlKljByQTou9Gs7CfnatzY8w==
+X-Received: by 2002:ac8:5955:0:b0:460:996b:2896 with SMTP id d75a77b69052e-46734f48cf2mr12049091cf.45.1733439963780;
+        Thu, 05 Dec 2024 15:06:03 -0800 (PST)
+Received: from localhost ([70.22.175.108])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4672978dd14sm13184221cf.54.2024.12.05.15.06.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Dec 2024 15:06:03 -0800 (PST)
+Date: Thu, 05 Dec 2024 18:06:02 -0500
+Message-ID: <70abed262882f79e63e747ef56a0379c@paul-moore.com>
+From: Paul Moore <paul@paul-moore.com>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: audit@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] audit/audit-pr-20241205
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] ima: instantiate the bprm_creds_for_exec() hook
-To: Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org
-Cc: =?UTF-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>,
-        roberto.sassu@huawei.com, linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jeff Xu <jeffxu@chromium.org>,
-        Kees Cook <kees@kernel.org>, Paul Moore <paul@paul-moore.com>,
-        audit@vger.kernel.org
-References: <20241203233424.287880-1-zohar@linux.ibm.com>
-Content-Language: en-US
-From: Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <20241203233424.287880-1-zohar@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: tx5W64ZXXLFvZsf-j4fPoGFnWV7eEydM
-X-Proofpoint-ORIG-GUID: tx5W64ZXXLFvZsf-j4fPoGFnWV7eEydM
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
- definitions=2024-10-15_01,2024-10-11_01,2024-09-30_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 suspectscore=0
- bulkscore=0 adultscore=0 impostorscore=0 priorityscore=1501
- lowpriorityscore=0 clxscore=1011 mlxscore=0 spamscore=0 malwarescore=0
- mlxlogscore=776 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2411120000 definitions=main-2412050112
 
+Linus,
 
+A minor audit patch that shuffles some code slightly to workaround a GCC
+bug affecting a number of people.  The GCC folks have been able to
+reproduce the problem and are discussing solutions (see the bug report
+link in the commit), but since the workaround is trivial let's do that
+in the kernel so we can unblock people who are hitting this.
 
-On 12/3/24 6:34 PM, Mimi Zohar wrote:
-> Like direct file execution (e.g. ./script.sh), indirect file exection
-> (e.g. sh script.sh) needs to be measured and appraised.  Instantiate
-> the new security_bprm_creds_for_exec() hook to measure and verify the
-> indirect file's integrity.  Unlike direct file execution, indirect file
-> execution is optionally enforced by the interpreter.
-> 
-> Differentiate kernel and userspace enforced integrity audit messages.
-> 
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
+Paul
 
-Tested-by: Stefan Berger <stefanb@linux.ibm.com>
+--
+The following changes since commit 40384c840ea1944d7c5a392e8975ed088ecf0b37:
 
+  Linux 6.13-rc1 (2024-12-01 14:28:56 -0800)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/audit.git
+    tags/audit-pr-20241205
+
+for you to fetch changes up to d9381508ea2b590aff46d28d432d20bfef1ba64c:
+
+  audit: workaround a GCC bug triggered by task comm changes
+    (2024-12-04 22:57:46 -0500)
+
+----------------------------------------------------------------
+audit/stable-6.13 PR 20241205
+----------------------------------------------------------------
+
+Yafang shao (1):
+      audit: workaround a GCC bug triggered by task comm changes
+
+ kernel/auditsc.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+--
+paul-moore.com
