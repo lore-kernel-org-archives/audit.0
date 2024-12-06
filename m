@@ -1,137 +1,105 @@
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC27041C77;
-	Fri,  6 Dec 2024 03:11:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A020A206F1F
+	for <audit@vger.kernel.org>; Fri,  6 Dec 2024 13:00:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733454668; cv=none; b=cC+uihvICHiqHsT6Yl4bOpXRo1i4BeyFnI74yvYmn2diampgIbPNndZcPaPUYHTq//4+S9Tiwgyh2JovncVnpOm3oLcm9klNH2upFuEvj7J06Eg1MPrSCQUndFj9M/J3tgzTbfgBGFHouhaWplITrfXT0Wzh39aFhZ9dt9VHalw=
+	t=1733490020; cv=none; b=P2KbG4CsjQOwNIh2U5wSlRtr0K6NyENxeDJD/DATiRVsP7qVPBhAXjYWwaUT7VpfaGxAUyUcRqMNEtMh0/eT49xpn2xM2fxW6epo4fcs83LTIAq53l39KvDd2ofi/eD6QHiFY9+P6eh8k+yq/Ac9PA71rIKMUMs2XJ9RcnxtC7A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733454668; c=relaxed/simple;
-	bh=YCcsQBLzz097jKtMcuCVJ8K011zJcVsZOgndM9W1fEI=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=taox2BvlfyYajX6iGF9H3aitINetmPHW/ODyKPkPnfqOMLl0QS9gXaxQIGUQ+mAg0yyIrTccNC3xGMdo3W2q3AVM+p9H2rR8fRWqz0s5TwHQl8Upt/fgSJtoLzJPNCrwKw0qKSC3mcpu4945iMtRNZDy5vwD6+7QHjY2hwVxLzs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=roIIUP5n; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1733490020; c=relaxed/simple;
+	bh=PW6Q+/r8QRjgroTX3+KWZFperSsUGEs9C/zFXUin/3s=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=FluepPbywXt+zKcn74SKXwJZ3f9jhkWq2pk5WdV6AcIVbdlxVE8FUBkkpT6t12SAk9Ij2LNUEsgXws9iJTRLkFjXnuvZG3f2pLLtVuPnlUAvSg//ZoeMzu/Xsx6rEpApuGp3KnhNB+ES0tAKIUy+7WwMefNOvoZCZ6ukcRAX5SA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=cw8rDrjO; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="roIIUP5n"
-Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4B5JX6xw027768;
-	Fri, 6 Dec 2024 03:10:39 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=yDhAM7
-	HPcAjoSQqLayCtHWYxOTAHydOBcH6zeNAKDLQ=; b=roIIUP5nCCMgEXm4IdtUFP
-	AKARimDUGh5yWy0/sKObBrHrg/39KQjHrnR+QrbaNw3QIXXAP7IVyMC/RMztxt41
-	KHdv6Ll1pqwyvwZ/AAmOaqvMV7J3SIBejak7Vsqk3oPDldnwDuZRsDoKiMk9y7WZ
-	Y+492gPJrlZAFcPbBiCsouyvOK3NAi4L78EA7tga7q85TzJkEB7pI8ErjvA93RxQ
-	CoQ07AloyGxj8hvMNZRR/rlzCgdZE4fIXz+tD23VAoGEdTLjSXeDRwPTlsdKS/I/
-	W83mW8tacnq2Zl1t+TDUm0JfFMHFXudRvUuIPpUp5ws6ZHKhrO0RS7A3pxFPYqxg
-	==
-Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 43ba1ymdk8-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 06 Dec 2024 03:10:39 +0000 (GMT)
-Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma11.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 4B60tcso005278;
-	Fri, 6 Dec 2024 03:10:38 GMT
-Received: from smtprelay01.wdc07v.mail.ibm.com ([172.16.1.68])
-	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 438fr1vwa2-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 06 Dec 2024 03:10:38 +0000
-Received: from smtpav02.dal12v.mail.ibm.com (smtpav02.dal12v.mail.ibm.com [10.241.53.101])
-	by smtprelay01.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 4B63AbLA49086890
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 6 Dec 2024 03:10:37 GMT
-Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 372815805A;
-	Fri,  6 Dec 2024 03:10:37 +0000 (GMT)
-Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 9639658051;
-	Fri,  6 Dec 2024 03:10:36 +0000 (GMT)
-Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.61.36.231])
-	by smtpav02.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Fri,  6 Dec 2024 03:10:36 +0000 (GMT)
-Message-ID: <b6dc4d8b23b822638ab676055809503060c0bca2.camel@linux.ibm.com>
-Subject: Re: [PATCH v2] ima: instantiate the bprm_creds_for_exec() hook
-From: Mimi Zohar <zohar@linux.ibm.com>
-To: Paul Moore <paul@paul-moore.com>, linux-integrity@vger.kernel.org
-Cc: =?ISO-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
-        roberto.sassu@huawei.com, linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jeff Xu <jeffxu@chromium.org>,
-        Kees Cook
-	 <kees@kernel.org>, audit@vger.kernel.org
-Date: Thu, 05 Dec 2024 22:10:36 -0500
-In-Reply-To: <282573d0ea82ac71c8305d0c8cc89083@paul-moore.com>
-References: <20241204192514.40308-1-zohar@linux.ibm.com>
-	 <282573d0ea82ac71c8305d0c8cc89083@paul-moore.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.52.4 (3.52.4-2.fc40) 
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="cw8rDrjO"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1733490017;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=4np2Gt/G625+NVUj+saJleDuMjAPrEfkQvrELJ5U0PA=;
+	b=cw8rDrjOA9xx08Z24SRJOvlwg9bhlKb8W9FbLeTSOccAOE+NaGjTEpJdsDTpy4n3r9og5q
+	/gMEYHLVGtZnyCi9X2J3po+WzjpYgTd09YW90UQHyzxpWmq5Do79ZEAFYlXUaT5gae2FmW
+	tgtGb6gXrpur4uw7G97lG7GHNHznFCo=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-392-GsDpl5v5OmidqcbG31yZCQ-1; Fri, 06 Dec 2024 08:00:14 -0500
+X-MC-Unique: GsDpl5v5OmidqcbG31yZCQ-1
+X-Mimecast-MFC-AGG-ID: GsDpl5v5OmidqcbG31yZCQ
+Received: by mail-ej1-f72.google.com with SMTP id a640c23a62f3a-aa64275c4f6so23228566b.0
+        for <audit@vger.kernel.org>; Fri, 06 Dec 2024 05:00:14 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1733490013; x=1734094813;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=4np2Gt/G625+NVUj+saJleDuMjAPrEfkQvrELJ5U0PA=;
+        b=pEOCIcLObUXocGm8nbU4AeVoL7iYGoXjmR+aiad9ACgTagjLfZHTBD6+NOlTSvXlsF
+         tBvqQJ0AhzBFyjwDGFtvMrlTg6788OF/71eRIe9lk9+DndHYmsbWArlT+UWWn0yJ71IJ
+         RfgCyPBJvEztQsL30UrLvEenvaIU0OdKTS7f6p930An+FZguk36jFHDIUcJdTACq4P16
+         jbXEDGD+J1WIwe3P+FbG2sxfaUVo3gec2Ub+VdSm0avmXaZSOyH+d2XbLEGCzG4w7ksD
+         2aIN1dOF/hwF9eDn226vO95WJWKgM1T9xFC80y7g4Vm3jh1ma3dIOEjqkz52uEh+INRa
+         6wgA==
+X-Gm-Message-State: AOJu0Yxu2p3yTk8f0lVlmxIG/reGNEIV4OXUIF59jPxdGNZpMddsLAQF
+	1FFE5GH70/u11rsBKJ08UbahXeJPpunYmoLrmXfnX50uR0oT8ueRO8mDrhGUBSIhc75JR8NMG+F
+	1WMQRhadb/Uac5WurqfZlN/DL6tYNa5rysmHKIfKVhu605AvO3B0HYkuJ8/5hJ0trVY4o9kqDnH
+	74SIjUDLsaP8N3+sj0st24wrJ+93o=
+X-Gm-Gg: ASbGnctPGAYI5FnF0BoBL3zOOMJt8DxAWvanqsUVlnf0XStl9AzgdW3IGN0N4zXENom
+	vPsRxeVFxnP9+o3fmGsefS+vNXxkjR77D9XOsONKXzuHcL5INKnCZXXhjAHpXOaYE
+X-Received: by 2002:a17:907:910d:b0:aa6:3e97:f9db with SMTP id a640c23a62f3a-aa63e98157emr128921666b.50.1733490013099;
+        Fri, 06 Dec 2024 05:00:13 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IFGbiJ4az96p6Wq62FXctxA12RJ2DsEtqG6ZgCij4WznqIqqVnc0rVhUWkKSVx3XxBChHE/U3LahunxkzQ4SqU=
+X-Received: by 2002:a17:907:910d:b0:aa6:3e97:f9db with SMTP id
+ a640c23a62f3a-aa63e98157emr128920466b.50.1733490012718; Fri, 06 Dec 2024
+ 05:00:12 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: Eikc-Du9f6xTPsAUAf3TY1Ri9qqXeCVg
-X-Proofpoint-GUID: Eikc-Du9f6xTPsAUAf3TY1Ri9qqXeCVg
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
- definitions=2024-10-15_01,2024-10-11_01,2024-09-30_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- mlxlogscore=998 phishscore=0 adultscore=0 spamscore=0 priorityscore=1501
- bulkscore=0 mlxscore=0 impostorscore=0 lowpriorityscore=0 clxscore=1015
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2411120000 definitions=main-2412060021
+References: <20241122121843.641573-1-rrobaina@redhat.com> <d3391fbff2c69be230d368c68d215be4@paul-moore.com>
+In-Reply-To: <d3391fbff2c69be230d368c68d215be4@paul-moore.com>
+From: Ricardo Robaina <rrobaina@redhat.com>
+Date: Fri, 6 Dec 2024 10:00:00 -0300
+Message-ID: <CAABTaaBQ0+tSx++xYB2NJ=3Qkein9Y5=eY0uU-V9Qb6mR28GvQ@mail.gmail.com>
+Subject: Re: [PATCH v2] audit: fix suffixed '/' filename matching in __audit_inode_child()
+To: Paul Moore <paul@paul-moore.com>
+Cc: audit@vger.kernel.org, linux-kernel@vger.kernel.org, eparis@redhat.com, 
+	rgb@redhat.com, viro@zeniv.linux.org.uk
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: NFTNawvl7QAHLCUVsJPQYHz6uKNANdycTkLJaST6EQ8_1733490013
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, 2024-12-05 at 19:30 -0500, Paul Moore wrote:
-> On Dec  4, 2024 Mimi Zohar <zohar@linux.ibm.com> wrote:
-> >=20
-> > Like direct file execution (e.g. ./script.sh), indirect file execution
-> > (e.g. sh script.sh) needs to be measured and appraised.  Instantiate
-> > the new security_bprm_creds_for_exec() hook to measure and verify the
-> > indirect file's integrity.  Unlike direct file execution, indirect file
-> > execution is optionally enforced by the interpreter.
-> >=20
-> > Differentiate kernel and userspace enforced integrity audit messages.
-> >=20
-> > Co-developed-by: Roberto Sassu <roberto.sassu@huawei.com>
-> > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> > Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
-> > ---
-> > Changelog v3:
-> > - Mickael: add comment ima_bprm_creds_for_exec(), minor code cleanup,
-> >   add Co-developed-by tag.
-> >=20
-> > Changelog v2:
-> > - Mickael: Use same audit messages with new audit message number
-> > - Stefan Berger: Return boolean from is_bprm_creds_for_exec()
-> >=20
-> >  include/uapi/linux/audit.h            |  1 +
-> >  security/integrity/ima/ima_appraise.c | 27 +++++++++++++++++++++++--
-> >  security/integrity/ima/ima_main.c     | 29 +++++++++++++++++++++++++++
-> >  3 files changed, 55 insertions(+), 2 deletions(-)
-> >=20
-> > diff --git a/include/uapi/linux/audit.h b/include/uapi/linux/audit.h
-> > index 75e21a135483..826337905466 100644
-> > --- a/include/uapi/linux/audit.h
-> > +++ b/include/uapi/linux/audit.h
-> > @@ -161,6 +161,7 @@
-> >  #define AUDIT_INTEGRITY_RULE	    1805 /* policy rule */
-> >  #define AUDIT_INTEGRITY_EVM_XATTR   1806 /* New EVM-covered xattr */
-> >  #define AUDIT_INTEGRITY_POLICY_RULE 1807 /* IMA policy rules */
-> > +#define AUDIT_INTEGRITY_DATA_CHECK  1808 /* Userspace enforced data in=
-tegrity */
->=20
-> I worry that "DATA_CHECK" is a bit vague, should we change the name so
-> that there is some hint of either userspace enforcement or
-> AT_EXECVE_CHECK?
->=20
-> What about AUDIT_INTEGRITY_DATA_USER?
+On Thu, Dec 5, 2024 at 9:22=E2=80=AFPM Paul Moore <paul@paul-moore.com> wro=
+te:
+>
+> Yes, Richard did provide a reviewed-by tag on the v1 patch, but v2 has
+> enough changes that I don't think we can reasonably carry that forward;
+> of course Richard re-review this iteration and provide a new tag.  I'm
+> going to remove it for now.
+>
+> Al never provided an explicit reviewed-by tag; simply commenting on a
+> patch is not the same as providing a 'Reviewed-by', the reviewer will
+> provide an explicit 'Reviewed-by' tag in their email.  I'm going to
+> remove Al's tag too.
 
-The emphasis should be on userspace - AUDIT_INTEGRITY_USERSPACE.
+I'm sorry about that, I was just trying to give credit to the ones who
+helped. Thanks for clarifying the expected review process, I
+appreciate it!
 
-Mimi
+> Other than those issues, I think this looks much better than v1, I'm
+> going to merge this into audit/dev now, thanks!
+
+Thanks, Paul!
+
+- Ricardo
+
