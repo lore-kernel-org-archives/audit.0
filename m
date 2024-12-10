@@ -1,118 +1,97 @@
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com [209.85.219.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB6D978F5A;
-	Tue, 10 Dec 2024 16:48:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F3A023ED63
+	for <audit@vger.kernel.org>; Tue, 10 Dec 2024 19:18:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733849303; cv=none; b=W4cWOz/435CQ/fcmbqwENvriiyJzL32ibib+iJHOeabyrLRy6aXPB6TcKhDtnZfsbP/J/I93KupzYrYeN0AQ6rvOy/5iIeudRL0X3dcuzYR6tW91eOorrgUZqUFJ8rW3LWOK3OPFWXlJSBXQxGktZheg8FKM4uN8HIALVB+bbxc=
+	t=1733858325; cv=none; b=N41jSAxIMNCo6IjHZvfPeS40iAhjVu2ncMBVgtNc4G3m3DQZtg498vL/cSakEsoT4OqYYxQ0rmWPmK0Yzl5DkxSXouOwoEgQG4onFSadQ/06ktlquYs3Sm76cGYuHeDN4yGbLr9zshFNOmgdPuRYahptvW0NrsINdE/yRiFWzvw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733849303; c=relaxed/simple;
-	bh=CDmWz5CiCJkhk/84wx4DIhxG+Go5pfa/hXNPyS+mkCs=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=bSlBbXnugkzk1YgmILd6JH2i0g1lRdEvBF7cLgPAlrnM9oilSlKoeroI3jqSzNgeQ0S+gtpq4l/m7z3A9jzhnkJ4pxvxuTYbkNWwUTdNBNxq9WN56HrW+ZOMq6gg8/LMNkBp6mqhqSL0V1wQdcTKjIzqd05kLhdk+e3pK3iNPDM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=sj/piHTU; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1733858325; c=relaxed/simple;
+	bh=CJFSUicCSEftUaEPCWoKl2JIiTfC9AFeIdCoKbGqNks=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=sqVxTGmwawznNAre6S8hX4gBOzwjtBesE8tVgmuZoahVc/WF1upr5usx4XhwwPipxUYNAaWEuM1HT0pFCIG/BwvUrS2EM4xfaMrqBKJqVdDnPnNln30WfnyDv2NCPrKsc+JIozKsxMpLY+KN2g+gX3j+KtaJunSTR0n6RlIL0pk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=KUzRdJux; arc=none smtp.client-ip=209.85.219.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="sj/piHTU"
-Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4BADrZHH004001;
-	Tue, 10 Dec 2024 16:47:58 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=y7ps4y
-	jzkZ/XtpKHNj+sd4uVbzn3335JijmLLbvAbDs=; b=sj/piHTU1zd8XuP3cPux/1
-	nt9tjYfZZyQnHYz3A2vr9VKQhuYytAOUGFAtgxinf7W074xL3dNrnROnnbdDqbEm
-	CrT+xK56u3JERZpicUunH5R1omEhPk/NCg9Sl9HB6CtrZ9LWxIe+JcEtqgU0yD+Y
-	Az2Fbrylw2v2c2rk1qwiWXQ9fqrurjV4DHwypU/hbYBTBFcpsN2yMsFvpuZgznK5
-	xKw05DsIR0Dsrfeuteosjx+C1HRJ7gD+sGvjPf/Rr2u/F9jicfs6Bfe5OljedvsU
-	NoiAFSEe5SYEyXAzLTPM9bgDFChzA1pkzE6b+OBXaarVlyXatrQ/3WxpF9DoZYLA
-	==
-Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 43ce0xf5pc-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 10 Dec 2024 16:47:57 +0000 (GMT)
-Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma11.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 4BAD28MJ017421;
-	Tue, 10 Dec 2024 16:47:57 GMT
-Received: from smtprelay05.dal12v.mail.ibm.com ([172.16.1.7])
-	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 43d3d1m4xj-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 10 Dec 2024 16:47:57 +0000
-Received: from smtpav05.wdc07v.mail.ibm.com (smtpav05.wdc07v.mail.ibm.com [10.39.53.232])
-	by smtprelay05.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 4BAGludf22545120
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 10 Dec 2024 16:47:56 GMT
-Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 519B958059;
-	Tue, 10 Dec 2024 16:47:56 +0000 (GMT)
-Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 5C63458053;
-	Tue, 10 Dec 2024 16:47:55 +0000 (GMT)
-Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.61.160.242])
-	by smtpav05.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-	Tue, 10 Dec 2024 16:47:55 +0000 (GMT)
-Message-ID: <983114dbf101b0df7d61a31af002783d06fc963d.camel@linux.ibm.com>
-Subject: Re: [PATCH v2] ima: instantiate the bprm_creds_for_exec() hook
-From: Mimi Zohar <zohar@linux.ibm.com>
-To: =?ISO-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>
-Cc: Paul Moore <paul@paul-moore.com>, linux-integrity@vger.kernel.org,
-        roberto.sassu@huawei.com, linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jeff Xu <jeffxu@chromium.org>,
-        Kees Cook
-	 <kees@kernel.org>, audit@vger.kernel.org
-Date: Tue, 10 Dec 2024 11:47:54 -0500
-In-Reply-To: <20241210.Wie6ion7Aich@digikod.net>
-References: <20241204192514.40308-1-zohar@linux.ibm.com>
-	 <282573d0ea82ac71c8305d0c8cc89083@paul-moore.com>
-	 <b6dc4d8b23b822638ab676055809503060c0bca2.camel@linux.ibm.com>
-	 <20241210.Wie6ion7Aich@digikod.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.52.4 (3.52.4-2.fc40) 
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="KUzRdJux"
+Received: by mail-yb1-f171.google.com with SMTP id 3f1490d57ef6-e3997835700so4728250276.2
+        for <audit@vger.kernel.org>; Tue, 10 Dec 2024 11:18:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1733858322; x=1734463122; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=OJ0dvOqyORHQjfISQJYoMpjke92iFiidvjB87tbcxDc=;
+        b=KUzRdJuxSD2p1wPWNlPSpR7dHbnz3ottIXdIYbvfK8NYcz+ED5JM8cLW6NJdXawfhi
+         aPFocARVlp5hEDbBN3aUW0D8pzB9Q5v74rbtFYdplKrzIjrzerMa9qd3XYuLRl3xBL0u
+         4NabB0jZ9jMvj8tx4OWyV1azHAOMyaI8njTJmlXMiSpsuAJ6S4nnmvbZiPf7TWK2dAHA
+         HriK9gmYmsL16+EpdyWBpTilCAVmYT8jXL12TmvBtYjpKPj/1KHukqKruQIz1G0oImKF
+         e+4vaUTRYwaJYlrwHLBW3kmbgNsd8Nbooo1aoKoyC51qgM61iT83FF5mshqr17qv81Qm
+         LfgQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1733858322; x=1734463122;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=OJ0dvOqyORHQjfISQJYoMpjke92iFiidvjB87tbcxDc=;
+        b=st3/4D1U4psyL79uT08A+C5u7pWzHW8JOQOwE/GO4eMbcYrxqpzJ7fMbolKI7Hw1/r
+         V3qvzgFdzIQkt1Ol2/BoF79jYCNH8YFohYM3wOTFVY6Z1VpL2yya7MQ+gQIcGc7doEVU
+         qX7vTACdRZ/b9XWX5nipAwL2bvLvsFpYXX93FH6JqhW4xnZPSzhsFw+I/dQG/76/JJUJ
+         TrOEWItgdtZURmh/6e3tXGtAtMBRcdlejKPHHDyAurN48fQkhj1AvGjlsEXb36pOetY3
+         vLz+zTAbjpCE3i81njzZthe4yueYfokBLOU/SQNcqmf7KiDWxodoe1rueJokFBe2ftGl
+         qWpQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXSnHJeoZ/VpRJ/a40TJE8mPupybid/nPXfS7m0hak7oOL5CdBr/kyzV/Vk5jOu7eLpigygVA==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz79Z92ZG+lsf8DrQJ45IBigMael3q/W3fbM7dQpK/AcIcS59/G
+	MxT4koxDFXN6S4CaU/+RUPjiRhztgFe0gynzzYa7SRsaNlO33uRu9HbzCBRMk3XEvaJvychWOV9
+	Mu8HqF3prUm9wvf6dn6zj2qrauvIpmrGKxazD
+X-Gm-Gg: ASbGncthxPlrdtWdZBn/k/SNRTdSUeO1clMzyr9XtSHRyx5L8l88uZuwnWS8mwWevjH
+	NGZR3dj5JjN1dIrtUZjY1yaY/JQgK7gQvkA==
+X-Google-Smtp-Source: AGHT+IHeifD5JmXkV44yBoBHBDMPFMW8bIr/4bdzGu6KutxSK8Mj9uJ3Jqeb8LMZfBS10mWZbzez3Vbmq3el3ENEZb8=
+X-Received: by 2002:a05:6902:310f:b0:e30:cd52:b247 with SMTP id
+ 3f1490d57ef6-e3c8e615116mr360989276.29.1733858322032; Tue, 10 Dec 2024
+ 11:18:42 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: COmalQii4v1ua8ESt7Q21uSSxSkETcMb
-X-Proofpoint-ORIG-GUID: COmalQii4v1ua8ESt7Q21uSSxSkETcMb
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
- definitions=2024-10-15_01,2024-10-11_01,2024-09-30_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- spamscore=0 clxscore=1011 impostorscore=0 mlxscore=0 mlxlogscore=538
- priorityscore=1501 malwarescore=0 adultscore=0 bulkscore=0 phishscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2411120000 definitions=main-2412100122
+References: <2A30FFFE-973A-4355-87D2-C0F3648E518A@flyingcircus.io>
+In-Reply-To: <2A30FFFE-973A-4355-87D2-C0F3648E518A@flyingcircus.io>
+From: Paul Moore <paul@paul-moore.com>
+Date: Tue, 10 Dec 2024 14:18:31 -0500
+Message-ID: <CAHC9VhSLKNthep_+Vo8t836WfxxuvDkDXu+NjC5RB+ApHM7QwA@mail.gmail.com>
+Subject: Re: Questions regarding TTY input auditing
+To: Molly Miller <mm@flyingcircus.io>
+Cc: eparis@redhat.com, audit@vger.kernel.org, 
+	Christian Theune <ct@flyingcircus.io>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, 2024-12-10 at 17:34 +0100, Micka=C3=ABl Sala=C3=BCn wrote:
-> > > > +++ b/include/uapi/linux/audit.h
-> > > > @@ -161,6 +161,7 @@
-> > > > =C2=A0 #define AUDIT_INTEGRITY_RULE	=C2=A0=C2=A0=C2=A0 1805 /* poli=
-cy rule */
-> > > > =C2=A0 #define AUDIT_INTEGRITY_EVM_XATTR=C2=A0=C2=A0 1806 /* New EV=
-M-covered xattr */
-> > > > =C2=A0 #define AUDIT_INTEGRITY_POLICY_RULE 1807 /* IMA policy rules=
- */
-> > > > +#define AUDIT_INTEGRITY_DATA_CHECK=C2=A0 1808 /* Userspace enforce=
-d data integrity */
-> > >=20
-> > > I worry that "DATA_CHECK" is a bit vague, should we change the name s=
-o
-> > > that there is some hint of either userspace enforcement or
-> > > AT_EXECVE_CHECK?
-> > >=20
-> > > What about AUDIT_INTEGRITY_DATA_USER?
-> >=20
-> > The emphasis should be on userspace - AUDIT_INTEGRITY_USERSPACE.
->=20
-> Looks good, I'll send a new patch series with this change, following
-> https://lore.kernel.org/all/20241205160925.230119-9-mic@digikod.net/
+On Mon, Dec 9, 2024 at 4:38=E2=80=AFAM Molly Miller <mm@flyingcircus.io> wr=
+ote:
+>
+> Hi there,
+>
+> We're currently taking a look at the TTY input logging functionality of t=
+he auditing subsystem and evaluating it for use in our environment, however=
+ there are some parts of this which we don't quite understand, and we've ha=
+d difficulty answering our questions purely from reading the kernel sources=
+.
+>
+> Primarily, it's not clear to us when the kernel decides to flush the keys=
+trokes logged from the TTY into an audit log message which can be read by a=
+ userspace process like auditd.
 
-Sound good!  Thank you.
+Hi Molly,
 
-Mimi
+You likely want to look for tty_audit_push() callers, that should help
+identify where/how the kernel decides to flush the TTY data.  Looking
+quickly at an upstream kernel I see the following callers: canonical
+mode (as you mentioned), ioctl(TIOCSTI), and the AUDIT_USER_TTY
+command/message from userspace.
+
+--
+paul-moore.com
