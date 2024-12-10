@@ -1,84 +1,102 @@
-Received: from mail.flyingcircus.io (mail.flyingcircus.io [212.122.41.197])
+Received: from smtp-190f.mail.infomaniak.ch (smtp-190f.mail.infomaniak.ch [185.125.25.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB8BF374EA
-	for <audit@vger.kernel.org>; Mon,  9 Dec 2024 09:38:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.122.41.197
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB5FE207DFA
+	for <audit@vger.kernel.org>; Tue, 10 Dec 2024 16:35:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.25.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733737116; cv=none; b=OCfd2xH5waeDcF8z6/rR7AKVkRfn0XAK809Xd1s5vjtoELyovfQT499fPYFcdcsyEn9XwUklBW+sihaVWrNTAaEmQkfIE2uoTrVyRvfVLnRQw+8lcos0uiBRZuInFPms4o0KpbY8gVJBGD/pW/4K5hIaLTS/CYxFSv6u/m7Q6oE=
+	t=1733848508; cv=none; b=cUYhEVCl7ACWfoeP1isc/q1/HCyimhbw6ewxNh+A4BHx8Ud0TDLQg4EW4d49heS9Dn/q/3Da5nKzjRfj9nMl7XPtXshXlOAfZG5kM53N+KMrNnK9vzh1Z1qdclebn5H4F8XkZm8ZDKPaDG4X4v87Wv3txLmqH0yTkAJ8iv9y6Wo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733737116; c=relaxed/simple;
-	bh=ZvWQz63WxAcv9PGqFM2YWwOPjhC8i+LdNaZdq78kCS8=;
-	h=From:Content-Type:Mime-Version:Subject:Message-Id:Date:Cc:To; b=PeFwlc/1j9cLehkeA4AnoM8GEN9iuksXLmjozLrN+nT/BsYZKQGsecDXUzszh13AD4KmPligMSW06WK0mimD4womQdSKDc2WNh/EXirVLhNc3TAWyxAhu/jKWtqtcLfKUBbCNwQonGLq6McP75WZYtiioFSCVSeqYrLKyJVtBzM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=flyingcircus.io; spf=pass smtp.mailfrom=flyingcircus.io; dkim=pass (1024-bit key) header.d=flyingcircus.io header.i=@flyingcircus.io header.b=Cx94xN0p; arc=none smtp.client-ip=212.122.41.197
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=flyingcircus.io
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flyingcircus.io
+	s=arc-20240116; t=1733848508; c=relaxed/simple;
+	bh=fdvYQhF/kSEp4gq64e8K5HKCp1kndZOw+47KYZU0gr8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=KgZbazmFWo+Vt7Wv9zkgdqTwDSexnGDbjzPzvkarLKreLC59yJUMothY4gxaiRuSoMNbzpUyfCmbriBOydUAWHahhFfmEd/dxtBUD8BUt2cXWic+d1tqin/j1vNm1FDYUDA34zfgdxU/3gsABU0VcTzl9QKS/6QpMA5Wd0Mljdg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=P1uLGjs3; arc=none smtp.client-ip=185.125.25.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=flyingcircus.io header.i=@flyingcircus.io header.b="Cx94xN0p"
-From: Molly Miller <mm@flyingcircus.io>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flyingcircus.io;
-	s=mail; t=1733737103;
-	bh=ZvWQz63WxAcv9PGqFM2YWwOPjhC8i+LdNaZdq78kCS8=;
-	h=From:Subject:Date:Cc:To;
-	b=Cx94xN0p6/ARy3rfIP0E+riX3J9zjVS9Et89jsnLOKxVbUNVJ8SvJrifW7fk4QOAz
-	 MBbrgxvevK6iWPhDInYzqZHb16whrnHc/llZcgFbj9qKYdi8UwTvjDdK9i0QQ02i2a
-	 L2Yt1YH8PF6E14203k4ZJzySnTRxTl/oy3pLitq8=
-Content-Type: text/plain;
-	charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="P1uLGjs3"
+Received: from smtp-4-0001.mail.infomaniak.ch (smtp-4-0001.mail.infomaniak.ch [10.7.10.108])
+	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4Y748G5G7KzGl;
+	Tue, 10 Dec 2024 17:34:54 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
+	s=20191114; t=1733848494;
+	bh=kASgsG6sXiEfr28LEqS8qaRwPSmOUOfc00ok9X/mxlo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=P1uLGjs3VUUQIlzlcmipATpKvMZD4jznCWyMtOe2pGbtLOJ6br2AhrxIGsvjr0Z4c
+	 qZOV/k8aWswDT5U2MKfBwkv8soMPNTgM4Kx685QCorRMBy8TlwAt8/BA4f5CtzWHz+
+	 D5KuTOr6/JdEvz2zhceJgScwnuSBHni0WI2RrzYI=
+Received: from unknown by smtp-4-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4Y748F6xQbz78s;
+	Tue, 10 Dec 2024 17:34:53 +0100 (CET)
+Date: Tue, 10 Dec 2024 17:34:42 +0100
+From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
+To: Mimi Zohar <zohar@linux.ibm.com>
+Cc: Paul Moore <paul@paul-moore.com>, linux-integrity@vger.kernel.org, 
+	roberto.sassu@huawei.com, linux-security-module@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Jeff Xu <jeffxu@chromium.org>, Kees Cook <kees@kernel.org>, 
+	audit@vger.kernel.org
+Subject: Re: [PATCH v2] ima: instantiate the bprm_creds_for_exec() hook
+Message-ID: <20241210.Wie6ion7Aich@digikod.net>
+References: <20241204192514.40308-1-zohar@linux.ibm.com>
+ <282573d0ea82ac71c8305d0c8cc89083@paul-moore.com>
+ <b6dc4d8b23b822638ab676055809503060c0bca2.camel@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3826.200.121\))
-Subject: Questions regarding TTY input auditing
-Message-Id: <2A30FFFE-973A-4355-87D2-C0F3648E518A@flyingcircus.io>
-Date: Mon, 9 Dec 2024 10:38:12 +0100
-Cc: audit@vger.kernel.org,
- Christian Theune <ct@flyingcircus.io>
-To: paul@paul-moore.com,
- eparis@redhat.com
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <b6dc4d8b23b822638ab676055809503060c0bca2.camel@linux.ibm.com>
+X-Infomaniak-Routing: alpha
 
-Hi there,
+On Thu, Dec 05, 2024 at 10:10:36PM -0500, Mimi Zohar wrote:
+> On Thu, 2024-12-05 at 19:30 -0500, Paul Moore wrote:
+> > On Dec  4, 2024 Mimi Zohar <zohar@linux.ibm.com> wrote:
+> > > 
+> > > Like direct file execution (e.g. ./script.sh), indirect file execution
+> > > (e.g. sh script.sh) needs to be measured and appraised.  Instantiate
+> > > the new security_bprm_creds_for_exec() hook to measure and verify the
+> > > indirect file's integrity.  Unlike direct file execution, indirect file
+> > > execution is optionally enforced by the interpreter.
+> > > 
+> > > Differentiate kernel and userspace enforced integrity audit messages.
+> > > 
+> > > Co-developed-by: Roberto Sassu <roberto.sassu@huawei.com>
+> > > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> > > Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
+> > > ---
+> > > Changelog v3:
+> > > - Mickael: add comment ima_bprm_creds_for_exec(), minor code cleanup,
+> > >   add Co-developed-by tag.
+> > > 
+> > > Changelog v2:
+> > > - Mickael: Use same audit messages with new audit message number
+> > > - Stefan Berger: Return boolean from is_bprm_creds_for_exec()
+> > > 
+> > >  include/uapi/linux/audit.h            |  1 +
+> > >  security/integrity/ima/ima_appraise.c | 27 +++++++++++++++++++++++--
+> > >  security/integrity/ima/ima_main.c     | 29 +++++++++++++++++++++++++++
+> > >  3 files changed, 55 insertions(+), 2 deletions(-)
+> > > 
+> > > diff --git a/include/uapi/linux/audit.h b/include/uapi/linux/audit.h
+> > > index 75e21a135483..826337905466 100644
+> > > --- a/include/uapi/linux/audit.h
+> > > +++ b/include/uapi/linux/audit.h
+> > > @@ -161,6 +161,7 @@
+> > >  #define AUDIT_INTEGRITY_RULE	    1805 /* policy rule */
+> > >  #define AUDIT_INTEGRITY_EVM_XATTR   1806 /* New EVM-covered xattr */
+> > >  #define AUDIT_INTEGRITY_POLICY_RULE 1807 /* IMA policy rules */
+> > > +#define AUDIT_INTEGRITY_DATA_CHECK  1808 /* Userspace enforced data integrity */
+> > 
+> > I worry that "DATA_CHECK" is a bit vague, should we change the name so
+> > that there is some hint of either userspace enforcement or
+> > AT_EXECVE_CHECK?
+> > 
+> > What about AUDIT_INTEGRITY_DATA_USER?
+> 
+> The emphasis should be on userspace - AUDIT_INTEGRITY_USERSPACE.
 
-We're currently taking a look at the TTY input logging functionality of =
-the auditing subsystem and evaluating it for use in our environment, =
-however there are some parts of this which we don't quite understand, =
-and we've had difficulty answering our questions purely from reading the =
-kernel sources.
-
-Primarily, it's not clear to us when the kernel decides to flush the =
-keystrokes logged from the TTY into an audit log message which can be =
-read by a userspace process like auditd. As far as we've established in =
-limited testing, the keystrokes read by a given process are only flushed =
-when that process exits. =46rom a security perspective this seems =
-suboptimal, as this would mean that for cases such as a long-running =
-admin shell which runs for several hours the keystrokes would only be =
-logged by the auditing subsystem hours after they occurred.
-
-=46rom reading the code we did manage to establish that there's a =
-difference in the input handling when the TTY is in canonical mode. In =
-this case, the kernel provides limited line editing itself, and the TTY =
-input is flushed to the audit logs line by line. In order to do this, =
-the kernel has to actively inspect the buffered input keystrokes to find =
-where the line feed is. However, most shells implement their own line =
-editing and hence don't use canonical mode, which results in the =
-behaviour described above. We're not sure why this difference exists -- =
-presumably there's a good reason why the kernel doesn't inspect the =
-input keystrokes to split the input on line feeds when the TTY is *not* =
-in canonical mode.
-
-If you're able to give us some pointers here it would be greatly =
-appreciated.
-
-Best wishes,
-Molly Miller.
-
---=20
-Molly Miller =C2=B7 mm@flyingcircus.io =C2=B7 +49 345 219401 0
-Flying Circus Internet Operations GmbH =C2=B7 https://flyingcircus.io
-Leipziger Str. 70/71 =C2=B7 06108 Halle (Saale) =C2=B7 Deutschland
-HR Stendal HRB 21169 =C2=B7 Gesch=C3=A4ftsf=C3=BChrer: Christian Theune, =
-Christian Zagrodnick
-
+Looks good, I'll send a new patch series with this change, following
+https://lore.kernel.org/all/20241205160925.230119-9-mic@digikod.net/
