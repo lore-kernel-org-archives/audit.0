@@ -1,122 +1,628 @@
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp-bc0a.mail.infomaniak.ch (smtp-bc0a.mail.infomaniak.ch [45.157.188.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3B0622A81D
-	for <audit@vger.kernel.org>; Fri, 20 Dec 2024 17:27:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4670E38F91
+	for <audit@vger.kernel.org>; Tue, 24 Dec 2024 14:55:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.157.188.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734715662; cv=none; b=u3xkmuWOi3eRMV+eWIHqRlwS0M8O2ACPsktipuqA4ukpmphIij1UrxsxKluHlOjtfFzaVs/mENZfRKxnL2MQI77wTozqkMV+Mb1CsYKSHLdZ53MwpHAh0eny0gJumh5rpcNiM7+2WKKgJwdKEEWsvICvo172AZU6xtz+kWrSoiQ=
+	t=1735052117; cv=none; b=CbVOa8q9ekumzfIgwkXF5b1pxqM7RRKoSxra7df5HgzzhWDGx5iMikggLHb2C2bHTD4L4ozAtMYHY2s++AxeLakRaLgIQPTfAMByAMW9CUYlre143BpjQAECrzI7mwPyUDwWgD9p0nelRZXwzZoB4LPtj3xjeUoYCf1FKf3LgEg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734715662; c=relaxed/simple;
-	bh=ftFlFL8Hf6gjCPdcRFrVx2YclVhyvU0X+h6fy2EfzIQ=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=UQNi0igPsXwM9qFnnts2dgxnSTwO895Kv9hBT0k9jb188JulY7HsTRvSl4q40QWY22n1qAL1+oKs5nVI9Q3O/tNo42c1MSG0BwHOWRHBBeG+yTvqORK5lai/Pm/d/J3Xx1A+1AkFVpyoDT++dKi8sLJR136v3Q5GGrvStnz2W4M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Sux4smDW; arc=none smtp.client-ip=209.85.221.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1735052117; c=relaxed/simple;
+	bh=hb2Pr/9viFc2QI2EGU/NqsFGHSIX3VwJnf5vmVeI6lc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=oiy68SoKt3teOxYh2xixGoGgTYAfbkSxGsuYDgc45eLiyxY/DQEU3/pF0C3Gn+h12wFNfZNPLWV7Mbwf+x5UJEYJPUO57wz+8piw1ej7Ml+NnZY1RSgdZJU/YMTlhxqC7B5SfKSE4hVeXMJzXHUnm12aIsg0nWrXU3UMKlivLZM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=XVT555VM; arc=none smtp.client-ip=45.157.188.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Sux4smDW"
-Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-3862d16b4f5so1519567f8f.0
-        for <audit@vger.kernel.org>; Fri, 20 Dec 2024 09:27:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1734715658; x=1735320458; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rl2GUGW1SKIB73yuGvAyVPoBfBy5XbBiVj4hV5yN+VI=;
-        b=Sux4smDWvhRYVAocCLrB8sH5Gn4iglVnvLOtYXjw2SwmbrW98B6c98IdTir+VF+VQJ
-         W10BWI4R3GFC1zT/iJoBlxuzYK0hnggsfABamHJxaKShxH8tLAyw6SYs1kiT5Zpq5DY/
-         y8F5G+SxDNISHMSnfr/J8ZC+W2oNrTFwJ0KMsYltX1nRmRejzvK8hykx9rw4E4PSCPjK
-         hBR+wlIXLMxbiloh7lXnf5z8TBJg0j3ePqZ9LWqb7cYYzpaMr36BzlgWIDpW6dDQHpe5
-         znRcS8BpCe/go3BIeiuQzZZSpEoYEyOJCj8IeINw++6FJJgIOUIPFK+PvAzsigdqsUly
-         aZ0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734715658; x=1735320458;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=rl2GUGW1SKIB73yuGvAyVPoBfBy5XbBiVj4hV5yN+VI=;
-        b=NCFHEeayTaUUAk1tmaRt5k71VCIKqqlRSP96EjmkW6d9RrElLwhb9ojAIdrAplbxGO
-         arCVYbdxIOwnvPnachg9f5tcIgRbnTR4Ht9Szx6KuOUejR3ETZytH9bO3Ao4xsTar309
-         AFf1Z+WCZxEP7izBJrTsp0A0VRC33k1C6o4Oy718B830s34gunK2yF19szIugSK3CGRw
-         9fYckQb2BtkHqZ8H8fv7SNWJAhszqVf+P+DOT9VHr2TI93yz7n86xab3bKysyRsdzQiA
-         XTO+ku6rPYE7UP5ufbjrB/hPWeJUVs/SdXnhmUgol0w7hLO9mCkdPc9Gez6PNekjtscI
-         tM6A==
-X-Forwarded-Encrypted: i=1; AJvYcCV50yigMbIJ6WyDI4T0fbHHEnH7eGtcWx+hiERRB17VMHFF2MoYOZyWM0GV3SfZno1i5IWjGg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwK2baEIhmD62dd6ouGE1gFEneOnKqqIKn8FTRUsnt5Vpq5edWQ
-	HA5EC2It1vzGeITXCbiZeDRn596i2BW7Tghxvfz1ZaBt/WHtOhMyDZ2brzz6LVM=
-X-Gm-Gg: ASbGncu+a8Cu0b3ow+fJcmfEgzFB2IM+0+WfUeozvH5QL1RnBo4KHfcDXRvrEJOEGpw
-	cFmKBDuEUGkBN9F3iQWAfsNWmYx6omx0DDtS5tpEXIpX8VaiTk3jeFD+H07eRs1K7GrT8/bBahX
-	ZGArpgEhNB5x6ZTPyWSCn0K5Gazj01M/sKCGHXGIlT0KHPUorEcCBgSjkGyKNpNTmcywk+52ueR
-	XFBk5FoAVJDNGBOueoyJF1cD/KjPrhIivST17eYkwuiCwYFHCdFmqnWdDejnSBGIp+NkrA/m1k=
-X-Google-Smtp-Source: AGHT+IHQofl14bIpVpiQqz6qAEwAjKsEmWVjRCOjis6wH9jKfvKMjWLHCbYlsDgmYPDOjR7ci+Y7xw==
-X-Received: by 2002:a5d:47c3:0:b0:388:cacf:24b0 with SMTP id ffacd0b85a97d-38a1a1f7253mr6745803f8f.2.1734715658179;
-        Fri, 20 Dec 2024 09:27:38 -0800 (PST)
-Received: from [192.168.68.114] ([5.133.47.210])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38a1c89e357sm4642915f8f.72.2024.12.20.09.27.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Dec 2024 09:27:37 -0800 (PST)
-From: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-To: linux-gpio@vger.kernel.org, Julia Lawall <Julia.Lawall@inria.fr>
-Cc: kernel-janitors@vger.kernel.org, audit@vger.kernel.org, 
- linux-mtd@lists.infradead.org, Zhihao Cheng <chengzhihao1@huawei.com>, 
- "Rafael J. Wysocki" <rafael@kernel.org>, linux-arm-msm@vger.kernel.org, 
- linux-pci@vger.kernel.org, dri-devel@lists.freedesktop.org, 
- linux-usb@vger.kernel.org, linux-mm@kvack.org, 
- maple-tree@lists.infradead.org, alsa-devel@alsa-project.org, 
- Sanyog Kale <sanyog.r.kale@intel.com>, 
- Pierre-Louis Bossart <pierre-louis.bossart@linux.dev>, dccp@vger.kernel.org, 
- linux-fsdevel@vger.kernel.org, Jan Kara <jack@suse.cz>, 
- drbd-dev@lists.linbit.com, linux-sound@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-omap@vger.kernel.org, 
- linux-arm-kernel@lists.infradead.org, netdev@vger.kernel.org, 
- nvdimm@lists.linux.dev, linux-leds@vger.kernel.org, 
- Nicholas Piggin <npiggin@gmail.com>, 
- Christophe Leroy <christophe.leroy@csgroup.eu>, 
- Naveen N Rao <naveen@kernel.org>, Madhavan Srinivasan <maddy@linux.ibm.com>, 
- linuxppc-dev@lists.ozlabs.org, tipc-discussion@lists.sourceforge.net, 
- Robin Murphy <robin.murphy@arm.com>, iommu@lists.linux.dev, 
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
- linux-trace-kernel@vger.kernel.org, Neil Brown <neilb@suse.de>, 
- Olga Kornievskaia <okorniev@redhat.com>, Dai Ngo <Dai.Ngo@oracle.com>, 
- Tom Talpey <tom@talpey.com>, linux-nfs@vger.kernel.org, 
- amd-gfx@lists.freedesktop.org, linux-wireless@vger.kernel.org, 
- intel-wired-lan@lists.osuosl.org
-In-Reply-To: <20240930112121.95324-1-Julia.Lawall@inria.fr>
-References: <20240930112121.95324-1-Julia.Lawall@inria.fr>
-Subject: Re: (subset) [PATCH 00/35] Reorganize kerneldoc parameter names
-Message-Id: <173471565665.227782.7244101246430956449.b4-ty@linaro.org>
-Date: Fri, 20 Dec 2024 17:27:36 +0000
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="XVT555VM"
+Received: from smtp-3-0000.mail.infomaniak.ch (unknown [IPv6:2001:1600:4:17::246b])
+	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4YHd6v5d3fzZjM;
+	Tue, 24 Dec 2024 15:48:23 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
+	s=20191114; t=1735051703;
+	bh=KojS2tSpuPofXfE69tLE+Oz2FhMrJU6WACehSQp1LAI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=XVT555VM0181yyfsJKtwG4FAe0q7rUiAPM5wGDcZ7aRu2m6PcLjXAOQWptULcfcQn
+	 0lNUwCqZcS59onKNXGrjE3GHKoIWVoysCbMON5b5yp+ZJGtZ/e37c4oOuJj+0e5Abe
+	 JFUvd9iki9tBuG0cXZMjI1SR/NodlYqJpBurJMYk=
+Received: from unknown by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4YHd6s36bNznfG;
+	Tue, 24 Dec 2024 15:48:21 +0100 (CET)
+Date: Tue, 24 Dec 2024 15:48:20 +0100
+From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
+To: Francis Laniel <flaniel@linux.microsoft.com>
+Cc: Eric Paris <eparis@redhat.com>, Paul Moore <paul@paul-moore.com>, 
+	=?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>, "Serge E . Hallyn" <serge@hallyn.com>, 
+	Ben Scarlato <akhna@google.com>, Casey Schaufler <casey@schaufler-ca.com>, 
+	Charles Zaffery <czaffery@roblox.com>, James Morris <jmorris@namei.org>, Jann Horn <jannh@google.com>, 
+	Jeff Xu <jeffxu@google.com>, Jorge Lucangeli Obes <jorgelo@google.com>, 
+	Kees Cook <kees@kernel.org>, Konstantin Meskhidze <konstantin.meskhidze@huawei.com>, 
+	Matt Bobrowski <mattbobrowski@google.com>, Mikhail Ivanov <ivanov.mikhail1@huawei-partners.com>, 
+	Phil Sutter <phil@nwl.cc>, Praveen K Paladugu <prapal@linux.microsoft.com>, 
+	Robert Salvet <robert.salvet@roblox.com>, Shervin Oloumi <enlightened@google.com>, 
+	Song Liu <song@kernel.org>, Tahera Fahimi <fahimitahera@gmail.com>, audit@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
+Subject: Re: [PATCH v3 08/23] landlock: Log ptrace denials
+Message-ID: <20241224.jeiY2jaeW3gu@digikod.net>
+References: <20241122143353.59367-1-mic@digikod.net>
+ <20241122143353.59367-9-mic@digikod.net>
+ <1908358.tdWV9SEqCh@pwmachine>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.12.2
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1908358.tdWV9SEqCh@pwmachine>
+X-Infomaniak-Routing: alpha
 
-
-On Mon, 30 Sep 2024 13:20:46 +0200, Julia Lawall wrote:
-> Reorganize kerneldoc parameter names to match the parameter
-> order in the function header.
+On Fri, Dec 20, 2024 at 03:36:14PM +0100, Francis Laniel wrote:
+> Le vendredi 22 novembre 2024, 15:33:38 CET Mickaël Salaün a écrit :
+> > Add audit support to ptrace_access_check and ptrace_traceme hooks.
+> > 
+> > Add a new AUDIT_LANDLOCK_DENY record type dedicated to any Landlock
+> > denials.
+> > 
+> > Log the domain ID restricting the action, the domain's blockers that are
+> > missing to allow the requested access, and the target task.
+> > 
+> > The blockers are implicit restrictions (e.g. ptrace), or explicit access
+> > rights (e.g. filesystem), or explicit scopes (e.g. signal).
+> > 
+> > For the ptrace_access_check case, we log the current/parent domain and
+> > the child task.  For the ptrace_traceme case, we log the parent domain
+> > and the parent task.  Indeed, the requester is the current task, but the
+> > action would be performed by the parent task.
+> > 
+> > The quick return for non-landlocked tasks is moved from task_ptrace() to
+> > each LSM hooks.
+> > 
+> > Audit event sample:
+> > 
+> >   type=LL_DENY msg=audit(1732186800.349:44): domain=195ba459b
+> > blockers=ptrace opid=1 ocomm="systemd" type=SYSCALL
+> > msg=audit(1732186800.349:44): arch=c000003e syscall=101 success=no [...]
+> > pid=300 auid=0
+> > 
+> > Cc: Günther Noack <gnoack@google.com>
+> > Cc: Paul Moore <paul@paul-moore.com>
+> > Signed-off-by: Mickaël Salaün <mic@digikod.net>
+> > Link: https://lore.kernel.org/r/20241122143353.59367-9-mic@digikod.net
+> > ---
+> > 
+> > Changes since v2:
+> > - Log domain IDs as hexadecimal number: this is a more compact notation
+> >   (i.e. at least one less digit), it improves alignment in logs, and it
+> >   makes most IDs start with 1 as leading digit (because of the 2^32
+> >   minimal value).  Do not use the "0x" prefix that would add useless
+> >   data to logs.
+> > - Constify function arguments.
+> > 
+> > Changes since v1:
+> > - Move most audit code to this patch.
+> > - Rebase on the TCP patch series.
+> > - Don't log missing access right: simplify and make it generic for rule
+> >   types.
+> > - Don't log errno and then don't wrap the error with
+> >   landlock_log_request(), as suggested by Jeff.
+> > - Add a WARN_ON_ONCE() check to never dereference null pointers.
+> > - Only log when audit is enabled.
+> > - Don't log task's PID/TID with log_task() because it would be redundant
+> >   with the SYSCALL record.
+> > - Move the "op" in front and rename "domain" to "denying_domain" to make
+> >   it more consistent with other entries.
+> > - Don't update the request with the domain ID but add an helper to get
+> >   it from the layer masks (and in a following commit with a struct
+> >   file).
+> > - Revamp get_domain_id_from_layer_masks() into
+> >   get_level_from_layer_masks().
+> > - For ptrace_traceme, log the parent domain instead of the current one.
+> > - Add documentation.
+> > - Rename AUDIT_LANDLOCK_DENIAL to AUDIT_LANDLOCK_DENY.
+> > - Only log the domain ID and the target task.
+> > - Log "blockers", which are either implicit restrictions (e.g. ptrace)
+> >   or explicit access rights (e.g. filesystem), or scopes (e.g. signal).
+> > - Don't log LSM hook names/operations.
+> > - Pick an audit event ID folling the IPE ones.
+> > - Add KUnit tests.
+> > ---
+> >  include/uapi/linux/audit.h  |   3 +-
+> >  security/landlock/Makefile  |   2 +-
+> >  security/landlock/audit.c   | 137 ++++++++++++++++++++++++++++++++++++
+> >  security/landlock/audit.h   |  52 ++++++++++++++
+> >  security/landlock/domain.c  |  21 ++++++
+> >  security/landlock/domain.h  |  17 +++++
+> >  security/landlock/ruleset.c |   3 +
+> >  security/landlock/task.c    |  91 ++++++++++++++++++------
+> >  8 files changed, 302 insertions(+), 24 deletions(-)
+> >  create mode 100644 security/landlock/audit.c
+> >  create mode 100644 security/landlock/audit.h
+> >  create mode 100644 security/landlock/domain.c
+> > 
+> > diff --git a/include/uapi/linux/audit.h b/include/uapi/linux/audit.h
+> > index 75e21a135483..60c909c396c0 100644
+> > --- a/include/uapi/linux/audit.h
+> > +++ b/include/uapi/linux/audit.h
+> > @@ -33,7 +33,7 @@
+> >   * 1100 - 1199 user space trusted application messages
+> >   * 1200 - 1299 messages internal to the audit daemon
+> >   * 1300 - 1399 audit event messages
+> > - * 1400 - 1499 SE Linux use
+> > + * 1400 - 1499 access control messages
+> >   * 1500 - 1599 kernel LSPP events
+> >   * 1600 - 1699 kernel crypto events
+> >   * 1700 - 1799 kernel anomaly records
+> > @@ -146,6 +146,7 @@
+> >  #define AUDIT_IPE_ACCESS	1420	/* IPE denial or grant */
+> >  #define AUDIT_IPE_CONFIG_CHANGE	1421	/* IPE config change */
+> >  #define AUDIT_IPE_POLICY_LOAD	1422	/* IPE policy load */
+> > +#define AUDIT_LANDLOCK_DENY	1423	/* Landlock denial */
+> > 
+> >  #define AUDIT_FIRST_KERN_ANOM_MSG   1700
+> >  #define AUDIT_LAST_KERN_ANOM_MSG    1799
+> > diff --git a/security/landlock/Makefile b/security/landlock/Makefile
+> > index e1777abbc413..31512ee4b041 100644
+> > --- a/security/landlock/Makefile
+> > +++ b/security/landlock/Makefile
+> > @@ -5,4 +5,4 @@ landlock-y := setup.o syscalls.o object.o ruleset.o \
+> > 
+> >  landlock-$(CONFIG_INET) += net.o
+> > 
+> > -landlock-$(CONFIG_AUDIT) += id.o
+> > +landlock-$(CONFIG_AUDIT) += id.o domain.o audit.o
+> > diff --git a/security/landlock/audit.c b/security/landlock/audit.c
+> > new file mode 100644
+> > index 000000000000..eab6b3a8a231
+> > --- /dev/null
+> > +++ b/security/landlock/audit.c
+> > @@ -0,0 +1,137 @@
+> > +// SPDX-License-Identifier: GPL-2.0-only
+> > +/*
+> > + * Landlock LSM - Audit helpers
+> > + *
+> > + * Copyright © 2023-2024 Microsoft Corporation
+> > + */
+> > +
+> > +#include <kunit/test.h>
+> > +#include <linux/audit.h>
+> > +#include <linux/lsm_audit.h>
+> > +
+> > +#include "audit.h"
+> > +#include "domain.h"
+> > +#include "ruleset.h"
+> > +
+> > +static const char *get_blocker(const enum landlock_request_type type)
+> > +{
+> > +	switch (type) {
+> > +	case LANDLOCK_REQUEST_PTRACE:
+> > +		return "ptrace";
+> > +	}
+> > +
+> > +	WARN_ON_ONCE(1);
+> > +	return "unknown";
+> > +}
+> > +
+> > +static void log_blockers(struct audit_buffer *const ab,
+> > +			 const enum landlock_request_type type)
+> > +{
+> > +	audit_log_format(ab, "%s", get_blocker(type));
+> > +}
+> > +
+> > +static struct landlock_hierarchy *
+> > +get_hierarchy(const struct landlock_ruleset *const domain, const size_t
+> > layer) +{
+> > +	struct landlock_hierarchy *node = domain->hierarchy;
+> > +	ssize_t i;
+> > +
+> > +	if (WARN_ON_ONCE(layer >= domain->num_layers))
+> > +		return node;
+> > +
+> > +	for (i = domain->num_layers - 1; i > layer; i--) {
+> > +		if (WARN_ON_ONCE(!node->parent))
+> > +			break;
+> > +
+> > +		node = node->parent;
+> > +	}
+> > +
+> > +	return node;
+> > +}
+> > +
+> > +#ifdef CONFIG_SECURITY_LANDLOCK_KUNIT_TEST
+> > +
+> > +static void test_get_hierarchy(struct kunit *const test)
+> > +{
+> > +	struct landlock_hierarchy dom0_node = {
+> > +		.id = 10,
+> > +	};
+> > +	struct landlock_hierarchy dom1_node = {
+> > +		.parent = &dom0_node,
+> > +		.id = 20,
+> > +	};
+> > +	struct landlock_hierarchy dom2_node = {
+> > +		.parent = &dom1_node,
+> > +		.id = 30,
+> > +	};
+> > +	struct landlock_ruleset dom2 = {
+> > +		.hierarchy = &dom2_node,
+> > +		.num_layers = 3,
+> > +	};
+> > +
+> > +	KUNIT_EXPECT_EQ(test, 10, get_hierarchy(&dom2, 0)->id);
+> > +	KUNIT_EXPECT_EQ(test, 20, get_hierarchy(&dom2, 1)->id);
+> > +	KUNIT_EXPECT_EQ(test, 30, get_hierarchy(&dom2, 2)->id);
+> > +	KUNIT_EXPECT_EQ(test, 30, get_hierarchy(&dom2, -1)->id);
+> > +}
+> > +
+> > +#endif /* CONFIG_SECURITY_LANDLOCK_KUNIT_TEST */
+> > +
+> > +static bool is_valid_request(const struct landlock_request *const request)
+> > +{
+> > +	if (WARN_ON_ONCE(!request->layer_plus_one))
+> > +		return false;
+> > +
+> > +	return true;
+> > +}
+> > +
+> > +/**
+> > + * landlock_log_denial - Create audit records related to a denial
+> > + *
+> > + * @domain: The domain denying an action.
+> > + * @request: Detail of the user space request.
+> > + */
+> > +void landlock_log_denial(const struct landlock_ruleset *const domain,
+> > +			 const struct landlock_request *const request)
+> > +{
+> > +	struct audit_buffer *ab;
+> > +	struct landlock_hierarchy *youngest_denied;
+> > +
+> > +	if (WARN_ON_ONCE(!domain || !domain->hierarchy || !request))
+> > +		return;
+> > +
+> > +	if (!is_valid_request(request))
+> > +		return;
+> > +
+> > +	if (!audit_enabled)
+> > +		return;
+> > +
+> > +	ab = audit_log_start(audit_context(), GFP_ATOMIC | __GFP_NOWARN,
+> > +			     AUDIT_LANDLOCK_DENY);
+> > +	if (!ab)
+> > +		return;
+> > +
+> > +	youngest_denied = get_hierarchy(domain, request->layer_plus_one - 1);
+> > +	audit_log_format(ab, "domain=%llx blockers=", youngest_denied->id);
+> > +	log_blockers(ab, request->type);
+> > +	audit_log_lsm_data(ab, &request->audit);
+> > +	audit_log_end(ab);
+> > +}
+> > +
+> > +#ifdef CONFIG_SECURITY_LANDLOCK_KUNIT_TEST
+> > +
+> > +static struct kunit_case test_cases[] = {
+> > +	/* clang-format off */
+> > +	KUNIT_CASE(test_get_hierarchy),
+> > +	{}
+> > +	/* clang-format on */
+> > +};
+> > +
+> > +static struct kunit_suite test_suite = {
+> > +	.name = "landlock_audit",
+> > +	.test_cases = test_cases,
+> > +};
+> > +
+> > +kunit_test_suite(test_suite);
+> > +
+> > +#endif /* CONFIG_SECURITY_LANDLOCK_KUNIT_TEST */
+> > diff --git a/security/landlock/audit.h b/security/landlock/audit.h
+> > new file mode 100644
+> > index 000000000000..f33095afcd2f
+> > --- /dev/null
+> > +++ b/security/landlock/audit.h
+> > @@ -0,0 +1,52 @@
+> > +/* SPDX-License-Identifier: GPL-2.0-only */
+> > +/*
+> > + * Landlock LSM - Audit helpers
+> > + *
+> > + * Copyright © 2023-2024 Microsoft Corporation
+> > + */
+> > +
+> > +#ifndef _SECURITY_LANDLOCK_AUDIT_H
+> > +#define _SECURITY_LANDLOCK_AUDIT_H
+> > +
+> > +#include <linux/audit.h>
+> > +#include <linux/lsm_audit.h>
+> > +
+> > +#include "ruleset.h"
+> > +
+> > +enum landlock_request_type {
+> > +	LANDLOCK_REQUEST_PTRACE = 1,
+> > +};
+> > +
+> > +/*
+> > + * We should be careful to only use a variable of this type for
+> > + * landlock_log_denial().  This way, the compiler can remove it entirely if
+> > + * CONFIG_AUDIT is not set.
+> > + */
+> > +struct landlock_request {
+> > +	/* Mandatory fields. */
+> > +	enum landlock_request_type type;
+> > +	struct common_audit_data audit;
+> > +
+> > +	/**
+> > +	 * layer_plus_one: First layer level that denies the request + 1.  The
+> > +	 * extra one is useful to detect uninitialized field.
+> > +	 */
+> > +	size_t layer_plus_one;
+> > +};
+> > +
+> > +#ifdef CONFIG_AUDIT
+> > +
+> > +void landlock_log_denial(const struct landlock_ruleset *const domain,
+> > +			 const struct landlock_request *const request);
+> > +
+> > +#else /* CONFIG_AUDIT */
+> > +
+> > +static inline void
+> > +landlock_log_denial(const struct landlock_ruleset *const domain,
+> > +		    const struct landlock_request *const request)
+> > +{
+> > +}
+> > +
+> > +#endif /* CONFIG_AUDIT */
+> > +
+> > +#endif /* _SECURITY_LANDLOCK_AUDIT_H */
+> > diff --git a/security/landlock/domain.c b/security/landlock/domain.c
+> > new file mode 100644
+> > index 000000000000..965e4dc21975
+> > --- /dev/null
+> > +++ b/security/landlock/domain.c
+> > @@ -0,0 +1,21 @@
+> > +// SPDX-License-Identifier: GPL-2.0-only
+> > +/*
+> > + * Landlock LSM - Domain management
+> > + *
+> > + * Copyright © 2024 Microsoft Corporation
+> > + */
+> > +
+> > +#include "domain.h"
+> > +#include "id.h"
+> > +
+> > +/**
+> > + * landlock_init_current_hierarchy - Partially initialize
+> > landlock_hierarchy + *
+> > + * @hierarchy: The hierarchy to initialize.
+> > + *
+> > + * @hierarchy->parent and @hierarchy->usage should already be set.
+> > + */
+> > +void landlock_init_current_hierarchy(struct landlock_hierarchy *const
+> > hierarchy) +{
+> > +	hierarchy->id = landlock_get_id(1);
+> > +}
+> > diff --git a/security/landlock/domain.h b/security/landlock/domain.h
+> > index 015d61fd81ec..f82d831ca0a7 100644
+> > --- a/security/landlock/domain.h
+> > +++ b/security/landlock/domain.h
+> > @@ -4,6 +4,7 @@
+> >   *
+> >   * Copyright © 2016-2020 Mickaël Salaün <mic@digikod.net>
+> >   * Copyright © 2018-2020 ANSSI
+> > + * Copyright © 2024 Microsoft Corporation
+> >   */
+> > 
+> >  #ifndef _SECURITY_LANDLOCK_DOMAIN_H
+> > @@ -26,6 +27,13 @@ struct landlock_hierarchy {
+> >  	 * domain.
+> >  	 */
+> >  	refcount_t usage;
+> > +
+> > +#ifdef CONFIG_AUDIT
+> > +	/**
+> > +	 * @id: Landlock domain ID, sets once at domain creation time.
+> > +	 */
+> > +	u64 id;
+> > +#endif /* CONFIG_AUDIT */
+> >  };
+> > 
+> >  static inline void
+> > @@ -45,4 +53,13 @@ static inline void landlock_put_hierarchy(struct
+> > landlock_hierarchy *hierarchy) }
+> >  }
+> > 
+> > +#ifdef CONFIG_AUDIT
+> > +void landlock_init_current_hierarchy(struct landlock_hierarchy *const
+> > hierarchy); +#else /* CONFIG_AUDIT */
+> > +static inline void
+> > +landlock_init_current_hierarchy(struct landlock_hierarchy *const hierarchy)
+> > +{
+> > +}
+> > +#endif /* CONFIG_AUDIT */
+> > +
+> >  #endif /* _SECURITY_LANDLOCK_DOMAIN_H */
+> > diff --git a/security/landlock/ruleset.c b/security/landlock/ruleset.c
+> > index 4b3dfa3e6fcb..7a88fd9b2473 100644
+> > --- a/security/landlock/ruleset.c
+> > +++ b/security/landlock/ruleset.c
+> > @@ -21,6 +21,7 @@
+> >  #include <linux/workqueue.h>
+> > 
+> >  #include "access.h"
+> > +#include "audit.h"
+> >  #include "domain.h"
+> >  #include "limits.h"
+> >  #include "object.h"
+> > @@ -503,6 +504,7 @@ static void free_ruleset_work(struct work_struct *const
+> > work) free_ruleset(ruleset);
+> >  }
+> > 
+> > +/* Only called by hook_cred_free(). */
+> >  void landlock_put_ruleset_deferred(struct landlock_ruleset *const ruleset)
+> >  {
+> >  	if (ruleset && refcount_dec_and_test(&ruleset->usage)) {
+> > @@ -562,6 +564,7 @@ landlock_merge_ruleset(struct landlock_ruleset *const
+> > parent, if (err)
+> >  		goto out_put_dom;
+> > 
+> > +	landlock_init_current_hierarchy(new_dom->hierarchy);
+> >  	return new_dom;
+> > 
+> >  out_put_dom:
+> > diff --git a/security/landlock/task.c b/security/landlock/task.c
+> > index 98894ad1abc7..1decd6f114e8 100644
+> > --- a/security/landlock/task.c
+> > +++ b/security/landlock/task.c
+> > @@ -10,12 +10,14 @@
+> >  #include <linux/cred.h>
+> >  #include <linux/errno.h>
+> >  #include <linux/kernel.h>
+> > +#include <linux/lsm_audit.h>
+> >  #include <linux/lsm_hooks.h>
+> >  #include <linux/rcupdate.h>
+> >  #include <linux/sched.h>
+> >  #include <net/af_unix.h>
+> >  #include <net/sock.h>
+> > 
+> > +#include "audit.h"
+> >  #include "common.h"
+> >  #include "cred.h"
+> >  #include "domain.h"
+> > @@ -38,41 +40,29 @@ static bool domain_scope_le(const struct
+> > landlock_ruleset *const parent, {
+> >  	const struct landlock_hierarchy *walker;
+> > 
+> > +	/* Quick return for non-landlocked tasks. */
+> >  	if (!parent)
+> >  		return true;
+> > +
+> >  	if (!child)
+> >  		return false;
+> > +
+> >  	for (walker = child->hierarchy; walker; walker = walker->parent) {
+> >  		if (walker == parent->hierarchy)
+> >  			/* @parent is in the scoped hierarchy of @child. */
+> >  			return true;
+> >  	}
+> > +
+> >  	/* There is no relationship between @parent and @child. */
+> >  	return false;
+> >  }
+> > 
+> > -static bool task_is_scoped(const struct task_struct *const parent,
+> > -			   const struct task_struct *const child)
+> > -{
+> > -	bool is_scoped;
+> > -	const struct landlock_ruleset *dom_parent, *dom_child;
+> > -
+> > -	rcu_read_lock();
+> > -	dom_parent = landlock_get_task_domain(parent);
+> > -	dom_child = landlock_get_task_domain(child);
+> > -	is_scoped = domain_scope_le(dom_parent, dom_child);
+> > -	rcu_read_unlock();
+> > -	return is_scoped;
+> > -}
+> > -
+> > -static int task_ptrace(const struct task_struct *const parent,
+> > -		       const struct task_struct *const child)
+> > +static int domain_ptrace(const struct landlock_ruleset *const parent,
+> > +			 const struct landlock_ruleset *const child)
+> >  {
+> > -	/* Quick return for non-landlocked tasks. */
+> > -	if (!landlocked(parent))
+> > -		return 0;
+> > -	if (task_is_scoped(parent, child))
+> > +	if (domain_scope_le(parent, child))
+> >  		return 0;
+> > +
+> >  	return -EPERM;
+> >  }
+> > 
+> > @@ -92,7 +82,36 @@ static int task_ptrace(const struct task_struct *const
+> > parent, static int hook_ptrace_access_check(struct task_struct *const
+> > child, const unsigned int mode)
+> >  {
+> > -	return task_ptrace(current, child);
+> > +	const struct landlock_ruleset *parent_dom, *child_dom;
+> > +	struct landlock_request request = {
+> > +		.type = LANDLOCK_REQUEST_PTRACE,
+> > +		.audit = {
+> > +			.type = LSM_AUDIT_DATA_TASK,
+> > +			.u.tsk = child,
+> > +		},
+> > +	};
+> > +	int err;
+> > +
+> > +	/* Quick return for non-landlocked tasks. */
+> > +	parent_dom = landlock_get_current_domain();
+> > +	if (!parent_dom)
+> > +		return 0;
+> > +
+> > +	rcu_read_lock();
+> > +	child_dom = landlock_get_task_domain(child);
+> > +	err = domain_ptrace(parent_dom, child_dom);
+> > +	rcu_read_unlock();
+> > +
+> > +	/*
+> > +	 * For the ptrace_access_check case, we log the current/parent domain
+> > +	 * and the child task.
+> > +	 */
+> > +	if (err && !(mode & PTRACE_MODE_NOAUDIT)) {
+> > +		request.layer_plus_one = parent_dom->num_layers;
+> > +		landlock_log_denial(parent_dom, &request);
+> > +	}
+> > +
+> > +	return err;
+> >  }
+> > 
+> >  /**
+> > @@ -109,7 +128,35 @@ static int hook_ptrace_access_check(struct task_struct
+> > *const child, */
+> >  static int hook_ptrace_traceme(struct task_struct *const parent)
+> >  {
+> > -	return task_ptrace(parent, current);
+> > +	const struct landlock_ruleset *parent_dom, *child_dom;
+> > +	struct landlock_request request = {
+> > +		.type = LANDLOCK_REQUEST_PTRACE,
+> > +		.audit = {
+> > +			.type = LSM_AUDIT_DATA_TASK,
+> > +			.u.tsk = parent,
+> > +		},
+> > +	};
+> > +	int err;
+> > +
+> > +	child_dom = landlock_get_current_domain();
+> > +	rcu_read_lock();
+> > +	parent_dom = landlock_get_task_domain(parent);
+> > +	err = domain_ptrace(parent_dom, child_dom);
+> > +
+> > +	/*
+> > +	 * For the ptrace_traceme case, we log the domain which is the cause 
+> of
+> > +	 * the denial, which means the parent domain instead of the current
+> > +	 * domain.  This may look weird because the ptrace_traceme action is a
+> > +	 * request to be traced, but the semantic is consistent with
+> > +	 * hook_ptrace_access_check().
+> > +	 */
+> > +	if (err) {
+> > +		request.layer_plus_one = parent_dom->num_layers;
+> > +		landlock_log_denial(parent_dom, &request);
+> > +	}
+> > +
+> > +	rcu_read_unlock();
 > 
-> The misordered cases were identified using the following
-> Coccinelle semantic patch:
+> Nit: in the above function, you do the rcu_read_unlock() before the if.
+
+This is because the RCU read-side critical section is needed for the
+"other" task's domain reference, which is parent_dom here, and child_dom
+in hook_ptrace_access_check().
+
 > 
-> // <smpl>
-> @initialize:ocaml@
-> @@
+> > +	return err;
+> >  }
+> > 
+> >  /**
 > 
-> [...]
-
-Applied, thanks!
-
-[31/35] slimbus: messaging: Reorganize kerneldoc parameter names
-        commit: 52d3d7f7a77ee9afc6a846b415790e13e1434847
-
-Best regards,
--- 
-Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-
+> 
+> 
+> 
