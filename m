@@ -1,63 +1,63 @@
-Received: from mail-qv1-f48.google.com (mail-qv1-f48.google.com [209.85.219.48])
+Received: from mail-qk1-f179.google.com (mail-qk1-f179.google.com [209.85.222.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB2B51EF01
-	for <audit@vger.kernel.org>; Sun,  5 Jan 2025 01:23:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB7F635950
+	for <audit@vger.kernel.org>; Sun,  5 Jan 2025 01:23:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736040233; cv=none; b=RMLnqpQ4ou48GljPfPUvJDjnu/riMkmt8Wxt5nt0V+Cl6ILSA2WUMTNeofTVyIXuXjGulEvV52UMT5nFegqoV/9oGvVpLKHqMl+6GenG4oya1R9ikFznriO3KvUqmR94ubziHhC/eX2oZ05p0x4w0iSQO+r/uOa305jeKbR6t24=
+	t=1736040234; cv=none; b=L7FBFfv/dY7vsGeQXwuNPsqJmd6MDF8+baCnMXKcPohe3/FwXzyldTJUM7Z6je40n5zYWP2ivORqixYIl368oEtf7XvBtzJ0SCjE6G/o6r/wPV/Rzyrdm8s8hn0WiE/sIBiM+grJKu0FZgpf+9wJXblLivWttV52mjSmtJDegDI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736040233; c=relaxed/simple;
-	bh=cx7aFAQRYoFBaTP4xpurSvEu2jN1c2qlDvCUOzCk0Fw=;
+	s=arc-20240116; t=1736040234; c=relaxed/simple;
+	bh=giREWuotuLRExC4OqokuExUwTwDtYZNFJ1UGDeGpW3U=;
 	h=Date:Message-ID:MIME-Version:Content-Type:From:To:Cc:Subject:
-	 References:In-Reply-To; b=B70AdDMz9FFyhOQEciF4QjXbzyHVzUZKqL/h1L/m36c3t4/6fo/aTpfY2PEQEAp3BWqH9l/i2DMLigDjLMcTn29Y/7FUzcBvL2z7eESqgGY3zdgSgpibpkxNLfSQKBCHZTukeaWDoY7gH4zfEFrpvPSa34INeBOXO8G2oQovtT4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=OpxFLTu5; arc=none smtp.client-ip=209.85.219.48
+	 References:In-Reply-To; b=ZhiXLlmL3bnc2m1J+sFBn8z5l6MTBDpHcCIkykH8PIrc9rdE7X4X9g3Nt56KzNPFutp4qlfY4D4BqYlN9TmdNpz9ha3eVQjM4gnxcBkiw98KrzYElx2j5kGUThK/wy859XZWm4SqS8OHyLuMMRfazpihfcC8KTDmsvH4TgC47n4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=UQqQUwcz; arc=none smtp.client-ip=209.85.222.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="OpxFLTu5"
-Received: by mail-qv1-f48.google.com with SMTP id 6a1803df08f44-6ddcff5a823so9287726d6.0
-        for <audit@vger.kernel.org>; Sat, 04 Jan 2025 17:23:51 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="UQqQUwcz"
+Received: by mail-qk1-f179.google.com with SMTP id af79cd13be357-7b6e5ee6ac7so1049534985a.0
+        for <audit@vger.kernel.org>; Sat, 04 Jan 2025 17:23:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=paul-moore.com; s=google; t=1736040231; x=1736645031; darn=vger.kernel.org;
         h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
          :mime-version:message-id:date:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=ZbSANAit+nNhV/GPK4Rpn/U4rLbYqshu18t3yU7ZUZ0=;
-        b=OpxFLTu5WAG9yUqrRzBCOVX8YW1SL36NwnDTzXMMy0uJY28cYCd4ltKtNurffscjuP
-         0rSGWDR4nowP+GvdBam1K/VJXXLePah4W1NVYCC2pGlcSOLLYND1bS43gRWBc0mkJ+de
-         WRn5yzvNhrrEAvq2pT4PPDL+6zz3M0grBUKYnoczBuOyje6ZT7D3JUGMo9kecVxyapPm
-         7+04LeDDoXjluGl9DZtwsLVQabdiZqlyy7Cc8KzMFNDvb5+7kZKITVCd32kK071RJxP5
-         dP/6J81++UXseI+ti1RP5DAGBDLmkOwuiq94XJZ6clpFU/b9BiboTJLQ3mNESkWuWdlJ
-         jMpA==
+        bh=k9rT4XVdO+KJptzLIU5K24Iy8JAMC8dWqPat04fTPeg=;
+        b=UQqQUwczTzk/8OM4hZAuld5141iGYk/EfKd5GBrtOM1asBba0hmKQ2JLfx4PYUwPvW
+         TyV37alf44YE+AMZwddXX3JYxwmYh2tIlGrDJeHjp0xnxrFzGAuxqfo2NFsCUC4W1RVO
+         nZtXL29oM1e/sOVsTB8WkL8Hyx/HjohKhbZiBFGskbnGY9qSFDfJ7JU8E1Who8zGb3EH
+         ceGhKdjM8ySxlgcOGMwa5SXgwcHrfY2BXyKpeujMxVsSKvdbob0Et8oi7Tg+oFewzNU5
+         Qe6eSyOUM/+VstiC9XEP3dHBskBYIpB1XWdyYZr6zfY0ZfoFHHdNYfsxQFX75B1Hd8pn
+         y+dw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20230601; t=1736040231; x=1736645031;
         h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
          :mime-version:message-id:date:x-gm-message-state:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=ZbSANAit+nNhV/GPK4Rpn/U4rLbYqshu18t3yU7ZUZ0=;
-        b=UGZ7Y51D0lIIfd3kK+kAlnVeFf2xLDIXoNJQ28LvI3NGJP3gJHBBF6glshTCmU6Bvj
-         t+FXWzAJ+igxUHjmHVt2/UbZVdVs+hcw8K9qt7JpRQ3sdu8OIIJqTsx5P4n6TOgdjP9R
-         6NrlAmhvd/VnxjI/vygNrr904+85zxXP7fP6OyvbbxT+Q46WyuRGLsTh+aOVua7/CVU6
-         NeXSzezSaF+1fVQU0KLBTu+Vdz0bZzuRxpnf+Sl8XrKCPwWmkY96/Q6Lfr2+Y3x2zpkc
-         IeAzwGwfbMyRs0pAt7NtR2cl9KIg+cV8PlcxpEyJFXEccpmvBduQzEYWe7dpvWfjrokT
-         LUcg==
-X-Forwarded-Encrypted: i=1; AJvYcCWAXemvF6oflGtmYi3gvO6lYlh9A283uUc69jRILbhNbbMqGs5GSGRy/QVxlptYFmMXo8YYcQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz/YTIGKu2NsFwDIQPl198N5//rbRlJDN+x+zgX/mXNb/ZlDNVA
-	T8BBWaa838Z3g+C2Bmj6ffdKRKSbmVfjNPQAA3LMHfttTxbMNZcypGYRc624zg==
-X-Gm-Gg: ASbGnctlG8ZTS9y+RmprWOxx98ka0F36vm2FYWMtpgOJrg6GxsKBKa+8GXPGXzT9A5h
-	vknYeRzq4ffUzqRwhSt8RnQYgdD1/OL/fE5KF9IwVaB0A8tVidcBE0IYTibLYaXb5o6sjYC0Yjf
-	VwB8k2VHm4lqPwksfc1I3BcABAqOgg/a33QDQKEMcqdfspgFEH9wqK7+h/+NfPRWsl+WMJrM/xH
-	2cAMTEIgSnC5H/OCLMJlmGT3kEdlZK3Gse6Jr66eSs7231FMeI=
-X-Google-Smtp-Source: AGHT+IFAW/O9xgHOLQxU7/y6pZPm969hCUI/wy/IpW8NgeI8pQ0oZf7IolNnJMoqvr+sjb1Uc1f85w==
-X-Received: by 2002:a05:6214:21e9:b0:6d8:a1fe:7293 with SMTP id 6a1803df08f44-6dd233ac3afmr710213676d6.42.1736040230673;
-        Sat, 04 Jan 2025 17:23:50 -0800 (PST)
+        bh=k9rT4XVdO+KJptzLIU5K24Iy8JAMC8dWqPat04fTPeg=;
+        b=oj3H1W45z1wzBd63/ixUhH3p6kKrzyZRP0EKdZ/3PdnelmnC80zHVKekiNFRnttwEw
+         wtGLw8mz0n3BbtJAqb4q+ZZ+xz3O6ErtJue6L9y5de5VVLFXy1sPr+iJyDaugFKDI8Qs
+         H9kSYGer2t1yUuBsBNMKSWva4a3tRjNxFRzoL3yBz0tek1iJMPt/47NZM2xFoVZui0p2
+         SQ58/MXOEFTP2BPLAMtp6r5T/2xrw/C9L9+QPqkxpi2vgJAreQvtIYSYEW/FX9QCNb4Z
+         X9qOCJ1qEJAgRCyCgJIxq9uJrV/oJtr0ALQrEjp9ahNWTOZtS84FptdSY6YSK8C/ZrNM
+         qqeA==
+X-Forwarded-Encrypted: i=1; AJvYcCVMEQsClJOuRE8UHgduBvpFIJa8TiJfC1FBdx5pJsxpBJzziqQNmY7j+wDEG5MiOloFxoJ+Ng==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyZL3/nQrZDS4479GSSZjLoP1Ob3nFwzw9xZVKYW1PnZeOY1Fw0
+	L1KjFByTdrB5RqjRSEERMkQ+bNL0lyCu3pxWYCOP1LkEt0gYrkGiIeXuGQd08g==
+X-Gm-Gg: ASbGncuK46ZK0EjBq4zl+agVi7Yr0bkxz0bPf/I9OQPLILfi+jJbOo4ZJvXRt4FJeQW
+	NciprlfI96n1PCaCZMt5S0EM/r8g+5dBlrvkmuEpHQWF/NIDUUoZpBjiABfbTQ7sljguk07qVFA
+	6aGhMgo79QfKyz2CZgU7qVzr/l0kczKjAUUKP0I8O85mWyiy4XGNTUtiWJ15SzBP53OwKhCKLJI
+	dNWOywn2VSo/KRxS9aEHICIy8rfh8nmIdxjNwrOnOfTAujU9oQ=
+X-Google-Smtp-Source: AGHT+IHglY+9TOxiTWIJ5F+v+fUise97c526iFqjanfLoXT3ipJnbKyIO+pLuH0YYRWs4S+ESy8RGA==
+X-Received: by 2002:a05:620a:1727:b0:7b6:c673:7427 with SMTP id af79cd13be357-7b9ba83a774mr7790907085a.59.1736040231672;
+        Sat, 04 Jan 2025 17:23:51 -0800 (PST)
 Received: from localhost ([70.22.175.108])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6dd1810db8fsm156404746d6.46.2025.01.04.17.23.50
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7b9ac2bc18dsm1392530885a.22.2025.01.04.17.23.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 04 Jan 2025 17:23:50 -0800 (PST)
-Date: Sat, 04 Jan 2025 20:23:49 -0500
-Message-ID: <a0181404db7048781857521d010d0658@paul-moore.com>
+        Sat, 04 Jan 2025 17:23:51 -0800 (PST)
+Date: Sat, 04 Jan 2025 20:23:50 -0500
+Message-ID: <a70e3b887f55a0e21c2cec553e047ce0@paul-moore.com>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
@@ -70,120 +70,41 @@ X-Mailer: pstg-pwork:20250104_1133/pstg-lib:20250104_1133/pstg-pwork:20250104_11
 From: Paul Moore <paul@paul-moore.com>
 To: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>, Eric Paris <eparis@redhat.com>, =?UTF-8?q?G=C3=BCnther=20Noack?= <gnoack@google.com>, "Serge E . Hallyn" <serge@hallyn.com>
 Cc: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>, Ben Scarlato <akhna@google.com>, Casey Schaufler <casey@schaufler-ca.com>, Charles Zaffery <czaffery@roblox.com>, Francis Laniel <flaniel@linux.microsoft.com>, James Morris <jmorris@namei.org>, Jann Horn <jannh@google.com>, Jeff Xu <jeffxu@google.com>, Jorge Lucangeli Obes <jorgelo@google.com>, Kees Cook <kees@kernel.org>, Konstantin Meskhidze <konstantin.meskhidze@huawei.com>, Matt Bobrowski <mattbobrowski@google.com>, Mikhail Ivanov <ivanov.mikhail1@huawei-partners.com>, Phil Sutter <phil@nwl.cc>, Praveen K Paladugu <prapal@linux.microsoft.com>, Robert Salvet <robert.salvet@roblox.com>, Shervin Oloumi <enlightened@google.com>, Song Liu <song@kernel.org>, Tahera Fahimi <fahimitahera@gmail.com>, audit@vger.kernel.org, linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
-Subject: Re: [PATCH v3 8/23] landlock: Log ptrace denials
-References: <20241122143353.59367-9-mic@digikod.net>
-In-Reply-To: <20241122143353.59367-9-mic@digikod.net>
+Subject: Re: [PATCH v3 9/23] audit: Add a new audit_get_ctime() helper
+References: <20241122143353.59367-10-mic@digikod.net>
+In-Reply-To: <20241122143353.59367-10-mic@digikod.net>
 
 On Nov 22, 2024 =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net> wrote:
 > 
-> Add audit support to ptrace_access_check and ptrace_traceme hooks.
+> It may be useful to synchronize with the audit's timestamp e.g., to
+> identify asynchronous events as being created with a previous audit
+> record (see next commit).
 > 
-> Add a new AUDIT_LANDLOCK_DENY record type dedicated to any Landlock
-> denials.
+> auditsc_get_stamp() does more than just getting a timestamp, so add a
+> new helper instead of exposing it and risking side effects.
 > 
-> Log the domain ID restricting the action, the domain's blockers that are
-> missing to allow the requested access, and the target task.
+> It should be noted that we cannot reliably expose event's serial numbers
+> because there may not be any related event, which would then create
+> holes in the sequence of serial numbers.
 > 
-> The blockers are implicit restrictions (e.g. ptrace), or explicit access
-> rights (e.g. filesystem), or explicit scopes (e.g. signal).
-> 
-> For the ptrace_access_check case, we log the current/parent domain and
-> the child task.  For the ptrace_traceme case, we log the parent domain
-> and the parent task.  Indeed, the requester is the current task, but the
-> action would be performed by the parent task.
-> 
-> The quick return for non-landlocked tasks is moved from task_ptrace() to
-> each LSM hooks.
-> 
-> Audit event sample:
-> 
->   type=LL_DENY msg=audit(1732186800.349:44): domain=195ba459b blockers=ptrace opid=1 ocomm="systemd"
->   type=SYSCALL msg=audit(1732186800.349:44): arch=c000003e syscall=101 success=no [...] pid=300 auid=0
-> 
-> Cc: Günther Noack <gnoack@google.com>
+> Cc: Eric Paris <eparis@redhat.com>
 > Cc: Paul Moore <paul@paul-moore.com>
 > Signed-off-by: Mickaël Salaün <mic@digikod.net>
-> Link: https://lore.kernel.org/r/20241122143353.59367-9-mic@digikod.net
+> Link: https://lore.kernel.org/r/20241122143353.59367-10-mic@digikod.net
 > ---
 > Changes since v2:
-> - Log domain IDs as hexadecimal number: this is a more compact notation
->   (i.e. at least one less digit), it improves alignment in logs, and it
->   makes most IDs start with 1 as leading digit (because of the 2^32
->   minimal value).  Do not use the "0x" prefix that would add useless
->   data to logs.
-> - Constify function arguments.
-> 
-> Changes since v1:
-> - Move most audit code to this patch.
-> - Rebase on the TCP patch series.
-> - Don't log missing access right: simplify and make it generic for rule
->   types.
-> - Don't log errno and then don't wrap the error with
->   landlock_log_request(), as suggested by Jeff.
-> - Add a WARN_ON_ONCE() check to never dereference null pointers.
-> - Only log when audit is enabled.
-> - Don't log task's PID/TID with log_task() because it would be redundant
->   with the SYSCALL record.
-> - Move the "op" in front and rename "domain" to "denying_domain" to make
->   it more consistent with other entries.
-> - Don't update the request with the domain ID but add an helper to get
->   it from the layer masks (and in a following commit with a struct
->   file).
-> - Revamp get_domain_id_from_layer_masks() into
->   get_level_from_layer_masks().
-> - For ptrace_traceme, log the parent domain instead of the current one.
-> - Add documentation.
-> - Rename AUDIT_LANDLOCK_DENIAL to AUDIT_LANDLOCK_DENY.
-> - Only log the domain ID and the target task.
-> - Log "blockers", which are either implicit restrictions (e.g. ptrace)
->   or explicit access rights (e.g. filesystem), or scopes (e.g. signal).
-> - Don't log LSM hook names/operations.
-> - Pick an audit event ID folling the IPE ones.
-> - Add KUnit tests.
+> - New patch.
 > ---
->  include/uapi/linux/audit.h  |   3 +-
->  security/landlock/Makefile  |   2 +-
->  security/landlock/audit.c   | 137 ++++++++++++++++++++++++++++++++++++
->  security/landlock/audit.h   |  52 ++++++++++++++
->  security/landlock/domain.c  |  21 ++++++
->  security/landlock/domain.h  |  17 +++++
->  security/landlock/ruleset.c |   3 +
->  security/landlock/task.c    |  91 ++++++++++++++++++------
->  8 files changed, 302 insertions(+), 24 deletions(-)
->  create mode 100644 security/landlock/audit.c
->  create mode 100644 security/landlock/audit.h
->  create mode 100644 security/landlock/domain.c
-> 
-> diff --git a/include/uapi/linux/audit.h b/include/uapi/linux/audit.h
-> index 75e21a135483..60c909c396c0 100644
-> --- a/include/uapi/linux/audit.h
-> +++ b/include/uapi/linux/audit.h
-> @@ -33,7 +33,7 @@
->   * 1100 - 1199 user space trusted application messages
->   * 1200 - 1299 messages internal to the audit daemon
->   * 1300 - 1399 audit event messages
-> - * 1400 - 1499 SE Linux use
-> + * 1400 - 1499 access control messages
+>  include/linux/audit.h |  8 ++++++++
+>  kernel/auditsc.c      | 21 ++++++++++++++++++---
+>  2 files changed, 26 insertions(+), 3 deletions(-)
 
-Thank you :)
+I need to see where you actually use this, but I'm not sure I want to
+expost the audit timestamp outside of the audit subsystem.
 
-I'm also reminded once again that the original audit devs stubbornly
-used "SE Linux" instead of "SELinux" :/
-
->   * 1500 - 1599 kernel LSPP events
->   * 1600 - 1699 kernel crypto events
->   * 1700 - 1799 kernel anomaly records
-> @@ -146,6 +146,7 @@
->  #define AUDIT_IPE_ACCESS	1420	/* IPE denial or grant */
->  #define AUDIT_IPE_CONFIG_CHANGE	1421	/* IPE config change */
->  #define AUDIT_IPE_POLICY_LOAD	1422	/* IPE policy load */
-> +#define AUDIT_LANDLOCK_DENY	1423	/* Landlock denial */
-
-Generally speaking, we don't really encode denial/allowed verdicts into
-the audit record type, instead we ask that developers use a field like
-"access=" to indicate that an action was allowed or denied.
-
-How about AUDIT_LANDLOCK_ACCESS ?
+Okay, I found at least one user in patch 10/23, and no, that's not
+something I think we want to support with audit.  More about this in
+patch 10/23.
 
 --
 paul-moore.com
