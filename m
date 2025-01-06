@@ -1,71 +1,71 @@
-Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com [209.85.219.180])
+Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com [209.85.219.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 655A71DF984
-	for <audit@vger.kernel.org>; Mon,  6 Jan 2025 21:57:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48E931E0DEE
+	for <audit@vger.kernel.org>; Mon,  6 Jan 2025 22:30:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736200624; cv=none; b=lKibt79CphmTzHvjZkgIar3wBRkvaLQk4u8T7K5XlXSdyKkJiU5SbeO60+7577+y55/iYuTmEhPN/jH6AGkHj2XQtvqwwo8rSD8JWHDrN2u8fg+eHFlGMKLWxWurYygjrmGcgGanF+M4+ozff5ZYi1nA5KC+2o/pJ7QWZpWMf4w=
+	t=1736202604; cv=none; b=teyUvexfh2TBUSs424d5dB0ILt79p0Fz1kUWl+hxoe4MT8a696WD82OEgCU08BSSbbTpwb8h0uPprHqCEAG//G0H8YctCkHv6y26WtaLetVupe9oY8WpzrNpEMig3RcL36QcZSW3yVw0E7T1XWudrdgc/e/uSVZUvcbmvS+gZIQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736200624; c=relaxed/simple;
-	bh=GrtQDJb+twssJLjC6Kvv/sZHfycRVnsWGZAKCD5cmCg=;
+	s=arc-20240116; t=1736202604; c=relaxed/simple;
+	bh=eca6IxW+0l/PDvEdBRtVxLKo/mmc6G2o2HOHdx03jWU=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=FnA3IxgZ0qZMzD8VTbezPUVf8iQAlvmqWD8OLadGFM5CzEGXGMGtqPoQQzfpexj0a+kJI2VbAVSncs0yZ4DTvB0skekeWDpuG6nudxQxnMstmnrBNXOsBRxwFC4gF4ANRawmLSXNKCMCpNhQFN58MnwcAWTEcdLfsI2x/lYxSq4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=RbiRO0n8; arc=none smtp.client-ip=209.85.219.180
+	 To:Cc:Content-Type; b=gQTNpJufXkMDvg3KydApWTZxYDZyOc0KWA6SKnGhZ23sNZZJT14h7iUv2Gdb52ln4ebsBMF+UIEZ41d1KShq6NYfFFKj4+MeKE7sz7xG7mncGLe+swU+j9Gx4ZdjDuQdQll1fAdU9d2AwHTO1o1Ltv/ut1+mUt9n76ij0hd2Djc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=RS6wlRcO; arc=none smtp.client-ip=209.85.219.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="RbiRO0n8"
-Received: by mail-yb1-f180.google.com with SMTP id 3f1490d57ef6-e460717039fso19429151276.0
-        for <audit@vger.kernel.org>; Mon, 06 Jan 2025 13:57:02 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="RS6wlRcO"
+Received: by mail-yb1-f181.google.com with SMTP id 3f1490d57ef6-e3983426f80so20681493276.1
+        for <audit@vger.kernel.org>; Mon, 06 Jan 2025 14:30:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1736200621; x=1736805421; darn=vger.kernel.org;
+        d=paul-moore.com; s=google; t=1736202602; x=1736807402; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=9ARa0zCGvqdPtaQ+iQc5T+J1GrOh+InVYBW4pMMFrU4=;
-        b=RbiRO0n8Ag3+XSX3VsIrJToBQvJPMWsXW2+lZe7iuFbqpdS6Sd+lOT9/wKSUUuw9yl
-         pL0XN24hRWpWccp7NTCN81MGgfbOqwx1HkwMOAhbrUHw5x2NXOGCrJBe5jjDMizuk4hy
-         ddX+gOKnA14zg74fE9ODEX/sV7O8OpK38ZfMx/UQhBXAjfdtqyf2I7YqhYKfxQUxdWjh
-         at/J+mIr5wIJ68JFaE2LQV4MnixOhUdU+++c3BmbyMWGnvPxeIDhZCoib0+HmfW/KWg+
-         dpfnxUSur/xYB3XKE9UB+r5rtZy/qEV845fs6UFmxEDZd8WzJx+OPLpwN6hqVpQ7eXXx
-         OMQQ==
+        bh=85Mr2nSUkKINWwGhExEOZAniHV88apIn6C3yWYS1jJY=;
+        b=RS6wlRcOR0uh9sdD9bdVWmH1C3pk5DcXw4WJCuCifvAm2cRnlKzsE8Y0vWY9h/EsKa
+         VP/AWfdVjXwzG7e+QwqHbP6cPZy6y3t6dATwhD//yeyVc30GYXegIc8uU7LhqiIFIz6y
+         IMSV9HIdz5oR8x4CIplDpaJMdNN7v3035g6e3U7cjuIiy5U8sN1szGPWx9XbttvDCCOb
+         +Ca3JgoDiakiOP4j4f23XwBd3E1wkVnAInBr6OUgufThI7Xd/BIHA7hNkaMTZrQdahdh
+         hvG2UkTXmHfq7OF0IqAHtATCbX12c1aTiJC4zhcTog9MGZStzbCYKdGzRlFASZCHWbzX
+         FovA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736200621; x=1736805421;
+        d=1e100.net; s=20230601; t=1736202602; x=1736807402;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=9ARa0zCGvqdPtaQ+iQc5T+J1GrOh+InVYBW4pMMFrU4=;
-        b=S4qxCORf0lf1wUJ8K6t3Qbip57+sSnxWmUzDmjYEKStc9Q47vxBJGnFZ3iTYsjLQeC
-         0Ehx7HBRjXILa2F3q9RkYaqQAn/yyYKgLoQjGUqsy6hpL2wVuqCsmJy32KYHBlgKJdwh
-         0+2X8SW18MVwMB7x4BDDCtPxcvp8Dc/dqlKEJxxgPhBoOLYjdQEgpKJ7hNWyI9GFxgE8
-         JwWP9ATRvx4PUB4D+A3SyIE3nvaauyS690BHHVfX59CYWGCBbniivnfFdTExndgp9Xb1
-         bUvUiBoby7w5KEvmmu2xqJ+S27tkM5HPUDJHfVhzoeNGmFBhSnevx1u9Pgvr0dD4Tny3
-         BFkA==
-X-Forwarded-Encrypted: i=1; AJvYcCVoNSZ0JyGN4BRNWrwSE7XJDeOK6bw6rJUX0CfdnAyjhfWaBUZ9uQVmG/A5tqPpKGY5ZGDafA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzyM+7Jowu3KBqyyUBggszQu4fGXPwUNiKjW4NZ2PLP5twXZzXI
-	0JE4Xck+GwaikxhUDscoXSYLhqEGvLPvwsGg3Mfl4mZWwaFG2FmhRqpDDFZ6d8JMHyEkIehRAYg
-	N1ntJQ2iGNlG2cAvMkTJnN1cOW1vBabli0Anx
-X-Gm-Gg: ASbGnct4hYsSReSWappUMIYWdBxYV/EEc/G+BcK4Y+6pmhheAOGrnPz7jiL5XR1EV8K
-	VmUvSpIbLbFafEppvEQK92AFA6N1nLAJ6Ser4
-X-Google-Smtp-Source: AGHT+IHPuvJvJAXeboVFnSiBK5XS83y2yyt1OxbD8VkKSr9+QTEL+xmBBRLBj+EuyKGNzWS7MFXb90EjBn/IVVYaZa8=
-X-Received: by 2002:a05:690c:4d86:b0:6ef:6d61:c254 with SMTP id
- 00721157ae682-6f3f82413ffmr419313447b3.38.1736200621343; Mon, 06 Jan 2025
- 13:57:01 -0800 (PST)
+        bh=85Mr2nSUkKINWwGhExEOZAniHV88apIn6C3yWYS1jJY=;
+        b=Og6Nb/l9J8F9d3QjG0i1PBh8r1GnvRvGy1Qpo2iTeypngaw8/PCXeVCt87Vj+BkcnX
+         jev5rqMwbE8qI72U8seqm9BZYpgbO88hzqP3WwNk1CUVUY7QM2X51kVeVtC+paZ2RN2W
+         hxaZbJu9g82g6gYmdGwRPOEk1jAc584hP1+zjd687WU6cs2T3svZQANngttBwRG2Hhz4
+         kGtv5zSH6P3teJuRiMDbtXbcrJHpkBrDYuEyB0d2v1uepxMh9LocRfhpLlYD9xpjDQJ1
+         EDGTdr33gIiOWCzjr15I/DR2RnrXTSwSrbME3yDlPKpn/WqfNxsUuFab0V+PgUmnr3+h
+         skRA==
+X-Forwarded-Encrypted: i=1; AJvYcCVE4eoRijdm+iAmPy0l2V6PF4913KEOPxoVK9pys/8EPxmSkJ4S7lESw7HAfZhk16EIkQUKug==@vger.kernel.org
+X-Gm-Message-State: AOJu0YygX89EdfN6NaLCF/PZMatBx3dyqhB6w6i4wgFq8RhhWKEZ+oGt
+	G9bDBaBagOXisB4X/ziBjRYNYQ5rY2Yeg+lucoz3JxsMKCW5YQF5Uvhx8EtafOLj1g+WLauD0uF
+	yVzfeyyAgor/QnHAOqY5EVup8TkU6PIheMEA6
+X-Gm-Gg: ASbGncuMzYm4JHYYVzY+pZF6cRimG5WYSAjtGY4+Cp9/IMfT2Ot9ZTPtLmPPOAYbSSD
+	VRDogdAsqRi82sG5ltdTBgS+sN4J5C5IpRf0n
+X-Google-Smtp-Source: AGHT+IFCGDAZ/3lfILcXv8R7tXGphEfEWUfm4JLOABY3D3/LkE5I7c6GclVjTfCzrbu3vRpcPGS9bRUgfDfCwb84xc0=
+X-Received: by 2002:a05:690c:4986:b0:6ee:6c7d:4888 with SMTP id
+ 00721157ae682-6f3f8144f76mr452679147b3.22.1736202602340; Mon, 06 Jan 2025
+ 14:30:02 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241122143353.59367-11-mic@digikod.net> <237bfe2be7b4ba5d59b3b832c23622bb@paul-moore.com>
- <20250106.ohgh8Zeu6coo@digikod.net>
-In-Reply-To: <20250106.ohgh8Zeu6coo@digikod.net>
+References: <20241122143353.59367-18-mic@digikod.net> <0055bef6843289ac8dc728a68326513d@paul-moore.com>
+ <20250106.ea8aex7jai3O@digikod.net>
+In-Reply-To: <20250106.ea8aex7jai3O@digikod.net>
 From: Paul Moore <paul@paul-moore.com>
-Date: Mon, 6 Jan 2025 16:56:50 -0500
-X-Gm-Features: AbW1kvZTl7s3th7FvYN4riS8lYBxye-y1t0qQkW9YUuzgax2JZptYODrJfZeE3E
-Message-ID: <CAHC9VhR7EWDm5afnzRbVO6jkqtwtBe-UbHk+b-bED7uwisu_bA@mail.gmail.com>
-Subject: Re: [PATCH v3 10/23] landlock: Log domain properties and release
+Date: Mon, 6 Jan 2025 17:29:51 -0500
+X-Gm-Features: AbW1kvbztsFKO2Mp88ClYKhkTyTWboydIXOO6GsUlgClK-Zf32TGnEy8Sn3G2WU
+Message-ID: <CAHC9VhRh+_CM5kVmuXkttCn-3f3X8TR4n2q7MzrxCBXhbb2n-Q@mail.gmail.com>
+Subject: Re: [PATCH v3 17/23] landlock: Log TCP bind and connect denials
 To: =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>
 Cc: Eric Paris <eparis@redhat.com>, =?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>, 
 	"Serge E . Hallyn" <serge@hallyn.com>, Ben Scarlato <akhna@google.com>, 
@@ -84,117 +84,43 @@ Content-Transfer-Encoding: quoted-printable
 
 On Mon, Jan 6, 2025 at 9:51=E2=80=AFAM Micka=C3=ABl Sala=C3=BCn <mic@digiko=
 d.net> wrote:
-> On Sat, Jan 04, 2025 at 08:23:51PM -0500, Paul Moore wrote:
+> On Sat, Jan 04, 2025 at 08:23:52PM -0500, Paul Moore wrote:
 > > On Nov 22, 2024 =3D?UTF-8?q?Micka=3DC3=3DABl=3D20Sala=3DC3=3DBCn?=3D <m=
 ic@digikod.net> wrote:
-
-...
-
-> > > Audit event sample for a first denial:
 > > >
-> > >   type=3DLL_DENY msg=3Daudit(1732186800.349:44): domain=3D195ba459b b=
-lockers=3Dptrace opid=3D1 ocomm=3D"systemd"
-> > >   type=3DLL_DOM_INFO msg=3Daudit(1732186800.349:44): domain=3D195ba45=
-9b creation=3D1732186800.345 pid=3D300 uid=3D0 exe=3D"/root/sandboxer" comm=
-=3D"sandboxer"
-> > >   type=3DSYSCALL msg=3Daudit(1732186800.349:44): arch=3Dc000003e sysc=
-all=3D101 success=3Dno [...] pid=3D300 auid=3D0
+> > > Add audit support to socket_bind and socket_connect hooks.
+> > >
+> > > Audit event sample:
+> > >
+> > >   type=3DLL_DENY [...]: domain=3D195ba459b blockers=3Dnet_connect_tcp=
+ daddr=3D127.0.0.1 dest=3D80
 > >
-> > As mentioned in patch 9/23, I don't want subsystems external to audit
-> > to access the audit timestamp information, so the "creation=3D" field
-> > in the audit event would need to be removed.  Assuming that the timesta=
-mp
-> > was used either to reference the original domain creation and/or simply
-> > provide some additional information for analysis, all of that informati=
-on
-> > should already be in the audit log, assuming of course that you are
-> > logging domain creation (which you should, at least as an option).
+> > The destination address and port is already captured in the SOCKADDR
+> > record for bind() and connect(), please don't duplicate it here.
 >
-> As explained in this patch, we don't want to (and cannot realistically)
-> log domain creations.  That would make the audit support for Landlock
-> unusable.  Moreover, these information is useless and only add noise
-> unless there is a denial, hence this asynchronous approach.
+> This does not show up when a connect or bind is denied.  I guess this is
+> because move_addr_to_kernel() is called at syscall entry when there is
+> no context, whereas a Landlock denial is created after that.  For this
+> to work, users would have to log a list of syscalls, which would not be
+> usable (nor reliably maintainable) for most users.
 
-That's fine, just know that it doesn't change my thoughts on exposing
-the audit timestamp.
+Quick question, can you share the audit filter configuration you are
+using on your dev/test systems (just dump /etc/audit/audit.rules,
+unless you are doing it by hand)?
 
-> However,
-> users may want to log some syscalls, including landlock_restrict_self(),
-> and it would make audit logs more consistent using the same timestamp as
-> the Landlock domain creation time.  I'm wondering why exposing this
-> timestamp to the kernel would be an issue whereas it is already exposed
-> to user space.
+One can make an argument that if syscall auditing is being explicitly
+denied, then the user has decided that the syscall related information
+is not important to them.  I'm somewhat conflicted on that argument,
+but I believe the argument is at least valid.
 
-Currently there are no other users of the audit timestamp besides
-audit.  Making the audit timestamp available to other subsystems makes
-the timestamp less flexible over the long term as it would become, in
-a way, part of the API that audit provides to other in-kernel users.
+> I guess this might be different with io_uring too.
 
-I still have hopes to rework a large chunk of the audit subsystem, and
-keeping the interfaces between audit and the other in-kernel
-subsystems makes that easier.
-
-> If you're really opposed to it I can create a new unrelated timestamp
-> specific to Landlock.
-
-Yes, at this point in time I don't want to support exporting the audit
-timestamp outside of audit.  My guess is that you probably want to use
-some identifier, other than a timestamp, when trying to link Landlock
-events (presumably the domain ID would do this?), but I don't pretend
-to know the details of Landlock very well right now.
-
-> > Also, is there a good reason why the LL_DOM_INFO information can't be
-> > recorded in the LL_DENY (or LL_ACCESS) record?  I think that would be
-> > preferable.
->
-> The goal of the standalone LL_DOM_INFO record type is to limit useless
-> log verbosity.  Including this information in LL_DENY would have two
-> downsides:
-> - it would increases the length of *all* LL_DENY messages
-
-Are you ever going to emit a LL_ACCESS/LL_DENY record without a
-LL_DOM_INFO record?
-
-> - it would make it more difficult to extend this new mixed messages with
->   access-related informations (e.g. file property) and domain-related
->   informations (and associate them with either the object or the
->   domain).
-
-How?  Please elaborate on this.
-
-> > > Audit event sample for logged domains deletion:
-> > >
-> > >   type=3DLL_DOM_DROP msg=3Daudit(1732186800.393:45): domain=3D195ba45=
-9b
-> > >
-> > > Cc: G=C3=BCnther Noack <gnoack@google.com>
-> > > Cc: Paul Moore <paul@paul-moore.com>
-> > > Signed-off-by: Micka=C3=ABl Sala=C3=BCn <mic@digikod.net>
-> > > Link: https://lore.kernel.org/r/20241122143353.59367-11-mic@digikod.n=
-et
-> > > ---
-> > > Questions:
-> > > - Should we also log the creator's loginuid?
-> > > - Should we also log the creator's sessionid?
-> >
-> > Creation of a Landlock domain can only happen through the Landlock
-> > syscalls, yes?  If so, that information should already be logged in
-> > the associated syscall record (see the "auid=3D" and "ses=3D" fields )a=
-nd
-> > we generally try to avoid duplicating information across records in
-> > the same audit event.
->
-> The specificity of Landlock compared to existing supported systems is
-> that we cannot log domain creation for the reason I explain before.
-
-Can you provide a link to that explanation?  I'm sure you explained it
-well, but I missed it when going over the patchset with a focus on
-audit.
-
-If the Landlock domain is created independent from any user/process
-action, it likely doesn't make sense to log either the loginuid or
-sessionid since the domain creation is happening independently from a
-user session.
+There are other issues with SOCKADDR and io_uring related to how
+io_uring wants to separate the work into different execution contexts.
+In general I wouldn't spend too much time worrying about auditing and
+io_uring right now, there are some general issues that need to be
+resolved in io_uring/audit that are much larger than just Landlock's
+audit usage.
 
 --=20
 paul-moore.com
