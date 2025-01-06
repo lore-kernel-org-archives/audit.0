@@ -1,71 +1,71 @@
-Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com [209.85.219.181])
+Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com [209.85.219.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48E931E0DEE
-	for <audit@vger.kernel.org>; Mon,  6 Jan 2025 22:30:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B5D01D79BE
+	for <audit@vger.kernel.org>; Mon,  6 Jan 2025 22:33:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736202604; cv=none; b=teyUvexfh2TBUSs424d5dB0ILt79p0Fz1kUWl+hxoe4MT8a696WD82OEgCU08BSSbbTpwb8h0uPprHqCEAG//G0H8YctCkHv6y26WtaLetVupe9oY8WpzrNpEMig3RcL36QcZSW3yVw0E7T1XWudrdgc/e/uSVZUvcbmvS+gZIQ=
+	t=1736202800; cv=none; b=AmK3BVnz9Gb8E18kMOZTpk97x9SBfTVkTROEicvENg14CQ9zvasBRCJ6UHolYisY/t6Tm3Rrmcd28/zn9c5ipJ/m9WPfmuxzisisz7u+oY/UF7QI/MZitJcMKib0ngyJCfq9MGPhiBwHm1DbGf24n+VseHjVyHtsTrMRmDUqRxE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736202604; c=relaxed/simple;
-	bh=eca6IxW+0l/PDvEdBRtVxLKo/mmc6G2o2HOHdx03jWU=;
+	s=arc-20240116; t=1736202800; c=relaxed/simple;
+	bh=kpxzGR4JaJofJNDa5ZJ3pY4v2uSOH1urVRJeJzOWYII=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=gQTNpJufXkMDvg3KydApWTZxYDZyOc0KWA6SKnGhZ23sNZZJT14h7iUv2Gdb52ln4ebsBMF+UIEZ41d1KShq6NYfFFKj4+MeKE7sz7xG7mncGLe+swU+j9Gx4ZdjDuQdQll1fAdU9d2AwHTO1o1Ltv/ut1+mUt9n76ij0hd2Djc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=RS6wlRcO; arc=none smtp.client-ip=209.85.219.181
+	 To:Cc:Content-Type; b=bzmWlnz7KUV/WXT51BaKrZjkwIVaAiw9Sa3Dt30fMBWFw4Jv9Si4A63mmWxf3OjbOLRWAHkrI0LMA7S/73aj+hPwxTcQxz7gL8sonwe4NDPTnPkpLhdxJxrG5CnEnNneFcgrg5VM8dOiydTuAFSGrbN/sXInRq615WYhXD1WEDQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=bamBrdNO; arc=none smtp.client-ip=209.85.219.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="RS6wlRcO"
-Received: by mail-yb1-f181.google.com with SMTP id 3f1490d57ef6-e3983426f80so20681493276.1
-        for <audit@vger.kernel.org>; Mon, 06 Jan 2025 14:30:03 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="bamBrdNO"
+Received: by mail-yb1-f176.google.com with SMTP id 3f1490d57ef6-e5447fae695so10779052276.2
+        for <audit@vger.kernel.org>; Mon, 06 Jan 2025 14:33:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1736202602; x=1736807402; darn=vger.kernel.org;
+        d=paul-moore.com; s=google; t=1736202798; x=1736807598; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=85Mr2nSUkKINWwGhExEOZAniHV88apIn6C3yWYS1jJY=;
-        b=RS6wlRcOR0uh9sdD9bdVWmH1C3pk5DcXw4WJCuCifvAm2cRnlKzsE8Y0vWY9h/EsKa
-         VP/AWfdVjXwzG7e+QwqHbP6cPZy6y3t6dATwhD//yeyVc30GYXegIc8uU7LhqiIFIz6y
-         IMSV9HIdz5oR8x4CIplDpaJMdNN7v3035g6e3U7cjuIiy5U8sN1szGPWx9XbttvDCCOb
-         +Ca3JgoDiakiOP4j4f23XwBd3E1wkVnAInBr6OUgufThI7Xd/BIHA7hNkaMTZrQdahdh
-         hvG2UkTXmHfq7OF0IqAHtATCbX12c1aTiJC4zhcTog9MGZStzbCYKdGzRlFASZCHWbzX
-         FovA==
+        bh=KnYEdpMsAz0QDzwNW1wx8vhWkXrIqVYrOc5wcWksEcQ=;
+        b=bamBrdNOgaRjGQcB/8IbivWyomkC+0wFRLe0P3/ifJhkvZFRfHGyPYJqaPZ6jE7dr9
+         3+vqcmVrULdJjdUVaJ0Oq7p82rF8gUzFweRtkootMaYSF/kkKXfpefWpB8FZ6vTamJ1t
+         xA2R98f4tsT9er12hZoyvTmPkDaFMNh5y6L8Nfog+6d7kIvwLpcw+fPC2+96T/ULB+nI
+         5SxqG1vSsRqKq2oGcXsVKSfZo6K3OxlRI2i1Ks7rnTPFAu4hQTS2mQubyI/Eqf52VQza
+         oW2qV1+6avrf2xCG3ZKaTVmImawHM0t0ImeR0wr04FHNrgzaTIHnKjMUDM/s0aNSIcJj
+         qVzg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736202602; x=1736807402;
+        d=1e100.net; s=20230601; t=1736202798; x=1736807598;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=85Mr2nSUkKINWwGhExEOZAniHV88apIn6C3yWYS1jJY=;
-        b=Og6Nb/l9J8F9d3QjG0i1PBh8r1GnvRvGy1Qpo2iTeypngaw8/PCXeVCt87Vj+BkcnX
-         jev5rqMwbE8qI72U8seqm9BZYpgbO88hzqP3WwNk1CUVUY7QM2X51kVeVtC+paZ2RN2W
-         hxaZbJu9g82g6gYmdGwRPOEk1jAc584hP1+zjd687WU6cs2T3svZQANngttBwRG2Hhz4
-         kGtv5zSH6P3teJuRiMDbtXbcrJHpkBrDYuEyB0d2v1uepxMh9LocRfhpLlYD9xpjDQJ1
-         EDGTdr33gIiOWCzjr15I/DR2RnrXTSwSrbME3yDlPKpn/WqfNxsUuFab0V+PgUmnr3+h
-         skRA==
-X-Forwarded-Encrypted: i=1; AJvYcCVE4eoRijdm+iAmPy0l2V6PF4913KEOPxoVK9pys/8EPxmSkJ4S7lESw7HAfZhk16EIkQUKug==@vger.kernel.org
-X-Gm-Message-State: AOJu0YygX89EdfN6NaLCF/PZMatBx3dyqhB6w6i4wgFq8RhhWKEZ+oGt
-	G9bDBaBagOXisB4X/ziBjRYNYQ5rY2Yeg+lucoz3JxsMKCW5YQF5Uvhx8EtafOLj1g+WLauD0uF
-	yVzfeyyAgor/QnHAOqY5EVup8TkU6PIheMEA6
-X-Gm-Gg: ASbGncuMzYm4JHYYVzY+pZF6cRimG5WYSAjtGY4+Cp9/IMfT2Ot9ZTPtLmPPOAYbSSD
-	VRDogdAsqRi82sG5ltdTBgS+sN4J5C5IpRf0n
-X-Google-Smtp-Source: AGHT+IFCGDAZ/3lfILcXv8R7tXGphEfEWUfm4JLOABY3D3/LkE5I7c6GclVjTfCzrbu3vRpcPGS9bRUgfDfCwb84xc0=
-X-Received: by 2002:a05:690c:4986:b0:6ee:6c7d:4888 with SMTP id
- 00721157ae682-6f3f8144f76mr452679147b3.22.1736202602340; Mon, 06 Jan 2025
- 14:30:02 -0800 (PST)
+        bh=KnYEdpMsAz0QDzwNW1wx8vhWkXrIqVYrOc5wcWksEcQ=;
+        b=uBhfgd2LbkOsGpOmRpvFu/THHadxmfjCvBa2Onw0ITzCkd8lAlFkBdSOH9gfG9SUkQ
+         HaijyOqH/DcFLAORu2f0aNz1kswBFTv61NNkqrJ0rtejZlsKkz2jDnUv3R5LedxrL8i5
+         0ICkqk65bzt0bBWCCzesqaLhwnaxTzCISzBtvo2EGW+NpJyQA9fKRy1QVsc97h5TZcbI
+         8Se23A6Ye6Y8aKsop2OreiKbZbD7KZxTXZnhJnTjNHsUUPycfSuYVcTJCKyTqBWpBbsW
+         lQvxhBycwzNQOiuPrxZzYtJxvf3eyb/go+epZflHnwmG4CPsYSKomqPLS+KYYvY2sJxo
+         XuWw==
+X-Forwarded-Encrypted: i=1; AJvYcCW+SZ3i9FSUcLtph+v+Wh66mYjglBDU3hwORkGIw2YVJi2X0Hdr1xF+F28O0IaHC5sPDIyIWg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxHylsqipx13FmP+qdJgK/EfLIwh1uNnAjoG3plRHVifk8Ionft
+	t8rRAlVWXzo6hHr8XXcZeqZEwCykX7LK5k7A/zV02dAD3pFkd46JnMs0PguZzbGbEoemnOZtATs
+	n6iRX63ldHIoM9VuRn4XQxQeQEMTuMJn7a5wi
+X-Gm-Gg: ASbGncvkvmEs4ZHo+LNtCSqT1Trh6QIaUUeYf3IZ/gQGdiMH6Qvw37WNi13nHnKsEf2
+	yHF65Hn77ta0SvegvfvwcSvK7qka5LJtaHFzl
+X-Google-Smtp-Source: AGHT+IFSn6EmyzYcayFke1bry03EZjwyI2ykxVAT2ssmOGcaLUn1LXokDJByOKaRFr7je/0lN2AHCYWtk+7hnvzD69E=
+X-Received: by 2002:a05:690c:4d81:b0:6ef:4e42:64b5 with SMTP id
+ 00721157ae682-6f3f8115a00mr425350417b3.16.1736202798164; Mon, 06 Jan 2025
+ 14:33:18 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241122143353.59367-18-mic@digikod.net> <0055bef6843289ac8dc728a68326513d@paul-moore.com>
- <20250106.ea8aex7jai3O@digikod.net>
-In-Reply-To: <20250106.ea8aex7jai3O@digikod.net>
+References: <20241122143353.59367-19-mic@digikod.net> <1372f9de0bb265a08114a870ec086da0@paul-moore.com>
+ <20250106.ohHi4La0ahTh@digikod.net>
+In-Reply-To: <20250106.ohHi4La0ahTh@digikod.net>
 From: Paul Moore <paul@paul-moore.com>
-Date: Mon, 6 Jan 2025 17:29:51 -0500
-X-Gm-Features: AbW1kvbztsFKO2Mp88ClYKhkTyTWboydIXOO6GsUlgClK-Zf32TGnEy8Sn3G2WU
-Message-ID: <CAHC9VhRh+_CM5kVmuXkttCn-3f3X8TR4n2q7MzrxCBXhbb2n-Q@mail.gmail.com>
-Subject: Re: [PATCH v3 17/23] landlock: Log TCP bind and connect denials
+Date: Mon, 6 Jan 2025 17:33:07 -0500
+X-Gm-Features: AbW1kvYKse12ll4fYv0870kHY_o3Lyw_REBr4iiKqgVQkplZz_g1WsoqSMdceVg
+Message-ID: <CAHC9VhQsUkthgGpoNZZdXGcPS9zF2aijYfKfuNYCZB08N=UDKg@mail.gmail.com>
+Subject: Re: [PATCH v3 18/23] landlock: Log scoped denials
 To: =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>
 Cc: Eric Paris <eparis@redhat.com>, =?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>, 
 	"Serge E . Hallyn" <serge@hallyn.com>, Ben Scarlato <akhna@google.com>, 
@@ -84,43 +84,27 @@ Content-Transfer-Encoding: quoted-printable
 
 On Mon, Jan 6, 2025 at 9:51=E2=80=AFAM Micka=C3=ABl Sala=C3=BCn <mic@digiko=
 d.net> wrote:
-> On Sat, Jan 04, 2025 at 08:23:52PM -0500, Paul Moore wrote:
+> On Sat, Jan 04, 2025 at 08:23:53PM -0500, Paul Moore wrote:
 > > On Nov 22, 2024 =3D?UTF-8?q?Micka=3DC3=3DABl=3D20Sala=3DC3=3DBCn?=3D <m=
 ic@digikod.net> wrote:
 > > >
-> > > Add audit support to socket_bind and socket_connect hooks.
+> > > Add audit support for unix_stream_connect, unix_may_send, task_kill, =
+and
+> > > file_send_sigiotask hooks.
 > > >
 > > > Audit event sample:
 > > >
-> > >   type=3DLL_DENY [...]: domain=3D195ba459b blockers=3Dnet_connect_tcp=
- daddr=3D127.0.0.1 dest=3D80
+> > >   type=3DLL_DENY [...]: domain=3D195ba459b blockers=3Dscope_abstract_=
+unix_socket path=3D00666F6F
 > >
-> > The destination address and port is already captured in the SOCKADDR
-> > record for bind() and connect(), please don't duplicate it here.
+> > Similar to 17/23, I believe the SOCKADDR record should already capture
+> > the socket address information.
 >
-> This does not show up when a connect or bind is denied.  I guess this is
-> because move_addr_to_kernel() is called at syscall entry when there is
-> no context, whereas a Landlock denial is created after that.  For this
-> to work, users would have to log a list of syscalls, which would not be
-> usable (nor reliably maintainable) for most users.
+> This might not be the case, which is why SELinux and others explicitly
+> log it I guess.
 
-Quick question, can you share the audit filter configuration you are
-using on your dev/test systems (just dump /etc/audit/audit.rules,
-unless you are doing it by hand)?
-
-One can make an argument that if syscall auditing is being explicitly
-denied, then the user has decided that the syscall related information
-is not important to them.  I'm somewhat conflicted on that argument,
-but I believe the argument is at least valid.
-
-> I guess this might be different with io_uring too.
-
-There are other issues with SOCKADDR and io_uring related to how
-io_uring wants to separate the work into different execution contexts.
-In general I wouldn't spend too much time worrying about auditing and
-io_uring right now, there are some general issues that need to be
-resolved in io_uring/audit that are much larger than just Landlock's
-audit usage.
+I think I may be misunderstanding you, can you point to the section of
+SELinux code that you are referring to in your comment?
 
 --=20
 paul-moore.com
