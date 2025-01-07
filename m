@@ -1,110 +1,200 @@
-Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com [209.85.219.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp-8fa8.mail.infomaniak.ch (smtp-8fa8.mail.infomaniak.ch [83.166.143.168])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B5D01D79BE
-	for <audit@vger.kernel.org>; Mon,  6 Jan 2025 22:33:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFE011F4E51
+	for <audit@vger.kernel.org>; Tue,  7 Jan 2025 14:16:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=83.166.143.168
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736202800; cv=none; b=AmK3BVnz9Gb8E18kMOZTpk97x9SBfTVkTROEicvENg14CQ9zvasBRCJ6UHolYisY/t6Tm3Rrmcd28/zn9c5ipJ/m9WPfmuxzisisz7u+oY/UF7QI/MZitJcMKib0ngyJCfq9MGPhiBwHm1DbGf24n+VseHjVyHtsTrMRmDUqRxE=
+	t=1736259394; cv=none; b=TZRrEfe2zAWr1lvZScqtEl6fHdHqj6TduejolXNX/zazqsTeSNrFrdWElVd184YTqr3NyYhc1p/9qKgUlRG5Ne7K7d58UIJflRMTAp4ypB1hkBBxjwMJqBdw/14dA0jKHVMGgAv9KhDyV/YK51oQxGUw5R6NIZ80W5Fx63NfiZY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736202800; c=relaxed/simple;
-	bh=kpxzGR4JaJofJNDa5ZJ3pY4v2uSOH1urVRJeJzOWYII=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=bzmWlnz7KUV/WXT51BaKrZjkwIVaAiw9Sa3Dt30fMBWFw4Jv9Si4A63mmWxf3OjbOLRWAHkrI0LMA7S/73aj+hPwxTcQxz7gL8sonwe4NDPTnPkpLhdxJxrG5CnEnNneFcgrg5VM8dOiydTuAFSGrbN/sXInRq615WYhXD1WEDQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=bamBrdNO; arc=none smtp.client-ip=209.85.219.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+	s=arc-20240116; t=1736259394; c=relaxed/simple;
+	bh=HkWRbgtHRgtFxahtfa+4WFYJvcN8mxyN8lLNocI1x0k=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rWk59Tn49KYXGHOkkb3cxv1N6MH2s/Xuvphxnm8LJ8J9DEWsVaQWOoZwWFI3CLMy70sj3zXKY/6sY3T4M/SfjGPUJhw9kSyHZrrLPHgf6FO3/r58NLf264rApC0zCBIZrvqSAIldkcrRAPa26/FOFI5JskEzCp0PEIdZOx9AUYc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=QUh9UMPq; arc=none smtp.client-ip=83.166.143.168
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="bamBrdNO"
-Received: by mail-yb1-f176.google.com with SMTP id 3f1490d57ef6-e5447fae695so10779052276.2
-        for <audit@vger.kernel.org>; Mon, 06 Jan 2025 14:33:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1736202798; x=1736807598; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KnYEdpMsAz0QDzwNW1wx8vhWkXrIqVYrOc5wcWksEcQ=;
-        b=bamBrdNOgaRjGQcB/8IbivWyomkC+0wFRLe0P3/ifJhkvZFRfHGyPYJqaPZ6jE7dr9
-         3+vqcmVrULdJjdUVaJ0Oq7p82rF8gUzFweRtkootMaYSF/kkKXfpefWpB8FZ6vTamJ1t
-         xA2R98f4tsT9er12hZoyvTmPkDaFMNh5y6L8Nfog+6d7kIvwLpcw+fPC2+96T/ULB+nI
-         5SxqG1vSsRqKq2oGcXsVKSfZo6K3OxlRI2i1Ks7rnTPFAu4hQTS2mQubyI/Eqf52VQza
-         oW2qV1+6avrf2xCG3ZKaTVmImawHM0t0ImeR0wr04FHNrgzaTIHnKjMUDM/s0aNSIcJj
-         qVzg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736202798; x=1736807598;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=KnYEdpMsAz0QDzwNW1wx8vhWkXrIqVYrOc5wcWksEcQ=;
-        b=uBhfgd2LbkOsGpOmRpvFu/THHadxmfjCvBa2Onw0ITzCkd8lAlFkBdSOH9gfG9SUkQ
-         HaijyOqH/DcFLAORu2f0aNz1kswBFTv61NNkqrJ0rtejZlsKkz2jDnUv3R5LedxrL8i5
-         0ICkqk65bzt0bBWCCzesqaLhwnaxTzCISzBtvo2EGW+NpJyQA9fKRy1QVsc97h5TZcbI
-         8Se23A6Ye6Y8aKsop2OreiKbZbD7KZxTXZnhJnTjNHsUUPycfSuYVcTJCKyTqBWpBbsW
-         lQvxhBycwzNQOiuPrxZzYtJxvf3eyb/go+epZflHnwmG4CPsYSKomqPLS+KYYvY2sJxo
-         XuWw==
-X-Forwarded-Encrypted: i=1; AJvYcCW+SZ3i9FSUcLtph+v+Wh66mYjglBDU3hwORkGIw2YVJi2X0Hdr1xF+F28O0IaHC5sPDIyIWg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxHylsqipx13FmP+qdJgK/EfLIwh1uNnAjoG3plRHVifk8Ionft
-	t8rRAlVWXzo6hHr8XXcZeqZEwCykX7LK5k7A/zV02dAD3pFkd46JnMs0PguZzbGbEoemnOZtATs
-	n6iRX63ldHIoM9VuRn4XQxQeQEMTuMJn7a5wi
-X-Gm-Gg: ASbGncvkvmEs4ZHo+LNtCSqT1Trh6QIaUUeYf3IZ/gQGdiMH6Qvw37WNi13nHnKsEf2
-	yHF65Hn77ta0SvegvfvwcSvK7qka5LJtaHFzl
-X-Google-Smtp-Source: AGHT+IFSn6EmyzYcayFke1bry03EZjwyI2ykxVAT2ssmOGcaLUn1LXokDJByOKaRFr7je/0lN2AHCYWtk+7hnvzD69E=
-X-Received: by 2002:a05:690c:4d81:b0:6ef:4e42:64b5 with SMTP id
- 00721157ae682-6f3f8115a00mr425350417b3.16.1736202798164; Mon, 06 Jan 2025
- 14:33:18 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="QUh9UMPq"
+Received: from smtp-3-0001.mail.infomaniak.ch (unknown [IPv6:2001:1600:4:17::246c])
+	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4YSClX40fWzVG0;
+	Tue,  7 Jan 2025 15:16:24 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
+	s=20191114; t=1736259384;
+	bh=qjoeBhexUB4tppgwtHsPKezms784ibvFJ+1Aw98kSVE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=QUh9UMPq0RxKSCmelKqdKeLxtQzNkZSW1RTy18wm/5MSI6/WtPgByG6OWgcf/Ws3q
+	 K+JygkQpSRcHHptFkCQtIH3Uo8Oevgl68bO18ALftz0nXagVkedj3gaDRdyHtbPOMG
+	 B+w9a+VUILEmF08uBorLtmH/DOElIG3u8md27aTc=
+Received: from unknown by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4YSClV0VwFzCvb;
+	Tue,  7 Jan 2025 15:16:21 +0100 (CET)
+Date: Tue, 7 Jan 2025 15:16:18 +0100
+From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
+To: Paul Moore <paul@paul-moore.com>
+Cc: Eric Paris <eparis@redhat.com>, 
+	=?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>, "Serge E . Hallyn" <serge@hallyn.com>, 
+	Ben Scarlato <akhna@google.com>, Casey Schaufler <casey@schaufler-ca.com>, 
+	Charles Zaffery <czaffery@roblox.com>, Francis Laniel <flaniel@linux.microsoft.com>, 
+	James Morris <jmorris@namei.org>, Jann Horn <jannh@google.com>, Jeff Xu <jeffxu@google.com>, 
+	Jorge Lucangeli Obes <jorgelo@google.com>, Kees Cook <kees@kernel.org>, 
+	Konstantin Meskhidze <konstantin.meskhidze@huawei.com>, Matt Bobrowski <mattbobrowski@google.com>, 
+	Mikhail Ivanov <ivanov.mikhail1@huawei-partners.com>, Phil Sutter <phil@nwl.cc>, 
+	Praveen K Paladugu <prapal@linux.microsoft.com>, Robert Salvet <robert.salvet@roblox.com>, 
+	Shervin Oloumi <enlightened@google.com>, Song Liu <song@kernel.org>, 
+	Tahera Fahimi <fahimitahera@gmail.com>, audit@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-security-module@vger.kernel.org
+Subject: Re: [PATCH v3 10/23] landlock: Log domain properties and release
+Message-ID: <20250107.alee0ahMovoh@digikod.net>
+References: <20241122143353.59367-11-mic@digikod.net>
+ <237bfe2be7b4ba5d59b3b832c23622bb@paul-moore.com>
+ <20250106.ohgh8Zeu6coo@digikod.net>
+ <CAHC9VhR7EWDm5afnzRbVO6jkqtwtBe-UbHk+b-bED7uwisu_bA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241122143353.59367-19-mic@digikod.net> <1372f9de0bb265a08114a870ec086da0@paul-moore.com>
- <20250106.ohHi4La0ahTh@digikod.net>
-In-Reply-To: <20250106.ohHi4La0ahTh@digikod.net>
-From: Paul Moore <paul@paul-moore.com>
-Date: Mon, 6 Jan 2025 17:33:07 -0500
-X-Gm-Features: AbW1kvYKse12ll4fYv0870kHY_o3Lyw_REBr4iiKqgVQkplZz_g1WsoqSMdceVg
-Message-ID: <CAHC9VhQsUkthgGpoNZZdXGcPS9zF2aijYfKfuNYCZB08N=UDKg@mail.gmail.com>
-Subject: Re: [PATCH v3 18/23] landlock: Log scoped denials
-To: =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>
-Cc: Eric Paris <eparis@redhat.com>, =?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>, 
-	"Serge E . Hallyn" <serge@hallyn.com>, Ben Scarlato <akhna@google.com>, 
-	Casey Schaufler <casey@schaufler-ca.com>, Charles Zaffery <czaffery@roblox.com>, 
-	Francis Laniel <flaniel@linux.microsoft.com>, James Morris <jmorris@namei.org>, 
-	Jann Horn <jannh@google.com>, Jeff Xu <jeffxu@google.com>, 
-	Jorge Lucangeli Obes <jorgelo@google.com>, Kees Cook <kees@kernel.org>, 
-	Konstantin Meskhidze <konstantin.meskhidze@huawei.com>, Matt Bobrowski <mattbobrowski@google.com>, 
-	Mikhail Ivanov <ivanov.mikhail1@huawei-partners.com>, Phil Sutter <phil@nwl.cc>, 
-	Praveen K Paladugu <prapal@linux.microsoft.com>, Robert Salvet <robert.salvet@roblox.com>, 
-	Shervin Oloumi <enlightened@google.com>, Song Liu <song@kernel.org>, 
-	Tahera Fahimi <fahimitahera@gmail.com>, audit@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAHC9VhR7EWDm5afnzRbVO6jkqtwtBe-UbHk+b-bED7uwisu_bA@mail.gmail.com>
+X-Infomaniak-Routing: alpha
 
-On Mon, Jan 6, 2025 at 9:51=E2=80=AFAM Micka=C3=ABl Sala=C3=BCn <mic@digiko=
-d.net> wrote:
-> On Sat, Jan 04, 2025 at 08:23:53PM -0500, Paul Moore wrote:
-> > On Nov 22, 2024 =3D?UTF-8?q?Micka=3DC3=3DABl=3D20Sala=3DC3=3DBCn?=3D <m=
-ic@digikod.net> wrote:
+On Mon, Jan 06, 2025 at 04:56:50PM -0500, Paul Moore wrote:
+> On Mon, Jan 6, 2025 at 9:51 AM Mickaël Salaün <mic@digikod.net> wrote:
+> > On Sat, Jan 04, 2025 at 08:23:51PM -0500, Paul Moore wrote:
+> > > On Nov 22, 2024 =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net> wrote:
+> 
+> ...
+> 
+> > > > Audit event sample for a first denial:
+> > > >
+> > > >   type=LL_DENY msg=audit(1732186800.349:44): domain=195ba459b blockers=ptrace opid=1 ocomm="systemd"
+> > > >   type=LL_DOM_INFO msg=audit(1732186800.349:44): domain=195ba459b creation=1732186800.345 pid=300 uid=0 exe="/root/sandboxer" comm="sandboxer"
+> > > >   type=SYSCALL msg=audit(1732186800.349:44): arch=c000003e syscall=101 success=no [...] pid=300 auid=0
 > > >
-> > > Add audit support for unix_stream_connect, unix_may_send, task_kill, =
-and
-> > > file_send_sigiotask hooks.
-> > >
-> > > Audit event sample:
-> > >
-> > >   type=3DLL_DENY [...]: domain=3D195ba459b blockers=3Dscope_abstract_=
-unix_socket path=3D00666F6F
+> > > As mentioned in patch 9/23, I don't want subsystems external to audit
+> > > to access the audit timestamp information, so the "creation=" field
+> > > in the audit event would need to be removed.  Assuming that the timestamp
+> > > was used either to reference the original domain creation and/or simply
+> > > provide some additional information for analysis, all of that information
+> > > should already be in the audit log, assuming of course that you are
+> > > logging domain creation (which you should, at least as an option).
 > >
-> > Similar to 17/23, I believe the SOCKADDR record should already capture
-> > the socket address information.
->
-> This might not be the case, which is why SELinux and others explicitly
-> log it I guess.
+> > As explained in this patch, we don't want to (and cannot realistically)
+> > log domain creations.  That would make the audit support for Landlock
+> > unusable.  Moreover, these information is useless and only add noise
+> > unless there is a denial, hence this asynchronous approach.
+> 
+> That's fine, just know that it doesn't change my thoughts on exposing
+> the audit timestamp.
+> 
+> > However,
+> > users may want to log some syscalls, including landlock_restrict_self(),
+> > and it would make audit logs more consistent using the same timestamp as
+> > the Landlock domain creation time.  I'm wondering why exposing this
+> > timestamp to the kernel would be an issue whereas it is already exposed
+> > to user space.
+> 
+> Currently there are no other users of the audit timestamp besides
+> audit.  Making the audit timestamp available to other subsystems makes
+> the timestamp less flexible over the long term as it would become, in
+> a way, part of the API that audit provides to other in-kernel users.
+> 
+> I still have hopes to rework a large chunk of the audit subsystem, and
+> keeping the interfaces between audit and the other in-kernel
+> subsystems makes that easier.
 
-I think I may be misunderstanding you, can you point to the section of
-SELinux code that you are referring to in your comment?
+OK
 
---=20
-paul-moore.com
+> 
+> > If you're really opposed to it I can create a new unrelated timestamp
+> > specific to Landlock.
+> 
+> Yes, at this point in time I don't want to support exporting the audit
+> timestamp outside of audit.  My guess is that you probably want to use
+> some identifier, other than a timestamp, when trying to link Landlock
+> events (presumably the domain ID would do this?), but I don't pretend
+> to know the details of Landlock very well right now.
+
+Correct, Landlock domain IDs are used to tie domain creation, denial,
+and destruction/drop events (and their use will be extended to user
+space in the future).
+
+> 
+> > > Also, is there a good reason why the LL_DOM_INFO information can't be
+> > > recorded in the LL_DENY (or LL_ACCESS) record?  I think that would be
+> > > preferable.
+> >
+> > The goal of the standalone LL_DOM_INFO record type is to limit useless
+> > log verbosity.  Including this information in LL_DENY would have two
+> > downsides:
+> > - it would increases the length of *all* LL_DENY messages
+> 
+> Are you ever going to emit a LL_ACCESS/LL_DENY record without a
+> LL_DOM_INFO record?
+
+Yes, only the first LL_DENY (for a domain) emits an LL_DOM_INFO (for
+this same domain), which is why this design is interesting: creation of
+domains can happen at a high frequency (e.g. script executing a
+sandboxed program in a loop, or just build a kernel with sandbox
+compilers), and logging every domain creation would make 99% of these
+events useless.  See log_status's LANDLOCK_LOG_RECORDED in log_node() in
+this patch.
+
+> 
+> > - it would make it more difficult to extend this new mixed messages with
+> >   access-related informations (e.g. file property) and domain-related
+> >   informations (and associate them with either the object or the
+> >   domain).
+> 
+> How?  Please elaborate on this.
+
+I mean that appending intertwined (i.e. some might be related to define
+a domain whereas others might be related to define an object) and
+optional (e.g. a file object and a socket object are not defined the
+same way) new fields to one message type makes the message less
+predictable and more difficult to parse.
+
+> 
+> > > > Audit event sample for logged domains deletion:
+> > > >
+> > > >   type=LL_DOM_DROP msg=audit(1732186800.393:45): domain=195ba459b
+> > > >
+> > > > Cc: Günther Noack <gnoack@google.com>
+> > > > Cc: Paul Moore <paul@paul-moore.com>
+> > > > Signed-off-by: Mickaël Salaün <mic@digikod.net>
+> > > > Link: https://lore.kernel.org/r/20241122143353.59367-11-mic@digikod.net
+> > > > ---
+> > > > Questions:
+> > > > - Should we also log the creator's loginuid?
+> > > > - Should we also log the creator's sessionid?
+> > >
+> > > Creation of a Landlock domain can only happen through the Landlock
+> > > syscalls, yes?  If so, that information should already be logged in
+> > > the associated syscall record (see the "auid=" and "ses=" fields )and
+> > > we generally try to avoid duplicating information across records in
+> > > the same audit event.
+> >
+> > The specificity of Landlock compared to existing supported systems is
+> > that we cannot log domain creation for the reason I explain before.
+> 
+> Can you provide a link to that explanation?  I'm sure you explained it
+> well, but I missed it when going over the patchset with a focus on
+> audit.
+
+That wasn't clear enough, I'll include the previous description in the
+next series, but the basic design idea is defined in the cover letter:
+https://lore.kernel.org/all/20241122143353.59367-1-mic@digikod.net/
+
+> 
+> If the Landlock domain is created independent from any user/process
+> action, it likely doesn't make sense to log either the loginuid or
+> sessionid since the domain creation is happening independently from a
+> user session.
+
+Landlock domain creations are a process action.  What we want to log are
+the denials and a minimal context (e.g. which task created the related
+domain).  I was wondering if we should (right now) include loginuid or
+sessionid in this (asynchronous) context.
