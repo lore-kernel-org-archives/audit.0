@@ -1,33 +1,33 @@
-Received: from smtp-bc0d.mail.infomaniak.ch (smtp-bc0d.mail.infomaniak.ch [45.157.188.13])
+Received: from smtp-bc09.mail.infomaniak.ch (smtp-bc09.mail.infomaniak.ch [45.157.188.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC866200127
-	for <audit@vger.kernel.org>; Wed,  8 Jan 2025 15:44:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.157.188.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 707751FE45C
+	for <audit@vger.kernel.org>; Wed,  8 Jan 2025 15:44:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.157.188.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736351050; cv=none; b=ob2xtLYJNKaJgp6aPBQSLNJaz0NAe+4tUMI67Q3lBQtNOl9iSgfhDO2+RIqJBxZJn+CU1QuQ+GQYNTJujhcRHgc8wR/jD9rJ5lruMqk+Lbm26ZCBz4uL4t2fiWIcFGh61ddyvu+k+Jfq4d6uLU1yg5dso9tZJfDcXZEKbX4Np6c=
+	t=1736351052; cv=none; b=Zm6/waiqejwxYYbIUIOnTJDY84j2ZvCCocymap//P7KQF+ClY64AOWGNnLoi4QAc0vLMwT0DUYNvBnHtcJKqX3rFCSajfu+viWbQrSIYkKqxdtIL7yiWh5HDCFqOmbJcGiiubgl8ROM/uLS/3HT658xmfDyykJ7Jvwxr6akV0HI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736351050; c=relaxed/simple;
-	bh=RlAygBJ9IIVrNtbofL5Dy3vbw+rLKcBXWDSsv9CbMXE=;
+	s=arc-20240116; t=1736351052; c=relaxed/simple;
+	bh=7ibfBYEi6f3gRg6pygE5JOGwb52bRToRkj9Kef1B8ek=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=XBLMfIdqfjaXCLi2bLiLXHiI9mzriLwkhJALmPP4id2YJkUd2WV72rN9drSefskcrg9OkKPEMuv+5/5cL6D0fADppnFPtI0bDA6vUQqLWnEURP070y3WzmWxWwp0k22MGoqblu/OZu3n8/PIYP1H5Md6I6aeIcNvtQDDVOZSbqI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=o718xX7t; arc=none smtp.client-ip=45.157.188.13
+	 MIME-Version:Content-Type; b=Cn71mOIDlaXL4uIzir8htYf8VJoU5QQV5vgv1l2CUg0sf4f1vmS+wxYrfKeD40zTEhw4UE+FEHysdWdenuj4Mm+8p+mpPQuq/nN+AAPM0gb4zhQIz9pJTLzu5W3qlVMwoWLUYKpWbsvBDUvRlY0ZEKydJWJZ3+ZeY7nySXUijW8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=EE6astl+; arc=none smtp.client-ip=45.157.188.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="o718xX7t"
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="EE6astl+"
 Received: from smtp-4-0000.mail.infomaniak.ch (smtp-4-0000.mail.infomaniak.ch [10.7.10.107])
-	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4YSsfD6Thmzpc9;
-	Wed,  8 Jan 2025 16:44:04 +0100 (CET)
+	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4YSsfC2vR0zrLS;
+	Wed,  8 Jan 2025 16:44:03 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
-	s=20191114; t=1736351044;
-	bh=zVKxiiqiK6yNDO4DxcSnrYBrnX+mtc4HDGZXmojhDXo=;
+	s=20191114; t=1736351043;
+	bh=St27lDxiIu3v5ST9RZRvjuRVlErWHof4RK6UwUhVE6s=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=o718xX7tRrpNay544j121jDjQh1zrHolEPw8wERyjB+qUeD+YcPxBd5CDkEyJaM/s
-	 xEhYt1epJgn5G1nA0TQBmUlCw+UIlr8qp8v5iuM2xjXIxBOwakzMxrWRUcyUwxswg1
-	 tPFjxf2ylPMoS4+YJ8PzkRcWJ7+CezP3sQFyk95k=
-Received: from unknown by smtp-4-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4YSsfD0gdvz2k8;
-	Wed,  8 Jan 2025 16:44:04 +0100 (CET)
+	b=EE6astl+NKDQZY4iKCq9GAxWqt3IG1EENFRkpE8H4fDeq6O/LM8chyhOGtDypQiPq
+	 d/hSPBLSQ9cJyWAPawwpK0HiukFyXm9zAHfl4hHdcaOfIbMxbmVGYDN2sFqhjkzChJ
+	 ayrLksfAHMq35lCSixBfhEwAFr4/7LitgPrcg73I=
+Received: from unknown by smtp-4-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4YSsfB4Ypyz2F3;
+	Wed,  8 Jan 2025 16:44:02 +0100 (CET)
 From: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
 To: Eric Paris <eparis@redhat.com>,
 	Paul Moore <paul@paul-moore.com>,
@@ -57,9 +57,9 @@ Cc: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
 	audit@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-security-module@vger.kernel.org
-Subject: [PATCH v4 12/30] selftests/landlock: Add test to check partial access in a mount tree
-Date: Wed,  8 Jan 2025 16:43:20 +0100
-Message-ID: <20250108154338.1129069-13-mic@digikod.net>
+Subject: [PATCH v4 11/30] landlock: Align partial refer access checks with final ones
+Date: Wed,  8 Jan 2025 16:43:19 +0100
+Message-ID: <20250108154338.1129069-12-mic@digikod.net>
 In-Reply-To: <20250108154338.1129069-1-mic@digikod.net>
 References: <20250108154338.1129069-1-mic@digikod.net>
 Precedence: bulk
@@ -72,119 +72,76 @@ Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Infomaniak-Routing: alpha
 
-Add layout1.refer_part_mount_tree_is_allowed to test the masked logical
-issue regarding collect_domain_accesses() calls followed by the
-is_access_to_paths_allowed() check in current_check_refer_path().  See
-previous commit.
+Fix a logical issue that could have been visible if the source or the
+destination of a rename/link action was allowed for either the source or
+the destination but not both.  However, this logical bug is unreachable
+because either:
+- the rename/link action is allowed by the access rights tied to the
+  same mount point (without relying on access rights in a parent mount
+  point) and the access request is allowed (i.e. allow_parent1 and
+  allow_parent2 are true in current_check_refer_path),
+- or a common rule in a parent mount point updates the access check for
+  the source and the destination (cf. is_access_to_paths_allowed).
 
-This test should work without the previous fix as well, but it enables
-us to make sure future changes will not have impact regarding this
-behavior.
+See the following layout1.refer_part_mount_tree_is_allowed test that
+work with and without this fix.
+
+This fix does not impact current code but it is required for the audit
+support.
 
 Cc: Günther Noack <gnoack@google.com>
 Signed-off-by: Mickaël Salaün <mic@digikod.net>
-Link: https://lore.kernel.org/r/20250108154338.1129069-13-mic@digikod.net
+Link: https://lore.kernel.org/r/20250108154338.1129069-12-mic@digikod.net
 ---
 
 Changes since v2:
 - New patch.
 ---
- tools/testing/selftests/landlock/fs_test.c | 54 ++++++++++++++++++++--
- 1 file changed, 50 insertions(+), 4 deletions(-)
+ security/landlock/fs.c | 14 +++++++++++++-
+ 1 file changed, 13 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/landlock/fs_test.c b/tools/testing/selftests/landlock/fs_test.c
-index 6788762188fe..42ce1e79ba82 100644
---- a/tools/testing/selftests/landlock/fs_test.c
-+++ b/tools/testing/selftests/landlock/fs_test.c
-@@ -85,6 +85,9 @@ static const char file1_s3d1[] = TMP_DIR "/s3d1/f1";
- /* dir_s3d2 is a mount point. */
- static const char dir_s3d2[] = TMP_DIR "/s3d1/s3d2";
- static const char dir_s3d3[] = TMP_DIR "/s3d1/s3d2/s3d3";
-+static const char file1_s3d3[] = TMP_DIR "/s3d1/s3d2/s3d3/f1";
-+static const char dir_s3d4[] = TMP_DIR "/s3d1/s3d2/s3d4";
-+static const char file1_s3d4[] = TMP_DIR "/s3d1/s3d2/s3d4/f1";
+diff --git a/security/landlock/fs.c b/security/landlock/fs.c
+index 171012efb559..ddadc465581e 100644
+--- a/security/landlock/fs.c
++++ b/security/landlock/fs.c
+@@ -567,6 +567,12 @@ static void test_no_more_access(struct kunit *const test)
+ #undef NMA_TRUE
+ #undef NMA_FALSE
  
- /*
-  * layout1 hierarchy:
-@@ -108,8 +111,11 @@ static const char dir_s3d3[] = TMP_DIR "/s3d1/s3d2/s3d3";
-  * │           └── f2
-  * └── s3d1
-  *     ├── f1
-- *     └── s3d2
-- *         └── s3d3
-+ *     └── s3d2 [mount point]
-+ *         ├── s3d3
-+ *         │   └── f1
-+ *         └── s3d4
-+ *             └── f1
-  */
- 
- static bool fgrep(FILE *const inf, const char *const str)
-@@ -358,7 +364,8 @@ static void create_layout1(struct __test_metadata *const _metadata)
- 	ASSERT_EQ(0, mount_opt(&mnt_tmp, dir_s3d2));
- 	clear_cap(_metadata, CAP_SYS_ADMIN);
- 
--	ASSERT_EQ(0, mkdir(dir_s3d3, 0700));
-+	create_file(_metadata, file1_s3d3);
-+	create_file(_metadata, file1_s3d4);
- }
- 
- static void remove_layout1(struct __test_metadata *const _metadata)
-@@ -378,7 +385,8 @@ static void remove_layout1(struct __test_metadata *const _metadata)
- 	EXPECT_EQ(0, remove_path(dir_s2d2));
- 
- 	EXPECT_EQ(0, remove_path(file1_s3d1));
--	EXPECT_EQ(0, remove_path(dir_s3d3));
-+	EXPECT_EQ(0, remove_path(file1_s3d3));
-+	EXPECT_EQ(0, remove_path(file1_s3d4));
- 	set_cap(_metadata, CAP_SYS_ADMIN);
- 	umount(dir_s3d2);
- 	clear_cap(_metadata, CAP_SYS_ADMIN);
-@@ -2444,6 +2452,44 @@ TEST_F_FORK(layout1, refer_mount_root_deny)
- 	EXPECT_EQ(0, close(root_fd));
- }
- 
-+TEST_F_FORK(layout1, refer_part_mount_tree_is_allowed)
++static bool is_layer_masks_allowed(
++	layer_mask_t (*const layer_masks)[LANDLOCK_NUM_ACCESS_FS])
 +{
-+	const struct rule layer1[] = {
-+		{
-+			/* Parent mount point. */
-+			.path = dir_s3d1,
-+			.access = LANDLOCK_ACCESS_FS_REFER |
-+				  LANDLOCK_ACCESS_FS_MAKE_REG,
-+		},
-+		{
-+			/*
-+			 * Removing the source file is allowed because its
-+			 * access rights are already a superset of the
-+			 * destination.
-+			 */
-+			.path = dir_s3d4,
-+			.access = LANDLOCK_ACCESS_FS_REFER |
-+				  LANDLOCK_ACCESS_FS_MAKE_REG |
-+				  LANDLOCK_ACCESS_FS_REMOVE_FILE,
-+		},
-+		{},
-+	};
-+	int ruleset_fd;
-+
-+	ASSERT_EQ(0, unlink(file1_s3d3));
-+	ruleset_fd = create_ruleset(_metadata,
-+				    LANDLOCK_ACCESS_FS_REFER |
-+					    LANDLOCK_ACCESS_FS_MAKE_REG |
-+					    LANDLOCK_ACCESS_FS_REMOVE_FILE,
-+				    layer1);
-+
-+	ASSERT_LE(0, ruleset_fd);
-+	enforce_ruleset(_metadata, ruleset_fd);
-+	ASSERT_EQ(0, close(ruleset_fd));
-+
-+	ASSERT_EQ(0, rename(file1_s3d4, file1_s3d3));
++	return !memchr_inv(layer_masks, 0, sizeof(*layer_masks));
 +}
 +
- TEST_F_FORK(layout1, reparent_link)
- {
- 	const struct rule layer1[] = {
+ /*
+  * Removes @layer_masks accesses that are not requested.
+  *
+@@ -584,7 +590,8 @@ scope_to_request(const access_mask_t access_request,
+ 
+ 	for_each_clear_bit(access_bit, &access_req, ARRAY_SIZE(*layer_masks))
+ 		(*layer_masks)[access_bit] = 0;
+-	return !memchr_inv(layer_masks, 0, sizeof(*layer_masks));
++
++	return is_layer_masks_allowed(layer_masks);
+ }
+ 
+ #ifdef CONFIG_SECURITY_LANDLOCK_KUNIT_TEST
+@@ -773,9 +780,14 @@ static bool is_access_to_paths_allowed(
+ 	if (WARN_ON_ONCE(domain->num_layers < 1 || !layer_masks_parent1))
+ 		return false;
+ 
++	allowed_parent1 = is_layer_masks_allowed(layer_masks_parent1);
++
+ 	if (unlikely(layer_masks_parent2)) {
+ 		if (WARN_ON_ONCE(!dentry_child1))
+ 			return false;
++
++		allowed_parent2 = is_layer_masks_allowed(layer_masks_parent2);
++
+ 		/*
+ 		 * For a double request, first check for potential privilege
+ 		 * escalation by looking at domain handled accesses (which are
 -- 
 2.47.1
 
