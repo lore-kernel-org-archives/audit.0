@@ -1,33 +1,32 @@
-Received: from smtp-42ab.mail.infomaniak.ch (smtp-42ab.mail.infomaniak.ch [84.16.66.171])
+Received: from smtp-42a8.mail.infomaniak.ch (smtp-42a8.mail.infomaniak.ch [84.16.66.168])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C03251FF5F9
-	for <audit@vger.kernel.org>; Wed,  8 Jan 2025 15:50:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=84.16.66.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1437E201266
+	for <audit@vger.kernel.org>; Wed,  8 Jan 2025 15:50:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=84.16.66.168
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736351413; cv=none; b=YU90sD1G2AsCvST79jGI6vNS9q82Zb+lKHi7CATOAk4bYvUEqOHbPKMzG71CWNwTyuxVFQmZS2OghQ0wHF5pg6fbrebvCMgvYwlzeIH4mf+8p7Teet9hMfgaajHKQNjUUIV83FAzo9bgvnEvG4rt8pfNBvhgLPKDrf4jO3S1c94=
+	t=1736351415; cv=none; b=m+vsnJFqMMvVFKhhxuqAgy51UZNvenbqCdOhN5FMN8CP418w4KtnEmtMyAzYGf9NrhVAUFvFS7H7BLHhxkglqulQseewwsM323pxfkRxWOn0Z4VAabO9wSpIgsXgQPkZsl04ZcSi3LJbOngCuwaXjr5fpC53u9nhj08KIvpf5Js=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736351413; c=relaxed/simple;
-	bh=dNF9revyAHdaReGII1otboacnCMyx6THKc+/K3qcWn8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ZdWnPmCxpZgSMUdUveFCqYU4DXRCEDAAuN5mvGHteSnNufp1AqORt+oDfNoj72aPuqDS+4XzGCMgcANSU811z9YSpI5Z81aQYGSUvOKC/om/29ThNcUg7v93QXDmSZtsG9vSzD4dhemygRqBFFimndSMDXyITwiCZXcSrOs2X5g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=fr5Dh3T1; arc=none smtp.client-ip=84.16.66.171
+	s=arc-20240116; t=1736351415; c=relaxed/simple;
+	bh=3Fo5zphv3fR0VMr0IZdF5iCVUkiUh7FK4w0e3jVvYeU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=DfdS8nbiJRQucTPcQRhlv1++Oc69ZrDufBzonjGRVG2NJR5ZaVn8kJ8VOx3YmmDAU9lKPcy4H/Cj8VRgMwEgoCwODl6Al3BppZZKSWxvrGgZa4n/3kGt+59VfxcwveRglC8Uirgl6I6HlJLIzxQiXfML+QSu429d/sTQcp2o6ig=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=SdbdR3yJ; arc=none smtp.client-ip=84.16.66.168
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="fr5Dh3T1"
-Received: from smtp-4-0000.mail.infomaniak.ch (smtp-4-0000.mail.infomaniak.ch [10.7.10.107])
-	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4YSsfL4146zrYM;
-	Wed,  8 Jan 2025 16:44:10 +0100 (CET)
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="SdbdR3yJ"
+Received: from smtp-3-0000.mail.infomaniak.ch (unknown [IPv6:2001:1600:4:17::246b])
+	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4YSsdt14PSz7RL;
+	Wed,  8 Jan 2025 16:43:46 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
-	s=20191114; t=1736351050;
-	bh=urI9rHx8OZzAhZ+lkRE6eb+dDcOP0tlB9XFr0Wi2DSc=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=fr5Dh3T1y5iLXLhJ2sPAis+FhvApVylseUXfAd0NvFehpLiD/qcOsigEgNUSnmuHF
-	 g6PBnV4ZHtfBAF1nrbqsOnliGzrK9TedLzubet727F5H5wxb9IUG0pVVsrjQtbdUDT
-	 4G2UDliQ57kg6FXDVlAB84TLsLoxMNjas63XW7VM=
-Received: from unknown by smtp-4-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4YSsfK5YPsz2yw;
-	Wed,  8 Jan 2025 16:44:09 +0100 (CET)
+	s=20191114; t=1736351026;
+	bh=cN0QSpezL8v4tsRKsjoQHFf42FQ1y+KLHfexmgD9sDQ=;
+	h=From:To:Cc:Subject:Date:From;
+	b=SdbdR3yJ8M4bUViGTt3GEknzLhYa8trPUElyYAAZjSWkj1maPxEc9opYbrILD3G+c
+	 6AxnxZ7/gCfHcQCFDUhubHKiqUqF/bNmAQUj4o40RCi5JNzTut6J2h2F+pM5zRE/sr
+	 yrFlr27BoyDNInril6gYzR74RJm+YnWv8kqYCwug=
+Received: from unknown by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4YSsdq6SZFzsJ9;
+	Wed,  8 Jan 2025 16:43:43 +0100 (CET)
 From: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
 To: Eric Paris <eparis@redhat.com>,
 	Paul Moore <paul@paul-moore.com>,
@@ -57,11 +56,9 @@ Cc: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
 	audit@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-security-module@vger.kernel.org
-Subject: [PATCH v4 16/30] landlock: Log TCP bind and connect denials
-Date: Wed,  8 Jan 2025 16:43:24 +0100
-Message-ID: <20250108154338.1129069-17-mic@digikod.net>
-In-Reply-To: <20250108154338.1129069-1-mic@digikod.net>
-References: <20250108154338.1129069-1-mic@digikod.net>
+Subject: [PATCH v4 00/30] Landlock audit support
+Date: Wed,  8 Jan 2025 16:43:08 +0100
+Message-ID: <20250108154338.1129069-1-mic@digikod.net>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
@@ -72,173 +69,211 @@ Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Infomaniak-Routing: alpha
 
-Add audit support to socket_bind and socket_connect hooks.
+Hi,
 
-The related blockers are:
-- net.bind_tcp
-- net.connect_tcp
+This patch series adds audit support to Landlock.
 
-Audit event sample:
+Logging denied requests is useful for different use cases:
+- sysadmins: to look for users' issues,
+- security experts: to detect attack attempts,
+- power users: to understand denials,
+- developers: to ease sandboxing support and get feedback from users.
 
-  type=LANDLOCK_DENY msg=audit(1729738800.349:44): domain=195ba459b blockers=net.connect_tcp daddr=127.0.0.1 dest=80
+Because of its unprivileged nature, Landlock can compose standalone
+security policies (i.e. domains).  To make logs useful, they need to
+contain the most relevant Landlock domain that denied an action, and the
+reason of such denial.  This translates to the latest nested domain and
+the related blockers: missing access rights or other kind of
+restrictions.
 
-Cc: Günther Noack <gnoack@google.com>
-Cc: Konstantin Meskhidze <konstantin.meskhidze@huawei.com>
-Cc: Mikhail Ivanov <ivanov.mikhail1@huawei-partners.com>
-Signed-off-by: Mickaël Salaün <mic@digikod.net>
-Link: https://lore.kernel.org/r/20250108154338.1129069-17-mic@digikod.net
----
+# Changes from previous version
 
-Changes since v3:
-- Rename blockers from net_* to net.*
+This fourth patch series mainly adds a new AUDIT_EXE_LANDLOCK_DENY rule
+type to filter Landlock denials according to the executable that loaded
+the policy responsible for this restriction.  New tests are added on top
+of that.
 
-Changes since v2:
-- Remove potentially superfluous IPv6 saddr log, spotted by Francis
-  Laniel.
-- Cosmetic improvements.
----
- security/landlock/audit.c | 12 +++++++++
- security/landlock/audit.h |  1 +
- security/landlock/net.c   | 51 ++++++++++++++++++++++++++++++++++++---
- 3 files changed, 60 insertions(+), 4 deletions(-)
+Domain's metadata are now stored in a dedicated struct landlock_details
+that contains the resolved exe's path, because we cannot keep a
+reference to the related struct path.  This fixes umount of the
+mount point containing a binary that restricted itself (if the domain is
+still alive).  Add a dedicated test to check this issue.
 
-diff --git a/security/landlock/audit.c b/security/landlock/audit.c
-index 89446e913d9f..2744e3d4fe73 100644
---- a/security/landlock/audit.c
-+++ b/security/landlock/audit.c
-@@ -41,6 +41,13 @@ static const char *const fs_access_strings[] = {
- 
- static_assert(ARRAY_SIZE(fs_access_strings) == LANDLOCK_NUM_ACCESS_FS);
- 
-+static const char *const net_access_strings[] = {
-+	[BIT_INDEX(LANDLOCK_ACCESS_NET_BIND_TCP)] = "net.bind_tcp",
-+	[BIT_INDEX(LANDLOCK_ACCESS_NET_CONNECT_TCP)] = "net.connect_tcp",
-+};
-+
-+static_assert(ARRAY_SIZE(net_access_strings) == LANDLOCK_NUM_ACCESS_NET);
-+
- static __attribute_const__ const char *
- get_blocker(const enum landlock_request_type type,
- 	    const unsigned long access_bit)
-@@ -58,6 +65,11 @@ get_blocker(const enum landlock_request_type type,
- 		if (WARN_ON_ONCE(access_bit >= ARRAY_SIZE(fs_access_strings)))
- 			return "unknown";
- 		return fs_access_strings[access_bit];
-+
-+	case LANDLOCK_REQUEST_NET_ACCESS:
-+		if (WARN_ON_ONCE(access_bit >= ARRAY_SIZE(net_access_strings)))
-+			return "unknown";
-+		return net_access_strings[access_bit];
- 	}
- 
- 	WARN_ON_ONCE(1);
-diff --git a/security/landlock/audit.h b/security/landlock/audit.h
-index 762cdbd10b3a..9a3697b901b5 100644
---- a/security/landlock/audit.h
-+++ b/security/landlock/audit.h
-@@ -18,6 +18,7 @@ enum landlock_request_type {
- 	LANDLOCK_REQUEST_PTRACE = 1,
- 	LANDLOCK_REQUEST_FS_CHANGE_LAYOUT,
- 	LANDLOCK_REQUEST_FS_ACCESS,
-+	LANDLOCK_REQUEST_NET_ACCESS,
- };
- 
- /*
-diff --git a/security/landlock/net.c b/security/landlock/net.c
-index d5dcc4407a19..45c80fa417c4 100644
---- a/security/landlock/net.c
-+++ b/security/landlock/net.c
-@@ -7,10 +7,12 @@
-  */
- 
- #include <linux/in.h>
-+#include <linux/lsm_audit.h>
- #include <linux/net.h>
- #include <linux/socket.h>
- #include <net/ipv6.h>
- 
-+#include "audit.h"
- #include "common.h"
- #include "cred.h"
- #include "limits.h"
-@@ -57,6 +59,10 @@ static int current_check_access_socket(struct socket *const sock,
- 	const struct landlock_ruleset *const dom =
- 		landlock_get_applicable_domain(landlock_get_current_domain(),
- 					       any_net);
-+	struct lsm_network_audit audit_net = {};
-+	struct landlock_request request = {
-+		.type = LANDLOCK_REQUEST_NET_ACCESS,
-+	};
- 
- 	if (!dom)
- 		return 0;
-@@ -73,18 +79,48 @@ static int current_check_access_socket(struct socket *const sock,
- 
- 	switch (address->sa_family) {
- 	case AF_UNSPEC:
--	case AF_INET:
-+	case AF_INET: {
-+		const struct sockaddr_in *addr4;
-+
- 		if (addrlen < sizeof(struct sockaddr_in))
- 			return -EINVAL;
--		port = ((struct sockaddr_in *)address)->sin_port;
-+
-+		addr4 = (struct sockaddr_in *)address;
-+		port = addr4->sin_port;
-+
-+		if (access_request == LANDLOCK_ACCESS_NET_CONNECT_TCP) {
-+			audit_net.dport = port;
-+			audit_net.v4info.daddr = addr4->sin_addr.s_addr;
-+		} else if (access_request == LANDLOCK_ACCESS_NET_BIND_TCP) {
-+			audit_net.sport = port;
-+			audit_net.v4info.saddr = addr4->sin_addr.s_addr;
-+		} else {
-+			WARN_ON_ONCE(1);
-+		}
- 		break;
-+	}
- 
- #if IS_ENABLED(CONFIG_IPV6)
--	case AF_INET6:
-+	case AF_INET6: {
-+		const struct sockaddr_in6 *addr6;
-+
- 		if (addrlen < SIN6_LEN_RFC2133)
- 			return -EINVAL;
--		port = ((struct sockaddr_in6 *)address)->sin6_port;
-+
-+		addr6 = (struct sockaddr_in6 *)address;
-+		port = addr6->sin6_port;
-+
-+		if (access_request == LANDLOCK_ACCESS_NET_CONNECT_TCP) {
-+			audit_net.dport = port;
-+			audit_net.v6info.daddr = addr6->sin6_addr;
-+		} else if (access_request == LANDLOCK_ACCESS_NET_BIND_TCP) {
-+			audit_net.sport = port;
-+			audit_net.v6info.saddr = addr6->sin6_addr;
-+		} else {
-+			WARN_ON_ONCE(1);
-+		}
- 		break;
-+	}
- #endif /* IS_ENABLED(CONFIG_IPV6) */
- 
- 	default:
-@@ -153,6 +189,13 @@ static int current_check_access_socket(struct socket *const sock,
- 				   ARRAY_SIZE(layer_masks)))
- 		return 0;
- 
-+	audit_net.family = address->sa_family;
-+	request.audit.type = LSM_AUDIT_DATA_NET;
-+	request.audit.u.net = &audit_net;
-+	request.access = access_request;
-+	request.layer_masks = &layer_masks;
-+	request.layer_masks_size = ARRAY_SIZE(layer_masks);
-+	landlock_log_denial(dom, &request);
- 	return -EACCES;
- }
- 
+Formatting of blockers are slightly improved.
+
+Audit timestamps are no longer exported but dedicated Landlock
+timestamps are use instead for domain creation.
+
+The new landlock_restrict_self()'s flag is renamed to
+LANDLOCK_RESTRICT_SELF_QUIET.
+
+# Design
+
+Log records are created for any denied actions caused by a Landlock
+policy, which means that a well-sandboxed applications should not log
+anything except for unattended access requests that might be the result
+of attacks or bugs.
+
+However, sandbox tools creating restricted environments could lead to
+abundant log entries because the sandboxed processes may not be aware of
+the related restrictions.  To avoid log spam, the
+landlock_restrict_self(2) syscall gets a new
+LANDLOCK_RESTRICT_SELF_QUIET flag to not log denials related to this
+specific domain.  Except for well-understood exceptions, this flag
+should not be set.  Indeed, applications sandboxing themselves should
+only try to bypass their own sandbox if they are compromised, which
+should ring a bell thanks to log events.
+
+When an action is denied, the related Landlock domain ID is specified.
+If this domain was not previously described in a log record, one is
+created.  This record contains the domain ID, its creation time, and
+informations about the process that enforced the restriction (at the
+time of the call to landlock_restrict_self): PID, UID, executable path,
+and name (comm).
+
+This new approach also brings building blocks for an upcoming
+unprivileged introspection interface.  The unique Landlock IDs will be
+useful to tie audit log entries to running processes, and to get
+properties of the related Landlock domains.  This will replace the
+previously logged ruleset properties.
+
+# Samples
+
+Here are two examples of log events (see serial numbers):
+
+$ LL_FS_RO=/ LL_FS_RW=/ LL_SCOPED=s LL_FORCE_LOG=1 ./sandboxer kill 1
+
+  type=LANDLOCK_DENY msg=audit(1729738800.268:30): domain=1a6fdc66f blockers=scope.signal opid=1 ocomm="systemd"
+  type=LANDLOCK_DOM_INFO msg=audit(1729738800.268:30): domain=1a6fdc66f creation=1729738800.264 pid=286 uid=0 exe="/root/sandboxer" comm="sandboxer"UID="root"
+  type=SYSCALL msg=audit(1729738800.268:30): arch=c000003e syscall=62 success=no exit=-1 [..] ppid=272 pid=286 auid=0 uid=0 gid=0 [...] comm="kill" [...]
+  type=PROCTITLE msg=audit(1729738800.268:30): proctitle=6B696C6C0031
+  type=LANDLOCK_DOM_DROP msg=audit(1729738800.324:31): domain=1a6fdc66f denials=1
+
+$ LL_FS_RO=/ LL_FS_RW=/tmp LL_FORCE_LOG=1 ./sandboxer sh -c "echo > /etc/passwd"
+
+  type=LANDLOCK_DENY msg=audit(1729738800.221:33): domain=1a6fdc679 blockers=fs.write_file path="/dev/tty" dev="devtmpfs" ino=9
+  type=LANDLOCK_DOM_INFO msg=audit(1729738800.221:33): domain=1a6fdc679 creation=1729738800.217 pid=289 uid=0 exe="/root/sandboxer" comm="sandboxer"UID="root"
+  type=SYSCALL msg=audit(1729738800.221:33): arch=c000003e syscall=257 success=no exit=-13 [...] ppid=272 pid=289 auid=0 uid=0 gid=0 [...] comm="sh" [...]
+  type=PROCTITLE msg=audit(1729738800.221:33): proctitle=7368002D63006563686F203E202F6574632F706173737764
+  type=LANDLOCK_DENY msg=audit(1729738800.221:34): domain=1a6fdc679 blockers=fs.write_file path="/etc/passwd" dev="vda2" ino=143821
+  type=SYSCALL msg=audit(1729738800.221:34): arch=c000003e syscall=257 success=no exit=-13 [...] ppid=272 pid=289 auid=0 uid=0 gid=0 [...] comm="sh" [...]
+  type=PROCTITLE msg=audit(1729738800.221:34): proctitle=7368002D63006563686F203E202F6574632F706173737764
+  type=LANDLOCK_DOM_DROP msg=audit(1729738800.261:35): domain=1a6fdc679 denials=2
+
+# Future changes
+
+I'll add more tests to check each kind of denied access.
+
+We might want to add new audit rule types to filter according to other
+domain properties (e.g. UID, AUID, session ID), but
+AUDIT_EXE_LANDLOCK_DENY should be enough to mute buggy programs before
+fixing them.
+
+# Previous versions
+
+v3: https://lore.kernel.org/r/20241122143353.59367-1-mic@digikod.net
+v2: https://lore.kernel.org/r/20241022161009.982584-1-mic@digikod.net
+v1: https://lore.kernel.org/r/20230921061641.273654-1-mic@digikod.net
+
+Regards,
+
+Mickaël Salaün (30):
+  lsm: Only build lsm_audit.c if CONFIG_SECURITY and CONFIG_AUDIT are
+    set
+  lsm: Add audit_log_lsm_data() helper
+  landlock: Factor out check_access_path()
+  landlock: Add unique ID generator
+  landlock: Move access types
+  landlock: Simplify initially denied access rights
+  landlock: Move domain hierarchy management and export helpers
+  landlock: Add AUDIT_LANDLOCK_DENY and log ptrace denials
+  landlock: Add AUDIT_LANDLOCK_DOM_{INFO,DROP} and log domain properties
+  landlock: Log mount-related denials
+  landlock: Align partial refer access checks with final ones
+  selftests/landlock: Add test to check partial access in a mount tree
+  landlock: Optimize file path walks and prepare for audit support
+  landlock: Log file-related denials
+  landlock: Log truncate and IOCTL denials
+  landlock: Log TCP bind and connect denials
+  landlock: Log scoped denials
+  landlock: Control log events with LANDLOCK_RESTRICT_SELF_QUIET
+  samples/landlock: Do not log denials from the sandboxer by default
+  selftests/landlock: Fix error message
+  selftests/landlock: Add wrappers.h
+  selftests/landlock: Add layout1.umount_sandboxer tests
+  selftests/landlock: Extend tests for landlock_restrict_self()'s flags
+  selftests/landlock: Add tests for audit and
+    LANDLOCK_RESTRICT_SELF_QUIET
+  selftests/landlock: Add audit tests for ptrace
+  landlock: Export and rename landlock_get_inode_object()
+  fs: Add iput() cleanup helper
+  audit,landlock: Add AUDIT_EXE_LANDLOCK_DENY rule type
+  selftests/landlock: Test audit rule with AUDIT_EXE_LANDLOCK_DOM
+  selftests/landlock: Test compatibility with audit rule lists
+
+ Documentation/userspace-api/landlock.rst      |   2 +-
+ MAINTAINERS                                   |   1 +
+ include/linux/audit.h                         |  11 +
+ include/linux/fs.h                            |   6 +-
+ include/linux/landlock.h                      |  41 ++
+ include/linux/lsm_audit.h                     |  22 +
+ include/uapi/linux/audit.h                    |   6 +-
+ include/uapi/linux/landlock.h                 |  14 +
+ kernel/audit.c                                |   4 +-
+ kernel/audit.h                                |   5 +-
+ kernel/auditfilter.c                          |  30 +-
+ kernel/auditsc.c                              |  31 ++
+ samples/landlock/sandboxer.c                  |  35 +-
+ security/Kconfig                              |   5 +
+ security/Makefile                             |   2 +-
+ security/landlock/.kunitconfig                |   2 +
+ security/landlock/Makefile                    |  15 +-
+ security/landlock/access.h                    | 100 ++++
+ security/landlock/audit.c                     | 510 ++++++++++++++++++
+ security/landlock/audit.h                     |  76 +++
+ security/landlock/domain.c                    | 339 ++++++++++++
+ security/landlock/domain.h                    | 145 +++++
+ security/landlock/fs.c                        | 305 ++++++++---
+ security/landlock/fs.h                        |  12 +
+ security/landlock/id.c                        | 249 +++++++++
+ security/landlock/id.h                        |  25 +
+ security/landlock/net.c                       |  51 +-
+ security/landlock/object.h                    |   4 +-
+ security/landlock/ruleset.c                   |  38 +-
+ security/landlock/ruleset.h                   |  95 ++--
+ security/landlock/setup.c                     |   2 +
+ security/landlock/syscalls.c                  |  28 +-
+ security/landlock/task.c                      | 152 +++++-
+ security/lsm_audit.c                          |  27 +-
+ tools/testing/kunit/configs/all_tests.config  |   2 +
+ tools/testing/selftests/landlock/Makefile     |   2 +-
+ tools/testing/selftests/landlock/audit.h      | 371 +++++++++++++
+ tools/testing/selftests/landlock/audit_test.c | 389 +++++++++++++
+ tools/testing/selftests/landlock/base_test.c  |  19 +-
+ tools/testing/selftests/landlock/common.h     |  40 +-
+ tools/testing/selftests/landlock/config       |   1 +
+ tools/testing/selftests/landlock/fs_test.c    | 151 +++++-
+ .../testing/selftests/landlock/ptrace_test.c  |  67 ++-
+ .../selftests/landlock/sandbox-and-launch.c   |  82 +++
+ tools/testing/selftests/landlock/wait-pipe.c  |  70 +++
+ tools/testing/selftests/landlock/wrappers.h   |  47 ++
+ 46 files changed, 3360 insertions(+), 271 deletions(-)
+ create mode 100644 include/linux/landlock.h
+ create mode 100644 security/landlock/access.h
+ create mode 100644 security/landlock/audit.c
+ create mode 100644 security/landlock/audit.h
+ create mode 100644 security/landlock/domain.c
+ create mode 100644 security/landlock/domain.h
+ create mode 100644 security/landlock/id.c
+ create mode 100644 security/landlock/id.h
+ create mode 100644 tools/testing/selftests/landlock/audit.h
+ create mode 100644 tools/testing/selftests/landlock/audit_test.c
+ create mode 100644 tools/testing/selftests/landlock/sandbox-and-launch.c
+ create mode 100644 tools/testing/selftests/landlock/wait-pipe.c
+ create mode 100644 tools/testing/selftests/landlock/wrappers.h
+
+
+base-commit: 9d89551994a430b50c4fffcb1e617a057fa76e20
 -- 
 2.47.1
 
