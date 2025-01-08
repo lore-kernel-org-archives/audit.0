@@ -1,88 +1,177 @@
-Received: from smtp-8faa.mail.infomaniak.ch (smtp-8faa.mail.infomaniak.ch [83.166.143.170])
+Received: from smtp-190c.mail.infomaniak.ch (smtp-190c.mail.infomaniak.ch [185.125.25.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50E3D18C0C;
-	Tue,  7 Jan 2025 14:23:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=83.166.143.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 921BC1F869E
+	for <audit@vger.kernel.org>; Wed,  8 Jan 2025 15:43:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.25.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736259793; cv=none; b=jzMC5+vvbiPzoMp+t0CtlKhyQvNgTN3EDsDZJhb5ZTq7ViZnch702nYUboIItReYHiDnGDt8mv8JbOI9qQShcYYu+Vij0Rmb158+YGj96KP+oTmWmD0rQJsgh3Nyj7GldgbaYBlZQZCQN1xMX+RGafIDd3TelPvaGI4d/qXbwyk=
+	t=1736351038; cv=none; b=jHfIBPJd6yuQIHyeCeeWkt/n5wyaBOuFk4lDfJKV0ByBTfbD1dkT+jfYk3us637ouvLs0mwOOE30SGdZ4WLMXni5pPhfx4XinLOAf7kcGcfGah3pYNzn+aQYLCRdfGh+9MMmW4Bm47xXjDhXyx+iOEA9XwXB9LgZczyQoBb0tAU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736259793; c=relaxed/simple;
-	bh=A8X5KCgGOiMZOiG094DeuZLqGHxdyWaWHu2jJJnjVSg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=h9Qm4+TNLdEwsDVlPIrCDTIelBv2xE/Fuf9m2Te0l/on1s4MzxMAfCGDL5YHRwt3WNPPhOrjt7jzlHk7Gp5Y1J0GrK8ziObXHTloi+o4h+5NCv4Tq2LOILGjXIf3UlIifuPwRoR/D9Q2wcRxI3qbe7g2gnKBVCKLeyaDlOg5VTw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=uKhp3Pwx; arc=none smtp.client-ip=83.166.143.170
+	s=arc-20240116; t=1736351038; c=relaxed/simple;
+	bh=g63Ro45o8hhUGW9H6URxmblZAnLGikpsoa9gZvjVE44=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=pVcBgVY0Zp7jV6dxzhsesaGAOUh5dd64FmWlotrBSr6MhWAFpq7+T7/Hb8b08gOz13eZWr4e1LCO6pHF2gmMeFmzSHdX/Jrd7owWuDp1PbeDcekQ5Mk09tem/e1iwZVKrFp6dWlNKPGSsapbvaf5QoP2eyBK24MqkQ2FxSu2K6w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=Q3iF1KUd; arc=none smtp.client-ip=185.125.25.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="uKhp3Pwx"
-Received: from smtp-3-0000.mail.infomaniak.ch (unknown [IPv6:2001:1600:4:17::246b])
-	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4YSCvH249kzcmv;
-	Tue,  7 Jan 2025 15:23:07 +0100 (CET)
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="Q3iF1KUd"
+Received: from smtp-3-0001.mail.infomaniak.ch (unknown [IPv6:2001:1600:4:17::246c])
+	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4YSsdv5PFBz2Qs;
+	Wed,  8 Jan 2025 16:43:47 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
-	s=20191114; t=1736259787;
-	bh=B4+j3PwDoMzbfcShLrDeDnQC0GfMp+uZ0RttBZ9mUi4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=uKhp3PwxdF3xeiifwQVjVpFYr5ibJ0aVg/+r7av3dQhnAOBKMLCfQXGiCHCBsJSpW
-	 onpEzw/iWs5d4OazYExmPJiKa6sCeOtf1dXVk2649b6ha/YbvuTBNpSC3CLQLN9RwC
-	 ktVqDrhaPWBne5KJz4EBzS91gRwuJZEVr6HvWSkk=
-Received: from unknown by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4YSCvG1nxkztFK;
-	Tue,  7 Jan 2025 15:23:06 +0100 (CET)
-Date: Tue, 7 Jan 2025 15:23:05 +0100
-From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
-To: Paul Moore <paul@paul-moore.com>
-Cc: Eric Paris <eparis@redhat.com>, 
-	=?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>, "Serge E . Hallyn" <serge@hallyn.com>, 
-	Ben Scarlato <akhna@google.com>, Casey Schaufler <casey@schaufler-ca.com>, 
-	Charles Zaffery <czaffery@roblox.com>, Francis Laniel <flaniel@linux.microsoft.com>, 
-	James Morris <jmorris@namei.org>, Jann Horn <jannh@google.com>, Jeff Xu <jeffxu@google.com>, 
-	Jorge Lucangeli Obes <jorgelo@google.com>, Kees Cook <kees@kernel.org>, 
-	Konstantin Meskhidze <konstantin.meskhidze@huawei.com>, Matt Bobrowski <mattbobrowski@google.com>, 
-	Mikhail Ivanov <ivanov.mikhail1@huawei-partners.com>, Phil Sutter <phil@nwl.cc>, 
-	Praveen K Paladugu <prapal@linux.microsoft.com>, Robert Salvet <robert.salvet@roblox.com>, 
-	Shervin Oloumi <enlightened@google.com>, Song Liu <song@kernel.org>, 
-	Tahera Fahimi <fahimitahera@gmail.com>, audit@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	s=20191114; t=1736351027;
+	bh=f5Hn5KV22WRjWqDiJSZ/dgncmazJcOwKRibL+A+zwmo=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=Q3iF1KUdqZG0Cygurl6JmKCgzshc2u+o9vEQAKYaYrnovyXbspRSRXciv/UAl8Gqm
+	 xBJHlcw0R14/02fnl/RvXmwV9C6fwMCBQApYTfA/i2EL9HmhuL90IWXIjaWPXudj2p
+	 kNTOiW5te95uFqsjeF6dXbS8XuIGLDvGRwtb6i5g=
+Received: from unknown by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4YSsdt6G7BzLZp;
+	Wed,  8 Jan 2025 16:43:46 +0100 (CET)
+From: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
+To: Eric Paris <eparis@redhat.com>,
+	Paul Moore <paul@paul-moore.com>,
+	=?UTF-8?q?G=C3=BCnther=20Noack?= <gnoack@google.com>,
+	"Serge E . Hallyn" <serge@hallyn.com>
+Cc: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
+	Ben Scarlato <akhna@google.com>,
+	Casey Schaufler <casey@schaufler-ca.com>,
+	Charles Zaffery <czaffery@roblox.com>,
+	Daniel Burgener <dburgener@linux.microsoft.com>,
+	Francis Laniel <flaniel@linux.microsoft.com>,
+	James Morris <jmorris@namei.org>,
+	Jann Horn <jannh@google.com>,
+	Jeff Xu <jeffxu@google.com>,
+	Jorge Lucangeli Obes <jorgelo@google.com>,
+	Kees Cook <kees@kernel.org>,
+	Konstantin Meskhidze <konstantin.meskhidze@huawei.com>,
+	Matt Bobrowski <mattbobrowski@google.com>,
+	Mikhail Ivanov <ivanov.mikhail1@huawei-partners.com>,
+	Phil Sutter <phil@nwl.cc>,
+	Praveen K Paladugu <prapal@linux.microsoft.com>,
+	Robert Salvet <robert.salvet@roblox.com>,
+	Shervin Oloumi <enlightened@google.com>,
+	Song Liu <song@kernel.org>,
+	Tahera Fahimi <fahimitahera@gmail.com>,
+	Tyler Hicks <code@tyhicks.com>,
+	audit@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
 	linux-security-module@vger.kernel.org
-Subject: Re: [PATCH v3 18/23] landlock: Log scoped denials
-Message-ID: <20250107.itheepai4Eri@digikod.net>
-References: <20241122143353.59367-19-mic@digikod.net>
- <1372f9de0bb265a08114a870ec086da0@paul-moore.com>
- <20250106.ohHi4La0ahTh@digikod.net>
- <CAHC9VhQsUkthgGpoNZZdXGcPS9zF2aijYfKfuNYCZB08N=UDKg@mail.gmail.com>
+Subject: [PATCH v4 01/30] lsm: Only build lsm_audit.c if CONFIG_SECURITY and CONFIG_AUDIT are set
+Date: Wed,  8 Jan 2025 16:43:09 +0100
+Message-ID: <20250108154338.1129069-2-mic@digikod.net>
+In-Reply-To: <20250108154338.1129069-1-mic@digikod.net>
+References: <20250108154338.1129069-1-mic@digikod.net>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHC9VhQsUkthgGpoNZZdXGcPS9zF2aijYfKfuNYCZB08N=UDKg@mail.gmail.com>
 X-Infomaniak-Routing: alpha
 
-On Mon, Jan 06, 2025 at 05:33:07PM -0500, Paul Moore wrote:
-> On Mon, Jan 6, 2025 at 9:51 AM Mickaël Salaün <mic@digikod.net> wrote:
-> > On Sat, Jan 04, 2025 at 08:23:53PM -0500, Paul Moore wrote:
-> > > On Nov 22, 2024 =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net> wrote:
-> > > >
-> > > > Add audit support for unix_stream_connect, unix_may_send, task_kill, and
-> > > > file_send_sigiotask hooks.
-> > > >
-> > > > Audit event sample:
-> > > >
-> > > >   type=LL_DENY [...]: domain=195ba459b blockers=scope_abstract_unix_socket path=00666F6F
-> > >
-> > > Similar to 17/23, I believe the SOCKADDR record should already capture
-> > > the socket address information.
-> >
-> > This might not be the case, which is why SELinux and others explicitly
-> > log it I guess.
-> 
-> I think I may be misunderstanding you, can you point to the section of
-> SELinux code that you are referring to in your comment?
+When CONFIG_AUDIT is set, its CONFIG_NET dependency is also set, and the
+dev_get_by_index and init_net symbols (used by dump_common_audit_data)
+are found by the linker.  dump_common_audit_data() should then failed to
+build when CONFIG_NET is not set. However, because the compiler is
+smart, it knows that audit_log_start() always return NULL when
+!CONFIG_AUDIT, and it doesn't build the body of common_lsm_audit().  As
+a side effect, dump_common_audit_data() is not built and the linker
+doesn't error out because of missing symbols.
 
-I'm refering to struct lsm_network_audit, and the related information
-ending in the logs with LSM_AUDIT_DATA_NET.  Landlock follows the
-current implementations, hence the generalization brought by the second
-patch with audit_log_lsm_data().
+Let's only build lsm_audit.o when CONFIG_SECURITY and CONFIG_AUDIT are
+both set, which is checked with the new CONFIG_HAS_SECURITY_AUDIT.
+
+ipv4_skb_to_auditdata() and ipv6_skb_to_auditdata() are only used by
+Smack if CONFIG_AUDIT is set, so they don't need fake implementations.
+
+Because common_lsm_audit() is used in multiple places without
+CONFIG_AUDIT checks, add a fake implementation.
+
+Cc: Casey Schaufler <casey@schaufler-ca.com>
+Cc: James Morris <jmorris@namei.org>
+Cc: Paul Moore <paul@paul-moore.com>
+Cc: Serge E. Hallyn <serge@hallyn.com>
+Signed-off-by: Mickaël Salaün <mic@digikod.net>
+Link: https://lore.kernel.org/r/20250108154338.1129069-2-mic@digikod.net
+---
+
+Merged in the LSM's next tree.  It will be part of Linux v6.13:
+https://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/lsm.git/commit/?h=next&id=7ccbe076d987598b04b4b9c9b61f042291f9cc77
+
+Changes since v2:
+- Add CONFIG_HAS_SECURITY_AUDIT to fix the build with AUDIT &&
+  !SECURITY, reported by Guenter Roeck.
+---
+ include/linux/lsm_audit.h | 14 ++++++++++++++
+ security/Kconfig          |  5 +++++
+ security/Makefile         |  2 +-
+ 3 files changed, 20 insertions(+), 1 deletion(-)
+
+diff --git a/include/linux/lsm_audit.h b/include/linux/lsm_audit.h
+index 97a8b21eb033..c2b01380262c 100644
+--- a/include/linux/lsm_audit.h
++++ b/include/linux/lsm_audit.h
+@@ -116,14 +116,28 @@ struct common_audit_data {
+ #define v4info fam.v4
+ #define v6info fam.v6
+ 
++#ifdef CONFIG_AUDIT
++
+ int ipv4_skb_to_auditdata(struct sk_buff *skb,
+ 		struct common_audit_data *ad, u8 *proto);
+ 
++#if IS_ENABLED(CONFIG_IPV6)
+ int ipv6_skb_to_auditdata(struct sk_buff *skb,
+ 		struct common_audit_data *ad, u8 *proto);
++#endif /* IS_ENABLED(CONFIG_IPV6) */
+ 
+ void common_lsm_audit(struct common_audit_data *a,
+ 	void (*pre_audit)(struct audit_buffer *, void *),
+ 	void (*post_audit)(struct audit_buffer *, void *));
+ 
++#else /* CONFIG_AUDIT */
++
++static inline void common_lsm_audit(struct common_audit_data *a,
++	void (*pre_audit)(struct audit_buffer *, void *),
++	void (*post_audit)(struct audit_buffer *, void *))
++{
++}
++
++#endif /* CONFIG_AUDIT */
++
+ #endif
+diff --git a/security/Kconfig b/security/Kconfig
+index 28e685f53bd1..f10dbf15c294 100644
+--- a/security/Kconfig
++++ b/security/Kconfig
+@@ -64,6 +64,11 @@ config SECURITY
+ 
+ 	  If you are unsure how to answer this question, answer N.
+ 
++config HAS_SECURITY_AUDIT
++	def_bool y
++	depends on AUDIT
++	depends on SECURITY
++
+ config SECURITYFS
+ 	bool "Enable the securityfs filesystem"
+ 	help
+diff --git a/security/Makefile b/security/Makefile
+index cc0982214b84..22ff4c8bd8ce 100644
+--- a/security/Makefile
++++ b/security/Makefile
+@@ -15,7 +15,7 @@ obj-$(CONFIG_SECURITY)			+= security.o
+ obj-$(CONFIG_SECURITYFS)		+= inode.o
+ obj-$(CONFIG_SECURITY_SELINUX)		+= selinux/
+ obj-$(CONFIG_SECURITY_SMACK)		+= smack/
+-obj-$(CONFIG_SECURITY)			+= lsm_audit.o
++obj-$(CONFIG_HAS_SECURITY_AUDIT)	+= lsm_audit.o
+ obj-$(CONFIG_SECURITY_TOMOYO)		+= tomoyo/
+ obj-$(CONFIG_SECURITY_APPARMOR)		+= apparmor/
+ obj-$(CONFIG_SECURITY_YAMA)		+= yama/
+-- 
+2.47.1
+
