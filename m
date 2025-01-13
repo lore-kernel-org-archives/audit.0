@@ -1,124 +1,101 @@
-Received: from smtp-bc0a.mail.infomaniak.ch (smtp-bc0a.mail.infomaniak.ch [45.157.188.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDD0422F17A
-	for <audit@vger.kernel.org>; Mon, 13 Jan 2025 11:15:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.157.188.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE7D140BE5
+	for <audit@vger.kernel.org>; Mon, 13 Jan 2025 14:00:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736766920; cv=none; b=aBhMfZW49xs20g5O6g95oTc67mMU66ZzQtjH8H+Jeo14uGTV11PIAQIM7D6EF5L+trYC3JZhCqg7ECARRHOUPWnF89nvEbqnkzv70xVxKjttnTvmOK2+5p9MqfvmyHxmro3s2YvlZU8Es3d0I9uNkDmJQBm1rcgCYypYgW3oRGA=
+	t=1736776861; cv=none; b=OhVBsPdzji4xeyAHd9KrLwe4hVsDr8mLW3bgds+TtMeadOOfi/Q3SgABbOPH+blc12Eg9ZSeld8YxWUq4ObS4BMe/Y9dEWRyQ75dhRJTBhFIsoimkGCUwoBrIjbu30vhwjAoEBB+gwgu3gOCqz5xFkCy7UFK2sl2Qtiku78wD+A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736766920; c=relaxed/simple;
-	bh=YNXe34HTTnEKDNceJHkBJiUrqHSYQYxezeTlxeXH5qs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HDrrY2Ya31RrWPyKARo94Ei9YMKiq0cBWCAKdvwot7uFSuzVvFvkSqXhLKQMl1rXqvb7VW8xecDnwHEbOGWqnDSHEKjrXpO/+2aY2zqcRdlaAkK7dlqB36IPtYcOBSmQ0gP60PXIi6Xi/c9VBP6KkqCC+oxvwGm6WsmIRecZZy4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=IfG8DUFW; arc=none smtp.client-ip=45.157.188.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
+	s=arc-20240116; t=1736776861; c=relaxed/simple;
+	bh=AmVqrJ76OwdjEXGBbxG4GnI2QXNXsrWG0X01vnKfxPk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=rWzWNw1gxq+fjRNobE1p6tHkEBFGFx7etWJvbutuGxdubCzVx1RkgmeeJAfJ2eBcMIg2owI6ZEiYp+QOBzHeMYbDEQcgJuc9ZN46AAExxJvUdNKvxTE+kt4zd3GzJru6c+qO6K/LPtYnF6D84WqXLbVShVpDupXBWmAOHsU0s9o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=i+QyNSCg; arc=none smtp.client-ip=209.85.208.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="IfG8DUFW"
-Received: from smtp-3-0000.mail.infomaniak.ch (unknown [IPv6:2001:1600:4:17::246b])
-	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4YWqRc009KzpZw;
-	Mon, 13 Jan 2025 12:15:08 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
-	s=20191114; t=1736766907;
-	bh=9VmIUGRg7ecSn3eVBNeu60OvvSp9tOOqFJ6XYLEmc5c=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=IfG8DUFWiV/4y2RnuEBjgFYtv57L0iFaOJ/JFODZPQ7DUjwYndnpjecN3/e8E1Q2u
-	 5aHf+sfgZiyPyngvC+ODsHEjNrwqexjjSsYFVV452R3B0cLdvqbcFNBSc1FQHxKSW+
-	 5iagbcPv3I1jr4nDHizFgNAjvUI8ZAJk51TUNTgQ=
-Received: from unknown by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4YWqRY6kbVzp6M;
-	Mon, 13 Jan 2025 12:15:05 +0100 (CET)
-Date: Mon, 13 Jan 2025 12:15:05 +0100
-From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
-To: Al Viro <viro@zeniv.linux.org.uk>, 
-	Christian Brauner <brauner@kernel.org>, Jeff Layton <jlayton@kernel.org>, 
-	Josef Bacik <josef@toxicpanda.com>
-Cc: Eric Paris <eparis@redhat.com>, Paul Moore <paul@paul-moore.com>, 
-	=?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>, "Serge E . Hallyn" <serge@hallyn.com>, 
-	Ben Scarlato <akhna@google.com>, Casey Schaufler <casey@schaufler-ca.com>, 
-	Charles Zaffery <czaffery@roblox.com>, Daniel Burgener <dburgener@linux.microsoft.com>, 
-	Francis Laniel <flaniel@linux.microsoft.com>, James Morris <jmorris@namei.org>, Jann Horn <jannh@google.com>, 
-	Jeff Xu <jeffxu@google.com>, Jorge Lucangeli Obes <jorgelo@google.com>, 
-	Kees Cook <kees@kernel.org>, Konstantin Meskhidze <konstantin.meskhidze@huawei.com>, 
-	Matt Bobrowski <mattbobrowski@google.com>, Mikhail Ivanov <ivanov.mikhail1@huawei-partners.com>, 
-	Phil Sutter <phil@nwl.cc>, Praveen K Paladugu <prapal@linux.microsoft.com>, 
-	Robert Salvet <robert.salvet@roblox.com>, Shervin Oloumi <enlightened@google.com>, 
-	Song Liu <song@kernel.org>, Tahera Fahimi <fahimitahera@gmail.com>, 
-	Tyler Hicks <code@tyhicks.com>, audit@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, Al Viro <viro@zeniv.linux.org.uk>, 
-	Christian Brauner <brauner@kernel.org>, Jeff Layton <jlayton@kernel.org>, 
-	Josef Bacik <josef@toxicpanda.com>, linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH v4 27/30] fs: Add iput() cleanup helper
-Message-ID: <20250113.juseengu1Po2@digikod.net>
-References: <20250108154338.1129069-1-mic@digikod.net>
- <20250108154338.1129069-28-mic@digikod.net>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="i+QyNSCg"
+Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-5d442f9d285so7224a12.1
+        for <audit@vger.kernel.org>; Mon, 13 Jan 2025 06:00:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1736776858; x=1737381658; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AmVqrJ76OwdjEXGBbxG4GnI2QXNXsrWG0X01vnKfxPk=;
+        b=i+QyNSCgkb7nRNx6zab9Kr2RWTBQ/KPJRU0z8p4am/7y/jnp0q2tw04KptzEYL4Z89
+         r/yEar28Vk2npI5+XpyRKSHFfL/yGZLBbQHzCAnvPANH8ezTUWzydFyYYHW56oE/5/2L
+         6dwt11NugFqMC6xF6h6hcgk7J2y7E1VKTLt/QuFTWc1tlnD/VwiIwR58uU3vfn62aBti
+         llBQ8vQlcKpNpD7I2ckImzQIvE+JfkwWxeN53xBXn7sj8brFQzozrGZSLKa0L1TDjYNP
+         UnH4bF/OKWCxDlfKCIzzAzgJHZyQO7sUPLXCJrPKqoaUFZrkbYLJaGn7RsHTqU7X3ZBS
+         SVuQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1736776858; x=1737381658;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=AmVqrJ76OwdjEXGBbxG4GnI2QXNXsrWG0X01vnKfxPk=;
+        b=UHy8cFu4A8GMIeXol/bsSiAktWIYEoEo4/M7Hw6Yc1DXBm4TEllX0RgSXee0PQtUSQ
+         U9waQd/0j7Np+EtlLFpMYNKZoPDVdzhe8VrhuQRMaowMTP16wnJcBKDzMfJTocfgxwWU
+         uzNK/E2jscEyauUs/dGiC0Hyf87p2wQGGWMZonRiZVI3cAdfBmhsIIAXvhPR2btAytCs
+         /G4L1V3HmWHwrs0aQEz+J2erQRLptNJf6Ak+bSwKjq+B2Fl2uOv/5w4bcpzbHDMJjzTH
+         27OcxWBzuqJpBccM0v5rEJ0AaV4SwKy4LrqghS85CUcGbTKWC+jFbiYXCQA+mktZ7oLb
+         DgSg==
+X-Forwarded-Encrypted: i=1; AJvYcCXrnlj/oYgWlcdL15AUErvgiqdC+zc2/ha1i8IQ88j3RmAgPmEbWmnO+Bpkd7FOhzzDgBTbhA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzTJZJEZW8lXww8t9BsAJVEgxYvEcdg1ZRuJcIYymDsoJdNIjj7
+	oXR+Tf9xol83QfrB2spR2OoEDlsnco5XUi4yMbzq73Wz5ibLmk7BUNX6oOnFzdd3UktJnbpdQwN
+	0Bh33Bi//Xye/PgN0CfvAb3VBOLuYeSwsu2TR
+X-Gm-Gg: ASbGncuy8kLXRYARjbId65dGa4O8Prsc2OoWxo7WZuDuZEg457fi84jXZ5VSh+q6GAz
+	QqnJFuhhgR69HmIN4SsX+pOn8W17zxdPrHaCd7knG2+t0dSV+unBKLTuZrpGACNJhOA==
+X-Google-Smtp-Source: AGHT+IHKZ693r6Symww5fH4Feom3gw0SaQrsRBWb1GldoG/HaGHvayUaIeg55n9HFelhlGnGfmWOwP+TP6vIw15HFZ8=
+X-Received: by 2002:aa7:c596:0:b0:5d9:5a5c:f2f9 with SMTP id
+ 4fb4d7f45d1cf-5d9a0ce240emr238092a12.7.1736776857045; Mon, 13 Jan 2025
+ 06:00:57 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+References: <20250108154338.1129069-1-mic@digikod.net> <20250108154338.1129069-28-mic@digikod.net>
 In-Reply-To: <20250108154338.1129069-28-mic@digikod.net>
-X-Infomaniak-Routing: alpha
+From: Jann Horn <jannh@google.com>
+Date: Mon, 13 Jan 2025 15:00:20 +0100
+X-Gm-Features: AbW1kvYBx8dcH5RfbC3sOaT76fCVvwDa3bMTGBf2ix2X_eB1y7LoeUR0Nuu-9l8
+Message-ID: <CAG48ez25VjcbUUkJiPru42LEX9AbUp0tfVrAcujo15ebozb0ew@mail.gmail.com>
+Subject: Re: [PATCH v4 27/30] fs: Add iput() cleanup helper
+To: =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>, 
+	Christian Brauner <brauner@kernel.org>, Al Viro <viro@zeniv.linux.org.uk>
+Cc: Eric Paris <eparis@redhat.com>, Paul Moore <paul@paul-moore.com>, 
+	=?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>, 
+	"Serge E . Hallyn" <serge@hallyn.com>, Ben Scarlato <akhna@google.com>, 
+	Casey Schaufler <casey@schaufler-ca.com>, Charles Zaffery <czaffery@roblox.com>, 
+	Daniel Burgener <dburgener@linux.microsoft.com>, 
+	Francis Laniel <flaniel@linux.microsoft.com>, James Morris <jmorris@namei.org>, 
+	Jeff Xu <jeffxu@google.com>, Jorge Lucangeli Obes <jorgelo@google.com>, Kees Cook <kees@kernel.org>, 
+	Konstantin Meskhidze <konstantin.meskhidze@huawei.com>, Matt Bobrowski <mattbobrowski@google.com>, 
+	Mikhail Ivanov <ivanov.mikhail1@huawei-partners.com>, Phil Sutter <phil@nwl.cc>, 
+	Praveen K Paladugu <prapal@linux.microsoft.com>, Robert Salvet <robert.salvet@roblox.com>, 
+	Shervin Oloumi <enlightened@google.com>, Song Liu <song@kernel.org>, 
+	Tahera Fahimi <fahimitahera@gmail.com>, Tyler Hicks <code@tyhicks.com>, audit@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org, 
+	Jeff Layton <jlayton@kernel.org>, Josef Bacik <josef@toxicpanda.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Al, Christian, this standalone patch could be useful to others.  Feel
-free to pick it in your tree.
-
-On Wed, Jan 08, 2025 at 04:43:35PM +0100, Mickaël Salaün wrote:
+On Wed, Jan 8, 2025 at 4:44=E2=80=AFPM Micka=C3=ABl Sala=C3=BCn <mic@digiko=
+d.net> wrote:
 > Add a simple scope-based helper to put an inode reference, similar to
 > the fput() helper.
-> 
-> This is used in a following commit.
-> 
-> Cc: Al Viro <viro@zeniv.linux.org.uk>
-> Cc: Christian Brauner <brauner@kernel.org>
-> Cc: Jeff Layton <jlayton@kernel.org>
-> Cc: Josef Bacik <josef@toxicpanda.com>
-> Signed-off-by: Mickaël Salaün <mic@digikod.net>
-> Link: https://lore.kernel.org/r/20250108154338.1129069-28-mic@digikod.net
-> ---
-> 
-> Changes since v3:
-> - New patch.
-> ---
->  include/linux/fs.h | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
-> 
-> diff --git a/include/linux/fs.h b/include/linux/fs.h
-> index 7e29433c5ecc..bd5a28b0871f 100644
-> --- a/include/linux/fs.h
-> +++ b/include/linux/fs.h
-> @@ -47,6 +47,8 @@
->  #include <linux/rw_hint.h>
->  #include <linux/file_ref.h>
->  #include <linux/unicode.h>
-> +#include <linux/cleanup.h>
-> +#include <linux/err.h>
->  
->  #include <asm/byteorder.h>
->  #include <uapi/linux/fs.h>
-> @@ -2698,6 +2700,8 @@ extern void iput(struct inode *);
->  int inode_update_timestamps(struct inode *inode, int flags);
->  int generic_update_time(struct inode *, int);
->  
-> +DEFINE_FREE(iput, struct inode *, if (!IS_ERR_OR_NULL(_T)) iput(_T))
-> +
->  /* /sys/fs */
->  extern struct kobject *fs_kobj;
->  
-> @@ -3108,8 +3112,6 @@ static inline bool is_dot_dotdot(const char *name, size_t len)
->  		(len == 1 || (len == 2 && name[1] == '.'));
->  }
->  
-> -#include <linux/err.h>
-> -
->  /* needed for stackable file system support */
->  extern loff_t default_llseek(struct file *file, loff_t offset, int whence);
->  
-> -- 
-> 2.47.1
-> 
-> 
+
+Cleaning up inode references with scope-based cleanup seems dangerous
+to me because, unlike most resources, holding a reference to an inode
+beyond the lifetime of the associated superblock can actually cause
+memory corruption; and scope-based cleanup is designed based on the
+idea that the order and precise location of dropping a reference don't
+matter so much.
+
+So I would prefer to either not do this, or at least have some big
+warning comment about usage requirements of scope-based inode
+references.
