@@ -1,103 +1,129 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C7361CAA6A;
-	Mon, 13 Jan 2025 14:37:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B73731FBBC5
+	for <audit@vger.kernel.org>; Mon, 13 Jan 2025 14:56:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736779021; cv=none; b=MpeqQd8G55ExGFOhJEPA8M/u+TVX/3GxdNIyTqIdCxAXRR9gOnN3Icae+aMSXAXSP31kQnqA3dYawXCOLy8TaW2PPU+gmwp4WKZObmDSvXvxF7JH5/u7MBG1u7CWnUZXFjk2fEm1UBsVy2KLu37I2JCth8QPqUhUpVWEXu7Vl8c=
+	t=1736780182; cv=none; b=NHeTJc/UE7Spa0Mg5FkbqkFcpqeZOTiCf1KqihzZGNhJ9oDoHPqDYk0HmePH2lnCS8LEtzwwW46ajmVcUSMChLHFQTzwIMu6D91kMbQbqIxQqqo6hiYC9UEWnjficrYhYHLV+RqU4EHiVO7F5c/5+JZ7hEWfTFrtZIMOgndUa68=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736779021; c=relaxed/simple;
-	bh=uEm7AaHSDpwzRjzu2/54yN04+VtaF1V86eu5JzbTrys=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=mhdPJoRQKlJ3FNL6P+GD60TIfZpSDpt4sd6kS3oAwbEz9P5oA/jtVJFtE1dgloXBrdJmhCoP6HC5V0ydygII19GiFYZWxKKThad451FQmd/gx6sIescS5kmBiLxzKDnBJbpqy9orFjEqq7bGA6YyBZd5vO/aRNzPOMRjPzgwY2c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gmT/Jlfk; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1736780182; c=relaxed/simple;
+	bh=TK7Qvhmlj7NhEvh41RPsmn4JZi3Ks3R0ITd41jPHuBk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=A3Z422W+QUQ11f9FNP4vDdpEovpQlppRnECwmhr506v3Hn5CbBp/j0vQGFo6PZmaa/ZljAPOggLLo/TtIzCtiiTeTUgrKkiO51faxNzZv9hQYnPRJwXM/XpvjpgWeQG24RBR5QlkNcwLSYsAZQ2tFyUjAG3vQ2ZdeXuxySyNf6A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=pSeqzIP9; arc=none smtp.client-ip=209.85.208.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gmT/Jlfk"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22D41C4CED6;
-	Mon, 13 Jan 2025 14:36:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1736779020;
-	bh=uEm7AaHSDpwzRjzu2/54yN04+VtaF1V86eu5JzbTrys=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=gmT/JlfkgoGjMyYwfQblR29ULOXQtK8ymlViVmfurx4UuEPHBovlc7O+0Cig2tRNj
-	 58LKBTtv1f4ygkYiFHqZ845hpznaCOjhIZ8mxFWqKOz1nWRgzr2EEt9qe48fqBrzcO
-	 qMbnGmKG4GO8anUUy0qB0sICGvusMu6baqfV0ro2trO5ruYLdOAzAVvTDuEc0Eq+l4
-	 e7xXQRvshUhSYk/f3+FolvLWDvijHgFSp5plXFurEq3HrQGGQ8sS0E/Bndrk8pvItE
-	 SL+vsgQqly+pkHzwb0bMOdXrFLnU8+WLVMb4H1gq8FPo/5kKteGEYW3TcTsLOg9lWf
-	 dQ+v1Gt+qLlIA==
-From: Christian Brauner <brauner@kernel.org>
-To: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
-Cc: Christian Brauner <brauner@kernel.org>,
-	Ben Scarlato <akhna@google.com>,
-	Casey Schaufler <casey@schaufler-ca.com>,
-	Charles Zaffery <czaffery@roblox.com>,
-	Daniel Burgener <dburgener@linux.microsoft.com>,
-	Francis Laniel <flaniel@linux.microsoft.com>,
-	James Morris <jmorris@namei.org>,
-	Jann Horn <jannh@google.com>,
-	Jeff Xu <jeffxu@google.com>,
-	Jorge Lucangeli Obes <jorgelo@google.com>,
-	Kees Cook <kees@kernel.org>,
-	Konstantin Meskhidze <konstantin.meskhidze@huawei.com>,
-	Matt Bobrowski <mattbobrowski@google.com>,
-	Mikhail Ivanov <ivanov.mikhail1@huawei-partners.com>,
-	Phil Sutter <phil@nwl.cc>,
-	Praveen K Paladugu <prapal@linux.microsoft.com>,
-	Robert Salvet <robert.salvet@roblox.com>,
-	Shervin Oloumi <enlightened@google.com>,
-	Song Liu <song@kernel.org>,
-	Tahera Fahimi <fahimitahera@gmail.com>,
-	Tyler Hicks <code@tyhicks.com>,
-	audit@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-security-module@vger.kernel.org,
-	Al Viro <viro@zeniv.linux.org.uk>,
-	Jeff Layton <jlayton@kernel.org>,
-	Josef Bacik <josef@toxicpanda.com>,
-	Eric Paris <eparis@redhat.com>,
-	Paul Moore <paul@paul-moore.com>,
-	=?UTF-8?q?G=C3=BCnther=20Noack?= <gnoack@google.com>,
-	"Serge E . Hallyn" <serge@hallyn.com>
-Subject: Re: (subset) [PATCH v4 27/30] fs: Add iput() cleanup helper
-Date: Mon, 13 Jan 2025 15:36:41 +0100
-Message-ID: <20250113-system-waben-2ff9c594e630@brauner>
-X-Mailer: git-send-email 2.45.2
-In-Reply-To: <20250108154338.1129069-28-mic@digikod.net>
-References: <20250108154338.1129069-1-mic@digikod.net> <20250108154338.1129069-28-mic@digikod.net>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="pSeqzIP9"
+Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-5d442f9d285so7800a12.1
+        for <audit@vger.kernel.org>; Mon, 13 Jan 2025 06:56:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1736780179; x=1737384979; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3bU31rzvdnNyKMbDykjZh8Ruhqgs15OKqVWKy0rLwlk=;
+        b=pSeqzIP9E5TQa21nOXQW00jLyELXYdkh/zFrZJgUZRbYvc70KeQXWyV+s9fMkhkLPR
+         0JW8BgDF2coVf3kopxhcVjkTEj8m3EaJlBcp8r3QybwWdEp0j0n+quZME9Ag3oj79kNp
+         N+8uRHxAkZrYPitsf1pvoSVFP4v6ewdRBxfV3IEySoy3xV+rh/0AQYl1A/Mb/ISBxsoP
+         qnFLFKwFOMLrD53yiT+Fx4swX5dxDh44qcuUJAcNqlzK1lADX9tS9wLlcKt9tSjqrJQW
+         m08nSAUUM9sEZ8HEAQVnvLB086xH+f1DMhbCAPsUFo0e3yXN0+5A+AJIbvIDdFZUlyI5
+         PYrQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1736780179; x=1737384979;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=3bU31rzvdnNyKMbDykjZh8Ruhqgs15OKqVWKy0rLwlk=;
+        b=tegCqZMTmtcCDGbwybLoykoYkAA287+Sv1P869duZry8zEUSHc+b9hBtISgbbaSDbm
+         YLE1ZMI13kpUVftvLpZIWFsqF+RMzEb8GcXlK0jYYZHdw2vo+mMj6HAFvKLbqVBD7++X
+         X1R+IVrlLDEYmwZty9Dl8cRGOcBn+saGvSTzkbbF2GeqOwPICGYXSav7I3g/3COOvKll
+         MMvxpLsZcj0Ef0medIw77YiSSQtnO7PEGGgOWZaB5wJacJH4NP5WcSQY0VU3B8q5dkgo
+         3ZXrXehLDxRd609EHdr6dxqsNdU+g40AnF0BUqx1SgTdX3b1HLBafLb39gJgoSnZTsS7
+         qEZA==
+X-Forwarded-Encrypted: i=1; AJvYcCXgxvs7sDAKfQTN+EK5DFkUdHoXr20XDw87cWzQwwdAfChcX0VQ1P8GAPLTIl9+xQuZssS5IQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw99hbnTPcSdKb4E1+V8eaajBpqP/rFqwVVorB6+jmS03SKZtDX
+	7/LX0A3jdVpUcz/1R2ZKkmdhC94+3qK751KcRllBmf+i5xtClrJqqDXyKpc8l5JUe9Ip8e8Nha7
+	qKgmxSQSawxXVxB+xi8FS2dKdZC1+X/raL0QG
+X-Gm-Gg: ASbGncv58z9rAJEF1gOTZwRMsI14AypK1bIAQdFh4YWe4cU9fx/Jg9j+PuD79Plemql
+	nKJz9yzIzVY+B874w1Fi/5HXOriSoDhGWJanSTuuV8NF72howoUqdUoGKB33IJLKkQw==
+X-Google-Smtp-Source: AGHT+IF/PaA6R1kIgG/h6ahe9DWLpPUJbhhw8Pyr/9w2G+GnL8ggX08blaDoQKySlhB39ot8IkKydU588T57noh/Ia8=
+X-Received: by 2002:aa7:c850:0:b0:5d0:dfe4:488a with SMTP id
+ 4fb4d7f45d1cf-5d99fb471c5mr228899a12.2.1736780178703; Mon, 13 Jan 2025
+ 06:56:18 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-X-Developer-Signature: v=1; a=openpgp-sha256; l=967; i=brauner@kernel.org; h=from:subject:message-id; bh=uEm7AaHSDpwzRjzu2/54yN04+VtaF1V86eu5JzbTrys=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMaS3qjLq/LkUtSh3kqOVU2/cEZUwLoM+X00J6Qf7th/qW xbkv2hGRykLgxgXg6yYIotDu0m43HKeis1GmRowc1iZQIYwcHEKwET+fmD4n61avu/GycVRx+s5 HjnWzJx8dAZf66/fllrZd+WM7uvxmTEyLDm0e/3SX0xRHu3nko6tEFB1ZtBg33t6EpvOoVt/XYo DOAE=
-X-Developer-Key: i=brauner@kernel.org; a=openpgp; fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
-Content-Transfer-Encoding: 8bit
+References: <20250108154338.1129069-1-mic@digikod.net> <20250108154338.1129069-29-mic@digikod.net>
+In-Reply-To: <20250108154338.1129069-29-mic@digikod.net>
+From: Jann Horn <jannh@google.com>
+Date: Mon, 13 Jan 2025 15:55:42 +0100
+X-Gm-Features: AbW1kvbvOyaaV64nNP2wfgNQ0OfxJtIm4xrtJNJoqWzzmKYPFqd07bKL-_XqlV0
+Message-ID: <CAG48ez3oTpoVH=en8yAwS2u=kuyh8rKqPQFjDCe_Muh7N9E_Tg@mail.gmail.com>
+Subject: Re: [PATCH v4 28/30] audit,landlock: Add AUDIT_EXE_LANDLOCK_DENY rule type
+To: =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>, 
+	Christian Brauner <brauner@kernel.org>, Al Viro <viro@zeniv.linux.org.uk>
+Cc: Eric Paris <eparis@redhat.com>, Paul Moore <paul@paul-moore.com>, 
+	=?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>, 
+	"Serge E . Hallyn" <serge@hallyn.com>, Ben Scarlato <akhna@google.com>, 
+	Casey Schaufler <casey@schaufler-ca.com>, Charles Zaffery <czaffery@roblox.com>, 
+	Daniel Burgener <dburgener@linux.microsoft.com>, 
+	Francis Laniel <flaniel@linux.microsoft.com>, James Morris <jmorris@namei.org>, 
+	Jeff Xu <jeffxu@google.com>, Jorge Lucangeli Obes <jorgelo@google.com>, Kees Cook <kees@kernel.org>, 
+	Konstantin Meskhidze <konstantin.meskhidze@huawei.com>, Matt Bobrowski <mattbobrowski@google.com>, 
+	Mikhail Ivanov <ivanov.mikhail1@huawei-partners.com>, Phil Sutter <phil@nwl.cc>, 
+	Praveen K Paladugu <prapal@linux.microsoft.com>, Robert Salvet <robert.salvet@roblox.com>, 
+	Shervin Oloumi <enlightened@google.com>, Song Liu <song@kernel.org>, 
+	Tahera Fahimi <fahimitahera@gmail.com>, Tyler Hicks <code@tyhicks.com>, audit@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, 08 Jan 2025 16:43:35 +0100, Mickaël Salaün wrote:
-> Add a simple scope-based helper to put an inode reference, similar to
-> the fput() helper.
-> 
-> This is used in a following commit.
-> 
-> 
++Christian and Al Viro to double-check what I'm saying
 
-Applied to the vfs-6.14.misc branch of the vfs/vfs.git tree.
-Patches in the vfs-6.14.misc branch should appear in linux-next soon.
+On Wed, Jan 8, 2025 at 4:44=E2=80=AFPM Micka=C3=ABl Sala=C3=BCn <mic@digiko=
+d.net> wrote:
+> -static const void *get_current_exe(const char **path_str, size_t *path_s=
+ize)
+> +static const void *get_current_exe(const char **path_str, size_t *path_s=
+ize,
+> +                                  struct inode **inode)
+>  {
+>         struct mm_struct *mm =3D current->mm;
+>         struct file *file __free(fput) =3D NULL;
+> @@ -93,6 +96,8 @@ static const void *get_current_exe(const char **path_st=
+r, size_t *path_size)
+>
+>         *path_size =3D size;
+>         *path_str =3D path;
+> +       ihold(file_inode(file));
+> +       *inode =3D file_inode(file);
+>         return no_free_ptr(buffer);
+>  }
 
-Please report any outstanding bugs that were missed during review in a
-new review to the original patch series allowing us to drop it.
+This looks unsafe: Once the reference to the file has been dropped
+(which happens implicitly on return from get_current_exe()), nothing
+holds a reference on the mount point or superblock anymore (the file
+was previously holding a reference to the mount point through
+->f_path.mnt), and so the superblock can be torn down and freed. But
+the reference to the inode lives longer and is only cleaned up on
+return from the caller get_current_details().
 
-It's encouraged to provide Acked-bys and Reviewed-bys even though the
-patch has now been applied. If possible patch trailers will be updated.
+So I think this code can hit the error check for "Busy inodes after
+unmount" in generic_shutdown_super(), which indicates that in theory,
+use-after-free can occur.
 
-Note that commit hashes shown below are subject to change due to rebase,
-trailer updates or similar. If in doubt, please check the listed branch.
+For context, here are two older kernel security issues that also
+involved superblock UAF due to assuming that it's possible to just
+hold refcounted references to inodes:
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git
-branch: vfs-6.14.misc
+https://project-zero.issues.chromium.org/42451116
+https://project-zero.issues.chromium.org/379667898
 
-[27/30] fs: Add iput() cleanup helper
-        https://git.kernel.org/vfs/vfs/c/38b1ff0bcff1
+For fixing this, one option would be to copy the entire "struct path"
+(which holds references on both the mount point and the inode) instead
+of just copying the inode pointer.
