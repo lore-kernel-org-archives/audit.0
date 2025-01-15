@@ -1,151 +1,137 @@
-Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com [209.85.219.174])
+Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3700CCA64
-	for <audit@vger.kernel.org>; Wed, 15 Jan 2025 01:06:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5399C12BF24
+	for <audit@vger.kernel.org>; Wed, 15 Jan 2025 23:53:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736903217; cv=none; b=fnxOQm9HpV8RKq49EEro60UxcTIYi1ikkHlQ/a/cEgVdfqo35E4GPiZ19WflScPr80p0Hga3U8gjzb2jAf4YZj0UNzrApThaZ3OXnGOA+oVpzqvtWmW3MklaRhWbjukLhXW5olcKvE6h5UVN0iV//f0codd+g7eDRj6k00imq6c=
+	t=1736985190; cv=none; b=NX0bJT+YeVFkUtAHvzdq3wVv0x+jLRZvv8muWvGM48Xhpi3OvgBZUKcsjNsJWwoxRMzXCangcFm4IEhSNPuRQiqqsENcWSQDo9/8E6OHVPHWLm+wPqZs7lDEOG47Gw9JtHdn/mvN212cpmneDhonAdZTx//24oy9Tp7X09qLUeA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736903217; c=relaxed/simple;
-	bh=9j4k5sJ0hIjbU76srPx9ofSroEp7lEzVi+AxKhpaT98=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=iLRf4liu6KDP6vaSsNUbYQ4cK1174zmYO/cGWvzil1ByFjsELm+b2Gh/seUJAsq5AECX45lhaq0qSeG3KokhsawSPjNEU5RwDe1mAAChLSMCTgzZx2AGD+8EMKPsWRgbDzzp4GhTegOH/g62QDAMVPDiVYCV7XUqosFiMSx8hkc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=XkuOuJen; arc=none smtp.client-ip=209.85.219.174
+	s=arc-20240116; t=1736985190; c=relaxed/simple;
+	bh=VD4HZMMruEXK3cWYgeMKyhT73yPU3eGiPRX9oJ6qcNA=;
+	h=Date:Message-ID:MIME-Version:Content-Type:From:To:Cc:Subject:
+	 References:In-Reply-To; b=O8C5Ww2bPHMo/KQUUK5bnCrSvUwNqb1Fc01vTyCW48mXkSzqtq3kn/Ch6cGkjIJyNoGYqCHjpfIHGcxndcMFygfxYUBwyVJl3b1AJE0hozR9DMmWMLTfuzm+1T4f87/Gg0tHaNyLdkWnpBwGFK28IH4o5lkK0wW3s1oox6UK7HY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=bncMIhVU; arc=none smtp.client-ip=209.85.160.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="XkuOuJen"
-Received: by mail-yb1-f174.google.com with SMTP id 3f1490d57ef6-e573136107bso7754016276.3
-        for <audit@vger.kernel.org>; Tue, 14 Jan 2025 17:06:54 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="bncMIhVU"
+Received: by mail-qt1-f180.google.com with SMTP id d75a77b69052e-467a6ecaa54so3850841cf.0
+        for <audit@vger.kernel.org>; Wed, 15 Jan 2025 15:53:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1736903214; x=1737508014; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9ClZ2iN446JwYVGOojANfV5KazntmHYQmtlXKhtMGv0=;
-        b=XkuOuJencZdgYPOMdTHwmfA/3q/+mGgwuURoE09cZPBSNkBvY5ClDDd+eaPRoDgHje
-         4UU/P34QjsLAUIlPtWEQSRaduLS18Glyggq2Tbx/W12AxHig0igljiX5QA0NBDVGPN/i
-         QUwETAcHxthArAhnnSfyj+8RuYloLU1eca6BTqnfcEPVg4nXj75NgcB1zR2tsU7la/EQ
-         YP5XYY6IxeK6nXvYxCMW1OuWFvk3cVnNP2EIdvAqCenMjQzPW1wjWw2MdWg+gTsUx+Uk
-         J46YZJOg6dwzbpTC+lfP3SR08yKRBR/k9K5mCeqiumQcIp3E/t+wzWS8533jWoVBhM1S
-         zmkA==
+        d=paul-moore.com; s=google; t=1736985187; x=1737589987; darn=vger.kernel.org;
+        h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
+         :mime-version:message-id:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5X1Qgkk1oWMSBXVfaHGiDjtsWRKN/BWSKCTADzfhM94=;
+        b=bncMIhVUKzOSxKC3Mq63MHv1s+59LuyJiIjKQqLJeREW1mQi59S+Ssj1+laDdk6LtD
+         IJmCmoObbyNDwpjLejpAYcTX1u+3LwCrB49RjV+pYsaErMWq8bkA4Ad8WVIhks9eJlge
+         OTRWGUmu/MoVzcFCjhe7sqnZkutgAfUqlKGqfMKjud2jaX48V6IO8YAwnpG+QbwQ83Xo
+         NxT5Vq3COMwU+7ubVSJunpg9DosFezpwuYPQVJMC39VnGb4QgLAoJodCcKgGNk9jTNAO
+         h5bgPuiVrUiJmYN9dM/Ho0GTNeuJJeCmG7LwAJNjNKRBbDOpII7j3sXYBHFHVQdXgKXn
+         9HHg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736903214; x=1737508014;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9ClZ2iN446JwYVGOojANfV5KazntmHYQmtlXKhtMGv0=;
-        b=nWyYsEx40AQrIcyvnz/NXZAdcSM/qJ4zZ5uSBhq36S9ew3A1b/j4SA6EI6vHs5W9eG
-         wcGfnJo2Ot9gJmknHCrE20CDU9FX4O9+ZjjwlncWvqPuzmbaHjEd/WBaKkBk6AkB91H5
-         4If7z9dnqyil++Cyhq8xsVgTd1WH4Q5JAkKHFkm0DAzqmHD3CfHeE12G/D0I4BbJi+SL
-         bP7LVYmnmP8fW+oJBGXMp49+I3LpD8Yv6mu7mKJzcWPf9/7l8fCGz6KcyUHqDfXpPWfJ
-         jZXnF0sMSes1T6VxpgSMZL4zXtkZAJw106Jlqc8jL+i7W0kD9A5X9hbEDBw4rCOq4pXa
-         jv3A==
-X-Forwarded-Encrypted: i=1; AJvYcCXyqOPxB20RsvpKQduB4TJhAyOhWi8hMpvsuF7HJqVVS0DYYpinqJUNxGY9qcc7UUe7dT2M+g==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw0phl6Cj5yVvKkpTzTMfu07bmVNsIM+rnitRvaVpShxPZtSZ8c
-	MDYW8Motg42L9eNcMN1l8YVHx1PhHu7efyaT02Ssg2t77QTCMuDlcPscXbLiqQLz+h6lasCFPpr
-	upDpoin4gTPvr4Mcm0DGY89srmjfwazzUEesh
-X-Gm-Gg: ASbGncvzOSNOUCXGztvtYkBVQXa9qKaZgNpwAC7XPZ5ei6bAQg8zvbObkgQN/x0D81v
-	IzpBzOx62ZHwDa2sa4ozOKqqeMoeQbRJltPOo
-X-Google-Smtp-Source: AGHT+IFIBU2fl4vT7M3OeM7QqyaCV0tVz9e3rDkB5RqAZJBay3KqrALibV2EnFImg6Urc5XwxsLXtSVFVF1JIFc1rIQ=
-X-Received: by 2002:a05:6902:e10:b0:e57:4b14:6fdb with SMTP id
- 3f1490d57ef6-e574b14720fmr9646301276.34.1736903214194; Tue, 14 Jan 2025
- 17:06:54 -0800 (PST)
+        d=1e100.net; s=20230601; t=1736985187; x=1737589987;
+        h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
+         :mime-version:message-id:date:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=5X1Qgkk1oWMSBXVfaHGiDjtsWRKN/BWSKCTADzfhM94=;
+        b=lbooAW5nXV1JA+euKTYg6OzYy6PbS81BnKPTKr+Ntaq+iVQM7f+J6pTzkRuPW6U71M
+         R6H+2iwKv3ISrI0nMviOu2vqACR89vpKiTDhZKcyeJyWpQWz9iGFqbxM0GmtglSVoIAR
+         LCwnynEH9rckfsPBm5nSNrpg4NaZfEXj6kRHOi3coRJYGdwKAk6X9oNS3NCOxAA9qQZW
+         SuKXKlpFJa9YpAktrovSnRCFnGOGzOh4SrgSjhgq11sb7cl5yaoNhjXQGOEV57e81wMo
+         jqSWAkulMcx/6+LIusI8rFSrwMh+wjH9e3ZBJelUNJWEQdd1xwAXPC2QksgGPPwuNnhR
+         y7/Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUowgEfAknrpunS1sGOEc4nvRODYJ3xAZPU6EWnzKTUKc+9Um1gB1lgwNIvR4h8i65wqzx1cw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwdqeK4MBUbunLuyB5emW7AtBhkvDK5TEX6UU0S6GTOrcDG7S2j
+	qtuLCXlIPnxhb4fuu+91dAJ7+fudvmYVs1cjyMx3ZRrSXjCNxs2SmTl/5Om5Xw==
+X-Gm-Gg: ASbGncttu0Xb9SBfmWlDFlK2uP/XfhU9eYX168r0HoOuSppg4QYKdB9uQdft9X6FYCN
+	k/TWnTfd0KXSs3WdSPJwV/yn8Oocagf7BeKvoldqqkT/1NqcvhZVHp2p+vuoYqS53OgO9kIeU6T
+	Td3kpebJg4b4pDVH8NdnLrsHlWtCSlNIshBf2+MzIwSQ6KfKQB75rZpj6A/h0eHY6jEgmm5R39o
+	qgU9K02k85QnNMBK4BFUhh9SEAacBSRyjpHOt0Jg0qCsJKYE0c=
+X-Google-Smtp-Source: AGHT+IGIHtyRoNutItU5LCDTdU6jNgI0Qs73ZHfm/NG1vsDq/TQ3ibefz9r6vrtgc2RPzEV1qHCiHg==
+X-Received: by 2002:a05:622a:15c9:b0:467:6e88:4548 with SMTP id d75a77b69052e-46c7108c109mr550006181cf.39.1736985187203;
+        Wed, 15 Jan 2025 15:53:07 -0800 (PST)
+Received: from localhost ([70.22.175.108])
+        by smtp.gmail.com with UTF8SMTPSA id d75a77b69052e-46c873dd754sm69938751cf.69.2025.01.15.15.53.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Jan 2025 15:53:06 -0800 (PST)
+Date: Wed, 15 Jan 2025 18:53:06 -0500
+Message-ID: <081bd4a2a44a80e046662667e0aeb309@paul-moore.com>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <2A30FFFE-973A-4355-87D2-C0F3648E518A@flyingcircus.io>
- <CAHC9VhSLKNthep_+Vo8t836WfxxuvDkDXu+NjC5RB+ApHM7QwA@mail.gmail.com> <67CAA6D8-9C8F-4F45-A15B-9D5446521339@flyingcircus.io>
-In-Reply-To: <67CAA6D8-9C8F-4F45-A15B-9D5446521339@flyingcircus.io>
+MIME-Version: 1.0 
+Content-Type: text/plain; charset=UTF-8 
+Content-Transfer-Encoding: 8bit 
+X-Mailer: pstg-pwork:20250115_1512/pstg-lib:20250114_2216/pstg-pwork:20250115_1512
 From: Paul Moore <paul@paul-moore.com>
-Date: Tue, 14 Jan 2025 20:06:43 -0500
-X-Gm-Features: AbW1kvZo6BTLlBbZx5YLtr9UCNotic5A4t-YRPEU1t2lN8j5x03Ghy6WuTK-RQ8
-Message-ID: <CAHC9VhT7nNX-n-PHpyJqH=0pEX=sm=LK2MTNtO6uyw6H=x+pCQ@mail.gmail.com>
-Subject: Re: Questions regarding TTY input auditing
-To: Christian Theune <ct@flyingcircus.io>
-Cc: "Molly Miller (mm@flyingcircus.io)" <mm@flyingcircus.io>, eparis@redhat.com, audit@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+To: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>, Eric Paris <eparis@redhat.com>, =?UTF-8?q?G=C3=BCnther=20Noack?= <gnoack@google.com>, "Serge E . Hallyn" <serge@hallyn.com>
+Cc: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>, Ben Scarlato <akhna@google.com>, Casey Schaufler <casey@schaufler-ca.com>, Charles Zaffery <czaffery@roblox.com>, Daniel Burgener <dburgener@linux.microsoft.com>, Francis Laniel <flaniel@linux.microsoft.com>, James Morris <jmorris@namei.org>, Jann Horn <jannh@google.com>, Jeff Xu <jeffxu@google.com>, Jorge Lucangeli Obes <jorgelo@google.com>, Kees Cook <kees@kernel.org>, Konstantin Meskhidze <konstantin.meskhidze@huawei.com>, Matt Bobrowski <mattbobrowski@google.com>, Mikhail Ivanov <ivanov.mikhail1@huawei-partners.com>, Phil Sutter <phil@nwl.cc>, Praveen K Paladugu <prapal@linux.microsoft.com>, Robert Salvet <robert.salvet@roblox.com>, Shervin Oloumi <enlightened@google.com>, Song Liu <song@kernel.org>, Tahera Fahimi <fahimitahera@gmail.com>, Tyler Hicks <code@tyhicks.com>, audit@vger.kernel.org, linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
+Subject: Re: [PATCH v4 8/30] landlock: Add AUDIT_LANDLOCK_DENY and log ptrace  denials
+References: <20250108154338.1129069-9-mic@digikod.net>
+In-Reply-To: <20250108154338.1129069-9-mic@digikod.net>
 
-On Tue, Jan 14, 2025 at 11:16=E2=80=AFAM Christian Theune <ct@flyingcircus.=
-io> wrote:
->
-> Hi Paul,
->
-> > On 10. Dec 2024, at 20:18, Paul Moore <paul@paul-moore.com> wrote:
-> >
-> > You likely want to look for tty_audit_push() callers, that should help
-> > identify where/how the kernel decides to flush the TTY data.  Looking
-> > quickly at an upstream kernel I see the following callers: canonical
-> > mode (as you mentioned), ioctl(TIOCSTI), and the AUDIT_USER_TTY
-> > command/message from userspace.
->
-> Thanks for those pointers! We sifted through the code but I still have a =
-question in my head:
-> do you know (or maybe have another pointer) whether it was an explicit de=
-cision to not
-> support =E2=80=9C\n=E2=80=9D scanning in the non-canonical mode?
->
-> My immediate guess: if this was deliberate then maybe because it would be=
- too much of a performance hit?
+On Jan  8, 2025 =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net> wrote:
+> 
+> Add a new AUDIT_LANDLOCK_DENY record type dedicated to any Landlock
+> denials.
 
-I'm sorry, but I don't have a good answer for you, or at least none
-beyond speculation. I'm much more of a tty user rather than a seasoned
-tty developer :)
+...
 
-While performance *may* be a reason, I suspect modern systems would
-have no problem handling even the fastest tty data rates while
-scanning for newlines.  I suspect the answer is some combination of
-wanting to avoid having to parse user input in the kernel as much as
-possible, and the existence of canonical mode, which does appear to be
-fairly similar, if not more complex, to what you are describing
-(assuming I'm understanding your proposal correctly).
+> diff --git a/include/uapi/linux/audit.h b/include/uapi/linux/audit.h
+> index 75e21a135483..60c909c396c0 100644
+> --- a/include/uapi/linux/audit.h
+> +++ b/include/uapi/linux/audit.h
+> @@ -33,7 +33,7 @@
+>   * 1100 - 1199 user space trusted application messages
+>   * 1200 - 1299 messages internal to the audit daemon
+>   * 1300 - 1399 audit event messages
+> - * 1400 - 1499 SE Linux use
+> + * 1400 - 1499 access control messages
+>   * 1500 - 1599 kernel LSPP events
+>   * 1600 - 1699 kernel crypto events
+>   * 1700 - 1799 kernel anomaly records
+> @@ -146,6 +146,7 @@
+>  #define AUDIT_IPE_ACCESS	1420	/* IPE denial or grant */
+>  #define AUDIT_IPE_CONFIG_CHANGE	1421	/* IPE config change */
+>  #define AUDIT_IPE_POLICY_LOAD	1422	/* IPE policy load */
+> +#define AUDIT_LANDLOCK_DENY	1423	/* Landlock denial */
 
-I also worry about what the audit records would look like if a user
-were to add a number of escaped newlines to their input stream.
-Teaching the kernel about various shell escape sequences, and doing
-all of the associated parsing would be far too ugly to support.
+I didn't have an opportunity to respond to your reply to my v3 comments
+before you posted v4, but I see you've decided to stick with _DENY as
+opposed to _ACCESS (or something similar).  Let me copy your reply
+below so I can respond appropriately ...
 
-> Nevertheless, the current setting of =E2=80=9Cflush on full buffer=E2=80=
-=9D is counter-intuitively laggy and seems to hit a very high ratio of logi=
-n sessions that never manage to fill the buffer. Attackers can easily hide =
-their traces within even =E2=80=9Csmall=E2=80=9D buffers (we=E2=80=99re gue=
-ssing it=E2=80=99s a page, so maybe 4k?).
+> A stronger type with the "denied" semantic makes more sense to me,
+> especially for Landlock which is unprivileged, and it makes it clear
+> that it should only impact performance and log size (i.e. audit log
+> creation) for denied actions.
 
-Yes, the tty audit buffer is 4k by default and changing it requires
-modifying the kernel source.  I also wonder what odd failures one
-might see if the buffer size was to change?
+This is not consistent with how audit is typically used.  Please
+convert to AUDIT_LANDLOCK_ACCESS, or something similar.
 
-I would expect that an installation that has strict user auditing
-requirements would also have other audit filter rules configured to
-watch for "interesting" events.  I would also expect some sort of LSM
-to be enabled on the system with its own audit events to help identify
-potentially malicious behavior.
+> The next patch
+> series will also contain a new kind of audit rule to specifically
+> identify the origin of the policy that created this denied event, which
+> should make more sense.
 
-> If adding support for scanning for =E2=80=9C\n=E2=80=9D for the audit flu=
-sh has a general chance of being widely interesting then we=E2=80=99d be wi=
-lling to take a stab at it. (We=E2=80=99re not experienced kernel developer=
-s but are likely dangerous enough to come up with a patch that might be bro=
-ught to ripeness with some shepherding =E2=80=A6)
+Generally speaking audit only wants to support a small number of message
+types dedicated to a specific LSM.  If you're aware of additional message
+types that you plan to propose in a future patchset, it's probably a
+time to discuss those now.
 
-First off, I want to commend you for offering to work on a patch,
-that's excellent!  Unfortunately, for some of the reasons mentioned
-above, I suspect we won't have much luck getting a patch like this
-accepted upstream.  You are welcome to try (although I do worry about
-the escaped newline issue), and I will be happy to help review and
-advise as appropriate, but I worry that ultimately it will be
-rejected.  Sorry :/
+> Because of its unprivileged nature, Landlock will never log granted
+> accesses by default.  In the future, we might want a permissive-like
+> mode for Landlock, but this will be optional, and I would also strongly
+> prefer to add new audit record types for new semantics.
 
-Perhaps an alternate solution would be to either piggyback on an
-existing, related commonly used tty ioctl and force an audit tty flush
-when that ioctl is triggered.  If a reasonable candidate can't be
-found, we could potentially create a new ioctl to force a flush of the
-audit tty buffer, but that would require userspace modification to
-fully leverage.
+Once again, this isn't consistent with how audit is typically used and
+I'm not seeing a compelling reason to rework how things are done.  Please
+stick with encoding the success/failure, accept/reject, etc. states in
+audit record fields, not the message types themselves.
 
---=20
+--
 paul-moore.com
