@@ -1,134 +1,100 @@
-Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com [209.85.219.181])
+Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com [209.85.160.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A17A5243857
-	for <audit@vger.kernel.org>; Thu, 16 Jan 2025 20:24:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83DB11F1912
+	for <audit@vger.kernel.org>; Tue, 21 Jan 2025 23:40:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737059059; cv=none; b=uRlYxMB5nUQ4P9i0xdxrcQDEDpyPfT8HSHdYeJOZ+JVS+5k0eLrEVPkeGqZAltbRkOlo8OweBglQ/eytGaCBSLFP1VeptUIDVC3DWIFWRF44S2sCdTUbhF4C5OSLVByeXd7znqiEzdInELeCiHR4qrwAyklNzJN2Q6GBtN5u9bI=
+	t=1737502840; cv=none; b=KR8JJjMIwOTIPU/FsDHn2tFY9Yza0WcLj8cFgaAdNd04IOgr6C+xX3JZYyXmTBhKSwnKovmuHP4w7TZUC/rjoSopOLfv3JW7dsanS0YbFPD3AOBfyeW+BedCSeaD/oPpG17/9NoCqHG+JztrMr93QSSuTtPh/KysWZtTDQgsY2Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737059059; c=relaxed/simple;
-	bh=Ce/Kp0zV1hAbK5Z9ebXol2O4puwXgqpgNhSLdSibnA0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=AnhUN6QmfzXSlFWl7ofwg/MODNpUyDMdJsY0CyQszshVE1D0BN6e0G035RRiaA0r03eLV7b8JMuW6KMW6zmng1wisskbH2W+SWh7rASk0yo1WrtyW3Ac//FX/wJoTLnxN2YpdYJhZmM/1apwEm8t6GqTXLfGg6MWev9eUdrr2lg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=UNUdpLRL; arc=none smtp.client-ip=209.85.219.181
+	s=arc-20240116; t=1737502840; c=relaxed/simple;
+	bh=dVhEbFZ3hn5mIIzSJur88ELuLKWzdf/SodSl9Vv0wQc=;
+	h=Date:Message-ID:From:To:Cc:Subject; b=bhNNISl3GNElCoHAgZXhy2ktWyKABfsk73AesTgcHbkKYjJjtb3kpXqJMI+WZrVLFDi+xX4dGe2iD8unSJAgodU+BFrnOFj14yi+YVvNgqo2WCc3q9ycKtMDK6m5too4TASItlm9Yzut4Vmx8usiXtNffVNQrGcwOzeYXtuID+w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=GAyfSL8l; arc=none smtp.client-ip=209.85.160.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="UNUdpLRL"
-Received: by mail-yb1-f181.google.com with SMTP id 3f1490d57ef6-e573136107bso2448420276.3
-        for <audit@vger.kernel.org>; Thu, 16 Jan 2025 12:24:17 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="GAyfSL8l"
+Received: by mail-qt1-f171.google.com with SMTP id d75a77b69052e-467b086e0easo35040131cf.1
+        for <audit@vger.kernel.org>; Tue, 21 Jan 2025 15:40:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1737059056; x=1737663856; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=paul-moore.com; s=google; t=1737502837; x=1738107637; darn=vger.kernel.org;
+        h=subject:cc:to:from:message-id:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=kyWQqNI14AFvv/FsJyoknx1z12jGrHDHRADBsDgqFJI=;
-        b=UNUdpLRLm+vML1oTNDCoVRy4+a7hC3LxKDD/s6sT9nXMmRof2421S7ktHYSGhhnIBD
-         3PM35v1tIpWEYtc2ButG08ief5hUDtJbvmyN+lEivGHYjC2iVmqVdM/Plxf5fjaop4n6
-         Dqm5eP5hcggWp2wixIhKU+B/kYjBE/GBUqePPrq5+UPq1TEz5Jixr5zhJXewX0r1Bs7d
-         gZ8d1ppJBu9CNL/LeNbXHYZyyJWH1LpnnmHNxqdrYmj34LZLHw0MyjMdPtGWFmQ7701O
-         v8ru6x0f9youIGtHZpuLzH7K7EjEDi43sWZTEiq377PwmArRAw9gZ4JXNQmij+Ds+Lk1
-         7a/w==
+        bh=c8qKaMvklOxumXZ+sYzwJZ7YTcDoTElXytH3htbQ1GE=;
+        b=GAyfSL8lIwddZT4YDulEbn5vY9k/DNW9TLnUhJAuEPKToviDhkMhfLCSxfrSwRmocb
+         6rOI0nrHmxF2C2Cekb/QVr2wnsIlHUMDB7DcL/JziZON0cQ2Y/xMFb6Dd0e2vTv1kd16
+         1TyCLfiA12RA+CJ0oPINqsuhCGfgGbM0H+zvFosIKx8tdrj/6sXQtJ0Gub3qzLM+a79+
+         KjEPd2eoWDSWm6d5e4wkeu52+OFEe4205TI6DrFJDf1DkQJ27Otx2MBU4EOpwCLHO5fq
+         QvgxRUGUCCOFLduI5Q6XWwY8Ta9YmLpiRNUarP++hfgcI4A0APA8XyardNchJGNVpDq0
+         Ox3w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737059056; x=1737663856;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1737502837; x=1738107637;
+        h=subject:cc:to:from:message-id:date:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=kyWQqNI14AFvv/FsJyoknx1z12jGrHDHRADBsDgqFJI=;
-        b=uYdo2sjhEb4dutECNCikEb8a3C0I5EDCvMBgcqhfkBii08iusm7Z4eQSv8jBdbdyX+
-         qeBYTmO7RZRQyDLBTF/9rGpJzsvnBtOUOa/TVT0qp3OMVq+qKkcU3Ivco1WkDGjHE+dM
-         k6Le1B8QQehrpPat/wg79StJRIWtsDAvRCboZCL+zR9xAm/kCuHUXdPaCzsC/2Ohdmkw
-         wiZtyB7CzVebTMggxoNrDFEWvon90MnYLU0MKXDERErMOoDGHVfRvDynibTjMrYMTeKK
-         tip0QEs9RaeyHBbGFQrTwFV5bV67CbLtLef6JTyafvmJZbYyjTXKQ/CFN1jJ0gZtJ0sO
-         XyGg==
-X-Forwarded-Encrypted: i=1; AJvYcCVgG+Imvj9brL3juIKHeloNkkzJnvuFNsQL+sCsWAGCiSBHenksz0csK1l92ZDWGEqRNVqsTg==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz6vIfsn3mNFe3ZOa42PXjERUA/aDzYAlV+DuvtDJaq026xs2aO
-	9JMdDDSvOx9kN9cHf4WbhUYgzRUrTsiACYmHmVerfHbZJtz01cJ4ZgGwjAJmgqGeJVjXeX1GHjU
-	P7nz51QQTtt8fXRYHQjxk46qQKRgwMXb9C3Kb
-X-Gm-Gg: ASbGncuw1ypcZXRlTq84bAxd4Yv4d9VcH8THD8PgIan/2DntB4dF9PZAozERYPQWJNg
-	PDkqHyr7w0QEcqnyiOK7HKVp/yStDtqv1FdgC
-X-Google-Smtp-Source: AGHT+IFRdjKAIsLJtAfeDNf8Z4dBBYv+hDTDBKjMzpxDhoyhHHPt6KvJPwEsFvBK2wrLIH2pD7an7L3kB5dCmpo/JVI=
-X-Received: by 2002:a05:6902:2809:b0:e54:d1e4:fb0f with SMTP id
- 3f1490d57ef6-e54edf102f7mr27837222276.7.1737059056552; Thu, 16 Jan 2025
- 12:24:16 -0800 (PST)
+        bh=c8qKaMvklOxumXZ+sYzwJZ7YTcDoTElXytH3htbQ1GE=;
+        b=ij8KJzbA+Q0XClADkHvriAw4jsya57AehUMRn75rbHjhFYhubFcHUvWC/+xmayJTCz
+         VOcQFTb2p/ejVsWcTTC5BeROm6SPXR4lAI/xBJQZCRffL+Q6leMHyHTbQufOfThRAK4H
+         pj7TL1jiufMJQIZyOnW/XbK9MZm8OfAJcsosyo4DBOCGTMb452Y1N03RtymdtH7mkRrg
+         5Q4InkwUAuQvD8l6GNWMo6tBYVnZ2SPMj/7v9oJizsDV3kq7b77Y8rZ84d8fvhWpe2ll
+         XbqCcRTw6B01juLZT22qNgE4QZe1CsZBqqch8kNwpEKRoQjktFHSSkKrh9psc9cQrjcO
+         jazg==
+X-Gm-Message-State: AOJu0Yztps7/pEHNM9jdkqPRVFR36wtoY6P063qCjN8XqUXb/XBBmXIH
+	cwDvanxQNxLUZ1a6BdsEdGuqGHpN/GIHgyXhnSo5aHPf+vDpf1e+8MlU8UPAuw==
+X-Gm-Gg: ASbGnctp9u89korfDVwW1Ti6noAoAHrhsRp6H6phJzaBP/kFz1nj4F7kM7MBgmsAl4n
+	epCs0roQr4s2W9O/TAGTxEQgLKJGPpNp4zhtClCAPbTI758cQtG8YbgFl5nAnkhOc0NJ0C64Y54
+	E/hFRKSmLjdtTtPYQfOXjp/eI7NTSweeCPX8kXcPNJfHDwnBjky8YSM0cZLU50frclFabDu/VgV
+	Ns9dJ10/PepazNErLjh0HptgkywJIpHDNNwKI+4vBhYIOE5oZYGR752Xof645pI
+X-Google-Smtp-Source: AGHT+IElyqT0VyDSDvKk3/iFTl2iC0ybUUWmIuvgsxZwCT+yLarh4F3Ssw5d/7a4bb6YxK+yiM5BmA==
+X-Received: by 2002:ac8:7dd0:0:b0:467:4f0a:1b5d with SMTP id d75a77b69052e-46e12b6db1cmr246433301cf.42.1737502837597;
+        Tue, 21 Jan 2025 15:40:37 -0800 (PST)
+Received: from localhost ([70.22.175.108])
+        by smtp.gmail.com with UTF8SMTPSA id d75a77b69052e-46e102ec47fsm58106001cf.14.2025.01.21.15.40.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Jan 2025 15:40:37 -0800 (PST)
+Date: Tue, 21 Jan 2025 18:40:36 -0500
+Message-ID: <dabb743aa8b30916ef82bf8295573da8@paul-moore.com>
+From: Paul Moore <paul@paul-moore.com>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: audit@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] audit/audit-pr-20250121
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20250108154338.1129069-29-mic@digikod.net> <1ac8548a7b42eaed3f4392690011eb8b@paul-moore.com>
- <20250116.tie4PhauzooC@digikod.net>
-In-Reply-To: <20250116.tie4PhauzooC@digikod.net>
-From: Paul Moore <paul@paul-moore.com>
-Date: Thu, 16 Jan 2025 15:24:04 -0500
-X-Gm-Features: AbW1kvYjyxc9pE58atFcKDqzn_m47bpJvbBtZCS3Co_h1H3qZ3tFFuJCTEG6VZA
-Message-ID: <CAHC9VhQ-JU0UNtYO-8v16vEC2B7pKBdV3i9QK3Bek+AqByKXLg@mail.gmail.com>
-Subject: Re: [PATCH v4 28/30] audit,landlock: Add AUDIT_EXE_LANDLOCK_DENY rule type
-To: =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>
-Cc: Eric Paris <eparis@redhat.com>, =?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>, 
-	"Serge E . Hallyn" <serge@hallyn.com>, Ben Scarlato <akhna@google.com>, 
-	Casey Schaufler <casey@schaufler-ca.com>, Charles Zaffery <czaffery@roblox.com>, 
-	Daniel Burgener <dburgener@linux.microsoft.com>, 
-	Francis Laniel <flaniel@linux.microsoft.com>, James Morris <jmorris@namei.org>, 
-	Jann Horn <jannh@google.com>, Jeff Xu <jeffxu@google.com>, 
-	Jorge Lucangeli Obes <jorgelo@google.com>, Kees Cook <kees@kernel.org>, 
-	Konstantin Meskhidze <konstantin.meskhidze@huawei.com>, Matt Bobrowski <mattbobrowski@google.com>, 
-	Mikhail Ivanov <ivanov.mikhail1@huawei-partners.com>, Phil Sutter <phil@nwl.cc>, 
-	Praveen K Paladugu <prapal@linux.microsoft.com>, Robert Salvet <robert.salvet@roblox.com>, 
-	Shervin Oloumi <enlightened@google.com>, Song Liu <song@kernel.org>, 
-	Tahera Fahimi <fahimitahera@gmail.com>, Tyler Hicks <code@tyhicks.com>, audit@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jan 16, 2025 at 5:57=E2=80=AFAM Micka=C3=ABl Sala=C3=BCn <mic@digik=
-od.net> wrote:
-> On Wed, Jan 15, 2025 at 06:53:08PM -0500, Paul Moore wrote:
-> > On Jan  8, 2025 =3D?UTF-8?q?Micka=3DC3=3DABl=3D20Sala=3DC3=3DBCn?=3D <m=
-ic@digikod.net> wrote:
-> > >
-> > > Landlock manages a set of standalone security policies, which can be
-> > > loaded by any process.  Because a sandbox policy may contain errors a=
-nd
-> > > can lead to log spam, we need a way to exclude some of them.  It is
-> > > simple and it makes sense to identify Landlock domains (i.e. security
-> > > policies) per binary path that loaded such policy.
-> > >
-> > > Add a new AUDIT_EXE_LANDLOCK_DENY rule type to enables system
-> > > administrator to filter logs according to the origin or the security
-> > > policy responsible for a denial.
-> >
-> > For reasons similar to why I didn't want to expose the audit timestamp
-> > to users outside of audit, I'm not very enthusiastic about expanding
-> > the audit filtering code at this point in time.
-> >
-> > I'm not saying "no" exactly, just "not right now".
->
-> Contrary to MAC systems which are configured and tuned by one entity
-> (e.g. the sysadmin), Landlock security policies can be configured by a
-> lot of different entities (e.g. sysadmin, app developers, users).  One
-> noisy policy (e.g. a buggy sandboxed tar called in a loop by maintenance
-> scripts) could easily flood the audit logs without the ability for
-> sysadmins to filter such policy.  They will only be able to filter all
-> users that *may* trigger such log (by executing the buggy sandboxed
-> app), which would mean almost all users, which would mask all other
-> legitimate Landlock events, then nullifying the entire audit support for
-> Landlock.
->
-> My plan was to extend these new kind of filter types to PID, UID, GID,
-> and LOGINUID (a subset of the audit filter exclude list) to give the
-> necessary flexibility to filter policy creators.
->
-> We really need a way to filter policy creators, and that needs to be
-> part of the (initial) Landlock audit support for it to be viable.
-> What do you propose?
+Linus,
 
-If I recall correctly, there are other patches in the patchset which
-provide some filtering of audit Landlock messages using mechanisms
-specific to Landlock, that may be an option here.  If not, perhaps the
-audit log is not the best way to log Landlock events?
+A single audit patch for the v6.14 merge window that fixes a problem
+when collecting pathnames for audit PATH records that was caused by
+some faulty pathname matching logic.
 
---=20
+Paul
+
+--
+The following changes since commit 40384c840ea1944d7c5a392e8975ed088ecf0b37:
+
+  Linux 6.13-rc1 (2024-12-01 14:28:56 -0800)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/audit.git
+    tags/audit-pr-20250121
+
+for you to fetch changes up to e92eebb0d6116f942ab25dfb1a41905aa59472a8:
+
+  audit: fix suffixed '/' filename matching (2024-12-05 19:22:38 -0500)
+
+----------------------------------------------------------------
+audit/stable-6.14 PR 20250121
+----------------------------------------------------------------
+
+Ricardo Robaina (1):
+      audit: fix suffixed '/' filename matching
+
+ kernel/auditfilter.c |   15 +++++++++++----
+ 1 file changed, 11 insertions(+), 4 deletions(-)
+
+--
 paul-moore.com
