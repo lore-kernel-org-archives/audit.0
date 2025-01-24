@@ -1,138 +1,214 @@
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B37E11D6DC8;
-	Fri, 24 Jan 2025 09:12:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
+Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com [209.85.219.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B515223B0
+	for <audit@vger.kernel.org>; Fri, 24 Jan 2025 17:01:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737709956; cv=none; b=BHAmHaySk8ux4zqR9LWqhzrTH6ONTEQOl9I5F01mP9oL1AQ3R1inwph/M6Ul/xv3wcoCRn+beWee0uu+yCrFIl9YWBXq7IchfDYdnFwZs8sFstWPYqnZnWRumjwS5mRVJvArwqOyQi6+0hnx+NJYxEpOoNZZ/dKkj4ky1Y+WG3E=
+	t=1737738117; cv=none; b=r9QZZadS0z5euXOVcKT0dPj41LANBvpAnL6EEE+OOMWTjYU9tFoD5yIuL7c3V6zedqSz6dCcLaFCgRRYk1mVagnwofWZgmfKZIe9uROayCtGg3SKq3NVRwOvkTEPLNV/Cp4Cvldj2OURMGmZEjO3W2XNxZdbFdvxFdZ/c/nEUC0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737709956; c=relaxed/simple;
-	bh=T0kC0aZm4QOSjS2LuV5WxT7ZuhH14TLndzU7DXnO/98=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=MTg9fw1yKQBPgfAor60Y6sO9zw8/eN19uLdcKAdqIbYI2cRvcacnaqH5KcMCcT1kxs0hq/CJ/FAKvuOhcW6av4E9qNRseuHwbAZLEPnLF3Ua+m7wa26j97726+J07KbPvm0UbFNp9NY5c9hiEEWL/GvIVuBa7ARwCJ+d0Q1zX+w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [223.64.68.38])
-	by gateway (Coremail) with SMTP id _____8DxGeF4WZNnJTFoAA--.7025S3;
-	Fri, 24 Jan 2025 17:12:24 +0800 (CST)
-Received: from localhost.localdomain (unknown [223.64.68.38])
-	by front1 (Coremail) with SMTP id qMiowMDxK8V0WZNn+IksAA--.13847S2;
-	Fri, 24 Jan 2025 17:12:23 +0800 (CST)
-From: Huacai Chen <chenhuacai@loongson.cn>
-To: Huacai Chen <chenhuacai@kernel.org>,
-	Paul Moore <paul@paul-moore.com>
-Cc: Eric Paris <eparis@redhat.com>,
-	Casey Schaufler <casey@schaufler-ca.com>,
-	audit@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Huacai Chen <chenhuacai@loongson.cn>,
-	stable@vger.kernel.org
-Subject: [PATCH] audit: Initialize lsmctx to avoid memory allocation error
-Date: Fri, 24 Jan 2025 17:12:09 +0800
-Message-ID: <20250124091209.4013832-1-chenhuacai@loongson.cn>
-X-Mailer: git-send-email 2.47.1
+	s=arc-20240116; t=1737738117; c=relaxed/simple;
+	bh=KyvB074LKY4pZXyNHHxIB2JUc1etSzsqguXdZ9CwFr8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=rCCkSf3EesrvwxZkEH+Wm/ddp2AiMe3HpuZExVJ2U8M8n0sF5JHkaZXMiUc3CnRS5REE4LlkYfbFTIeHHFa6KpucZtUvZqeel+TYMgsz9fpkfiDAaxXqzaHTrAAm6hrmld1ZdQ0BKyd24GRhTRwOvJfLRA0ZJibSH0rBDu2178g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=Z0tf2Z8b; arc=none smtp.client-ip=209.85.219.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="Z0tf2Z8b"
+Received: by mail-yb1-f172.google.com with SMTP id 3f1490d57ef6-e399e904940so3439488276.2
+        for <audit@vger.kernel.org>; Fri, 24 Jan 2025 09:01:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1737738114; x=1738342914; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0cjmSuIoOMZZENNHRMSvP3Ks+k7N6X68Q98F9+tN/Ro=;
+        b=Z0tf2Z8b5cMQQukybuU4LOJsbYBShjwCu8Bs5gsHaN6ZCGOifsnpPWAUHmd62igq8P
+         GnVtBprMtZHWcGlobMNDFv4BjkEAuoo4UH+9lby4Faye+L895rFdGY+YlXhzN8qwmU9O
+         YF1nbRc8uXtD27fRwQ1SqRjGjONnFII+WZRQYftZCmVxrCogHbg6RjOyPxXtBDc5e08x
+         fjYcwKFlnIduk2VWKj38bY/txWUh0H/GoGQt+6yDvqQgxg+tJwC1ptn1zYrLefcCFPkS
+         uaKx8XpORf3wyztCx0aQ0OS5sNsXKjAwyShAeSpXwVVZIWB/EJxX86dbDQgkQFHffvm2
+         XxSQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1737738115; x=1738342915;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=0cjmSuIoOMZZENNHRMSvP3Ks+k7N6X68Q98F9+tN/Ro=;
+        b=UrozfAQ0vXVQJca2r5j/xIA+zIaPDFLb+dolXvBbwo1zx7+vLWjRBuHFm6klMgLNZF
+         M7eCFRpseGjcb98w7n7r1KXslruyoXuYaf9/fUA8UWTGuUcYAO8rce0CDmxGAh7U6l77
+         hvgo3qfC7wB5petFA1w9CGyMBQj2oUscqEMpWZOO5lC92G9It5wvBdvbd4QT5xSPoJdB
+         t/dLMCmmPSQs9Mi72kStVhlhLfdF0of2IDF30JmRgDBGcWoiCZBie35oVLLiXNKGB3JV
+         2+NwgebjFbB0lsITm5oAPB+XxSmK100HXn/sacTGX2HRD2TqtdpdTwjh5pdIvP/J8xNs
+         wkrA==
+X-Forwarded-Encrypted: i=1; AJvYcCVpul7m3EkSjUNY7YGPXUTPSUuxvdJ5fHlGN4y3458ZviTdu+b6goylr7Jeco8aImUrBzbpuw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwQSNuNPDP9B4CbaSVaMzpCpYzpY96wkLUT7wbIonLTTQyBfwJG
+	tDIiMZM8sT68EsLJHFn7LwKpFR+b3NbDEfhkBXYizYt/Jx1r8mDqRBuT5+BUxrwnOVC8M3Z/fra
+	TRxeN0HvgRIgIGmiIGxffGs8p4CL1G2HLLqyGtC/e0z9G3aC2vw==
+X-Gm-Gg: ASbGncsJbk/HQx41dVkyncy13jPH20rmQ5eISHtR6V8OU6pDf+Ju9DSQ44/SJ1e6GAo
+	gqA5U/iixlQmllYyGJfbBcl0ePDc7GjYXSpiBhl7buw0p8S1ndnzlKZ2OROLo
+X-Google-Smtp-Source: AGHT+IHb9sk3ehKTGRS08Y1U9SLW8s+yiotTzqIKMznFmNeJ8QH8S31jCxV0VVB+WIJ7OzYnjmFpmAhMyrC1eDXziqs=
+X-Received: by 2002:a05:690c:7349:b0:6ef:7312:d05e with SMTP id
+ 00721157ae682-6f6eb6b2551mr282243987b3.19.1737738114642; Fri, 24 Jan 2025
+ 09:01:54 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:qMiowMDxK8V0WZNn+IksAA--.13847S2
-X-CM-SenderInfo: hfkh0x5xdftxo6or00hjvr0hdfq/
-X-Coremail-Antispam: 1Uk129KBj93XoWxXw18Gr1fZFWDWr4fZw48KrX_yoW7Jw43pF
-	y5Ar48Cr4kXryUAr10yF1DJrW7Xw1UCa18Jr17Gr17G3WUJw1DJr1UGFW7Cw1UJrn8JrW7
-	ArnrZr1rtr1DJagCm3ZEXasCq-sJn29KB7ZKAUJUUUUr529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUvEb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E14v2
-	6rxl6s0DM2kKe7AKxVWUXVWUAwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYI
-	kI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUXVWU
-	AwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI4
-	8JMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI1I0E14v26r1Y
-	6r17MI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7
-	AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE
-	2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcV
-	C2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73
-	UjIFyTuYvjxU2MKZDUUUU
+References: <20250124091209.4013832-1-chenhuacai@loongson.cn>
+In-Reply-To: <20250124091209.4013832-1-chenhuacai@loongson.cn>
+From: Paul Moore <paul@paul-moore.com>
+Date: Fri, 24 Jan 2025 12:01:44 -0500
+X-Gm-Features: AWEUYZlTgfUHKpay17LlycDcW6N6nI-YGw3SJS2gEnVUm_kORtJVEFqmp2Yiys0
+Message-ID: <CAHC9VhTZAMrGhNxHS52ua2g-sX_Q=qtmqZ1QgLXLyu2wufY81A@mail.gmail.com>
+Subject: Re: [PATCH] audit: Initialize lsmctx to avoid memory allocation error
+To: Huacai Chen <chenhuacai@loongson.cn>
+Cc: Huacai Chen <chenhuacai@kernel.org>, Eric Paris <eparis@redhat.com>, 
+	Casey Schaufler <casey@schaufler-ca.com>, audit@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Initialize the local variable lsmctx in audit_receive_msg(), so as to
-avoid memory allocation errors like:
+On Fri, Jan 24, 2025 at 4:12=E2=80=AFAM Huacai Chen <chenhuacai@loongson.cn=
+> wrote:
+>
+> Initialize the local variable lsmctx in audit_receive_msg(), so as to
+> avoid memory allocation errors like:
+>
+> [  258.074914] WARNING: CPU: 2 PID: 443 at mm/page_alloc.c:4727 __alloc_p=
+ages_noprof+0x4c8/0x1040
+> [  258.074994] Hardware name: Loongson Loongson-3A5000-7A1000-1w-CRB/Loon=
+gson-LS3A5000-7A1000-1w-CRB, BIOS vUDK2018-LoongArch-V2.0.0-prebeta9 10/21/=
+2022
+> [  258.074997] pc 900000000304d588 ra 9000000003059644 tp 900000010777400=
+0 sp 9000000107777890
+> [  258.075000] a0 0000000000040cc0 a1 0000000000000012 a2 000000000000000=
+0 a3 0000000000000000
+> [  258.075003] a4 9000000107777bd0 a5 0000000000000280 a6 000000000000001=
+0 a7 0000000000000000
+> [  258.075006] t0 9000000004b4c000 t1 0000000000000001 t2 1f3f37829c264c8=
+0 t3 000000000000002e
+> [  258.075009] t4 0000000000000000 t5 00000000000003f6 t6 90000001066b631=
+0 t7 000000000000002f
+> [  258.075011] t8 000000000000003c u0 00000000000000b4 s9 900000010006f88=
+0 s0 9000000004a4b000
+> [  258.075014] s1 0000000000000000 s2 9000000004a4b000 s3 900000010667340=
+0 s4 9000000107777af0
+> [  258.075017] s5 90000001066b6300 s6 0000000000000012 s7 fffffffffffff00=
+0 s8 0000000000000004
+> [  258.075019]    ra: 9000000003059644 ___kmalloc_large_node+0x84/0x1e0
+> [  258.075026]   ERA: 900000000304d588 __alloc_pages_noprof+0x4c8/0x1040
+> [  258.075030]  CRMD: 000000b0 (PLV0 -IE -DA +PG DACF=3DCC DACM=3DCC -WE)
+> [  258.075040]  PRMD: 00000004 (PPLV0 +PIE -PWE)
+> [  258.075045]  EUEN: 00000007 (+FPE +SXE +ASXE -BTE)
+> [  258.075051]  ECFG: 00071c1d (LIE=3D0,2-4,10-12 VS=3D7)
+> [  258.075056] ESTAT: 000c0000 [BRK] (IS=3D ECode=3D12 EsubCode=3D0)
+> [  258.075061]  PRID: 0014c010 (Loongson-64bit, Loongson-3A5000)
+> [  258.075064] CPU: 2 UID: 0 PID: 443 Comm: auditd Not tainted 6.13.0-rc1=
++ #1899
+> [  258.075068] Hardware name: Loongson Loongson-3A5000-7A1000-1w-CRB/Loon=
+gson-LS3A5000-7A1000-1w-CRB, BIOS vUDK2018-LoongArch-V2.0.0-prebeta9 10/21/=
+2022
+> [  258.075070] Stack : ffffffffffffffff 0000000000000000 9000000002debf5c=
+ 9000000107774000
+> [  258.075077]         90000001077774f0 0000000000000000 90000001077774f8=
+ 900000000489e480
+> [  258.075083]         9000000004b380e8 9000000004b380e0 9000000107777380=
+ 0000000000000001
+> [  258.075089]         0000000000000001 9000000004a4b000 1f3f37829c264c80=
+ 90000001001a9b40
+> [  258.075094]         9000000107774000 9000000004b080e8 00000000000003d4=
+ 9000000004b080e8
+> [  258.075100]         9000000004a580e8 000000000000002d 0000000006ebc000=
+ 900000010006f880
+> [  258.075106]         00000000000000b4 0000000000000000 0000000000000004=
+ 0000000000001277
+> [  258.075112]         900000000489e480 90000001066b6300 0000000000000012=
+ fffffffffffff000
+> [  258.075118]         0000000000000004 900000000489e480 9000000002def6a8=
+ 00007ffff2ba4065
+> [  258.075124]         00000000000000b0 0000000000000004 0000000000000000=
+ 0000000000071c1d
+> [  258.075129]         ...
+> [  258.075132] Call Trace:
+> [  258.075135] [<9000000002def6a8>] show_stack+0x30/0x148
+> [  258.075146] [<9000000002debf58>] dump_stack_lvl+0x68/0xa0
+> [  258.075152] [<9000000002e0fe18>] __warn+0x80/0x108
+> [  258.075158] [<900000000407486c>] report_bug+0x154/0x268
+> [  258.075163] [<90000000040ad468>] do_bp+0x2a8/0x320
+> [  258.075172] [<9000000002dedda0>] handle_bp+0x120/0x1c0
+> [  258.075178] [<900000000304d588>] __alloc_pages_noprof+0x4c8/0x1040
+> [  258.075183] [<9000000003059640>] ___kmalloc_large_node+0x80/0x1e0
+> [  258.075187] [<9000000003061504>] __kmalloc_noprof+0x2c4/0x380
+> [  258.075192] [<9000000002f0f7ac>] audit_receive_msg+0x764/0x1530
+> [  258.075199] [<9000000002f1065c>] audit_receive+0xe4/0x1c0
+> [  258.075204] [<9000000003e5abe8>] netlink_unicast+0x340/0x450
+> [  258.075211] [<9000000003e5ae9c>] netlink_sendmsg+0x1a4/0x4a0
+> [  258.075216] [<9000000003d9ffd0>] __sock_sendmsg+0x48/0x58
+> [  258.075222] [<9000000003da32f0>] __sys_sendto+0x100/0x170
+> [  258.075226] [<9000000003da3374>] sys_sendto+0x14/0x28
+> [  258.075229] [<90000000040ad574>] do_syscall+0x94/0x138
+> [  258.075233] [<9000000002ded318>] handle_syscall+0xb8/0x158
+> [  258.075239]
+> [  258.075241] ---[ end trace 0000000000000000 ]---
+>
+> Cc: stable@vger.kernel.org
+> Fixes: 6fba89813ccf333d ("lsm: ensure the correct LSM context releaser")
+> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+> ---
+>  kernel/audit.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-[  258.074914] WARNING: CPU: 2 PID: 443 at mm/page_alloc.c:4727 __alloc_pages_noprof+0x4c8/0x1040
-[  258.074994] Hardware name: Loongson Loongson-3A5000-7A1000-1w-CRB/Loongson-LS3A5000-7A1000-1w-CRB, BIOS vUDK2018-LoongArch-V2.0.0-prebeta9 10/21/2022
-[  258.074997] pc 900000000304d588 ra 9000000003059644 tp 9000000107774000 sp 9000000107777890
-[  258.075000] a0 0000000000040cc0 a1 0000000000000012 a2 0000000000000000 a3 0000000000000000
-[  258.075003] a4 9000000107777bd0 a5 0000000000000280 a6 0000000000000010 a7 0000000000000000
-[  258.075006] t0 9000000004b4c000 t1 0000000000000001 t2 1f3f37829c264c80 t3 000000000000002e
-[  258.075009] t4 0000000000000000 t5 00000000000003f6 t6 90000001066b6310 t7 000000000000002f
-[  258.075011] t8 000000000000003c u0 00000000000000b4 s9 900000010006f880 s0 9000000004a4b000
-[  258.075014] s1 0000000000000000 s2 9000000004a4b000 s3 9000000106673400 s4 9000000107777af0
-[  258.075017] s5 90000001066b6300 s6 0000000000000012 s7 fffffffffffff000 s8 0000000000000004
-[  258.075019]    ra: 9000000003059644 ___kmalloc_large_node+0x84/0x1e0
-[  258.075026]   ERA: 900000000304d588 __alloc_pages_noprof+0x4c8/0x1040
-[  258.075030]  CRMD: 000000b0 (PLV0 -IE -DA +PG DACF=CC DACM=CC -WE)
-[  258.075040]  PRMD: 00000004 (PPLV0 +PIE -PWE)
-[  258.075045]  EUEN: 00000007 (+FPE +SXE +ASXE -BTE)
-[  258.075051]  ECFG: 00071c1d (LIE=0,2-4,10-12 VS=7)
-[  258.075056] ESTAT: 000c0000 [BRK] (IS= ECode=12 EsubCode=0)
-[  258.075061]  PRID: 0014c010 (Loongson-64bit, Loongson-3A5000)
-[  258.075064] CPU: 2 UID: 0 PID: 443 Comm: auditd Not tainted 6.13.0-rc1+ #1899
-[  258.075068] Hardware name: Loongson Loongson-3A5000-7A1000-1w-CRB/Loongson-LS3A5000-7A1000-1w-CRB, BIOS vUDK2018-LoongArch-V2.0.0-prebeta9 10/21/2022
-[  258.075070] Stack : ffffffffffffffff 0000000000000000 9000000002debf5c 9000000107774000
-[  258.075077]         90000001077774f0 0000000000000000 90000001077774f8 900000000489e480
-[  258.075083]         9000000004b380e8 9000000004b380e0 9000000107777380 0000000000000001
-[  258.075089]         0000000000000001 9000000004a4b000 1f3f37829c264c80 90000001001a9b40
-[  258.075094]         9000000107774000 9000000004b080e8 00000000000003d4 9000000004b080e8
-[  258.075100]         9000000004a580e8 000000000000002d 0000000006ebc000 900000010006f880
-[  258.075106]         00000000000000b4 0000000000000000 0000000000000004 0000000000001277
-[  258.075112]         900000000489e480 90000001066b6300 0000000000000012 fffffffffffff000
-[  258.075118]         0000000000000004 900000000489e480 9000000002def6a8 00007ffff2ba4065
-[  258.075124]         00000000000000b0 0000000000000004 0000000000000000 0000000000071c1d
-[  258.075129]         ...
-[  258.075132] Call Trace:
-[  258.075135] [<9000000002def6a8>] show_stack+0x30/0x148
-[  258.075146] [<9000000002debf58>] dump_stack_lvl+0x68/0xa0
-[  258.075152] [<9000000002e0fe18>] __warn+0x80/0x108
-[  258.075158] [<900000000407486c>] report_bug+0x154/0x268
-[  258.075163] [<90000000040ad468>] do_bp+0x2a8/0x320
-[  258.075172] [<9000000002dedda0>] handle_bp+0x120/0x1c0
-[  258.075178] [<900000000304d588>] __alloc_pages_noprof+0x4c8/0x1040
-[  258.075183] [<9000000003059640>] ___kmalloc_large_node+0x80/0x1e0
-[  258.075187] [<9000000003061504>] __kmalloc_noprof+0x2c4/0x380
-[  258.075192] [<9000000002f0f7ac>] audit_receive_msg+0x764/0x1530
-[  258.075199] [<9000000002f1065c>] audit_receive+0xe4/0x1c0
-[  258.075204] [<9000000003e5abe8>] netlink_unicast+0x340/0x450
-[  258.075211] [<9000000003e5ae9c>] netlink_sendmsg+0x1a4/0x4a0
-[  258.075216] [<9000000003d9ffd0>] __sock_sendmsg+0x48/0x58
-[  258.075222] [<9000000003da32f0>] __sys_sendto+0x100/0x170
-[  258.075226] [<9000000003da3374>] sys_sendto+0x14/0x28
-[  258.075229] [<90000000040ad574>] do_syscall+0x94/0x138
-[  258.075233] [<9000000002ded318>] handle_syscall+0xb8/0x158
-[  258.075239]
-[  258.075241] ---[ end trace 0000000000000000 ]---
+[NOTE: dropping the stable mailing list and adding the LSM list]
 
-Cc: stable@vger.kernel.org
-Fixes: 6fba89813ccf333d ("lsm: ensure the correct LSM context releaser")
-Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
----
- kernel/audit.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Thanks for the problem report.
 
-diff --git a/kernel/audit.c b/kernel/audit.c
-index 13d0144efaa3..5f5bf85bcc90 100644
---- a/kernel/audit.c
-+++ b/kernel/audit.c
-@@ -1221,7 +1221,7 @@ static int audit_receive_msg(struct sk_buff *skb, struct nlmsghdr *nlh,
- 	struct audit_buffer	*ab;
- 	u16			msg_type = nlh->nlmsg_type;
- 	struct audit_sig_info   *sig_data;
--	struct lsm_context	lsmctx;
-+	struct lsm_context	lsmctx = { NULL, 0, 0 };
- 
- 	err = audit_netlink_ok(skb, msg_type);
- 	if (err)
--- 
-2.47.1
+First a bit of metadata feedback: the stable tagging isn't necessary
+as the commit this patch claims to fix was first introduced during the
+current merge window just a few days ago; as long as we fix this in
+Linus' tree before v6.14 is release a stable tag isn't necessary and
+will result in some extra work/noise.  You generally only need to add
+a stable tag to a patch when the problematic commit occurs in a kernel
+that has already been released.
 
+Back to the issue at hand, without line numbers in your problem report
+I can't be certain, but it looks like you have audit enabled but have
+disabled the LSM, can you confirm that?  If that isn't the case, can
+you please provide the line numbers in the backtrace above?  I'd like
+to better understand the root cause of the problem.
+
+Finally, if you do have audit enabled without the LSM, I would suggest
+that you rewrite the commit description to mention that explicitly and
+drop the backtrace splat as it is large/noisy, isn't line wrapped, and
+generally isn't very helpful without a specific kernel revision and
+line numbers.  Explaining the root cause, in this case the
+audit-without-LSM Kconfig, and perhaps an explanation that in the
+AUDIT_SIGNAL_INFO case an allocation can happen using an uninitialized
+length when the LSM is disabled, is much more useful in understanding
+the problem.  Oftentimes, including a backtrace in a commit
+description is a good thing, but only when the backtrace is put in the
+proper context so it can be interpreted by others without your kernel
+build at some point in the future.
+
+> diff --git a/kernel/audit.c b/kernel/audit.c
+> index 13d0144efaa3..5f5bf85bcc90 100644
+> --- a/kernel/audit.c
+> +++ b/kernel/audit.c
+> @@ -1221,7 +1221,7 @@ static int audit_receive_msg(struct sk_buff *skb, s=
+truct nlmsghdr *nlh,
+>         struct audit_buffer     *ab;
+>         u16                     msg_type =3D nlh->nlmsg_type;
+>         struct audit_sig_info   *sig_data;
+> -       struct lsm_context      lsmctx;
+> +       struct lsm_context      lsmctx =3D { NULL, 0, 0 };
+>
+>         err =3D audit_netlink_ok(skb, msg_type);
+>         if (err)
+> --
+> 2.47.1
+
+--=20
+paul-moore.com
