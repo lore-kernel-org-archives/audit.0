@@ -1,46 +1,66 @@
-Received: from smtp-42aa.mail.infomaniak.ch (smtp-42aa.mail.infomaniak.ch [84.16.66.170])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC02C1F37AD
-	for <audit@vger.kernel.org>; Fri, 31 Jan 2025 16:37:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=84.16.66.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 670C41F4E5C;
+	Fri, 31 Jan 2025 20:29:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738341457; cv=none; b=n4bW42KeW/fnkTePwAh1UyRXFTsbJkkqkUFb7IzILvQtgeC+FB0ufUCnGHfYaI27xm6BaEdSxdfD83/PrtdaWDlzu1eWgC23j3WmMgk3a0cqwa3sz6BkZfyE/1GFw6a4mH5QD4YdIb8HV5CGRmBaz7P4ZVfrVo/pwJvsNAMeXXg=
+	t=1738355355; cv=none; b=XoBqdN8DSHQx0OhA4Ma3qvJ4EkFH5u/Pktcb/hZyvvnS+CTpfSupToYln1dyfizhTXhIUyiiaDgjor9LPEQlLpjnyUU+642QvLv3gSWPp/TZzMyF0BucLw20LJY5CQp7Pna2HhDqEbNjsVMtyVvsOqH9YFWOXY1KAfJ9G/B/vsE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738341457; c=relaxed/simple;
-	bh=OBOX7bwNED33r3zI/kL0r2VVNnqh/FiG5/8UNTSNigg=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Bp/Du0/1sbmj3V2pd3VVzBY6IJubKJp2N0RML2B8IJPitSZ9dAMFzsbntHrXkjlXz+b5PXqI737tl85WxNwLFzIATU0ZElKQifkBcrx2gDMQ60lLrfmFkaVt2p8gJLuFZ1/osWymShZeLNlFsEILZebuWpNLNoRP/EbniK3aixs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=W4DA137X; arc=none smtp.client-ip=84.16.66.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
+	s=arc-20240116; t=1738355355; c=relaxed/simple;
+	bh=RSCX9rg3pxhLk0LNvz+k/K/VMw4qWttV4lsGMD5jWLw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=l3wiwNI5cCwgBObVCVUmCFTBUhP9L6OQ3RIQDDJ9bZh3mvqIGUk4hopNpbbdSsfzo0e299UMH2mnKsPQeulYpcruGqDSRvnxmvt/kmW1iKNFxm3ZE3xRNLgWpvQFqq1sZeld02eC0avo7Xe87O6eBcIJ8NVxYFxRQtUNgrCd05A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=eb2py1lw; arc=none smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="W4DA137X"
-Received: from smtp-3-0001.mail.infomaniak.ch (smtp-3-0001.mail.infomaniak.ch [10.4.36.108])
-	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4Yl1cG693KzVyH;
-	Fri, 31 Jan 2025 17:31:26 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
-	s=20191114; t=1738341086;
-	bh=kZlB2Ny34Xj+TMoR7jNhDX0plnRS+4IxsxEaHY2C1+M=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=W4DA137XzSX4mq8EICI2Pe5hs2XqJVHtt65rZFb710GcwNugceJGaXI2NfaQXSsXD
-	 +m9BIzGQj0ZhtH9qGd8g07/7BoH5Fq3cCs8LAZGQXxonkceHWvA0uUUrlr/gLrbqMw
-	 nkqPoiyG7cxvIthXUa2yX41IPTP1JiauQz8ICpcI=
-Received: from unknown by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4Yl1cG0dh2zdcw;
-	Fri, 31 Jan 2025 17:31:26 +0100 (CET)
-From: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
-To: Eric Paris <eparis@redhat.com>,
-	Paul Moore <paul@paul-moore.com>,
-	=?UTF-8?q?G=C3=BCnther=20Noack?= <gnoack@google.com>,
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eb2py1lw"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1738355353; x=1769891353;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=RSCX9rg3pxhLk0LNvz+k/K/VMw4qWttV4lsGMD5jWLw=;
+  b=eb2py1lwvd6D7d4nw7UOx+enir8iDreHoM3lOqb2crFbILyzQj27Dm1O
+   EY+4rRB0lLfZxpJcEdLeRnGaWiK1XQk17Ed7fWwS6eqFnCPP1ym0UH3fV
+   AzAzOUQBc9Jr406Uxg5zjYewpHi5gDfznjMUn4TcSgemC9mP3EgZPbs3s
+   qegfIk9FuAWJQvpbQ7ktfBnO7HVtmgt628mPUR+VwPQyHSGeZaLacOfSH
+   fH7cJMVpCBjbYgXrsdPFRtjgIgNOK5ca/Zmwmb8EK1pukfeT/6M++cQ3V
+   OzR8Crlof8dULAO4kbvIRCSXq07VdclV17pDE8gmT66HhHJCV5ODSnMVQ
+   Q==;
+X-CSE-ConnectionGUID: mZnDs7BnS5SZQzpPk6RHTw==
+X-CSE-MsgGUID: OJFMXltfSbqgNjqyRMoVNA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11332"; a="49193198"
+X-IronPort-AV: E=Sophos;i="6.13,249,1732608000"; 
+   d="scan'208";a="49193198"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2025 12:29:12 -0800
+X-CSE-ConnectionGUID: iOJJo52WQAGwXT5CZt+awQ==
+X-CSE-MsgGUID: XKt/0b3EST+OplvXHxy8FQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="113740721"
+Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
+  by fmviesa003.fm.intel.com with ESMTP; 31 Jan 2025 12:29:06 -0800
+Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tdxdQ-000n5t-1e;
+	Fri, 31 Jan 2025 20:29:04 +0000
+Date: Sat, 1 Feb 2025 04:28:07 +0800
+From: kernel test robot <lkp@intel.com>
+To: =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
+	Eric Paris <eparis@redhat.com>, Paul Moore <paul@paul-moore.com>,
+	=?iso-8859-1?Q?G=FCnther?= Noack <gnoack@google.com>,
 	"Serge E . Hallyn" <serge@hallyn.com>
-Cc: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
+Cc: oe-kbuild-all@lists.linux.dev,
+	=?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
 	Ben Scarlato <akhna@google.com>,
 	Casey Schaufler <casey@schaufler-ca.com>,
 	Charles Zaffery <czaffery@roblox.com>,
 	Daniel Burgener <dburgener@linux.microsoft.com>,
 	Francis Laniel <flaniel@linux.microsoft.com>,
-	James Morris <jmorris@namei.org>,
-	Jann Horn <jannh@google.com>,
+	James Morris <jmorris@namei.org>, Jann Horn <jannh@google.com>,
 	Jeff Xu <jeffxu@google.com>,
 	Jorge Lucangeli Obes <jorgelo@google.com>,
 	Kees Cook <kees@kernel.org>,
@@ -50,157 +70,136 @@ Cc: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
 	Phil Sutter <phil@nwl.cc>,
 	Praveen K Paladugu <prapal@linux.microsoft.com>,
 	Robert Salvet <robert.salvet@roblox.com>,
-	Shervin Oloumi <enlightened@google.com>,
-	Song Liu <song@kernel.org>,
+	Shervin Oloumi <enlightened@google.com>, Song Liu <song@kernel.org>,
 	Tahera Fahimi <fahimitahera@gmail.com>,
-	Tyler Hicks <code@tyhicks.com>,
-	audit@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-security-module@vger.kernel.org
-Subject: [PATCH v5 08/24] landlock: Identify domain execution crossing
-Date: Fri, 31 Jan 2025 17:30:43 +0100
-Message-ID: <20250131163059.1139617-9-mic@digikod.net>
-In-Reply-To: <20250131163059.1139617-1-mic@digikod.net>
-References: <20250131163059.1139617-1-mic@digikod.net>
+	Tyler Hicks <code@tyhicks.com>, audit@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
+Subject: Re: [PATCH v5 17/24] landlock: Add
+ LANDLOCK_RESTRICT_SELF_QUIET_SUBDOMAINS
+Message-ID: <202502010411.lOcXpnOG-lkp@intel.com>
+References: <20250131163059.1139617-18-mic@digikod.net>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Infomaniak-Routing: alpha
+In-Reply-To: <20250131163059.1139617-18-mic@digikod.net>
 
-Extend struct landlock_cred_security with a domain_exec bitmask
-identifying if the current task created its domain.  This is reset on
-cross-execution.
+Hi Micka�l,
 
-Cc: Günther Noack <gnoack@google.com>
-Cc: Paul Moore <paul@paul-moore.com>
-Signed-off-by: Mickaël Salaün <mic@digikod.net>
-Link: https://lore.kernel.org/r/20250131163059.1139617-9-mic@digikod.net
----
+kernel test robot noticed the following build warnings:
 
-Changes since v4:
-- New patch.
----
- security/landlock/cred.c     | 26 ++++++++++++++++++++++----
- security/landlock/cred.h     | 15 +++++++++++++++
- security/landlock/syscalls.c |  5 +++++
- 3 files changed, 42 insertions(+), 4 deletions(-)
+[auto build test WARNING on 69e858e0b8b2ea07759e995aa383e8780d9d140c]
 
-diff --git a/security/landlock/cred.c b/security/landlock/cred.c
-index db9fe7d906ba..a22756fe3b71 100644
---- a/security/landlock/cred.c
-+++ b/security/landlock/cred.c
-@@ -4,8 +4,10 @@
-  *
-  * Copyright © 2017-2020 Mickaël Salaün <mic@digikod.net>
-  * Copyright © 2018-2020 ANSSI
-+ * Copyright © 2025 Microsoft Corporation
-  */
- 
-+#include <linux/binfmts.h>
- #include <linux/cred.h>
- #include <linux/lsm_hooks.h>
- 
-@@ -17,11 +19,12 @@
- static void hook_cred_transfer(struct cred *const new,
- 			       const struct cred *const old)
- {
--	struct landlock_ruleset *const old_dom = landlock_cred(old)->domain;
-+	const struct landlock_cred_security *const old_llcred =
-+		landlock_cred(old);
- 
--	if (old_dom) {
--		landlock_get_ruleset(old_dom);
--		landlock_cred(new)->domain = old_dom;
-+	if (old_llcred->domain) {
-+		landlock_get_ruleset(old_llcred->domain);
-+		*landlock_cred(new) = *old_llcred;
- 	}
- }
- 
-@@ -40,10 +43,25 @@ static void hook_cred_free(struct cred *const cred)
- 		landlock_put_ruleset_deferred(dom);
- }
- 
-+#ifdef CONFIG_AUDIT
-+
-+static int hook_bprm_creds_for_exec(struct linux_binprm *const bprm)
-+{
-+	/* Resets for each execution. */
-+	landlock_cred(bprm->cred)->domain_exec = 0;
-+	return 0;
-+}
-+
-+#endif /* CONFIG_AUDIT */
-+
- static struct security_hook_list landlock_hooks[] __ro_after_init = {
- 	LSM_HOOK_INIT(cred_prepare, hook_cred_prepare),
- 	LSM_HOOK_INIT(cred_transfer, hook_cred_transfer),
- 	LSM_HOOK_INIT(cred_free, hook_cred_free),
-+
-+#ifdef CONFIG_AUDIT
-+	LSM_HOOK_INIT(bprm_creds_for_exec, hook_bprm_creds_for_exec),
-+#endif /* CONFIG_AUDIT */
- };
- 
- __init void landlock_add_cred_hooks(void)
-diff --git a/security/landlock/cred.h b/security/landlock/cred.h
-index fdbbaf66d151..47cdf0fa1a4e 100644
---- a/security/landlock/cred.h
-+++ b/security/landlock/cred.h
-@@ -9,18 +9,33 @@
- #ifndef _SECURITY_LANDLOCK_CRED_H
- #define _SECURITY_LANDLOCK_CRED_H
- 
-+#include <linux/container_of.h>
- #include <linux/cred.h>
- #include <linux/init.h>
- #include <linux/rcupdate.h>
- 
- #include "access.h"
-+#include "limits.h"
- #include "ruleset.h"
- #include "setup.h"
- 
- struct landlock_cred_security {
- 	struct landlock_ruleset *domain;
-+
-+#ifdef CONFIG_AUDIT
-+	u16 domain_exec;
-+#endif /* CONFIG_AUDIT */
- };
- 
-+#ifdef CONFIG_AUDIT
-+
-+/* Makes sure all layer executions can be stored. */
-+static_assert(BITS_PER_TYPE(typeof_member(struct landlock_cred_security,
-+					  domain_exec)) >=
-+	      LANDLOCK_MAX_NUM_LAYERS);
-+
-+#endif /* CONFIG_AUDIT */
-+
- static inline struct landlock_cred_security *
- landlock_cred(const struct cred *cred)
- {
-diff --git a/security/landlock/syscalls.c b/security/landlock/syscalls.c
-index a9760d252fc2..5129981fec8b 100644
---- a/security/landlock/syscalls.c
-+++ b/security/landlock/syscalls.c
-@@ -496,5 +496,10 @@ SYSCALL_DEFINE2(landlock_restrict_self, const int, ruleset_fd, const __u32,
- 	/* Replaces the old (prepared) domain. */
- 	landlock_put_ruleset(new_llcred->domain);
- 	new_llcred->domain = new_dom;
-+
-+#ifdef CONFIG_AUDIT
-+	new_llcred->domain_exec |= 1 << (new_dom->num_layers - 1);
-+#endif /* CONFIG_AUDIT */
-+
- 	return commit_creds(new_cred);
- }
+url:    https://github.com/intel-lab-lkp/linux/commits/Micka-l-Sala-n/lsm-Add-audit_log_lsm_data-helper/20250201-004434
+base:   69e858e0b8b2ea07759e995aa383e8780d9d140c
+patch link:    https://lore.kernel.org/r/20250131163059.1139617-18-mic%40digikod.net
+patch subject: [PATCH v5 17/24] landlock: Add LANDLOCK_RESTRICT_SELF_QUIET_SUBDOMAINS
+config: x86_64-buildonly-randconfig-002-20250201 (https://download.01.org/0day-ci/archive/20250201/202502010411.lOcXpnOG-lkp@intel.com/config)
+compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250201/202502010411.lOcXpnOG-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202502010411.lOcXpnOG-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   security/landlock/syscalls.c: In function '__do_sys_landlock_restrict_self':
+>> security/landlock/syscalls.c:469:24: warning: variable 'is_quiet_subdomains' set but not used [-Wunused-but-set-variable]
+     469 |         bool is_quiet, is_quiet_subdomains,
+         |                        ^~~~~~~~~~~~~~~~~~~
+   security/landlock/syscalls.c:469:14: warning: variable 'is_quiet' set but not used [-Wunused-but-set-variable]
+     469 |         bool is_quiet, is_quiet_subdomains,
+         |              ^~~~~~~~
+
+
+vim +/is_quiet_subdomains +469 security/landlock/syscalls.c
+
+   435	
+   436	/**
+   437	 * sys_landlock_restrict_self - Enforce a ruleset on the calling thread
+   438	 *
+   439	 * @ruleset_fd: File descriptor tied to the ruleset to merge with the target.
+   440	 * @flags: Supported values:
+   441	 *
+   442	 * - %LANDLOCK_RESTRICT_SELF_QUIET
+   443	 * - %LANDLOCK_RESTRICT_SELF_QUIET_SUBDOMAINS
+   444	 *
+   445	 * This system call enables to enforce a Landlock ruleset on the current
+   446	 * thread.  Enforcing a ruleset requires that the task has %CAP_SYS_ADMIN in its
+   447	 * namespace or is running with no_new_privs.  This avoids scenarios where
+   448	 * unprivileged tasks can affect the behavior of privileged children.
+   449	 *
+   450	 * Possible returned errors are:
+   451	 *
+   452	 * - %EOPNOTSUPP: Landlock is supported by the kernel but disabled at boot time;
+   453	 * - %EINVAL: @flags contains an unknown bit.
+   454	 * - %EBADF: @ruleset_fd is not a file descriptor for the current thread;
+   455	 * - %EBADFD: @ruleset_fd is not a ruleset file descriptor;
+   456	 * - %EPERM: @ruleset_fd has no read access to the underlying ruleset, or the
+   457	 *   current thread is not running with no_new_privs, or it doesn't have
+   458	 *   %CAP_SYS_ADMIN in its namespace.
+   459	 * - %E2BIG: The maximum number of stacked rulesets is reached for the current
+   460	 *   thread.
+   461	 */
+   462	SYSCALL_DEFINE2(landlock_restrict_self, const int, ruleset_fd, const __u32,
+   463			flags)
+   464	{
+   465		struct landlock_ruleset *new_dom,
+   466			*ruleset __free(landlock_put_ruleset) = NULL;
+   467		struct cred *new_cred;
+   468		struct landlock_cred_security *new_llcred;
+ > 469		bool is_quiet, is_quiet_subdomains,
+   470			__maybe_unused inherits_quiet_subdomains;
+   471	
+   472		if (!is_initialized())
+   473			return -EOPNOTSUPP;
+   474	
+   475		/*
+   476		 * Similar checks as for seccomp(2), except that an -EPERM may be
+   477		 * returned.
+   478		 */
+   479		if (!task_no_new_privs(current) &&
+   480		    !ns_capable_noaudit(current_user_ns(), CAP_SYS_ADMIN))
+   481			return -EPERM;
+   482	
+   483		if ((flags | LANDLOCK_MASK_RESTRICT_SELF) !=
+   484		    LANDLOCK_MASK_RESTRICT_SELF)
+   485			return -EINVAL;
+   486	
+   487		is_quiet = !!(flags & LANDLOCK_RESTRICT_SELF_QUIET);
+   488		is_quiet_subdomains =
+   489			!!(flags & LANDLOCK_RESTRICT_SELF_QUIET_SUBDOMAINS);
+   490	
+   491		/* Gets and checks the ruleset. */
+   492		ruleset = get_ruleset_from_fd(ruleset_fd, FMODE_CAN_READ);
+   493		if (IS_ERR(ruleset))
+   494			return PTR_ERR(ruleset);
+   495	
+   496		/* Prepares new credentials. */
+   497		new_cred = prepare_creds();
+   498		if (!new_cred)
+   499			return -ENOMEM;
+   500	
+   501		new_llcred = landlock_cred(new_cred);
+   502	
+   503		/*
+   504		 * There is no possible race condition while copying and manipulating
+   505		 * the current credentials because they are dedicated per thread.
+   506		 */
+   507		new_dom = landlock_merge_ruleset(new_llcred->domain, ruleset);
+   508		if (IS_ERR(new_dom)) {
+   509			abort_creds(new_cred);
+   510			return PTR_ERR(new_dom);
+   511		}
+   512	
+
 -- 
-2.48.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
