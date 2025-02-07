@@ -1,153 +1,143 @@
-Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62F1A22FF37;
-	Thu,  6 Feb 2025 22:10:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 834B717C208;
+	Fri,  7 Feb 2025 03:41:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738879859; cv=none; b=ObZ7YOfhbFfxemOfns3iUClK0Symy3VyV8VsYCVMO2hzlUfUc4zzEe7RDYeihFavGuUPy/OmAAi4eCu00j7XG0GV8b4y1yjnWkgwO0cVDniMCU5d3o4c/CVZtXTBVHp0mDhyjnfF3Vzs+kT2QKdzLVGWZMTayCmlA9iJfQah4Fc=
+	t=1738899666; cv=none; b=aL2zHh1kpcnc6PafaiY9HagEARC4ahF3B0xKv4QGqyGutrLK3ALzujt/cy7pA+kckdsjK9B5d1TYHLWJbND93f8fLdIQdRcnLMJBBc3JinkqCvLL8D6Z781/jIr+LC1WmewIi67HJrXG12N1OR/SneNcWjRLsb4emzEptKVYC20=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738879859; c=relaxed/simple;
-	bh=2Y70HzxcQTGQ8pp24im9o2oCo4aDLht1LZCb/OG3xJk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=bO17+d3+gQVoF7hoh/HErxnyn++Iz8wrS/IPBp3Y5wAyqPxu6lz98fCiEnsrVhQGteiqf1OPEq5xbUt8Aoeqmo97NvdSLV656NS90wKBqXpwACDBwBz/2vLSvqNViS9mXnxx8jvyr1X2US7Zh9XHAfBW/l2phpK3Sn2ktfYUhSs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=f+WePZI6; arc=none smtp.client-ip=209.85.208.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1738899666; c=relaxed/simple;
+	bh=JVOG5FL3W8Eu+Cn2Hq9bt4LEAaxlYlJuRq0NmOihM04=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ivYDGLSU0FA52JR9KpChYe0MbnFMUkNfEeFnGHJaHmWgkr3TQGjvchh6AiN6F6N2t0/AzYwY3ug1whlyBz9U4l3kJUUgR7OEvTxWkPYC+4OGtFX9FvT8MEQMszSWYkQI1ntSZxW+aFO2o1itSlu819XkfgdyXgv+9VAzITc3gf4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=T4npwCYF; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=s1dVh/zX; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=T4npwCYF; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=s1dVh/zX; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="f+WePZI6"
-Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-5dc82e38c10so3075054a12.3;
-        Thu, 06 Feb 2025 14:10:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1738879856; x=1739484656; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JW4K88ZRfCDR2jOA2UBUFxi/kKP7aoGmXehZOk8p2EA=;
-        b=f+WePZI6w8ASafkII/yohWm+YErgbqA2iHQrd54JvpYBD3VdhlZQAQqcKibG8k4IQL
-         Ai8NOcPNL7rmNS5palle1ieR9s9/2xPAolxAVvb7bWAnNAncFLYINZ6JAH4qubopKFoP
-         sFK5HLnvbigouYoS/e7Cuz9gtI42ifMpt77SN8GQH0DkB0AbZwSWYOhovny1blPCLnS3
-         G+c/7bGZw72QHaKLI10u3PocjecuW6qSnCAyh3ExqBTyVNTf315hqeKkklJyhZ5Jyo6r
-         WnQPRjCzWaPeb9tRFRvu65AH5sPLeSNLhw4DAnkNPc/OF/TOuGpH/s0faz7QTqtWhyAT
-         K7ww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738879856; x=1739484656;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=JW4K88ZRfCDR2jOA2UBUFxi/kKP7aoGmXehZOk8p2EA=;
-        b=QGEHCGRnxSEnsA0Rk6URgDdeObgD+i6BhFpcz07uQQAzT/IGGP2NmeIAIUhD2KaRpj
-         I1umMvpKAB1uHIudZc7ACZpWxTEJksW7hwr9fMQBKmk9TJMjFfcO1PV4VbHMECvHMY2z
-         Rn6jFBBj16j2zasFLSoGhwmHcKJm8eU+m0PZbwt8DfQrM75/C7XM0yuXcmfq5zO6A31a
-         DEuzB1tiZECj9Fc6n2a7BDLdYMVS4tsXwX5M9eZwILQXTceM5Y6R54gcI/+1abGeyBWx
-         SK6n0XiYKx6LmEdj4yV5AmJ/vl8CniI9V1fDng05rplHtFRD2BR5rqvHdLul+PQghFbN
-         t6LQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVU5sysSxJ83I8j5xglgY+T+4b9/iMZoCTKAFnyDircVohdpv6mFBrOybBhvEkN56Iuv8zhUA==@vger.kernel.org, AJvYcCWki5Nj29ALCqrCkoPWB8mYFQ/0Zs/u9RUGqkB2jqfj1gaWA/3Ygx/vrMqQxQFx371iyjUd+nIJSLCuCFyu@vger.kernel.org, AJvYcCXgJ92Qv4QRydKxnun2t+YyTiBCHoSp2fFK4/LQzUjfBgGHNm890IYt7atS2Xp56JLp+23pJa+Lqv0Lziys9w==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyTkudiHjCZk407f+0vfci1eqGrnZloQfWIqd33wy8XFD8vIMT4
-	o2TLtt73vNdHjOeXfOrenTPtTAB1jNDkJsIqaah5GAx0QReyhhPLcJVAAtpCUzbauIUhiRD0AEm
-	kRuzz/PKpCnEZKi+HWYxUnvFQ9gM=
-X-Gm-Gg: ASbGnct1sqcEkNioMQ1x+DejEvlQw9vBS7HP1ceWW8H784RFXWp81QwSR1WIcfNk79V
-	sIFLwOoliQk+0HT2Xp3V+n2wiiFn29x9CDuIRfOjxD08wFz8xBrtUfH0TTsMK4UcTtOMpOb5v
-X-Google-Smtp-Source: AGHT+IG2oWQwkRpCjysgqfuWiM97pMeIC+nGnB0ZEcQS+BxA5ZSw1JZItpWr/Qw3z8w7GeyebbtowgqSYSm9aozev1c=
-X-Received: by 2002:a05:6402:5290:b0:5dc:74fd:ac0a with SMTP id
- 4fb4d7f45d1cf-5de45046dc3mr1016725a12.8.1738879855385; Thu, 06 Feb 2025
- 14:10:55 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="T4npwCYF";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="s1dVh/zX";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="T4npwCYF";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="s1dVh/zX"
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 5C29D21160;
+	Fri,  7 Feb 2025 03:41:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1738899662; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=yGbXX/7s9iOpX6fxR/q+DsUQ+t0c9mc3Qj66EA1S0OM=;
+	b=T4npwCYFu6SlxJjxU+z/iaMXCwhVfYvHMSG+AUW5gOjI7eNH2+g4T4wVD/tE+R6MVDCIIR
+	B2sWr7ZA/IbDXbZrT4oFTcRvDoMkd/yUuPspe74aXtxfxWujqofnm5MJhsNaUqlGCnTbv6
+	xlhFFcYyWtxF95X/tz18mkI5KqbMxwA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1738899662;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=yGbXX/7s9iOpX6fxR/q+DsUQ+t0c9mc3Qj66EA1S0OM=;
+	b=s1dVh/zXSIqvMMi6NBEjM7uIIdnJoq2Kgnv/ZU0ZvjRehRwwvf8IIbgJhZ3XW4TsfWmRBT
+	1gdf212ULrih6PBQ==
+Authentication-Results: smtp-out1.suse.de;
+	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=T4npwCYF;
+	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b="s1dVh/zX"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1738899662; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=yGbXX/7s9iOpX6fxR/q+DsUQ+t0c9mc3Qj66EA1S0OM=;
+	b=T4npwCYFu6SlxJjxU+z/iaMXCwhVfYvHMSG+AUW5gOjI7eNH2+g4T4wVD/tE+R6MVDCIIR
+	B2sWr7ZA/IbDXbZrT4oFTcRvDoMkd/yUuPspe74aXtxfxWujqofnm5MJhsNaUqlGCnTbv6
+	xlhFFcYyWtxF95X/tz18mkI5KqbMxwA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1738899662;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=yGbXX/7s9iOpX6fxR/q+DsUQ+t0c9mc3Qj66EA1S0OM=;
+	b=s1dVh/zXSIqvMMi6NBEjM7uIIdnJoq2Kgnv/ZU0ZvjRehRwwvf8IIbgJhZ3XW4TsfWmRBT
+	1gdf212ULrih6PBQ==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 9AFA813694;
+	Fri,  7 Feb 2025 03:40:55 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id 8FOzE8eApWehfgAAD6G6ig
+	(envelope-from <neilb@suse.de>); Fri, 07 Feb 2025 03:40:55 +0000
+From: NeilBrown <neilb@suse.de>
+To: Christian Brauner <brauner@kernel.org>,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Jan Kara <jack@suse.cz>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Danilo Krummrich <dakr@kernel.org>,
+	Kent Overstreet <kent.overstreet@linux.dev>,
+	Trond Myklebust <trondmy@kernel.org>,
+	Anna Schumaker <anna@kernel.org>,
+	Namjae Jeon <linkinjeon@kernel.org>,
+	Steve French <sfrench@samba.org>,
+	Sergey Senozhatsky <senozhatsky@chromium.org>,
+	Tom Talpey <tom@talpey.com>,
+	Paul Moore <paul@paul-moore.com>,
+	Eric Paris <eparis@redhat.com>,
+	linux-kernel@vger.kernel.org,
+	linux-bcachefs@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org,
+	linux-nfs@vger.kernel.org,
+	linux-cifs@vger.kernel.org,
+	audit@vger.kernel.org
+Subject: [PATCH 0/2] VFS: minor improvements to a couple of interfaces
+Date: Fri,  7 Feb 2025 14:36:46 +1100
+Message-ID: <20250207034040.3402438-1-neilb@suse.de>
+X-Mailer: git-send-email 2.47.1
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CAGudoHFLnmp3tQHOwUAFBKxrno=ejxHmJXta=sTxVMtN9L1T9w@mail.gmail.com>
- <956b43574bcb149579ecac7a3ab98ad29dddc275.camel@kernel.org> <CAGudoHGqYKTM979s13SAP7fukeAd4NHGTMsxnRWN7A5BpYaCzw@mail.gmail.com>
-In-Reply-To: <CAGudoHGqYKTM979s13SAP7fukeAd4NHGTMsxnRWN7A5BpYaCzw@mail.gmail.com>
-From: Mateusz Guzik <mjguzik@gmail.com>
-Date: Thu, 6 Feb 2025 23:10:41 +0100
-X-Gm-Features: AWEUYZknvE-HOGP2RWK6mr0JD4I7AL0JTBX-Up_kPyHMEtp0w9NL4G3eskO-d6c
-Message-ID: <CAGudoHH8Rg=UA+gSDywkVCNHDofpAQCgJuiecZxrTa_7otrx-w@mail.gmail.com>
-Subject: Re: audit_reusename in getname_flags
-To: Jeff Layton <jlayton@kernel.org>
-Cc: Christian Brauner <brauner@kernel.org>, Al Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>, 
-	linux-fsdevel <linux-fsdevel@vger.kernel.org>, linux-kernel <linux-kernel@vger.kernel.org>, 
-	audit@vger.kernel.org, Paul Moore <paul@paul-moore.com>, Eric Paris <eparis@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-Rspamd-Queue-Id: 5C29D21160
+X-Spam-Level: 
+X-Spamd-Result: default: False [-2.99 / 50.00];
+	BAYES_HAM(-2.98)[99.91%];
+	MID_CONTAINS_FROM(1.00)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	R_MISSING_CHARSET(0.50)[];
+	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns];
+	FROM_HAS_DN(0.00)[];
+	ASN(0.00)[asn:25478, ipnet:::/0, country:RU];
+	ARC_NA(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	TO_DN_SOME(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[21];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	RCVD_COUNT_TWO(0.00)[2];
+	RCVD_TLS_ALL(0.00)[];
+	R_RATELIMIT(0.00)[from(RLewrxuus8mos16izbn)];
+	DKIM_TRACE(0.00)[suse.de:+]
+X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
+X-Rspamd-Action: no action
+X-Spam-Score: -2.99
+X-Spam-Flag: NO
 
-On Thu, Feb 6, 2025 at 9:34=E2=80=AFPM Mateusz Guzik <mjguzik@gmail.com> wr=
-ote:
->
-> On Thu, Feb 6, 2025 at 9:24=E2=80=AFPM Jeff Layton <jlayton@kernel.org> w=
-rote:
-> >
-> > On Thu, 2025-02-06 at 20:07 +0100, Mateusz Guzik wrote:
-> > > You added it in:
-> > > commit 7ac86265dc8f665cc49d6e60a125e608cd2fca14
-> > > Author: Jeff Layton <jlayton@kernel.org>
-> > > Date:   Wed Oct 10 15:25:28 2012 -0400
-> > >
-> > >     audit: allow audit code to satisfy getname requests from its name=
-s_list
-> > >
-> > > Do I read correctly this has no user-visible impact, but merely tries
-> > > to shave off some memory usage in case of duplicated user bufs?
-> > >
-> > > This is partially getting in the way of whacking atomics for filename
-> > > ref management (but can be worked around).
-> > >
-> > > AFAIU this change is not all *that* beneficial in its own right, so
-> > > should not be a big deal to whack it regardless of what happens with
-> > > refs? Note it would also remove some branches in the common case as
-> > > normally audit either has dummy context or there is no match anyway.
-> >
-> >
-> > (cc'ing audit folks and mailing list)
-> >
-> > IIRC, having duplicate audit_names records can cause audit to emit
-> > extra name records in this loop in audit_log_exit():
-> >
-> >         list_for_each_entry(n, &context->names_list, list) {
-> >                 if (n->hidden)
-> >                         continue;
-> >                 audit_log_name(context, n, NULL, i++, &call_panic);
-> >         }
-> >
-> >
-> > ...which is something you probably want to avoid.
->
-> Well in this case I would argue the current code is buggy, unless I'm
-> misunderstanding something.
->
-> audit_log_name in particular logs:
->   1550 =E2=94=82       if (n->ino !=3D AUDIT_INO_UNSET)
->   1551 =E2=94=82               audit_log_format(ab, " inode=3D%lu dev=3D%=
-02x:%02x
-> mode=3D%#ho ouid=3D%u ogid=3D%u rdev=3D%02x
->   1552 =E2=94=82                                n->ino,
->   1553 =E2=94=82                                MAJOR(n->dev),
->   1554 =E2=94=82                                MINOR(n->dev),
->   1555 =E2=94=82                                n->mode,
->   1556 =E2=94=82                                from_kuid(&init_user_ns, =
-n->uid),
->   1557 =E2=94=82                                from_kgid(&init_user_ns, =
-n->gid),
->   1558 =E2=94=82                                MAJOR(n->rdev),
->   1559 =E2=94=82                                MINOR(n->rdev));
->
-> As in it grabs the properties of the found inode.
->
-> Suppose the 2 lookups of the same path name found 2 different inodes
-> as someone was mucking with the filesystem at the same time.
->
-> Then this is going to *fail* to record the next inode.
->
-> So if any dedup is necessary, it should be done by audit when logging imo=
-.
->
+Hi,
+ I found these opportunities for simplification as part of my work to
+ enhance filesystem directory operations to not require an exclusive
+ lock on the directory.
+ There are quite a collection of users of these interfaces incluing NFS,
+ smb/server, bcachefs, devtmpfs, and audit.  Hence the long Cc line.
 
-I did more digging, audit indeed *does* handle it later in
-__audit_inode(), so this does work after all.
+NeilBrown
 
-I'm going to have to chew on it what to do here then.
-
---=20
-Mateusz Guzik <mjguzik gmail.com>
+ [PATCH 1/2] VFS: change kern_path_locked() and user_path_locked_at()
+ [PATCH 2/2] VFS: add common error checks to lookup_one_qstr_excl()
