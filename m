@@ -1,155 +1,204 @@
-Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com [209.85.128.177])
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 446E618A6A6
-	for <audit@vger.kernel.org>; Fri,  7 Feb 2025 19:10:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDA2CC125;
+	Mon, 10 Feb 2025 01:20:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738955409; cv=none; b=Yrd2DtRQbrTKuLsoj6uoUpVKj5WR5jKLYt3xZU4PPbCJSCus5Kt4ZodQbCnCjhkqt3sPFcUxr7BJDmoqqL9Cjgy2piup7H00RNxc9T6tLe4fo2ohOoty3jHU9XWErFxmjxZHFfv81lpvdL1SZAen4aAL3VP0YAYgt11pY8b/hs0=
+	t=1739150428; cv=none; b=VLzZMzsfkdP+PAV7fLf88jx91oPhXaD9B9awUi8do18ctYrzCcjm2VZLSr20xbDgaLjOtGqLcZ+YECJHNMdgXvUJqftgpJ6WURDcRDMPSBkgK9hzFU4Y9ckc5fKoEuqf1xScEms0i4bSmBWKSezJJTViePCv91USBjLdqpHB+54=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738955409; c=relaxed/simple;
-	bh=L3hBF+iQrBKTRIa3wKiXJJ/OQyIh4KsyTMz0Xy+5S4A=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=sTe7Z7cuK+4KUHt3OESg7v/3lEGFHTRIdif3iEXtyZRZmceZL7kQzLT1KxhHz98NWQvXDniTbxjytoGUotSLHPlxWxC4s5eRLmrD9J7Me1Ow3nfFmGE+3kDpmPZQ9CYHZttWEF/0vyII8FP/hHhH7Emb+mBXSrzAqPA2AYs+SzI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=GKim8lt4; arc=none smtp.client-ip=209.85.128.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+	s=arc-20240116; t=1739150428; c=relaxed/simple;
+	bh=6vm4jw6wg9RdZqCVO4c/MR5vasxo/EaDKybb5J4L5A0=;
+	h=Content-Type:MIME-Version:From:To:Cc:Subject:In-reply-to:
+	 References:Date:Message-id; b=ErxwaYqR5tt2wVL0MTQnCrGEIgt7P7S9LFbYz3+/RxZioKigOCTnn1Uq/Tofa3QYkFFal0CiQBbKCXq3JRlyDG1XcBJS94kZ3n7yiZ8TARzeMm7Zfx49J9Mskk4RyJXS1AtF8wnfLGI3fsPumEkslyRWRoNnVUCwberXIR8J3Q4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=GVvg4m6O; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=RbVKTVRS; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=GVvg4m6O; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=RbVKTVRS; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="GKim8lt4"
-Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-6f6715734d9so22297117b3.3
-        for <audit@vger.kernel.org>; Fri, 07 Feb 2025 11:10:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1738955406; x=1739560206; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Om2VSE738EF+Gy11pRhlx9VqvfBmWOXzuPiTJvCwuz4=;
-        b=GKim8lt4SXP5kCoh/4cTxGCOS0NFKc37s/H8tESJs+gNOMv7ToQFj9aCC6gXDOyZFW
-         HLxSttUGftYuYAnyZLRg40Zjxvlf+AWJp8XZhkFbbWk1U2XHw2B6BMJCaOy4FE3fPdpW
-         Unfpfmv2KhLrQ0n6jpymXy/CUq2x15XKxIBQ0mhxWAURjkNVKfJwfsEDRlZ88+bThbLy
-         S7h6oS6qz2gkxd30lZv9rMUCNFRCH6fquC2+bZCWmiLNNARvDStxMgbCi1NfsA9chIbC
-         +jyROlyUVDutZjFEJL45IVc2NMcmVq07hYptArEUCcGxbrzeWHvGJD2J5f1lTQrXqPxp
-         7fhA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738955406; x=1739560206;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Om2VSE738EF+Gy11pRhlx9VqvfBmWOXzuPiTJvCwuz4=;
-        b=QXbEWRrk4iWFfkLkbsJWwFN70kAfKN9tPVSyHaXn+VKHtFqxixh7oO+AlAfuJ7IqDu
-         D1r9HCE0D90oXUubFZ5hB5vIdVW+Nt01HFV344Tx5ExsjlImnx7tI5MNPstc/I107Du4
-         Yx9GRmLbK8SqhQB+UNgTD4ARxs5NvQe9zVTrK86InUfSQA1dIMempq/xND+zOjiI7HXR
-         z0+ISkiFkAtGEpkHMc85dY5wJ0/WxIeOlpE1nMTyP6LkH6ljNjhHkDdpblirUczImXJI
-         usq4ChGsKquzctQjPGhPTOsk0bd4c6Qpn0k7luO1nwKBPN8Ovx0lgV4PpNCau/luWOey
-         t2rw==
-X-Forwarded-Encrypted: i=1; AJvYcCUdV56dlRlLI+S6Lv2OU4QdFfJwCvvoUWQ/NXt9WTY1b0u8Xufy3bPROjr/uBHehO1TLUufZA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxeCaJHkS+c9rEx7suIekPFjgooEjdIkAM39tY3vF4jczxxy3bC
-	h5YNWrp5k5DHtD4HBCha510tZ/iZ8eo6P/m76rUe57866b8bNhHiyVVK4T6x7DlNC1jEH8GCTjw
-	fcU/Aom5MTlLe/5bZudYDZdSVE4j06WGKJm3D
-X-Gm-Gg: ASbGncuBb5uqLwo5DpkepLE3ydIMJ7D+OdzVssCk2sOaWodSE2l7JDquNaudJDAeugb
-	X/DhYZkowNYfmcnLrWum5/fk4j4TwdEALbIt3PbomdvycQbwqt2d+CzR6Ahq70r5vlXi53w0=
-X-Google-Smtp-Source: AGHT+IGK+1YaMF/yB5tZ88LHxwIuQM3/Gj8AOscWWTmOeYR+q9GoKPuGwr2TcabPJS4LqujSyvfXsbiPIUAyuUzPzSo=
-X-Received: by 2002:a05:690c:3804:b0:6f9:97bd:5a63 with SMTP id
- 00721157ae682-6f9b2844e3cmr39923927b3.4.1738955406214; Fri, 07 Feb 2025
- 11:10:06 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="GVvg4m6O";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="RbVKTVRS";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="GVvg4m6O";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="RbVKTVRS"
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 2B82921102;
+	Mon, 10 Feb 2025 01:20:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1739150425; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=kNHkLWb8LhlVxwfN71tab7fM7Ihwg66qglqKNi6jmFg=;
+	b=GVvg4m6Oi+5Nf73A3l4nea6uMla+aAQMPpYPlG8SWuZ7oRQepMR8R9VmmtKyM73xUIh4X8
+	470qmg9kUKy1tnAru1Wrl9o4Tv+dVCprIlazwc2A4YvAKbYdNOP86tNqxDPENlx58ONqeW
+	oPeqOtzaGLovzCA95Uyfv78PZECyg7k=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1739150425;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=kNHkLWb8LhlVxwfN71tab7fM7Ihwg66qglqKNi6jmFg=;
+	b=RbVKTVRSav7aiYPr8v8nupZZlw+Bdw+DsmKbdWDU8HAdGceAvEXvrFVD8+hjZxcIymRl2T
+	CXfKlMNq8eRzBqDQ==
+Authentication-Results: smtp-out1.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1739150425; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=kNHkLWb8LhlVxwfN71tab7fM7Ihwg66qglqKNi6jmFg=;
+	b=GVvg4m6Oi+5Nf73A3l4nea6uMla+aAQMPpYPlG8SWuZ7oRQepMR8R9VmmtKyM73xUIh4X8
+	470qmg9kUKy1tnAru1Wrl9o4Tv+dVCprIlazwc2A4YvAKbYdNOP86tNqxDPENlx58ONqeW
+	oPeqOtzaGLovzCA95Uyfv78PZECyg7k=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1739150425;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=kNHkLWb8LhlVxwfN71tab7fM7Ihwg66qglqKNi6jmFg=;
+	b=RbVKTVRSav7aiYPr8v8nupZZlw+Bdw+DsmKbdWDU8HAdGceAvEXvrFVD8+hjZxcIymRl2T
+	CXfKlMNq8eRzBqDQ==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 7B2BF13AA4;
+	Mon, 10 Feb 2025 01:20:18 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id gKKtC1JUqWcyNgAAD6G6ig
+	(envelope-from <neilb@suse.de>); Mon, 10 Feb 2025 01:20:18 +0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250207034040.3402438-1-neilb@suse.de> <20250207034040.3402438-2-neilb@suse.de>
-In-Reply-To: <20250207034040.3402438-2-neilb@suse.de>
-From: Paul Moore <paul@paul-moore.com>
-Date: Fri, 7 Feb 2025 14:09:55 -0500
-X-Gm-Features: AWEUYZl_WdQaatK919wx4Q8t6Nn6ccb6OCvCp4tV_BELcL0JYxwXteOCsEvAF2g
-Message-ID: <CAHC9VhTnVg-5C75qY8NkfKs4tjbVz62Vk=SVXS2mwH0f3ftLhQ@mail.gmail.com>
+From: "NeilBrown" <neilb@suse.de>
+To: "Kent Overstreet" <kent.overstreet@linux.dev>
+Cc: "Christian Brauner" <brauner@kernel.org>,
+ "Alexander Viro" <viro@zeniv.linux.org.uk>, "Jan Kara" <jack@suse.cz>,
+ "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+ "Rafael J. Wysocki" <rafael@kernel.org>, "Danilo Krummrich" <dakr@kernel.org>,
+ "Trond Myklebust" <trondmy@kernel.org>, "Anna Schumaker" <anna@kernel.org>,
+ "Namjae Jeon" <linkinjeon@kernel.org>, "Steve French" <sfrench@samba.org>,
+ "Sergey Senozhatsky" <senozhatsky@chromium.org>,
+ "Tom Talpey" <tom@talpey.com>, "Paul Moore" <paul@paul-moore.com>,
+ "Eric Paris" <eparis@redhat.com>, linux-kernel@vger.kernel.org,
+ linux-bcachefs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+ linux-nfs@vger.kernel.org, linux-cifs@vger.kernel.org, audit@vger.kernel.org
 Subject: Re: [PATCH 1/2] VFS: change kern_path_locked() and
  user_path_locked_at() to never return negative dentry
-To: NeilBrown <neilb@suse.de>
-Cc: Christian Brauner <brauner@kernel.org>, Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Danilo Krummrich <dakr@kernel.org>, Kent Overstreet <kent.overstreet@linux.dev>, 
-	Trond Myklebust <trondmy@kernel.org>, Anna Schumaker <anna@kernel.org>, 
-	Namjae Jeon <linkinjeon@kernel.org>, Steve French <sfrench@samba.org>, 
-	Sergey Senozhatsky <senozhatsky@chromium.org>, Tom Talpey <tom@talpey.com>, 
-	Eric Paris <eparis@redhat.com>, linux-kernel@vger.kernel.org, 
-	linux-bcachefs@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	linux-nfs@vger.kernel.org, linux-cifs@vger.kernel.org, audit@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+In-reply-to: <4bxqnnpfau5sq2h7oexvrvazqqpn55e7vsjlj44epdcas2clzf@424354eeo6dl>
+References:
+ <>, <4bxqnnpfau5sq2h7oexvrvazqqpn55e7vsjlj44epdcas2clzf@424354eeo6dl>
+Date: Mon, 10 Feb 2025 12:20:15 +1100
+Message-id: <173915041509.22054.12649815796390080222@noble.neil.brown.name>
+X-Spam-Score: -4.30
+X-Spamd-Result: default: False [-4.30 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	NEURAL_HAM_SHORT(-0.20)[-0.999];
+	MIME_GOOD(-0.10)[text/plain];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	ARC_NA(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	MISSING_XM_UA(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[21];
+	RCVD_TLS_ALL(0.00)[];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	FROM_HAS_DN(0.00)[];
+	TO_DN_SOME(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	R_RATELIMIT(0.00)[from(RLewrxuus8mos16izbn)]
+X-Spam-Flag: NO
+X-Spam-Level: 
 
-On Thu, Feb 6, 2025 at 10:41=E2=80=AFPM NeilBrown <neilb@suse.de> wrote:
->
-> No callers of kern_path_locked() or user_path_locked_at() want a
-> negative dentry.  So change them to return -ENOENT instead.  This
-> simplifies callers.
->
-> This results in a subtle change to bcachefs in that an ioctl will now
-> return -ENOENT in preference to -EXDEV.  I believe this restores the
-> behaviour to what it was prior to
->  Commit bbe6a7c899e7 ("bch2_ioctl_subvolume_destroy(): fix locking")
->
-> Signed-off-by: NeilBrown <neilb@suse.de>
-> ---
->  drivers/base/devtmpfs.c | 65 +++++++++++++++++++----------------------
->  fs/bcachefs/fs-ioctl.c  |  4 ---
->  fs/namei.c              |  4 +++
->  kernel/audit_watch.c    | 12 ++++----
->  4 files changed, 40 insertions(+), 45 deletions(-)
+On Sat, 08 Feb 2025, Kent Overstreet wrote:
+> On Fri, Feb 07, 2025 at 06:30:00PM +1100, NeilBrown wrote:
+> > On Fri, 07 Feb 2025, Kent Overstreet wrote:
+> > > On Fri, Feb 07, 2025 at 05:34:23PM +1100, NeilBrown wrote:
+> > > > On Fri, 07 Feb 2025, Kent Overstreet wrote:
+> > > > > On Fri, Feb 07, 2025 at 03:53:52PM +1100, NeilBrown wrote:
+> > > > > > Do you think there could be a problem with changing the error ret=
+urned
+> > > > > > in this circumstance? i.e. if you try to destroy a subvolume with=
+ a
+> > > > > > non-existant name on a different filesystem could getting -ENOENT
+> > > > > > instead of -EXDEV be noticed?
+> > > > >=20
+> > > > > -EXDEV is the standard error code for "we're crossing a filesystem
+> > > > > boundary and we can't or aren't supposed to be", so no, let's not c=
+hange
+> > > > > that.
+> > > > >=20
+> > > >=20
+> > > > OK.  As bcachefs is the only user of user_path_locked_at() it shouldn=
+'t
+> > > > be too hard.
+> > >=20
+> > > Hang on, why does that require keeping user_path_locked_at()? Just
+> > > compare i_sb...
+> > >=20
+> >=20
+> > I changed user_path_locked_at() to not return a dentry at all when the
+> > full path couldn't be found.  If there is no dentry, then there is no
+> > ->d_sb.
+> > (if there was an ->i_sb, there would be an inode and this all wouldn't
+> > be an issue).
+> >=20
+> > To recap: the difference happens if the path DOESN'T exist but the
+> > parent DOES exist on a DIFFERENT filesystem.  It is very much a corner
+> > case and the error code shouldn't matter.  But I had to ask...
+>=20
+> Ahh...
+>=20
+> Well, if I've scanned the series correctly (sorry, we're on different
+> timezones and I haven't had much caffeine yet) I hope you don't have to
+> keep that function just for bcachefs - but I do think the error code is
+> important.
+>=20
+> Userspace getting -ENOENT and reporting -ENOENT to the user will
+> inevitably lead to head banging frustration by someone, somewhere, when
+> they're trying to delete something and the system is tell them it
+> doesn't exist when they can see it very much does exist, right there :)
+> the more precise error code is a very helpful cue...
+>=20
 
-...
+???
+You will only get -ENOENT if there is no ent.  There is no question of a
+confusing error message.
+If you ask for a non-exist name on the correct filesystem, you get -ENOENT
+If you ask for an existing name of the wrong filesystem, you get -EXDEV
+That all works as expected and always has.
 
-> diff --git a/kernel/audit_watch.c b/kernel/audit_watch.c
-> index 7f358740e958..e3130675ee6b 100644
-> --- a/kernel/audit_watch.c
-> +++ b/kernel/audit_watch.c
-> @@ -350,11 +350,10 @@ static int audit_get_nd(struct audit_watch *watch, =
-struct path *parent)
->         struct dentry *d =3D kern_path_locked(watch->path, parent);
->         if (IS_ERR(d))
->                 return PTR_ERR(d);
-> -       if (d_is_positive(d)) {
-> -               /* update watch filter fields */
-> -               watch->dev =3D d->d_sb->s_dev;
-> -               watch->ino =3D d_backing_inode(d)->i_ino;
-> -       }
-> +       /* update watch filter fields */
-> +       watch->dev =3D d->d_sb->s_dev;
-> +       watch->ino =3D d_backing_inode(d)->i_ino;
-> +
->         inode_unlock(d_backing_inode(parent->dentry));
->         dput(d);
->         return 0;
-> @@ -419,7 +418,7 @@ int audit_add_watch(struct audit_krule *krule, struct=
- list_head **list)
->         /* caller expects mutex locked */
->         mutex_lock(&audit_filter_mutex);
->
-> -       if (ret) {
-> +       if (ret && ret !=3D -ENOENT) {
->                 audit_put_watch(watch);
->                 return ret;
->         }
-> @@ -438,6 +437,7 @@ int audit_add_watch(struct audit_krule *krule, struct=
- list_head **list)
->
->         h =3D audit_hash_ino((u32)watch->ino);
->         *list =3D &audit_inode_hash[h];
-> +       ret =3D 0;
+But what if you ask for a non-existing name in a directory on the
+wrong filesystem? =20
+The code you originally wrote in 42d237320e9817a9 would return
+-ENOENT because that it what user_path_at() would return.
+But using user_path_at() is "wrong" because it doesn't lock the directory
+so ->d_parent is not guaranteed to be stable.
+Al fixed that in bbe6a7c899e7f265c using user_path_locked_at(), but
+that doesn't check for a negative dentry so Al added a check to return
+-ENOENT, but that was added *after* the test that returns -EXDEV.
 
-If you have to respin this patch for any reason I'd prefer to move the
-'ret =3D 0' up to just after the if block you're modifying in the chunk
-above, but that's a trivial nitpick so please don't respin only for
-that.  Otherwise it looks fine to me from an audit perspective.
+So now if you call subvolume_destroy on a non-existing name in a
+directory on the wrong filesystem, you get -EXDEV.  I think that is
+a bit weird but not a lot weird.
+My patch will change it back to -ENOENT - the way you originally wrote
+it.
 
-Acked-by: Paul Moore <paul@paul-moore.com> (Audit)
+I hope you are ok with that.
 
->  error:
->         path_put(&parent_path);
->         audit_put_watch(watch);
-> --
-> 2.47.1
+NeilBrown
 
---=20
-paul-moore.com
