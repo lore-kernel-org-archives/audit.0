@@ -1,54 +1,90 @@
-Received: from smtp-190b.mail.infomaniak.ch (smtp-190b.mail.infomaniak.ch [185.125.25.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EE7A1ACEDA
-	for <audit@vger.kernel.org>; Tue, 18 Feb 2025 19:40:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.25.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D51C013B58A;
+	Sat, 22 Feb 2025 19:48:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739907624; cv=none; b=Vu+XJBqJiLdqDw0AixdpB7h6EN1jwwIpmZfwWJIMqKtThQOYtMO4DSfUPMQVkYrayt6l+8KeMNTinUsgAb3TktV2XzriFjMyuZ9HpI7MSk7zTqET/dUdw1cr0ApkdHM0SE0296A13rP8+YX8VCM/THs9YmUHNyK8KX5W87H0IA0=
+	t=1740253683; cv=none; b=jkd2E1zMAAYTie6GCqNFbFIKCJxQkdQ9wK4gPEHZEOQCfyE9Y+C5msUtLx55YAB28se3F8j5gEiKXjTo1RIUanWHK8jBOyxz8s2kA0ls0TQDaUdZdl/UcLxLBhX0kUHVZU+QNHhNiBCFpK4pZ/6ObZmN0zQSopjnzNhiDFL4pyo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739907624; c=relaxed/simple;
-	bh=g6pM5p59DtafRScJvERQT6s7kkxvi1A/0/KvljZlntI=;
+	s=arc-20240116; t=1740253683; c=relaxed/simple;
+	bh=GSSL9WURNukCtmHPIvrJndVUgEqS+IurAIIg+d+KSn4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=glIGb7DPbgxQytsAGH436CNm9emn3X3VAeem1kmE2odtVrXmoVfn+c+GukihJjR5aQ2RpTD0ohwOTLL/sxVYK/zqRc84DNVrUjHGWLDBxLnyCuBDJiAjxhHbpqOk/6UDJ9NFtGRdmfQQ+ACvPn92t0xHYLVyoc1OvdGuNoHxLO4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=CDVyVVOx; arc=none smtp.client-ip=185.125.25.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
+	 Content-Type:Content-Disposition:In-Reply-To; b=T49IznPf2u+ZeSm80kWE5o8FzunmyQ8El8PRGW7il8DzqJ0lgtPTkb1CWRq9ZrcvsceapauNwEoo6pzGrruIEC5wVc9Lq4e+qG7jayXbRuKlr6BT2h0c8qlRytxiBxbtNgLQr6S4wE0Tn27DFMz9wUQzkk+m9wYqLxozlWoYKo4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eY7d6xT+; arc=none smtp.client-ip=209.85.221.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="CDVyVVOx"
-Received: from smtp-4-0001.mail.infomaniak.ch (unknown [IPv6:2001:1600:7:10:40ca:feff:fe05:1])
-	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4Yy8Wn35pzzsHM;
-	Tue, 18 Feb 2025 20:21:09 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
-	s=20191114; t=1739906469;
-	bh=TP/4KcQ7PwfLgx3GavNd5mFGIeNpg/wtdpDBEjPeE/4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=CDVyVVOxAKCow0jCQYaGujlvPHO5NV/YpVTGwRGnowb3Tx7KNADx/EvFsqplMLc8t
-	 RvOrGeXFrsl2IdL71gM5tIZOZudNlDlXK40iDkqsGrkIlEGCYKd769GZKnl2c8TRrV
-	 BeDZkTXErKsW+Ea2ZirTN2QM2GJJmgSHgogoszGw=
-Received: from unknown by smtp-4-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4Yy8Wm4VQ8z41;
-	Tue, 18 Feb 2025 20:21:08 +0100 (CET)
-Date: Tue, 18 Feb 2025 20:21:08 +0100
-From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
-To: Paul Moore <paul@paul-moore.com>
-Cc: Eric Paris <eparis@redhat.com>, 
-	=?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>, "Serge E . Hallyn" <serge@hallyn.com>, 
-	Ben Scarlato <akhna@google.com>, Casey Schaufler <casey@schaufler-ca.com>, 
-	Charles Zaffery <czaffery@roblox.com>, Daniel Burgener <dburgener@linux.microsoft.com>, 
-	Francis Laniel <flaniel@linux.microsoft.com>, James Morris <jmorris@namei.org>, Jann Horn <jannh@google.com>, 
-	Jeff Xu <jeffxu@google.com>, Jorge Lucangeli Obes <jorgelo@google.com>, 
-	Kees Cook <kees@kernel.org>, Konstantin Meskhidze <konstantin.meskhidze@huawei.com>, 
-	Matt Bobrowski <mattbobrowski@google.com>, Mikhail Ivanov <ivanov.mikhail1@huawei-partners.com>, 
-	Phil Sutter <phil@nwl.cc>, Praveen K Paladugu <prapal@linux.microsoft.com>, 
-	Robert Salvet <robert.salvet@roblox.com>, Shervin Oloumi <enlightened@google.com>, 
-	Song Liu <song@kernel.org>, Tahera Fahimi <fahimitahera@gmail.com>, 
-	Tyler Hicks <code@tyhicks.com>, audit@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-security-module@vger.kernel.org
-Subject: Re: [PATCH v5 10/24] landlock: Add AUDIT_LANDLOCK_DOMAIN and log
- domain status
-Message-ID: <20250218.aePeer3oole2@digikod.net>
-References: <20250131163059.1139617-11-mic@digikod.net>
- <7ed44e7b0e371302d29be95789cd1a57@paul-moore.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eY7d6xT+"
+Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-38f22fe889aso2726941f8f.3;
+        Sat, 22 Feb 2025 11:48:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1740253680; x=1740858480; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=k74eRZ9dzu/ozgkVvl8FCs1arPr3tSEztc+1v3LM2i8=;
+        b=eY7d6xT+ysEvRMa5NEWj3PtwsTk3pEBnWFkLpwAUpQ0juQ3/xVroYUdSQaUsJGIQXC
+         UcKzmr0hWJIkWoPwhsha6ZjEM3Kv1jgcTcDzYmvOXBPwubG+Czsp0jE3GQzN/CgOLmJ+
+         NvutA5dUHckwp+k8mdv6Ibgi4ZDH6rgefNOnBa4/rGmhZfeYYOmoHqn5WIM8nxkazDau
+         VkwkeSujfIDNF7FTalkzoALcxZfq0GJ7P05iBjvA/ciAlUtGXg3MpUIovsLAZQd0+fhD
+         ZdUKeiM1hbeHrDi8YX+yo6BlxWvYGBQGdE9/g8JBOHNulDp1DEsO6JPq9/rRdfzbvfue
+         yxBg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1740253680; x=1740858480;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=k74eRZ9dzu/ozgkVvl8FCs1arPr3tSEztc+1v3LM2i8=;
+        b=OnEhY/LdO3TQhOwvJ73G2DVMzXA0OekBaaBaGrWwZBRGo4cirgw6n3tm0DiS7Xt9q1
+         usIcjowP3IAyB04zUGFn97JD/RDdRrviUrMwjRCRonSCe7Pi5QpNEsKxCvoY7Ge5CUny
+         fIt02O6vWumINKkWeL+9pgfEmCdxZMGSe/PckE2xgbthfIlxO7dUg/ZmGqYG+jVh0tAa
+         n8iFaKv5X/25ZxGkj/zpdIPJQxcphXQB440va+qulbNP5kaBWLW/xs+8Tj2hqCWCsJE+
+         sxrhpPzbvSt3SEN043CmKB8XRDjdPDrDfNhAc83OH13Gq7l+49+1MoUXBU7IaAJWclaW
+         iqBw==
+X-Forwarded-Encrypted: i=1; AJvYcCVqq+35NuwYmU0olxBfrklsB/5ws+O0KKEGP21zFXzDJfJH+4HrCJkuwHgyzCWgUO61PF7AEg==@vger.kernel.org, AJvYcCWgKiL3vbRsU9gOA7W6fSk53bfWm1muXbDualyzZe3aCFy00MdHrvt3ZGOBX6mNXMkKmReaW7QaH4X89Fti@vger.kernel.org, AJvYcCXOJsD6XTunKATx16sQwr7ApqJc7XH8V7wMA+l8eru5+tWHX22bKH3HQ5Qjme77W9owwfbfhyFdSIPI9zfdKA3kZ/88Njam@vger.kernel.org
+X-Gm-Message-State: AOJu0YzAxfnT+mybfwr0192nsEYu10ZIDo7b8+GmezSEM/dx+m7EE7e/
+	xW/DJKC43xvyke9dHMjlFKQh9BA/GkYl+PTqrwu0o+cRZneE/4JD
+X-Gm-Gg: ASbGncsLsW6M+XCwGdk2HOrII5aUdfar5Pmy2WhyM5cB5b5rSNAc2jv5cylafzJuto6
+	n1dDlQOVN4WVYF/Jf/wLUfqJBk8YssbHr65UcJYW8tsedBrmzAIbusALlBUC36W+OMYy07kEEBv
+	EX3a7yZtGT9LPMQeqybpZreFg40TL2ZJ7yaynWWlO4UDcth08EvYQQQPjkEuwVK1AK42MnM0lPZ
+	h68MgFZOecMcfJJdlYnqOXvsrtyg+qa9ecRSp33HSi1z52Ebe9VJ4nXGOKyHRsXwPEnjsMJs+RN
+	fo+Hv5s3eMHtyPOGa6LPUh8=
+X-Google-Smtp-Source: AGHT+IFXPA5CwrvBfpW+3dDuNHGyj8bPzZDVesd+4AvKSUQ7qkBsUmzvqVffkUzaZSbxeLmfG3IRew==
+X-Received: by 2002:a05:6000:1842:b0:38d:af14:cb1 with SMTP id ffacd0b85a97d-38f6f0c7880mr7503792f8f.54.1740253679881;
+        Sat, 22 Feb 2025 11:47:59 -0800 (PST)
+Received: from localhost ([2a02:168:59f0:1:b0ab:dd5e:5c82:86b0])
+        by smtp.gmail.com with UTF8SMTPSA id ffacd0b85a97d-38f258eb141sm26478829f8f.41.2025.02.22.11.47.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 22 Feb 2025 11:47:59 -0800 (PST)
+Date: Sat, 22 Feb 2025 20:47:40 +0100
+From: =?iso-8859-1?Q?G=FCnther?= Noack <gnoack3000@gmail.com>
+To: =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>
+Cc: Eric Paris <eparis@redhat.com>, Paul Moore <paul@paul-moore.com>,
+	=?iso-8859-1?Q?G=FCnther?= Noack <gnoack@google.com>,
+	"Serge E . Hallyn" <serge@hallyn.com>,
+	Ben Scarlato <akhna@google.com>,
+	Casey Schaufler <casey@schaufler-ca.com>,
+	Charles Zaffery <czaffery@roblox.com>,
+	Daniel Burgener <dburgener@linux.microsoft.com>,
+	Francis Laniel <flaniel@linux.microsoft.com>,
+	James Morris <jmorris@namei.org>, Jann Horn <jannh@google.com>,
+	Jeff Xu <jeffxu@google.com>,
+	Jorge Lucangeli Obes <jorgelo@google.com>,
+	Kees Cook <kees@kernel.org>,
+	Konstantin Meskhidze <konstantin.meskhidze@huawei.com>,
+	Matt Bobrowski <mattbobrowski@google.com>,
+	Mikhail Ivanov <ivanov.mikhail1@huawei-partners.com>,
+	Phil Sutter <phil@nwl.cc>,
+	Praveen K Paladugu <prapal@linux.microsoft.com>,
+	Robert Salvet <robert.salvet@roblox.com>,
+	Shervin Oloumi <enlightened@google.com>, Song Liu <song@kernel.org>,
+	Tahera Fahimi <fahimitahera@gmail.com>,
+	Tyler Hicks <code@tyhicks.com>, audit@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
+Subject: Re: [PATCH v5 00/24] Landlock audit support
+Message-ID: <20250222.0cd761da0d19@gnoack.org>
+References: <20250131163059.1139617-1-mic@digikod.net>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
@@ -58,305 +94,222 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <7ed44e7b0e371302d29be95789cd1a57@paul-moore.com>
-X-Infomaniak-Routing: alpha
+In-Reply-To: <20250131163059.1139617-1-mic@digikod.net>
 
-On Fri, Feb 14, 2025 at 05:52:49PM -0500, Paul Moore wrote:
-> On Jan 31, 2025 =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net> wrote:
-> > 
-> > Asynchronously log domain information when it first denies an access.
-> > This minimize the amount of generated logs, which makes it possible to
-> > always log denials since they should not happen (except with the new
-> > LANDLOCK_RESTRICT_SELF_QUIET flag).  These records are identified with
-> > the new AUDIT_LANDLOCK_DOMAIN type.
-> > 
-> > The AUDIT_LANDLOCK_DOMAIN message contains:
-> > - the "domain" ID which is described;
-> > - the "status" which can either be "allocated" or "deallocated";
-> > - the "mode" which is for now only "enforcing";
-> > - for the "allocated" status, a minimal set of properties to easily
-> >   identify the task that loaded the domain's policy with
-> >   landlock_restrict_self(2): "pid", "uid", executable path ("exe"), and
-> >   command line ("comm");
-> > - for the "deallocated" state, the number of "denials" accounted to this
-> >   domain, which is at least 1.
-> > 
-> > This requires each domain to save these task properties at creation
-> > time in the new struct landlock_details.  A reference to the PID is kept
-> > for the lifetime of the domain to avoid race conditions when
-> > investigating the related task.  The executable path is resolved and
-> > stored to not keep a reference to the filesystem and block related
-> > actions.  All these metadata are stored for the lifetime of the related
-> > domain and should then be minimal.  The required memory is not accounted
-> > to the task calling landlock_restrict_self(2) contrary to most other
-> > Landlock allocations (see related comment).
-> > 
-> > The AUDIT_LANDLOCK_DOMAIN record follows the first AUDIT_LANDLOCK_ACCESS
-> > record for the same domain, which is always followed by AUDIT_SYSCALL
-> > and AUDIT_PROCTITLE.  This is in line with the audit logic to first
-> > record the cause of an event, and then add context with other types of
-> > record.
-> > 
-> > Audit event sample for a first denial:
-> > 
-> >   type=LANDLOCK_ACCESS msg=audit(1732186800.349:44): domain=195ba459b blockers=ptrace opid=1 ocomm="systemd"
-> >   type=LANDLOCK_DOMAIN msg=audit(1732186800.349:44): domain=195ba459b status=allocated mode=enforcing pid=300 uid=0 exe="/root/sandboxer" comm="sandboxer"
-> >   type=SYSCALL msg=audit(1732186800.349:44): arch=c000003e syscall=101 success=no [...] pid=300 auid=0
-> > 
-> > Audit event sample for a following denial:
-> > 
-> >   type=LANDLOCK_ACCESS msg=audit(1732186800.372:45): domain=195ba459b blockers=ptrace opid=1 ocomm="systemd"
-> >   type=SYSCALL msg=audit(1732186800.372:45): arch=c000003e syscall=101 success=no [...] pid=300 auid=0
-> > 
-> > Log domain deletion with the "deallocated" state when a domain was
-> > previously logged.  This makes it possible for log parsers to free
-> > potential resources when a domain ID will never show again.
-> > 
-> > The number of denied access requests is useful to easily check how many
-> > access requests a domain blocked and potentially if some of them are
-> > missing in logs because of audit rate limiting or audit rules.  Rate
-> > limiting could also drop this record though.
-> > 
-> > Audit event sample for a deletion of a domain that denied something:
-> > 
-> >   type=LANDLOCK_DOMAIN msg=audit(1732186800.393:46): domain=195ba459b status=deallocated denials=2
-> > 
-> > Cc: Günther Noack <gnoack@google.com>
-> > Cc: Paul Moore <paul@paul-moore.com>
-> > Signed-off-by: Mickaël Salaün <mic@digikod.net>
-> > Link: https://lore.kernel.org/r/20250131163059.1139617-11-mic@digikod.net
-> > ---
-> > Changes since v4:
-> > - Rename AUDIT_LANDLOCK_DOM_{INFO,DROP} to AUDIT_LANDLOCK_DOMAIN and add
-> >   a "status" field, as requested by Paul.
-> > - Add a harcoded "mode=enforcing" to leave room for a potential future
-> >   permissive mode, as suggested by Paul.
-> > - Remove the "creation" timestamp, as suggested by Paul.
-> > - Move LANDLOCK_PATH_MAX_SIZE to domain.h, check the size of the
-> >   greatest landlock_details at build time, and improve comments.
-> > - Improve audit check in landlock_log_drop_domain().
-> > - Add missing headers.
-> > - Fix typo in comment.
-> > - Rebase on top of the landlock_log_denial() and subject type changes.
-> > 
-> > Changes since v3:
-> > - Log number of denied access requests with AUDIT_LANDLOCK_DOM_DROP
-> >   records, suggested by Tyler.
-> > - Do not store a struct path pointer but the resolved string instead.
-> >   This enables us to not block unmount of the initially restricted task
-> >   executable's mount point.  See the new get_current_info() and
-> >   get_current_exe().  A following patch add tests for this case.
-> > - Create and allocate a new struct landlock_details for initially
-> >   restricted task's information.
-> > - Remove audit_get_ctime() call, as requested by Paul.  We now always
-> >   have a standalone timestamp per Landlock domain creations.
-> > - Fix docstring.
-> > 
-> > Changes since v2:
-> > - Fix docstring.
-> > - Fix log_status check in log_hierarchy() to also log
-> >   LANDLOCK_LOG_DISABLED.
-> > - Add audit's creation time to domain's properties.
-> > - Use hexadecimal notation for domain IDs.
-> > - Remove domain's parent records: parent domains are not really useful
-> >   in the logs.  They will be available with the upcoming introspection
-> >   feature though.
-> > - Extend commit message with audit's timestamp explanation.
-> > 
-> > Changes since v1:
-> > - Add a ruleset's version for atomic logs.
-> > - Rebased on the TCP patch series.
-> > - Rename operation using "_" instead of "-".
-> > - Rename AUDIT_LANDLOCK to AUDIT_LANDLOCK_RULESET.
-> > - Only log when audit is enabled, but always set domain IDs.
-> > - Don't log task's PID/TID with log_task() because it would be redundant
-> >   with the SYSCALL record.
-> > - Remove race condition when logging ruleset creation and logging
-> >   ruleset modification while the related file descriptor was already
-> >   registered but the ruleset creation not logged yet.
-> > - Fix domain drop logs.
-> > - Move the domain drop record from the previous patch into this one.
-> > - Do not log domain creation but log first domain use instead.
-> > - Save task's properties that sandbox themselves.
-> > ---
-> >  include/uapi/linux/audit.h  |   1 +
-> >  security/landlock/audit.c   |  90 ++++++++++++++++++++++++++++++--
-> >  security/landlock/audit.h   |   7 +++
-> >  security/landlock/domain.c  | 101 ++++++++++++++++++++++++++++++++++++
-> >  security/landlock/domain.h  |  68 ++++++++++++++++++++++++
-> >  security/landlock/ruleset.c |   6 +++
-> >  6 files changed, 270 insertions(+), 3 deletions(-)
+On Fri, Jan 31, 2025 at 05:30:35PM +0100, Mickaël Salaün wrote:
+> Hi,
 > 
-> Some minor questions below, but from an audit perspective this is okay.
+> This patch series adds audit support to Landlock.
 > 
-> Acked-by: Paul Moore <paul@paul-moore.com> (Audit)
+> Logging denied requests is useful for different use cases:
+> - sysadmins: to look for users' issues,
+> - security experts: to detect attack attempts,
+> - power users: to understand denials,
+> - developers: to ease sandboxing support and get feedback from users.
 > 
-> > diff --git a/security/landlock/audit.c b/security/landlock/audit.c
-> > index b0dde6bcfb76..a5b055306757 100644
-> > --- a/security/landlock/audit.c
-> > +++ b/security/landlock/audit.c
-> > @@ -8,6 +8,8 @@
-> >  #include <kunit/test.h>
-> >  #include <linux/audit.h>
-> >  #include <linux/lsm_audit.h>
-> > +#include <linux/pid.h>
-> > +#include <linux/uidgid.h>
-> >  
-> >  #include "audit.h"
-> >  #include "cred.h"
-> > @@ -31,6 +33,40 @@ static void log_blockers(struct audit_buffer *const ab,
-> >  	audit_log_format(ab, "%s", get_blocker(type));
-> >  }
-> >  
-> > +static void log_node(struct landlock_hierarchy *const node)
-> > +{
-> > +	struct audit_buffer *ab;
-> > +
-> > +	if (WARN_ON_ONCE(!node))
-> > +		return;
-> > +
-> > +	/* Ignores already logged domains.  */
-> > +	if (READ_ONCE(node->log_status) == LANDLOCK_LOG_RECORDED)
-> > +		return;
-> > +
-> > +	ab = audit_log_start(audit_context(), GFP_ATOMIC,
-> > +			     AUDIT_LANDLOCK_DOMAIN);
+> Because of its unprivileged nature, Landlock can compose standalone
+> security policies (i.e. domains).  To make logs useful, they need to
+> contain the most relevant Landlock domain that denied an action, and the
+> reason of such denial.  This translates to the latest nested domain and
+> the related blockers: missing access rights or other kind of
+> restrictions.
 > 
-> You use __GFP_NOWARN in the other calls to audit_log_start(), did you
-> mean to use it here as well?
-
-Good catch, this is at least inconsistent.
-
-My initial though was that we should use __GFP_NOWARN for access
-requests that can occure frequently, and common_lsm_audit() already uses
-this flag, and the fact that audit events might not be logged at all for
-other reasons (e.g. burst of entries).  But __GFP_NOWARN is not use for
-all audit_log_start() calls.
-
-For domain allocations and deallocations, this should rarely happen
-during the life of a process, and it looked reasonable to warn about an
-issue at this point.
-
-Are there guidance about __GFP_NOWARN for audit or other subsystems?
-
+> # Changes from previous version
 > 
-> > +	if (!ab)
-> > +		return;
-> > +
-> > +	WARN_ON_ONCE(node->id == 0);
-> > +	audit_log_format(
-> > +		ab,
-> > +		"domain=%llx status=allocated mode=enforcing pid=%d uid=%u exe=",
-> > +		node->id, pid_nr(node->details->pid),
-> > +		from_kuid(&init_user_ns, node->details->cred->uid));
-> > +	audit_log_untrustedstring(ab, node->details->exe_path);
-> > +	audit_log_format(ab, " comm=");
-> > +	audit_log_untrustedstring(ab, node->details->comm);
-> > +	audit_log_end(ab);
-> > +
-> > +	/*
-> > +	 * There may be race condition leading to logging of the same domain
-> > +	 * several times but that is OK.
-> > +	 */
-> > +	WRITE_ONCE(node->log_status, LANDLOCK_LOG_RECORDED);
-> > +}
-> > +
-> >  static struct landlock_hierarchy *
-> >  get_hierarchy(const struct landlock_ruleset *const domain, const size_t layer)
-> >  {
-
-> > @@ -106,16 +142,24 @@ void landlock_log_denial(const struct landlock_cred_security *const subject,
-> >  	if (!is_valid_request(request))
-> >  		return;
-> >  
-> > -	if (!unlikely(audit_context() && audit_enabled))
-> > -		return;
-> > -
-> >  	youngest_layer = request->layer_plus_one - 1;
-> >  	youngest_denied = get_hierarchy(subject->domain, youngest_layer);
-> >  
-> > +	/*
-> > +	 * Consistently keeps track of the number of denied access requests
-> > +	 * even if audit is currently disabled, if audit rules currently
-> > +	 * exclude this record type, or if landlock_restrict_self(2)'s flags
-> > +	 * quiet logs.
-> > +	 */
-> > +	atomic64_inc(&youngest_denied->num_denials);
-> > +
-> >  	/* Ignores denials after an execution. */
-> >  	if (!(subject->domain_exec & (1 << youngest_layer)))
-> >  		return;
-> >  
-> > +	if (!unlikely(audit_context() && audit_enabled))
-> > +		return;
-> > +
+> Remove the AUDIT_EXE_LANDLOCK_DENY audit rule and add 2 new
+> landlock_restrict_self(2) flags to filter Landlock audit events, which
+> makes 3 flags:
+> - LANDLOCK_RESTRICT_SELF_QUIET: do not log any denied access because of
+>   this new domain.
+> - LANDLOCK_RESTRICT_SELF_QUIET_DESCENDENTS: do not log denied access
+>   from child domains.
+> - LANDLOCK_RESTRICT_SELF_LOG_CROSS_EXEC: log denied access for processes
+>   resulting from an execve(2), which is not the case by default anymore.
 > 
-> Not a big deal either way, but it seems like the check above should
-> probably be in patch 09/24.
-
-It is in 09/24 but it's moved in this patch because we need to count
-denials consistently, see a few lines above.
-
+> One patch was merged in mainline: 7ccbe076d987 ("lsm: Only build
+> lsm_audit.c if CONFIG_SECURITY and CONFIG_AUDIT are set").
 > 
-> >  	ab = audit_log_start(audit_context(), GFP_ATOMIC | __GFP_NOWARN,
-> >  			     AUDIT_LANDLOCK_ACCESS);
-> >  	if (!ab)
-> > @@ -125,6 +169,46 @@ void landlock_log_denial(const struct landlock_cred_security *const subject,
-> >  	log_blockers(ab, request->type);
-> >  	audit_log_lsm_data(ab, &request->audit);
-> >  	audit_log_end(ab);
-> > +
-> > +	/* Logs this domain if it is the first time. */
-> > +	log_node(youngest_denied);
-> > +}
-> > +
-> > +/**
-> > + * landlock_log_drop_domain - Create an audit record when a domain is deleted
-> > + *
-> > + * @domain: The domain being deleted.
-> > + *
-> > + * Only domains which previously appeared in the audit logs are logged again.
-> > + * This is useful to know when a domain will never show again in the audit log.
-> > + *
-> > + * This record is not directly tied to a syscall entry.
-> > + *
-> > + * Called by the cred_free() hook, in an uninterruptible context.
-> > + */
-> > +void landlock_log_drop_domain(const struct landlock_ruleset *const domain)
-> > +{
-> > +	struct audit_buffer *ab;
-> > +
-> > +	if (WARN_ON_ONCE(!domain->hierarchy))
-> > +		return;
-> > +
-> > +	if (!unlikely(audit_enabled))
-> > +		return;
+> # Design
 > 
-> I'm guessing you probably also want to check the audit context given
-> that you are doing it elsewhere?
+> Log records are created for any denied actions caused by a Landlock
+> policy, which means that a well-sandboxed applications should not log
+> anything except for unattended access requests that might be the result
+> of attacks or bugs.
+> 
+> However, sandbox tools creating restricted environments could lead to
+> abundant log entries because the sandboxed processes may not be aware of
+> the related restrictions.  To avoid log spam, the
+> landlock_restrict_self(2) syscall gets a new
+> LANDLOCK_RESTRICT_SELF_QUIET flag to not log denials related to this
+> specific domain.  Except for well-understood exceptions, this flag
+> should not be set.  Indeed, applications sandboxing themselves should
+> only try to bypass their own sandbox if they are compromised, which
+> should ring a bell thanks to log events.
+> 
+> When an action is denied, the related Landlock domain ID is specified.
+> If this domain was not previously described in a log record, one is
+> created.  This record contains the domain ID, its creation time, and
+> informations about the process that enforced the restriction (at the
+> time of the call to landlock_restrict_self): PID, UID, executable path,
+> and name (comm).
+> 
+> This new approach also brings building blocks for an upcoming
+> unprivileged introspection interface.  The unique Landlock IDs will be
+> useful to tie audit log entries to running processes, and to get
+> properties of the related Landlock domains.  This will replace the
+> previously logged ruleset properties.
 
-The context is NULL when this function is called, I guess because it is
-not directly triggered by a syscall but deferred to the domain
-deallocation.
+What implications does this patch set have for Landlock's performance?
 
+For some aspects of Landlock domains, when domains get merged, their
+rules can potentially get merged into simpler "flattened"
+representations at the cost of losing track about the original domain
+for individual denials.
+
+For instance, when a process enforces the following two rulesets
+nested in each other:
+
+ * RS1 allowed to only connect to TCP ports {1, 2, 3}
+ * RS2 allowed to only connect to TCP ports {2, 3, 4}
+
+Then the resulting merged domain could build the intersection of these
+two sets {2, 3}, and store a smaller set of port numbers than the two
+rulesets individually.  Similar tricks would likely also be possible
+for the rules for socket type restriction, as well as for
+IOCTL-per-command allow-lists, if we had done that at that level of
+granularity.
+
+I realize that we are not doing this right now for ports, so it is
+slightly speculative, but it would be an option in the future.
+However, when we want to attribute each denial to the original domain
+which caused it, that kind of optimization does not work any more.
+
+In performance-sensitive environments that don't need Landlock
+auditing, to what extent would users of such environments have to pay
+a "hidden cost" of auditing because we can't do such "data structure
+flattening" optimizations any more?
+
+Do you have thoughts on how you want to strike the balance between
+Landlock performance and logging accuracy?
+
+–Günther
+
+> # Samples
 > 
-> > +	/* Ignores domains that were not logged.  */
-> > +	if (READ_ONCE(domain->hierarchy->log_status) != LANDLOCK_LOG_RECORDED)
-> > +		return;
-> > +
-> > +	ab = audit_log_start(audit_context(), GFP_ATOMIC,
-> > +			     AUDIT_LANDLOCK_DOMAIN);
-> > +	if (!ab)
-> > +		return;
-> > +
-> > +	audit_log_format(ab, "domain=%llx status=deallocated denials=%llu",
-> > +			 domain->hierarchy->id,
-> > +			 atomic64_read(&domain->hierarchy->num_denials));
-> > +	audit_log_end(ab);
-> >  }
-> >  
-> >  #ifdef CONFIG_SECURITY_LANDLOCK_KUNIT_TEST
+> Here are two examples of log events (see serial numbers):
 > 
-> --
-> paul-moore.com
+> $ LL_FS_RO=/ LL_FS_RW=/ LL_SCOPED=s LL_FORCE_LOG=1 ./sandboxer kill 1
+> 
+>   type=LANDLOCK_ACCESS msg=audit(1729738800.268:30): domain=1a6fdc66f blockers=scope.signal opid=1 ocomm="systemd"
+>   type=LANDLOCK_DOMAIN msg=audit(1729738800.268:30): domain=1a6fdc66f status=allocated mode=enforcing pid=286 uid=0 exe="/root/sandboxer" comm="sandboxer"
+>   type=SYSCALL msg=audit(1729738800.268:30): arch=c000003e syscall=62 success=no exit=-1 [..] ppid=272 pid=286 auid=0 uid=0 gid=0 [...] comm="kill" [...]
+>   type=PROCTITLE msg=audit(1729738800.268:30): proctitle=6B696C6C0031
+>   type=LANDLOCK_DOMAIN msg=audit(1729738800.324:31): domain=1a6fdc66f status=deallocated denials=1
+> 
+> $ LL_FS_RO=/ LL_FS_RW=/tmp LL_FORCE_LOG=1 ./sandboxer sh -c "echo > /etc/passwd"
+> 
+>   type=LANDLOCK_ACCESS msg=audit(1729738800.221:33): domain=1a6fdc679 blockers=fs.write_file path="/dev/tty" dev="devtmpfs" ino=9
+>   type=LANDLOCK_DOMAIN msg=audit(1729738800.221:33): domain=1a6fdc679 status=allocated mode=enforcing pid=289 uid=0 exe="/root/sandboxer" comm="sandboxer"
+>   type=SYSCALL msg=audit(1729738800.221:33): arch=c000003e syscall=257 success=no exit=-13 [...] ppid=272 pid=289 auid=0 uid=0 gid=0 [...] comm="sh" [...]
+>   type=PROCTITLE msg=audit(1729738800.221:33): proctitle=7368002D63006563686F203E202F6574632F706173737764
+>   type=LANDLOCK_ACCESS msg=audit(1729738800.221:34): domain=1a6fdc679 blockers=fs.write_file path="/etc/passwd" dev="vda2" ino=143821
+>   type=SYSCALL msg=audit(1729738800.221:34): arch=c000003e syscall=257 success=no exit=-13 [...] ppid=272 pid=289 auid=0 uid=0 gid=0 [...] comm="sh" [...]
+>   type=PROCTITLE msg=audit(1729738800.221:34): proctitle=7368002D63006563686F203E202F6574632F706173737764
+>   type=LANDLOCK_DOMAIN msg=audit(1729738800.261:35): domain=1a6fdc679 status=deallocated denials=2
+> 
+> # Future changes
+> 
+> I'll add more tests to check each kind of denied access.
+> 
+> # Previous versions
+> 
+> v4: https://lore.kernel.org/r/20250108154338.1129069-1-mic@digikod.net
+> v3: https://lore.kernel.org/r/20241122143353.59367-1-mic@digikod.net
+> v2: https://lore.kernel.org/r/20241022161009.982584-1-mic@digikod.net
+> v1: https://lore.kernel.org/r/20230921061641.273654-1-mic@digikod.net
+> 
+> Regards,
+> 
+> Mickaël Salaün (24):
+>   lsm: Add audit_log_lsm_data() helper
+>   landlock: Add unique ID generator
+>   landlock: Move domain hierarchy management
+>   landlock: Prepare to use credential instead of domain for filesystem
+>   landlock: Prepare to use credential instead of domain for network
+>   landlock: Prepare to use credential instead of domain for scope
+>   landlock: Prepare to use credential instead of domain for fowner
+>   landlock: Identify domain execution crossing
+>   landlock: Add AUDIT_LANDLOCK_ACCESS and log ptrace denials
+>   landlock: Add AUDIT_LANDLOCK_DOMAIN and log domain status
+>   landlock: Log mount-related denials
+>   landlock: Log file-related denials
+>   landlock: Log truncate and IOCTL denials
+>   landlock: Log TCP bind and connect denials
+>   landlock: Log scoped denials
+>   landlock: Add LANDLOCK_RESTRICT_SELF_QUIET
+>   landlock: Add LANDLOCK_RESTRICT_SELF_QUIET_SUBDOMAINS
+>   landlock: Add LANDLOCK_RESTRICT_SELF_LOG_CROSS_EXEC
+>   samples/landlock: Enable users to log sandbox denials
+>   selftests/landlock: Extend tests for landlock_restrict_self()'s flags
+>   selftests/landlock: Add tests for audit and
+>     LANDLOCK_RESTRICT_SELF_QUIET
+>   selftests/landlock: Test audit with restrict flags
+>   selftests/landlock: Add audit tests for ptrace
+>   landlock: Add audit documentation
+> 
+>  Documentation/admin-guide/LSM/index.rst       |   1 +
+>  Documentation/admin-guide/LSM/landlock.rst    | 157 ++++++
+>  Documentation/security/landlock.rst           |   7 +
+>  Documentation/userspace-api/landlock.rst      |   9 +-
+>  MAINTAINERS                                   |   1 +
+>  include/linux/lsm_audit.h                     |   8 +
+>  include/uapi/linux/audit.h                    |   4 +-
+>  include/uapi/linux/landlock.h                 |  31 ++
+>  samples/landlock/sandboxer.c                  |  37 +-
+>  security/landlock/.kunitconfig                |   2 +
+>  security/landlock/Makefile                    |   5 +
+>  security/landlock/access.h                    |  23 +
+>  security/landlock/audit.c                     | 513 ++++++++++++++++++
+>  security/landlock/audit.h                     |  77 +++
+>  security/landlock/cred.c                      |  26 +-
+>  security/landlock/cred.h                      |  65 +++
+>  security/landlock/domain.c                    | 264 +++++++++
+>  security/landlock/domain.h                    | 158 ++++++
+>  security/landlock/fs.c                        | 279 ++++++++--
+>  security/landlock/fs.h                        |  21 +-
+>  security/landlock/id.c                        | 249 +++++++++
+>  security/landlock/id.h                        |  25 +
+>  security/landlock/limits.h                    |   4 +
+>  security/landlock/net.c                       |  74 ++-
+>  security/landlock/ruleset.c                   |  33 +-
+>  security/landlock/ruleset.h                   |  47 +-
+>  security/landlock/setup.c                     |   2 +
+>  security/landlock/syscalls.c                  |  50 +-
+>  security/landlock/task.c                      | 232 ++++++--
+>  security/lsm_audit.c                          |  27 +-
+>  tools/testing/kunit/configs/all_tests.config  |   2 +
+>  tools/testing/selftests/landlock/Makefile     |   6 +-
+>  tools/testing/selftests/landlock/audit.h      | 358 ++++++++++++
+>  tools/testing/selftests/landlock/audit_test.c | 425 +++++++++++++++
+>  tools/testing/selftests/landlock/base_test.c  |  43 +-
+>  tools/testing/selftests/landlock/common.h     |   3 +
+>  tools/testing/selftests/landlock/config       |   1 +
+>  .../testing/selftests/landlock/ptrace_test.c  |  67 ++-
+>  .../selftests/landlock/wait-pipe-sandbox.c    | 131 +++++
+>  39 files changed, 3244 insertions(+), 223 deletions(-)
+>  create mode 100644 Documentation/admin-guide/LSM/landlock.rst
+>  create mode 100644 security/landlock/audit.c
+>  create mode 100644 security/landlock/audit.h
+>  create mode 100644 security/landlock/domain.c
+>  create mode 100644 security/landlock/domain.h
+>  create mode 100644 security/landlock/id.c
+>  create mode 100644 security/landlock/id.h
+>  create mode 100644 tools/testing/selftests/landlock/audit.h
+>  create mode 100644 tools/testing/selftests/landlock/audit_test.c
+>  create mode 100644 tools/testing/selftests/landlock/wait-pipe-sandbox.c
+> 
+> 
+> base-commit: 69e858e0b8b2ea07759e995aa383e8780d9d140c
+> -- 
+> 2.48.1
 > 
