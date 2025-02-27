@@ -1,98 +1,245 @@
-Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 854472620D8
-	for <audit@vger.kernel.org>; Wed, 26 Feb 2025 23:41:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.178
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D34732777F0;
+	Thu, 27 Feb 2025 22:46:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740613310; cv=none; b=WkBH+A9Mr4k0gGMXGE/B5aGxiZ8NxsgaAzdacveADjXZzQMIRXqpdKjtQH/KCqk5VV2E3l8xkYv2w8NdUhFNt2HkiUhlGgVrK/KNBl1NhjPsEk4abwCixUfjIHQkBMxtUynOyVTLnZilmIfWbL0XsllZuzdzsz99GYy+BR52YiI=
+	t=1740696392; cv=none; b=fZRVUkxL0uVMXT+3N8673swZoQFpui0ZIYG0Td0wVlAJ66buOlYTLVLC6iVYpzWMQCyBwNsVuqV5YkpxKC+IN/RcOIpX61Mni3xUked7VKCcQ7zjJwECIXUWDRMUcnHYxI+500D0/eIogkHhI6ncixcrTymtT069WFU9Hs442WM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740613310; c=relaxed/simple;
-	bh=JQDAukDOA1SXdHWfiWnXuv4Qp+qpUTG+aOURb/RFTMg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=laJViOtxmUks7B82zw3/+KaNJHCHcngkrRss3E27up1JIRJmjGF47rLC3/J827B3KCG7+4JwaCDi8/uuPG87+nbSnStvBagwP6aHMT/eKR6P+8n/ezxgAT7QLAxkyxd7JeM5yoVhLzGD98Ere5TVdaeDzwWMgANXFpKzT9Fge4U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=f74K/K/a; arc=none smtp.client-ip=209.85.128.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+	s=arc-20240116; t=1740696392; c=relaxed/simple;
+	bh=Q6Pa0KhEvlHtwBQPvl7cH5V19cFDAgMxXJL/DJvUHCE=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=DYwWZGAt8YGiF6FZTra8ae69WYheXPRlNaiJ6cUn28yfRCspvZmDyCprjgi734oeeeTkoZIwUFP0YbluAgh88zBCDNSHCEjY4VWy/d3I/E5iK6CexKSUSx+JDmuOSM8nHpP2DGVRUkA8lJse9rLJqOnozaLghldODgnyXJZd8Rk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=lGVeiR+E; arc=none smtp.client-ip=13.77.154.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="f74K/K/a"
-Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-6efe4e3d698so3851707b3.0
-        for <audit@vger.kernel.org>; Wed, 26 Feb 2025 15:41:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1740613307; x=1741218107; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JQDAukDOA1SXdHWfiWnXuv4Qp+qpUTG+aOURb/RFTMg=;
-        b=f74K/K/afzWjWvWsdHxzN/jH61xJHHyuPbfUP001y7a/mX6nUiQ6DZSUR4rQzkAFCx
-         uOFAYRBDM75LJJ3tEtVTkKT7Pfyamp4QYiJxQoBN7PAuBLpEFKsB4bsCIFSC+EyqITA4
-         MSFowOZhYMXT6smdUYfJrBJNAGtzWPePtqkaV+TeW+JQV8A86bZ4NvxrgQQwmhygBwVc
-         4AyCxHkuezll/ele/Euj7pr1pPIBuQgLCodPj+v2Il0IkiTCMNdfBwh8YYMXpiUuZsUg
-         jNsMH1mqRG2FYKB9txR+/jBVrF4PiuwCG7NFcaxSBTrxjJCbTAetHKMw2dcEExoHNhUR
-         hHlQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740613307; x=1741218107;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=JQDAukDOA1SXdHWfiWnXuv4Qp+qpUTG+aOURb/RFTMg=;
-        b=skGQD6bsC0A/ltVerG3PcDd5xYtSd0IrXEAW0EFVpG2JASt2NMh2MsDXvIipsi2nHG
-         BvCbYxmbqn+C/13O++/ZHgZGEXAjqbi4fJCOx2dTuPMx2OxmMWtg3mTBjkMlUh5f7oIY
-         89JqXx8wqg4BHG8ShugFMIvxYJeU8wl0KOGbONBMWu4qXvbu2lVaC0G2XqHJn+zPIItV
-         1U9g8P1fXrNpTGoVxNDGRQZLhgVoO7M1KF61AuEhdcumaAN2dPgpCothZzfrbSvbfgb8
-         2XToyd3a0fSK1MvEdCHglDwxRM3NUplVKjHa4n87U9a+LOYWnUJCr0sPd+wuGySUduXG
-         Mpqg==
-X-Forwarded-Encrypted: i=1; AJvYcCUIcUx6qpIcFEW3ayUBcSY2dQ0pIsW9mfJ2okazgN9Ja4urIycAqoBG7iRrSlrvzU9aG/YV8Q==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwdLJBYk4+OHz6QkplF4GpCnTwtFWBIOruwDwOeQIyW1FlIWaeT
-	OK6xrsFcV+WPsiByfujACHdkmWc2SV2hnx/WMWdrExode2P/GeEYzdKo57iPC17LtRt7To8mD68
-	4yq3wpjUhDAYFmnK1cia+qnvFgU6xCjtynmG2
-X-Gm-Gg: ASbGncuX+hpyPfShpxK5ZWMdUp1P3LYJGMg89LS2UAqajbmRl8JcKx06M8/CiSAItyw
-	gha159/8NtkcChZY7jUvqb1uo637Rgyqau9x/4B3JfpRIKGw0Uy0ICfUP95CI2HvrOjtKgxX0R0
-	5sRjVEPoQ=
-X-Google-Smtp-Source: AGHT+IGemVdA8vFM5APA46NT9uZdRK4EJWAEgmp2/eNiVxXqJ81TXGGCyav4i+lfYJLRLeB/U2Bp2pN4yp0P8tAT1hU=
-X-Received: by 2002:a05:690c:38d:b0:6f6:b646:4f34 with SMTP id
- 00721157ae682-6fd22074377mr57621747b3.30.1740613307514; Wed, 26 Feb 2025
- 15:41:47 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="lGVeiR+E"
+Received: by linux.microsoft.com (Postfix, from userid 1212)
+	id 7133E210D0F2; Thu, 27 Feb 2025 14:46:30 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 7133E210D0F2
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1740696390;
+	bh=aqBCcjB1GK85ZkCy3eKDq7vjs8P7hOhb3Um+ZUwqHwU=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=lGVeiR+EmAAjP23a2cMbYaJvaa52eX7lDcBNK530Z/qjh+OgbQCPGO+GBwkePJJIv
+	 sRekI3vtPozpaqqLxu0ar47xgem/MoE5SfVVkidjhVlp3IczOUsC5AA+m/cnC1wCr9
+	 oFglWIUtRtych1UOaEmbzyNy34PNtqAayX0ryTpQ=
+From: Jasjiv Singh <jasjivsingh@linux.microsoft.com>
+To: wufan@kernel.org
+Cc: audit@vger.kernel.org,
+	corbet@lwn.net,
+	eparis@redhat.com,
+	jasjivsingh@linux.microsoft.com,
+	jmorris@namei.org,
+	linux-audit@redhat.com,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-security-module@vger.kernel.org,
+	paul@paul-moore.com
+Subject: [PATCH v2] ipe: add errno field to IPE policy load auditing
+Date: Thu, 27 Feb 2025 14:46:17 -0800
+Message-Id: <1740696377-3986-1-git-send-email-jasjivsingh@linux.microsoft.com>
+X-Mailer: git-send-email 1.8.3.1
+In-Reply-To: <CAKtyLkFg2+8ciy4DM=g+vcTVvuRPNL2SHbN+m9ObErxtYXZYPw@mail.gmail.com>
+References: <CAKtyLkFg2+8ciy4DM=g+vcTVvuRPNL2SHbN+m9ObErxtYXZYPw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20250131163059.1139617-11-mic@digikod.net> <7ed44e7b0e371302d29be95789cd1a57@paul-moore.com>
- <20250218.aePeer3oole2@digikod.net>
-In-Reply-To: <20250218.aePeer3oole2@digikod.net>
-From: Paul Moore <paul@paul-moore.com>
-Date: Wed, 26 Feb 2025 18:41:36 -0500
-X-Gm-Features: AQ5f1JqWYmxLqpt22zS6kb-r4-IiD-XvgZ__5B9665k_Ga0PZ4Qv98lgbWnYyX4
-Message-ID: <CAHC9VhSo7L8jw2pR9x6KmVCiqucGaRqkuj+RyQXOC6jnQBcQjA@mail.gmail.com>
-Subject: Re: [PATCH v5 10/24] landlock: Add AUDIT_LANDLOCK_DOMAIN and log
- domain status
-To: =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>
-Cc: Eric Paris <eparis@redhat.com>, =?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>, 
-	"Serge E . Hallyn" <serge@hallyn.com>, Ben Scarlato <akhna@google.com>, 
-	Casey Schaufler <casey@schaufler-ca.com>, Charles Zaffery <czaffery@roblox.com>, 
-	Daniel Burgener <dburgener@linux.microsoft.com>, 
-	Francis Laniel <flaniel@linux.microsoft.com>, James Morris <jmorris@namei.org>, 
-	Jann Horn <jannh@google.com>, Jeff Xu <jeffxu@google.com>, 
-	Jorge Lucangeli Obes <jorgelo@google.com>, Kees Cook <kees@kernel.org>, 
-	Konstantin Meskhidze <konstantin.meskhidze@huawei.com>, Matt Bobrowski <mattbobrowski@google.com>, 
-	Mikhail Ivanov <ivanov.mikhail1@huawei-partners.com>, Phil Sutter <phil@nwl.cc>, 
-	Praveen K Paladugu <prapal@linux.microsoft.com>, Robert Salvet <robert.salvet@roblox.com>, 
-	Shervin Oloumi <enlightened@google.com>, Song Liu <song@kernel.org>, 
-	Tahera Fahimi <fahimitahera@gmail.com>, Tyler Hicks <code@tyhicks.com>, audit@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Tue, Feb 18, 2025 at 2:21=E2=80=AFPM Micka=C3=ABl Sala=C3=BCn <mic@digik=
-od.net> wrote:
->
-> Are there guidance about __GFP_NOWARN for audit or other subsystems?
+Thanks for reviewing it. Here's the example generated from real logs:
 
-Unfortunately I'm not aware of anything, and I too would be very
-interested in learning if there was some solid guidance around the GFP
-flags as the comment block in gfp_types.h is rather short.
+AUDIT_IPE_POLICY_LOAD(1422):
+audit:  AUDIT1422 policy_name="Test_Policy" policy_version=0.0.1 
+policy_digest =sha256:84EFBA8FA71E62AE0A537FAB962F8A2BD1053964C4
+299DCA92BFFF4DB82E86D3 auid=1000 ses=3 lsm=ipe res=1 errno=0
 
---=20
-paul-moore.com
+The above record shows a new policy has been successfully loaded into
+the kernel with the policy name, version, and hash with the errno=0.
+
+AUDIT_IPE_POLICY_LOAD(1422) with error:
+
+audit: AUDIT1422 policy_name=? policy_version=? policy_digest=?
+auid=1000 ses=3 lsm=ipe res=0 errno=-74
+
+The above record shows a policy load failure due to an invalid policy.
+
+I have updated the failure cases in new_policy() and update_policy(),
+which covers each case as well.
+ 
+Signed-off-by: Jasjiv Singh <jasjivsingh@linux.microsoft.com>
+---
+ Documentation/admin-guide/LSM/ipe.rst |  2 ++
+ security/ipe/audit.c                  | 10 ++++------
+ security/ipe/fs.c                     | 17 ++++++++++++-----
+ security/ipe/policy.c                 |  4 +---
+ security/ipe/policy_fs.c              | 24 +++++++++++++++++++-----
+ 5 files changed, 38 insertions(+), 19 deletions(-)
+
+diff --git a/Documentation/admin-guide/LSM/ipe.rst b/Documentation/admin-guide/LSM/ipe.rst
+index 2143165f48c9..5dbf54471fab 100644
+--- a/Documentation/admin-guide/LSM/ipe.rst
++++ b/Documentation/admin-guide/LSM/ipe.rst
+@@ -453,6 +453,8 @@ Field descriptions:
+ | errno          | integer    | No        | The result of the policy error as follows:        |
+ |                |            |           |                                                   |
+ |                |            |           | +  0: no error                                    |
++|                |            |           | +  -EPERM: Insufficient permission                |
++|                |            |           | +  -EEXIST: Same name policy already deployed     |
+ |                |            |           | +  -EBADMSG: policy is invalid                    |
+ |                |            |           | +  -ENOMEM: out of memory (OOM)                   |
+ |                |            |           | +  -ERANGE: policy version number overflow        |
+diff --git a/security/ipe/audit.c b/security/ipe/audit.c
+index f810f7004498..8df307bb2bab 100644
+--- a/security/ipe/audit.c
++++ b/security/ipe/audit.c
+@@ -21,7 +21,7 @@
+ 
+ #define AUDIT_POLICY_LOAD_FMT "policy_name=\"%s\" policy_version=%hu.%hu.%hu "\
+ 			      "policy_digest=" IPE_AUDIT_HASH_ALG ":"
+-#define AUDIT_POLICY_LOAD_NULL_FMT "policy_name=? policy_version=? "\
++#define AUDIT_POLICY_LOAD_FAIL_FMT "policy_name=? policy_version=? "\
+ 				   "policy_digest=?"
+ #define AUDIT_OLD_ACTIVE_POLICY_FMT "old_active_pol_name=\"%s\" "\
+ 				    "old_active_pol_version=%hu.%hu.%hu "\
+@@ -255,9 +255,8 @@ void ipe_audit_policy_activation(const struct ipe_policy *const op,
+  */
+ void ipe_audit_policy_load(const struct ipe_policy *const p)
+ {
+-	int res = 0;
+-	int err = 0;
+ 	struct audit_buffer *ab;
++	int err = 0;
+ 
+ 	ab = audit_log_start(audit_context(), GFP_KERNEL,
+ 			     AUDIT_IPE_POLICY_LOAD);
+@@ -266,15 +265,14 @@ void ipe_audit_policy_load(const struct ipe_policy *const p)
+ 
+ 	if (!IS_ERR(p)) {
+ 		audit_policy(ab, AUDIT_POLICY_LOAD_FMT, p);
+-		res = 1;
+ 	} else {
+-		audit_log_format(ab, AUDIT_POLICY_LOAD_NULL_FMT);
++		audit_log_format(ab, AUDIT_POLICY_LOAD_FAIL_FMT);
+ 		err = PTR_ERR(p);
+ 	}
+ 
+ 	audit_log_format(ab, " auid=%u ses=%u lsm=ipe res=%d errno=%d",
+ 			 from_kuid(&init_user_ns, audit_get_loginuid(current)),
+-			 audit_get_sessionid(current), res, err);
++			 audit_get_sessionid(current), !err, err);
+ 
+ 	audit_log_end(ab);
+ }
+diff --git a/security/ipe/fs.c b/security/ipe/fs.c
+index 5b6d19fb844a..40805b13ee2c 100644
+--- a/security/ipe/fs.c
++++ b/security/ipe/fs.c
+@@ -141,12 +141,16 @@ static ssize_t new_policy(struct file *f, const char __user *data,
+ 	char *copy = NULL;
+ 	int rc = 0;
+ 
+-	if (!file_ns_capable(f, &init_user_ns, CAP_MAC_ADMIN))
+-		return -EPERM;
++	if (!file_ns_capable(f, &init_user_ns, CAP_MAC_ADMIN)) {
++		rc = -EPERM;
++		goto out;
++	}
+ 
+ 	copy = memdup_user_nul(data, len);
+-	if (IS_ERR(copy))
+-		return PTR_ERR(copy);
++	if (IS_ERR(copy)) {
++		rc = PTR_ERR(copy);
++		goto out;
++	}
+ 
+ 	p = ipe_new_policy(NULL, 0, copy, len);
+ 	if (IS_ERR(p)) {
+@@ -161,8 +165,11 @@ static ssize_t new_policy(struct file *f, const char __user *data,
+ 	ipe_audit_policy_load(p);
+ 
+ out:
+-	if (rc < 0)
++	if (rc < 0) {
+ 		ipe_free_policy(p);
++		p = ERR_PTR(rc);
++		ipe_audit_policy_load(p);
++	}
+ 	kfree(copy);
+ 	return (rc < 0) ? rc : len;
+ }
+diff --git a/security/ipe/policy.c b/security/ipe/policy.c
+index 0f616e9fbe61..b628f696e32b 100644
+--- a/security/ipe/policy.c
++++ b/security/ipe/policy.c
+@@ -202,9 +202,7 @@ struct ipe_policy *ipe_new_policy(const char *text, size_t textlen,
+ 	return new;
+ err:
+ 	ipe_free_policy(new);
+-	new = ERR_PTR(rc);
+-	ipe_audit_policy_load(new);
+-	return new;
++	return ERR_PTR(rc);
+ }
+ 
+ /**
+diff --git a/security/ipe/policy_fs.c b/security/ipe/policy_fs.c
+index 3bcd8cbd09df..74f4e7288331 100644
+--- a/security/ipe/policy_fs.c
++++ b/security/ipe/policy_fs.c
+@@ -12,6 +12,7 @@
+ #include "policy.h"
+ #include "eval.h"
+ #include "fs.h"
++#include "audit.h"
+ 
+ #define MAX_VERSION_SIZE ARRAY_SIZE("65535.65535.65535")
+ 
+@@ -288,25 +289,38 @@ static ssize_t getactive(struct file *f, char __user *data,
+ static ssize_t update_policy(struct file *f, const char __user *data,
+ 			     size_t len, loff_t *offset)
+ {
++	const struct ipe_policy *p = NULL;
+ 	struct inode *root = NULL;
+ 	char *copy = NULL;
+ 	int rc = 0;
+ 
+-	if (!file_ns_capable(f, &init_user_ns, CAP_MAC_ADMIN))
+-		return -EPERM;
++	if (!file_ns_capable(f, &init_user_ns, CAP_MAC_ADMIN)) {
++		rc = -EPERM;
++		goto out;
++	}
+ 
+ 	copy = memdup_user(data, len);
+-	if (IS_ERR(copy))
+-		return PTR_ERR(copy);
++	if (IS_ERR(copy)) {
++		rc = PTR_ERR(copy);
++		goto out;
++	}
+ 
+ 	root = d_inode(f->f_path.dentry->d_parent);
+ 	inode_lock(root);
+ 	rc = ipe_update_policy(root, NULL, 0, copy, len);
++	if (rc < 0) {
++		inode_unlock(root);
++		goto out;
++	}
+ 	inode_unlock(root);
+ 
++out:
+ 	kfree(copy);
+-	if (rc)
++	if (rc) {
++		p = ERR_PTR(rc);
++		ipe_audit_policy_load(p);
+ 		return rc;
++	}
+ 
+ 	return len;
+ }
+-- 
+2.34.1
+
