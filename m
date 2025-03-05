@@ -1,47 +1,47 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32E00204583
-	for <audit@vger.kernel.org>; Wed,  5 Mar 2025 21:35:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 558912571A1
+	for <audit@vger.kernel.org>; Wed,  5 Mar 2025 21:35:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741210551; cv=none; b=EkwwqR0h6jUt6Nlov4X7NRY087y86rLlJ0+D4yJ9KzfHimxLAwmgjFswUOaMKruLKx4ICGSicVIKbkFk/NqKE9n10EbuYwX0VhUX0DWvraJIzQ56sU/AhCXkS4Xadg/m3ndSfRnGmkn402JQBd2guKRzcqSonlFtmCTYHlwDMok=
+	t=1741210559; cv=none; b=qhb1wiPpFoKgRqTr1494RxqxOeHKEa8EeN+IOpHrsEZfcnJDE0nthMUhCmcEdT7HSpyMD/jKu49iNF2f1b5XyCowXbpuiGSkdQ+MBTNg9ymnGWuyxi10sEoh0q+Xhxl+6J2NqCXSmwJHw6ZC/oCQ+ztNZbUy3CDNomcdaYG8+Uw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741210551; c=relaxed/simple;
-	bh=kJB/BuKpNJuMmYfW3eeM1K+X6HuiYJFeiFZWiMKXpQU=;
+	s=arc-20240116; t=1741210559; c=relaxed/simple;
+	bh=SflZSNxyKqwjQwi6drHuYZoUmeT0qxe50tPNwOzBgE8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-type; b=r2q4ouvnjS932nUo4q6xYpK+oygCggCJDiTi0dKfxcXgTRe0YJvwThv4ZaxbGOLTMkrjOxVDtQ67bZNfCmZSfib3bN1pCl5PghHqZOFGIM0tsSOJE1tJ0Hmc2vPqTq6mQOudvNhNC54Qy9OSE4Kb5YPqILGLvyzRwlJ8Pmhf7cw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=bHdKGNa7; arc=none smtp.client-ip=170.10.133.124
+	 MIME-Version:Content-type; b=OCIAVU0ylzCAotvfElwiE4lyrheIX8ti1lJ3Wi0fWKC2VAIbstSP+JFN7pdoM7XL1HGKySsUR+hXBjHEePPa3qeALCqL/L6u5UoFlNT+IpRFJN3nKzycip/X5HcxmMacFAD2uess/7QPKW/z3+dBIr+aH3eNJHbl/DaVw0mHkco=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=aJswfg1E; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="bHdKGNa7"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="aJswfg1E"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1741210549;
+	s=mimecast20190719; t=1741210557;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=j/065lj+K5RVB5JDzFKvemDu1XmMmEIECpSK6YxUCzE=;
-	b=bHdKGNa7gC3fff1TfnzyZjn64g+kiIxN9EBFu0+QwH3QM/tCgOzKuelT+t8hTiqs3wsxLU
-	GUXDPmZeZB0crXpnvsDPCquW/qPlYBu75Gmz2SisCYxDEII72DtnHZAlWjrXrQDGkONlf9
-	fs0kAX/5iBftEZEdFwDL+kvlS4xZj3g=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
+	bh=WVP1rCTer6eijl5cxS3xeMFf/yShnPi0yCI1aksLWSE=;
+	b=aJswfg1EdjPQE6ZzV1khF+5ur7apZav7WrWTKy4D6t4v8R4/8zcJVKvBBZCwrXbSTLJ3wQ
+	WMSWu/7fpwqVvMU/XWTO8yfutYSHwgDxFDQZdVgbmfVp8rW9HeOcV2A8lySg3i7ryuKnaA
+	TogJpe2cg5dqUkfuGsYfZvOpaXRdANU=
+Received: from mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com
  (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-504-1-a3N_2zPBmhY8ApvHz-ig-1; Wed,
- 05 Mar 2025 16:35:45 -0500
-X-MC-Unique: 1-a3N_2zPBmhY8ApvHz-ig-1
-X-Mimecast-MFC-AGG-ID: 1-a3N_2zPBmhY8ApvHz-ig_1741210543
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-396-KOXsgrFtORipS_8F9f4k0A-1; Wed,
+ 05 Mar 2025 16:35:49 -0500
+X-MC-Unique: KOXsgrFtORipS_8F9f4k0A-1
+X-Mimecast-MFC-AGG-ID: KOXsgrFtORipS_8F9f4k0A_1741210547
 Received: from mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.40])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 311BF1954B20;
-	Wed,  5 Mar 2025 21:35:43 +0000 (UTC)
+	by mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 6714D1955D7A;
+	Wed,  5 Mar 2025 21:35:47 +0000 (UTC)
 Received: from madcap2.tricolour.com (unknown [10.22.76.19])
-	by mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 306121955DCE;
-	Wed,  5 Mar 2025 21:35:39 +0000 (UTC)
+	by mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id ED8161955DCE;
+	Wed,  5 Mar 2025 21:35:44 +0000 (UTC)
 From: Richard Guy Briggs <rgb@redhat.com>
 To: Linux-Audit Mailing List <linux-audit@lists.linux-audit.osci.io>,
 	LKML <linux-kernel@vger.kernel.org>,
@@ -53,9 +53,9 @@ Cc: Paul Moore <paul@paul-moore.com>,
 	Richard Guy Briggs <rgb@redhat.com>,
 	Jan Kara <jack@suse.cz>,
 	Amir Goldstein <amir73il@gmail.com>
-Subject: [PATCH v1 1/2] audit: record fanotify event regardless of presence of rules
-Date: Wed,  5 Mar 2025 16:33:19 -0500
-Message-ID: <3c2679cb9df8a110e1e21b7f387b77ddfaacc289.1741210251.git.rgb@redhat.com>
+Subject: [PATCH v1 2/2] audit: record AUDIT_ANOM_* events regardless of presence of rules
+Date: Wed,  5 Mar 2025 16:33:20 -0500
+Message-ID: <0b569667efde7c91992bf3ea35b40c3a8f10e384.1741210251.git.rgb@redhat.com>
 In-Reply-To: <cover.1741210251.git.rgb@redhat.com>
 References: <cover.1741210251.git.rgb@redhat.com>
 Precedence: bulk
@@ -68,63 +68,42 @@ Content-type: text/plain
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.0 on 10.30.177.40
 
-When no audit rules are in place, fanotify event results are
-unconditionally dropped due to an explicit check for the existence of
-any audit rules.  Given this is a report from another security
-sub-system, allow it to be recorded regardless of the existence of any
-audit rules.
+When no audit rules are in place, AUDIT_ANOM_{LINK,CREAT} events
+reported in audit_log_path_denied() are unconditionally dropped due to
+an explicit check for the existence of any audit rules.  Given this is a
+report of a security violation, allow it to be recorded regardless of
+the existence of any audit rules.
 
-To test, install and run the fapolicyd daemon with default config.  Then
-as an unprivileged user, create and run a very simple binary that should
-be denied.  Then check for an event with
-	ausearch -m FANOTIFY -ts recent
+To test,
+	mkdir -p /root/tmp
+	chmod 1777 /root/tmp
+	touch /root/tmp/test.txt
+	useradd test
+	chown test /root/tmp/test.txt
+	{echo C0644 12 test.txt; printf 'hello\ntest1\n'; printf \\000;} | \
+		scp -t /root/tmp
+Check with
+	ausearch -m ANOM_CREAT -ts recent
 
-Link: https://issues.redhat.com/browse/RHEL-1367
+Link: https://issues.redhat.com/browse/RHEL-9065
 Signed-off-by: Richard Guy Briggs <rgb@redhat.com>
 ---
- include/linux/audit.h | 8 +-------
- kernel/auditsc.c      | 2 +-
- 2 files changed, 2 insertions(+), 8 deletions(-)
+ kernel/audit.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/include/linux/audit.h b/include/linux/audit.h
-index 0050ef288ab3..d0c6f23503a1 100644
---- a/include/linux/audit.h
-+++ b/include/linux/audit.h
-@@ -418,7 +418,7 @@ extern void __audit_log_capset(const struct cred *new, const struct cred *old);
- extern void __audit_mmap_fd(int fd, int flags);
- extern void __audit_openat2_how(struct open_how *how);
- extern void __audit_log_kern_module(char *name);
--extern void __audit_fanotify(u32 response, struct fanotify_response_info_audit_rule *friar);
-+extern void audit_fanotify(u32 response, struct fanotify_response_info_audit_rule *friar);
- extern void __audit_tk_injoffset(struct timespec64 offset);
- extern void __audit_ntp_log(const struct audit_ntp_data *ad);
- extern void __audit_log_nfcfg(const char *name, u8 af, unsigned int nentries,
-@@ -525,12 +525,6 @@ static inline void audit_log_kern_module(char *name)
- 		__audit_log_kern_module(name);
- }
- 
--static inline void audit_fanotify(u32 response, struct fanotify_response_info_audit_rule *friar)
--{
--	if (!audit_dummy_context())
--		__audit_fanotify(response, friar);
--}
--
- static inline void audit_tk_injoffset(struct timespec64 offset)
+diff --git a/kernel/audit.c b/kernel/audit.c
+index 53e3bddcc327..0cf2827882fc 100644
+--- a/kernel/audit.c
++++ b/kernel/audit.c
+@@ -2285,7 +2285,7 @@ void audit_log_path_denied(int type, const char *operation)
  {
- 	/* ignore no-op events */
-diff --git a/kernel/auditsc.c b/kernel/auditsc.c
-index 0627e74585ce..936825114bae 100644
---- a/kernel/auditsc.c
-+++ b/kernel/auditsc.c
-@@ -2880,7 +2880,7 @@ void __audit_log_kern_module(char *name)
- 	context->type = AUDIT_KERN_MODULE;
- }
+ 	struct audit_buffer *ab;
  
--void __audit_fanotify(u32 response, struct fanotify_response_info_audit_rule *friar)
-+void audit_fanotify(u32 response, struct fanotify_response_info_audit_rule *friar)
- {
- 	/* {subj,obj}_trust values are {0,1,2}: no,yes,unknown */
- 	switch (friar->hdr.type) {
+-	if (!audit_enabled || audit_dummy_context())
++	if (!audit_enabled)
+ 		return;
+ 
+ 	/* Generate log with subject, operation, outcome. */
 -- 
 2.43.5
 
