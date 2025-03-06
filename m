@@ -1,90 +1,58 @@
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45DA318A6A8
-	for <audit@vger.kernel.org>; Thu,  6 Mar 2025 15:06:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3290249E5
+	for <audit@vger.kernel.org>; Thu,  6 Mar 2025 21:41:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741273580; cv=none; b=o1hxKClLhrrHBq33OT2XM+4YlJrtfVtik4xDcGkepKFwxQjlsvdHy2rVQdlTsnkx03gkc3/wswj8mDdZ2hfXCP6SasBkAo2diOkzeuc6AcUt9A4bZCkaYhfhLeOaOFV3aDXGcUTS/GDH8AvFF9gMfbQw1zlBJwM7vF9WzgMs6Ao=
+	t=1741297319; cv=none; b=Z7YppZlJr+tPq4lMDz5mcgkkSKZyd72c8nlR0v966VNo4iNpaMufn9PaXwdMqN7T4+cbwXcCUkh4XI2t/5Vck8hlAyMPwEmX9PdEDYNHQHkfaIHRbXK8hikSvaLYalJ7RdSd9A5+pdkFsrQqD4FAyYzg4fjfa+RinBHZEqMKwW0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741273580; c=relaxed/simple;
-	bh=lTsaNbEL7PPZK0ZEMpQFiHYhojh9KBHVSDzA0Dqu3WY=;
+	s=arc-20240116; t=1741297319; c=relaxed/simple;
+	bh=aVLNVrLZKEE5KjPg3WoLESe9UeDSDRif4oI55x9IxgQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TXuGeAaVNWHnyBiKBxoL8uu81KQfl+1oty9i6uBVI/V60VV6bDc/JFS0VbHVw1KEh6l5/qy8mI/Syp02kpiA6FFNrf/d8FWKgDoIsZmJWRXpqlzv+69nt/TdsZwOs57geZ0XCIFRiZ7VMQUNYLbD41YHkZFLkSUg82FCaXnorjM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=BJn6iahd; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=REMHNr7j; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=KfCjqL6z; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=5PETCIc6; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+	 Content-Type:Content-Disposition:In-Reply-To; b=rsEa5K+iQgYlfaHstU6gImVqaEyFqfTRwsyHuL+S4b5UUd0XNK/uEMNeeT2yAyipZNzC9tegt3Ozo8QUUV9EDhdTV6yV1L9NnPabEO/XVfryImCKDf+fHdw7E3Y7utpU1/W18pSRBvsI5cW99VoncNhMbgLQgyfqoFqNR+EnWIE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=cH1OnXee; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="BJn6iahd";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="REMHNr7j";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="KfCjqL6z";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="5PETCIc6"
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="cH1OnXee"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1741297315;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=uJcVPcLs2/wJB/DwRRqED94e382CQGBRjYRlsnr3NXo=;
+	b=cH1OnXeeohQxzPZrSYtmIyvTPvxLCNwpXxDEAgVG0kCJXvggrI260YffjFwj4PnKye29AI
+	msnbH0YusgW9bTu7sv/LGrRU8IpuPdr0ogLB+JIL72YtHV9bUQG+ehLfzfjZ/wRm/2ww9z
+	rZxTSIswdLAEz1bvZRKIEOiJQdR7HM4=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-441-sGn5ivZoPGKNn9WVVT6acQ-1; Thu,
+ 06 Mar 2025 16:41:47 -0500
+X-MC-Unique: sGn5ivZoPGKNn9WVVT6acQ-1
+X-Mimecast-MFC-AGG-ID: sGn5ivZoPGKNn9WVVT6acQ_1741297306
+Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 3479B211B5;
-	Thu,  6 Mar 2025 15:06:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1741273575; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=mB1oMD8PvQtMu2/nphy4C9Bht+f/qS2hF6Qv21atn9A=;
-	b=BJn6iahdMWw3giBoFYeRzZqWxIYVqdrsXewUi/FeXURY7hvC87k/0OQd65GRMfTyFp+owF
-	p1GqJvVw3JgW17Kx3TWIeRd95Ay7jyHw2w04pxmJWtn3sWQ6husoaF9evKIX95yjviB3w+
-	GY7eq2KBOnPLGcOESuyXIZiizoEpBXQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1741273575;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=mB1oMD8PvQtMu2/nphy4C9Bht+f/qS2hF6Qv21atn9A=;
-	b=REMHNr7jZvsB2FqS5bmeUjGziTOyaKmVPVQzp/rdn+PEpRHqA1mZ75tlZ2krMw7svg8IZ0
-	hdvkX0vMAjHdmOAg==
-Authentication-Results: smtp-out1.suse.de;
-	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=KfCjqL6z;
-	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=5PETCIc6
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1741273574; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=mB1oMD8PvQtMu2/nphy4C9Bht+f/qS2hF6Qv21atn9A=;
-	b=KfCjqL6zYZbEmJvy4xTp3vwPRtOofMMeYzeooMulSNXZNaEsH1XYb2AYVPDVVNQ/Ft54pK
-	HlQfJ20YdJe0QJOEEnRJcB3Qa/uEPlWpX3qNNBkxCtyIEMNRwatFIhjzpl7x/2bm0XpZSU
-	Ghyz71dGGZKRdv+UeMI6tA0jtts9u6s=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1741273574;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=mB1oMD8PvQtMu2/nphy4C9Bht+f/qS2hF6Qv21atn9A=;
-	b=5PETCIc636uk8Hy1RvV0q/IgUqI1ZBcehiialye7CbjnyT/2N2/p+aCDFyzZdlYDZ3brwv
-	pAENCuQDlbzAFQDw==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 2206713A61;
-	Thu,  6 Mar 2025 15:06:14 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id QE1JCOa5yWcNDgAAD6G6ig
-	(envelope-from <jack@suse.cz>); Thu, 06 Mar 2025 15:06:14 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-	id C9737A087F; Thu,  6 Mar 2025 16:06:05 +0100 (CET)
-Date: Thu, 6 Mar 2025 16:06:05 +0100
-From: Jan Kara <jack@suse.cz>
-To: Richard Guy Briggs <rgb@redhat.com>
-Cc: Linux-Audit Mailing List <linux-audit@lists.linux-audit.osci.io>, 
-	LKML <linux-kernel@vger.kernel.org>, linux-fsdevel@vger.kernel.org, 
-	Linux Kernel Audit Mailing List <audit@vger.kernel.org>, Paul Moore <paul@paul-moore.com>, 
-	Eric Paris <eparis@parisplace.org>, Steve Grubb <sgrubb@redhat.com>, Jan Kara <jack@suse.cz>, 
-	Amir Goldstein <amir73il@gmail.com>
-Subject: Re: [PATCH v1 1/2] audit: record fanotify event regardless of
- presence of rules
-Message-ID: <aksoenimnsvk4jhxw663spln3pow5x6dys4lbtlfxqtwzwtvs4@yk5ef2tq26l2>
-References: <cover.1741210251.git.rgb@redhat.com>
- <3c2679cb9df8a110e1e21b7f387b77ddfaacc289.1741210251.git.rgb@redhat.com>
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 81F6D1800266;
+	Thu,  6 Mar 2025 21:41:45 +0000 (UTC)
+Received: from madcap2.tricolour.ca (unknown [10.22.58.19])
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 191631828A83;
+	Thu,  6 Mar 2025 21:41:42 +0000 (UTC)
+Date: Thu, 6 Mar 2025 16:41:40 -0500
+From: Richard Guy Briggs <rgb@redhat.com>
+To: Paul Moore <paul@paul-moore.com>
+Cc: Linux-Audit Mailing List <linux-audit@lists.linux-audit.osci.io>,
+	LKML <linux-kernel@vger.kernel.org>, linux-modules@vger.kernel.org,
+	Linux Kernel Audit Mailing List <audit@vger.kernel.org>,
+	Eric Paris <eparis@parisplace.org>, Steve Grubb <sgrubb@redhat.com>
+Subject: Re: [PATCH v1] audit,module: restore audit logging in load failure
+ case
+Message-ID: <Z8oWlAwgKWW+M8yL@madcap2.tricolour.ca>
+References: <999cdd694f951acd2f4ad665fe7ab97d0834e162.1729717542.git.rgb@redhat.com>
+ <b7f8e0d11b6cfc7547709c7efc472021@paul-moore.com>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
@@ -93,73 +61,158 @@ List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <3c2679cb9df8a110e1e21b7f387b77ddfaacc289.1741210251.git.rgb@redhat.com>
-X-Rspamd-Queue-Id: 3479B211B5
-X-Spam-Score: -4.01
-X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-4.01 / 50.00];
-	BAYES_HAM(-3.00)[99.99%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	MID_RHS_NOT_FQDN(0.50)[];
-	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	RCVD_COUNT_THREE(0.00)[3];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	TO_DN_SOME(0.00)[];
-	URIBL_BLOCKED(0.00)[suse.com:email,imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo,suse.cz:dkim];
-	MIME_TRACE(0.00)[0:+];
-	ARC_NA(0.00)[];
-	FREEMAIL_ENVRCPT(0.00)[gmail.com];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	RCPT_COUNT_SEVEN(0.00)[10];
-	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	ASN(0.00)[asn:25478, ipnet:::/0, country:RU];
-	FREEMAIL_CC(0.00)[lists.linux-audit.osci.io,vger.kernel.org,paul-moore.com,parisplace.org,redhat.com,suse.cz,gmail.com];
-	DKIM_TRACE(0.00)[suse.cz:+];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:email,imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo,suse.cz:dkim]
-X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
-X-Spam-Flag: NO
-X-Spam-Level: 
+In-Reply-To: <b7f8e0d11b6cfc7547709c7efc472021@paul-moore.com>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
 
-On Wed 05-03-25 16:33:19, Richard Guy Briggs wrote:
-> When no audit rules are in place, fanotify event results are
-> unconditionally dropped due to an explicit check for the existence of
-> any audit rules.  Given this is a report from another security
-> sub-system, allow it to be recorded regardless of the existence of any
-> audit rules.
+On 2024-10-24 16:41, Paul Moore wrote:
+> On Oct 23, 2024 Richard Guy Briggs <rgb@redhat.com> wrote:
+> > The move of the module sanity check to earlier skipped the audit logging
+> > call in the case of failure and to a place where the previously used
+> > context is unavailable.
+> > 
+> > Add an audit logging call for the module loading failure case and get
+> > the module name when possible.
+> > 
+> > Link: https://issues.redhat.com/browse/RHEL-52839
+> > Fixes: 02da2cbab452 ("module: move check_modinfo() early to early_mod_check()")
+> > Signed-off-by: Richard Guy Briggs <rgb@redhat.com>
+> > ---
+> >  kernel/module/main.c | 4 +++-
+> >  1 file changed, 3 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/kernel/module/main.c b/kernel/module/main.c
+> > index 49b9bca9de12..1f482532ef66 100644
+> > --- a/kernel/module/main.c
+> > +++ b/kernel/module/main.c
+> > @@ -3057,8 +3057,10 @@ static int load_module(struct load_info *info, const char __user *uargs,
+> >  	 * failures once the proper module was allocated and
+> >  	 * before that.
+> >  	 */
+> > -	if (!module_allocated)
+> > +	if (!module_allocated) {
+> > +		audit_log_kern_module(info->name ? info->name : "(unavailable)");
+> >  		mod_stat_bump_becoming(info, flags);
+> > +	}
 > 
-> To test, install and run the fapolicyd daemon with default config.  Then
-> as an unprivileged user, create and run a very simple binary that should
-> be denied.  Then check for an event with
-> 	ausearch -m FANOTIFY -ts recent
+> We probably should move the existing audit_log_kern_module() to just
+> after the elf_validity_cache_copy() call as both info->name and
+> info->mod->name should be as valid as they are going to get at that
+> point.  If we do that then we only have two cases we need to worry about,
+> a failed module_sig_check() or a failed elf_validity_cache_copy(), and
+> in both cases we can use "(unavailable)" without having to check
+> info->name first.
+
+Fair enough.
+
+> However, assuming we move the audit_log_kern_module() call up a bit as
+> described above, I'm not sure there is much value in calling
+> audit_log_kern_module() with an "(unavailable)" module name in those
+> early two cases.  We know it's an attempted module load based on the
+> SYSCALL record, seeing an associated "(unavailable)" KERN_MODULE record
+> doesn't provide us with any more information than if we had simply
+> skipped the KERN_MODULE record.
+
+Understood.  I wonder if the absence of the record in the error case
+will leave us guessing if we lost a record from the event?  We will have
+the error code from the SYSCALL record but not much more than that, and
+some of those error codes could just as well be generated after that
+point too.  This would be a similar situation to the vanishing fields in
+an existing record, but is likely easier to mitigate than a
+non-last-field vanishing or shifting around in an existing record.
+
+Steve?  Atilla?  Any comments?
+
+> Untested, but this is what I'm talking about:
 > 
-> Link: https://issues.redhat.com/browse/RHEL-1367
-> Signed-off-by: Richard Guy Briggs <rgb@redhat.com>
-
-I don't know enough about security modules to tell whether this is what
-admins want or not so that's up to you but:
-
-> -static inline void audit_fanotify(u32 response, struct fanotify_response_info_audit_rule *friar)
-> -{
-> -	if (!audit_dummy_context())
-> -		__audit_fanotify(response, friar);
-> -}
+> diff --git a/include/linux/audit.h b/include/linux/audit.h
+> index 0050ef288ab3..eaa10e3c7eca 100644
+> --- a/include/linux/audit.h
+> +++ b/include/linux/audit.h
+> @@ -417,7 +417,7 @@ extern int __audit_log_bprm_fcaps(struct linux_binprm *bprm,
+>  extern void __audit_log_capset(const struct cred *new, const struct cred *old);
+>  extern void __audit_mmap_fd(int fd, int flags);
+>  extern void __audit_openat2_how(struct open_how *how);
+> -extern void __audit_log_kern_module(char *name);
+> +extern void __audit_log_kern_module(const char *name);
+>  extern void __audit_fanotify(u32 response, struct fanotify_response_info_audit_rule *friar);
+>  extern void __audit_tk_injoffset(struct timespec64 offset);
+>  extern void __audit_ntp_log(const struct audit_ntp_data *ad);
+> @@ -519,7 +519,7 @@ static inline void audit_openat2_how(struct open_how *how)
+>                 __audit_openat2_how(how);
+>  }
+>  
+> -static inline void audit_log_kern_module(char *name)
+> +static inline void audit_log_kern_module(const char *name)
+>  {
+>         if (!audit_dummy_context())
+>                 __audit_log_kern_module(name);
+> @@ -677,7 +677,7 @@ static inline void audit_mmap_fd(int fd, int flags)
+>  static inline void audit_openat2_how(struct open_how *how)
+>  { }
+>  
+> -static inline void audit_log_kern_module(char *name)
+> +static inline void audit_log_kern_module(const char *name)
+>  {
+>  }
+>  
+> diff --git a/kernel/audit.h b/kernel/audit.h
+> index a60d2840559e..5156ecd35457 100644
+> --- a/kernel/audit.h
+> +++ b/kernel/audit.h
+> @@ -199,7 +199,7 @@ struct audit_context {
+>                         int                     argc;
+>                 } execve;
+>                 struct {
+> -                       char                    *name;
+> +                       const char              *name;
+>                 } module;
+>                 struct {
+>                         struct audit_ntp_data   ntp_data;
+> diff --git a/kernel/auditsc.c b/kernel/auditsc.c
+> index 0627e74585ce..f79eb3a5a789 100644
+> --- a/kernel/auditsc.c
+> +++ b/kernel/auditsc.c
+> @@ -2870,7 +2870,7 @@ void __audit_openat2_how(struct open_how *how)
+>         context->type = AUDIT_OPENAT2;
+>  }
+>  
+> -void __audit_log_kern_module(char *name)
+> +void __audit_log_kern_module(const char *name)
+>  {
+>         struct audit_context *context = audit_context();
+>  
+> diff --git a/kernel/module/main.c b/kernel/module/main.c
+> index 49b9bca9de12..3acb65073c53 100644
+> --- a/kernel/module/main.c
+> +++ b/kernel/module/main.c
+> @@ -2884,6 +2884,8 @@ static int load_module(struct load_info *info, const char __user *uargs,
+>         if (err)
+>                 goto free_copy;
+>  
+> +       audit_log_kern_module(info->name);
+> +
+>         err = early_mod_check(info, flags);
+>         if (err)
+>                 goto free_copy;
+> @@ -2897,8 +2899,6 @@ static int load_module(struct load_info *info, const char __user *uargs,
+>  
+>         module_allocated = true;
+>  
+> -       audit_log_kern_module(mod->name);
 > -
+>         /* Reserve our place in the list. */
+>         err = add_unformed_module(mod);
+>         if (err)
+> 
+> --
+> paul-moore.com
 
-I think this is going to break compilation with !CONFIG_AUDITSYSCALL &&
-CONFIG_FANOTIFY?
+- RGB
 
-								Honza
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+--
+Richard Guy Briggs <rgb@redhat.com>
+Sr. S/W Engineer, Kernel Security, Base Operating Systems
+Remote, Ottawa, Red Hat Canada
+Upstream IRC: SunRaycer
+Voice: +1.613.860 2354 SMS: +1.613.518.6570
+
