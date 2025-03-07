@@ -1,253 +1,163 @@
-Received: from sonic311-30.consmr.mail.ne1.yahoo.com (sonic311-30.consmr.mail.ne1.yahoo.com [66.163.188.211])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97FB8242918
-	for <audit@vger.kernel.org>; Fri,  7 Mar 2025 18:47:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.163.188.211
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B669254877
+	for <audit@vger.kernel.org>; Fri,  7 Mar 2025 19:19:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741373243; cv=none; b=RpLMgK9iFmZ56bpDNue+rzfx4WOj0dhDkE6dmE9t2e9y3zyeNF/I0EnaBmHkc3B3AyJX+4x9JLNL9MfKNWS/sf94FWz2l48x0NTaUY/8dhKE+wMbfxSIGLDGbe4bLEsqO9zGtVCLBCBwaxeTYb46V5oXEY5M4On/TsuVv4jCIVQ=
+	t=1741375193; cv=none; b=UubW0jcRV9AYqdxX3FTt8zluS7UkQP24y77AV8EForLqoqYYCFuBpEbYDMprWmAUJl99DEoa/bpm5hOckN6UkQl6GcZYEueo7AFwzJjZB1q0ClyBrJBc8PpDtiERBJrwqAdTWH8em0Vhv1YsJ1H16fFJumLFl6THr61hlU/bo30=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741373243; c=relaxed/simple;
-	bh=bf1+QbpcbSVah0/h8uBb3DCVF+GdYtB5ASLxPrihG7A=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=T7NFF7Fjm0V3/1a05XodsLxUIYSpomfYb+5sv2fGEoo1DMRAvMAPpkcfdpSdfm9GSQkDEsgvTKNJxFwguu3tvppAMA1MFAxZ4+Roujob0vqt2tagRwSF/UvmSciYci0XmT2cjsI8529JDSW9RBX8YYkIy9GjXyrwyz1m0QoQax0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com; spf=none smtp.mailfrom=schaufler-ca.com; dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b=CnJic7IA; arc=none smtp.client-ip=66.163.188.211
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=schaufler-ca.com
+	s=arc-20240116; t=1741375193; c=relaxed/simple;
+	bh=g4MqkEHiB7Hh07+p3G9AYFM2M8BQsXqZ/GWxguZs4Jc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=SLDiHGQhgRopegteH00ernd3tEUpf77Y+nLTq0hMPtv/r6jUAAcqYcD05AozgqVwf4Jw0Njw9XLATjQTfTXO8LREXLI8Vn2oySF+DcMCBYluv6+JuIjEbO6pA1k1DBZJ/NiinNJbM9ZqeHQdU2y/K9oRzEBywMtas4AGopQq6mY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=axZQo+9F; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b="CnJic7IA"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1741373240; bh=azN7Kk9YErwtWuqymGLMrPgHPFYKiUq/drMMdKqTQgM=; h=From:To:Cc:Subject:Date:In-Reply-To:References:From:Subject:Reply-To; b=CnJic7IAT7mRj07sxdbuvaXQoUt5IFtbZZQ6QYqSCaRM8emQu653VU94h89ssNvPokMoSF+bYd3GnaLdFiBu8y3gxJuN9zbKjm34to+y3FL8SvzV+u1h82qa6XfsvijmkUr1r4t02ikRBEJuP46cvqZP1AEZ6foJkrWAy+FmRqiVQK1SS5Ta9EMmyZdNx0F0mOlCwnc0XdMIDuHBbpimxUxO1Q/o+pqPNBlhpWyOIiyuscnxFZjQ7P9/TE33Qbc+S1iO8bIj9ubiVMWTt1/+pE1BgbU2FdKjvB++X8He3EUGfd4sNPJhmDCM55OreFy8IC7qhnWhnDifoD4OXd7MbA==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1741373240; bh=x3fc+ehbkhQYkIMpVRwKGi8EeyZ67Ev+S7/oBj1EkP5=; h=X-Sonic-MF:From:To:Subject:Date:From:Subject; b=bvb18iVwgRHDPLVBh5eK/q49a8JTlmse1tQxuF3YGGc8AWLaBF9kMnmoYrAyrFGUpST0Oe35ZQNmFNwlH6f4Qa/GLZhL1U1B669xMAjY/vzFcLO3Acbs80SMqvxOdnf/4FpkGUDuNi2TVNiZeb4SHKQBoc1HDTCHJ29Jc53MwCxeuaB868vyZYzRvBkEKCzSC5MNPLmbCuMb5fKDhzFwX3OrFe7l6NRFlOF1r2YNwdOBbjvIDzL9O82l6e6Oue+jGt8xg0AsK84o4HJnt5CyBSLTsk6MZyssBqMvsJg6m+uetAx+i16tFFLIz+BZ7izVb5m8KaTcadspLYRHicY2Sw==
-X-YMail-OSG: sodVNuwVM1nIIpzBOdI2aquWxNcSw17J9YDkAJypoaHFNRlW8ZXFw60VFV03BZh
- P3fTkGn0Me06EkYTBC_bZJ2BNt5JbOB2ggAChV043f5dyP84Bp.xWeSERNT6v3D4venGmz5wTLOl
- xx3u.w5cZEfJQIGxZbO3wFs6.OfzXM.M9yMZ8Itf6b1dO.gf.by3Ty5Uw8ETXk0OBM_UCY9pzZjf
- DsZYfDekfxE26XvBEfpGRkLiZBbKhF.nKw1caJenSBZEguNnv0Ktph5qrCJHjdqvL0KBgBvkJMt3
- hZMBVDmFIPHpPIYruYxM5AVftrGPb69kjjcgiSHZ6Iz1I7ksSIrY9ufZvoXvWu2ab01IPxcWJHcr
- p3Ykh6WcQyj8TEGx1E5TvLeMZvxAw1qOKpJbjNp3j3cBrfOOVKP5pHcGWYisnwn65IzQdWwq2G72
- wkW1sbMMrH1UtEcVGFBNzAeXm5H6OZvwE1jH.cSDgewCyoFo3wH0fxRieENOc_TLxm2vwrGJWjEe
- m3FuGavirEO9bShs76cT858PeN83lX.qAt1EDQ1n8oMG4zZ9DDgKYKmVbB1wuZbqRZ71BrcbsbFS
- QGNLymFI5KeaV5Y7K2O8DBwMBmiAKEM2oVKiivFy19GcACB70gZf0Tk123OQV1315rNfskJZTzjY
- AU7hnaAdaIZUUNVr8cn8z_xCy1AkKShLO7koLeuaoADlX36rM2izwieN6Y3QPiNqZwyd_SNI1dkv
- ZTvjgCa1RsJVch0kTkebzkGfQbiZ6UnC8locjOb4y8OgocsYiw4DRME3MDmCle.c4nU7vItYK3va
- gG3iOarmoGnxHx.fa9jWMoMguYv3wSoS3MmwaoPltOAWTjfk9Tyf.YgC2BOVN97HsnprFf8YFCsZ
- NodX5TWWcRfNFaSqDYzhKfmZvYs_1h331m4_watSDvtEMslG74TFTWGFWY.lnHLZU3gNjAVWm28P
- KcEbt9ILd0qJUHrt6ouYIacVx1arHsWD.xT50OSVrcxHOBj79vAraAA2oR8.tsUvGwP3GzfWpouN
- G64Fc3WIAUzz9o_Rof9tI5y40p2lhWsY0wRZuDRKb8nuUD.dEKSsenqAVZN2jiqaFku6Gm7cpe1y
- HbCHcecpPqlx0m0kkyfHueu_DM57x4v1OPRuT8U1cv5BGPpzKnLjQrJWTYp3aCReolYnbixarMHz
- FPZKnBECIiJHRIZFXE2PDDf1ag9ljHgl9ycGK4pJM7nIPKk39UTrtcaztuLu_iB6zhonnxhFmS1r
- 9odvaf1iod2XsrJ2lcLpMaBnHeKb5PIJoM.jENQWNXxwCXzDLuz_nkdHUcQxfS1DFW4uE9uZ5CTj
- GNmyU.NA5s7HGJ5nhQNautVCiZiuco6O72AqDLVbZsKlffpeeCQnWbvv4MBFEv5BavS3si7nsnct
- 19IMfHJckK0cfu7ZNGjQx3o.Vru.3iGvn1lDQs_dAaP0CURto7Xr0IVrDijmB2X1E0DXu.CtE5T1
- 7iWL9suQP2fHahA_plJc7MZH1C0nkk1ikXXo0xNKQO70uAzR8tF7SLFozYxGWLhaQhEyveReOoJ3
- hA8IbrgEdFrftWZElNP1ljBF22BtG73UeBE2UVm_dpHuvf..22dqb5YKakrdZmQ5fDToDbMrsHiB
- gf2.4jaIhhaBUw6GK1tk7FAExQthESMhYsJXQtHUhwoXAzsJ4NswwpsOlF0hog94ERdrZAaSdEVx
- do9nLrBRs8wc4pfxcP1U.5YGKF.xLkaqgl4jy7tWbf4v0jBPQVFSytIQhpWiuZFn7Dt6z8xwKqxR
- 6aUGgTlM4qbqRQoa_vVLh5F3hGULrSJ3yFrma50OCmrARp37jxN7YHgAUqSx5bPDmiWr5tdwlTFi
- 0DmoIpKic7D_aOK_W8ecWDEY8ugtwEhEUehFUQ3rOPOrBxsVbXUdz700LyIB0Y9AOCespGOSMDUo
- WhekrVCycwr0lRDPXT.AYunFtLtw3oYUn9exD.N8aZsbvCVglXjonYUmhQ9OermDwVq0BqvHfN3m
- QeBy.buEIc8BSjMeuW5bAkFY2qF0y8FRt6d01ARutQ9ABl7L.z.6P_pne.S3v4hyX_t6qXJmcICW
- r0RJ.kOVTdFPsUrLwDgubX.S0VJwVEPoF3_vLZ68UaGZSBaypx.DKIupuQ_Z34MIBUzapSbmH32F
- m0N8tveOza7gQlQPCmG7Mart_ptzJQ3XfGVKWMim.lqqzuuRq9oceZiMcYjHagkehDR9ibauu3nV
- Fn3f4qtpjpFRnSuDqa_7EP3pXU.b7glhlPS0OCjoG754If6lvdsho
-X-Sonic-MF: <casey@schaufler-ca.com>
-X-Sonic-ID: eac63fb3-8e16-4dd8-b4ed-5160a93bfede
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic311.consmr.mail.ne1.yahoo.com with HTTP; Fri, 7 Mar 2025 18:47:20 +0000
-Received: by hermes--production-gq1-7d5f4447dd-9qjv2 (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 9e6d6a2ea591e1dd2da3497c747300b1;
-          Fri, 07 Mar 2025 18:37:07 +0000 (UTC)
-From: Casey Schaufler <casey@schaufler-ca.com>
-To: casey@schaufler-ca.com,
-	paul@paul-moore.com,
-	eparis@redhat.com,
-	linux-security-module@vger.kernel.org,
-	audit@vger.kernel.org
-Cc: jmorris@namei.org,
-	serge@hallyn.com,
-	keescook@chromium.org,
-	john.johansen@canonical.com,
-	penguin-kernel@i-love.sakura.ne.jp,
-	stephen.smalley.work@gmail.com,
-	linux-kernel@vger.kernel.org,
-	selinux@vger.kernel.org
-Subject: [PATCH v2 1/6] Audit: Create audit_stamp structure
-Date: Fri,  7 Mar 2025 10:36:56 -0800
-Message-ID: <20250307183701.16970-2-casey@schaufler-ca.com>
-X-Mailer: git-send-email 2.47.0
-In-Reply-To: <20250307183701.16970-1-casey@schaufler-ca.com>
-References: <20250307183701.16970-1-casey@schaufler-ca.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="axZQo+9F"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1741375190;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=nrPsYGhY2ctGgSCoMFqFX1XHzK6SWuV8/qZ7voczswo=;
+	b=axZQo+9F7LfQwIRriQnUAog6m1h5c3/J2jziv5nBWJRCn/Md4H0F9fcGnIXiKuoBzuA7pc
+	Pdzi/BbKFvLDB28OMVTbKzihQdENdRdTKmXh3Ro4Cy0BsNte82jP8tLZvwSUMON7Mh2VCC
+	bArg4Ux7Gjq6RJXXZZhT0KpOqi6GO+4=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-686-fHWpz0DVMHiW_mwF1wewHQ-1; Fri,
+ 07 Mar 2025 14:19:45 -0500
+X-MC-Unique: fHWpz0DVMHiW_mwF1wewHQ-1
+X-Mimecast-MFC-AGG-ID: fHWpz0DVMHiW_mwF1wewHQ_1741375184
+Received: from mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.40])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id AE68B1955BC9;
+	Fri,  7 Mar 2025 19:19:43 +0000 (UTC)
+Received: from madcap2.tricolour.ca (unknown [10.22.58.19])
+	by mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id CF3161955DCE;
+	Fri,  7 Mar 2025 19:19:40 +0000 (UTC)
+Date: Fri, 7 Mar 2025 14:19:38 -0500
+From: Richard Guy Briggs <rgb@redhat.com>
+To: Jan Kara <jack@suse.cz>
+Cc: Linux-Audit Mailing List <linux-audit@lists.linux-audit.osci.io>,
+	LKML <linux-kernel@vger.kernel.org>, linux-fsdevel@vger.kernel.org,
+	Linux Kernel Audit Mailing List <audit@vger.kernel.org>,
+	Paul Moore <paul@paul-moore.com>,
+	Eric Paris <eparis@parisplace.org>, Steve Grubb <sgrubb@redhat.com>,
+	Amir Goldstein <amir73il@gmail.com>
+Subject: Re: [PATCH v1 1/2] audit: record fanotify event regardless of
+ presence of rules
+Message-ID: <Z8tGyiUzX6p+2vpp@madcap2.tricolour.ca>
+References: <cover.1741210251.git.rgb@redhat.com>
+ <3c2679cb9df8a110e1e21b7f387b77ddfaacc289.1741210251.git.rgb@redhat.com>
+ <aksoenimnsvk4jhxw663spln3pow5x6dys4lbtlfxqtwzwtvs4@yk5ef2tq26l2>
+ <Z8pH97tbwt7OGj2o@madcap2.tricolour.ca>
+ <jhvf3n4fnzsnj7opxooqblmpnuhvqhcg366y47p5u44dg4tm3i@snmc3msdcoiv>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <jhvf3n4fnzsnj7opxooqblmpnuhvqhcg366y47p5u44dg4tm3i@snmc3msdcoiv>
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.40
 
-Replace the timestamp and serial number pair used in audit records
-with a structure containing the two elements.
+On 2025-03-07 15:52, Jan Kara wrote:
+> On Thu 06-03-25 20:12:23, Richard Guy Briggs wrote:
+> > On 2025-03-06 16:06, Jan Kara wrote:
+> > > On Wed 05-03-25 16:33:19, Richard Guy Briggs wrote:
+> > > > When no audit rules are in place, fanotify event results are
+> > > > unconditionally dropped due to an explicit check for the existence of
+> > > > any audit rules.  Given this is a report from another security
+> > > > sub-system, allow it to be recorded regardless of the existence of any
+> > > > audit rules.
+> > > > 
+> > > > To test, install and run the fapolicyd daemon with default config.  Then
+> > > > as an unprivileged user, create and run a very simple binary that should
+> > > > be denied.  Then check for an event with
+> > > > 	ausearch -m FANOTIFY -ts recent
+> > > > 
+> > > > Link: https://issues.redhat.com/browse/RHEL-1367
+> > > > Signed-off-by: Richard Guy Briggs <rgb@redhat.com>
+> > > 
+> > > I don't know enough about security modules to tell whether this is what
+> > > admins want or not so that's up to you but:
+> > > 
+> > > > -static inline void audit_fanotify(u32 response, struct fanotify_response_info_audit_rule *friar)
+> > > > -{
+> > > > -	if (!audit_dummy_context())
+> > > > -		__audit_fanotify(response, friar);
+> > > > -}
+> > > > -
+> > > 
+> > > I think this is going to break compilation with !CONFIG_AUDITSYSCALL &&
+> > > CONFIG_FANOTIFY?
+> > 
+> > Why would that break it?  The part of the patch you (prematurely)
+> > deleted takes care of that.
+> 
+> So I'm failing to see how it takes care of that when with
+> !CONFIG_AUDITSYSCALL kernel/auditsc.c does not get compiled into the kernel.
+> So what does provide the implementation of audit_fanotify() in that case?
+> I think you need to provide empty audit_fanotify() inline wrapper for that
+> case...
 
-Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
----
- kernel/audit.c   | 17 +++++++++--------
- kernel/audit.h   | 13 +++++++++----
- kernel/auditsc.c | 22 +++++++++-------------
- 3 files changed, 27 insertions(+), 25 deletions(-)
+I'm sorry, I responded too quickly without thinking about your question,
+my mistake.  It isn't the prototype that was changed in the
+CONFIG_SYSCALL case that is relevant in that case.
 
-diff --git a/kernel/audit.c b/kernel/audit.c
-index 5f5bf85bcc90..2a567f667528 100644
---- a/kernel/audit.c
-+++ b/kernel/audit.c
-@@ -1833,11 +1833,11 @@ unsigned int audit_serial(void)
- }
- 
- static inline void audit_get_stamp(struct audit_context *ctx,
--				   struct timespec64 *t, unsigned int *serial)
-+				   struct audit_stamp *stamp)
- {
--	if (!ctx || !auditsc_get_stamp(ctx, t, serial)) {
--		ktime_get_coarse_real_ts64(t);
--		*serial = audit_serial();
-+	if (!ctx || !auditsc_get_stamp(ctx, stamp)) {
-+		ktime_get_coarse_real_ts64(&stamp->ctime);
-+		stamp->serial = audit_serial();
- 	}
- }
- 
-@@ -1860,8 +1860,7 @@ struct audit_buffer *audit_log_start(struct audit_context *ctx, gfp_t gfp_mask,
- 				     int type)
- {
- 	struct audit_buffer *ab;
--	struct timespec64 t;
--	unsigned int serial;
-+	struct audit_stamp stamp;
- 
- 	if (audit_initialized != AUDIT_INITIALIZED)
- 		return NULL;
-@@ -1916,12 +1915,14 @@ struct audit_buffer *audit_log_start(struct audit_context *ctx, gfp_t gfp_mask,
- 		return NULL;
- 	}
- 
--	audit_get_stamp(ab->ctx, &t, &serial);
-+	audit_get_stamp(ab->ctx, &stamp);
- 	/* cancel dummy context to enable supporting records */
- 	if (ctx)
- 		ctx->dummy = 0;
- 	audit_log_format(ab, "audit(%llu.%03lu:%u): ",
--			 (unsigned long long)t.tv_sec, t.tv_nsec/1000000, serial);
-+			 (unsigned long long)stamp.ctime.tv_sec,
-+			 stamp.ctime.tv_nsec/1000000,
-+			 stamp.serial);
- 
- 	return ab;
- }
-diff --git a/kernel/audit.h b/kernel/audit.h
-index 0211cb307d30..4d6dd2588f9b 100644
---- a/kernel/audit.h
-+++ b/kernel/audit.h
-@@ -99,6 +99,12 @@ struct audit_proctitle {
- 	char	*value;	/* the cmdline field */
- };
- 
-+/* A timestamp/serial pair to identify an event */
-+struct audit_stamp {
-+	struct timespec64	ctime;	/* time of syscall entry */
-+	unsigned int		serial;	/* serial number for record */
-+};
-+
- /* The per-task audit context. */
- struct audit_context {
- 	int		    dummy;	/* must be the first element */
-@@ -108,10 +114,9 @@ struct audit_context {
- 		AUDIT_CTX_URING,	/* in use by io_uring */
- 	} context;
- 	enum audit_state    state, current_state;
--	unsigned int	    serial;     /* serial number for record */
-+	struct audit_stamp  stamp;	/* event identifier */
- 	int		    major;      /* syscall number */
- 	int		    uring_op;   /* uring operation */
--	struct timespec64   ctime;      /* time of syscall entry */
- 	unsigned long	    argv[4];    /* syscall arguments */
- 	long		    return_code;/* syscall return code */
- 	u64		    prio;
-@@ -263,7 +268,7 @@ extern void audit_put_tty(struct tty_struct *tty);
- extern unsigned int audit_serial(void);
- #ifdef CONFIG_AUDITSYSCALL
- extern int auditsc_get_stamp(struct audit_context *ctx,
--			      struct timespec64 *t, unsigned int *serial);
-+			     struct audit_stamp *stamp);
- 
- extern void audit_put_watch(struct audit_watch *watch);
- extern void audit_get_watch(struct audit_watch *watch);
-@@ -304,7 +309,7 @@ extern void audit_filter_inodes(struct task_struct *tsk,
- 				struct audit_context *ctx);
- extern struct list_head *audit_killed_trees(void);
- #else /* CONFIG_AUDITSYSCALL */
--#define auditsc_get_stamp(c, t, s) 0
-+#define auditsc_get_stamp(c, s) 0
- #define audit_put_watch(w) do { } while (0)
- #define audit_get_watch(w) do { } while (0)
- #define audit_to_watch(k, p, l, o) (-EINVAL)
-diff --git a/kernel/auditsc.c b/kernel/auditsc.c
-index 9c853cde9abe..2ec3a0d85447 100644
---- a/kernel/auditsc.c
-+++ b/kernel/auditsc.c
-@@ -994,10 +994,10 @@ static void audit_reset_context(struct audit_context *ctx)
- 	 */
- 
- 	ctx->current_state = ctx->state;
--	ctx->serial = 0;
-+	ctx->stamp.serial = 0;
- 	ctx->major = 0;
- 	ctx->uring_op = 0;
--	ctx->ctime = (struct timespec64){ .tv_sec = 0, .tv_nsec = 0 };
-+	ctx->stamp.ctime = (struct timespec64){ .tv_sec = 0, .tv_nsec = 0 };
- 	memset(ctx->argv, 0, sizeof(ctx->argv));
- 	ctx->return_code = 0;
- 	ctx->prio = (ctx->state == AUDIT_STATE_RECORD ? ~0ULL : 0);
-@@ -1917,7 +1917,7 @@ void __audit_uring_entry(u8 op)
- 
- 	ctx->context = AUDIT_CTX_URING;
- 	ctx->current_state = ctx->state;
--	ktime_get_coarse_real_ts64(&ctx->ctime);
-+	ktime_get_coarse_real_ts64(&ctx->stamp.ctime);
- }
- 
- /**
-@@ -2039,7 +2039,7 @@ void __audit_syscall_entry(int major, unsigned long a1, unsigned long a2,
- 	context->argv[3]    = a4;
- 	context->context = AUDIT_CTX_SYSCALL;
- 	context->current_state  = state;
--	ktime_get_coarse_real_ts64(&context->ctime);
-+	ktime_get_coarse_real_ts64(&context->stamp.ctime);
- }
- 
- /**
-@@ -2510,21 +2510,17 @@ EXPORT_SYMBOL_GPL(__audit_inode_child);
- /**
-  * auditsc_get_stamp - get local copies of audit_context values
-  * @ctx: audit_context for the task
-- * @t: timespec64 to store time recorded in the audit_context
-- * @serial: serial value that is recorded in the audit_context
-+ * @stamp: timestamp to record
-  *
-  * Also sets the context as auditable.
-  */
--int auditsc_get_stamp(struct audit_context *ctx,
--		       struct timespec64 *t, unsigned int *serial)
-+int auditsc_get_stamp(struct audit_context *ctx, struct audit_stamp *stamp)
- {
- 	if (ctx->context == AUDIT_CTX_UNUSED)
- 		return 0;
--	if (!ctx->serial)
--		ctx->serial = audit_serial();
--	t->tv_sec  = ctx->ctime.tv_sec;
--	t->tv_nsec = ctx->ctime.tv_nsec;
--	*serial    = ctx->serial;
-+	if (!ctx->stamp.serial)
-+		ctx->stamp.serial = audit_serial();
-+	*stamp = ctx->stamp;
- 	if (!ctx->prio) {
- 		ctx->prio = 1;
- 		ctx->current_state = AUDIT_STATE_RECORD;
--- 
-2.47.0
+There was already in existance in the !CONFIG_AUDITSYSCALL case the
+inline wrapper to do that job:
+
+	static inline void audit_fanotify(u32 response, struct fanotify_response_info_audit_rule *friar)
+	{ }
+
+Did I understand correctly this time and does this answer your question?
+
+But you do cause me to notice the case that these notifications will be
+dropped when CONFIG_AUDIT && !CONFIG_AUDITSYSCALL.
+
+Thanks for persisting.
+
+> 								Honza
+> 
+> > diff --git a/include/linux/audit.h b/include/linux/audit.h
+> > index 0050ef288ab3..d0c6f23503a1 100644
+> > --- a/include/linux/audit.h
+> > +++ b/include/linux/audit.h
+> > @@ -418,7 +418,7 @@ extern void __audit_log_capset(const struct cred *new, const struct cred *old);
+> >  extern void __audit_mmap_fd(int fd, int flags);
+> >  extern void __audit_openat2_how(struct open_how *how);
+> >  extern void __audit_log_kern_module(char *name);
+> > -extern void __audit_fanotify(u32 response, struct fanotify_response_info_audit_rule *friar);
+> > +extern void audit_fanotify(u32 response, struct fanotify_response_info_audit_rule *friar);
+> >  extern void __audit_tk_injoffset(struct timespec64 offset);
+> >  extern void __audit_ntp_log(const struct audit_ntp_data *ad);
+> >  extern void __audit_log_nfcfg(const char *name, u8 af, unsigned int nentries,
+> > 
+> > > -- 
+> > > Jan Kara <jack@suse.com>
+> > > SUSE Labs, CR
+> > 
+> > - RGB
+> > 
+> -- 
+> Jan Kara <jack@suse.com>
+> SUSE Labs, CR
+
+- RGB
+
+--
+Richard Guy Briggs <rgb@redhat.com>
+Sr. S/W Engineer, Kernel Security, Base Operating Systems
+Remote, Ottawa, Red Hat Canada
+Upstream IRC: SunRaycer
+Voice: +1.613.860 2354 SMS: +1.613.518.6570
 
