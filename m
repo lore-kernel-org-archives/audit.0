@@ -1,206 +1,452 @@
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7310118DF65
-	for <audit@vger.kernel.org>; Fri,  7 Mar 2025 14:53:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C08F13C682;
+	Fri,  7 Mar 2025 16:12:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741359182; cv=none; b=ZTWkARHUd3yTFYiqkMp+SLAbw3iCD6ONMKS9q8Im63Sfm6MhtsFZ0KmWgEV9+/s1xcAw+SihyWI98qYeZxxDgfgXdgxmliA96Mm6l+eCjIQ+gs9P96S8N5UuYg5W7yTnY+2a59JiVDnVBYN97OpWmo1WRd+LCQLnx3W2Zi3SlFQ=
+	t=1741363930; cv=none; b=USreHzdQweaVqfi0zt0Ljikt5ohFr7h13JGNj9wgm0U1R+g6SCZFQ3CAOquycQyVVxRUK0oxrvZpXLoA/WOm7y3JMs0OzkvI7IEKEsi1bxyP9qrK0ghHQU+mrTyVI1pRnbM0utPHF2f001MQ9DC6lhuImWqO16Zl/L9OeOO+ih0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741359182; c=relaxed/simple;
-	bh=qU+VfyYXwmKMWMDbkLHUItkYOPu1I84ijbbgQdEIubs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=M7FfMdcbT60LILsSVLH2M3+T9X6alNmxmDrYv/j6+euoAPULNU9JZw1gI2Q4QBjSWZ46CmpT5sCiUjMxgmVXajri/USTDH9zwjj8EJSH2Mz3lfTq1m/Aai3K7DbB5XBVnFRSWJR7tVeU3afu+4IV+cvcUyJBCAss3Kv7kz4bGn0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=u2bxbasN; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=UPZOzrsy; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=u2bxbasN; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=UPZOzrsy; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+	s=arc-20240116; t=1741363930; c=relaxed/simple;
+	bh=fPyYtc4uUeCe+TxmHHxBNxl29fqS4EHIQEWiLkOCn3g=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=mVfifKlHgSH6wqBzE9/dqS1uUvG6b/YHHPwgv7yGfePOL/JEtdu3IWk4cj8/IqZZAGAA1Z/qFL3ZEhZoqftJAKBpOArkPL7UYgNEUf8C3tBLO5oy18AlvZwGcJTElTun3UpKArCd8r7s1GObkLPujnuFbml3QozyYmFQ49d7jx4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IZ612EOX; arc=none smtp.client-ip=209.85.218.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="u2bxbasN";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="UPZOzrsy";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="u2bxbasN";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="UPZOzrsy"
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 6EC0321184;
-	Fri,  7 Mar 2025 14:52:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1741359178; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=jPWvXYPnJ7Y6KzwiEJ9cDFOBL04knKlm29X0NRAGEZQ=;
-	b=u2bxbasNmAxvzEVRkno+U5TtSq+Eb+8aaSlEptJ2GHxcyGQ5wQss1nq/xo36a/FMywpK2u
-	kLqYuXP3NblG0OP3DPjVlhzVj5ynDpPEJLnURtHqm+ApIj5FVKAR+BkLq0OGAK/cB0okEZ
-	A4QG28AiXsS0Ry9ZfsFyJ1anpWBBRgA=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1741359178;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=jPWvXYPnJ7Y6KzwiEJ9cDFOBL04knKlm29X0NRAGEZQ=;
-	b=UPZOzrsyfcj/WQ+Rp80iCUI0RZjiqVLBk4iyHPcJqaddA7wbvZH4Ru01U7F9SAmZPeQO8F
-	GSjddpvjF90V0TBg==
-Authentication-Results: smtp-out1.suse.de;
-	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=u2bxbasN;
-	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=UPZOzrsy
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1741359178; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=jPWvXYPnJ7Y6KzwiEJ9cDFOBL04knKlm29X0NRAGEZQ=;
-	b=u2bxbasNmAxvzEVRkno+U5TtSq+Eb+8aaSlEptJ2GHxcyGQ5wQss1nq/xo36a/FMywpK2u
-	kLqYuXP3NblG0OP3DPjVlhzVj5ynDpPEJLnURtHqm+ApIj5FVKAR+BkLq0OGAK/cB0okEZ
-	A4QG28AiXsS0Ry9ZfsFyJ1anpWBBRgA=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1741359178;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=jPWvXYPnJ7Y6KzwiEJ9cDFOBL04knKlm29X0NRAGEZQ=;
-	b=UPZOzrsyfcj/WQ+Rp80iCUI0RZjiqVLBk4iyHPcJqaddA7wbvZH4Ru01U7F9SAmZPeQO8F
-	GSjddpvjF90V0TBg==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 66A4413939;
-	Fri,  7 Mar 2025 14:52:58 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id 51MMGUoIy2f0MwAAD6G6ig
-	(envelope-from <jack@suse.cz>); Fri, 07 Mar 2025 14:52:58 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-	id 23421A089C; Fri,  7 Mar 2025 15:52:58 +0100 (CET)
-Date: Fri, 7 Mar 2025 15:52:58 +0100
-From: Jan Kara <jack@suse.cz>
-To: Richard Guy Briggs <rgb@redhat.com>
-Cc: Jan Kara <jack@suse.cz>, 
-	Linux-Audit Mailing List <linux-audit@lists.linux-audit.osci.io>, LKML <linux-kernel@vger.kernel.org>, 
-	linux-fsdevel@vger.kernel.org, Linux Kernel Audit Mailing List <audit@vger.kernel.org>, 
-	Paul Moore <paul@paul-moore.com>, Eric Paris <eparis@parisplace.org>, 
-	Steve Grubb <sgrubb@redhat.com>, Amir Goldstein <amir73il@gmail.com>
-Subject: Re: [PATCH v1 1/2] audit: record fanotify event regardless of
- presence of rules
-Message-ID: <jhvf3n4fnzsnj7opxooqblmpnuhvqhcg366y47p5u44dg4tm3i@snmc3msdcoiv>
-References: <cover.1741210251.git.rgb@redhat.com>
- <3c2679cb9df8a110e1e21b7f387b77ddfaacc289.1741210251.git.rgb@redhat.com>
- <aksoenimnsvk4jhxw663spln3pow5x6dys4lbtlfxqtwzwtvs4@yk5ef2tq26l2>
- <Z8pH97tbwt7OGj2o@madcap2.tricolour.ca>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IZ612EOX"
+Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-ac0b6e8d96cso288954766b.0;
+        Fri, 07 Mar 2025 08:12:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1741363927; x=1741968727; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=aut8eMv1fZRM/0QttFTrqNuiPm5SDhwugOF4K2UNTVE=;
+        b=IZ612EOXuYTYk9r4Oagw3thHMxy8QUlBRl8fch8HHXhOPGLv7+pkAphPONgF3n/LKS
+         ngsnFeJlLUU+6LbDepTv3kKqmxxCAHxDGKlTiNGDZ+mEFDShhCyQkkKEi/lcDqMTR3i6
+         HWu/rTkkYpBqdsEuMvAMP8pirjmZAedaq9G7Z3As6asiwd93Fo1oe4euzHOmpO7pD0Ll
+         SOPP5VZM0o4xkxWrIeiOrZwcYi3rBO1AiCPxEjQnHiMgRUegk1P9KWvPQA194Wps5JMa
+         Uj5kG5nbG4EwmsYcqLqvpxWIO4tzLcqCeVnPfzNRFbPHSamkYZtKIsEjq/aDWInJ9pW0
+         9Nqw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1741363927; x=1741968727;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=aut8eMv1fZRM/0QttFTrqNuiPm5SDhwugOF4K2UNTVE=;
+        b=JesEVvaj7Ak8vnjDMfiQQ/PFRj+tB1zTKqsR+Mr0akXXUW5mUvZCxixoPufWO6BMHB
+         pxfoLdLv4PJ5GLrBFV1/CTQNcyu09MdiCkF4yt6KVvjjgjMeJkhlj5FD0cpWQCPWmcJS
+         AyoLH70OgJgtqknftAK3Brl6QCTRMfIHoKW4KsYiUTtJBjaSRwSTxFnlHcCaUg8Q0Axu
+         AGj/rEFwCjjaIQpi1vhRhxoa0r2JObNKjDZu6XAXHHGZ/aWJ4UQD2Py5nQhdMhKwsCrO
+         k+zWRHIjhAOwtIEbsgr9cv3rJ4sPy16WnX5V+vQb517Gy3oHTcLBbyo6dAYHZynJPuav
+         NI0w==
+X-Forwarded-Encrypted: i=1; AJvYcCUNRFgXdvChtdLPM5wYjuce/bZsjSMnO230p8e0k4kskJA7dowbzeJ0GPxPd49fg56OrijRpA==@vger.kernel.org, AJvYcCURA6ULaW1F6UbcS+QIslyTt2PenmwFHXM0i3Yi7NWJzXLggbTtyvvGj9/sHwVaKjvgKR7qqcIB2gM=@vger.kernel.org, AJvYcCVzFshqjGHaVmDKN4S7FNFkto1QPY5C7yIT7FrWEd8m2YRLTq+cZt4kb2H/AG5gbd64+lU8nfQX5rwPUJKO/A==@vger.kernel.org, AJvYcCWRmYU69R+tVdvakBWYo0/NoPQVxkTv6dpOU84a3YzJCIL9mvCSZIwxVKoi1zHvBvxX1V/I5zkdo8UUHFAM@vger.kernel.org
+X-Gm-Message-State: AOJu0YwKdbRno7HEVdx1ddcpvhCJQSnPZsemKpK2cRXLdEni+rUkcMXr
+	fzMkWY7htNqCOY2XT4R5kF6oj6zOJqvfxBRT8eNzkvef4DXePQGa
+X-Gm-Gg: ASbGncuyLU39B+cNG0uCfzb53KfPI7tA4k/Hee+Jf2UhZMelFsy9509Aa+2c5tJf3VM
+	/RkzkjQg/BV0JJXr032TahYDv9397A1TD097WwSqr30oN2VGM9b1IpDOEGTzQL/rKgwWqhQp338
+	18Vp56hEMTFrwTnZyxTXQ0lMUy/Gyf7YvlospX1TU3zCxJCdOGGtlVJYSQaMxDObh9NN8OYzmsy
+	yAjYGfskjLft7oIDgsj28zbRLjXGgygBUX4UDJ2AwQELLATG17UWMqaH3+o/g0goC4KgQPFJ7/k
+	KPrVcRLaUsi23qWSz7tAjnG9sKP0fa0A6sUfHZgW05YURSE78gl2UY+60cO+jp0=
+X-Google-Smtp-Source: AGHT+IFpvumDeTJuCryGQ+/lx3TMXKTkpDyzebKmqgzl7UqQldHCIgpUkrGr+TDUR3x5EajiLNLYJQ==
+X-Received: by 2002:a17:907:c99b:b0:abf:7af6:ea64 with SMTP id a640c23a62f3a-ac252e9e42cmr375351466b.45.1741363926455;
+        Fri, 07 Mar 2025 08:12:06 -0800 (PST)
+Received: from f.. (cst-prg-95-226.cust.vodafone.cz. [46.135.95.226])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ac2399d4877sm292211266b.169.2025.03.07.08.12.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Mar 2025 08:12:05 -0800 (PST)
+From: Mateusz Guzik <mjguzik@gmail.com>
+To: brauner@kernel.org
+Cc: viro@zeniv.linux.org.uk,
+	jack@suse.cz,
+	linux-kernel@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org,
+	io-uring@vger.kernel.org,
+	audit@vger.kernel.org,
+	axboe@kernel.dk,
+	Mateusz Guzik <mjguzik@gmail.com>
+Subject: [PATCH] fs: support filename refcount without atomics
+Date: Fri,  7 Mar 2025 17:11:55 +0100
+Message-ID: <20250307161155.760949-1-mjguzik@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Z8pH97tbwt7OGj2o@madcap2.tricolour.ca>
-X-Rspamd-Queue-Id: 6EC0321184
-X-Spam-Score: -4.01
-X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-4.01 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	MID_RHS_NOT_FQDN(0.50)[];
-	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	RCVD_COUNT_THREE(0.00)[3];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	ARC_NA(0.00)[];
-	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	TO_DN_SOME(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	RCVD_TLS_LAST(0.00)[];
-	FREEMAIL_ENVRCPT(0.00)[gmail.com];
-	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	RCPT_COUNT_SEVEN(0.00)[10];
-	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	ASN(0.00)[asn:25478, ipnet:::/0, country:RU];
-	FREEMAIL_CC(0.00)[suse.cz,lists.linux-audit.osci.io,vger.kernel.org,paul-moore.com,parisplace.org,redhat.com,gmail.com];
-	DKIM_TRACE(0.00)[suse.cz:+];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:email,imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo,suse.cz:dkim]
-X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
-X-Spam-Flag: NO
-X-Spam-Level: 
+Content-Transfer-Encoding: 8bit
 
-On Thu 06-03-25 20:12:23, Richard Guy Briggs wrote:
-> On 2025-03-06 16:06, Jan Kara wrote:
-> > On Wed 05-03-25 16:33:19, Richard Guy Briggs wrote:
-> > > When no audit rules are in place, fanotify event results are
-> > > unconditionally dropped due to an explicit check for the existence of
-> > > any audit rules.  Given this is a report from another security
-> > > sub-system, allow it to be recorded regardless of the existence of any
-> > > audit rules.
-> > > 
-> > > To test, install and run the fapolicyd daemon with default config.  Then
-> > > as an unprivileged user, create and run a very simple binary that should
-> > > be denied.  Then check for an event with
-> > > 	ausearch -m FANOTIFY -ts recent
-> > > 
-> > > Link: https://issues.redhat.com/browse/RHEL-1367
-> > > Signed-off-by: Richard Guy Briggs <rgb@redhat.com>
-> > 
-> > I don't know enough about security modules to tell whether this is what
-> > admins want or not so that's up to you but:
-> > 
-> > > -static inline void audit_fanotify(u32 response, struct fanotify_response_info_audit_rule *friar)
-> > > -{
-> > > -	if (!audit_dummy_context())
-> > > -		__audit_fanotify(response, friar);
-> > > -}
-> > > -
-> > 
-> > I think this is going to break compilation with !CONFIG_AUDITSYSCALL &&
-> > CONFIG_FANOTIFY?
-> 
-> Why would that break it?  The part of the patch you (prematurely)
-> deleted takes care of that.
+Atomics are only needed for a combination of io_uring and audit.
 
-So I'm failing to see how it takes care of that when with
-!CONFIG_AUDITSYSCALL kernel/auditsc.c does not get compiled into the kernel.
-So what does provide the implementation of audit_fanotify() in that case?
-I think you need to provide empty audit_fanotify() inline wrapper for that
-case...
+Regular file access (even with audit) gets around fine without them.
 
-								Honza
+With this patch 'struct filename' starts with being refcounted using
+regular ops.
 
-> diff --git a/include/linux/audit.h b/include/linux/audit.h
-> index 0050ef288ab3..d0c6f23503a1 100644
-> --- a/include/linux/audit.h
-> +++ b/include/linux/audit.h
-> @@ -418,7 +418,7 @@ extern void __audit_log_capset(const struct cred *new, const struct cred *old);
->  extern void __audit_mmap_fd(int fd, int flags);
->  extern void __audit_openat2_how(struct open_how *how);
->  extern void __audit_log_kern_module(char *name);
-> -extern void __audit_fanotify(u32 response, struct fanotify_response_info_audit_rule *friar);
-> +extern void audit_fanotify(u32 response, struct fanotify_response_info_audit_rule *friar);
->  extern void __audit_tk_injoffset(struct timespec64 offset);
->  extern void __audit_ntp_log(const struct audit_ntp_data *ad);
->  extern void __audit_log_nfcfg(const char *name, u8 af, unsigned int nentries,
-> 
-> > 								Honza
-> > -- 
-> > Jan Kara <jack@suse.com>
-> > SUSE Labs, CR
-> 
-> - RGB
-> 
-> --
-> Richard Guy Briggs <rgb@redhat.com>
-> Sr. S/W Engineer, Kernel Security, Base Operating Systems
-> Remote, Ottawa, Red Hat Canada
-> Upstream IRC: SunRaycer
-> Voice: +1.613.860 2354 SMS: +1.613.518.6570
-> 
+In order to avoid API explosion in the getname*() family, a dedicated
+routine is added to switch the obj to use atomics.
+
+This leaves the room for merely issuing getname(), not issuing the
+switch and still trying to manipulate the refcount from another thread.
+
+Catching such cases is facilitated by CONFIG_DEBUG_VFS-dependent
+tracking of who created the given filename object and having refname()
+and putname() detect if another thread is trying to modify them.
+
+Benchmarked on Sapphire Rapids issuing access() (ops/s):
+before: 5106246
+after:	5269678 (+3%)
+
+Signed-off-by: Mateusz Guzik <mjguzik@gmail.com>
+---
+
+this can be split into 2 patches (refname, initname vs the atomic
+change). I also took the liberty to fix up some weird whitespace.
+
+the bench is access1 from will-it-scale (kind of):
+https://github.com/antonblanchard/will-it-scale/pull/36
+
+correctness tested with io_uring + audit using the test suite in liburing.
+
+Confirmed mismatched owners show up:
+# bpftrace -e 'kprobe:putname /curtask != ((struct filename *)arg0)->owner/ { @[kstack()] = count(); }'
+Attaching 1 probe...
+^C
+
+@[
+    putname+5
+    do_renameat2+279
+    io_renameat+40
+    io_issue_sqe+1159
+    io_wq_submit_work+200
+    io_worker_handle_work+313
+    io_wq_worker+218
+    ret_from_fork+49
+    ret_from_fork_asm+26
+]: 4
+@[
+    putname+5
+    do_renameat2+287
+    io_renameat+40
+    io_issue_sqe+1159
+    io_wq_submit_work+200
+    io_worker_handle_work+313
+    io_wq_worker+218
+    ret_from_fork+49
+    ret_from_fork_asm+26
+]: 4
+
+ fs/namei.c           | 44 +++++++++++++++++++++++++++++++++-----------
+ include/linux/fs.h   | 37 ++++++++++++++++++++++++++++++++++++-
+ io_uring/fs.c        |  8 ++++++++
+ io_uring/openclose.c |  1 +
+ io_uring/statx.c     |  3 +--
+ io_uring/xattr.c     |  2 ++
+ kernel/auditsc.c     | 12 +++++-------
+ 7 files changed, 86 insertions(+), 21 deletions(-)
+
+diff --git a/fs/namei.c b/fs/namei.c
+index 06765d320e7e..ff76b495abef 100644
+--- a/fs/namei.c
++++ b/fs/namei.c
+@@ -125,6 +125,17 @@
+ 
+ #define EMBEDDED_NAME_MAX	(PATH_MAX - offsetof(struct filename, iname))
+ 
++static inline void initname(struct filename *name)
++{
++	name->uptr = NULL;
++	name->aname = NULL;
++	name->is_atomic = false;
++#ifdef CONFIG_DEBUG_VFS
++	name->owner = current;
++#endif
++	atomic_set(&name->refcnt_atomic, 1);
++}
++
+ struct filename *
+ getname_flags(const char __user *filename, int flags)
+ {
+@@ -203,10 +214,7 @@ getname_flags(const char __user *filename, int flags)
+ 			return ERR_PTR(-ENAMETOOLONG);
+ 		}
+ 	}
+-
+-	atomic_set(&result->refcnt, 1);
+-	result->uptr = filename;
+-	result->aname = NULL;
++	initname(result);
+ 	audit_getname(result);
+ 	return result;
+ }
+@@ -264,26 +272,40 @@ struct filename *getname_kernel(const char * filename)
+ 		return ERR_PTR(-ENAMETOOLONG);
+ 	}
+ 	memcpy((char *)result->name, filename, len);
+-	result->uptr = NULL;
+-	result->aname = NULL;
+-	atomic_set(&result->refcnt, 1);
++	initname(result);
+ 	audit_getname(result);
+-
+ 	return result;
+ }
+ EXPORT_SYMBOL(getname_kernel);
+ 
+ void putname(struct filename *name)
+ {
++	int refcnt;
++
+ 	if (IS_ERR_OR_NULL(name))
+ 		return;
+ 
+-	if (WARN_ON_ONCE(!atomic_read(&name->refcnt)))
+-		return;
++	VFS_BUG_ON(name->owner != current && !name->is_atomic);
+ 
+-	if (!atomic_dec_and_test(&name->refcnt))
++	refcnt = atomic_read(&name->refcnt_atomic);
++	if (WARN_ON_ONCE(!refcnt))
+ 		return;
+ 
++	/*
++	 * If refcnt == 1 then there is nobody who can legally change it.
++	 * Short-circuiting this case saves a branch in the common case and
++	 * an atomic op for the last unref (for the ->is_atomic variant).
++	 */
++	if (refcnt != 1) {
++		if (name->is_atomic) {
++			if (!atomic_dec_and_test(&name->refcnt_atomic))
++				return;
++		} else {
++			if (--name->refcnt)
++				return;
++		}
++	}
++
+ 	if (name->name != name->iname) {
+ 		__putname(name->name);
+ 		kfree(name);
+diff --git a/include/linux/fs.h b/include/linux/fs.h
+index 110d95d04299..b559a611dd15 100644
+--- a/include/linux/fs.h
++++ b/include/linux/fs.h
+@@ -2765,11 +2765,19 @@ struct audit_names;
+ struct filename {
+ 	const char		*name;	/* pointer to actual string */
+ 	const __user char	*uptr;	/* original userland pointer */
+-	atomic_t		refcnt;
++	union {
++		atomic_t	refcnt_atomic;
++		int		refcnt;
++	};
++#ifdef CONFIG_DEBUG_VFS
++	struct task_struct	*owner;
++#endif
++	bool			is_atomic;
+ 	struct audit_names	*aname;
+ 	const char		iname[];
+ };
+ static_assert(offsetof(struct filename, iname) % sizeof(long) == 0);
++static_assert(sizeof(int) == sizeof(atomic_t)); /* refcount */
+ 
+ static inline struct mnt_idmap *file_mnt_idmap(const struct file *file)
+ {
+@@ -2864,6 +2872,33 @@ static inline struct filename *getname_maybe_null(const char __user *name, int f
+ extern void putname(struct filename *name);
+ DEFINE_FREE(putname, struct filename *, if (!IS_ERR_OR_NULL(_T)) putname(_T))
+ 
++static inline void makeatomicname(struct filename *name)
++{
++	VFS_BUG_ON(IS_ERR_OR_NULL(name));
++	/*
++	 * The name can legitimately already be atomic if it was cached by audit.
++	 * If switching the refcount to atomic, we need not to know we are the
++	 * only non-atomic user.
++	 */
++	VFS_BUG_ON(name->owner != current && !name->is_atomic);
++	/*
++	 * Don't bother branching, this is a store to an already dirtied cacheline.
++	 */
++	name->is_atomic = true;
++}
++
++static inline struct filename *refname(struct filename *name)
++{
++	VFS_BUG_ON(name->owner != current && !name->is_atomic);
++
++	if (name->is_atomic)
++		atomic_inc(&name->refcnt_atomic);
++	else
++		name->refcnt++;
++
++	return name;
++}
++
+ extern int finish_open(struct file *file, struct dentry *dentry,
+ 			int (*open)(struct inode *, struct file *));
+ extern int finish_no_open(struct file *file, struct dentry *dentry);
+diff --git a/io_uring/fs.c b/io_uring/fs.c
+index eccea851dd5a..db8d4fe4290d 100644
+--- a/io_uring/fs.c
++++ b/io_uring/fs.c
+@@ -66,12 +66,14 @@ int io_renameat_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
+ 	ren->oldpath = getname(oldf);
+ 	if (IS_ERR(ren->oldpath))
+ 		return PTR_ERR(ren->oldpath);
++	makeatomicname(ren->oldpath);
+ 
+ 	ren->newpath = getname(newf);
+ 	if (IS_ERR(ren->newpath)) {
+ 		putname(ren->oldpath);
+ 		return PTR_ERR(ren->newpath);
+ 	}
++	makeatomicname(ren->newpath);
+ 
+ 	req->flags |= REQ_F_NEED_CLEANUP;
+ 	req->flags |= REQ_F_FORCE_ASYNC;
+@@ -121,6 +123,7 @@ int io_unlinkat_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
+ 	un->filename = getname(fname);
+ 	if (IS_ERR(un->filename))
+ 		return PTR_ERR(un->filename);
++	makeatomicname(un->filename);
+ 
+ 	req->flags |= REQ_F_NEED_CLEANUP;
+ 	req->flags |= REQ_F_FORCE_ASYNC;
+@@ -168,6 +171,7 @@ int io_mkdirat_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
+ 	mkd->filename = getname(fname);
+ 	if (IS_ERR(mkd->filename))
+ 		return PTR_ERR(mkd->filename);
++	makeatomicname(mkd->filename);
+ 
+ 	req->flags |= REQ_F_NEED_CLEANUP;
+ 	req->flags |= REQ_F_FORCE_ASYNC;
+@@ -212,12 +216,14 @@ int io_symlinkat_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
+ 	sl->oldpath = getname(oldpath);
+ 	if (IS_ERR(sl->oldpath))
+ 		return PTR_ERR(sl->oldpath);
++	makeatomicname(sl->oldpath);
+ 
+ 	sl->newpath = getname(newpath);
+ 	if (IS_ERR(sl->newpath)) {
+ 		putname(sl->oldpath);
+ 		return PTR_ERR(sl->newpath);
+ 	}
++	makeatomicname(sl->newpath);
+ 
+ 	req->flags |= REQ_F_NEED_CLEANUP;
+ 	req->flags |= REQ_F_FORCE_ASYNC;
+@@ -257,12 +263,14 @@ int io_linkat_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
+ 	lnk->oldpath = getname_uflags(oldf, lnk->flags);
+ 	if (IS_ERR(lnk->oldpath))
+ 		return PTR_ERR(lnk->oldpath);
++	makeatomicname(lnk->oldpath);
+ 
+ 	lnk->newpath = getname(newf);
+ 	if (IS_ERR(lnk->newpath)) {
+ 		putname(lnk->oldpath);
+ 		return PTR_ERR(lnk->newpath);
+ 	}
++	makeatomicname(lnk->newpath);
+ 
+ 	req->flags |= REQ_F_NEED_CLEANUP;
+ 	req->flags |= REQ_F_FORCE_ASYNC;
+diff --git a/io_uring/openclose.c b/io_uring/openclose.c
+index e3357dfa14ca..d1213bd2911b 100644
+--- a/io_uring/openclose.c
++++ b/io_uring/openclose.c
+@@ -70,6 +70,7 @@ static int __io_openat_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe
+ 		open->filename = NULL;
+ 		return ret;
+ 	}
++	makeatomicname(open->filename);
+ 
+ 	open->file_slot = READ_ONCE(sqe->file_index);
+ 	if (open->file_slot && (open->how.flags & O_CLOEXEC))
+diff --git a/io_uring/statx.c b/io_uring/statx.c
+index 6bc4651700a2..892c85a29e5f 100644
+--- a/io_uring/statx.c
++++ b/io_uring/statx.c
+@@ -37,13 +37,12 @@ int io_statx_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
+ 	sx->flags = READ_ONCE(sqe->statx_flags);
+ 
+ 	sx->filename = getname_uflags(path, sx->flags);
+-
+ 	if (IS_ERR(sx->filename)) {
+ 		int ret = PTR_ERR(sx->filename);
+-
+ 		sx->filename = NULL;
+ 		return ret;
+ 	}
++	makeatomicname(sx->filename);
+ 
+ 	req->flags |= REQ_F_NEED_CLEANUP;
+ 	req->flags |= REQ_F_FORCE_ASYNC;
+diff --git a/io_uring/xattr.c b/io_uring/xattr.c
+index de5064fcae8a..73acc6036187 100644
+--- a/io_uring/xattr.c
++++ b/io_uring/xattr.c
+@@ -96,6 +96,7 @@ int io_getxattr_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
+ 	ix->filename = getname(path);
+ 	if (IS_ERR(ix->filename))
+ 		return PTR_ERR(ix->filename);
++	makeatomicname(ix->filename);
+ 
+ 	return 0;
+ }
+@@ -172,6 +173,7 @@ int io_setxattr_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
+ 	ix->filename = getname(path);
+ 	if (IS_ERR(ix->filename))
+ 		return PTR_ERR(ix->filename);
++	makeatomicname(ix->filename);
+ 
+ 	return 0;
+ }
+diff --git a/kernel/auditsc.c b/kernel/auditsc.c
+index 9c853cde9abe..78fd876a5473 100644
+--- a/kernel/auditsc.c
++++ b/kernel/auditsc.c
+@@ -2207,10 +2207,8 @@ __audit_reusename(const __user char *uptr)
+ 	list_for_each_entry(n, &context->names_list, list) {
+ 		if (!n->name)
+ 			continue;
+-		if (n->name->uptr == uptr) {
+-			atomic_inc(&n->name->refcnt);
+-			return n->name;
+-		}
++		if (n->name->uptr == uptr)
++			return refname(n->name);
+ 	}
+ 	return NULL;
+ }
+@@ -2237,7 +2235,7 @@ void __audit_getname(struct filename *name)
+ 	n->name = name;
+ 	n->name_len = AUDIT_NAME_FULL;
+ 	name->aname = n;
+-	atomic_inc(&name->refcnt);
++	refname(name);
+ }
+ 
+ static inline int audit_copy_fcaps(struct audit_names *name,
+@@ -2369,7 +2367,7 @@ void __audit_inode(struct filename *name, const struct dentry *dentry,
+ 		return;
+ 	if (name) {
+ 		n->name = name;
+-		atomic_inc(&name->refcnt);
++		refname(name);
+ 	}
+ 
+ out:
+@@ -2496,7 +2494,7 @@ void __audit_inode_child(struct inode *parent,
+ 		if (found_parent) {
+ 			found_child->name = found_parent->name;
+ 			found_child->name_len = AUDIT_NAME_FULL;
+-			atomic_inc(&found_child->name->refcnt);
++			refname(found_child->name);
+ 		}
+ 	}
+ 
 -- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+2.43.0
+
