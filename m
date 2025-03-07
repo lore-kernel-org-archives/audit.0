@@ -1,117 +1,128 @@
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
+Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05D0223E25B;
-	Fri,  7 Mar 2025 16:32:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAF04221D82;
+	Fri,  7 Mar 2025 16:35:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741365157; cv=none; b=Wayb4FZEn0xJwv/GeSMPO9NbycRjbGC2FTLtktloNwBskuLwzIFG4IYZEX+bsiv5bnB3vy6IE/3dx0SJSsHfKKTriBcRAGj+LJuCjonJBimBd3tT3EZF0E125D8z17YP7p/z8YdFK4RqOWmaPhsyf28MeMM24AyBetwrO6NRGGg=
+	t=1741365332; cv=none; b=p+NL7PTUEuQaXKJmRSplZZxexhYrkLyb7y0c/dnMTTvdhov8YMgW2rl9MrHTVECYAuTc2dhhO3QHxs1xjsHVMlsaJvYw2MAJcYGdPqdCLijxAr1qYM7RnEBHtPv0hDnKPm+hMDVyqPeZ5Z3xZQNrUdpdhbHtiRPT+wWfKll7FBw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741365157; c=relaxed/simple;
-	bh=oQf5jVqULeByozILfTBc0wkSCRMZsErZmwi6C6inhbc=;
+	s=arc-20240116; t=1741365332; c=relaxed/simple;
+	bh=hnhlE+0OQEiSQn+c+VHmtDZu7ONh/10XfgpfElJvNHY=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=OQ6IBcnY+IVUBUUUr/WXZK8SfAMHiWjLYaL8I6vqDlTBnLyi5ITxVaO370GE3RJruxVd2n6YtQGWo0vfuUgc9EpiymM3cYmWf+VuaCLRNyEJIGxH1CX5iuYY6MUrM4s4XOn3DPccYhB2lLCX1q5YPQ8HKZeo+EbDZIi9sYPF/FU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OfmNgOyK; arc=none smtp.client-ip=209.85.218.53
+	 To:Cc:Content-Type; b=SRLcFTqvdHbh9u3ulQBKWOuau3nfhdncgyRehS6YuHbvG0CRubXvbpjbFJ0Ax3tNtGIYy6K5zKd54YhGv01ikqXrZ4QJGLVZISSIRxFTib2zqMyukRo83Vpj8afuvG0lWjydav/soS6Y2SgZcDsCFj0fbzSLbRKm1pCPIGed5j0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LCMm3RKU; arc=none smtp.client-ip=209.85.208.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OfmNgOyK"
-Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-ac25520a289so160738266b.3;
-        Fri, 07 Mar 2025 08:32:35 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LCMm3RKU"
+Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-5e549af4927so3666244a12.2;
+        Fri, 07 Mar 2025 08:35:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1741365154; x=1741969954; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1741365329; x=1741970129; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=QaMpg896xolYxOCXjW3J4K6eo5SI4eXQ21NSkDFdFAU=;
-        b=OfmNgOyKKTDbmjGi8EGzN5NP50Jx8AoD0qeq1G5E+eT9U2QLOTD3OifFucuoqIN2+D
-         CQv9gAZSNQkFfczR1YMvMRc1U8V5CBr2SxFjMRxNC5ptxodFlDQS+Drm0UPi2HHC3cL5
-         DcZf5VH2WtK3FufO8Umd46XDkhMCG3N7xLn74JRaTs9d5WF+5tq9LisTGiZMMHnXAlYI
-         nn77KIjjuQzS6L/Hb5pKNf+gtTqHt1uGoe+QkiuKsohOqOBDGey3Sau8V7Klkub+2Hbj
-         WnQmdER04wQb4vo7V6FFPJqWAAJCH1SCNQAXpWoK7W1pk9kKhMlxYKE7NBpSHLZrRMRm
-         c2mQ==
+        bh=bs+apT/tQvTF+BsbilTW0J0ot+r5JZPer6N+2EIjKdk=;
+        b=LCMm3RKUTB3z3rPS8uBWGhdkxUBmbgNWMZzEkZ8vsp1fj1kGKwaMdAegCkkK8IlP4f
+         TDhULwmCNnt8jtO/KSc4CNNiXn1KLtV2FUeeq7ebelxqULdUmj5GMj0ueAL2OutC2JML
+         QszqJAfLKj8ZzFnA72fZVuflLR2ulu7g8qnc22tFIgY6ohQVv9OvZJAUdYJ2+UcH4NRS
+         yhRhRNWjhYJmxTtSc3f1E9qRQxL9AssGfcakWucYkopAAm2AmolO0aAFTzRZzgheqmC1
+         lciCwWD5jYPuIoEto9J2wbr4op6kFl1BchOGTF45cLOuUV9Hv24fqh6hoGTtyADblnG6
+         42Yg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741365154; x=1741969954;
+        d=1e100.net; s=20230601; t=1741365329; x=1741970129;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=QaMpg896xolYxOCXjW3J4K6eo5SI4eXQ21NSkDFdFAU=;
-        b=qfTIDDFk/F9Y94/qB3SQncJYF5cfu1+sjjVlM54rBNhzaxVVSa2OiFuaMXkS9qnOCA
-         jm3+t8nQhkEwlT6adl/HX5qJj5aD2J6lCOWfD1wjbXSAKc8FmdTZImUbmPM5gXVnPb68
-         NZ6INhtg9+nbz+VSpVX/cQIO3TrEtdjb6D5sxgls9rsSpHufuM1SHhgo8yi5/ukLheb4
-         UEZJCHWfqZPD31rMNTfofY7Rzoei+imvaWHxUxu7Z5gkiTZDf3d6DLcwtHDXqp43smWH
-         yUJDc/PP3bblmg3UPxH/9pWwTRKGAWME1VCurgaOfv+2wFt6vkNdefL5e9nk8mz1CIPe
-         If5A==
-X-Forwarded-Encrypted: i=1; AJvYcCUhV5BjIUEllPIMWCFTtst/BihB9RVB47QjvsnnHtEx7czcvmZFvmHVeFG9Ei8zNIGJKmOJSA==@vger.kernel.org, AJvYcCV/WKC5VOzsGJjHxdcnmU4QwU5+KxiyHUUjLvB5wYTITUFoGE/1qI8m7TYXH2bF9+cyClXbNXv2GhOxjcjA@vger.kernel.org, AJvYcCVzn+XF7X8KJvllaSV7cjovbTdKm0SQ2rs9yXxwaT6ZELhErdclUvU1t3+aOwkGf8vLn0kg4uw6rrCeOc3yCw==@vger.kernel.org, AJvYcCW4ClMe+blPt0+Z62oO5cWILZg1xPJN06Pf2vR+Vx4GfxW8PYsJQfEKG9n9ya/bRXAOs218UzT25c0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyjWDhRwWXXOTvJNj3UEY3ANv5OM3pyv5UGmC+bWOscdNt5fpCV
-	IEBcm4KY6BP2gJuH0TijseKRPq2tOX3ulIduB7GqYkusaP2ANiM2vs6FufGlLFlCkzWWej7bgqq
-	cbBZ+oZpKsqeHL/EDPP+FWSorlos=
-X-Gm-Gg: ASbGnctqe9WQLrCB0GAzotJIf96TkZW+fF9IqADsVxdISAbfdNMndIDXTa9OmDZM1h8
-	+D6YJ8StzZUZf+nKOdyXPeUPAqEFf43N/r1R604YkWWxhEA71sLCRgjZwFaFU16SE8oWdZG/50t
-	E1z54a8DoFL2rbMheJH4he5NCpPQ==
-X-Google-Smtp-Source: AGHT+IEHF8ni2+GI59nqC7YZiklr3ZSmmj0M7EPFXeng83dy0fR9Zzo0YlX3UxQorkhiNsBZUWZ2EFCCu6lhgvLvZrI=
-X-Received: by 2002:a17:907:1c97:b0:ac1:f7a6:fba9 with SMTP id
- a640c23a62f3a-ac253028efamr502883166b.53.1741365153902; Fri, 07 Mar 2025
- 08:32:33 -0800 (PST)
+        bh=bs+apT/tQvTF+BsbilTW0J0ot+r5JZPer6N+2EIjKdk=;
+        b=m0Kl0rymhguE33FI+rPZMTspLtFhZoHmKVeRS/knqXlvbB0+dcVRTMj4liqx8pmYqB
+         lveAJfTYzOv1W2x4F+oGaeBPsiFRFio08HEOjMe2KoEX8YZ3BkUWbKNdkMxgSjVGW+Yd
+         HqHc4rRv/xBnUDNyYDjhNw1v1rD6mHzjBZ6+u7L7NUx1Ohvz9jZBJoI6BB87B/KCs4eX
+         5PPydalu2t71dalaTRsKZxGA2TVennlGdnlZrd6BTeyy8Y0P86Gxu2J94sumyK/oqQkR
+         Hp0Sat5jTbhkyOAu2oLGBqTsFP0VtZuIfCtR+nQ6GjHqG3Fx2TZRT0PGsFXxH7I0q7uX
+         L17Q==
+X-Forwarded-Encrypted: i=1; AJvYcCU4VKTK5ATAsmsr6R46fMU3wFxLHgR2lwkxvKQkAQSYl27SrtoZqq4XH4J6zghO71JiNjW9dYHY+zYvVCAU@vger.kernel.org, AJvYcCVKZkL7YkU8dYx373mtK+jcQeTJH9GXYytgbhEoRu1txm4IH96jceeyYSd/IGUYTIdNke79dzMyZhk=@vger.kernel.org, AJvYcCVzyxgLbLLSAlazoAkHcUw7Rs2ZtX7nIoedy72opH3hGSck1FgAMlR98c0gzzK9zRD0Un7UPi5jvhjkbvJOlQ==@vger.kernel.org, AJvYcCXJsjnHGdtplp8hz7V0uvpNAWaGnweinZrcvDTtpFf9Xn+r9muSDECipC6a3+ZclNNZZW9NeQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yylx5wucYqG1ZcrXM6CetZEHz7I79R7LvFX27C12j7RqS5szCfm
+	5w1I1z/7Vl7gunUrkPwzHY7aLQWxoccwLtpB4Ub7wCXwI49I+KQSkrvYCELIeDrlczfwOLCrMkO
+	P3f2OkMg+oSFEG4WWMoZMxZtUDBY=
+X-Gm-Gg: ASbGncu0yVbDp6CTeNocNmTuRqwz+P/4T6NLOc9LAhu7xUq6Fncyow9TGLNLod6wJ4H
+	7JkWBgl0e+0AnQWMNZNb7RK6ggbmzvPyVYMClvfA0dq91ctnhvQhnY1xtJX+UfExcP1c6/rZVrn
+	5BU+8PghUd9ZerB3et39NeIVsR8g==
+X-Google-Smtp-Source: AGHT+IGC+vUtpkwJbi1H/qX2S6udJgTLOnCRZMIUxrJQaMNfKycHXMyLZ25+JBQNJkrAQTu6X9gnoGzr8gIi8K/oG0o=
+X-Received: by 2002:a17:906:794f:b0:ac1:509:79b1 with SMTP id
+ a640c23a62f3a-ac25260a76bmr450748366b.20.1741365328818; Fri, 07 Mar 2025
+ 08:35:28 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250307161155.760949-1-mjguzik@gmail.com> <Z8seJ5QV4nxGMf-T@casper.infradead.org>
-In-Reply-To: <Z8seJ5QV4nxGMf-T@casper.infradead.org>
+References: <20250307161155.760949-1-mjguzik@gmail.com> <fa3bbf2c-8079-4bdf-b106-a0641069080b@kernel.dk>
+ <CAGudoHGina_OHsbP_oz5UAtXKoKQqhv-tB6Ok63rRQHThPuy+Q@mail.gmail.com> <5a0ddd31-8df1-40d7-8104-30aa89a35286@kernel.dk>
+In-Reply-To: <5a0ddd31-8df1-40d7-8104-30aa89a35286@kernel.dk>
 From: Mateusz Guzik <mjguzik@gmail.com>
-Date: Fri, 7 Mar 2025 17:32:20 +0100
-X-Gm-Features: AQ5f1Jpjtkjmkg2E6JvEe2DIUoMG9AJrN4aWXHPE6hV4Kiokr3u8E0cnnXKhXeI
-Message-ID: <CAGudoHG1VZ8eE_MmD9CPV7TEOg_ozqfHi1r_84Oqf3Ny0XNd9Q@mail.gmail.com>
+Date: Fri, 7 Mar 2025 17:35:15 +0100
+X-Gm-Features: AQ5f1Jpq5_KCzV2s1j_YwgdELUYwTtdvzKji8S2zAocaDna5x7cWeftRslkEy08
+Message-ID: <CAGudoHFE8D4itzs=DC14cJpRo-SNqJTz7J4g5B0VsjrNuE0_pA@mail.gmail.com>
 Subject: Re: [PATCH] fs: support filename refcount without atomics
-To: Matthew Wilcox <willy@infradead.org>
+To: Jens Axboe <axboe@kernel.dk>
 Cc: brauner@kernel.org, viro@zeniv.linux.org.uk, jack@suse.cz, 
 	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	io-uring@vger.kernel.org, audit@vger.kernel.org, axboe@kernel.dk
+	io-uring@vger.kernel.org, audit@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Mar 7, 2025 at 5:26=E2=80=AFPM Matthew Wilcox <willy@infradead.org>=
- wrote:
+On Fri, Mar 7, 2025 at 5:32=E2=80=AFPM Jens Axboe <axboe@kernel.dk> wrote:
 >
-> On Fri, Mar 07, 2025 at 05:11:55PM +0100, Mateusz Guzik wrote:
-> > +++ b/include/linux/fs.h
-> > @@ -2765,11 +2765,19 @@ struct audit_names;
-> >  struct filename {
-> >       const char              *name;  /* pointer to actual string */
-> >       const __user char       *uptr;  /* original userland pointer */
-> > -     atomic_t                refcnt;
-> > +     union {
-> > +             atomic_t        refcnt_atomic;
-> > +             int             refcnt;
-> > +     };
-> > +#ifdef CONFIG_DEBUG_VFS
-> > +     struct task_struct      *owner;
-> > +#endif
-> > +     bool                    is_atomic;
-> >       struct audit_names      *aname;
-> >       const char              iname[];
-> >  };
+> On 3/7/25 9:25 AM, Mateusz Guzik wrote:
+> > On Fri, Mar 7, 2025 at 5:18?PM Jens Axboe <axboe@kernel.dk> wrote:
+> >>
+> >>> +static inline void makeatomicname(struct filename *name)
+> >>> +{
+> >>> +     VFS_BUG_ON(IS_ERR_OR_NULL(name));
+> >>> +     /*
+> >>> +      * The name can legitimately already be atomic if it was cached=
+ by audit.
+> >>> +      * If switching the refcount to atomic, we need not to know we =
+are the
+> >>> +      * only non-atomic user.
+> >>> +      */
+> >>> +     VFS_BUG_ON(name->owner !=3D current && !name->is_atomic);
+> >>> +     /*
+> >>> +      * Don't bother branching, this is a store to an already dirtie=
+d cacheline.
+> >>> +      */
+> >>> +     name->is_atomic =3D true;
+> >>> +}
+> >>
+> >> Should this not depend on audit being enabled? io_uring without audit =
+is
+> >> fine.
+> >>
+> >
+> > I thought about it, but then I got worried about transitions from
+> > disabled to enabled -- will they suddenly start looking here? Should
+> > this test for audit_enabled, audit_dummy_context() or something else?
+> > I did not want to bother analyzing this.
 >
-> 7 (or 3) byte hole; try to pad.
+> Let me take a look at it, the markings for when to switch atomic are not
+> accurate - it only really needs to happen for offload situations only,
+> and if audit is enabled and tracking. So I think we can great improve
+> upon this patch.
 >
-> Would it make more sense to put the bool between aname and iname where
-> it will only take one byte instead of 8?
 
-On the stock kernel there is already a 4 byte hole between the
-refcount and aname, which is where is_atomic lands with debug
-disabled. I.e. no size changes in production kernels with and without
-the change.
+I aimed for this to be a NOP for io_uring, so to speak, specifically
+because I could not be arsed to deal with audit.
 
-However, now that you mention it the debug owner field is misplaced --
-it should have landed *after* is_atomic. Maybe Christian will be happy
-to just move it, otherwise I'm going to include this in a v2.
+> > I'll note though this would be an optimization on top of the current
+> > code, so I don't think it *blocks* the patch.
+>
+> Let's not go with something half-done if we can get it right the first
+> time.
+>
 
-The iname field is expected to be aligned, so I don't believe
-shuffling the is_atomic flag helps anyone:
-static_assert(offsetof(struct filename, iname) % sizeof(long) =3D=3D 0);
-
+Since you volunteered to sort this out, I'll be happy to wait.
 --=20
 Mateusz Guzik <mjguzik gmail.com>
