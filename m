@@ -1,148 +1,206 @@
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55EEC21ABAC;
-	Fri,  7 Mar 2025 14:15:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7310118DF65
+	for <audit@vger.kernel.org>; Fri,  7 Mar 2025 14:53:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741356955; cv=none; b=C0tEDs6F1SZ0TcxeiWYjHQQDPu70H5RiSUqhxGw05tFNHqzD3xxqDkmnL4rwuIwXPv3GaIIl192OiO492U/ygCA2ORDUAk63rPBvk6r/b+hC4DBMMIqJzto3V2urXK7rI3AcK1T2OXNb9mnPMI/uFoRVp3SY4rFMMzeaqW3wWog=
+	t=1741359182; cv=none; b=ZTWkARHUd3yTFYiqkMp+SLAbw3iCD6ONMKS9q8Im63Sfm6MhtsFZ0KmWgEV9+/s1xcAw+SihyWI98qYeZxxDgfgXdgxmliA96Mm6l+eCjIQ+gs9P96S8N5UuYg5W7yTnY+2a59JiVDnVBYN97OpWmo1WRd+LCQLnx3W2Zi3SlFQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741356955; c=relaxed/simple;
-	bh=taP3F99W38M9kOmq3WxGykgtM2k764o1KKtTPDuFYV0=;
+	s=arc-20240116; t=1741359182; c=relaxed/simple;
+	bh=qU+VfyYXwmKMWMDbkLHUItkYOPu1I84ijbbgQdEIubs=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XL3YoXqTXWWykz7p0TgIJriEyzpp9QoZREMZEJU06k9YnlBR49jsgb5puH5T++7et9fiUnVxPkEweviddcMt8FYpEbuIw0Gv492RrPchwdq5SFsrSIyYfVryzi9qAIJ2KIovYdJKpi3Y6rD1i3y8bRW52X6k7G0sXmY4Qn5w+W0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Hd9xcTAo; arc=none smtp.client-ip=209.85.128.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=M7FfMdcbT60LILsSVLH2M3+T9X6alNmxmDrYv/j6+euoAPULNU9JZw1gI2Q4QBjSWZ46CmpT5sCiUjMxgmVXajri/USTDH9zwjj8EJSH2Mz3lfTq1m/Aai3K7DbB5XBVnFRSWJR7tVeU3afu+4IV+cvcUyJBCAss3Kv7kz4bGn0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=u2bxbasN; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=UPZOzrsy; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=u2bxbasN; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=UPZOzrsy; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Hd9xcTAo"
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-43bc6a6aaf7so14810025e9.2;
-        Fri, 07 Mar 2025 06:15:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1741356951; x=1741961751; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=kFwKmzBhAxlpLaATkDCjvlsMFFHGTZg+V5EA1F4aNnw=;
-        b=Hd9xcTAoga5Fn636t00mkP+Xpff9ItuZ6+LoQs6zX68nAba9u0hKsYfo0PZm+Gov6W
-         S9q38Yo2t2+v1UcqBlbDLa4CXPDrkfZKCHWHuCeIqhFzEbYG/u0KhjPqG97Jw+rbMRcP
-         aTggIjXse9XLpUbsY43VO9p/6GWCCFijUEOHVcEeyMdeEdWvAi23kbyilFl3KKDNuTHS
-         INwnV0BCZeutx3KaCy8JgAaOknuoXZGfE3nfv47OwZo+xzFrInF2n0oJaJczufldDFQZ
-         8uocFDvPLzsUw30icorFaK7GfKa2ITZXgIL9xzvDx3qg/6k80mKFvQlD2KDTgrocNvri
-         UH3g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741356951; x=1741961751;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=kFwKmzBhAxlpLaATkDCjvlsMFFHGTZg+V5EA1F4aNnw=;
-        b=AbP7J7jYFYcJjpl7yPAgEY4N4y1yUaztC1o/6HpcCEHh5nc8cDOpvNGUcCAJGwz4NU
-         b86KQzfbMond490q8KS4P/9Mlw64VNBAP2oEeeFKsPSdBnE/fIOzBMnhjDhA2wpq4JBR
-         ehSMu9e3jNnTM1AXvkdwNbcUjbgI8hbztK2nknE9Rs5YCFpyzejA9DTyr8GVO/kcyazO
-         SYkex85vwYlwcNM3ORjx/N2EgpALNGGr/y8Ir4GQmHi7h1xkKogxkGOrUXADQpfJhXfA
-         E9nCvLAJnYKU4sdlVYul5H4O49jm/ZclsmAC3Fm3Bpjviofb6jOuZK3nMbHAGOavrNHi
-         e6gg==
-X-Forwarded-Encrypted: i=1; AJvYcCVn3d/HUKLxOS+T1RMSN8k48Dh6vHxyulU7699GaUAZpFN1hk4jYFFcom5mbl/kvc79+CQPkgW4TdqyYtLx@vger.kernel.org, AJvYcCWQuthK10kN7KaKxuUATubkpzw9VaWbgD60psvZsa3Z93M0Xm0+XhIDX34FPImUflm4r77nIw==@vger.kernel.org, AJvYcCXMXOgP75a7npwGuqpYhdCByy3QHKCe0WJCwNTXdGkpT2YaESDq4dQatLcWfzz55L9uRyO/JLXOptWXGrPVqg3cj0/4lzDj@vger.kernel.org
-X-Gm-Message-State: AOJu0YztgE9HQKX2PVJ1DbCpPfZ5+Q0CLH+ElY9Zet7LyIOXPO8Sakxv
-	JukbX8zX32NFWiOtDccOwmwx8jF+R4UzkcVJZE2VANw0w5mfrBUT/t1bGMjI
-X-Gm-Gg: ASbGncv6RUS813ckTGNB0NxJ4sy6wV1jEjbXyjkZZ3gq1rk0nxNkSnlO+W2K0l8ztse
-	B8d0EjW9Efp2s11cWL/W1Pvlg7QiB9xIdU4D+WbetwCiKY6FdzcFWpqFQSOXo3GIplX7DNSIpqp
-	MsdnnfNDVHj52ReRByK6ZBTCpuxyBwssYADApdds/6p2f9O9UZ+wotrPNq+CgUUxAgwa8i1ArZl
-	gzzbC1zVLL4k/X4xi02YiF6q2B5zafq/JHokRBAWs+EBdFxWC7tInFmVKcC4vu7QKijzUOVE6lR
-	JHfd9QniyLJRaDFJKTGxC0OD38ms3bl9XZL/sY2st5uWzg==
-X-Google-Smtp-Source: AGHT+IEeQbp0KPTtaRkHZdgqyWieJ4Lpbt+72nb/jjZnESc+t/wQXHMLHCm49p2mTJWtWxtSzfV9sg==
-X-Received: by 2002:a05:600c:548c:b0:439:8bc3:a697 with SMTP id 5b1f17b1804b1-43c5a5e4f54mr26703145e9.4.1741356951169;
-        Fri, 07 Mar 2025 06:15:51 -0800 (PST)
-Received: from localhost ([2a00:79e1:abd:a201:48ff:95d2:7dab:ae81])
-        by smtp.gmail.com with UTF8SMTPSA id ffacd0b85a97d-3912c0193bfsm5536881f8f.55.2025.03.07.06.15.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Mar 2025 06:15:50 -0800 (PST)
-Date: Fri, 7 Mar 2025 15:15:44 +0100
-From: =?iso-8859-1?Q?G=FCnther?= Noack <gnoack3000@gmail.com>
-To: =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>
-Cc: Eric Paris <eparis@redhat.com>, Paul Moore <paul@paul-moore.com>,
-	=?iso-8859-1?Q?G=FCnther?= Noack <gnoack@google.com>,
-	"Serge E . Hallyn" <serge@hallyn.com>,
-	Ben Scarlato <akhna@google.com>,
-	Casey Schaufler <casey@schaufler-ca.com>,
-	Charles Zaffery <czaffery@roblox.com>,
-	Daniel Burgener <dburgener@linux.microsoft.com>,
-	Francis Laniel <flaniel@linux.microsoft.com>,
-	James Morris <jmorris@namei.org>, Jann Horn <jannh@google.com>,
-	Jeff Xu <jeffxu@google.com>,
-	Jorge Lucangeli Obes <jorgelo@google.com>,
-	Kees Cook <kees@kernel.org>,
-	Konstantin Meskhidze <konstantin.meskhidze@huawei.com>,
-	Matt Bobrowski <mattbobrowski@google.com>,
-	Mikhail Ivanov <ivanov.mikhail1@huawei-partners.com>,
-	Phil Sutter <phil@nwl.cc>,
-	Praveen K Paladugu <prapal@linux.microsoft.com>,
-	Robert Salvet <robert.salvet@roblox.com>,
-	Shervin Oloumi <enlightened@google.com>, Song Liu <song@kernel.org>,
-	Tahera Fahimi <fahimitahera@gmail.com>,
-	Tyler Hicks <code@tyhicks.com>, audit@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
-Subject: Re: [PATCH v5 02/24] landlock: Add unique ID generator
-Message-ID: <20250307.db38587e80e7@gnoack.org>
-References: <20250131163059.1139617-1-mic@digikod.net>
- <20250131163059.1139617-3-mic@digikod.net>
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="u2bxbasN";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="UPZOzrsy";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="u2bxbasN";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="UPZOzrsy"
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 6EC0321184;
+	Fri,  7 Mar 2025 14:52:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1741359178; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=jPWvXYPnJ7Y6KzwiEJ9cDFOBL04knKlm29X0NRAGEZQ=;
+	b=u2bxbasNmAxvzEVRkno+U5TtSq+Eb+8aaSlEptJ2GHxcyGQ5wQss1nq/xo36a/FMywpK2u
+	kLqYuXP3NblG0OP3DPjVlhzVj5ynDpPEJLnURtHqm+ApIj5FVKAR+BkLq0OGAK/cB0okEZ
+	A4QG28AiXsS0Ry9ZfsFyJ1anpWBBRgA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1741359178;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=jPWvXYPnJ7Y6KzwiEJ9cDFOBL04knKlm29X0NRAGEZQ=;
+	b=UPZOzrsyfcj/WQ+Rp80iCUI0RZjiqVLBk4iyHPcJqaddA7wbvZH4Ru01U7F9SAmZPeQO8F
+	GSjddpvjF90V0TBg==
+Authentication-Results: smtp-out1.suse.de;
+	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=u2bxbasN;
+	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=UPZOzrsy
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1741359178; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=jPWvXYPnJ7Y6KzwiEJ9cDFOBL04knKlm29X0NRAGEZQ=;
+	b=u2bxbasNmAxvzEVRkno+U5TtSq+Eb+8aaSlEptJ2GHxcyGQ5wQss1nq/xo36a/FMywpK2u
+	kLqYuXP3NblG0OP3DPjVlhzVj5ynDpPEJLnURtHqm+ApIj5FVKAR+BkLq0OGAK/cB0okEZ
+	A4QG28AiXsS0Ry9ZfsFyJ1anpWBBRgA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1741359178;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=jPWvXYPnJ7Y6KzwiEJ9cDFOBL04knKlm29X0NRAGEZQ=;
+	b=UPZOzrsyfcj/WQ+Rp80iCUI0RZjiqVLBk4iyHPcJqaddA7wbvZH4Ru01U7F9SAmZPeQO8F
+	GSjddpvjF90V0TBg==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 66A4413939;
+	Fri,  7 Mar 2025 14:52:58 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id 51MMGUoIy2f0MwAAD6G6ig
+	(envelope-from <jack@suse.cz>); Fri, 07 Mar 2025 14:52:58 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+	id 23421A089C; Fri,  7 Mar 2025 15:52:58 +0100 (CET)
+Date: Fri, 7 Mar 2025 15:52:58 +0100
+From: Jan Kara <jack@suse.cz>
+To: Richard Guy Briggs <rgb@redhat.com>
+Cc: Jan Kara <jack@suse.cz>, 
+	Linux-Audit Mailing List <linux-audit@lists.linux-audit.osci.io>, LKML <linux-kernel@vger.kernel.org>, 
+	linux-fsdevel@vger.kernel.org, Linux Kernel Audit Mailing List <audit@vger.kernel.org>, 
+	Paul Moore <paul@paul-moore.com>, Eric Paris <eparis@parisplace.org>, 
+	Steve Grubb <sgrubb@redhat.com>, Amir Goldstein <amir73il@gmail.com>
+Subject: Re: [PATCH v1 1/2] audit: record fanotify event regardless of
+ presence of rules
+Message-ID: <jhvf3n4fnzsnj7opxooqblmpnuhvqhcg366y47p5u44dg4tm3i@snmc3msdcoiv>
+References: <cover.1741210251.git.rgb@redhat.com>
+ <3c2679cb9df8a110e1e21b7f387b77ddfaacc289.1741210251.git.rgb@redhat.com>
+ <aksoenimnsvk4jhxw663spln3pow5x6dys4lbtlfxqtwzwtvs4@yk5ef2tq26l2>
+ <Z8pH97tbwt7OGj2o@madcap2.tricolour.ca>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250131163059.1139617-3-mic@digikod.net>
+In-Reply-To: <Z8pH97tbwt7OGj2o@madcap2.tricolour.ca>
+X-Rspamd-Queue-Id: 6EC0321184
+X-Spam-Score: -4.01
+X-Rspamd-Action: no action
+X-Spamd-Result: default: False [-4.01 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	MID_RHS_NOT_FQDN(0.50)[];
+	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	RCVD_COUNT_THREE(0.00)[3];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	ARC_NA(0.00)[];
+	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	TO_DN_SOME(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	RCVD_TLS_LAST(0.00)[];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	RCPT_COUNT_SEVEN(0.00)[10];
+	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	ASN(0.00)[asn:25478, ipnet:::/0, country:RU];
+	FREEMAIL_CC(0.00)[suse.cz,lists.linux-audit.osci.io,vger.kernel.org,paul-moore.com,parisplace.org,redhat.com,gmail.com];
+	DKIM_TRACE(0.00)[suse.cz:+];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:email,imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo,suse.cz:dkim]
+X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
+X-Spam-Flag: NO
+X-Spam-Level: 
 
-On Fri, Jan 31, 2025 at 05:30:37PM +0100, Mickaël Salaün wrote:
-> --- /dev/null
-> +++ b/security/landlock/id.c
-> +static atomic64_t next_id = ATOMIC64_INIT(COUNTER_PRE_INIT);
-> +
-> +static void __init init_id(atomic64_t *const counter, const u32 random_32bits)
-> +{
-> +	u64 init;
-> +
-> +	/*
-> +	 * Ensures sure 64-bit values are always used by user space (or may
-> +	 * fail with -EOVERFLOW), and makes this testable.
-> +	 */
-> +	init = 1ULL << 32;
-> +
-> +	/*
-> +	 * Makes a large (2^32) boot-time value to limit ID collision in logs
-> +	 * from different boots, and to limit info leak about the number of
-> +	 * initially (relative to the reader) created elements (e.g. domains).
-> +	 */
-> +	init += random_32bits;
-> +
-> +	/* Sets first or ignores.  This will be the first ID. */
-> +	atomic64_cmpxchg(counter, COUNTER_PRE_INIT, init);
+On Thu 06-03-25 20:12:23, Richard Guy Briggs wrote:
+> On 2025-03-06 16:06, Jan Kara wrote:
+> > On Wed 05-03-25 16:33:19, Richard Guy Briggs wrote:
+> > > When no audit rules are in place, fanotify event results are
+> > > unconditionally dropped due to an explicit check for the existence of
+> > > any audit rules.  Given this is a report from another security
+> > > sub-system, allow it to be recorded regardless of the existence of any
+> > > audit rules.
+> > > 
+> > > To test, install and run the fapolicyd daemon with default config.  Then
+> > > as an unprivileged user, create and run a very simple binary that should
+> > > be denied.  Then check for an event with
+> > > 	ausearch -m FANOTIFY -ts recent
+> > > 
+> > > Link: https://issues.redhat.com/browse/RHEL-1367
+> > > Signed-off-by: Richard Guy Briggs <rgb@redhat.com>
+> > 
+> > I don't know enough about security modules to tell whether this is what
+> > admins want or not so that's up to you but:
+> > 
+> > > -static inline void audit_fanotify(u32 response, struct fanotify_response_info_audit_rule *friar)
+> > > -{
+> > > -	if (!audit_dummy_context())
+> > > -		__audit_fanotify(response, friar);
+> > > -}
+> > > -
+> > 
+> > I think this is going to break compilation with !CONFIG_AUDITSYSCALL &&
+> > CONFIG_FANOTIFY?
+> 
+> Why would that break it?  The part of the patch you (prematurely)
+> deleted takes care of that.
 
-It feels like this should always need to succeed.  Or to say it the
-other way around: If this cmpxchg were to fail, the guarantees from
-your commit message would be broken.  Maybe it would be worth handling
-that error case in a more direct way?
+So I'm failing to see how it takes care of that when with
+!CONFIG_AUDITSYSCALL kernel/auditsc.c does not get compiled into the kernel.
+So what does provide the implementation of audit_fanotify() in that case?
+I think you need to provide empty audit_fanotify() inline wrapper for that
+case...
 
+								Honza
 
-> +static void __init test_init_once(struct kunit *const test)
-> +{
-> +	const u64 first_init = 1ULL + U32_MAX;
-> +	atomic64_t counter = ATOMIC64_INIT(COUNTER_PRE_INIT);
-> +
-> +	init_id(&counter, 0);
-> +	KUNIT_EXPECT_EQ(test, atomic64_read(&counter), first_init);
-> +
-> +	init_id(&counter, ~0);
-> +	KUNIT_EXPECT_EQ(test, atomic64_read(&counter), first_init);
-
-Maybe we can annotate this with an explanatory message,
-to make it slightly clearer that this is the point of the test:
-
-KUNIT_EXPECT_EQ_MSG(test, atomic64_read(&counter), first_init,
-    "should still have the same value after the subsequent init_id()");
-
-–Günther
+> diff --git a/include/linux/audit.h b/include/linux/audit.h
+> index 0050ef288ab3..d0c6f23503a1 100644
+> --- a/include/linux/audit.h
+> +++ b/include/linux/audit.h
+> @@ -418,7 +418,7 @@ extern void __audit_log_capset(const struct cred *new, const struct cred *old);
+>  extern void __audit_mmap_fd(int fd, int flags);
+>  extern void __audit_openat2_how(struct open_how *how);
+>  extern void __audit_log_kern_module(char *name);
+> -extern void __audit_fanotify(u32 response, struct fanotify_response_info_audit_rule *friar);
+> +extern void audit_fanotify(u32 response, struct fanotify_response_info_audit_rule *friar);
+>  extern void __audit_tk_injoffset(struct timespec64 offset);
+>  extern void __audit_ntp_log(const struct audit_ntp_data *ad);
+>  extern void __audit_log_nfcfg(const char *name, u8 af, unsigned int nentries,
+> 
+> > 								Honza
+> > -- 
+> > Jan Kara <jack@suse.com>
+> > SUSE Labs, CR
+> 
+> - RGB
+> 
+> --
+> Richard Guy Briggs <rgb@redhat.com>
+> Sr. S/W Engineer, Kernel Security, Base Operating Systems
+> Remote, Ottawa, Red Hat Canada
+> Upstream IRC: SunRaycer
+> Voice: +1.613.860 2354 SMS: +1.613.518.6570
+> 
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
