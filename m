@@ -1,33 +1,33 @@
-Received: from smtp-8fac.mail.infomaniak.ch (smtp-8fac.mail.infomaniak.ch [83.166.143.172])
+Received: from smtp-8fab.mail.infomaniak.ch (smtp-8fab.mail.infomaniak.ch [83.166.143.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C92F4207A06
-	for <audit@vger.kernel.org>; Sat,  8 Mar 2025 18:44:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=83.166.143.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B379212D82;
+	Sat,  8 Mar 2025 18:44:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=83.166.143.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741459490; cv=none; b=L5fTQu5yHjTm2rn5Wm2CyoUZfNwhAoz8RkgjpMjlBidq1oZ/KCu1LOZ7SVc/4OkXJLvzMZm43z4S5QD/BbK8pRQDGk/aYjRhJNyzkL5h4pJkw5uQxogSADgTeeiO/VTaThbiR2KlRIW1U/7oStRK8YDgyUYQG+V+TQLwwVrjMkU=
+	t=1741459492; cv=none; b=OgGEXxPmHujzD7pgnlZwfQhLDtDpwOG4+grW6px+2eyGNA6kh0YbC1T2YSexf4q6W90d3UputLFdJ8Uq5qjUVZuOC9sfX4biPYQFqY54tjlJhbQ9NLx1tA/tMwU8qZqb3gZmJby0VB39EnSclvhJmCVdj+Rk0dTutqKCzuCb8Wo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741459490; c=relaxed/simple;
-	bh=AmtaGvKQQlXjo3JdTiWFG/rOYA6Xnap3wIdH9lIvMFU=;
+	s=arc-20240116; t=1741459492; c=relaxed/simple;
+	bh=LAcwhyexj1ZfYg2BpS1Tj6Fb83PCQzM6VMckD2e+iFc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=NCrZsSwtKWC5PQZuxhD/zY2imvJFT/vp03uNJ83Vv/AmHnCGYw64PgRkohM+R+P+MDIVvu1PwIO74I+dmhzWRXxY31sAZrROVW4yi27XvV8agZPHNAJt3hDqFUxGvGwFDJmAMDmLToujYIiU4gRwUa7Buv4GVAvs2sTuAMuxCY8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=PYz3XabL; arc=none smtp.client-ip=83.166.143.172
+	 MIME-Version:Content-Type; b=IBHpvyqiNuAXRNZwFUd1ClkZGf9SGEdRm4GMgbBI1ew2SFgmKIGXO2z+XHCkOq8Wwg+Cfpz9J27CkCi+7oyUCpjB3vHkxLnXd6oUkiRebJ4DjWbcnMdVIWVf3HQwclffQb4jnHfOxVQ8eF1CgHOHOvOt61+sijK/P1qGxNxKVJ8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=KyIML9nA; arc=none smtp.client-ip=83.166.143.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="PYz3XabL"
-Received: from smtp-3-0001.mail.infomaniak.ch (unknown [IPv6:2001:1600:4:17::246c])
-	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4Z9BsM12pgzRSy;
-	Sat,  8 Mar 2025 19:44:39 +0100 (CET)
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="KyIML9nA"
+Received: from smtp-4-0001.mail.infomaniak.ch (unknown [IPv6:2001:1600:7:10:40ca:feff:fe05:1])
+	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4Z9BsQ167NzQgn;
+	Sat,  8 Mar 2025 19:44:42 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
-	s=20191114; t=1741459479;
-	bh=TwH8+8Lj6sHCNuDChiWjCXEj20CBT3AkbxLELBQclZY=;
+	s=20191114; t=1741459482;
+	bh=UpfkxzrR33d21qbePQH9kdScV+WUPL3QSen9Fu3/hec=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=PYz3XabLHO0kwUd4p8LitPg1gLDmLSEJgPCqHI8WnabubJnnDRbpAJGez9J2sOpdf
-	 FuHSnLdfHDANMBUfbf4doH+DR2Rbe74WrfjjH7uCDdWXaBREE/PqwOc0xM36jxTnfX
-	 jTbnxJQHyNVbl8LlYMEwJXqKP42RRnYaH9RfXrcE=
-Received: from unknown by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4Z9BsL3fNzzMX;
-	Sat,  8 Mar 2025 19:44:38 +0100 (CET)
+	b=KyIML9nAWf85mKVNxRUX6+BWD8+DRwTx7/0t3jC80xJ7RkviRO6iNg9OwMUVxsjq/
+	 RJPeT4ADHbnut7BWsXMyoMUKSl6x67skzDjXxtGcV1VzGk7h/yam9bXusfNW/bDQOb
+	 t1op0F46pKW/6FXPFJZPLiOJGmsFbjaE/oE7dIA8=
+Received: from unknown by smtp-4-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4Z9BsP25hTzjnn;
+	Sat,  8 Mar 2025 19:44:41 +0100 (CET)
 From: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
 To: Eric Paris <eparis@redhat.com>,
 	Paul Moore <paul@paul-moore.com>,
@@ -58,9 +58,9 @@ Cc: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
 	audit@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-security-module@vger.kernel.org
-Subject: [PATCH v6 04/26] landlock: Prepare to use credential instead of domain for filesystem
-Date: Sat,  8 Mar 2025 19:44:00 +0100
-Message-ID: <20250308184422.2159360-5-mic@digikod.net>
+Subject: [PATCH v6 06/26] landlock: Prepare to use credential instead of domain for scope
+Date: Sat,  8 Mar 2025 19:44:02 +0100
+Message-ID: <20250308184422.2159360-7-mic@digikod.net>
 In-Reply-To: <20250308184422.2159360-1-mic@digikod.net>
 References: <20250308184422.2159360-1-mic@digikod.net>
 Precedence: bulk
@@ -73,247 +73,126 @@ Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Infomaniak-Routing: alpha
 
-This cosmetic change is needed for audit support, specifically to be
-able to filter according to cross-execution boundaries.
+This cosmetic change that is needed for audit support, specifically to
+be able to filter according to cross-execution boundaries.
 
-Add landlock_get_applicable_subject(), mainly a copy of
-landlock_get_applicable_domain(), which will fully replace it in a
-following commit.
+Replace hardcoded LANDLOCK_SCOPE_SIGNAL with the signal_scope.scope
+variable.
 
-Optimize current_check_access_path() to only handle the access request.
-
-Partially replace get_current_fs_domain() with explicit calls to
-landlock_get_applicable_subject().  The remaining ones will follow with
-more changes.
-
-Remove explicit domain->num_layers check which is now part of the
-landlock_get_applicable_subject() call.
+Use scoped guards for RCU read-side critical sections.
 
 Cc: Günther Noack <gnoack@google.com>
 Signed-off-by: Mickaël Salaün <mic@digikod.net>
-Link: https://lore.kernel.org/r/20250308184422.2159360-5-mic@digikod.net
+Link: https://lore.kernel.org/r/20250308184422.2159360-7-mic@digikod.net
 ---
 
 Changes since v4:
-- New patch to avoid duplicated computation of the layer level that
-  denied an access.
+- New patch.
 ---
- security/landlock/cred.h | 50 +++++++++++++++++++++++++++++++
- security/landlock/fs.c   | 65 +++++++++++++++++++++++-----------------
- 2 files changed, 88 insertions(+), 27 deletions(-)
+ security/landlock/task.c | 50 +++++++++++++++++++++-------------------
+ 1 file changed, 26 insertions(+), 24 deletions(-)
 
-diff --git a/security/landlock/cred.h b/security/landlock/cred.h
-index bf755459838a..fdbbaf66d151 100644
---- a/security/landlock/cred.h
-+++ b/security/landlock/cred.h
-@@ -13,6 +13,7 @@
- #include <linux/init.h>
- #include <linux/rcupdate.h>
+diff --git a/security/landlock/task.c b/security/landlock/task.c
+index 98894ad1abc7..dbdfac11e015 100644
+--- a/security/landlock/task.c
++++ b/security/landlock/task.c
+@@ -7,6 +7,7 @@
+  */
  
-+#include "access.h"
- #include "ruleset.h"
- #include "setup.h"
- 
-@@ -53,6 +54,55 @@ static inline bool landlocked(const struct task_struct *const task)
- 	return has_dom;
- }
- 
-+/**
-+ * landlock_get_applicable_subject - Return the subject's Landlock credential
-+ *                                   if its enforced domain applies to (i.e.
-+ *                                   handles) at least one of the access rights
-+ *                                   specified in @masks
-+ *
-+ * @cred: credential
-+ * @masks: access masks
-+ * @handle_layer: returned youngest layer handling a subset of @masks.  Not set
-+ *                if the function returns NULL.
-+ *
-+ * Returns: landlock_cred(@cred) if any access rights specified in @masks is
-+ * handled, or NULL otherwise.
-+ */
-+static inline const struct landlock_cred_security *
-+landlock_get_applicable_subject(const struct cred *const cred,
-+				const struct access_masks masks,
-+				size_t *const handle_layer)
-+{
-+	const union access_masks_all masks_all = {
-+		.masks = masks,
-+	};
-+	const struct landlock_ruleset *domain;
-+	ssize_t layer_level;
-+
-+	if (!cred)
-+		return NULL;
-+
-+	domain = landlock_cred(cred)->domain;
-+	if (!domain)
-+		return NULL;
-+
-+	for (layer_level = domain->num_layers - 1; layer_level >= 0;
-+	     layer_level--) {
-+		union access_masks_all layer = {
-+			.masks = domain->access_masks[layer_level],
-+		};
-+
-+		if (layer.all & masks_all.all) {
-+			if (handle_layer)
-+				*handle_layer = layer_level;
-+
-+			return landlock_cred(cred);
-+		}
-+	}
-+
-+	return NULL;
-+}
-+
- __init void landlock_add_cred_hooks(void);
- 
- #endif /* _SECURITY_LANDLOCK_CRED_H */
-diff --git a/security/landlock/fs.c b/security/landlock/fs.c
-index 71b9dc331aae..d5b153d29fcb 100644
---- a/security/landlock/fs.c
-+++ b/security/landlock/fs.c
-@@ -771,11 +771,14 @@ static bool is_access_to_paths_allowed(
- 
- 	if (!access_request_parent1 && !access_request_parent2)
- 		return true;
--	if (WARN_ON_ONCE(!domain || !path))
-+
-+	if (WARN_ON_ONCE(!path))
- 		return true;
-+
- 	if (is_nouser_or_private(path->dentry))
- 		return true;
--	if (WARN_ON_ONCE(domain->num_layers < 1 || !layer_masks_parent1))
-+
-+	if (WARN_ON_ONCE(!layer_masks_parent1))
- 		return false;
- 
- 	allowed_parent1 = is_layer_masks_allowed(layer_masks_parent1);
-@@ -926,16 +929,21 @@ static bool is_access_to_paths_allowed(
- static int current_check_access_path(const struct path *const path,
- 				     access_mask_t access_request)
+ #include <asm/current.h>
++#include <linux/cleanup.h>
+ #include <linux/cred.h>
+ #include <linux/errno.h>
+ #include <linux/kernel.h>
+@@ -213,15 +214,15 @@ static int hook_unix_stream_connect(struct sock *const sock,
+ 				    struct sock *const other,
+ 				    struct sock *const newsk)
  {
--	const struct landlock_ruleset *const dom = get_current_fs_domain();
-+	const struct access_masks masks = {
-+		.fs = access_request,
-+	};
-+	const struct landlock_cred_security *const subject =
-+		landlock_get_applicable_subject(current_cred(), masks, NULL);
- 	layer_mask_t layer_masks[LANDLOCK_NUM_ACCESS_FS] = {};
- 
--	if (!dom)
-+	if (!subject)
- 		return 0;
- 
--	access_request = landlock_init_layer_masks(
--		dom, access_request, &layer_masks, LANDLOCK_KEY_INODE);
--	if (is_access_to_paths_allowed(dom, path, access_request, &layer_masks,
--				       NULL, 0, NULL, NULL))
-+	access_request = landlock_init_layer_masks(subject->domain,
-+						   access_request, &layer_masks,
-+						   LANDLOCK_KEY_INODE);
-+	if (is_access_to_paths_allowed(subject->domain, path, access_request,
-+				       &layer_masks, NULL, 0, NULL, NULL))
- 		return 0;
- 
- 	return -EACCES;
-@@ -1098,7 +1106,8 @@ static int current_check_refer_path(struct dentry *const old_dentry,
- 				    struct dentry *const new_dentry,
- 				    const bool removable, const bool exchange)
- {
--	const struct landlock_ruleset *const dom = get_current_fs_domain();
-+	const struct landlock_cred_security *const subject =
-+		landlock_get_applicable_subject(current_cred(), any_fs, NULL);
- 	bool allow_parent1, allow_parent2;
- 	access_mask_t access_request_parent1, access_request_parent2;
- 	struct path mnt_dir;
-@@ -1106,10 +1115,9 @@ static int current_check_refer_path(struct dentry *const old_dentry,
- 	layer_mask_t layer_masks_parent1[LANDLOCK_NUM_ACCESS_FS] = {},
- 		     layer_masks_parent2[LANDLOCK_NUM_ACCESS_FS] = {};
- 
--	if (!dom)
-+	if (!subject)
- 		return 0;
--	if (WARN_ON_ONCE(dom->num_layers < 1))
--		return -EACCES;
-+
- 	if (unlikely(d_is_negative(old_dentry)))
- 		return -ENOENT;
- 	if (exchange) {
-@@ -1134,10 +1142,11 @@ static int current_check_refer_path(struct dentry *const old_dentry,
- 		 * for same-directory referer (i.e. no reparenting).
- 		 */
- 		access_request_parent1 = landlock_init_layer_masks(
--			dom, access_request_parent1 | access_request_parent2,
-+			subject->domain,
-+			access_request_parent1 | access_request_parent2,
- 			&layer_masks_parent1, LANDLOCK_KEY_INODE);
- 		if (is_access_to_paths_allowed(
--			    dom, new_dir, access_request_parent1,
-+			    subject->domain, new_dir, access_request_parent1,
- 			    &layer_masks_parent1, NULL, 0, NULL, NULL))
- 			return 0;
- 		return -EACCES;
-@@ -1160,10 +1169,12 @@ static int current_check_refer_path(struct dentry *const old_dentry,
- 						      old_dentry->d_parent;
- 
- 	/* new_dir->dentry is equal to new_dentry->d_parent */
--	allow_parent1 = collect_domain_accesses(dom, mnt_dir.dentry, old_parent,
-+	allow_parent1 = collect_domain_accesses(subject->domain, mnt_dir.dentry,
-+						old_parent,
- 						&layer_masks_parent1);
--	allow_parent2 = collect_domain_accesses(
--		dom, mnt_dir.dentry, new_dir->dentry, &layer_masks_parent2);
-+	allow_parent2 = collect_domain_accesses(subject->domain, mnt_dir.dentry,
-+						new_dir->dentry,
-+						&layer_masks_parent2);
- 
- 	if (allow_parent1 && allow_parent2)
- 		return 0;
-@@ -1175,9 +1186,9 @@ static int current_check_refer_path(struct dentry *const old_dentry,
- 	 * destination parent access rights.
- 	 */
- 	if (is_access_to_paths_allowed(
--		    dom, &mnt_dir, access_request_parent1, &layer_masks_parent1,
--		    old_dentry, access_request_parent2, &layer_masks_parent2,
--		    exchange ? new_dentry : NULL))
-+		    subject->domain, &mnt_dir, access_request_parent1,
-+		    &layer_masks_parent1, old_dentry, access_request_parent2,
-+		    &layer_masks_parent2, exchange ? new_dentry : NULL))
- 		return 0;
- 
- 	/*
-@@ -1504,11 +1515,10 @@ static int hook_file_open(struct file *const file)
- 	layer_mask_t layer_masks[LANDLOCK_NUM_ACCESS_FS] = {};
- 	access_mask_t open_access_request, full_access_request, allowed_access,
- 		optional_access;
 -	const struct landlock_ruleset *const dom =
--		landlock_get_applicable_domain(
--			landlock_cred(file->f_cred)->domain, any_fs);
+-		landlock_get_applicable_domain(landlock_get_current_domain(),
+-					       unix_scope);
 +	const struct landlock_cred_security *const subject =
-+		landlock_get_applicable_subject(file->f_cred, any_fs, NULL);
++		landlock_get_applicable_subject(current_cred(), unix_scope,
++						NULL);
+ 
+ 	/* Quick return for non-landlocked tasks. */
+-	if (!dom)
++	if (!subject)
+ 		return 0;
+ 
+-	if (is_abstract_socket(other) && sock_is_scoped(other, dom))
++	if (is_abstract_socket(other) && sock_is_scoped(other, subject->domain))
+ 		return -EPERM;
+ 
+ 	return 0;
+@@ -230,11 +231,11 @@ static int hook_unix_stream_connect(struct sock *const sock,
+ static int hook_unix_may_send(struct socket *const sock,
+ 			      struct socket *const other)
+ {
+-	const struct landlock_ruleset *const dom =
+-		landlock_get_applicable_domain(landlock_get_current_domain(),
+-					       unix_scope);
++	const struct landlock_cred_security *const subject =
++		landlock_get_applicable_subject(current_cred(), unix_scope,
++						NULL);
  
 -	if (!dom)
 +	if (!subject)
  		return 0;
  
  	/*
-@@ -1529,9 +1539,10 @@ static int hook_file_open(struct file *const file)
- 	full_access_request = open_access_request | optional_access;
+@@ -244,7 +245,8 @@ static int hook_unix_may_send(struct socket *const sock,
+ 	if (unix_peer(sock->sk) == other->sk)
+ 		return 0;
  
- 	if (is_access_to_paths_allowed(
--		    dom, &file->f_path,
--		    landlock_init_layer_masks(dom, full_access_request,
--					      &layer_masks, LANDLOCK_KEY_INODE),
-+		    subject->domain, &file->f_path,
-+		    landlock_init_layer_masks(subject->domain,
-+					      full_access_request, &layer_masks,
-+					      LANDLOCK_KEY_INODE),
- 		    &layer_masks, NULL, 0, NULL, NULL)) {
- 		allowed_access = full_access_request;
- 	} else {
+-	if (is_abstract_socket(other->sk) && sock_is_scoped(other->sk, dom))
++	if (is_abstract_socket(other->sk) &&
++	    sock_is_scoped(other->sk, subject->domain))
+ 		return -EPERM;
+ 
+ 	return 0;
+@@ -256,27 +258,27 @@ static const struct access_masks signal_scope = {
+ 
+ static int hook_task_kill(struct task_struct *const p,
+ 			  struct kernel_siginfo *const info, const int sig,
+-			  const struct cred *const cred)
++			  const struct cred *cred)
+ {
+ 	bool is_scoped;
+-	const struct landlock_ruleset *dom;
++	const struct landlock_cred_security *subject;
+ 
+-	if (cred) {
+-		/* Dealing with USB IO. */
+-		dom = landlock_cred(cred)->domain;
+-	} else {
+-		dom = landlock_get_current_domain();
+-	}
+-	dom = landlock_get_applicable_domain(dom, signal_scope);
++	if (!cred)
++		/* Not dealing with USB IO. */
++		cred = current_cred();
++
++	subject = landlock_get_applicable_subject(cred, signal_scope, NULL);
+ 
+ 	/* Quick return for non-landlocked tasks. */
+-	if (!dom)
++	if (!subject)
+ 		return 0;
+ 
+-	rcu_read_lock();
+-	is_scoped = domain_is_scoped(dom, landlock_get_task_domain(p),
+-				     LANDLOCK_SCOPE_SIGNAL);
+-	rcu_read_unlock();
++	scoped_guard(rcu)
++	{
++		is_scoped = domain_is_scoped(subject->domain,
++					     landlock_get_task_domain(p),
++					     signal_scope.scope);
++	}
+ 	if (is_scoped)
+ 		return -EPERM;
+ 
 -- 
 2.48.1
 
