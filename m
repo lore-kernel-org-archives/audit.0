@@ -1,33 +1,33 @@
-Received: from smtp-190f.mail.infomaniak.ch (smtp-190f.mail.infomaniak.ch [185.125.25.15])
+Received: from smtp-bc0f.mail.infomaniak.ch (smtp-bc0f.mail.infomaniak.ch [45.157.188.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91A51217654
-	for <audit@vger.kernel.org>; Sat,  8 Mar 2025 18:45:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.25.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E75F216E11
+	for <audit@vger.kernel.org>; Sat,  8 Mar 2025 18:45:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.157.188.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741459510; cv=none; b=AGigSYYdjR1rFdge1Hw0rSpGgj/ssta0fOmGp2FWMoSBTNg/s0zKfl8vJ/xGo0FrzoXT9BXHufWYCxfXoEAi+8hPDgZLCiv32TeAOez5ZrAKTI8CMf3k2VsVVeiLM35pwOvTr882iFD75QFi/YBUaqw52JA+GD/zMwQAiB4gwgQ=
+	t=1741459511; cv=none; b=qJ0ahSpiJ0chogv6y5NbmhpPyN4ML8kL9n265ingDjMPqfDoOf63L0OyTs5Jh8/VlW6gc20cZWmzYFa5grzhv+pKLNGnBi9fmaJoRuV1BiJXmJidvP1R5RQlOHyU3yYxcCMakHiVqL5kTPZpy7fpI5cZqMwh5KvLazAgwASckz8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741459510; c=relaxed/simple;
-	bh=HY7qIKjBEs880v4uRMbaQluwbi4wIxUTYH16MjpJy7o=;
+	s=arc-20240116; t=1741459511; c=relaxed/simple;
+	bh=OlNzPmf82Dwqvaf790xzC1Jbc4nAdjQWZ7qF2fGhVDg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=CB1gC9BJNJUXPG+4rb32cAV/HkrCvM1nVbNdisyvWQJAMeidKTErvjgHfF0vjY1smkKh/WALYynXoM/B+U0isfjMaf/Z66Mybraka2xSUG5pHOoPLQKAuzapbR1j2NtZ71ZyhmVU6vJUYej9rODsiMUU/oxiobiF4E0vjHznFFs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=nFFZP+XT; arc=none smtp.client-ip=185.125.25.15
+	 MIME-Version:Content-Type; b=KRCI7byp2R5xt4wkMVuhB8V2/AWGbRIMn8tSEHdFsFrmcoGn93Tr1sdYF4A2PtL7OWgbhiZ+u3PhCqiOgrGeuTLHo/gg+qgRHR9fdeN6Z0LwRjH11YXaHzgfGVSHziKDLb0ewOFpjoLJGcf0Uuhtm5KUq7yZNlBXUetUGAl/TdI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=lHvSALqj; arc=none smtp.client-ip=45.157.188.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="nFFZP+XT"
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="lHvSALqj"
 Received: from smtp-4-0001.mail.infomaniak.ch (unknown [IPv6:2001:1600:7:10:40ca:feff:fe05:1])
-	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4Z9Bsk6QmqzQXN;
-	Sat,  8 Mar 2025 19:44:58 +0100 (CET)
+	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4Z9Bsm2X6szSwT;
+	Sat,  8 Mar 2025 19:45:00 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
-	s=20191114; t=1741459498;
-	bh=3viWkOI4qofVLlRfSbI1uxTIdc+LKxgzLDCR2tOktw0=;
+	s=20191114; t=1741459500;
+	bh=W9mq3JNdoLiJcn0ZPxWDmdxmjmG0hkY/Wsw30p5Lvpg=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=nFFZP+XTehK97wbq/uScO1/+nU78acHZl61bgIRWx1dnVw32hQ4FFQeWqrN7nvZ4k
-	 QB/CQnkoPRL0segtfQ/vTpvD3erNzTDdP+GX3Z58OswEu76bAW1bOSJVw1MxdDslPW
-	 oL+RKssDyLU2PrKzw5enqai/efLNpMPD2/n6OAog=
-Received: from unknown by smtp-4-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4Z9Bsk11LQzhLM;
-	Sat,  8 Mar 2025 19:44:58 +0100 (CET)
+	b=lHvSALqjk/H/JTp3r9ONV4PHn0PeYQ5rbPGoZec0/LM5X+V8n5Od3mXSaBMcW+Rd6
+	 UVv6dTAdYprkf+ysmv6NINzZ+GPaJj1KnhH8z7o9kjh1/ATvL0h8BI2wk7ahXicukS
+	 VbwTHjYVT5YVRhFBAzAJwTjeC80/cnq/sgJ8Ps5k=
+Received: from unknown by smtp-4-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4Z9Bsl4HLbzjlG;
+	Sat,  8 Mar 2025 19:44:59 +0100 (CET)
 From: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
 To: Eric Paris <eparis@redhat.com>,
 	Paul Moore <paul@paul-moore.com>,
@@ -58,9 +58,9 @@ Cc: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
 	audit@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-security-module@vger.kernel.org
-Subject: [PATCH v6 17/26] landlock: Add LANDLOCK_RESTRICT_SELF_LOG_SUBDOMAINS_OFF
-Date: Sat,  8 Mar 2025 19:44:13 +0100
-Message-ID: <20250308184422.2159360-18-mic@digikod.net>
+Subject: [PATCH v6 18/26] samples/landlock: Enable users to log sandbox denials
+Date: Sat,  8 Mar 2025 19:44:14 +0100
+Message-ID: <20250308184422.2159360-19-mic@digikod.net>
 In-Reply-To: <20250308184422.2159360-1-mic@digikod.net>
 References: <20250308184422.2159360-1-mic@digikod.net>
 Precedence: bulk
@@ -73,193 +73,148 @@ Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Infomaniak-Routing: alpha
 
-Add LANDLOCK_RESTRICT_SELF_LOG_SUBDOMAINS_OFF for the case of sandboxer
-tools, init systems, or runtime containers launching programs sandboxing
-themselves in an inconsistent way.  Setting this flag should only
-depends on runtime configuration (i.e. not hardcoded).
+By default, denials from within the sandbox are not logged.  Indeed, the
+sandboxer's security policy might not be fitted to the set of sandboxed
+processes that could be spawned (e.g. from a shell).
 
-We don't create a new ruleset's option because this should not be part
-of the security policy: only the task that enforces the policy (not the
-one that create it) knows if itself or its children may request denied
-actions.
-
-This is the first and only flag that can be set without actually
-restricting the caller (i.e. without providing a ruleset).
-
-Extend struct landlock_cred_security with a u8 log_subdomains_off.
-struct landlock_file_security is still 16 bytes.
+For test purpose, parse the LL_FORCE_LOG environment variable to log
+every sandbox denials, including after launching the initial sandboxed
+program thanks to LANDLOCK_RESTRICT_SELF_LOG_NEW_EXEC_ON.
 
 Cc: Günther Noack <gnoack@google.com>
-Cc: Paul Moore <paul@paul-moore.com>
-Closes: https://github.com/landlock-lsm/linux/issues/3
 Signed-off-by: Mickaël Salaün <mic@digikod.net>
-Link: https://lore.kernel.org/r/20250308184422.2159360-18-mic@digikod.net
+Link: https://lore.kernel.org/r/20250308184422.2159360-19-mic@digikod.net
 ---
 
 Changes since v5:
-- Rename LANDLOCK_RESTRICT_SELF_QUIET_SUBDOMAINS to
-  LANDLOCK_RESTRICT_SELF_LOG_SUBDOMAINS_OFF.  As for
-  LANDLOCK_RESTRICT_SELF_LOG_OFF, this makes more sense.
-- Store the log_subdomains bit in landlock_cred instead of
-  landlock_hirerarchy because it is not directly related to the current
-  domain.
-- Make it possible to set this flag without actually restricting the
-  calling task, and update the related documentation.
+- Update with new flag.
 
-Changes since v4:
+Changes since v3:
+- Extend error message, suggested by Francis Laniel.
+
+Changes since v2:
 - New patch.
 ---
- include/uapi/linux/landlock.h | 12 ++++++++++
- security/landlock/cred.h      |  7 ++++++
- security/landlock/limits.h    |  2 +-
- security/landlock/syscalls.c  | 41 ++++++++++++++++++++++++++++++-----
- 4 files changed, 55 insertions(+), 7 deletions(-)
+ samples/landlock/sandboxer.c | 37 +++++++++++++++++++++++++++++++++---
+ security/landlock/syscalls.c |  8 ++------
+ 2 files changed, 36 insertions(+), 9 deletions(-)
 
-diff --git a/include/uapi/linux/landlock.h b/include/uapi/linux/landlock.h
-index daa1bc4123c3..66f6328583e4 100644
---- a/include/uapi/linux/landlock.h
-+++ b/include/uapi/linux/landlock.h
-@@ -77,10 +77,22 @@ struct landlock_ruleset_attr {
-  *   This flag should only be set if all the programs than can legitimately be
-  *   executed will not try to request a denied access (which could spam audit
-  *   logs).
-+ * - %LANDLOCK_RESTRICT_SELF_LOG_SUBDOMAINS_OFF: Do not create any log related
-+ *   to the enforced restrictions coming from future nested domains created by
-+ *   the caller or its descendants.  This should only be set according to a
-+ *   runtime configuration (i.e. not hardcoded) by programs launching other
-+ *   unknown or untrusted programs that may create their own Landlock domains
-+ *   and spam logs.  The main use case is for container runtimes to enable users
-+ *   to mute buggy sandboxed programs for a specific container image.  Other use
-+ *   cases include sandboxer tools and init systems.  Unlike
-+ *   %LANDLOCK_RESTRICT_SELF_LOG_SAME_EXEC_OFF,
-+ *   %LANDLOCK_RESTRICT_SELF_LOG_SUBDOMAINS_OFF does not impact the requested
-+ *   restriction (if any) but only the future nested domains.
-  */
- /* clang-format off */
- #define LANDLOCK_RESTRICT_SELF_LOG_SAME_EXEC_OFF		(1U << 0)
- #define LANDLOCK_RESTRICT_SELF_LOG_NEW_EXEC_ON			(1U << 1)
-+#define LANDLOCK_RESTRICT_SELF_LOG_SUBDOMAINS_OFF		(1U << 2)
- /* clang-format on */
+diff --git a/samples/landlock/sandboxer.c b/samples/landlock/sandboxer.c
+index 07fab2ef534e..4e2854c6f9a3 100644
+--- a/samples/landlock/sandboxer.c
++++ b/samples/landlock/sandboxer.c
+@@ -58,6 +58,7 @@ static inline int landlock_restrict_self(const int ruleset_fd,
+ #define ENV_TCP_BIND_NAME "LL_TCP_BIND"
+ #define ENV_TCP_CONNECT_NAME "LL_TCP_CONNECT"
+ #define ENV_SCOPED_NAME "LL_SCOPED"
++#define ENV_FORCE_LOG_NAME "LL_FORCE_LOG"
+ #define ENV_DELIMITER ":"
  
- /**
-diff --git a/security/landlock/cred.h b/security/landlock/cred.h
-index cf38caf77adc..3194a46022f9 100644
---- a/security/landlock/cred.h
-+++ b/security/landlock/cred.h
-@@ -39,6 +39,13 @@ struct landlock_cred_security {
- 	 * landlock_restrict_self(2)).
- 	 */
- 	u16 domain_exec;
-+	/**
-+	 * @log_subdomains_off: Set if the domain descendants's log_status should be
-+	 * set to %LANDLOCK_LOG_DISABLED.  This is not a landlock_hierarchy
-+	 * configuration because it applies to future descendant domains and it does
-+	 * not require a current domain.
-+	 */
-+	u8 log_subdomains_off : 1;
- #endif /* CONFIG_AUDIT */
- } __packed;
- 
-diff --git a/security/landlock/limits.h b/security/landlock/limits.h
-index a45cd58898d0..5c0dbf1beb48 100644
---- a/security/landlock/limits.h
-+++ b/security/landlock/limits.h
-@@ -30,7 +30,7 @@
- #define LANDLOCK_MASK_SCOPE		((LANDLOCK_LAST_SCOPE << 1) - 1)
- #define LANDLOCK_NUM_SCOPE		__const_hweight64(LANDLOCK_MASK_SCOPE)
- 
--#define LANDLOCK_LAST_RESTRICT_SELF	LANDLOCK_RESTRICT_SELF_LOG_NEW_EXEC_ON
-+#define LANDLOCK_LAST_RESTRICT_SELF	LANDLOCK_RESTRICT_SELF_LOG_SUBDOMAINS_OFF
- #define LANDLOCK_MASK_RESTRICT_SELF	((LANDLOCK_LAST_RESTRICT_SELF << 1) - 1)
+ static int str2num(const char *numstr, __u64 *num_dst)
+@@ -295,7 +296,7 @@ static bool check_ruleset_scope(const char *const env_var,
  
  /* clang-format on */
+ 
+-#define LANDLOCK_ABI_LAST 6
++#define LANDLOCK_ABI_LAST 7
+ 
+ #define XSTR(s) #s
+ #define STR(s) XSTR(s)
+@@ -322,6 +323,9 @@ static const char help[] =
+ 	"  - \"a\" to restrict opening abstract unix sockets\n"
+ 	"  - \"s\" to restrict sending signals\n"
+ 	"\n"
++	"A sandboxer should not log denied access requests to avoid spamming logs, "
++	"but to test audit we can set " ENV_FORCE_LOG_NAME "=1\n"
++	"\n"
+ 	"Example:\n"
+ 	ENV_FS_RO_NAME "=\"${PATH}:/lib:/usr:/proc:/etc:/dev/urandom\" "
+ 	ENV_FS_RW_NAME "=\"/dev/null:/dev/full:/dev/zero:/dev/pts:/tmp\" "
+@@ -340,7 +344,7 @@ int main(const int argc, char *const argv[], char *const *const envp)
+ 	const char *cmd_path;
+ 	char *const *cmd_argv;
+ 	int ruleset_fd, abi;
+-	char *env_port_name;
++	char *env_port_name, *env_force_log;
+ 	__u64 access_fs_ro = ACCESS_FS_ROUGHLY_READ,
+ 	      access_fs_rw = ACCESS_FS_ROUGHLY_READ | ACCESS_FS_ROUGHLY_WRITE;
+ 
+@@ -351,6 +355,8 @@ int main(const int argc, char *const argv[], char *const *const envp)
+ 		.scoped = LANDLOCK_SCOPE_ABSTRACT_UNIX_SOCKET |
+ 			  LANDLOCK_SCOPE_SIGNAL,
+ 	};
++	int supported_restrict_flags = LANDLOCK_RESTRICT_SELF_LOG_NEW_EXEC_ON;
++	int set_restrict_flags = 0;
+ 
+ 	if (argc < 2) {
+ 		fprintf(stderr, help, argv[0]);
+@@ -422,6 +428,13 @@ int main(const int argc, char *const argv[], char *const *const envp)
+ 		/* Removes LANDLOCK_SCOPE_* for ABI < 6 */
+ 		ruleset_attr.scoped &= ~(LANDLOCK_SCOPE_ABSTRACT_UNIX_SOCKET |
+ 					 LANDLOCK_SCOPE_SIGNAL);
++		__attribute__((fallthrough));
++	case 6:
++		/* Removes LANDLOCK_RESTRICT_SELF_LOG_NEW_EXEC_ON for ABI < 7 */
++		supported_restrict_flags &=
++			~LANDLOCK_RESTRICT_SELF_LOG_NEW_EXEC_ON;
++
++		/* Must be printed for any ABI < LANDLOCK_ABI_LAST. */
+ 		fprintf(stderr,
+ 			"Hint: You should update the running kernel "
+ 			"to leverage Landlock features "
+@@ -456,6 +469,24 @@ int main(const int argc, char *const argv[], char *const *const envp)
+ 	if (check_ruleset_scope(ENV_SCOPED_NAME, &ruleset_attr))
+ 		return 1;
+ 
++	/* Enables optional logs. */
++	env_force_log = getenv(ENV_FORCE_LOG_NAME);
++	if (env_force_log) {
++		if (strcmp(env_force_log, "1") != 0) {
++			fprintf(stderr, "Unknown value for " ENV_FORCE_LOG_NAME
++					" (only \"1\" is handled)\n");
++			return 1;
++		}
++		if (!(supported_restrict_flags &
++		      LANDLOCK_RESTRICT_SELF_LOG_NEW_EXEC_ON)) {
++			fprintf(stderr,
++				"Audit logs not supported by current kernel\n");
++			return 1;
++		}
++		set_restrict_flags |= LANDLOCK_RESTRICT_SELF_LOG_NEW_EXEC_ON;
++		unsetenv(ENV_FORCE_LOG_NAME);
++	}
++
+ 	ruleset_fd =
+ 		landlock_create_ruleset(&ruleset_attr, sizeof(ruleset_attr), 0);
+ 	if (ruleset_fd < 0) {
+@@ -483,7 +514,7 @@ int main(const int argc, char *const argv[], char *const *const envp)
+ 		perror("Failed to restrict privileges");
+ 		goto err_close_ruleset;
+ 	}
+-	if (landlock_restrict_self(ruleset_fd, 0)) {
++	if (landlock_restrict_self(ruleset_fd, set_restrict_flags)) {
+ 		perror("Failed to enforce ruleset");
+ 		goto err_close_ruleset;
+ 	}
 diff --git a/security/landlock/syscalls.c b/security/landlock/syscalls.c
-index c9f4e213a6f4..e38b22075ca1 100644
+index e38b22075ca1..cae0a0fd08d8 100644
 --- a/security/landlock/syscalls.c
 +++ b/security/landlock/syscalls.c
-@@ -441,12 +441,16 @@ SYSCALL_DEFINE4(landlock_add_rule, const int, ruleset_fd,
-  *
-  * - %LANDLOCK_RESTRICT_SELF_LOG_SAME_EXEC_OFF
-  * - %LANDLOCK_RESTRICT_SELF_LOG_NEW_EXEC_ON
-+ * - %LANDLOCK_RESTRICT_SELF_LOG_SUBDOMAINS_OFF
-  *
-  * This system call enables to enforce a Landlock ruleset on the current
-  * thread.  Enforcing a ruleset requires that the task has %CAP_SYS_ADMIN in its
-  * namespace or is running with no_new_privs.  This avoids scenarios where
-  * unprivileged tasks can affect the behavior of privileged children.
-  *
-+ * It is allowed to only pass the %LANDLOCK_RESTRICT_SELF_LOG_SUBDOMAINS_OFF
-+ * flag with a @ruleset_fd value of -1.
-+ *
-  * Possible returned errors are:
-  *
-  * - %EOPNOTSUPP: Landlock is supported by the kernel but disabled at boot time;
-@@ -466,7 +470,8 @@ SYSCALL_DEFINE2(landlock_restrict_self, const int, ruleset_fd, const __u32,
- 		*ruleset __free(landlock_put_ruleset) = NULL;
- 	struct cred *new_cred;
- 	struct landlock_cred_security *new_llcred;
--	bool log_same_exec, log_cross_exec;
-+	bool log_same_exec, log_cross_exec, log_subdomains,
-+		__maybe_unused prev_log_subdomains;
+@@ -495,12 +495,8 @@ SYSCALL_DEFINE2(landlock_restrict_self, const int, ruleset_fd, const __u32,
+ 	/* Translates "off" flag to boolean. */
+ 	log_subdomains = !(flags & LANDLOCK_RESTRICT_SELF_LOG_SUBDOMAINS_OFF);
  
- 	if (!is_initialized())
- 		return -EOPNOTSUPP;
-@@ -487,11 +492,20 @@ SYSCALL_DEFINE2(landlock_restrict_self, const int, ruleset_fd, const __u32,
- 	log_same_exec = !(flags & LANDLOCK_RESTRICT_SELF_LOG_SAME_EXEC_OFF);
- 	/* Translates "on" flag to boolean. */
- 	log_cross_exec = !!(flags & LANDLOCK_RESTRICT_SELF_LOG_NEW_EXEC_ON);
-+	/* Translates "off" flag to boolean. */
-+	log_subdomains = !(flags & LANDLOCK_RESTRICT_SELF_LOG_SUBDOMAINS_OFF);
- 
--	/* Gets and checks the ruleset. */
--	ruleset = get_ruleset_from_fd(ruleset_fd, FMODE_CAN_READ);
--	if (IS_ERR(ruleset))
--		return PTR_ERR(ruleset);
-+	/*
-+	 * It is allowed to set %LANDLOCK_RESTRICT_SELF_LOG_SUBDOMAINS_OFF with -1
-+	 * as @ruleset_fd, but no other flag must be set.
-+	 */
-+	if (!(ruleset_fd == -1 &&
-+	      flags == LANDLOCK_RESTRICT_SELF_LOG_SUBDOMAINS_OFF)) {
-+		/* Gets and checks the ruleset. */
-+		ruleset = get_ruleset_from_fd(ruleset_fd, FMODE_CAN_READ);
-+		if (IS_ERR(ruleset))
-+			return PTR_ERR(ruleset);
-+	}
- 
- 	/* Prepares new credentials. */
- 	new_cred = prepare_creds();
-@@ -500,6 +514,21 @@ SYSCALL_DEFINE2(landlock_restrict_self, const int, ruleset_fd, const __u32,
- 
- 	new_llcred = landlock_cred(new_cred);
- 
-+#ifdef CONFIG_AUDIT
-+	prev_log_subdomains = !new_llcred->log_subdomains_off;
-+	new_llcred->log_subdomains_off = !prev_log_subdomains ||
-+					 !log_subdomains;
-+#endif /* CONFIG_AUDIT */
-+
-+	/*
-+	 * The only case when a ruleset may not be set is if
-+	 * LANDLOCK_RESTRICT_SELF_LOG_SUBDOMAINS_OFF is set and ruleset_fd is -1.
-+	 * We could optimize this case by not calling commit_creds() if this flag
-+	 * was already set, but it is not worth the complexity.
-+	 */
-+	if (!ruleset)
-+		return commit_creds(new_cred);
-+
- 	/*
- 	 * There is no possible race condition while copying and manipulating
- 	 * the current credentials because they are dedicated per thread.
-@@ -513,7 +542,7 @@ SYSCALL_DEFINE2(landlock_restrict_self, const int, ruleset_fd, const __u32,
- #ifdef CONFIG_AUDIT
- 	new_dom->hierarchy->log_same_exec = log_same_exec;
- 	new_dom->hierarchy->log_cross_exec = log_cross_exec;
--	if (!log_same_exec && !log_cross_exec)
-+	if ((!log_same_exec && !log_cross_exec) || !prev_log_subdomains)
- 		new_dom->hierarchy->log_status = LANDLOCK_LOG_DISABLED;
- #endif /* CONFIG_AUDIT */
- 
+-	/*
+-	 * It is allowed to set %LANDLOCK_RESTRICT_SELF_LOG_SUBDOMAINS_OFF with -1
+-	 * as @ruleset_fd, but no other flag must be set.
+-	 */
+-	if (!(ruleset_fd == -1 &&
+-	      flags == LANDLOCK_RESTRICT_SELF_LOG_SUBDOMAINS_OFF)) {
++	if (!(flags == LANDLOCK_RESTRICT_SELF_LOG_SUBDOMAINS_OFF &&
++	      ruleset_fd == -1)) {
+ 		/* Gets and checks the ruleset. */
+ 		ruleset = get_ruleset_from_fd(ruleset_fd, FMODE_CAN_READ);
+ 		if (IS_ERR(ruleset))
 -- 
 2.48.1
 
