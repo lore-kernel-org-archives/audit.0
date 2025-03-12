@@ -1,46 +1,85 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D0651DB356;
-	Wed, 12 Mar 2025 08:36:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A41FA2566F4
+	for <audit@vger.kernel.org>; Wed, 12 Mar 2025 15:51:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741768576; cv=none; b=TEd/5et2p2mrKe/Hna1NQXFYYgju08mqu6CaH3GOFt4ONo6UnlPxjbwGmtaUAFr8ApvcXiWV5QXNvG6J1kbjabS7wOWQnUnVvcA3EhAvkQvg3q+dVRURnjJB8BjWlavJYZ8eRhUEffLJG/6EvveKclWZja9xZpGN/2/8wU5NooA=
+	t=1741794690; cv=none; b=SzEFCGlC+LG/nSa2QT44pncORw6I8FV2LSRFNiRWZ0o9SRlekh7RRTZo5wfaoeIF78KV/+WM63G+acXHhIn08FjyWE9UvhSNgg0ypJSck9QRwl/xGiuQfEM+pc9rRJykIuCdPKifg3ma6JLYQB4u+wNTGZjjlmL7FGfyT0WHMLE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741768576; c=relaxed/simple;
-	bh=rAnPETvJ1xWsUR/LEodaT72moPokpP2sjBnMZ54f35U=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Q9a5wUvSwiCKu8QRW4iGM7ooFa1D4iFSTrQG2y57n3f0nvghWsn7XL+nQBV1wWTQ+ZvUf68r8lhpnE6L6sxXv8HuE5tYKadPJC29nqlyS2WvCQsvJvpo3Iub4kXaMysTT7Nk8szGwESo4XQmgLGCny+FiVG1Xs9QVSOrrpsOnDw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GRbA55BK; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1741794690; c=relaxed/simple;
+	bh=x0bzaDEk8aQvniRaJxUgWv0R2t78KM+JXoY5XWMzc4E=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=N376Lad152QhEapzDRYRdGcww0ZF83eeGv+uQKcWxbildzL85gqo69XNv86Xb6rpa/rYuS7dqn+pvHTATfonu6n/AQhpsiN3J2IfHzt5umXnl27/NQGJWW6V2okH2Nj2mR+I43FnlPqdkwehTDTWuXWlghF7xd9/5gWiK+YMEtg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=fxMytm9d; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=Yxo63xRQ; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=fxMytm9d; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=Yxo63xRQ; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GRbA55BK"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9511DC4CEE3;
-	Wed, 12 Mar 2025 08:36:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741768576;
-	bh=rAnPETvJ1xWsUR/LEodaT72moPokpP2sjBnMZ54f35U=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=GRbA55BKdEP2X00NG+FMCqNQ7hjGMlhWXGYiB76VnY5W7+Z0XJhLa+J3TsIrE2tMX
-	 GGcYg4KK5ZNkqpwP51pKaHYS5zo1HtxpFhHLBMOy5bt+yl2ccP3MdCw3UzeKJlJENl
-	 QzQF+iM5vTSCE5xsoUciSvrCMhR0mEObkYf5dSFpv+oAtYwp+tr54DlOGSZkVIZPpQ
-	 VOlRJBEBhsZh1pW9rF1aekQM0HNuk7g2Gwsf65CNaai5lzDdy1N/RCPZSZLxNz2uZg
-	 rzShVnYs6FSYdDXH9LwwDM2dO+vmlBjP2iSVBzfjt4Aj6/eLnsE09fKT2bZoe88meF
-	 56J+Y6R+BUZfQ==
-From: Christian Brauner <brauner@kernel.org>
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="fxMytm9d";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="Yxo63xRQ";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="fxMytm9d";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="Yxo63xRQ"
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id BEDEB21195;
+	Wed, 12 Mar 2025 15:51:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1741794686; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=YAolITJtosWbgnrc4Sl1gW+rHyFKKmQ+Fk910mjL86Q=;
+	b=fxMytm9dRWRHCGHtl03ouUJ/RAM32u41BjH5yWb28VwBeyGiIo3THR55jxsgi//yujU/3h
+	MOlKmPR591vXtv1Abv73AKMvfFsVnQsYK+8PiKNoqORrr8pY7CAQuBZ0NjvqX+7MaI6vrm
+	bB8XcjTb+z7Y+cm7LU07iE5w+daL9ww=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1741794686;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=YAolITJtosWbgnrc4Sl1gW+rHyFKKmQ+Fk910mjL86Q=;
+	b=Yxo63xRQgDxrt9B4y5UvKmUR34SS4Cs8MVqymB2MqaJUVmcrFeA6ivRuYCb/ilRM+74DEe
+	t68JcSrFQne43BBA==
+Authentication-Results: smtp-out1.suse.de;
+	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=fxMytm9d;
+	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=Yxo63xRQ
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1741794686; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=YAolITJtosWbgnrc4Sl1gW+rHyFKKmQ+Fk910mjL86Q=;
+	b=fxMytm9dRWRHCGHtl03ouUJ/RAM32u41BjH5yWb28VwBeyGiIo3THR55jxsgi//yujU/3h
+	MOlKmPR591vXtv1Abv73AKMvfFsVnQsYK+8PiKNoqORrr8pY7CAQuBZ0NjvqX+7MaI6vrm
+	bB8XcjTb+z7Y+cm7LU07iE5w+daL9ww=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1741794686;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=YAolITJtosWbgnrc4Sl1gW+rHyFKKmQ+Fk910mjL86Q=;
+	b=Yxo63xRQgDxrt9B4y5UvKmUR34SS4Cs8MVqymB2MqaJUVmcrFeA6ivRuYCb/ilRM+74DEe
+	t68JcSrFQne43BBA==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id B389313AA9;
+	Wed, 12 Mar 2025 15:51:26 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id VcPOK36t0WenFAAAD6G6ig
+	(envelope-from <jack@suse.cz>); Wed, 12 Mar 2025 15:51:26 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+	id 65CB5A0908; Wed, 12 Mar 2025 16:51:22 +0100 (CET)
+Date: Wed, 12 Mar 2025 16:51:22 +0100
+From: Jan Kara <jack@suse.cz>
 To: Mateusz Guzik <mjguzik@gmail.com>
-Cc: Christian Brauner <brauner@kernel.org>,
-	jack@suse.cz,
-	linux-kernel@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org,
-	io-uring@vger.kernel.org,
-	audit@vger.kernel.org,
-	axboe@kernel.dk,
-	viro@zeniv.linux.org.uk
+Cc: brauner@kernel.org, viro@zeniv.linux.org.uk, jack@suse.cz, 
+	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, io-uring@vger.kernel.org, 
+	audit@vger.kernel.org, axboe@kernel.dk
 Subject: Re: [PATCH] fs: dodge an atomic in putname if ref == 1
-Date: Wed, 12 Mar 2025 09:36:00 +0100
-Message-ID: <20250312-zwang-farbbeutel-a4c031fd05df@brauner>
-X-Mailer: git-send-email 2.47.2
-In-Reply-To: <20250311181804.1165758-1-mjguzik@gmail.com>
+Message-ID: <naalmvyvolpfkwxoztkskhz2kyoznjjhm5y4zmfd44tyf5d24k@2jap6ty4nkwz>
 References: <20250311181804.1165758-1-mjguzik@gmail.com>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
@@ -48,12 +87,45 @@ List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1101; i=brauner@kernel.org; h=from:subject:message-id; bh=rAnPETvJ1xWsUR/LEodaT72moPokpP2sjBnMZ54f35U=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMaRfdC8/qhb3VNT6qUXTrfW2pXzzhRMVM/8d1xfcvDjhR eizt+c6OkpZGMS4GGTFFFkc2k3C5ZbzVGw2ytSAmcPKBDKEgYtTACZieoDhf+0mrRVrZW9OuGA6 t+7I5S1lhpOtbirMLRV1XS4/panBYj/Df+8Psku+MP/luc937fHuO88eBvfc2lyy6P7OaVE3vx7 ecoMBAA==
-X-Developer-Key: i=brauner@kernel.org; a=openpgp; fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250311181804.1165758-1-mjguzik@gmail.com>
+X-Rspamd-Queue-Id: BEDEB21195
+X-Spam-Score: -4.01
+X-Rspamd-Action: no action
+X-Spamd-Result: default: False [-4.01 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	MID_RHS_NOT_FQDN(0.50)[];
+	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	RCVD_COUNT_THREE(0.00)[3];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	TO_DN_SOME(0.00)[];
+	FREEMAIL_TO(0.00)[gmail.com];
+	MIME_TRACE(0.00)[0:+];
+	ARC_NA(0.00)[];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	RCVD_TLS_LAST(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[9];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
+	MISSING_XM_UA(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DKIM_TRACE(0.00)[suse.cz:+];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:email,imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo]
+X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
+X-Spam-Flag: NO
+X-Spam-Level: 
 
-On Tue, 11 Mar 2025 19:18:04 +0100, Mateusz Guzik wrote:
+On Tue 11-03-25 19:18:04, Mateusz Guzik wrote:
 > While the structure is refcounted, the only consumer incrementing it is
 > audit and even then the atomic operation is only needed when it
 > interacts with io_uring.
@@ -61,22 +133,75 @@ On Tue, 11 Mar 2025 19:18:04 +0100, Mateusz Guzik wrote:
 > If putname spots a count of 1, there is no legitimate way for anyone to
 > bump it.
 > 
-> [...]
+> If audit is disabled, the count is guaranteed to be 1, which
+> consistently elides the atomic for all path lookups. If audit is
+> enabled, it still manages to elide the last decrement.
+> 
+> Note the patch does not do anything to prevent audit from suffering
+> atomics. See [1] and [2] for a different approach.
+> 
+> Benchmarked on Sapphire Rapids issuing access() (ops/s):
+> before: 5106246
+> after:  5269678 (+3%)
+> 
+> Link 1:	https://lore.kernel.org/linux-fsdevel/20250307161155.760949-1-mjguzik@gmail.com/
+> Link 2: https://lore.kernel.org/linux-fsdevel/20250307164216.GI2023217@ZenIV/
+> Signed-off-by: Mateusz Guzik <mjguzik@gmail.com>
 
-Applied to the vfs-6.15.misc branch of the vfs/vfs.git tree.
-Patches in the vfs-6.15.misc branch should appear in linux-next soon.
+Yeah, I like this much more than the original. Feel free to add:
 
-Please report any outstanding bugs that were missed during review in a
-new review to the original patch series allowing us to drop it.
+Reviewed-by: Jan Kara <jack@suse.cz>
 
-It's encouraged to provide Acked-bys and Reviewed-bys even though the
-patch has now been applied. If possible patch trailers will be updated.
+								Honza
 
-Note that commit hashes shown below are subject to change due to rebase,
-trailer updates or similar. If in doubt, please check the listed branch.
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git
-branch: vfs-6.15.misc
-
-[1/1] fs: dodge an atomic in putname if ref == 1
-      https://git.kernel.org/vfs/vfs/c/c93617c0f22c
+> This is an alternative to the patch I linked above.
+> 
+> I think the improved commit message should also cover the feedback
+> Christian previously shared concerning it.
+> 
+> This is a trivial win until the atomic issue gets resolved, I don't see
+> any reason to NOT include it. At the same time I don't have that much
+> interest arguing about it either.
+> 
+> That is to say, here is a different take, if you don't like it, I'm
+> dropping the subject.
+> 
+> cheers
+> 
+>  fs/namei.c | 13 +++++++++----
+>  1 file changed, 9 insertions(+), 4 deletions(-)
+> 
+> diff --git a/fs/namei.c b/fs/namei.c
+> index 06765d320e7e..add90981cfcd 100644
+> --- a/fs/namei.c
+> +++ b/fs/namei.c
+> @@ -275,14 +275,19 @@ EXPORT_SYMBOL(getname_kernel);
+>  
+>  void putname(struct filename *name)
+>  {
+> +	int refcnt;
+> +
+>  	if (IS_ERR_OR_NULL(name))
+>  		return;
+>  
+> -	if (WARN_ON_ONCE(!atomic_read(&name->refcnt)))
+> -		return;
+> +	refcnt = atomic_read(&name->refcnt);
+> +	if (refcnt != 1) {
+> +		if (WARN_ON_ONCE(!refcnt))
+> +			return;
+>  
+> -	if (!atomic_dec_and_test(&name->refcnt))
+> -		return;
+> +		if (!atomic_dec_and_test(&name->refcnt))
+> +			return;
+> +	}
+>  
+>  	if (name->name != name->iname) {
+>  		__putname(name->name);
+> -- 
+> 2.43.0
+> 
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
