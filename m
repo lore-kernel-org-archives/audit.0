@@ -1,65 +1,65 @@
-Received: from mail-qv1-f51.google.com (mail-qv1-f51.google.com [209.85.219.51])
+Received: from mail-qk1-f177.google.com (mail-qk1-f177.google.com [209.85.222.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5780A1F2369
-	for <audit@vger.kernel.org>; Wed, 12 Mar 2025 23:51:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 841191F2B87
+	for <audit@vger.kernel.org>; Wed, 12 Mar 2025 23:51:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741823498; cv=none; b=hU9wq0h9LcS8V4wgE1gs8WLJME9JvfGAo+ea9qOhjJq01uIvk/awAdpTxTt/BA0pDoAq+g8aCaGcSvJYtK1ftxh65Y0e/5U0THmrwkGNXRj5BOQkif14jpHV9h//IWCvcW7Hw+rtW2wShyeVXNs1Ll0FSCxkNI9quVur+lWTurY=
+	t=1741823498; cv=none; b=cMjUOZpxFL7Y3p9B5FRxo4z5Agh25FN1OiERq2Ysx7e4iOpP1GpyiVm4sV067PNggoMnmvJMHCsFYSeVobTdCD0S8Ef27ceEI+UiFFeWTlcHIjhXLHURX9Iue1M8XRBK5UQ6yBdgBSDfOt7Rq63j7Wz3FkPAiv6tZn/8gpTxihs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1741823498; c=relaxed/simple;
-	bh=nZppvXExe9z50boTqFggcjUjW+ehiSBBDdzzf3Mnh3I=;
+	bh=y6im2FC9RnrBK0DsITVVl0clIoDEu4fT57zPgo7oKQI=;
 	h=Date:Message-ID:MIME-Version:Content-Type:From:To:Cc:Subject:
-	 References:In-Reply-To; b=FscAZn6txiWBy3mU6AgWCCw74bAzFdLBdWAw8SttBAAWeamdZ5Oc2feySNJ8IwLonCAf/ok+nhRRZ8nu4YOUeJCT1cAFtWOC3nBIJp7ZAnpJjefMsO+PE0Se7OK+raHBylIthfV2uO5brAUt7/GUpNnTbYL7uXeWmIcliF/851s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=EZ+8pCy1; arc=none smtp.client-ip=209.85.219.51
+	 References:In-Reply-To; b=WFv3mrZdz3gT2Sw6ItFJOdME2G+iHHzunYHif5t0Z92ggDH0q0HjOMChH9VYgMUaQh5+UuyIXQEz7/C887ggCe/TGT+tM8DIErIiDCY4uqFsWfkX7xS+Bw9LdEjEU6piiTf7UssPxzTkfXvYGenEW3dJhLcPCFHLO+t6IsTaFoQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=aagWl5ht; arc=none smtp.client-ip=209.85.222.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="EZ+8pCy1"
-Received: by mail-qv1-f51.google.com with SMTP id 6a1803df08f44-6dd049b5428so5665976d6.2
-        for <audit@vger.kernel.org>; Wed, 12 Mar 2025 16:51:35 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="aagWl5ht"
+Received: by mail-qk1-f177.google.com with SMTP id af79cd13be357-7c56321b22cso45023785a.1
+        for <audit@vger.kernel.org>; Wed, 12 Mar 2025 16:51:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1741823494; x=1742428294; darn=vger.kernel.org;
+        d=paul-moore.com; s=google; t=1741823495; x=1742428295; darn=vger.kernel.org;
         h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
          :mime-version:message-id:date:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=CW90axoo0o9jpPTk+/SEj4I5AijDX95SkVqF//3Gczg=;
-        b=EZ+8pCy1b5Iv8gyVt3xRDvb6fknPtM29D7El+oqDFPB4nlAJdTHmzlgZkh+j+qcaRB
-         ufXPokzwA3jOcyPOgJ6lRj/1FRB4O/U7V2SJyBLYKb7B1W772i+tNpFNThJGy3N3+af0
-         utDAn8vAFyBooZrDMKhCd9AfaUxyCSIamTBv16Kdv1S/EMlW4dNpGQR47Xq8GYIjsZqb
-         EtPLL+uSznx3rLfY6c49YpsPXp5XC13dnKXhidIXyRi7FXUZs81FZF1PRhXEiCiiRy2x
-         PuTpWh3Fmrw55t+cZImN0KN865YapvUmZDmip+p7FVJ21KKka9e7P1l4Sze1kCyvDQZR
-         NJ8A==
+        bh=qEHvEcO4NOg0YRDF2fNEp3c9gsS6yXYNEicVD7ca+jg=;
+        b=aagWl5htvm96U1T2VDK+wTQWnB3Os1O1B4Smq1jlsN18q5uwQA1ye/O7YN9OFTgSYL
+         Q+5F76wxKqehkXX2JLKFrrPcUFOEhyaS/xp+ARN/5ANK6NAe5KtqkkNhq0cS275kr5ET
+         cfFb/pGJ4yCTm/8OFF3b9Cd2GdS+CrDaiHpmQ3ktrtByR2ZIC238a6tZgpeBAY2MXROo
+         gKhuRVk+lCXBzwjypUwZFPWGreAN41yWzjA10hNffGY3/YxPC2nqDvyaqR/rqn7xWX3J
+         Arc/43oUVhEoAcDOOEOwE12DI2UXwFlbJ+UnfSruPN8xj1jekQUB7+5h0PJB+yskVL58
+         Uv+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741823494; x=1742428294;
+        d=1e100.net; s=20230601; t=1741823495; x=1742428295;
         h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
          :mime-version:message-id:date:x-gm-message-state:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=CW90axoo0o9jpPTk+/SEj4I5AijDX95SkVqF//3Gczg=;
-        b=v4ZXgylRl7WjPH5siY4SKaMUBOzw4lpf+6GxfEIFkbdTdxWW+oamRdcUrqH7GnuvKi
-         yJvVgKKaJ8jYERMgT4DTHEV/yaJ9upXJkVdcHL5AfBOBWn8jo+5v8AMxS7B9zvxhaSEO
-         y8oHCLAMCI5G+bqkW+js2hTJ1VndyoYQWe3GR2RoH1tbkHMyGj1ZqpKVcJgdlhMgDRTV
-         y08wQ28pvRCGdOTv+Tge+z+QUUlO0gv+ro+tsGQ3/LYwoYxgjB2i8bpKf0DYPHzQAWpy
-         RzdZllOf6r25jYb7Vgj8KdWhtzCFOmiBx9IxFIMqxd2kweCL6YY/8Y/jSYCy29ee/JD4
-         FYlQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXpB/HJM6YBOMu6X5sItQvBgrj4h0x94DQI8F3i9ZRwzuODreWP0STzqTRXYHuSN8LrgBomHQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwgYaL0M+C1VzFnboe3TPjwlaGP00NInr8D/Q746phB6ROEEMZj
-	S1g1L+s4HFEZFN0BdAPgW7KNwKSjuivoSreau40Ldfr5RpyyKqvdmr7hBm6d/g==
-X-Gm-Gg: ASbGnctLr0PlOO6FvMrgmzaSYlwfupwfPbYT9wHO61klLVdDO3g9CaS7Gv4KlRkXx+W
-	14n/MaFtvrsWXtN0YNdZ5fPcAkfjxTCClvXxVd62Up1UiTe9gJ0wpVaVP0Vg8GhelJ7eR2ocz2b
-	ww7RJpnKqv3xUwBYBLDwDPOWQdvsAw9JidXtzPqJvt8iWSCjAickqABF6OSFvgBSSL3KCGReJpp
-	GVTJVhuQcA9wAiOQ41dUvIuNqGHHd5YTrftpIcwRYqotXzGOJLgUanlK7dBi2qXhrFVhcEDUgFa
-	l9MzPAscTnEIIovY2hj0sFIA8ByIH3pntaAeoJ9w7gmud5/xX6YhWVYCYAG0fm7098u118XutsB
-	SlJuiWEzhytcixA==
-X-Google-Smtp-Source: AGHT+IFSqTK2ilUcKx6zm2i0BV+o8XNbFHCnS5If+1fP0sLk3byjVxocCH06FxErBK2o3HRcOC9grQ==
-X-Received: by 2002:ad4:5c8e:0:b0:6e8:fb44:5bda with SMTP id 6a1803df08f44-6e900609592mr404688736d6.19.1741823494123;
-        Wed, 12 Mar 2025 16:51:34 -0700 (PDT)
+        bh=qEHvEcO4NOg0YRDF2fNEp3c9gsS6yXYNEicVD7ca+jg=;
+        b=q8BN4iqiDzBNDZ2coo4Tf7pYmnrimdzQbskB56n1yaK63yeBRH/o4cGvwVe6r0emgp
+         YPqPM6gB/MkdPZxG5gB/rvr4U9W/LOi6AfU9gxdj+Tm5LB64PqnrCtSD39QLv2zJqUKV
+         WP9ce6GBym+tLCikNJSp2nRjFtA2MAnqwftCQFXWy06TJSVc8uL9o21FwoCt3eRZZGbf
+         NI81SUFjpnfiloDpDxqhLuKkD2B/S22npbYwHU557Y5qgvpZt7FuPPu5JFzSJSejx6jv
+         9e+Wr+oLFBVj/0YI6gi7E8Dwc2oTyFCG7VpnfWgwkU/Se4hqciIvUY4BTIAqkSuxtIET
+         YMog==
+X-Forwarded-Encrypted: i=1; AJvYcCUybdLPr90foGisIpbGHWCu6rRhJ9ThJ6uzvh71WX3KTWoCgq6KNZ/NqRlqpZUUNZ4aI9gOig==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyqu1wsCSk47RE+wyoTTba96a6W7AWm7tzk1R390xZibuJep8kM
+	so7lbABp+vMTiX+VNfDl7HNmHGZWeHcveEe3ighbZjgIq7EOTWLOzSYJrrm4GQ==
+X-Gm-Gg: ASbGncuLdTQkEGygv4ZpSU8P+tocMwnr4Cob7eIcVOjSTnwr1Tsi+erGJU75v/IsUY1
+	tFptkqbIduPMH1TGQAss/lr/tuofIgksorbp7wI/qX3cg8wHiIsCH6aw2iflnZ8Cr5bQz8jXdX8
+	lLw0dSHFqWcf/FY4xfQ7fmT2BAK9TCT5LL92ERg39pIImIdHcOH4v35N9wb4htQISPbsFSe519w
+	nRxnc5GnzQkbRRCaBHGqWszijhJfzSW2e/7DT8eOQJeZ4YkrZkZhBeft3wGaWgOwll3CoHvr3wT
+	jYlGirbr1Z0EpzHG1OeK7O7apgmbvOdyZznGi1jmbFh7FtVBTbHD6vShkMxBngwMGqIFFPJN8hc
+	EejYHVVbDkY/umw==
+X-Google-Smtp-Source: AGHT+IEW0E6G8sFUJZrXjgx8IgIO7dCL/me5AKtsty8GXdCJQbxSmByGBM0HaBvG1kOgomgjfgPzCw==
+X-Received: by 2002:a05:620a:13d0:b0:7c0:add8:1759 with SMTP id af79cd13be357-7c5737b8c7dmr71231985a.18.1741823495217;
+        Wed, 12 Mar 2025 16:51:35 -0700 (PDT)
 Received: from localhost (pool-71-126-255-178.bstnma.fios.verizon.net. [71.126.255.178])
-        by smtp.gmail.com with UTF8SMTPSA id 6a1803df08f44-6eade34c51fsm1722136d6.109.2025.03.12.16.51.33
+        by smtp.gmail.com with UTF8SMTPSA id af79cd13be357-7c573c9d8b8sm18772585a.53.2025.03.12.16.51.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Mar 2025 16:51:33 -0700 (PDT)
-Date: Wed, 12 Mar 2025 19:51:33 -0400
-Message-ID: <d3a295144441248d47fee124e30a008a@paul-moore.com>
+        Wed, 12 Mar 2025 16:51:34 -0700 (PDT)
+Date: Wed, 12 Mar 2025 19:51:34 -0400
+Message-ID: <69ee16ce82a564e09b2060d46fa2be0d@paul-moore.com>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
@@ -72,45 +72,99 @@ X-Mailer: pstg-pwork:20250312_1930/pstg-lib:20250312_1930/pstg-pwork:20250312_19
 From: Paul Moore <paul@paul-moore.com>
 To: Casey Schaufler <casey@schaufler-ca.com>, casey@schaufler-ca.com, eparis@redhat.com, linux-security-module@vger.kernel.org, audit@vger.kernel.org
 Cc: jmorris@namei.org, serge@hallyn.com, keescook@chromium.org, john.johansen@canonical.com, penguin-kernel@i-love.sakura.ne.jp, stephen.smalley.work@gmail.com, linux-kernel@vger.kernel.org, selinux@vger.kernel.org
-Subject: Re: [PATCH v2 1/6] Audit: Create audit_stamp structure
-References: <20250307183701.16970-2-casey@schaufler-ca.com>
-In-Reply-To: <20250307183701.16970-2-casey@schaufler-ca.com>
+Subject: Re: [PATCH v2 2/6] Audit: Allow multiple records in an audit_buffer
+References: <20250307183701.16970-3-casey@schaufler-ca.com>
+In-Reply-To: <20250307183701.16970-3-casey@schaufler-ca.com>
 
 On Mar  7, 2025 Casey Schaufler <casey@schaufler-ca.com> wrote:
 > 
-> Replace the timestamp and serial number pair used in audit records
-> with a structure containing the two elements.
+> Replace the single skb pointer in an audit_buffer with
+> a list of skb pointers. Add the audit_stamp information
+> to the audit_buffer as there's no guarantee that there
+> will be an audit_context containing the stamp associated
+> with the event. At audit_log_end() time create auxiliary
+> records (none are currently defined) as have been added
+> to the list. Functions are created to manage the skb list
+> in the audit_buffer.
 > 
+> Suggested-by: Paul Moore <paul@paul-moore.com>
 > Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
 > ---
->  kernel/audit.c   | 17 +++++++++--------
->  kernel/audit.h   | 13 +++++++++----
->  kernel/auditsc.c | 22 +++++++++-------------
->  3 files changed, 27 insertions(+), 25 deletions(-)
+>  kernel/audit.c | 111 +++++++++++++++++++++++++++++++++++++++----------
+>  1 file changed, 89 insertions(+), 22 deletions(-)
 
-...
+This may need to be squashed with a later patch as I get
+"defined but not used" warnings/errors for audit_buffer_aux_{new,end}().
 
-> diff --git a/kernel/auditsc.c b/kernel/auditsc.c
-> index 9c853cde9abe..2ec3a0d85447 100644
-> --- a/kernel/auditsc.c
-> +++ b/kernel/auditsc.c
-> @@ -994,10 +994,10 @@ static void audit_reset_context(struct audit_context *ctx)
->  	 */
+> diff --git a/kernel/audit.c b/kernel/audit.c
+> index 2a567f667528..a4945f1c3ec0 100644
+> --- a/kernel/audit.c
+> +++ b/kernel/audit.c
+> @@ -2412,26 +2471,14 @@ int audit_signal_info(int sig, struct task_struct *t)
+>  }
 >  
->  	ctx->current_state = ctx->state;
-> -	ctx->serial = 0;
-> +	ctx->stamp.serial = 0;
->  	ctx->major = 0;
->  	ctx->uring_op = 0;
-> -	ctx->ctime = (struct timespec64){ .tv_sec = 0, .tv_nsec = 0 };
-> +	ctx->stamp.ctime = (struct timespec64){ .tv_sec = 0, .tv_nsec = 0 };
->  	memset(ctx->argv, 0, sizeof(ctx->argv));
->  	ctx->return_code = 0;
->  	ctx->prio = (ctx->state == AUDIT_STATE_RECORD ? ~0ULL : 0);
+>  /**
+> - * audit_log_end - end one audit record
+> - * @ab: the audit_buffer
+> - *
+> - * We can not do a netlink send inside an irq context because it blocks (last
+> - * arg, flags, is not set to MSG_DONTWAIT), so the audit buffer is placed on a
+> - * queue and a kthread is scheduled to remove them from the queue outside the
+> - * irq context.  May be called in any context.
+> + * __audit_log_end - enqueue one audit record
+> + * @skb: the buffer to send
+>   */
+> -void audit_log_end(struct audit_buffer *ab)
+> +static void __audit_log_end(struct sk_buff *skb)
+>  {
+> -	struct sk_buff *skb;
+>  	struct nlmsghdr *nlh;
+>  
+> -	if (!ab)
+> -		return;
+> -
+>  	if (audit_rate_check()) {
+> -		skb = ab->skb;
+> -		ab->skb = NULL;
+> -
+>  		/* setup the netlink header, see the comments in
+>  		 * kauditd_send_multicast_skb() for length quirks */
+>  		nlh = nlmsg_hdr(skb);
+> @@ -2442,6 +2489,26 @@ void audit_log_end(struct audit_buffer *ab)
+>  		wake_up_interruptible(&kauditd_wait);
 
-Since we are now combining the timestamp and serial number into a single
-struct, let's move both clear/reset instructions together up to where
-we currently reset ctx->serial.
+We should probably move the kauditd thread wake into audit_log_end()
+so we don't end up poking the scheduler multiple times.
+
+>  	} else
+>  		audit_log_lost("rate limit exceeded");
+> +}
+> +
+> +/**
+> + * audit_log_end - end one audit record
+> + * @ab: the audit_buffer
+> + *
+> + * We can not do a netlink send inside an irq context because it blocks (last
+> + * arg, flags, is not set to MSG_DONTWAIT), so the audit buffer is placed on a
+> + * queue and a kthread is scheduled to remove them from the queue outside the
+> + * irq context.  May be called in any context.
+> + */
+> +void audit_log_end(struct audit_buffer *ab)
+> +{
+> +	struct sk_buff *skb;
+> +
+> +	if (!ab)
+> +		return;
+> +
+> +	while ((skb = skb_dequeue(&ab->skb_list)))
+> +		__audit_log_end(skb);
+
+Put the kauditd thread wake here.
+
+>  	audit_buffer_free(ab);
+>  }
+> -- 
+> 2.47.0
 
 --
 paul-moore.com
