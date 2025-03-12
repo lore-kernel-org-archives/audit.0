@@ -1,176 +1,85 @@
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+Received: from mail-io1-f45.google.com (mail-io1-f45.google.com [209.85.166.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A41FA2566F4
-	for <audit@vger.kernel.org>; Wed, 12 Mar 2025 15:51:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 648D41C84AA
+	for <audit@vger.kernel.org>; Wed, 12 Mar 2025 16:07:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741794690; cv=none; b=SzEFCGlC+LG/nSa2QT44pncORw6I8FV2LSRFNiRWZ0o9SRlekh7RRTZo5wfaoeIF78KV/+WM63G+acXHhIn08FjyWE9UvhSNgg0ypJSck9QRwl/xGiuQfEM+pc9rRJykIuCdPKifg3ma6JLYQB4u+wNTGZjjlmL7FGfyT0WHMLE=
+	t=1741795646; cv=none; b=K6ZYvwvNpd3Cl3xleNyYztGwSjEMPdQP3YlfKwEtBEhMB15iSGMKOvq0XeXH/+MwAVoDj5B337NEMKJIYzzW6qrR1i6JsCZ9pFMoRj4SrJmgf7lmroHAHf1WIx/whi+MgSu5a4P7uHiwCzEsJtcUAVJzJCqf8JjXpfnFKBdzGM0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741794690; c=relaxed/simple;
-	bh=x0bzaDEk8aQvniRaJxUgWv0R2t78KM+JXoY5XWMzc4E=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=N376Lad152QhEapzDRYRdGcww0ZF83eeGv+uQKcWxbildzL85gqo69XNv86Xb6rpa/rYuS7dqn+pvHTATfonu6n/AQhpsiN3J2IfHzt5umXnl27/NQGJWW6V2okH2Nj2mR+I43FnlPqdkwehTDTWuXWlghF7xd9/5gWiK+YMEtg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=fxMytm9d; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=Yxo63xRQ; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=fxMytm9d; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=Yxo63xRQ; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+	s=arc-20240116; t=1741795646; c=relaxed/simple;
+	bh=+DPcVpt5jm09eAi/Y9n5785dJsafsofbqA8F/h57dus=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=FLOjnBCekJBEQanluFiD1CmlHaG1DfcLuXVnrNu8EJ9kv8uuDFAQHMLj6ZG0stCT965XtJfTsko9FxY4pdAoiE6CIyhQlTmIKwMv/GgOFqrmj0GeN0Qyw2IeH44dQQ4vNAn4jbwFLeEQfsxaEPvlOs//62oywesXDe1BROo/QRk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=HZe/Rgjw; arc=none smtp.client-ip=209.85.166.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="fxMytm9d";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="Yxo63xRQ";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="fxMytm9d";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="Yxo63xRQ"
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id BEDEB21195;
-	Wed, 12 Mar 2025 15:51:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1741794686; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=YAolITJtosWbgnrc4Sl1gW+rHyFKKmQ+Fk910mjL86Q=;
-	b=fxMytm9dRWRHCGHtl03ouUJ/RAM32u41BjH5yWb28VwBeyGiIo3THR55jxsgi//yujU/3h
-	MOlKmPR591vXtv1Abv73AKMvfFsVnQsYK+8PiKNoqORrr8pY7CAQuBZ0NjvqX+7MaI6vrm
-	bB8XcjTb+z7Y+cm7LU07iE5w+daL9ww=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1741794686;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=YAolITJtosWbgnrc4Sl1gW+rHyFKKmQ+Fk910mjL86Q=;
-	b=Yxo63xRQgDxrt9B4y5UvKmUR34SS4Cs8MVqymB2MqaJUVmcrFeA6ivRuYCb/ilRM+74DEe
-	t68JcSrFQne43BBA==
-Authentication-Results: smtp-out1.suse.de;
-	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=fxMytm9d;
-	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=Yxo63xRQ
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1741794686; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=YAolITJtosWbgnrc4Sl1gW+rHyFKKmQ+Fk910mjL86Q=;
-	b=fxMytm9dRWRHCGHtl03ouUJ/RAM32u41BjH5yWb28VwBeyGiIo3THR55jxsgi//yujU/3h
-	MOlKmPR591vXtv1Abv73AKMvfFsVnQsYK+8PiKNoqORrr8pY7CAQuBZ0NjvqX+7MaI6vrm
-	bB8XcjTb+z7Y+cm7LU07iE5w+daL9ww=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1741794686;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=YAolITJtosWbgnrc4Sl1gW+rHyFKKmQ+Fk910mjL86Q=;
-	b=Yxo63xRQgDxrt9B4y5UvKmUR34SS4Cs8MVqymB2MqaJUVmcrFeA6ivRuYCb/ilRM+74DEe
-	t68JcSrFQne43BBA==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id B389313AA9;
-	Wed, 12 Mar 2025 15:51:26 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id VcPOK36t0WenFAAAD6G6ig
-	(envelope-from <jack@suse.cz>); Wed, 12 Mar 2025 15:51:26 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-	id 65CB5A0908; Wed, 12 Mar 2025 16:51:22 +0100 (CET)
-Date: Wed, 12 Mar 2025 16:51:22 +0100
-From: Jan Kara <jack@suse.cz>
-To: Mateusz Guzik <mjguzik@gmail.com>
-Cc: brauner@kernel.org, viro@zeniv.linux.org.uk, jack@suse.cz, 
-	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, io-uring@vger.kernel.org, 
-	audit@vger.kernel.org, axboe@kernel.dk
-Subject: Re: [PATCH] fs: dodge an atomic in putname if ref == 1
-Message-ID: <naalmvyvolpfkwxoztkskhz2kyoznjjhm5y4zmfd44tyf5d24k@2jap6ty4nkwz>
-References: <20250311181804.1165758-1-mjguzik@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="HZe/Rgjw"
+Received: by mail-io1-f45.google.com with SMTP id ca18e2360f4ac-85b40c7d608so346541439f.3
+        for <audit@vger.kernel.org>; Wed, 12 Mar 2025 09:07:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1741795643; x=1742400443; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ExMoY/YUEJ2sXZfuXzKCTdc9+tog41q5+FPX04PqUyM=;
+        b=HZe/RgjwWI1hEqmeTUpZ7rLgRzKZbdsCLSjpiIZwywmwJMJ7rpKITg+E+bNy2VmPA3
+         IXP66hluxKFO1nUuFB97+n015rW282h0l3WS6oSFD4BCQGeDnXInZkpeJJGAJx5xKHo1
+         wylHfhTaRJRSVDoQX0JR0cIYXPLxmrcGiXnxPtenFa7zE4adRUaOKenn9Q6mwk2/sjpe
+         ObaEDKowiY/sh2AF5g5FVxhgZZ76mQY6Xfa/1zeE1UrBHyU0gz2AWaUwnb1xhI3RbcAb
+         BMkdAkiZzlHY3FyxqDwxgT5FQHU9ZZBWxOb/LHgS5vNpc7nEVtO8uWyp+B5c4UTP/PUY
+         BAGg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1741795643; x=1742400443;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ExMoY/YUEJ2sXZfuXzKCTdc9+tog41q5+FPX04PqUyM=;
+        b=tCdSjVbDV0+9WA+tQhTH/u6anvCSppodPlRI16H+IgUKqQtp++KTh15T2gn2CD3Y+D
+         /RXZVYVgYRabRexCgV6x81AUBRTS8qp4OHDdRVVyEk0gitjlyAu4k3evR6pNi/mnPUMI
+         2I37ORDki56E9xe0CzqSOy8LdcLDobYEllocMC437roM1rzZ8TyvMeXVjHVc2R953J63
+         cOBd7ZRYqG63OHxZmkLkZ5234zrSOGu2wtU69NPmnTJZbl/B6SQZsjqKjCEVLr1pkgbk
+         7SCfcM4Pen/aH6CGrpLgi5/3mtnV6nwA9krbTu5wuyGefJtkyR2S3FdlTkAPV7Rmsu9D
+         JADw==
+X-Forwarded-Encrypted: i=1; AJvYcCXldwTb5dnC41g+xxmsOHZ6IG/gENdJtcAV+3pw5PbcCnOS/qJ5cnfZlLVE0fJM8jTWd3ZnGA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyzmjUbcnBvtPmrd5Q9NzhMXDscEPTzBhxvj/RwK9yczaNMZK+F
+	Ea1NPFbCfPDfgJkCqP158bd7i+Yt7QO2Ml7wg5KA0xD7wA2iLL5Q0XE5jrS37cI=
+X-Gm-Gg: ASbGncsVtfRz1333ZWZwatanyzRamfMs6/29Gm00DgfJfvQ/z/7a6XsbjUolZ7T5HY4
+	vQSaS2Cn0+FAdpDggEiPnhUOO0uPAKBcKOK2+pnUOoPc5KUFkfZRkQMEIhC5xEJYBCsHN2yrIBR
+	sYzOINRoRAA0l51082ejTH97bOfFvfflAO4hG8Vv99ilVQXusBfgsnFx3OBg+cG4vBxBMghLbFd
+	7XLtq6g3J44hR8N3wYNjfcUoVEB5oOv7Pe5254rzoNqpx5XD+z15vsYjsSznJ/32VRStAGD5saC
+	kFnxOiXIA+/WbGJdrf9MWwZrQj3c10RR+vtW4o7o
+X-Google-Smtp-Source: AGHT+IElo/nFdPS6E/5N5+GL1pAZfk0yR7kOrU1+gao2muzmo9g0AwgP1v3zMHzkrcml22cA5yeNRw==
+X-Received: by 2002:a05:6602:398f:b0:85c:5521:cbfe with SMTP id ca18e2360f4ac-85d8e2233c5mr1023090939f.8.1741795642951;
+        Wed, 12 Mar 2025 09:07:22 -0700 (PDT)
+Received: from [192.168.1.116] ([96.43.243.2])
+        by smtp.gmail.com with ESMTPSA id ca18e2360f4ac-85b119a823asm284201939f.14.2025.03.12.09.07.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 12 Mar 2025 09:07:22 -0700 (PDT)
+Message-ID: <6115bfac-658c-4e8c-859f-d4a1a5820dae@kernel.dk>
+Date: Wed, 12 Mar 2025 10:07:21 -0600
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] fs: dodge an atomic in putname if ref == 1
+To: Mateusz Guzik <mjguzik@gmail.com>, brauner@kernel.org,
+ viro@zeniv.linux.org.uk
+Cc: jack@suse.cz, linux-kernel@vger.kernel.org,
+ linux-fsdevel@vger.kernel.org, io-uring@vger.kernel.org,
+ audit@vger.kernel.org
+References: <20250311181804.1165758-1-mjguzik@gmail.com>
+Content-Language: en-US
+From: Jens Axboe <axboe@kernel.dk>
 In-Reply-To: <20250311181804.1165758-1-mjguzik@gmail.com>
-X-Rspamd-Queue-Id: BEDEB21195
-X-Spam-Score: -4.01
-X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-4.01 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	MID_RHS_NOT_FQDN(0.50)[];
-	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	RCVD_COUNT_THREE(0.00)[3];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	TO_DN_SOME(0.00)[];
-	FREEMAIL_TO(0.00)[gmail.com];
-	MIME_TRACE(0.00)[0:+];
-	ARC_NA(0.00)[];
-	FREEMAIL_ENVRCPT(0.00)[gmail.com];
-	RCVD_TLS_LAST(0.00)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[9];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
-	MISSING_XM_UA(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DKIM_TRACE(0.00)[suse.cz:+];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:email,imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo]
-X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
-X-Spam-Flag: NO
-X-Spam-Level: 
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Tue 11-03-25 19:18:04, Mateusz Guzik wrote:
-> While the structure is refcounted, the only consumer incrementing it is
-> audit and even then the atomic operation is only needed when it
-> interacts with io_uring.
-> 
-> If putname spots a count of 1, there is no legitimate way for anyone to
-> bump it.
-> 
-> If audit is disabled, the count is guaranteed to be 1, which
-> consistently elides the atomic for all path lookups. If audit is
-> enabled, it still manages to elide the last decrement.
-> 
-> Note the patch does not do anything to prevent audit from suffering
-> atomics. See [1] and [2] for a different approach.
-> 
-> Benchmarked on Sapphire Rapids issuing access() (ops/s):
-> before: 5106246
-> after:  5269678 (+3%)
-> 
-> Link 1:	https://lore.kernel.org/linux-fsdevel/20250307161155.760949-1-mjguzik@gmail.com/
-> Link 2: https://lore.kernel.org/linux-fsdevel/20250307164216.GI2023217@ZenIV/
-> Signed-off-by: Mateusz Guzik <mjguzik@gmail.com>
-
-Yeah, I like this much more than the original. Feel free to add:
-
-Reviewed-by: Jan Kara <jack@suse.cz>
-
-								Honza
-
-> This is an alternative to the patch I linked above.
-> 
-> I think the improved commit message should also cover the feedback
-> Christian previously shared concerning it.
-> 
-> This is a trivial win until the atomic issue gets resolved, I don't see
-> any reason to NOT include it. At the same time I don't have that much
-> interest arguing about it either.
-> 
-> That is to say, here is a different take, if you don't like it, I'm
-> dropping the subject.
-> 
-> cheers
-> 
->  fs/namei.c | 13 +++++++++----
->  1 file changed, 9 insertions(+), 4 deletions(-)
-> 
+On 3/11/25 12:18 PM, Mateusz Guzik wrote:
 > diff --git a/fs/namei.c b/fs/namei.c
 > index 06765d320e7e..add90981cfcd 100644
 > --- a/fs/namei.c
@@ -196,12 +105,11 @@ Reviewed-by: Jan Kara <jack@suse.cz>
 > +		if (!atomic_dec_and_test(&name->refcnt))
 > +			return;
 > +	}
->  
->  	if (name->name != name->iname) {
->  		__putname(name->name);
-> -- 
-> 2.43.0
-> 
+
+Looks good to me, I use this trick with bitops too all the time, to
+avoid a RMW when possible.
+
+Reviewed-by: Jens Axboe <axboe@kernel.dk>
+
 -- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+Jens Axboe
