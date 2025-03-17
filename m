@@ -1,173 +1,170 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91CF83597E
-	for <audit@vger.kernel.org>; Mon, 17 Mar 2025 19:58:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BE451FAA;
+	Mon, 17 Mar 2025 20:59:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742241503; cv=none; b=r2x6KLPn9DfGBvXo5H1RSO73OQZAtjswUlmnNjAQCuaRwdjx1cvWsl/vyWrgl+XJ4C29mHbrEmIOtkmJEPgMWUSE5gxW4iNtOAkExzjUjkPHiv1bhDrjJiU0v3pE4OxA1YvEgFNzpcutW/Va0n6wA9GzyHX0RlUgIDRzlPw4l70=
+	t=1742245161; cv=none; b=VVoo/RdFrc0Q52l4NKcjhTQx9GMCWtjJrMMdMvOq99LaxAV1vn2KtY4Bh9deoF7yWRccO12zMfd0ds40EoQitOt7a8O/dD8xsMFx9lHO4BrswaNs65IBEZcDE5KG2xZSolKRECJzHbuDyYUrPUD0Mhk8iqETcYdnMcnfQy0z3SM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742241503; c=relaxed/simple;
-	bh=xCTU3OBwU9jJ4TjWyzIDZXqQ2uRG46LwG0WRjRy8Jws=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-type; b=ZlIsl6I1NxCaEk9pqpKFiEVm/tCl/F/TXi8avdicYiTMm9OncT8riXa5VhhdghtxeBzZo0HQPOzTwrvVBOER0+e6wdiL5U5xcSuxaySM2LzfkMURgNctUkzVtgWFozLptOzRF1qyoK9epa00Va7fGRLg4+10V/TvQlggGXMDqe4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=J0xMMV0L; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1742245161; c=relaxed/simple;
+	bh=vjYs1iVtvT6elCJYWvA6a39Fiy+4oldR0sImIebwG2k=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Z0apXJVJDMzp1rp2/m8DMl8cGfYcpNO1qPUavYzlDY7yVwCkbsdrlqXl8t2B5XtSaLcBAWyEMwJE+7eaDT6WX82j3+hpghDo+rKCKDIgSeumAOFOAIqQs/WX1otgOGv8sQMAbh3qopWCsd2hupQkNUQuFoGPaT07jGNfDmnw9E0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=p+6XPPrN; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="J0xMMV0L"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1742241500;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=fe9M2Oa4I5OBxyse7ylLRME/AasjszWQ8rkyKb61Ngg=;
-	b=J0xMMV0LmZlXg2Su/qV2GuVhHXiblt5xSjmtft2KF2kCFgShho+sxGL0jrq9YIOcsdg4v9
-	j+f3u6FIfM45t0zpbW2GIdAF3gSGtGoIHEHw4NgfFY/+Bxqa3ztB5K/Wa+3Ih/n2tDXP1h
-	LH5Yf/Ui54URUlN98n2yQVP6fIzLURE=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-478-ZiMJzCSFMFSU3VpcFKK_9w-1; Mon,
- 17 Mar 2025 15:58:18 -0400
-X-MC-Unique: ZiMJzCSFMFSU3VpcFKK_9w-1
-X-Mimecast-MFC-AGG-ID: ZiMJzCSFMFSU3VpcFKK_9w_1742241497
-Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 1976618001E3;
-	Mon, 17 Mar 2025 19:58:17 +0000 (UTC)
-Received: from madcap2.tricolour.com (unknown [10.22.76.11])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 915B71801755;
-	Mon, 17 Mar 2025 19:58:14 +0000 (UTC)
-From: Richard Guy Briggs <rgb@redhat.com>
-To: Linux-Audit Mailing List <linux-audit@lists.linux-audit.osci.io>,
-	LKML <linux-kernel@vger.kernel.org>,
-	linux-modules@vger.kernel.org,
-	Linux Kernel Audit Mailing List <audit@vger.kernel.org>
-Cc: Paul Moore <paul@paul-moore.com>,
-	Eric Paris <eparis@parisplace.org>,
-	Steve Grubb <sgrubb@redhat.com>,
-	Richard Guy Briggs <rgb@redhat.com>
-Subject: [PATCH v2] audit,module: restore audit logging in load failure case
-Date: Mon, 17 Mar 2025 15:57:44 -0400
-Message-ID: <b96c64d522cf1c46dce1b8987e83f2f41ff2e5ee.1742231027.git.rgb@redhat.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="p+6XPPrN"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB031C4CEF2;
+	Mon, 17 Mar 2025 20:59:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1742245160;
+	bh=vjYs1iVtvT6elCJYWvA6a39Fiy+4oldR0sImIebwG2k=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=p+6XPPrNuH6u+/zhkkK3a/t53bIXFuFzXp6p4RjfOjjrP8AIMDUWZjWcfJL4GZLXl
+	 0/Q9HAqhNkWEiuV2u5CAtJC6V5ANJ+Hw8oAeSPzh/WoDTYxJkZZ8rX2GFxETz3E1Kw
+	 Z2xdu6QRc3qaMoVA9AbFr4+HS6lqus2c8WxSUf/B96710S2bJ5L+LoUr2UFI5w8GpD
+	 pBZPVACsZ9o59Ot732iVX/lYrzFinZj2eJWulgjm+zsdD1yeXHq+Vt/u+NuGMbHXLA
+	 wyzdNuKA4ux607YNlhchLenPAKSwe3zvR6OxWEd0SxpmBQw/CuV7t1qHP15Hs8YvYw
+	 E2pgP5r1PY+yg==
+Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-6f666c94285so47219517b3.3;
+        Mon, 17 Mar 2025 13:59:20 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCU2kZbAb7VLDb/QJLWYuo142Z+oL7oD2OruoPjUk54PEy3zUJp3VdpJVMFcXlFAX458QBjAEw==@vger.kernel.org, AJvYcCU5fbGCUcMTs+N04LBi0/rkM6msOXcoB7vBeEpSwSDM+od3mV6U5qJAqXnLBqucdGd7wnXCMjHGOYaCa4Gz@vger.kernel.org, AJvYcCV9yR4vv2IsOotP57gmdNWfU/bwZYTkJnc2Q7b/3ENWvu4L+ngh593JmVjs0rInLjZp+uaF+SNwqmGs@vger.kernel.org, AJvYcCXYdDLXOhdJws3tzeZiOKC9LgyFL6VWCT56RyLgp1tF+c6Qo5W6i+19B9Lo8ZmtfrKC9s0K6IrjRBUTD9JbxdKzJZMs92U+@vger.kernel.org
+X-Gm-Message-State: AOJu0Yye7yixqRgxdxG7YtYjnKsQgHyxthSAgSFDLtR+sptiKFvCGNwR
+	nOTP4sd2wsb+wCgixa6s3l5gPsA/1Sg9cvkDVaIR8AYMEqtisdWSq1vYVohPwp0S0+mceY2c32A
+	YD6nfYwXrQlbhVqNxfOtikG8jAyg=
+X-Google-Smtp-Source: AGHT+IG2KGySkbENIEIwfPWn9Y0xEwyw2vu7R1Cg5oOaKr3QUdu4o2IoxOYJkMdYnLlTBrmK/eWhPMya6kUW2cA8aBI=
+X-Received: by 2002:a05:6902:118f:b0:e64:192e:725d with SMTP id
+ 3f1490d57ef6-e64af124d1emr2325540276.15.1742245160049; Mon, 17 Mar 2025
+ 13:59:20 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
+References: <1741902661-31767-1-git-send-email-jasjivsingh@linux.microsoft.com>
+ <1741902661-31767-2-git-send-email-jasjivsingh@linux.microsoft.com>
+In-Reply-To: <1741902661-31767-2-git-send-email-jasjivsingh@linux.microsoft.com>
+From: Fan Wu <wufan@kernel.org>
+Date: Mon, 17 Mar 2025 13:59:08 -0700
+X-Gmail-Original-Message-ID: <CAKtyLkGuRraMbArSQCGxb+m5p+M8G5WZCTHk-7dKVfQd2EJYxw@mail.gmail.com>
+X-Gm-Features: AQ5f1JrHOtrVJ6GMM8x4vxzrK5EKOKJCc20cPLm5ogUONaxzbIbLo2wsHktkfwc
+Message-ID: <CAKtyLkGuRraMbArSQCGxb+m5p+M8G5WZCTHk-7dKVfQd2EJYxw@mail.gmail.com>
+Subject: Re: [PATCH v5 1/1] ipe: add errno field to IPE policy load auditing
+To: Jasjiv Singh <jasjivsingh@linux.microsoft.com>
+Cc: corbet@lwn.net, jmorris@namei.org, serge@hallyn.com, eparis@redhat.com, 
+	paul@paul-moore.com, linux-doc@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, audit@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-The move of the module sanity check to earlier skipped the audit logging
-call in the case of failure and to a place where the previously used
-context is unavailable.
+On Thu, Mar 13, 2025 at 2:51=E2=80=AFPM Jasjiv Singh
+<jasjivsingh@linux.microsoft.com> wrote:
+>
+> Users of IPE require a way to identify when and why an operation fails,
+> allowing them to both respond to violations of policy and be notified
+> of potentially malicious actions on their systems with respect to IPE.
+>
+> This patch introduces a new error field to the AUDIT_IPE_POLICY_LOAD even=
+t
+> to log policy loading failures. Currently, IPE only logs successful polic=
+y
+> loads, but not failures. Tracking failures is crucial to detect malicious
+> attempts and ensure a complete audit trail for security events.
+>
+> The new error field will capture the following error codes:
+>
+> * -ENOKEY: Key used to sign the IPE policy not found in the keyring
+> * -ESTALE: Attempting to update an IPE policy with an older version
+> * -EKEYREJECTED: IPE signature verification failed
+> * -ENOENT: Policy was deleted while updating
+> * -EEXIST: Same name policy already deployed
+> * -ERANGE: Policy version number overflow
+> * -EINVAL: Policy version parsing error
+> * -EPERM: Insufficient permission
+> * -ENOMEM: Out of memory (OOM)
+> * -EBADMSG: Policy is invalid
+>
+> Here are some examples of the updated audit record types:
+>
+> AUDIT_IPE_POLICY_LOAD(1422):
+> audit:  AUDIT1422 policy_name=3D"Test_Policy" policy_version=3D0.0.1
+> policy_digest=3Dsha256:84EFBA8FA71E62AE0A537FAB962F8A2BD1053964C4299DCA
+> 92BFFF4DB82E86D3 auid=3D1000 ses=3D3 lsm=3Dipe res=3D1 errno=3D0
+>
+> The above record shows a new policy has been successfully loaded into
+> the kernel with the policy name, version, and hash with the errno=3D0.
+>
+> AUDIT_IPE_POLICY_LOAD(1422) with error:
+>
+> audit: AUDIT1422 policy_name=3D? policy_version=3D? policy_digest=3D?
+> auid=3D1000 ses=3D3 lsm=3Dipe res=3D0 errno=3D-74
+>
+> The above record shows a policy load failure due to an invalid policy
+> (-EBADMSG).
+>
+> By adding this error field, we ensure that all policy load attempts,
+> whether successful or failed, are logged, providing a comprehensive
+> audit trail for IPE policy management.
+>
+> Signed-off-by: Jasjiv Singh <jasjivsingh@linux.microsoft.com>
+> ---
+>  Documentation/admin-guide/LSM/ipe.rst | 69 +++++++++++++++++++--------
+>  security/ipe/audit.c                  | 19 ++++++--
+>  security/ipe/fs.c                     | 25 ++++++----
+>  security/ipe/policy.c                 | 17 ++++---
+>  security/ipe/policy_fs.c              | 28 ++++++++---
+>  5 files changed, 113 insertions(+), 45 deletions(-)
+>
 
-Add an audit logging call for the module loading failure case and get
-the module name when possible.
+...
 
-Link: https://issues.redhat.com/browse/RHEL-52839
-Fixes: 02da2cbab452 ("module: move check_modinfo() early to early_mod_check()")
-Signed-off-by: Richard Guy Briggs <rgb@redhat.com>
----
-Changelog:
-v2
-- use info->name for both audit_log_kern_module() calls and add const
----
- include/linux/audit.h | 9 ++++-----
- kernel/audit.h        | 2 +-
- kernel/auditsc.c      | 2 +-
- kernel/module/main.c  | 6 ++++--
- 4 files changed, 10 insertions(+), 9 deletions(-)
+> diff --git a/security/ipe/policy.c b/security/ipe/policy.c
+> index b628f696e32b..1c58c29886e8 100644
+> --- a/security/ipe/policy.c
+> +++ b/security/ipe/policy.c
+> @@ -84,8 +84,11 @@ static int set_pkcs7_data(void *ctx, const void *data,=
+ size_t len,
+>   * ipe_new_policy.
+>   *
+>   * Context: Requires root->i_rwsem to be held.
+> - * Return: %0 on success. If an error occurs, the function will return
+> - * the -errno.
+> + * Return:
+> + * * %0        - Success
+> + * * %-ENOENT  - Policy was deleted while updating
+> + * * %-EINVAL  - Policy name mismatch
+> + * * %-ESTALE  - Policy version too old
+>   */
+>  int ipe_update_policy(struct inode *root, const char *text, size_t textl=
+en,
+>                       const char *pkcs7, size_t pkcs7len)
+> @@ -146,10 +149,12 @@ int ipe_update_policy(struct inode *root, const cha=
+r *text, size_t textlen,
+>   *
+>   * Return:
+>   * * a pointer to the ipe_policy structure     - Success
+> - * * %-EBADMSG                                 - Policy is invalid
+> - * * %-ENOMEM                                  - Out of memory (OOM)
+> - * * %-ERANGE                                  - Policy version number o=
+verflow
+> - * * %-EINVAL                                  - Policy version parsing =
+error
+> + * * %-EBADMSG                         - Policy is invalid
+> + * * %-ENOMEM                          - Out of memory (OOM)
+> + * * %-ERANGE                          - Policy version number overflow
+> + * * %-EINVAL                          - Policy version parsing error
+> + * * %-ENOKEY                          - Policy signing key not found
+> + * * %-EKEYREJECTED                    - Policy signature verification f=
+ailed
+>   */
 
-diff --git a/include/linux/audit.h b/include/linux/audit.h
-index 0050ef288ab3..a394614ccd0b 100644
---- a/include/linux/audit.h
-+++ b/include/linux/audit.h
-@@ -417,7 +417,7 @@ extern int __audit_log_bprm_fcaps(struct linux_binprm *bprm,
- extern void __audit_log_capset(const struct cred *new, const struct cred *old);
- extern void __audit_mmap_fd(int fd, int flags);
- extern void __audit_openat2_how(struct open_how *how);
--extern void __audit_log_kern_module(char *name);
-+extern void __audit_log_kern_module(const char *name);
- extern void __audit_fanotify(u32 response, struct fanotify_response_info_audit_rule *friar);
- extern void __audit_tk_injoffset(struct timespec64 offset);
- extern void __audit_ntp_log(const struct audit_ntp_data *ad);
-@@ -519,7 +519,7 @@ static inline void audit_openat2_how(struct open_how *how)
- 		__audit_openat2_how(how);
- }
- 
--static inline void audit_log_kern_module(char *name)
-+static inline void audit_log_kern_module(const char *name)
- {
- 	if (!audit_dummy_context())
- 		__audit_log_kern_module(name);
-@@ -677,9 +677,8 @@ static inline void audit_mmap_fd(int fd, int flags)
- static inline void audit_openat2_how(struct open_how *how)
- { }
- 
--static inline void audit_log_kern_module(char *name)
--{
--}
-+static inline void audit_log_kern_module(const char *name)
-+{ }
- 
- static inline void audit_fanotify(u32 response, struct fanotify_response_info_audit_rule *friar)
- { }
-diff --git a/kernel/audit.h b/kernel/audit.h
-index 0211cb307d30..2a24d01c5fb0 100644
---- a/kernel/audit.h
-+++ b/kernel/audit.h
-@@ -200,7 +200,7 @@ struct audit_context {
- 			int			argc;
- 		} execve;
- 		struct {
--			char			*name;
-+			const char		*name;
- 		} module;
- 		struct {
- 			struct audit_ntp_data	ntp_data;
-diff --git a/kernel/auditsc.c b/kernel/auditsc.c
-index 9c853cde9abe..7bc0462e86f3 100644
---- a/kernel/auditsc.c
-+++ b/kernel/auditsc.c
-@@ -2866,7 +2866,7 @@ void __audit_openat2_how(struct open_how *how)
- 	context->type = AUDIT_OPENAT2;
- }
- 
--void __audit_log_kern_module(char *name)
-+void __audit_log_kern_module(const char *name)
- {
- 	struct audit_context *context = audit_context();
- 
-diff --git a/kernel/module/main.c b/kernel/module/main.c
-index 1fb9ad289a6f..efa62ace1b23 100644
---- a/kernel/module/main.c
-+++ b/kernel/module/main.c
-@@ -3346,7 +3346,7 @@ static int load_module(struct load_info *info, const char __user *uargs,
- 
- 	module_allocated = true;
- 
--	audit_log_kern_module(mod->name);
-+	audit_log_kern_module(info->name);
- 
- 	/* Reserve our place in the list. */
- 	err = add_unformed_module(mod);
-@@ -3506,8 +3506,10 @@ static int load_module(struct load_info *info, const char __user *uargs,
- 	 * failures once the proper module was allocated and
- 	 * before that.
- 	 */
--	if (!module_allocated)
-+	if (!module_allocated) {
-+		audit_log_kern_module(info->name ? info->name : "(unavailable)");
- 		mod_stat_bump_becoming(info, flags);
-+	}
- 	free_copy(info, flags);
- 	return err;
- }
--- 
-2.43.5
+The indentation here is not aligned.
 
+I don't see any other issue, if there is no objection from the audit
+folks, I will pull this into ipe's tree.
+
+-Fan
+
+.
