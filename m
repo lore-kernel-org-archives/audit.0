@@ -1,58 +1,41 @@
-Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com [209.85.128.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D77D1B042F
-	for <audit@vger.kernel.org>; Mon, 17 Mar 2025 21:04:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADFE32063FE;
+	Tue, 18 Mar 2025 22:51:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742245445; cv=none; b=Z6QbeYAnR7Nu1W2JWv7UmWZ4k5IuwPicNGhHkMxi400hWIZq7pwALklo683JXRoxj19zIyC6I0UvxgXcJQ/3TMYhH+b4I+QCoRSIGnzkXSL6v/ERkJIn+3pC6plmhv1nRWBj9VSSAzSePehIP+jT4/21A/XmoMGwBevi+9LhEiA=
+	t=1742338270; cv=none; b=tvCMKqQ1Syxbemqll4tXsmZM8ZWUmSN3itv1E05/+S2TOnc/TCZdYINYEOsZK8sCW53Q4OyEWJlJrGCgDz0NIJhZDWDhU6nwANeFpfyzCV3/6ilP/Y/ODg1eqq4rBfPF32dvQG2ygRGIB34HLMRL3Gh9OWNT5trZr6krufYLEWg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742245445; c=relaxed/simple;
-	bh=4DZV6Mf22HPdspxseNYgEQU/HJNgzwH7tOtAOoYex8g=;
+	s=arc-20240116; t=1742338270; c=relaxed/simple;
+	bh=VVmm5qJe9dwbIlANjI3AgRxkODh8ApI2KbJHlCI9RWE=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=cz6MJIk54758GAhaxTomoANPerseqX15qJoeaNWGUdbCjw5GGEPYmJfeiI3PuTlNNQjZCDRkp9TsRd3xeqRD8YOusL6KkHE5eKBshLsRYJgHwXhomzl8U8rt8p3fOvkGQv7Mz7+30msY31/G7Ddn+R90B65Os5YL9Sez32Pu26M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=aOnkj8b8; arc=none smtp.client-ip=209.85.128.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+	 To:Cc:Content-Type; b=lVIvvGpP6QdcuaOylcAZ/OE1XxOkizGoiwWC27ChS9CZRPCLms0b8WUZO5W+rr2kK2Ar3JnUGcfbpfwsQ0yZKqSgpWAZVEL80D4ytPQUGxSt60VV/WEkvJbbKoMTA+PQxRNRwYA4rciNuxclTMYQx4wPGmobTFp/h65JA6D8XeM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EAVDKK6G; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="aOnkj8b8"
-Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-6fece18b3c8so41211847b3.3
-        for <audit@vger.kernel.org>; Mon, 17 Mar 2025 14:04:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1742245442; x=1742850242; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lN0WAY63eQ+SjxSDZ4iWpY0cwX3v9NBuvFxMG3JYoRs=;
-        b=aOnkj8b8mbPZyGV0rC9333QvbDI+I2R/Vz8nVQk42xkwb5J+exH74xNB4QJFxKGlxC
-         GR7ZG1qEh5Ss9hrMEumj8ydE6qXZIH5cYzl7wzRIC6AL7EQZqYBmazG40urLsAaWqkyU
-         bhv0fCmfLvgLAfgtY/dz1nLb/30CGUT26rKeQ9Q94R7px38yzj7aULMMndX7SgvWm/Av
-         i0OYx+nI2noc77jVxn0xUnQB+IG8LkJ+A3EEMv0FnN0WmymRtgxTHMxR9ecnRPvbqfkZ
-         vDrpNjeQZ6nCV+c1tRkJkzmYCC1lE8Ws/d/WF/XoKWDP1f1L6iGRwqduO8uTMNOFGlLA
-         oH4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742245442; x=1742850242;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=lN0WAY63eQ+SjxSDZ4iWpY0cwX3v9NBuvFxMG3JYoRs=;
-        b=JnsuN4ztloU5cWkV8Fu88Mdcwve1GTrtnGjABzRdl0sWc/v46yhP69Q3mWa5LsOSpc
-         MhYLtVpsCZUYsQrBhgqS50kUajTo+KSf/8iWV3vdxUwQa+N5v9WhPZkIHBF7ER6GFhy3
-         KQqsxxglY2+3Pl2yn+NWnlPPXBhoKkhQW9H/GZ35RiGp38wGwacTkJxTuBevnE1c7yJE
-         OcZcA6UdAePzsk9L7XQAeKakwAxWQgOuDbosQO5fUbaTkIN7TjOUz6pq9dDupNWbmwBg
-         pdH4SmIa8Zby1moiuq9NPMf9RJmsLZ8ocDU7ubGDVne6xsir89nneMyd2Mtwz4OMNA+T
-         ssqQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVMCxrj3snggiVsM/K9AbzmFFyp9NNE8aF2QhjRl15X0KMLno+yzLsqr78knO/ALsf0yXBQ5A==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyBLg8o3dUK9fmAUBFRiBebq+e5FnTR2wMpqiLUBhH15vaLt3xh
-	1X81idfKHB9rVxRbueeb9w7wSvtHrCt5/Vgupw39cD7B19wwmNEfOv8nb17/dbiwcMnNimU6p85
-	mTgR/YbqaIUSLXtrnCdHcm0RAEcstGtTytULW
-X-Gm-Gg: ASbGncsydr+2mLwfU9hGI29+MHHGrpktbEvA7OmvBl5Gh4HboqgSK5iPFx2Jd5vdQCq
-	BROG2p0J+FDqrf0NySj5sn84UHbWsTn9/aFRjELtnKe7/M5Xy/YOQClDoYX6GymdIQokOhEZe6Y
-	yGGyJpQwAPQTWF9m1E9EmGVRuHOw==
-X-Google-Smtp-Source: AGHT+IHCEoZCaxv7OeUD/lycaKqmsWh9p2nUqOcZQrmR9zpt7xGkZ3QRivr7CV15cEdv0CsTFj9gYBS74SPFr3Jm474=
-X-Received: by 2002:a05:690c:4882:b0:6fd:2feb:eb6e with SMTP id
- 00721157ae682-6ff460bbcadmr182599447b3.28.1742245441971; Mon, 17 Mar 2025
- 14:04:01 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EAVDKK6G"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C4B0C4CEDD;
+	Tue, 18 Mar 2025 22:51:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1742338269;
+	bh=VVmm5qJe9dwbIlANjI3AgRxkODh8ApI2KbJHlCI9RWE=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=EAVDKK6GABD21xIzzH9iJVgp1KnvrfqdT4YJm5+2kpXcQKgTL6b4Y3hx9MfH+UxBf
+	 43EUwBQ0IL7Eb+ntiEhlrgc/W9R04WEsWDNGij+pW0LYB0j0mMTziPF98xy5wvD9Km
+	 j6dTJ7e2hhlchC7gSiBg1a8c+csTpz6HTN1bkG2uxGBTFteZDeUeWDzMbq01l4q/6r
+	 uC0gVNDCnMV89hh96fPbMMFYPiIjzTcUmp/E3LQXir5TGZoOu55t+nKb2fEwyzB4H3
+	 Ed942wyMfdicPT5mELzQU+ToF9b2Okjzo/66yYTe+9Bs4FpCxvdkq8Kt04EJujXex1
+	 VHy/ZQVa56rLw==
+Received: by mail-yb1-f182.google.com with SMTP id 3f1490d57ef6-e5dc299deb4so5999757276.1;
+        Tue, 18 Mar 2025 15:51:09 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVnvTknItmz/PQrYzL/4wE9DXWhhnWwPak97i9pi2OdNwKk7LvpSJNpxYKNbv3r5pJYgRjIlGeSyQXJTJoIMtd2x4oE92U8@vger.kernel.org, AJvYcCWBrYP4cmLoc4mr2DsTWTWp3ewwE669RxIsz3cGcVXJNaQ2TLhtutsFXaffcduwvD47oSPXrA==@vger.kernel.org, AJvYcCX93M5ege5Oi4SA1KNXrZGULlBokhgQV81KXAw3rx0JluuPdWK8dfjfZYvW3NZQB+Ss8npuCRt0pu2XZovB@vger.kernel.org, AJvYcCXHCmQS+oHUAgcp6QYN1InMGAtyTwuDKLZZ835t9WRo7JShxEcwL3STFE/5rAYK3Mo059bJsB07OLZD@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw6qXP5/YJYwjJaWTnMtSiJcR58ywoJKWvJU57/hY+z3mpDdp3l
+	0jDWUV5p/GgNO1PczxyRZuO7+KTTzU06oeAp+eopy7iENaKIlz4f3VyfPlW/tl+Hcg+vnSkIAYW
+	RdjZbrnny2hSHlksY2rzuaUppGPE=
+X-Google-Smtp-Source: AGHT+IHtWrWG9q14SFtqmCK3AD8VjveTzse+0ACAXhWDDSbBM11VEK9SbV1XqbYGyrMXedtzt9WqakWtI5DtyrpKZ2g=
+X-Received: by 2002:a05:6902:1b83:b0:e63:6715:4d72 with SMTP id
+ 3f1490d57ef6-e667b446649mr766504276.42.1742338268586; Tue, 18 Mar 2025
+ 15:51:08 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
@@ -60,131 +43,40 @@ List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <1741902661-31767-1-git-send-email-jasjivsingh@linux.microsoft.com>
- <1741902661-31767-2-git-send-email-jasjivsingh@linux.microsoft.com> <CAKtyLkGuRraMbArSQCGxb+m5p+M8G5WZCTHk-7dKVfQd2EJYxw@mail.gmail.com>
-In-Reply-To: <CAKtyLkGuRraMbArSQCGxb+m5p+M8G5WZCTHk-7dKVfQd2EJYxw@mail.gmail.com>
-From: Paul Moore <paul@paul-moore.com>
-Date: Mon, 17 Mar 2025 17:03:51 -0400
-X-Gm-Features: AQ5f1Jrwt6khDXjv0IVheA9isqgUbo47peyyUpS_OaZh_PBVr6OQzM6Nq_CsvzI
-Message-ID: <CAHC9VhRPU1C1-B=PUwUcheOmYhSDzHJMmcpg3j9z0DPiMOHydg@mail.gmail.com>
+ <1741902661-31767-2-git-send-email-jasjivsingh@linux.microsoft.com>
+ <CAKtyLkGuRraMbArSQCGxb+m5p+M8G5WZCTHk-7dKVfQd2EJYxw@mail.gmail.com> <CAHC9VhRPU1C1-B=PUwUcheOmYhSDzHJMmcpg3j9z0DPiMOHydg@mail.gmail.com>
+In-Reply-To: <CAHC9VhRPU1C1-B=PUwUcheOmYhSDzHJMmcpg3j9z0DPiMOHydg@mail.gmail.com>
+From: Fan Wu <wufan@kernel.org>
+Date: Tue, 18 Mar 2025 15:50:57 -0700
+X-Gmail-Original-Message-ID: <CAKtyLkFRpu5n_Bp5Fm=VcKrBcXKeapZM8=4pRs7y65=6WhmTpg@mail.gmail.com>
+X-Gm-Features: AQ5f1JrWQ7_DK8jvagvgBhzrdsf8P0o9soiY5JDo-E1dwIaB-x1ELuRlLKyfMww
+Message-ID: <CAKtyLkFRpu5n_Bp5Fm=VcKrBcXKeapZM8=4pRs7y65=6WhmTpg@mail.gmail.com>
 Subject: Re: [PATCH v5 1/1] ipe: add errno field to IPE policy load auditing
-To: Fan Wu <wufan@kernel.org>
-Cc: Jasjiv Singh <jasjivsingh@linux.microsoft.com>, corbet@lwn.net, jmorris@namei.org, 
-	serge@hallyn.com, eparis@redhat.com, linux-doc@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, audit@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
+To: Paul Moore <paul@paul-moore.com>
+Cc: Fan Wu <wufan@kernel.org>, Jasjiv Singh <jasjivsingh@linux.microsoft.com>, corbet@lwn.net, 
+	jmorris@namei.org, serge@hallyn.com, eparis@redhat.com, 
+	linux-doc@vger.kernel.org, linux-security-module@vger.kernel.org, 
+	audit@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Mar 17, 2025 at 4:59=E2=80=AFPM Fan Wu <wufan@kernel.org> wrote:
-> On Thu, Mar 13, 2025 at 2:51=E2=80=AFPM Jasjiv Singh
-> <jasjivsingh@linux.microsoft.com> wrote:
-> >
-> > Users of IPE require a way to identify when and why an operation fails,
-> > allowing them to both respond to violations of policy and be notified
-> > of potentially malicious actions on their systems with respect to IPE.
-> >
-> > This patch introduces a new error field to the AUDIT_IPE_POLICY_LOAD ev=
-ent
-> > to log policy loading failures. Currently, IPE only logs successful pol=
-icy
-> > loads, but not failures. Tracking failures is crucial to detect malicio=
-us
-> > attempts and ensure a complete audit trail for security events.
-> >
-> > The new error field will capture the following error codes:
-> >
-> > * -ENOKEY: Key used to sign the IPE policy not found in the keyring
-> > * -ESTALE: Attempting to update an IPE policy with an older version
-> > * -EKEYREJECTED: IPE signature verification failed
-> > * -ENOENT: Policy was deleted while updating
-> > * -EEXIST: Same name policy already deployed
-> > * -ERANGE: Policy version number overflow
-> > * -EINVAL: Policy version parsing error
-> > * -EPERM: Insufficient permission
-> > * -ENOMEM: Out of memory (OOM)
-> > * -EBADMSG: Policy is invalid
-> >
-> > Here are some examples of the updated audit record types:
-> >
-> > AUDIT_IPE_POLICY_LOAD(1422):
-> > audit:  AUDIT1422 policy_name=3D"Test_Policy" policy_version=3D0.0.1
-> > policy_digest=3Dsha256:84EFBA8FA71E62AE0A537FAB962F8A2BD1053964C4299DCA
-> > 92BFFF4DB82E86D3 auid=3D1000 ses=3D3 lsm=3Dipe res=3D1 errno=3D0
-> >
-> > The above record shows a new policy has been successfully loaded into
-> > the kernel with the policy name, version, and hash with the errno=3D0.
-> >
-> > AUDIT_IPE_POLICY_LOAD(1422) with error:
-> >
-> > audit: AUDIT1422 policy_name=3D? policy_version=3D? policy_digest=3D?
-> > auid=3D1000 ses=3D3 lsm=3Dipe res=3D0 errno=3D-74
-> >
-> > The above record shows a policy load failure due to an invalid policy
-> > (-EBADMSG).
-> >
-> > By adding this error field, we ensure that all policy load attempts,
-> > whether successful or failed, are logged, providing a comprehensive
-> > audit trail for IPE policy management.
-> >
-> > Signed-off-by: Jasjiv Singh <jasjivsingh@linux.microsoft.com>
-> > ---
-> >  Documentation/admin-guide/LSM/ipe.rst | 69 +++++++++++++++++++--------
-> >  security/ipe/audit.c                  | 19 ++++++--
-> >  security/ipe/fs.c                     | 25 ++++++----
-> >  security/ipe/policy.c                 | 17 ++++---
-> >  security/ipe/policy_fs.c              | 28 ++++++++---
-> >  5 files changed, 113 insertions(+), 45 deletions(-)
-> >
+On Mon, Mar 17, 2025 at 2:04=E2=80=AFPM Paul Moore <paul@paul-moore.com> wr=
+ote:
 >
-> ...
+> On Mon, Mar 17, 2025 at 4:59=E2=80=AFPM Fan Wu <wufan@kernel.org> wrote:
+> > On Thu, Mar 13, 2025 at 2:51=E2=80=AFPM Jasjiv Singh
+> > <jasjivsingh@linux.microsoft.com> wrote:
+> > >
+...
+> >
+> > I don't see any other issue, if there is no objection from the audit
+> > folks, I will pull this into ipe's tree.
 >
-> > diff --git a/security/ipe/policy.c b/security/ipe/policy.c
-> > index b628f696e32b..1c58c29886e8 100644
-> > --- a/security/ipe/policy.c
-> > +++ b/security/ipe/policy.c
-> > @@ -84,8 +84,11 @@ static int set_pkcs7_data(void *ctx, const void *dat=
-a, size_t len,
-> >   * ipe_new_policy.
-> >   *
-> >   * Context: Requires root->i_rwsem to be held.
-> > - * Return: %0 on success. If an error occurs, the function will return
-> > - * the -errno.
-> > + * Return:
-> > + * * %0        - Success
-> > + * * %-ENOENT  - Policy was deleted while updating
-> > + * * %-EINVAL  - Policy name mismatch
-> > + * * %-ESTALE  - Policy version too old
-> >   */
-> >  int ipe_update_policy(struct inode *root, const char *text, size_t tex=
-tlen,
-> >                       const char *pkcs7, size_t pkcs7len)
-> > @@ -146,10 +149,12 @@ int ipe_update_policy(struct inode *root, const c=
-har *text, size_t textlen,
-> >   *
-> >   * Return:
-> >   * * a pointer to the ipe_policy structure     - Success
-> > - * * %-EBADMSG                                 - Policy is invalid
-> > - * * %-ENOMEM                                  - Out of memory (OOM)
-> > - * * %-ERANGE                                  - Policy version number=
- overflow
-> > - * * %-EINVAL                                  - Policy version parsin=
-g error
-> > + * * %-EBADMSG                         - Policy is invalid
-> > + * * %-ENOMEM                          - Out of memory (OOM)
-> > + * * %-ERANGE                          - Policy version number overflo=
-w
-> > + * * %-EINVAL                          - Policy version parsing error
-> > + * * %-ENOKEY                          - Policy signing key not found
-> > + * * %-EKEYREJECTED                    - Policy signature verification=
- failed
-> >   */
+> No objections from me.
 >
-> The indentation here is not aligned.
->
-> I don't see any other issue, if there is no objection from the audit
-> folks, I will pull this into ipe's tree.
+> --
+> paul-moore.com
 
-No objections from me.
+This patch is in ipe/next now.
 
---
-paul-moore.com
+-Fan
