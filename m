@@ -1,33 +1,33 @@
-Received: from smtp-190c.mail.infomaniak.ch (smtp-190c.mail.infomaniak.ch [185.125.25.12])
+Received: from smtp-8fab.mail.infomaniak.ch (smtp-8fab.mail.infomaniak.ch [83.166.143.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F36422A7F4
-	for <audit@vger.kernel.org>; Thu, 20 Mar 2025 19:07:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.25.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6983222AE6B
+	for <audit@vger.kernel.org>; Thu, 20 Mar 2025 19:07:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=83.166.143.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742497668; cv=none; b=cAmE7FS0dC+Y64mI5E4OVOnVxHurk7ZZJ6NNuH2Qo+6+ncAd/boQKnCZSVQ5iTwCigbLG1kajOwLlzPqj5aRN/u2V2NZ1ho1xGGCj0UEUnJ4OjcQ4v/0PQqC6mFm2ioSagme7RScC06eNpXZ6oofyCSTaQtZxz8F5dAxFjlv5lI=
+	t=1742497668; cv=none; b=EjONBsxvkaxJVG/QVcLo8+bPLRmU3XAwyZiB5YNh5ou9TFCQkj4aXS+6g88UTeKv1LqM/fVk/VnhXVx0Q2HsOLyR7bIOVkdkKjlS+VBq9OdiXbB/pBu/raYjTWBef3EbPZH2eWUymNc7YzDM0phbiQ/vyUS6F/7+aKgHFnUkwcw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1742497668; c=relaxed/simple;
-	bh=gou4wTV07PcxiKujCVqpX8f+aZ5s5Ym6AZvcZxQW160=;
+	bh=xHmWeTcBfK3Ln1wpeTx4Dv9p+mVfxVJlGlBfJ9XLdcI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=cwXVpzB3Rc0Mn1GLYydrr8dNuE/+yx3hLZ6hEY11rrb8iGxlW/LsRM+stCQe7D7L4y858Vzts1zFpLraMePLS2ooSLC0fsFUegg2JkwacwAgspJreK+K0DLL2Obf/rQW38V6otajARMefA7pRdr5E9Kd2uR1t4VWKdosKi9TiVM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=D9RBc3Bw; arc=none smtp.client-ip=185.125.25.12
+	 MIME-Version:Content-Type; b=IVxNNjbmDiUcbDDW+e34wWeoZVvRKG6RY+jgpf+W47x2fml1WkamelnBFW82sxTXFmbP+AsbGE2rzerdrg/2ch9CXClYw/VdXP+XKQiS0pereNaOSpS+ajISmolm9KbKdPBsuCBga0DsXWrOTcltvp46Mx1qisr0iDt9P3edpjs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=fq8cc/UV; arc=none smtp.client-ip=83.166.143.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="D9RBc3Bw"
-Received: from smtp-3-0001.mail.infomaniak.ch (smtp-3-0001.mail.infomaniak.ch [10.4.36.108])
-	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4ZJZpN2Ltqz39;
-	Thu, 20 Mar 2025 20:07:40 +0100 (CET)
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="fq8cc/UV"
+Received: from smtp-4-0001.mail.infomaniak.ch (smtp-4-0001.mail.infomaniak.ch [10.7.10.108])
+	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4ZJZpL4g4lzHth;
+	Thu, 20 Mar 2025 20:07:38 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
-	s=20191114; t=1742497660;
-	bh=KqMTBxBGURzJjUmJJV3U0YM+1WPqEqbaX/x2mNCOafA=;
+	s=20191114; t=1742497658;
+	bh=cKBdIbjeGomxqFaY0uEVRpZGJRkDoJ1rJoVWkdTbywo=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=D9RBc3Bwy1Fvt/Z5dgqa3TR7nuOxr+3ZrPg31xtkrHCNtOQlmEyA7XW9LiXJmu64P
-	 rb4V25YxI8lypUOYcM8uVBDFLYRFKte/zzHM3FMq6x+zHtu9TwrepXvsrSiYSgIGa4
-	 1rf/4KH0QzG/YEhU6ZpTOiqZX8m/4gdDHTsYdIk0=
-Received: from unknown by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4ZJZpM2hVNzFBF;
-	Thu, 20 Mar 2025 20:07:39 +0100 (CET)
+	b=fq8cc/UVLcKHDnJSvkJFC3woV77XE2GmpcyXHlu3DDkuZUfeQmDFmulnglMkv51jU
+	 hVWwLp8Z1GMazgHCkUTjRzNWTbkMVv5wnb+p62BB25PaQ36cwJS/mGUiyk5kXYRoJQ
+	 2P+IznMTYkXQbe3qwD8uKI2GtADfNCgyr2kgfGI0=
+Received: from unknown by smtp-4-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4ZJZpK51pBzY76;
+	Thu, 20 Mar 2025 20:07:37 +0100 (CET)
 From: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
 To: Eric Paris <eparis@redhat.com>,
 	Paul Moore <paul@paul-moore.com>,
@@ -59,9 +59,9 @@ Cc: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
 	audit@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-security-module@vger.kernel.org
-Subject: [PATCH v7 10/28] landlock: Add AUDIT_LANDLOCK_DOMAIN and log domain status
-Date: Thu, 20 Mar 2025 20:06:59 +0100
-Message-ID: <20250320190717.2287696-11-mic@digikod.net>
+Subject: [PATCH v7 09/28] landlock: Add AUDIT_LANDLOCK_ACCESS and log ptrace denials
+Date: Thu, 20 Mar 2025 20:06:58 +0100
+Message-ID: <20250320190717.2287696-10-mic@digikod.net>
 In-Reply-To: <20250320190717.2287696-1-mic@digikod.net>
 References: <20250320190717.2287696-1-mic@digikod.net>
 Precedence: bulk
@@ -74,62 +74,64 @@ Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Infomaniak-Routing: alpha
 
-Asynchronously log domain information when it first denies an access.
-This minimize the amount of generated logs, which makes it possible to
-always log denials for the current execution since they should not
-happen.  These records are identified with the new AUDIT_LANDLOCK_DOMAIN
-type.
+Add a new AUDIT_LANDLOCK_ACCESS record type dedicated to an access
+request denied by a Landlock domain.  AUDIT_LANDLOCK_ACCESS indicates
+that something unexpected happened.
 
-The AUDIT_LANDLOCK_DOMAIN message contains:
-- the "domain" ID which is described;
-- the "status" which can either be "allocated" or "deallocated";
-- the "mode" which is for now only "enforcing";
-- for the "allocated" status, a minimal set of properties to easily
-  identify the task that loaded the domain's policy with
-  landlock_restrict_self(2): "pid", "uid", executable path ("exe"), and
-  command line ("comm");
-- for the "deallocated" state, the number of "denials" accounted to this
-  domain, which is at least 1.
+For now, only denied access are logged, which means that any
+AUDIT_LANDLOCK_ACCESS record is always followed by a SYSCALL record with
+"success=no".  However, log parsers should check this syscall property
+because this is the only sign that a request was denied.  Indeed, we
+could have "success=yes" if Landlock would support a "permissive" mode.
+We could also add a new field to AUDIT_LANDLOCK_DOMAIN for this mode
+(see following commit).
 
-This requires each domain to save these task properties at creation
-time in the new struct landlock_details.  A reference to the PID is kept
-for the lifetime of the domain to avoid race conditions when
-investigating the related task.  The executable path is resolved and
-stored to not keep a reference to the filesystem and block related
-actions.  All these metadata are stored for the lifetime of the related
-domain and should then be minimal.  The required memory is not accounted
-to the task calling landlock_restrict_self(2) contrary to most other
-Landlock allocations (see related comment).
+By default, the only logged access requests are those coming from the
+same executed program that enforced the Landlock restriction on itself.
+In other words, no audit record are created for a task after it called
+execve(2).  This is required to avoid log spam because programs may only
+be aware of their own restrictions, but not the inherited ones.
 
-The AUDIT_LANDLOCK_DOMAIN record follows the first AUDIT_LANDLOCK_ACCESS
-record for the same domain, which is always followed by AUDIT_SYSCALL
-and AUDIT_PROCTITLE.  This is in line with the audit logic to first
-record the cause of an event, and then add context with other types of
-record.
+Following commits will allow to conditionally generate
+AUDIT_LANDLOCK_ACCESS records according to dedicated
+landlock_restrict_self(2)'s flags.
 
-Audit event sample for a first denial:
+The AUDIT_LANDLOCK_ACCESS message contains:
+- the "domain" ID restricting the action on an object,
+- the "blockers" that are missing to allow the requested access,
+- a set of fields identifying the related object (e.g. task identified
+  with "opid" and "ocomm").
 
-  type=LANDLOCK_ACCESS msg=audit(1732186800.349:44): domain=195ba459b blockers=ptrace opid=1 ocomm="systemd"
-  type=LANDLOCK_DOMAIN msg=audit(1732186800.349:44): domain=195ba459b status=allocated mode=enforcing pid=300 uid=0 exe="/root/sandboxer" comm="sandboxer"
-  type=SYSCALL msg=audit(1732186800.349:44): arch=c000003e syscall=101 success=no [...] pid=300 auid=0
+The blockers are implicit restrictions (e.g. ptrace), or explicit access
+rights (e.g. filesystem), or explicit scopes (e.g. signal).  This field
+contains a list of at least one element, each separated with a comma.
 
-Audit event sample for a following denial:
+The initial blocker is "ptrace", which describe all implicit Landlock
+restrictions related to ptrace (e.g. deny tracing of tasks outside a
+sandbox).
 
-  type=LANDLOCK_ACCESS msg=audit(1732186800.372:45): domain=195ba459b blockers=ptrace opid=1 ocomm="systemd"
-  type=SYSCALL msg=audit(1732186800.372:45): arch=c000003e syscall=101 success=no [...] pid=300 auid=0
+Add audit support to ptrace_access_check and ptrace_traceme hooks.  For
+the ptrace_access_check case, we log the current/parent domain and the
+child task.  For the ptrace_traceme case, we log the parent domain and
+the current/child task.  Indeed, the requester and the target are the
+current task, but the action would be performed by the parent task.
 
-Log domain deletion with the "deallocated" state when a domain was
-previously logged.  This makes it possible for log parsers to free
-potential resources when a domain ID will never show again.
+Audit event sample:
 
-The number of denied access requests is useful to easily check how many
-access requests a domain blocked and potentially if some of them are
-missing in logs because of audit rate limiting, audit rules, or Landlock
-log configuration flags (see following commit).
+  type=LANDLOCK_ACCESS msg=audit(1729738800.349:44): domain=195ba459b blockers=ptrace opid=1 ocomm="systemd"
+  type=SYSCALL msg=audit(1729738800.349:44): arch=c000003e syscall=101 success=no [...] pid=300 auid=0
 
-Audit event sample for a deletion of a domain that denied something:
+A following commit adds user documentation.
 
-  type=LANDLOCK_DOMAIN msg=audit(1732186800.393:46): domain=195ba459b status=deallocated denials=2
+Add KUnit tests to check reading of domain ID relative to layer level.
+
+The quick return for non-landlocked tasks is moved from task_ptrace() to
+each LSM hooks.
+
+It is not useful to inline the audit_enabled check because other
+computation are performed by landlock_log_denial().
+
+Use scoped guards for RCU read-side critical sections.
 
 Cc: Günther Noack <gnoack@google.com>
 Acked-by: Paul Moore <paul@paul-moore.com> (Audit)
@@ -137,539 +139,603 @@ Signed-off-by: Mickaël Salaün <mic@digikod.net>
 ---
 
 Changes since v6:
-- Improve consistency and clarity by renaming log_node() to log_domain()
-  and "node" variables to "hierarchy".
-- Fix unsigned integer check, reported by Dan Carpenter:
-  https://lore.kernel.org/r/2425110b-b5ca-4b33-bf75-e6fca0b0de63@stanley.mountain
-- Fix inconsistent memory allocation flags and explain rationale,
-  spotted by Paul.
-- Fix domain deallocation logs by moving the call from cred put to
-  hierarchy put.  Update landlock_log_drop_domain() accordingly.  This
-  required to not include domain.h in ruleset.h anymore to avoid
-  recursive include.
-- Free hierarchy's details when putting a hierarchy.
-- Save UID instead of keeping a reference to the current cred, which is
-  not useful for now.
-- Clean up includes.
+- Improve consistency and clarity by renaming "node" variables to
+  "hierarchy".
+- Identify current (instead of the parent) as the task object in traceme
+  requests.  It makes more sense to always log the target as the object.
+- Improve is_valid_request() by checking the layer_plus_one number.
+- Clean up includes and headers.
+- Explain rationale for allocation flags.
 
 Changes since v5:
 - Add Acked-by Paul.
-- Improve comment.
-- Cosmetic code move in landlock_log_denial() for consistency, and to
-  get a cleaner diff regarding the non-changing audit_enabled check.
+- Move request declarations in the landlock_log_denial() calls to
+  not impact allowed requests with audit, and return as soon as possible
+  when access is allowed.
+- Remove the audit_context() check in landlock_log_denial() because the
+  context may not already exist.  This issue was identified thanks to a
+  new test.
 - Remove unlikely().
 
 Changes since v4:
-- Rename AUDIT_LANDLOCK_DOM_{INFO,DROP} to AUDIT_LANDLOCK_DOMAIN and add
-  a "status" field, as requested by Paul.
-- Add a harcoded "mode=enforcing" to leave room for a potential future
-  permissive mode, as suggested by Paul.
-- Remove the "creation" timestamp, as suggested by Paul.
-- Move LANDLOCK_PATH_MAX_SIZE to domain.h, check the size of the
-  greatest landlock_details at build time, and improve comments.
-- Improve audit check in landlock_log_drop_domain().
-- Add missing headers.
-- Fix typo in comment.
-- Rebase on top of the landlock_log_denial() and subject type changes.
+- Rename AUDIT_LANDLOCK_DENY to AUDIT_LANDLOCK_ACCESS, requested by
+  Paul.
+- Make landlock_log_denial() get Landlock credential instead of Landlock
+  domain to be able to filter on the domain_exe variable.
+- Rebase on top of the migration from struct landlock_ruleset to struct
+  landlock_cred_security.
+- Rename landlock_init_current_hierarchy() to
+  landlock_init_hierarchy_log().
+- Rebase on top of the scoped guard patches.
+- By default, do not log denials after an execution.
+- Use scoped guards for RCU read-side critical sections.
 
 Changes since v3:
-- Log number of denied access requests with AUDIT_LANDLOCK_DOM_DROP
-  records, suggested by Tyler.
-- Do not store a struct path pointer but the resolved string instead.
-  This enables us to not block unmount of the initially restricted task
-  executable's mount point.  See the new get_current_info() and
-  get_current_exe().  A following patch add tests for this case.
-- Create and allocate a new struct landlock_details for initially
-  restricted task's information.
-- Remove audit_get_ctime() call, as requested by Paul.  We now always
-  have a standalone timestamp per Landlock domain creations.
-- Fix docstring.
+- Extend commit message.
 
 Changes since v2:
-- Fix docstring.
-- Fix log_status check in log_hierarchy() to also log
-  LANDLOCK_LOG_DISABLED.
-- Add audit's creation time to domain's properties.
-- Use hexadecimal notation for domain IDs.
-- Remove domain's parent records: parent domains are not really useful
-  in the logs.  They will be available with the upcoming introspection
-  feature though.
-- Extend commit message with audit's timestamp explanation.
+- Log domain IDs as hexadecimal number: this is a more compact notation
+  (i.e. at least one less digit), it improves alignment in logs, and it
+  makes most IDs start with 1 as leading digit (because of the 2^32
+  minimal value).  Do not use the "0x" prefix that would add useless
+  data to logs.
+- Constify function arguments.
+- Clean up Makefile entries.
 
 Changes since v1:
-- Add a ruleset's version for atomic logs.
-- Rebased on the TCP patch series.
-- Rename operation using "_" instead of "-".
-- Rename AUDIT_LANDLOCK to AUDIT_LANDLOCK_RULESET.
-- Only log when audit is enabled, but always set domain IDs.
+- Move most audit code to this patch.
+- Rebase on the TCP patch series.
+- Don't log missing access right: simplify and make it generic for rule
+  types.
+- Don't log errno and then don't wrap the error with
+  landlock_log_request(), as suggested by Jeff.
+- Add a WARN_ON_ONCE() check to never dereference null pointers.
+- Only log when audit is enabled.
 - Don't log task's PID/TID with log_task() because it would be redundant
   with the SYSCALL record.
-- Remove race condition when logging ruleset creation and logging
-  ruleset modification while the related file descriptor was already
-  registered but the ruleset creation not logged yet.
-- Fix domain drop logs.
-- Move the domain drop record from the previous patch into this one.
-- Do not log domain creation but log first domain use instead.
-- Save task's properties that sandbox themselves.
+- Move the "op" in front and rename "domain" to "denying_domain" to make
+  it more consistent with other entries.
+- Don't update the request with the domain ID but add an helper to get
+  it from the layer masks (and in a following commit with a struct
+  file).
+- Revamp get_domain_id_from_layer_masks() into
+  get_level_from_layer_masks().
+- For ptrace_traceme, log the parent domain instead of the current one.
+- Add documentation.
+- Rename AUDIT_LANDLOCK_DENIAL to AUDIT_LANDLOCK_DENY.
+- Only log the domain ID and the target task.
+- Log "blockers", which are either implicit restrictions (e.g. ptrace)
+  or explicit access rights (e.g. filesystem), or scopes (e.g. signal).
+- Don't log LSM hook names/operations.
+- Pick an audit event ID folling the IPE ones.
+- Add KUnit tests.
 ---
- include/uapi/linux/audit.h  |   1 +
- security/landlock/audit.c   |  90 ++++++++++++++++++++++++++++++--
- security/landlock/audit.h   |   7 +++
- security/landlock/domain.c  | 101 ++++++++++++++++++++++++++++++++++++
- security/landlock/domain.h  |  86 ++++++++++++++++++++++++++++++
- security/landlock/ruleset.c |   3 ++
- security/landlock/ruleset.h |   3 +-
- 7 files changed, 287 insertions(+), 4 deletions(-)
+ include/uapi/linux/audit.h  |   3 +-
+ security/landlock/Makefile  |   5 +-
+ security/landlock/audit.c   | 151 ++++++++++++++++++++++++++++++++++++
+ security/landlock/audit.h   |  52 +++++++++++++
+ security/landlock/domain.c  |  28 +++++++
+ security/landlock/domain.h  |  22 ++++++
+ security/landlock/ruleset.c |   6 ++
+ security/landlock/task.c    |  96 +++++++++++++++++------
+ 8 files changed, 338 insertions(+), 25 deletions(-)
+ create mode 100644 security/landlock/audit.c
+ create mode 100644 security/landlock/audit.h
+ create mode 100644 security/landlock/domain.c
 
 diff --git a/include/uapi/linux/audit.h b/include/uapi/linux/audit.h
-index 5dd53f416a4a..9a4ecc9f6dc5 100644
+index d9a069b4a775..5dd53f416a4a 100644
 --- a/include/uapi/linux/audit.h
 +++ b/include/uapi/linux/audit.h
-@@ -147,6 +147,7 @@
+@@ -33,7 +33,7 @@
+  * 1100 - 1199 user space trusted application messages
+  * 1200 - 1299 messages internal to the audit daemon
+  * 1300 - 1399 audit event messages
+- * 1400 - 1499 SE Linux use
++ * 1400 - 1499 access control messages
+  * 1500 - 1599 kernel LSPP events
+  * 1600 - 1699 kernel crypto events
+  * 1700 - 1799 kernel anomaly records
+@@ -146,6 +146,7 @@
+ #define AUDIT_IPE_ACCESS	1420	/* IPE denial or grant */
  #define AUDIT_IPE_CONFIG_CHANGE	1421	/* IPE config change */
  #define AUDIT_IPE_POLICY_LOAD	1422	/* IPE policy load */
- #define AUDIT_LANDLOCK_ACCESS	1423	/* Landlock denial */
-+#define AUDIT_LANDLOCK_DOMAIN	1424	/* Landlock domain status */
++#define AUDIT_LANDLOCK_ACCESS	1423	/* Landlock denial */
  
  #define AUDIT_FIRST_KERN_ANOM_MSG   1700
  #define AUDIT_LAST_KERN_ANOM_MSG    1799
+diff --git a/security/landlock/Makefile b/security/landlock/Makefile
+index e1777abbc413..3160c2bdac1d 100644
+--- a/security/landlock/Makefile
++++ b/security/landlock/Makefile
+@@ -5,4 +5,7 @@ landlock-y := setup.o syscalls.o object.o ruleset.o \
+ 
+ landlock-$(CONFIG_INET) += net.o
+ 
+-landlock-$(CONFIG_AUDIT) += id.o
++landlock-$(CONFIG_AUDIT) += \
++	id.o \
++	audit.o \
++	domain.o
 diff --git a/security/landlock/audit.c b/security/landlock/audit.c
-index b0752263012a..a0e6041a1e21 100644
---- a/security/landlock/audit.c
+new file mode 100644
+index 000000000000..b0752263012a
+--- /dev/null
 +++ b/security/landlock/audit.c
-@@ -8,6 +8,7 @@
- #include <kunit/test.h>
- #include <linux/audit.h>
- #include <linux/lsm_audit.h>
-+#include <linux/pid.h>
- 
- #include "audit.h"
- #include "cred.h"
-@@ -32,6 +33,38 @@ static void log_blockers(struct audit_buffer *const ab,
- 	audit_log_format(ab, "%s", get_blocker(type));
- }
- 
-+static void log_domain(struct landlock_hierarchy *const hierarchy)
+@@ -0,0 +1,151 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Landlock - Audit helpers
++ *
++ * Copyright © 2023-2025 Microsoft Corporation
++ */
++
++#include <kunit/test.h>
++#include <linux/audit.h>
++#include <linux/lsm_audit.h>
++
++#include "audit.h"
++#include "cred.h"
++#include "domain.h"
++#include "limits.h"
++#include "ruleset.h"
++
++static const char *get_blocker(const enum landlock_request_type type)
++{
++	switch (type) {
++	case LANDLOCK_REQUEST_PTRACE:
++		return "ptrace";
++	}
++
++	WARN_ON_ONCE(1);
++	return "unknown";
++}
++
++static void log_blockers(struct audit_buffer *const ab,
++			 const enum landlock_request_type type)
++{
++	audit_log_format(ab, "%s", get_blocker(type));
++}
++
++static struct landlock_hierarchy *
++get_hierarchy(const struct landlock_ruleset *const domain, const size_t layer)
++{
++	struct landlock_hierarchy *hierarchy = domain->hierarchy;
++	ssize_t i;
++
++	if (WARN_ON_ONCE(layer >= domain->num_layers))
++		return hierarchy;
++
++	for (i = domain->num_layers - 1; i > layer; i--) {
++		if (WARN_ON_ONCE(!hierarchy->parent))
++			break;
++
++		hierarchy = hierarchy->parent;
++	}
++
++	return hierarchy;
++}
++
++#ifdef CONFIG_SECURITY_LANDLOCK_KUNIT_TEST
++
++static void test_get_hierarchy(struct kunit *const test)
++{
++	struct landlock_hierarchy dom0_hierarchy = {
++		.id = 10,
++	};
++	struct landlock_hierarchy dom1_hierarchy = {
++		.parent = &dom0_hierarchy,
++		.id = 20,
++	};
++	struct landlock_hierarchy dom2_hierarchy = {
++		.parent = &dom1_hierarchy,
++		.id = 30,
++	};
++	struct landlock_ruleset dom2 = {
++		.hierarchy = &dom2_hierarchy,
++		.num_layers = 3,
++	};
++
++	KUNIT_EXPECT_EQ(test, 10, get_hierarchy(&dom2, 0)->id);
++	KUNIT_EXPECT_EQ(test, 20, get_hierarchy(&dom2, 1)->id);
++	KUNIT_EXPECT_EQ(test, 30, get_hierarchy(&dom2, 2)->id);
++	KUNIT_EXPECT_EQ(test, 30, get_hierarchy(&dom2, -1)->id);
++}
++
++#endif /* CONFIG_SECURITY_LANDLOCK_KUNIT_TEST */
++
++static bool is_valid_request(const struct landlock_request *const request)
++{
++	if (WARN_ON_ONCE(request->layer_plus_one > LANDLOCK_MAX_NUM_LAYERS))
++		return false;
++
++	if (WARN_ON_ONCE(!request->layer_plus_one))
++		return false;
++
++	return true;
++}
++
++/**
++ * landlock_log_denial - Create audit records related to a denial
++ *
++ * @subject: The Landlock subject's credential denying an action.
++ * @request: Detail of the user space request.
++ */
++void landlock_log_denial(const struct landlock_cred_security *const subject,
++			 const struct landlock_request *const request)
 +{
 +	struct audit_buffer *ab;
++	struct landlock_hierarchy *youngest_denied;
++	size_t youngest_layer;
 +
-+	/* Ignores already logged domains.  */
-+	if (READ_ONCE(hierarchy->log_status) == LANDLOCK_LOG_RECORDED)
++	if (WARN_ON_ONCE(!subject || !subject->domain ||
++			 !subject->domain->hierarchy || !request))
++		return;
++
++	if (!is_valid_request(request))
++		return;
++
++	if (!audit_enabled)
++		return;
++
++	youngest_layer = request->layer_plus_one - 1;
++	youngest_denied = get_hierarchy(subject->domain, youngest_layer);
++
++	/* Ignores denials after an execution. */
++	if (!(subject->domain_exec & (1 << youngest_layer)))
 +		return;
 +
 +	/* Uses consistent allocation flags wrt common_lsm_audit(). */
 +	ab = audit_log_start(audit_context(), GFP_ATOMIC | __GFP_NOWARN,
-+			     AUDIT_LANDLOCK_DOMAIN);
++			     AUDIT_LANDLOCK_ACCESS);
 +	if (!ab)
 +		return;
 +
-+	WARN_ON_ONCE(hierarchy->id == 0);
-+	audit_log_format(
-+		ab,
-+		"domain=%llx status=allocated mode=enforcing pid=%d uid=%u exe=",
-+		hierarchy->id, pid_nr(hierarchy->details->pid),
-+		hierarchy->details->uid);
-+	audit_log_untrustedstring(ab, hierarchy->details->exe_path);
-+	audit_log_format(ab, " comm=");
-+	audit_log_untrustedstring(ab, hierarchy->details->comm);
++	audit_log_format(ab, "domain=%llx blockers=", youngest_denied->id);
++	log_blockers(ab, request->type);
++	audit_log_lsm_data(ab, &request->audit);
 +	audit_log_end(ab);
-+
-+	/*
-+	 * There may be race condition leading to logging of the same domain
-+	 * several times but that is OK.
-+	 */
-+	WRITE_ONCE(hierarchy->log_status, LANDLOCK_LOG_RECORDED);
 +}
 +
- static struct landlock_hierarchy *
- get_hierarchy(const struct landlock_ruleset *const domain, const size_t layer)
- {
-@@ -110,12 +143,20 @@ void landlock_log_denial(const struct landlock_cred_security *const subject,
- 	if (!is_valid_request(request))
- 		return;
- 
--	if (!audit_enabled)
--		return;
--
- 	youngest_layer = request->layer_plus_one - 1;
- 	youngest_denied = get_hierarchy(subject->domain, youngest_layer);
- 
-+	/*
-+	 * Consistently keeps track of the number of denied access requests
-+	 * even if audit is currently disabled, or if audit rules currently
-+	 * exclude this record type, or if landlock_restrict_self(2)'s flags
-+	 * quiet logs.
-+	 */
-+	atomic64_inc(&youngest_denied->num_denials);
++#ifdef CONFIG_SECURITY_LANDLOCK_KUNIT_TEST
 +
-+	if (!audit_enabled)
-+		return;
++static struct kunit_case test_cases[] = {
++	/* clang-format off */
++	KUNIT_CASE(test_get_hierarchy),
++	{}
++	/* clang-format on */
++};
 +
- 	/* Ignores denials after an execution. */
- 	if (!(subject->domain_exec & (1 << youngest_layer)))
- 		return;
-@@ -130,6 +171,49 @@ void landlock_log_denial(const struct landlock_cred_security *const subject,
- 	log_blockers(ab, request->type);
- 	audit_log_lsm_data(ab, &request->audit);
- 	audit_log_end(ab);
++static struct kunit_suite test_suite = {
++	.name = "landlock_audit",
++	.test_cases = test_cases,
++};
 +
-+	/* Logs this domain the first time it shows in log. */
-+	log_domain(youngest_denied);
-+}
++kunit_test_suite(test_suite);
 +
-+/**
-+ * landlock_log_drop_domain - Create an audit record on domain deallocation
-+ *
-+ * @hierarchy: The domain's hierarchy being deallocated.
-+ *
-+ * Only domains which previously appeared in the audit logs are logged again.
-+ * This is useful to know when a domain will never show again in the audit log.
-+ *
-+ * This record is not directly tied to a syscall entry.
-+ *
-+ * Called by the cred_free() hook, in an uninterruptible context.
-+ */
-+void landlock_log_drop_domain(const struct landlock_hierarchy *const hierarchy)
-+{
-+	struct audit_buffer *ab;
-+
-+	if (WARN_ON_ONCE(!hierarchy))
-+		return;
-+
-+	if (!audit_enabled)
-+		return;
-+
-+	/* Ignores domains that were not logged.  */
-+	if (READ_ONCE(hierarchy->log_status) != LANDLOCK_LOG_RECORDED)
-+		return;
-+
-+	/*
-+	 * If logging of domain allocation succeeded, warns about failure to log
-+	 * domain deallocation to highlight unbalanced domain lifetime logs.
-+	 */
-+	ab = audit_log_start(audit_context(), GFP_ATOMIC,
-+			     AUDIT_LANDLOCK_DOMAIN);
-+	if (!ab)
-+		return;
-+
-+	audit_log_format(ab, "domain=%llx status=deallocated denials=%llu",
-+			 hierarchy->id, atomic64_read(&hierarchy->num_denials));
-+	audit_log_end(ab);
- }
- 
- #ifdef CONFIG_SECURITY_LANDLOCK_KUNIT_TEST
++#endif /* CONFIG_SECURITY_LANDLOCK_KUNIT_TEST */
 diff --git a/security/landlock/audit.h b/security/landlock/audit.h
-index 3a6ec7c8e7c3..40ff230316c4 100644
---- a/security/landlock/audit.h
+new file mode 100644
+index 000000000000..3a6ec7c8e7c3
+--- /dev/null
 +++ b/security/landlock/audit.h
-@@ -36,11 +36,18 @@ struct landlock_request {
- 
- #ifdef CONFIG_AUDIT
- 
-+void landlock_log_drop_domain(const struct landlock_hierarchy *const hierarchy);
-+
- void landlock_log_denial(const struct landlock_cred_security *const subject,
- 			 const struct landlock_request *const request);
- 
- #else /* CONFIG_AUDIT */
- 
-+static inline void
-+landlock_log_drop_domain(const struct landlock_hierarchy *const hierarchy)
-+{
-+}
-+
- static inline void
- landlock_log_denial(const struct landlock_cred_security *const subject,
- 		    const struct landlock_request *const request)
-diff --git a/security/landlock/domain.c b/security/landlock/domain.c
-index e6367933303c..3c1715e4b1c9 100644
---- a/security/landlock/domain.c
-+++ b/security/landlock/domain.c
-@@ -7,21 +7,122 @@
-  * Copyright © 2024-2025 Microsoft Corporation
-  */
- 
-+#include <linux/cred.h>
-+#include <linux/file.h>
-+#include <linux/mm.h>
-+#include <linux/path.h>
-+#include <linux/pid.h>
-+#include <linux/sched.h>
-+#include <linux/uidgid.h>
-+
- #include "domain.h"
- #include "id.h"
- 
- #ifdef CONFIG_AUDIT
- 
-+/**
-+ * get_current_exe - Get the current's executable path, if any
+@@ -0,0 +1,52 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/*
++ * Landlock - Audit helpers
 + *
-+ * @exe_str: Returned pointer to a path string with a lifetime tied to the
-+ *           returned buffer, if any.
-+ * @exe_size: Returned size of @exe_str (including the trailing null
-+ *            character), if any.
-+ *
-+ * Returns: A pointer to an allocated buffer where @exe_str point to, %NULL if
-+ * there is no executable path, or an error otherwise.
++ * Copyright © 2023-2025 Microsoft Corporation
 + */
-+static const void *get_current_exe(const char **const exe_str,
-+				   size_t *const exe_size)
-+{
-+	const size_t buffer_size = LANDLOCK_PATH_MAX_SIZE;
-+	struct mm_struct *mm = current->mm;
-+	struct file *file __free(fput) = NULL;
-+	char *buffer __free(kfree) = NULL;
-+	const char *exe;
-+	ssize_t size;
 +
-+	if (!mm)
-+		return NULL;
++#ifndef _SECURITY_LANDLOCK_AUDIT_H
++#define _SECURITY_LANDLOCK_AUDIT_H
 +
-+	file = get_mm_exe_file(mm);
-+	if (!file)
-+		return NULL;
++#include <linux/audit.h>
++#include <linux/lsm_audit.h>
 +
-+	buffer = kmalloc(buffer_size, GFP_KERNEL);
-+	if (!buffer)
-+		return ERR_PTR(-ENOMEM);
++#include "cred.h"
 +
-+	exe = d_path(&file->f_path, buffer, buffer_size);
-+	if (WARN_ON_ONCE(IS_ERR(exe)))
-+		/* Should never happen according to LANDLOCK_PATH_MAX_SIZE. */
-+		return ERR_CAST(exe);
-+
-+	size = buffer + buffer_size - exe;
-+	if (WARN_ON_ONCE(size <= 0))
-+		return ERR_PTR(-ENAMETOOLONG);
-+
-+	*exe_size = size;
-+	*exe_str = exe;
-+	return no_free_ptr(buffer);
-+}
++enum landlock_request_type {
++	LANDLOCK_REQUEST_PTRACE = 1,
++};
 +
 +/*
-+ * Returns: A newly allocated object describing a domain, or an error
-+ * otherwise.
++ * We should be careful to only use a variable of this type for
++ * landlock_log_denial().  This way, the compiler can remove it entirely if
++ * CONFIG_AUDIT is not set.
 + */
-+static struct landlock_details *get_current_details(void)
-+{
-+	/* Cf. audit_log_d_path_exe() */
-+	static const char null_path[] = "(null)";
-+	const char *path_str = null_path;
-+	size_t path_size = sizeof(null_path);
-+	const void *buffer __free(kfree) = NULL;
-+	struct landlock_details *details;
++struct landlock_request {
++	/* Mandatory fields. */
++	enum landlock_request_type type;
++	struct common_audit_data audit;
 +
-+	buffer = get_current_exe(&path_str, &path_size);
-+	if (IS_ERR(buffer))
-+		return ERR_CAST(buffer);
-+
-+	/*
-+	 * Create the new details according to the path's length.  Do not
-+	 * allocate with GFP_KERNEL_ACCOUNT because it is independent from the
-+	 * caller.
++	/**
++	 * layer_plus_one: First layer level that denies the request + 1.  The
++	 * extra one is useful to detect uninitialized field.
 +	 */
-+	details =
-+		kzalloc(struct_size(details, exe_path, path_size), GFP_KERNEL);
-+	if (!details)
-+		return ERR_PTR(-ENOMEM);
++	size_t layer_plus_one;
++};
 +
-+	memcpy(details->exe_path, path_str, path_size);
-+	WARN_ON_ONCE(current_cred() != current_real_cred());
-+	details->pid = get_pid(task_pid(current));
-+	details->uid = from_kuid(&init_user_ns, current_uid());
-+	get_task_comm(details->comm, current);
-+	return details;
++#ifdef CONFIG_AUDIT
++
++void landlock_log_denial(const struct landlock_cred_security *const subject,
++			 const struct landlock_request *const request);
++
++#else /* CONFIG_AUDIT */
++
++static inline void
++landlock_log_denial(const struct landlock_cred_security *const subject,
++		    const struct landlock_request *const request)
++{
 +}
 +
- /**
-  * landlock_init_hierarchy_log - Partially initialize landlock_hierarchy
-  *
-  * @hierarchy: The hierarchy to initialize.
-  *
-+ * The current task is referenced as the domain that is enforcing the
-+ * restriction.  The subjective credentials must not be in an overridden state.
++#endif /* CONFIG_AUDIT */
++
++#endif /* _SECURITY_LANDLOCK_AUDIT_H */
+diff --git a/security/landlock/domain.c b/security/landlock/domain.c
+new file mode 100644
+index 000000000000..e6367933303c
+--- /dev/null
++++ b/security/landlock/domain.c
+@@ -0,0 +1,28 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Landlock - Domain management
 + *
-  * @hierarchy->parent and @hierarchy->usage should already be set.
-  */
- int landlock_init_hierarchy_log(struct landlock_hierarchy *const hierarchy)
- {
-+	struct landlock_details *details;
++ * Copyright © 2016-2020 Mickaël Salaün <mic@digikod.net>
++ * Copyright © 2018-2020 ANSSI
++ * Copyright © 2024-2025 Microsoft Corporation
++ */
 +
-+	details = get_current_details();
-+	if (IS_ERR(details))
-+		return PTR_ERR(details);
++#include "domain.h"
++#include "id.h"
 +
-+	hierarchy->details = details;
- 	hierarchy->id = landlock_get_id_range(1);
-+	hierarchy->log_status = LANDLOCK_LOG_PENDING;
-+	atomic64_set(&hierarchy->num_denials, 0);
- 	return 0;
- }
- 
-diff --git a/security/landlock/domain.h b/security/landlock/domain.h
-index f8df7103bd3d..2c6f04da3628 100644
---- a/security/landlock/domain.h
-+++ b/security/landlock/domain.h
-@@ -10,8 +10,62 @@
- #ifndef _SECURITY_LANDLOCK_DOMAIN_H
- #define _SECURITY_LANDLOCK_DOMAIN_H
- 
-+#include <linux/limits.h>
- #include <linux/mm.h>
-+#include <linux/path.h>
-+#include <linux/pid.h>
- #include <linux/refcount.h>
-+#include <linux/sched.h>
-+#include <linux/slab.h>
-+
-+#include "audit.h"
-+
-+enum landlock_log_status {
-+	LANDLOCK_LOG_PENDING = 0,
-+	LANDLOCK_LOG_RECORDED,
-+};
++#ifdef CONFIG_AUDIT
 +
 +/**
-+ * struct landlock_details - Domain's creation information
++ * landlock_init_hierarchy_log - Partially initialize landlock_hierarchy
 + *
-+ * Rarely accessed, mainly when logging the first domain's denial.
++ * @hierarchy: The hierarchy to initialize.
 + *
-+ * The contained pointers are initialized at the domain creation time and never
-+ * changed again.  Contrary to most other Landlock object types, this one is
-+ * not allocated with GFP_KERNEL_ACCOUNT because its size may not be under the
-+ * caller's control (e.g. unknown exe_path) and the data is not explicitly
-+ * requested nor used by tasks.
++ * @hierarchy->parent and @hierarchy->usage should already be set.
 + */
-+struct landlock_details {
-+	/**
-+	 * @pid: PID of the task that initially restricted itself.  It still
-+	 * identifies the same task.  Keeping a reference to this PID ensures that
-+	 * it will not be recycled.
-+	 */
-+	struct pid *pid;
-+	/**
-+	 * @uid: UID of the task that initially restricted itself, at creation time.
-+	 */
-+	uid_t uid;
-+	/**
-+	 * @comm: Command line of the task that initially restricted itself, at
-+	 * creation time.  Always NULL terminated.
-+	 */
-+	char comm[TASK_COMM_LEN];
-+	/**
-+	 * @exe_path: Executable path of the task that initially restricted
-+	 * itself, at creation time.  Always NULL terminated, and never greater
-+	 * than LANDLOCK_PATH_MAX_SIZE.
-+	 */
-+	char exe_path[];
-+};
++int landlock_init_hierarchy_log(struct landlock_hierarchy *const hierarchy)
++{
++	hierarchy->id = landlock_get_id_range(1);
++	return 0;
++}
 +
-+/* Adds 11 extra characters for the potential " (deleted)" suffix. */
-+#define LANDLOCK_PATH_MAX_SIZE (PATH_MAX + 11)
-+
-+/* Makes sure the greatest landlock_details can be allocated. */
-+static_assert(struct_size_t(struct landlock_details, exe_path,
-+			    LANDLOCK_PATH_MAX_SIZE) <= KMALLOC_MAX_SIZE);
++#endif /* CONFIG_AUDIT */
+diff --git a/security/landlock/domain.h b/security/landlock/domain.h
+index d22712e5fb0f..f8df7103bd3d 100644
+--- a/security/landlock/domain.h
++++ b/security/landlock/domain.h
+@@ -4,6 +4,7 @@
+  *
+  * Copyright © 2016-2020 Mickaël Salaün <mic@digikod.net>
+  * Copyright © 2018-2020 ANSSI
++ * Copyright © 2024-2025 Microsoft Corporation
+  */
  
- /**
-  * struct landlock_hierarchy - Node in a domain hierarchy
-@@ -29,10 +83,25 @@ struct landlock_hierarchy {
- 	refcount_t usage;
- 
- #ifdef CONFIG_AUDIT
-+	/**
-+	 * @log_status: Whether this domain should be logged or not.  Because
-+	 * concurrent log entries may be created at the same time, it is still
-+	 * possible to have several domain records of the same domain.
-+	 */
-+	enum landlock_log_status log_status;
-+	/**
-+	 * @num_denials: Number of access requests denied by this domain.
-+	 * Masked (i.e. never logged) denials are still counted.
-+	 */
-+	atomic64_t num_denials;
- 	/**
- 	 * @id: Landlock domain ID, sets once at domain creation time.
+ #ifndef _SECURITY_LANDLOCK_DOMAIN_H
+@@ -26,8 +27,29 @@ struct landlock_hierarchy {
+ 	 * domain.
  	 */
- 	u64 id;
+ 	refcount_t usage;
++
++#ifdef CONFIG_AUDIT
 +	/**
-+	 * @details: Information about the related domain.
++	 * @id: Landlock domain ID, sets once at domain creation time.
 +	 */
-+	const struct landlock_details *details;
- #endif /* CONFIG_AUDIT */
++	u64 id;
++#endif /* CONFIG_AUDIT */
  };
  
-@@ -40,6 +109,16 @@ struct landlock_hierarchy {
- 
- int landlock_init_hierarchy_log(struct landlock_hierarchy *const hierarchy);
- 
-+static inline void
-+landlock_free_hierarchy_details(struct landlock_hierarchy *const hierarchy)
-+{
-+	if (WARN_ON_ONCE(!hierarchy || !hierarchy->details))
-+		return;
++#ifdef CONFIG_AUDIT
 +
-+	put_pid(hierarchy->details->pid);
-+	kfree(hierarchy->details);
++int landlock_init_hierarchy_log(struct landlock_hierarchy *const hierarchy);
++
++#else /* CONFIG_AUDIT */
++
++static inline int
++landlock_init_hierarchy_log(struct landlock_hierarchy *const hierarchy)
++{
++	return 0;
 +}
 +
- #else /* CONFIG_AUDIT */
- 
- static inline int
-@@ -48,6 +127,11 @@ landlock_init_hierarchy_log(struct landlock_hierarchy *const hierarchy)
- 	return 0;
- }
- 
-+static inline void
-+landlock_free_hierarchy_details(struct landlock_hierarchy *const hierarchy)
-+{
-+}
++#endif /* CONFIG_AUDIT */
 +
- #endif /* CONFIG_AUDIT */
- 
  static inline void
-@@ -62,6 +146,8 @@ static inline void landlock_put_hierarchy(struct landlock_hierarchy *hierarchy)
- 	while (hierarchy && refcount_dec_and_test(&hierarchy->usage)) {
- 		const struct landlock_hierarchy *const freeme = hierarchy;
- 
-+		landlock_log_drop_domain(hierarchy);
-+		landlock_free_hierarchy_details(hierarchy);
- 		hierarchy = hierarchy->parent;
- 		kfree(freeme);
- 	}
+ landlock_get_hierarchy(struct landlock_hierarchy *const hierarchy)
+ {
 diff --git a/security/landlock/ruleset.c b/security/landlock/ruleset.c
-index f273a40e9780..ce7940efea51 100644
+index adb7f87828df..f273a40e9780 100644
 --- a/security/landlock/ruleset.c
 +++ b/security/landlock/ruleset.c
-@@ -521,6 +521,9 @@ void landlock_put_ruleset_deferred(struct landlock_ruleset *const ruleset)
-  * @parent: Parent domain.
-  * @ruleset: New ruleset to be merged.
-  *
-+ * The current task is requesting to be restricted.  The subjective credentials
-+ * must not be in an overridden state. cf. landlock_init_hierarchy_log().
-+ *
-  * Returns the intersection of @parent and @ruleset, or returns @parent if
-  * @ruleset is empty, or returns a duplicate of @ruleset if @parent is empty.
-  */
-diff --git a/security/landlock/ruleset.h b/security/landlock/ruleset.h
-index bbb5996545d2..28af42d66261 100644
---- a/security/landlock/ruleset.h
-+++ b/security/landlock/ruleset.h
-@@ -17,10 +17,11 @@
+@@ -23,6 +23,7 @@
  #include <linux/workqueue.h>
  
  #include "access.h"
--#include "domain.h"
++#include "audit.h"
+ #include "domain.h"
  #include "limits.h"
  #include "object.h"
+@@ -505,6 +506,7 @@ static void free_ruleset_work(struct work_struct *const work)
+ 	free_ruleset(ruleset);
+ }
  
-+struct landlock_hierarchy;
++/* Only called by hook_cred_free(). */
+ void landlock_put_ruleset_deferred(struct landlock_ruleset *const ruleset)
+ {
+ 	if (ruleset && refcount_dec_and_test(&ruleset->usage)) {
+@@ -564,6 +566,10 @@ landlock_merge_ruleset(struct landlock_ruleset *const parent,
+ 	if (err)
+ 		return ERR_PTR(err);
+ 
++	err = landlock_init_hierarchy_log(new_dom->hierarchy);
++	if (err)
++		return ERR_PTR(err);
 +
+ 	return no_free_ptr(new_dom);
+ }
+ 
+diff --git a/security/landlock/task.c b/security/landlock/task.c
+index 1ccd780e1354..60e2953d2c71 100644
+--- a/security/landlock/task.c
++++ b/security/landlock/task.c
+@@ -11,6 +11,7 @@
+ #include <linux/cred.h>
+ #include <linux/errno.h>
+ #include <linux/kernel.h>
++#include <linux/lsm_audit.h>
+ #include <linux/lsm_hooks.h>
+ #include <linux/rcupdate.h>
+ #include <linux/sched.h>
+@@ -18,6 +19,7 @@
+ #include <net/af_unix.h>
+ #include <net/sock.h>
+ 
++#include "audit.h"
+ #include "common.h"
+ #include "cred.h"
+ #include "domain.h"
+@@ -40,41 +42,29 @@ static bool domain_scope_le(const struct landlock_ruleset *const parent,
+ {
+ 	const struct landlock_hierarchy *walker;
+ 
++	/* Quick return for non-landlocked tasks. */
+ 	if (!parent)
+ 		return true;
++
+ 	if (!child)
+ 		return false;
++
+ 	for (walker = child->hierarchy; walker; walker = walker->parent) {
+ 		if (walker == parent->hierarchy)
+ 			/* @parent is in the scoped hierarchy of @child. */
+ 			return true;
+ 	}
++
+ 	/* There is no relationship between @parent and @child. */
+ 	return false;
+ }
+ 
+-static bool task_is_scoped(const struct task_struct *const parent,
+-			   const struct task_struct *const child)
+-{
+-	bool is_scoped;
+-	const struct landlock_ruleset *dom_parent, *dom_child;
+-
+-	rcu_read_lock();
+-	dom_parent = landlock_get_task_domain(parent);
+-	dom_child = landlock_get_task_domain(child);
+-	is_scoped = domain_scope_le(dom_parent, dom_child);
+-	rcu_read_unlock();
+-	return is_scoped;
+-}
+-
+-static int task_ptrace(const struct task_struct *const parent,
+-		       const struct task_struct *const child)
++static int domain_ptrace(const struct landlock_ruleset *const parent,
++			 const struct landlock_ruleset *const child)
+ {
+-	/* Quick return for non-landlocked tasks. */
+-	if (!landlocked(parent))
+-		return 0;
+-	if (task_is_scoped(parent, child))
++	if (domain_scope_le(parent, child))
+ 		return 0;
++
+ 	return -EPERM;
+ }
+ 
+@@ -94,7 +84,39 @@ static int task_ptrace(const struct task_struct *const parent,
+ static int hook_ptrace_access_check(struct task_struct *const child,
+ 				    const unsigned int mode)
+ {
+-	return task_ptrace(current, child);
++	const struct landlock_cred_security *parent_subject;
++	const struct landlock_ruleset *child_dom;
++	int err;
++
++	/* Quick return for non-landlocked tasks. */
++	parent_subject = landlock_cred(current_cred());
++	if (!parent_subject)
++		return 0;
++
++	scoped_guard(rcu)
++	{
++		child_dom = landlock_get_task_domain(child);
++		err = domain_ptrace(parent_subject->domain, child_dom);
++	}
++
++	if (!err)
++		return 0;
++
++	/*
++	 * For the ptrace_access_check case, we log the current/parent domain
++	 * and the child task.
++	 */
++	if (!(mode & PTRACE_MODE_NOAUDIT))
++		landlock_log_denial(parent_subject, &(struct landlock_request) {
++			.type = LANDLOCK_REQUEST_PTRACE,
++			.audit = {
++				.type = LSM_AUDIT_DATA_TASK,
++				.u.tsk = child,
++			},
++			.layer_plus_one = parent_subject->domain->num_layers,
++		});
++
++	return err;
+ }
+ 
  /**
-  * struct landlock_layer - Access rights for a given layer
+@@ -111,7 +133,35 @@ static int hook_ptrace_access_check(struct task_struct *const child,
   */
+ static int hook_ptrace_traceme(struct task_struct *const parent)
+ {
+-	return task_ptrace(parent, current);
++	const struct landlock_cred_security *parent_subject;
++	const struct landlock_ruleset *child_dom;
++	int err;
++
++	child_dom = landlock_get_current_domain();
++
++	guard(rcu)();
++	parent_subject = landlock_cred(__task_cred(parent));
++	err = domain_ptrace(parent_subject->domain, child_dom);
++
++	if (!err)
++		return 0;
++
++	/*
++	 * For the ptrace_traceme case, we log the domain which is the cause of
++	 * the denial, which means the parent domain instead of the current
++	 * domain.  This may look unusual because the ptrace_traceme action is a
++	 * request to be traced, but the semantic is consistent with
++	 * hook_ptrace_access_check().
++	 */
++	landlock_log_denial(parent_subject, &(struct landlock_request) {
++		.type = LANDLOCK_REQUEST_PTRACE,
++		.audit = {
++			.type = LSM_AUDIT_DATA_TASK,
++			.u.tsk = current,
++		},
++		.layer_plus_one = parent_subject->domain->num_layers,
++	});
++	return err;
+ }
+ 
+ /**
+@@ -130,7 +180,7 @@ static bool domain_is_scoped(const struct landlock_ruleset *const client,
+ 			     access_mask_t scope)
+ {
+ 	int client_layer, server_layer;
+-	struct landlock_hierarchy *client_walker, *server_walker;
++	const struct landlock_hierarchy *client_walker, *server_walker;
+ 
+ 	/* Quick return if client has no domain */
+ 	if (WARN_ON_ONCE(!client))
 -- 
 2.49.0
 
