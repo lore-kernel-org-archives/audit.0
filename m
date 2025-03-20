@@ -1,88 +1,190 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from smtp-8fac.mail.infomaniak.ch (smtp-8fac.mail.infomaniak.ch [83.166.143.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACCD51E47A5;
-	Thu, 20 Mar 2025 15:19:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 662881EC006
+	for <audit@vger.kernel.org>; Thu, 20 Mar 2025 19:07:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=83.166.143.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742483954; cv=none; b=RAa9rHlStrb6wexfPiH1U+4xmA6a2DRgbIg7mL0z0NqHTXi6BBoU8t2DA9TjBWWcyVToqZ1dUdnyBnaqGf49qJKPclmBU9qm5UWq16QSqzPJLZ0psxBSN3PPJ24ig4sF+ZK07c8RGFvPS6lBZknKzCDrptl35UT7KDbr4XtHBHg=
+	t=1742497657; cv=none; b=bh2yL+SdmWba0WuBs89haajEwyWCq6xYFxz10yu71wT1GnqFVzVxRiDLuEh+fcubZ21dbQ3iGhJgkxaETDh5YdVKHbuB6x6LylK7dD+wibttIttnkU5MD5NH0xldGzrseXs6Gam+d5b2SWI8IWPd6CdeSAWpDsVjchNyU423nUA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742483954; c=relaxed/simple;
-	bh=hZXFgGRtdjy9qRCbIgqxQapdBt46RdzmCE3ncomov24=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rJRmf3/vIXIAwS1wzxidlPQsKehhkHH6VWLGRMezy2m4CxaBU/euBRepoy31fzCYq68driJ1lVcgB51uyn5LaP54Fm41k3KylUfHxoR3aTwvY0PLjLp9FXtw8golD3cWgFtty25exN3UGnhJPv3km8ZExDw8pN2ZkgUEtB8Wx5I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=S+vKybcA; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1742497657; c=relaxed/simple;
+	bh=4APA0yd3c+w7p33UrZkR+u3PdFp86U0HE/ww9K2v2Ug=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=rDnE/ArKrgsD4/W+I4Bd89f9JrrKKhiCzW7dwN3jektBN+tLomDGpGWZ2XuPEJpaSNwtEfkhwentYWf1nDqlpUPLT9q0t+3H3StZUOumvqXLfvGBeaOORFBxnhk1IuEKi7IrTtozaM5b75wr6r8k8wBaNU8GMCG1SVnnZrKLZbY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=t8sb4QrQ; arc=none smtp.client-ip=83.166.143.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="S+vKybcA"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1742483953; x=1774019953;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=hZXFgGRtdjy9qRCbIgqxQapdBt46RdzmCE3ncomov24=;
-  b=S+vKybcAjt65q/ZMzfk6qKHDTC+ifI+ejlip9NE/3xozrpm3lylzmGOw
-   gQDa40AlXamagmTyoC2PGwbfuj6GhnXLCnXVzwapRa6UfGSRH60CNyVR6
-   IbjcdSNXIAGR+/4ok1VW0GYA/taHL1CYvp63PjsTPpsXWyDkVK8PPkAMW
-   QLChaJMq55ek7sG/ztqXWWFrLctk6835PDgBws6ySW3UHjTPMDuamPqHf
-   AX82NtWOATciKTdscWUdA9bt9ef+7vN2kpGboC3h4yQpYt/bdhRkMQvhz
-   Af3G6Bg7RliTVxzMvm771nAAe3Ym8/kPkhaF90ugAr8qkKBChdns8GBom
-   Q==;
-X-CSE-ConnectionGUID: 0vOE8R2OQqWth0dx/GIknQ==
-X-CSE-MsgGUID: 0At9pjUgQZ6XNwhyFI6IIw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11379"; a="43911981"
-X-IronPort-AV: E=Sophos;i="6.14,262,1736841600"; 
-   d="scan'208";a="43911981"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2025 08:19:12 -0700
-X-CSE-ConnectionGUID: GzhO3JqXQyOh/wDlLxPQ/A==
-X-CSE-MsgGUID: kPFnzCM1R56UsNfuEBPiQA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.14,262,1736841600"; 
-   d="scan'208";a="123132133"
-Received: from smile.fi.intel.com ([10.237.72.58])
-  by fmviesa007.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2025 08:19:10 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.98)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1tvHfo-00000004Fz8-0EtK;
-	Thu, 20 Mar 2025 17:19:08 +0200
-Date: Thu, 20 Mar 2025 17:19:07 +0200
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Paul Moore <paul@paul-moore.com>,
-	Casey Schaufler <casey@schaufler-ca.com>, audit@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Eric Paris <eparis@redhat.com>
-Subject: Re: [PATCH v2 1/1] audit: Mark audit_log_vformat() with __printf()
- attribute
-Message-ID: <Z9wx60LEpqN4BF5W@smile.fi.intel.com>
-References: <20250313085343.241623-1-andriy.shevchenko@linux.intel.com>
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="t8sb4QrQ"
+Received: from smtp-3-0000.mail.infomaniak.ch (unknown [IPv6:2001:1600:4:17::246b])
+	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4ZJZp56XQFzwgX;
+	Thu, 20 Mar 2025 20:07:25 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
+	s=20191114; t=1742497645;
+	bh=zr5gmFSYD1tD7fpfRv2XYUIy9g8rF8FEdaY+2pUts9w=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=t8sb4QrQAnScemqm3VR/dsDjqAgP/joYvY+9TJHKGKtYbZCjNsHrg7R248bPi4WXU
+	 2+B5vOcKw3ss65jdzQ1Dl3VinBLjcpwF9oezlD+gHjL8w837FUkGICFhWi+Ir7lcBt
+	 RSkx/AdBz/HUbsbnq3A40ZAU2ENEBxROhHzNz4o0=
+Received: from unknown by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4ZJZp46cCTzPnK;
+	Thu, 20 Mar 2025 20:07:24 +0100 (CET)
+From: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
+To: Eric Paris <eparis@redhat.com>,
+	Paul Moore <paul@paul-moore.com>,
+	=?UTF-8?q?G=C3=BCnther=20Noack?= <gnoack@google.com>,
+	"Serge E . Hallyn" <serge@hallyn.com>
+Cc: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
+	Ben Scarlato <akhna@google.com>,
+	Casey Schaufler <casey@schaufler-ca.com>,
+	Charles Zaffery <czaffery@roblox.com>,
+	Daniel Burgener <dburgener@linux.microsoft.com>,
+	Francis Laniel <flaniel@linux.microsoft.com>,
+	James Morris <jmorris@namei.org>,
+	Jann Horn <jannh@google.com>,
+	Jeff Xu <jeffxu@google.com>,
+	Jorge Lucangeli Obes <jorgelo@google.com>,
+	Kees Cook <kees@kernel.org>,
+	Konstantin Meskhidze <konstantin.meskhidze@huawei.com>,
+	Matt Bobrowski <mattbobrowski@google.com>,
+	Matthieu Buffet <matthieu@buffet.re>,
+	Mikhail Ivanov <ivanov.mikhail1@huawei-partners.com>,
+	Phil Sutter <phil@nwl.cc>,
+	Praveen K Paladugu <prapal@linux.microsoft.com>,
+	Robert Salvet <robert.salvet@roblox.com>,
+	Shervin Oloumi <enlightened@google.com>,
+	Song Liu <song@kernel.org>,
+	Tahera Fahimi <fahimitahera@gmail.com>,
+	Tingmao Wang <m@maowtm.org>,
+	Tyler Hicks <code@tyhicks.com>,
+	audit@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-security-module@vger.kernel.org
+Subject: [PATCH v7 01/28] lsm: Add audit_log_lsm_data() helper
+Date: Thu, 20 Mar 2025 20:06:50 +0100
+Message-ID: <20250320190717.2287696-2-mic@digikod.net>
+In-Reply-To: <20250320190717.2287696-1-mic@digikod.net>
+References: <20250320190717.2287696-1-mic@digikod.net>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250313085343.241623-1-andriy.shevchenko@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Infomaniak-Routing: alpha
 
-On Thu, Mar 13, 2025 at 10:52:39AM +0200, Andy Shevchenko wrote:
-> audit_log_vformat() is using printf() type of format, and GCC compiler
-> (Debian 14.2.0-17) is not happy about this:
-> 
-> kernel/audit.c:1978:9: error: function ‘audit_log_vformat’ might be a candidate for ‘gnu_printf’ format attribute [-Werror=suggest-attribute=format]
-> kernel/audit.c:1987:17: error: function ‘audit_log_vformat’ might be a candidate for ‘gnu_printf’ format attribute [-Werror=suggest-attribute=format]
-> 
-> Fix the compilation errors (`make W=1` when CONFIG_WERROR=y, which is default)
-> by adding __printf() attribute.
+Extract code from dump_common_audit_data() into the audit_log_lsm_data()
+helper. This helps reuse common LSM audit data while not abusing
+AUDIT_AVC records because of the common_lsm_audit() helper.
 
-Any comments on this? Can it be applied?
+Cc: Casey Schaufler <casey@schaufler-ca.com>
+Cc: James Morris <jmorris@namei.org>
+Cc: Serge E. Hallyn <serge@hallyn.com>
+Acked-by: Paul Moore <paul@paul-moore.com>
+Depends-on: 7ccbe076d987 ("lsm: Only build lsm_audit.c if CONFIG_SECURITY and CONFIG_AUDIT are set")
+Signed-off-by: Mickaël Salaün <mic@digikod.net>
+---
 
+Changes since v4:
+- Add Depends-on tag.
+
+Changes since v3:
+- Rebase on top of the v6.13's get_task_comm() fix.
+- Add Acked-by Paul.
+
+Changes since v1:
+- Fix commit message (spotted by Paul).
+- Constify dump_common_audit_data()'s and audit_log_lsm_data()'s "a"
+  argument.
+- Fix build without CONFIG_NET: see previous patch.
+---
+ include/linux/lsm_audit.h |  8 ++++++++
+ security/lsm_audit.c      | 27 ++++++++++++++++++---------
+ 2 files changed, 26 insertions(+), 9 deletions(-)
+
+diff --git a/include/linux/lsm_audit.h b/include/linux/lsm_audit.h
+index e13d2f947b51..bddd694f7c4c 100644
+--- a/include/linux/lsm_audit.h
++++ b/include/linux/lsm_audit.h
+@@ -132,6 +132,9 @@ void common_lsm_audit(struct common_audit_data *a,
+ 	void (*pre_audit)(struct audit_buffer *, void *),
+ 	void (*post_audit)(struct audit_buffer *, void *));
+ 
++void audit_log_lsm_data(struct audit_buffer *ab,
++			const struct common_audit_data *a);
++
+ #else /* CONFIG_AUDIT */
+ 
+ static inline void common_lsm_audit(struct common_audit_data *a,
+@@ -140,6 +143,11 @@ static inline void common_lsm_audit(struct common_audit_data *a,
+ {
+ }
+ 
++static inline void audit_log_lsm_data(struct audit_buffer *ab,
++			const struct common_audit_data *a)
++{
++}
++
+ #endif /* CONFIG_AUDIT */
+ 
+ #endif
+diff --git a/security/lsm_audit.c b/security/lsm_audit.c
+index 52db886dbba8..a61c7ebdb6a7 100644
+--- a/security/lsm_audit.c
++++ b/security/lsm_audit.c
+@@ -189,16 +189,13 @@ static inline void print_ipv4_addr(struct audit_buffer *ab, __be32 addr,
+ }
+ 
+ /**
+- * dump_common_audit_data - helper to dump common audit data
++ * audit_log_lsm_data - helper to log common LSM audit data
+  * @ab : the audit buffer
+  * @a : common audit data
+- *
+  */
+-static void dump_common_audit_data(struct audit_buffer *ab,
+-				   struct common_audit_data *a)
++void audit_log_lsm_data(struct audit_buffer *ab,
++			const struct common_audit_data *a)
+ {
+-	char comm[sizeof(current->comm)];
+-
+ 	/*
+ 	 * To keep stack sizes in check force programmers to notice if they
+ 	 * start making this union too large!  See struct lsm_network_audit
+@@ -206,9 +203,6 @@ static void dump_common_audit_data(struct audit_buffer *ab,
+ 	 */
+ 	BUILD_BUG_ON(sizeof(a->u) > sizeof(void *)*2);
+ 
+-	audit_log_format(ab, " pid=%d comm=", task_tgid_nr(current));
+-	audit_log_untrustedstring(ab, get_task_comm(comm, current));
+-
+ 	switch (a->type) {
+ 	case LSM_AUDIT_DATA_NONE:
+ 		return;
+@@ -431,6 +425,21 @@ static void dump_common_audit_data(struct audit_buffer *ab,
+ 	} /* switch (a->type) */
+ }
+ 
++/**
++ * dump_common_audit_data - helper to dump common audit data
++ * @ab : the audit buffer
++ * @a : common audit data
++ */
++static void dump_common_audit_data(struct audit_buffer *ab,
++				   const struct common_audit_data *a)
++{
++	char comm[sizeof(current->comm)];
++
++	audit_log_format(ab, " pid=%d comm=", task_tgid_nr(current));
++	audit_log_untrustedstring(ab, get_task_comm(comm, current));
++	audit_log_lsm_data(ab, a);
++}
++
+ /**
+  * common_lsm_audit - generic LSM auditing function
+  * @a:  auxiliary audit data
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.49.0
 
