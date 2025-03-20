@@ -1,33 +1,33 @@
-Received: from smtp-bc0f.mail.infomaniak.ch (smtp-bc0f.mail.infomaniak.ch [45.157.188.15])
+Received: from smtp-8faa.mail.infomaniak.ch (smtp-8faa.mail.infomaniak.ch [83.166.143.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9775622DFA0
-	for <audit@vger.kernel.org>; Thu, 20 Mar 2025 19:07:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.157.188.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98B4922F389
+	for <audit@vger.kernel.org>; Thu, 20 Mar 2025 19:08:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=83.166.143.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742497681; cv=none; b=PWNN5A9+h5sALrbbh0Xq0dpfbFqmSSvcJSyQVRNn1VrNFKcyGUTQvtJp2GvLyc2tmmyaH91bE/RPCdT57q0fbP9JtxqTUy7BPmngHFLkdWDYWXmyThMhPPBljsKDFaRxdlkoZYJpULb3XCE7J7GSSGwGUZchPJC3fZdCHPoS4Hg=
+	t=1742497685; cv=none; b=FNHqhIUJ1K+7gdcHcFPmnRyfh4kqbK1TNGjA4x3lgx3xJZkLawcmkol1WCXy7RVBrs7oFsZ4fukKm0NOptFeJBsK4dbum4S6/0+IraIrZLSw426WDquqKEt1LITAT1r7lzjICKSW6jI6T27XflIrf2jlfAO3hXluqfvUdp/SsVQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742497681; c=relaxed/simple;
-	bh=5wSp16PzXW25jQHwWtDQzWvXn57TRsLbcOkap5zElVY=;
+	s=arc-20240116; t=1742497685; c=relaxed/simple;
+	bh=o32z6dIuawc+cy907aPku4fhUOEpTl5pGyJZOx4r3u8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=UBqL/vs7NtEC/JsEKMTa7wYmp2uPsZQrrZxARS1NTF+QFswZGQ6W6VknwMLvPwrL/bFrLTqc6MUZ0a/prrWQifcpcDNmCtLWk8qmvA8gMH0i3m2poqmvHKP8Yi0dYtks7banOWjJBphJlaYcqYa3+GRY981H/960b/6MlMJneQM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=OKU40taV; arc=none smtp.client-ip=45.157.188.15
+	 MIME-Version:Content-Type; b=CEGDd5nrl1bbSzh9jDJkJ/mM/V1knxbelZTq46wtltF3hZbM9iJ5m+PKyImVIIf6ZvIOy+9pHT5P3Kx0QW1EkrtEH06Y1uPQvwO9BVkc84KY1knkx+W72YUMueeuhztwuFXIfb7TesixCw7IzAOJsz+5i3DWdx9Ah8tcU56U2ZM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=JXG+A4DP; arc=none smtp.client-ip=83.166.143.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="OKU40taV"
-Received: from smtp-4-0000.mail.infomaniak.ch (unknown [IPv6:2001:1600:7:10:40ca:feff:fe05:0])
-	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4ZJZpj6vvwzK0k;
-	Thu, 20 Mar 2025 20:07:57 +0100 (CET)
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="JXG+A4DP"
+Received: from smtp-3-0001.mail.infomaniak.ch (unknown [IPv6:2001:1600:4:17::246c])
+	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4ZJZpm6kPSzvmR;
+	Thu, 20 Mar 2025 20:08:00 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
-	s=20191114; t=1742497677;
-	bh=74ouMiX4giVyHf7pbwBfSsgmdEoGD0LYiGig71u+SKs=;
+	s=20191114; t=1742497680;
+	bh=ykmvepjRGXuTbOiW14n8Z+TDB99kFTkRkeI512o0QkU=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=OKU40taVi3Xur8MFY6eJFnaXshLfzl9O/lEZ5Mjvy55raWDnZZSFx7AzPuz0HeGDL
-	 tw9Zmcr/dWVeQX3mfR6ty6yoeLlhuV5hgoDuQ1CoHExYRJrp5aNRtxdeFP0RiXrn4/
-	 LFr0jMHe3CGEQVF2TaqmNiVjZs771w5i+UrbrFj4=
-Received: from unknown by smtp-4-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4ZJZpj0Rv9z6P6;
-	Thu, 20 Mar 2025 20:07:57 +0100 (CET)
+	b=JXG+A4DPyRNaCwxeenevxVEYtgyeJEl9LksM8TwBg3RFedf95orrJf3lmh77/vh6R
+	 cGdDMCf64R9rNlQXkav8zRA173/bn9yt9tF6bwpgF3TdZgj/RXEK2KvfSNhepi8fJR
+	 kJVtaW0sJhz4Ei9n7ZC3t4X+8U+I7idht/Kg3Qeo=
+Received: from unknown by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4ZJZpm0W1bzBxH;
+	Thu, 20 Mar 2025 20:08:00 +0100 (CET)
 From: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
 To: Eric Paris <eparis@redhat.com>,
 	Paul Moore <paul@paul-moore.com>,
@@ -59,9 +59,9 @@ Cc: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
 	audit@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-security-module@vger.kernel.org
-Subject: [PATCH v7 21/28] selftests/landlock: Extend tests for landlock_restrict_self(2)'s flags
-Date: Thu, 20 Mar 2025 20:07:10 +0100
-Message-ID: <20250320190717.2287696-22-mic@digikod.net>
+Subject: [PATCH v7 23/28] selftests/landlock: Test audit with restrict flags
+Date: Thu, 20 Mar 2025 20:07:12 +0100
+Message-ID: <20250320190717.2287696-24-mic@digikod.net>
 In-Reply-To: <20250320190717.2287696-1-mic@digikod.net>
 References: <20250320190717.2287696-1-mic@digikod.net>
 Precedence: bulk
@@ -74,122 +74,452 @@ Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Infomaniak-Routing: alpha
 
-Add the base_test's restrict_self_fd_flags tests to align with previous
-restrict_self_fd tests but with the new
-LANDLOCK_RESTRICT_SELF_LOG_SUBDOMAINS_OFF flag.
+Add audit_exec tests to filter Landlock denials according to
+cross-execution or muted subdomains.
 
-Add the restrict_self_flags tests to check that
-LANDLOCK_RESTRICT_SELF_LOG_SAME_EXEC_OFF,
-LANDLOCK_RESTRICT_SELF_LOG_NEW_EXEC_ON, and
-LANDLOCK_RESTRICT_SELF_LOG_SUBDOMAINS_OFF are valid but not the next
-bit.  Some checks are similar to restrict_self_checks_ordering's ones.
+Add a wait-pipe-sandbox.c test program to sandbox itself and send a
+(denied) signals to its parent.
 
 Cc: Günther Noack <gnoack@google.com>
 Cc: Paul Moore <paul@paul-moore.com>
 Signed-off-by: Mickaël Salaün <mic@digikod.net>
 ---
 
+Changes since v6:
+- Check audit_count_records() calls for audit errors.
+- Simplify matches_log_fs_read_root().
+- Update .gitignore
+
 Changes since v5:
-- Rename restrict flags.
-- Update LANDLOCK_RESTRICT_SELF_LOG_SUBDOMAINS_OFF test to pass with -1
-  as ruleset FD, and flag ordering.
-- Add restrict_self_fd_flags tests.
+- Rename audit_exec.flags to audit_exec.signal_and_open .
 
 Changes since v4:
-- Update with LANDLOCK_RESTRICT_SELF_QUIET_SUBDOMAINS, and
-  LANDLOCK_RESTRICT_SELF_LOG_CROSS_EXEC.
+- Revamp to test the Landlock syscall flags instead of the audit rules.
+- Copy wait-pipe.c to wait-pipe-sandbox.c and extend it.
+- Fix regex.
 
 Changes since v3:
-- Use a last_flag variable.
-
-Changes since v2:
 - New patch.
 ---
- tools/testing/selftests/landlock/base_test.c | 71 ++++++++++++++++++++
- 1 file changed, 71 insertions(+)
+ tools/testing/selftests/landlock/.gitignore   |   1 +
+ tools/testing/selftests/landlock/Makefile     |   6 +-
+ tools/testing/selftests/landlock/audit_test.c | 219 ++++++++++++++++++
+ tools/testing/selftests/landlock/common.h     |   1 +
+ .../selftests/landlock/wait-pipe-sandbox.c    | 131 +++++++++++
+ 5 files changed, 357 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/landlock/wait-pipe-sandbox.c
 
-diff --git a/tools/testing/selftests/landlock/base_test.c b/tools/testing/selftests/landlock/base_test.c
-index cb13416533d2..c75ac925b912 100644
---- a/tools/testing/selftests/landlock/base_test.c
-+++ b/tools/testing/selftests/landlock/base_test.c
-@@ -280,6 +280,77 @@ TEST(restrict_self_fd)
- 	EXPECT_EQ(EBADFD, errno);
+diff --git a/tools/testing/selftests/landlock/.gitignore b/tools/testing/selftests/landlock/.gitignore
+index 335b2b1a3463..a820329cae0d 100644
+--- a/tools/testing/selftests/landlock/.gitignore
++++ b/tools/testing/selftests/landlock/.gitignore
+@@ -2,3 +2,4 @@
+ /sandbox-and-launch
+ /true
+ /wait-pipe
++/wait-pipe-sandbox
+diff --git a/tools/testing/selftests/landlock/Makefile b/tools/testing/selftests/landlock/Makefile
+index 5cb0828f0514..a3f449914bf9 100644
+--- a/tools/testing/selftests/landlock/Makefile
++++ b/tools/testing/selftests/landlock/Makefile
+@@ -10,7 +10,11 @@ src_test := $(wildcard *_test.c)
+ 
+ TEST_GEN_PROGS := $(src_test:.c=)
+ 
+-TEST_GEN_PROGS_EXTENDED := true sandbox-and-launch wait-pipe
++TEST_GEN_PROGS_EXTENDED := \
++	true \
++	sandbox-and-launch \
++	wait-pipe \
++	wait-pipe-sandbox
+ 
+ # Short targets:
+ $(TEST_GEN_PROGS): LDLIBS += -lcap -lpthread
+diff --git a/tools/testing/selftests/landlock/audit_test.c b/tools/testing/selftests/landlock/audit_test.c
+index 59764dc18ecb..a0643070c403 100644
+--- a/tools/testing/selftests/landlock/audit_test.c
++++ b/tools/testing/selftests/landlock/audit_test.c
+@@ -7,7 +7,9 @@
+ 
+ #define _GNU_SOURCE
+ #include <errno.h>
++#include <limits.h>
+ #include <linux/landlock.h>
++#include <stdlib.h>
+ #include <sys/mount.h>
+ #include <sys/prctl.h>
+ #include <sys/types.h>
+@@ -329,4 +331,221 @@ TEST_F(audit_flags, signal)
+ 	}
  }
  
-+TEST(restrict_self_fd_flags)
++static int matches_log_fs_read_root(int audit_fd)
 +{
-+	int fd;
++	return audit_match_record(
++		audit_fd, AUDIT_LANDLOCK_ACCESS,
++		REGEX_LANDLOCK_PREFIX
++		" blockers=fs\\.read_dir path=\"/\" dev=\"[^\"]\\+\" ino=[0-9]\\+$",
++		NULL);
++}
 +
-+	fd = open("/dev/null", O_RDONLY | O_CLOEXEC);
-+	ASSERT_LE(0, fd);
++FIXTURE(audit_exec)
++{
++	struct audit_filter audit_filter;
++	int audit_fd;
++};
++
++FIXTURE_VARIANT(audit_exec)
++{
++	const int restrict_flags;
++};
++
++/* clang-format off */
++FIXTURE_VARIANT_ADD(audit_exec, default) {
++	/* clang-format on */
++	.restrict_flags = 0,
++};
++
++/* clang-format off */
++FIXTURE_VARIANT_ADD(audit_exec, same_exec_off) {
++	/* clang-format on */
++	.restrict_flags = LANDLOCK_RESTRICT_SELF_LOG_SAME_EXEC_OFF,
++};
++
++/* clang-format off */
++FIXTURE_VARIANT_ADD(audit_exec, subdomains_off) {
++	/* clang-format on */
++	.restrict_flags = LANDLOCK_RESTRICT_SELF_LOG_SUBDOMAINS_OFF,
++};
++
++/* clang-format off */
++FIXTURE_VARIANT_ADD(audit_exec, cross_exec_on) {
++	/* clang-format on */
++	.restrict_flags = LANDLOCK_RESTRICT_SELF_LOG_NEW_EXEC_ON,
++};
++
++/* clang-format off */
++FIXTURE_VARIANT_ADD(audit_exec, subdomains_off_and_cross_exec_on) {
++	/* clang-format on */
++	.restrict_flags = LANDLOCK_RESTRICT_SELF_LOG_SUBDOMAINS_OFF |
++			  LANDLOCK_RESTRICT_SELF_LOG_NEW_EXEC_ON,
++};
++
++FIXTURE_SETUP(audit_exec)
++{
++	disable_caps(_metadata);
++	set_cap(_metadata, CAP_AUDIT_CONTROL);
++
++	self->audit_fd = audit_init();
++	EXPECT_LE(0, self->audit_fd)
++	{
++		const char *error_msg;
++
++		/* kill "$(auditctl -s | sed -ne 's/^pid \([0-9]\+\)$/\1/p')" */
++		if (self->audit_fd == -EEXIST)
++			error_msg = "socket already in use (e.g. auditd)";
++		else
++			error_msg = strerror(-self->audit_fd);
++		TH_LOG("Failed to initialize audit: %s", error_msg);
++	}
++
++	/* Applies test filter for the bin_wait_pipe_sandbox program. */
++	EXPECT_EQ(0, audit_init_filter_exe(&self->audit_filter,
++					   bin_wait_pipe_sandbox));
++	EXPECT_EQ(0, audit_filter_exe(self->audit_fd, &self->audit_filter,
++				      AUDIT_ADD_RULE));
++
++	clear_cap(_metadata, CAP_AUDIT_CONTROL);
++}
++
++FIXTURE_TEARDOWN(audit_exec)
++{
++	set_cap(_metadata, CAP_AUDIT_CONTROL);
++	EXPECT_EQ(0, audit_filter_exe(self->audit_fd, &self->audit_filter,
++				      AUDIT_DEL_RULE));
++	clear_cap(_metadata, CAP_AUDIT_CONTROL);
++	EXPECT_EQ(0, close(self->audit_fd));
++}
++
++TEST_F(audit_exec, signal_and_open)
++{
++	struct audit_records records;
++	int pipe_child[2], pipe_parent[2];
++	char buf_parent;
++	pid_t child;
++	int status;
++
++	ASSERT_EQ(0, pipe2(pipe_child, 0));
++	ASSERT_EQ(0, pipe2(pipe_parent, 0));
++
++	child = fork();
++	ASSERT_LE(0, child);
++	if (child == 0) {
++		const struct landlock_ruleset_attr layer1 = {
++			.scoped = LANDLOCK_SCOPE_SIGNAL,
++		};
++		char pipe_child_str[12], pipe_parent_str[12];
++		char *const argv[] = { (char *)bin_wait_pipe_sandbox,
++				       pipe_child_str, pipe_parent_str, NULL };
++		int ruleset_fd;
++
++		/* Passes the pipe FDs to the executed binary. */
++		EXPECT_EQ(0, close(pipe_child[0]));
++		EXPECT_EQ(0, close(pipe_parent[1]));
++		snprintf(pipe_child_str, sizeof(pipe_child_str), "%d",
++			 pipe_child[1]);
++		snprintf(pipe_parent_str, sizeof(pipe_parent_str), "%d",
++			 pipe_parent[0]);
++
++		ruleset_fd =
++			landlock_create_ruleset(&layer1, sizeof(layer1), 0);
++		if (ruleset_fd < 0) {
++			perror("Failed to create a ruleset");
++			_exit(1);
++		}
++		prctl(PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0);
++		if (landlock_restrict_self(ruleset_fd,
++					   variant->restrict_flags)) {
++			perror("Failed to restrict self");
++			_exit(1);
++		}
++		close(ruleset_fd);
++
++		ASSERT_EQ(0, execve(argv[0], argv, NULL))
++		{
++			TH_LOG("Failed to execute \"%s\": %s", argv[0],
++			       strerror(errno));
++		};
++		_exit(1);
++		return;
++	}
++
++	EXPECT_EQ(0, close(pipe_child[1]));
++	EXPECT_EQ(0, close(pipe_parent[0]));
++
++	/* Waits for the child. */
++	EXPECT_EQ(1, read(pipe_child[0], &buf_parent, 1));
++
++	/* Tests that there was no denial until now. */
++	EXPECT_EQ(0, audit_count_records(self->audit_fd, &records));
++	EXPECT_EQ(0, records.access);
++	EXPECT_EQ(0, records.domain);
 +
 +	/*
-+	 * LANDLOCK_RESTRICT_SELF_LOG_SUBDOMAINS_OFF accepts -1 but not any file
-+	 * descriptor.
++	 * Wait for the child to do a first denied action by layer1 and
++	 * sandbox itself with layer2.
 +	 */
-+	EXPECT_EQ(-1, landlock_restrict_self(
-+			      fd, LANDLOCK_RESTRICT_SELF_LOG_SUBDOMAINS_OFF));
-+	EXPECT_EQ(EBADFD, errno);
++	EXPECT_EQ(1, write(pipe_parent[1], ".", 1));
++	EXPECT_EQ(1, read(pipe_child[0], &buf_parent, 1));
++
++	/* Tests that the audit record only matches the child. */
++	if (variant->restrict_flags & LANDLOCK_RESTRICT_SELF_LOG_NEW_EXEC_ON) {
++		/* Matches the current domain. */
++		EXPECT_EQ(0, matches_log_signal(_metadata, self->audit_fd,
++						getpid(), NULL));
++	}
++
++	/* Checks that we didn't miss anything. */
++	EXPECT_EQ(0, audit_count_records(self->audit_fd, &records));
++	EXPECT_EQ(0, records.access);
++
++	/*
++	 * Wait for the child to do a second denied action by layer1 and
++	 * layer2, and sandbox itself with layer3.
++	 */
++	EXPECT_EQ(1, write(pipe_parent[1], ".", 1));
++	EXPECT_EQ(1, read(pipe_child[0], &buf_parent, 1));
++
++	/* Tests that the audit record only matches the child. */
++	if (variant->restrict_flags & LANDLOCK_RESTRICT_SELF_LOG_NEW_EXEC_ON) {
++		/* Matches the current domain. */
++		EXPECT_EQ(0, matches_log_signal(_metadata, self->audit_fd,
++						getpid(), NULL));
++	}
++
++	if (!(variant->restrict_flags &
++	      LANDLOCK_RESTRICT_SELF_LOG_SUBDOMAINS_OFF)) {
++		/* Matches the child domain. */
++		EXPECT_EQ(0, matches_log_fs_read_root(self->audit_fd));
++	}
++
++	/* Checks that we didn't miss anything. */
++	EXPECT_EQ(0, audit_count_records(self->audit_fd, &records));
++	EXPECT_EQ(0, records.access);
++
++	/* Waits for the child to terminate. */
++	EXPECT_EQ(1, write(pipe_parent[1], ".", 1));
++	ASSERT_EQ(child, waitpid(child, &status, 0));
++	ASSERT_EQ(1, WIFEXITED(status));
++	ASSERT_EQ(0, WEXITSTATUS(status));
++
++	/* Tests that the audit record only matches the child. */
++	if (!(variant->restrict_flags &
++	      LANDLOCK_RESTRICT_SELF_LOG_SUBDOMAINS_OFF)) {
++		/*
++		 * Matches the child domains, which tests that the
++		 * llcred->domain_exec bitmask is correctly updated with a new
++		 * domain.
++		 */
++		EXPECT_EQ(0, matches_log_fs_read_root(self->audit_fd));
++		EXPECT_EQ(0, matches_log_signal(_metadata, self->audit_fd,
++						getpid(), NULL));
++	}
++
++	/* Checks that we didn't miss anything. */
++	EXPECT_EQ(0, audit_count_records(self->audit_fd, &records));
++	EXPECT_EQ(0, records.access);
 +}
 +
-+TEST(restrict_self_flags)
-+{
-+	const __u32 last_flag = LANDLOCK_RESTRICT_SELF_LOG_SUBDOMAINS_OFF;
-+
-+	/* Tests invalid flag combinations. */
-+
-+	EXPECT_EQ(-1, landlock_restrict_self(-1, last_flag << 1));
-+	EXPECT_EQ(EINVAL, errno);
-+
-+	EXPECT_EQ(-1, landlock_restrict_self(-1, -1));
-+	EXPECT_EQ(EINVAL, errno);
-+
-+	/* Tests valid flag combinations. */
-+
-+	EXPECT_EQ(-1, landlock_restrict_self(-1, 0));
-+	EXPECT_EQ(EBADF, errno);
-+
-+	EXPECT_EQ(-1, landlock_restrict_self(
-+			      -1, LANDLOCK_RESTRICT_SELF_LOG_SAME_EXEC_OFF));
-+	EXPECT_EQ(EBADF, errno);
-+
-+	EXPECT_EQ(-1,
-+		  landlock_restrict_self(
-+			  -1,
-+			  LANDLOCK_RESTRICT_SELF_LOG_SAME_EXEC_OFF |
-+				  LANDLOCK_RESTRICT_SELF_LOG_SUBDOMAINS_OFF));
-+	EXPECT_EQ(EBADF, errno);
-+
-+	EXPECT_EQ(-1,
-+		  landlock_restrict_self(
-+			  -1,
-+			  LANDLOCK_RESTRICT_SELF_LOG_NEW_EXEC_ON |
-+				  LANDLOCK_RESTRICT_SELF_LOG_SUBDOMAINS_OFF));
-+	EXPECT_EQ(EBADF, errno);
-+
-+	EXPECT_EQ(-1, landlock_restrict_self(
-+			      -1, LANDLOCK_RESTRICT_SELF_LOG_NEW_EXEC_ON));
-+	EXPECT_EQ(EBADF, errno);
-+
-+	EXPECT_EQ(-1,
-+		  landlock_restrict_self(
-+			  -1, LANDLOCK_RESTRICT_SELF_LOG_SAME_EXEC_OFF |
-+				      LANDLOCK_RESTRICT_SELF_LOG_NEW_EXEC_ON));
-+	EXPECT_EQ(EBADF, errno);
-+
-+	/* Tests with an invalid ruleset_fd. */
-+
-+	EXPECT_EQ(-1, landlock_restrict_self(
-+			      -2, LANDLOCK_RESTRICT_SELF_LOG_SUBDOMAINS_OFF));
-+	EXPECT_EQ(EBADF, errno);
-+
-+	EXPECT_EQ(0, landlock_restrict_self(
-+			     -1, LANDLOCK_RESTRICT_SELF_LOG_SUBDOMAINS_OFF));
-+}
-+
- TEST(ruleset_fd_io)
+ TEST_HARNESS_MAIN
+diff --git a/tools/testing/selftests/landlock/common.h b/tools/testing/selftests/landlock/common.h
+index 54b6f80fc697..6e1d143ddfa7 100644
+--- a/tools/testing/selftests/landlock/common.h
++++ b/tools/testing/selftests/landlock/common.h
+@@ -31,6 +31,7 @@
+ 
+ static const char bin_sandbox_and_launch[] = "./sandbox-and-launch";
+ static const char bin_wait_pipe[] = "./wait-pipe";
++static const char bin_wait_pipe_sandbox[] = "./wait-pipe-sandbox";
+ 
+ static void _init_caps(struct __test_metadata *const _metadata, bool drop_all)
  {
- 	struct landlock_ruleset_attr ruleset_attr = {
+diff --git a/tools/testing/selftests/landlock/wait-pipe-sandbox.c b/tools/testing/selftests/landlock/wait-pipe-sandbox.c
+new file mode 100644
+index 000000000000..87dbc9164430
+--- /dev/null
++++ b/tools/testing/selftests/landlock/wait-pipe-sandbox.c
+@@ -0,0 +1,131 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Write in a pipe, wait, sandbox itself, test sandboxing, and wait again.
++ *
++ * Used by audit_exec.flags from audit_test.c
++ *
++ * Copyright © 2024-2025 Microsoft Corporation
++ */
++
++#define _GNU_SOURCE
++#include <fcntl.h>
++#include <linux/landlock.h>
++#include <linux/prctl.h>
++#include <signal.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <sys/prctl.h>
++#include <unistd.h>
++
++#include "wrappers.h"
++
++static int sync_with(int pipe_child, int pipe_parent)
++{
++	char buf;
++
++	/* Signals that we are waiting. */
++	if (write(pipe_child, ".", 1) != 1) {
++		perror("Failed to write to first argument");
++		return 1;
++	}
++
++	/* Waits for the parent do its test. */
++	if (read(pipe_parent, &buf, 1) != 1) {
++		perror("Failed to write to the second argument");
++		return 1;
++	}
++
++	return 0;
++}
++
++int main(int argc, char *argv[])
++{
++	const struct landlock_ruleset_attr layer2 = {
++		.handled_access_fs = LANDLOCK_ACCESS_FS_READ_DIR,
++	};
++	const struct landlock_ruleset_attr layer3 = {
++		.scoped = LANDLOCK_SCOPE_SIGNAL,
++	};
++	int err, pipe_child, pipe_parent, ruleset_fd;
++
++	/* The first argument must be the file descriptor number of a pipe. */
++	if (argc != 3) {
++		fprintf(stderr, "Wrong number of arguments (not two)\n");
++		return 1;
++	}
++
++	pipe_child = atoi(argv[1]);
++	pipe_parent = atoi(argv[2]);
++	/* PR_SET_NO_NEW_PRIVS already set by parent. */
++
++	/* First step to test parent's layer1. */
++	err = sync_with(pipe_child, pipe_parent);
++	if (err)
++		return err;
++
++	/* Tries to send a signal, denied by layer1. */
++	if (!kill(getppid(), 0)) {
++		fprintf(stderr, "Successfully sent a signal to the parent");
++		return 1;
++	}
++
++	/* Second step to test parent's layer1 and our layer2. */
++	err = sync_with(pipe_child, pipe_parent);
++	if (err)
++		return err;
++
++	ruleset_fd = landlock_create_ruleset(&layer2, sizeof(layer2), 0);
++	if (ruleset_fd < 0) {
++		perror("Failed to create the layer2 ruleset");
++		return 1;
++	}
++
++	if (landlock_restrict_self(ruleset_fd, 0)) {
++		perror("Failed to restrict self");
++		return 1;
++	}
++	close(ruleset_fd);
++
++	/* Tries to send a signal, denied by layer1. */
++	if (!kill(getppid(), 0)) {
++		fprintf(stderr, "Successfully sent a signal to the parent");
++		return 1;
++	}
++
++	/* Tries to open ., denied by layer2. */
++	if (open("/", O_RDONLY | O_DIRECTORY | O_CLOEXEC) >= 0) {
++		fprintf(stderr, "Successfully opened /");
++		return 1;
++	}
++
++	/* Third step to test our layer2 and layer3. */
++	err = sync_with(pipe_child, pipe_parent);
++	if (err)
++		return err;
++
++	ruleset_fd = landlock_create_ruleset(&layer3, sizeof(layer3), 0);
++	if (ruleset_fd < 0) {
++		perror("Failed to create the layer3 ruleset");
++		return 1;
++	}
++
++	if (landlock_restrict_self(ruleset_fd, 0)) {
++		perror("Failed to restrict self");
++		return 1;
++	}
++	close(ruleset_fd);
++
++	/* Tries to open ., denied by layer2. */
++	if (open("/", O_RDONLY | O_DIRECTORY | O_CLOEXEC) >= 0) {
++		fprintf(stderr, "Successfully opened /");
++		return 1;
++	}
++
++	/* Tries to send a signal, denied by layer3. */
++	if (!kill(getppid(), 0)) {
++		fprintf(stderr, "Successfully sent a signal to the parent");
++		return 1;
++	}
++
++	return 0;
++}
 -- 
 2.49.0
 
