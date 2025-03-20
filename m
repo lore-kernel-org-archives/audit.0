@@ -1,33 +1,33 @@
-Received: from smtp-8fab.mail.infomaniak.ch (smtp-8fab.mail.infomaniak.ch [83.166.143.171])
+Received: from smtp-190a.mail.infomaniak.ch (smtp-190a.mail.infomaniak.ch [185.125.25.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9A9522D4D1
-	for <audit@vger.kernel.org>; Thu, 20 Mar 2025 19:07:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=83.166.143.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 348B82288F9
+	for <audit@vger.kernel.org>; Thu, 20 Mar 2025 19:07:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.25.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742497677; cv=none; b=N7kUMUQB20CFYFstmis4n+FSKglbvWu0ePlyedO0tiEgbtopuT5XuOHUeju+f63fcHw95nCkiAz1+BLR+9C7veIagYJWUgdGjm9HvIkL+9vSdoCYQ4BPH3H7DqRtkx24wFEpmnT4q6cP0Z+AmB2tDiHYvDfrmcodc4OBnpdHp/U=
+	t=1742497677; cv=none; b=Znvnsm+q4nN6mDo5LscDi3rmFWDm3IgUjUk3iMt31AtMcUNbyvI1uVqnrNa7nM7yJKpCRjU1/FV3UFwKsT7AtTxngPVUAW8BAmRkcQ4FiJrpOyKf6r+j7C8riSOixk8yhWahUlPCCh8b59rkOKBW1F/0MM2/XL7iMlwv3fZgoA8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1742497677; c=relaxed/simple;
-	bh=7flhWP8ygpcvAmUbY85qVo1LcnNeczBMgOiTvpScqak=;
+	bh=UZgrTKwwnpZMru3hFB6cWmjZEpSfr1aJxv1aOn5i/co=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=XXvZitX/H0Yjz0DebVEKvZbXYuJldyZv4hlvuIm2bSnXnQmQzBEW6lG1vlIz/0fZB+fs20rokGFi+vvfPJTz//oEITf9xBQP2NFEOZVllC6zvatusQlBAIKWsqxlxO2XOfVy/FU9ebhjgmYQ48JO824UeByZc94ChKOGIPuqqpo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=MLAjprmN; arc=none smtp.client-ip=83.166.143.171
+	 MIME-Version:Content-Type; b=DpdRol5ObP3x6tZeNDhP23G7oTG+QL6HNtvxK+EOJ0insuFCKAIFiufbIRP0oXYY7efQEhtfyb1TW154WpGfXrnAIroR25XziY8LpCd0X1a9+TJDozKrNnv5aJic0JGr7XK0sraW0vISKMtcaarj7njC5BUkdk6e12sm0Rl3Xe8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=jFWadMAE; arc=none smtp.client-ip=185.125.25.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="MLAjprmN"
-Received: from smtp-4-0000.mail.infomaniak.ch (unknown [IPv6:2001:1600:7:10:40ca:feff:fe05:0])
-	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4ZJZpd2hyZzHj6;
-	Thu, 20 Mar 2025 20:07:53 +0100 (CET)
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="jFWadMAE"
+Received: from smtp-3-0001.mail.infomaniak.ch (smtp-3-0001.mail.infomaniak.ch [10.4.36.108])
+	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4ZJZpX25T2zxvJ;
+	Thu, 20 Mar 2025 20:07:48 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
-	s=20191114; t=1742497673;
-	bh=nNswpTtD18zUqILHBB9Imp9vJiNfAbZ/1aLoVvoOLNQ=;
+	s=20191114; t=1742497668;
+	bh=YrYB2X4cLWgBwHHGFEMnc1idqQl0CQlMHetQ1DDbagU=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=MLAjprmNV//6/HbewYtCglZ+lDi/jBc3nKCKSkYZYcQgtJ7S9Q+f3sTuy37fUmjvb
-	 5k9jl16Xn0uHdPTO9lzf9YAHkH7FadL8JxzQ0WN6p9aP8V8tL0u5rrnGqpGKRXGVl/
-	 97pDosVl3jitE5ohDbUV656SYt+Nhq7gKsqqkKgI=
-Received: from unknown by smtp-4-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4ZJZpc2D9nz5rc;
-	Thu, 20 Mar 2025 20:07:52 +0100 (CET)
+	b=jFWadMAEhoz++Vg1hEdpI1tZ2fINFjdb/vP9zn5mmN80gGb0yMAnn1CONY++rc1TW
+	 p58kA156gaEbRKhdCPHljQlLbqviICTVZwDzvxerTX+5izZy5BHiYYD6vnl8ewlFu1
+	 XGLCrGFxoCdf49NbW+muPCadhgbMPUuW6OtyDyvs=
+Received: from unknown by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4ZJZpW3hd4zFMr;
+	Thu, 20 Mar 2025 20:07:47 +0100 (CET)
 From: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
 To: Eric Paris <eparis@redhat.com>,
 	Paul Moore <paul@paul-moore.com>,
@@ -59,9 +59,9 @@ Cc: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
 	audit@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-security-module@vger.kernel.org
-Subject: [PATCH v7 18/28] landlock: Add LANDLOCK_RESTRICT_SELF_LOG_SUBDOMAINS_OFF
-Date: Thu, 20 Mar 2025 20:07:07 +0100
-Message-ID: <20250320190717.2287696-19-mic@digikod.net>
+Subject: [PATCH v7 15/28] landlock: Log TCP bind and connect denials
+Date: Thu, 20 Mar 2025 20:07:04 +0100
+Message-ID: <20250320190717.2287696-16-mic@digikod.net>
 In-Reply-To: <20250320190717.2287696-1-mic@digikod.net>
 References: <20250320190717.2287696-1-mic@digikod.net>
 Precedence: bulk
@@ -74,191 +74,178 @@ Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Infomaniak-Routing: alpha
 
-Add LANDLOCK_RESTRICT_SELF_LOG_SUBDOMAINS_OFF for the case of sandboxer
-tools, init systems, or runtime containers launching programs sandboxing
-themselves in an inconsistent way.  Setting this flag should only
-depends on runtime configuration (i.e. not hardcoded).
+Add audit support to socket_bind and socket_connect hooks.
 
-We don't create a new ruleset's option because this should not be part
-of the security policy: only the task that enforces the policy (not the
-one that create it) knows if itself or its children may request denied
-actions.
+The related blockers are:
+- net.bind_tcp
+- net.connect_tcp
 
-This is the first and only flag that can be set without actually
-restricting the caller (i.e. without providing a ruleset).
+Audit event sample:
 
-Extend struct landlock_cred_security with a u8 log_subdomains_off.
-struct landlock_file_security is still 16 bytes.
+  type=LANDLOCK_DENY msg=audit(1729738800.349:44): domain=195ba459b blockers=net.connect_tcp daddr=127.0.0.1 dest=80
 
 Cc: Günther Noack <gnoack@google.com>
-Cc: Paul Moore <paul@paul-moore.com>
-Closes: https://github.com/landlock-lsm/linux/issues/3
+Cc: Konstantin Meskhidze <konstantin.meskhidze@huawei.com>
+Cc: Mikhail Ivanov <ivanov.mikhail1@huawei-partners.com>
 Signed-off-by: Mickaël Salaün <mic@digikod.net>
 ---
 
 Changes since v5:
-- Rename LANDLOCK_RESTRICT_SELF_QUIET_SUBDOMAINS to
-  LANDLOCK_RESTRICT_SELF_LOG_SUBDOMAINS_OFF.  As for
-  LANDLOCK_RESTRICT_SELF_LOG_OFF, this makes more sense.
-- Store the log_subdomains bit in landlock_cred instead of
-  landlock_hirerarchy because it is not directly related to the current
-  domain.
-- Make it possible to set this flag without actually restricting the
-  calling task, and update the related documentation.
+- Move request declaration in the landlock_log_denial() call to
+  not impact allowed requests with audit.
 
 Changes since v4:
-- New patch.
----
- include/uapi/linux/landlock.h | 12 ++++++++++
- security/landlock/cred.h      |  7 ++++++
- security/landlock/limits.h    |  2 +-
- security/landlock/syscalls.c  | 41 ++++++++++++++++++++++++++++++-----
- 4 files changed, 55 insertions(+), 7 deletions(-)
+- Rebase on top of the landlock_log_denial() and subject type changes.
 
-diff --git a/include/uapi/linux/landlock.h b/include/uapi/linux/landlock.h
-index 56b0094ef792..d9d0cb827117 100644
---- a/include/uapi/linux/landlock.h
-+++ b/include/uapi/linux/landlock.h
-@@ -79,10 +79,22 @@ struct landlock_ruleset_attr {
-  *   This flag should only be set if all the programs than can legitimately be
-  *   executed will not try to request a denied access (which could spam audit
-  *   logs).
-+ * - %LANDLOCK_RESTRICT_SELF_LOG_SUBDOMAINS_OFF: Do not create any log related
-+ *   to the enforced restrictions coming from future nested domains created by
-+ *   the caller or its descendants.  This should only be set according to a
-+ *   runtime configuration (i.e. not hardcoded) by programs launching other
-+ *   unknown or untrusted programs that may create their own Landlock domains
-+ *   and spam logs.  The main use case is for container runtimes to enable users
-+ *   to mute buggy sandboxed programs for a specific container image.  Other use
-+ *   cases include sandboxer tools and init systems.  Unlike
-+ *   %LANDLOCK_RESTRICT_SELF_LOG_SAME_EXEC_OFF,
-+ *   %LANDLOCK_RESTRICT_SELF_LOG_SUBDOMAINS_OFF does not impact the requested
-+ *   restriction (if any) but only the future nested domains.
+Changes since v3:
+- Rename blockers from net_* to net.*
+
+Changes since v2:
+- Remove potentially superfluous IPv6 saddr log, spotted by Francis
+  Laniel.
+- Cosmetic improvements.
+---
+ security/landlock/audit.c | 12 +++++++++
+ security/landlock/audit.h |  1 +
+ security/landlock/net.c   | 51 ++++++++++++++++++++++++++++++++++++---
+ 3 files changed, 60 insertions(+), 4 deletions(-)
+
+diff --git a/security/landlock/audit.c b/security/landlock/audit.c
+index f50ce677e3a0..66ff9a5d9866 100644
+--- a/security/landlock/audit.c
++++ b/security/landlock/audit.c
+@@ -41,6 +41,13 @@ static const char *const fs_access_strings[] = {
+ 
+ static_assert(ARRAY_SIZE(fs_access_strings) == LANDLOCK_NUM_ACCESS_FS);
+ 
++static const char *const net_access_strings[] = {
++	[BIT_INDEX(LANDLOCK_ACCESS_NET_BIND_TCP)] = "net.bind_tcp",
++	[BIT_INDEX(LANDLOCK_ACCESS_NET_CONNECT_TCP)] = "net.connect_tcp",
++};
++
++static_assert(ARRAY_SIZE(net_access_strings) == LANDLOCK_NUM_ACCESS_NET);
++
+ static __attribute_const__ const char *
+ get_blocker(const enum landlock_request_type type,
+ 	    const unsigned long access_bit)
+@@ -58,6 +65,11 @@ get_blocker(const enum landlock_request_type type,
+ 		if (WARN_ON_ONCE(access_bit >= ARRAY_SIZE(fs_access_strings)))
+ 			return "unknown";
+ 		return fs_access_strings[access_bit];
++
++	case LANDLOCK_REQUEST_NET_ACCESS:
++		if (WARN_ON_ONCE(access_bit >= ARRAY_SIZE(net_access_strings)))
++			return "unknown";
++		return net_access_strings[access_bit];
+ 	}
+ 
+ 	WARN_ON_ONCE(1);
+diff --git a/security/landlock/audit.h b/security/landlock/audit.h
+index 8130a6fcad07..486b4e7050d3 100644
+--- a/security/landlock/audit.h
++++ b/security/landlock/audit.h
+@@ -18,6 +18,7 @@ enum landlock_request_type {
+ 	LANDLOCK_REQUEST_PTRACE = 1,
+ 	LANDLOCK_REQUEST_FS_CHANGE_TOPOLOGY,
+ 	LANDLOCK_REQUEST_FS_ACCESS,
++	LANDLOCK_REQUEST_NET_ACCESS,
+ };
+ 
+ /*
+diff --git a/security/landlock/net.c b/security/landlock/net.c
+index 6fb3e60bc5ff..f4478e6a2c0b 100644
+--- a/security/landlock/net.c
++++ b/security/landlock/net.c
+@@ -7,10 +7,12 @@
   */
- /* clang-format off */
- #define LANDLOCK_RESTRICT_SELF_LOG_SAME_EXEC_OFF		(1U << 0)
- #define LANDLOCK_RESTRICT_SELF_LOG_NEW_EXEC_ON			(1U << 1)
-+#define LANDLOCK_RESTRICT_SELF_LOG_SUBDOMAINS_OFF		(1U << 2)
- /* clang-format on */
  
- /**
-diff --git a/security/landlock/cred.h b/security/landlock/cred.h
-index 3bf18551d7b8..c82fe63ec598 100644
---- a/security/landlock/cred.h
-+++ b/security/landlock/cred.h
-@@ -40,6 +40,13 @@ struct landlock_cred_security {
- 	 * landlock_restrict_self(2)).
- 	 */
- 	u16 domain_exec;
-+	/**
-+	 * @log_subdomains_off: Set if the domain descendants's log_status should be
-+	 * set to %LANDLOCK_LOG_DISABLED.  This is not a landlock_hierarchy
-+	 * configuration because it applies to future descendant domains and it does
-+	 * not require a current domain.
-+	 */
-+	u8 log_subdomains_off : 1;
- #endif /* CONFIG_AUDIT */
- } __packed;
+ #include <linux/in.h>
++#include <linux/lsm_audit.h>
+ #include <linux/net.h>
+ #include <linux/socket.h>
+ #include <net/ipv6.h>
  
-diff --git a/security/landlock/limits.h b/security/landlock/limits.h
-index 404e880cccf9..65b5ff051674 100644
---- a/security/landlock/limits.h
-+++ b/security/landlock/limits.h
-@@ -31,7 +31,7 @@
- #define LANDLOCK_MASK_SCOPE		((LANDLOCK_LAST_SCOPE << 1) - 1)
- #define LANDLOCK_NUM_SCOPE		__const_hweight64(LANDLOCK_MASK_SCOPE)
++#include "audit.h"
+ #include "common.h"
+ #include "cred.h"
+ #include "limits.h"
+@@ -55,6 +57,7 @@ static int current_check_access_socket(struct socket *const sock,
+ 	};
+ 	const struct landlock_cred_security *const subject =
+ 		landlock_get_applicable_subject(current_cred(), masks, NULL);
++	struct lsm_network_audit audit_net = {};
  
--#define LANDLOCK_LAST_RESTRICT_SELF	LANDLOCK_RESTRICT_SELF_LOG_NEW_EXEC_ON
-+#define LANDLOCK_LAST_RESTRICT_SELF	LANDLOCK_RESTRICT_SELF_LOG_SUBDOMAINS_OFF
- #define LANDLOCK_MASK_RESTRICT_SELF	((LANDLOCK_LAST_RESTRICT_SELF << 1) - 1)
+ 	if (!subject)
+ 		return 0;
+@@ -68,18 +71,48 @@ static int current_check_access_socket(struct socket *const sock,
  
- /* clang-format on */
-diff --git a/security/landlock/syscalls.c b/security/landlock/syscalls.c
-index 5c49a6ef14e4..74d5cc2963b7 100644
---- a/security/landlock/syscalls.c
-+++ b/security/landlock/syscalls.c
-@@ -454,12 +454,16 @@ SYSCALL_DEFINE4(landlock_add_rule, const int, ruleset_fd,
-  *
-  * - %LANDLOCK_RESTRICT_SELF_LOG_SAME_EXEC_OFF
-  * - %LANDLOCK_RESTRICT_SELF_LOG_NEW_EXEC_ON
-+ * - %LANDLOCK_RESTRICT_SELF_LOG_SUBDOMAINS_OFF
-  *
-  * This system call enables to enforce a Landlock ruleset on the current
-  * thread.  Enforcing a ruleset requires that the task has %CAP_SYS_ADMIN in its
-  * namespace or is running with no_new_privs.  This avoids scenarios where
-  * unprivileged tasks can affect the behavior of privileged children.
-  *
-+ * It is allowed to only pass the %LANDLOCK_RESTRICT_SELF_LOG_SUBDOMAINS_OFF
-+ * flag with a @ruleset_fd value of -1.
-+ *
-  * Possible returned errors are:
-  *
-  * - %EOPNOTSUPP: Landlock is supported by the kernel but disabled at boot time;
-@@ -479,7 +483,8 @@ SYSCALL_DEFINE2(landlock_restrict_self, const int, ruleset_fd, const __u32,
- 		*ruleset __free(landlock_put_ruleset) = NULL;
- 	struct cred *new_cred;
- 	struct landlock_cred_security *new_llcred;
--	bool log_same_exec, log_cross_exec;
-+	bool log_same_exec, log_cross_exec, log_subdomains,
-+		__maybe_unused prev_log_subdomains;
- 
- 	if (!is_initialized())
- 		return -EOPNOTSUPP;
-@@ -500,11 +505,20 @@ SYSCALL_DEFINE2(landlock_restrict_self, const int, ruleset_fd, const __u32,
- 	log_same_exec = !(flags & LANDLOCK_RESTRICT_SELF_LOG_SAME_EXEC_OFF);
- 	/* Translates "on" flag to boolean. */
- 	log_cross_exec = !!(flags & LANDLOCK_RESTRICT_SELF_LOG_NEW_EXEC_ON);
-+	/* Translates "off" flag to boolean. */
-+	log_subdomains = !(flags & LANDLOCK_RESTRICT_SELF_LOG_SUBDOMAINS_OFF);
- 
--	/* Gets and checks the ruleset. */
--	ruleset = get_ruleset_from_fd(ruleset_fd, FMODE_CAN_READ);
--	if (IS_ERR(ruleset))
--		return PTR_ERR(ruleset);
-+	/*
-+	 * It is allowed to set %LANDLOCK_RESTRICT_SELF_LOG_SUBDOMAINS_OFF with -1
-+	 * as @ruleset_fd, but no other flag must be set.
-+	 */
-+	if (!(ruleset_fd == -1 &&
-+	      flags == LANDLOCK_RESTRICT_SELF_LOG_SUBDOMAINS_OFF)) {
-+		/* Gets and checks the ruleset. */
-+		ruleset = get_ruleset_from_fd(ruleset_fd, FMODE_CAN_READ);
-+		if (IS_ERR(ruleset))
-+			return PTR_ERR(ruleset);
+ 	switch (address->sa_family) {
+ 	case AF_UNSPEC:
+-	case AF_INET:
++	case AF_INET: {
++		const struct sockaddr_in *addr4;
++
+ 		if (addrlen < sizeof(struct sockaddr_in))
+ 			return -EINVAL;
+-		port = ((struct sockaddr_in *)address)->sin_port;
++
++		addr4 = (struct sockaddr_in *)address;
++		port = addr4->sin_port;
++
++		if (access_request == LANDLOCK_ACCESS_NET_CONNECT_TCP) {
++			audit_net.dport = port;
++			audit_net.v4info.daddr = addr4->sin_addr.s_addr;
++		} else if (access_request == LANDLOCK_ACCESS_NET_BIND_TCP) {
++			audit_net.sport = port;
++			audit_net.v4info.saddr = addr4->sin_addr.s_addr;
++		} else {
++			WARN_ON_ONCE(1);
++		}
+ 		break;
 +	}
  
- 	/* Prepares new credentials. */
- 	new_cred = prepare_creds();
-@@ -513,6 +527,21 @@ SYSCALL_DEFINE2(landlock_restrict_self, const int, ruleset_fd, const __u32,
- 
- 	new_llcred = landlock_cred(new_cred);
- 
-+#ifdef CONFIG_AUDIT
-+	prev_log_subdomains = !new_llcred->log_subdomains_off;
-+	new_llcred->log_subdomains_off = !prev_log_subdomains ||
-+					 !log_subdomains;
-+#endif /* CONFIG_AUDIT */
+ #if IS_ENABLED(CONFIG_IPV6)
+-	case AF_INET6:
++	case AF_INET6: {
++		const struct sockaddr_in6 *addr6;
 +
-+	/*
-+	 * The only case when a ruleset may not be set is if
-+	 * LANDLOCK_RESTRICT_SELF_LOG_SUBDOMAINS_OFF is set and ruleset_fd is -1.
-+	 * We could optimize this case by not calling commit_creds() if this flag
-+	 * was already set, but it is not worth the complexity.
-+	 */
-+	if (!ruleset)
-+		return commit_creds(new_cred);
+ 		if (addrlen < SIN6_LEN_RFC2133)
+ 			return -EINVAL;
+-		port = ((struct sockaddr_in6 *)address)->sin6_port;
 +
- 	/*
- 	 * There is no possible race condition while copying and manipulating
- 	 * the current credentials because they are dedicated per thread.
-@@ -526,7 +555,7 @@ SYSCALL_DEFINE2(landlock_restrict_self, const int, ruleset_fd, const __u32,
- #ifdef CONFIG_AUDIT
- 	new_dom->hierarchy->log_same_exec = log_same_exec;
- 	new_dom->hierarchy->log_cross_exec = log_cross_exec;
--	if (!log_same_exec && !log_cross_exec)
-+	if ((!log_same_exec && !log_cross_exec) || !prev_log_subdomains)
- 		new_dom->hierarchy->log_status = LANDLOCK_LOG_DISABLED;
- #endif /* CONFIG_AUDIT */
++		addr6 = (struct sockaddr_in6 *)address;
++		port = addr6->sin6_port;
++
++		if (access_request == LANDLOCK_ACCESS_NET_CONNECT_TCP) {
++			audit_net.dport = port;
++			audit_net.v6info.daddr = addr6->sin6_addr;
++		} else if (access_request == LANDLOCK_ACCESS_NET_BIND_TCP) {
++			audit_net.sport = port;
++			audit_net.v6info.saddr = addr6->sin6_addr;
++		} else {
++			WARN_ON_ONCE(1);
++		}
+ 		break;
++	}
+ #endif /* IS_ENABLED(CONFIG_IPV6) */
+ 
+ 	default:
+@@ -149,6 +182,16 @@ static int current_check_access_socket(struct socket *const sock,
+ 				   ARRAY_SIZE(layer_masks)))
+ 		return 0;
+ 
++	audit_net.family = address->sa_family;
++	landlock_log_denial(subject,
++			    &(struct landlock_request){
++				    .type = LANDLOCK_REQUEST_NET_ACCESS,
++				    .audit.type = LSM_AUDIT_DATA_NET,
++				    .audit.u.net = &audit_net,
++				    .access = access_request,
++				    .layer_masks = &layer_masks,
++				    .layer_masks_size = ARRAY_SIZE(layer_masks),
++			    });
+ 	return -EACCES;
+ }
  
 -- 
 2.49.0
