@@ -1,160 +1,108 @@
-Received: from smtp-42ad.mail.infomaniak.ch (smtp-42ad.mail.infomaniak.ch [84.16.66.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com [209.85.219.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F5711C174E
-	for <audit@vger.kernel.org>; Fri, 28 Mar 2025 10:40:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=84.16.66.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CA3823E34D
+	for <audit@vger.kernel.org>; Fri, 11 Apr 2025 18:03:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743158415; cv=none; b=bsuZJoi9w3PKUz4Q1Q+DBtksq2u3q/bCzYZG/75wRa3ot2XvUghIDFm27bhr795GRdaahTDuSVg6rmrnWOxNqtkjju2DhYxNwvSo0qyn077TVvr/8NNbdRomNplxeNBJCOxC3coppxkV6wcZNKjiiKbJ7QiPokOT4Dm9nrBuE1Q=
+	t=1744394639; cv=none; b=I1gox+X2hb+Fdccn1X4zer3KPsa+IDEG7/6J85hawJfeU8eiMo26n1HVu/WMgLihIiodU8hOD6VEUeQ/WnYWqV4v8n9q9eG7VgjKX/L757aag5FKFikXNlpwxQq58Tb40WGfKruk1xz0OazYjdNRpbg01RbdAM+Zy9W+4p5/ncM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743158415; c=relaxed/simple;
-	bh=x2e4qnIWrwIBG0j4W+5WT1W+v5MPlz50IWf7emFarRs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jVf0HUbeKQibMG4YRIfkjyCKv3CglKDr9rhYgGSQn8XCcSZ3oQd78PPRkRshNsSTdAPHjnm0ZlPfCX0LSwhPg4+KLi+f2CeHw4MLDbUx+dnhOqwofTv8CmJaHUkSi0XSMJGECtDy7voxgSlwiAvW+FryyKenVl+jSUZrK8paPp8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=d4rrCeae; arc=none smtp.client-ip=84.16.66.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
+	s=arc-20240116; t=1744394639; c=relaxed/simple;
+	bh=x8x+1RUUuoyKVvm4rwiW1cGjTypYl2uDQbLP7Tq+/ZM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=anyC2GrUKlRYH8GODRep0QyXUuPLUH2C5Xqrvjb+alWxW0eDIecgd9iD03NSu75eRDbRmw+QDJ+3YPQhEF6ECO1eG/fhb588qcveqk/84+3O8amNEyhiBc/GkLOD/Z5+E391/4ZEyN3KnZnXg4SFEzhf09qEG851CSKGeHbf4fc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=DXEJAYp/; arc=none smtp.client-ip=209.85.219.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="d4rrCeae"
-Received: from smtp-4-0000.mail.infomaniak.ch (unknown [IPv6:2001:1600:7:10:40ca:feff:fe05:0])
-	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4ZPH1H2NqFzVfJ;
-	Fri, 28 Mar 2025 11:33:23 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
-	s=20191114; t=1743158003;
-	bh=ZRMeNlcXNIbn1nJwecKQQoqD89P0pz802GFL11P7xo0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=d4rrCeaeECs4meKGwPt7Wp3nMmR1RwXM+Vy+28uAjIlMObqbr/+B5EwjVDAfb6dy0
-	 o4C2LVSasTtrBPaaQszpmUtor98nBKIuG7IhZdYOvYHOYTkPFRBSM9r6mvXnKvxjtb
-	 yCypmxnt6aRKFmnB296GOlblJVEby4rR7RMiJJok=
-Received: from unknown by smtp-4-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4ZPH1G0ZHMzJhb;
-	Fri, 28 Mar 2025 11:33:21 +0100 (CET)
-Date: Fri, 28 Mar 2025 11:33:21 +0100
-From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
-To: Tingmao Wang <m@maowtm.org>, 
-	Brendan Higgins <brendan.higgins@linux.dev>, David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>, 
-	Alessandro Carminati <acarmina@redhat.com>, Guenter Roeck <linux@roeck-us.net>, 
-	Andrew Morton <akpm@linux-foundation.org>
-Cc: audit@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
-	=?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>
-Subject: Re: [PATCH v7 09/28] landlock: Add AUDIT_LANDLOCK_ACCESS and log
- ptrace denials
-Message-ID: <20250328.Ahc0thi6CaiJ@digikod.net>
-References: <20250320190717.2287696-10-mic@digikod.net>
- <20250327213807.12964-1-m@maowtm.org>
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="DXEJAYp/"
+Received: by mail-yb1-f173.google.com with SMTP id 3f1490d57ef6-e702ba24abaso1733675276.0
+        for <audit@vger.kernel.org>; Fri, 11 Apr 2025 11:03:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1744394635; x=1744999435; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fwUA3HJN+kY+Z/XkRzxrR6K4yzKq89b6kJGOJP40UfI=;
+        b=DXEJAYp/YUT7qY6hWE5d6lyGPp2cKofR+BrACFakl3jhGZK4x7NOmb7mrlsQcidUne
+         Z7iolTqlMEpZXIWQAQs+2UG+8Sms2U2H34sDS6L0SvEQSrQ9SATrHLkpmaoDayLcSFue
+         hcZnJ0rqsXhF5MA6Oc6um1Re4WKSBcskP30SssltzMccn+NrC5UL7ZU6Q3yQCuGsSUoE
+         a3qqiZ73WokBSChm+m5VNK1lV1Z6ahrStLtLyVfMuL3GoDQh4NBwD3qUGamOwTv6crD9
+         K0xjJt3YiypUckpk3H+HPP9uwIdzDK1v5TpEze5ugZ5XOSXTWizUJLL6q/Oq+4zz3Rs3
+         QIOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1744394635; x=1744999435;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=fwUA3HJN+kY+Z/XkRzxrR6K4yzKq89b6kJGOJP40UfI=;
+        b=UgKPFe8ARkqFgBltUyMeDufsFSf7GBwMD1dRkDWxzq43Zkp8Zt3vWbe2LL4QaZFHGa
+         BIbTrMe6q8MeOYIOgo0EBBoWZK1UdlY1c0Fii7r0fmV6JCPgcHqcrdscIRTj0GPDVG6k
+         ULJ47T2/p8YSvz6fZF96qF/qnMT1uviXyRVvbInekdu2sExq4CzYq1hOKQVkm9dq1W6c
+         M4nsA8nl8yUZ757eZhD1GMQAFr2CKX/cs0HN7qT89h4kIzHPf/td63HNTWogUC4LN9qY
+         hJxjtBOx5BLSKV6KdkAq7QzzxYdaQL0+mkrk6WBPA0X2OeTiw/Po+9S04F6hYEeyf7Lr
+         f4xw==
+X-Forwarded-Encrypted: i=1; AJvYcCXW9DEpQsOqSBEJExmPIMdGYWF8X1o1mTiZiSQWyfTdSHAy1uBIhiWygDZqrOa3Vm9T2t8e1A==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyfuyOumpJVgbupf6uNl9VVfs5eH9oDjO36MAQwZS3SNZRKc4cP
+	ruFuGFHtGvNv0wXN4AYyIPwQUgDwq6MrxDx15usVzdJS329//8H5wFhQFIRPrh5rpu0+Fxa+AMB
+	iBnZat7tUbv1rtNXGe+Mqmrzust3Z3w7xP8Yf
+X-Gm-Gg: ASbGncstMC9h8TEa/5Sh1SlNI3BQuLEhCLcspSBJerCw2kDd87wMG0gtpDD899CViT+
+	GIkTXZJvuJaqlmtVj0YW4t/uo5dwUdetiRmduCnLyvJke0AaxMZTtHYK6nk1l24+AiF+pAmjXc8
+	2LYg/isa0TB0p/SVKVaL6TTg==
+X-Google-Smtp-Source: AGHT+IEECo1qjKE9+f5KAGYFBltXYqlNcShZy0OxIxRF/dripUpXcghaKlFEoodTVnpFvHNNqn3e9noR9gmhbN9E1gs=
+X-Received: by 2002:a05:6902:1404:b0:e6d:f0a6:4cdc with SMTP id
+ 3f1490d57ef6-e704deca03bmr6577544276.20.1744394635152; Fri, 11 Apr 2025
+ 11:03:55 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250327213807.12964-1-m@maowtm.org>
-X-Infomaniak-Routing: alpha
+References: <20250313085343.241623-1-andriy.shevchenko@linux.intel.com> <c7f860b806603cd8af7740c73db68197@paul-moore.com>
+In-Reply-To: <c7f860b806603cd8af7740c73db68197@paul-moore.com>
+From: Paul Moore <paul@paul-moore.com>
+Date: Fri, 11 Apr 2025 14:03:44 -0400
+X-Gm-Features: ATxdqUEPAvVP9dZVohwiFoxW7AmOhM6emkPlKEK8JPh8cs8epZY_MHf0QmZ7qQk
+Message-ID: <CAHC9VhT9VKQuWONEoosKtB_n=xLz6rrRubmEZi8_+dQrJe3nBA@mail.gmail.com>
+Subject: Re: [PATCH v2 1/1] audit: Mark audit_log_vformat() with __printf() attribute
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
+	Casey Schaufler <casey@schaufler-ca.com>, audit@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Cc: Eric Paris <eparis@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Mar 27, 2025 at 09:38:05PM +0000, Tingmao Wang wrote:
-> Hi Mickaël,
+On Thu, Mar 20, 2025 at 6:02=E2=80=AFPM Paul Moore <paul@paul-moore.com> wr=
+ote:
+> On Mar 13, 2025 Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote=
+:
+> >
+> > audit_log_vformat() is using printf() type of format, and GCC compiler
+> > (Debian 14.2.0-17) is not happy about this:
+> >
+> > kernel/audit.c:1978:9: error: function =E2=80=98audit_log_vformat=E2=80=
+=99 might be a candidate for =E2=80=98gnu_printf=E2=80=99 format attribute =
+[-Werror=3Dsuggest-attribute=3Dformat]
+> > kernel/audit.c:1987:17: error: function =E2=80=98audit_log_vformat=E2=
+=80=99 might be a candidate for =E2=80=98gnu_printf=E2=80=99 format attribu=
+te [-Werror=3Dsuggest-attribute=3Dformat]
+> >
+> > Fix the compilation errors (`make W=3D1` when CONFIG_WERROR=3Dy, which =
+is default)
+> > by adding __printf() attribute.
+> >
+> > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> > ---
+> > v2: added necessary technical information to the commit message (Paul)
+> >
+> >  kernel/audit.c | 4 ++--
+> >  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> Merged into audit/dev-staging, this will move to audit/dev after the
+> upcoming merge window.
 
-Hi, thanks for the report.
+... and now it is in audit/dev, thanks.
 
-> 
-> On 3/20/25 19:06, Mickaël Salaün wrote:
-> [...]
-> > +static struct landlock_hierarchy *
-> > +get_hierarchy(const struct landlock_ruleset *const domain, const size_t layer)
-> > +{
-> > +	struct landlock_hierarchy *hierarchy = domain->hierarchy;
-> > +	ssize_t i;
-> > +
-> > +	if (WARN_ON_ONCE(layer >= domain->num_layers))
-> > +		return hierarchy;
-> > +
-> > +	for (i = domain->num_layers - 1; i > layer; i--) {
-> > +		if (WARN_ON_ONCE(!hierarchy->parent))
-> > +			break;
-> > +
-> > +		hierarchy = hierarchy->parent;
-> > +	}
-> > +
-> > +	return hierarchy;
-> > +}
-> > +
-> > +#ifdef CONFIG_SECURITY_LANDLOCK_KUNIT_TEST
-> > +
-> > +static void test_get_hierarchy(struct kunit *const test)
-> > +{
-> > +	struct landlock_hierarchy dom0_hierarchy = {
-> > +		.id = 10,
-> > +	};
-> > +	struct landlock_hierarchy dom1_hierarchy = {
-> > +		.parent = &dom0_hierarchy,
-> > +		.id = 20,
-> > +	};
-> > +	struct landlock_hierarchy dom2_hierarchy = {
-> > +		.parent = &dom1_hierarchy,
-> > +		.id = 30,
-> > +	};
-> > +	struct landlock_ruleset dom2 = {
-> > +		.hierarchy = &dom2_hierarchy,
-> > +		.num_layers = 3,
-> > +	};
-> > +
-> > +	KUNIT_EXPECT_EQ(test, 10, get_hierarchy(&dom2, 0)->id);
-> > +	KUNIT_EXPECT_EQ(test, 20, get_hierarchy(&dom2, 1)->id);
-> > +	KUNIT_EXPECT_EQ(test, 30, get_hierarchy(&dom2, 2)->id);
-> > +	KUNIT_EXPECT_EQ(test, 30, get_hierarchy(&dom2, -1)->id);
-> 
-> This causes a warning from WARN_ON_ONCE(layer >= domain->num_layers)
-> when running this test, I guess because layer is unsigned.
-
-Interestingly this doesn't make the test to fail (because the result is
-still correct), nor to show up when using tools/testing/kunit/kunit.py,
-which is why I didn't see that.
-
-> Should it
-> be ssize_t, if this is an expected usage?
-
-The get_hierarchy() code is correct, and the KUnit test is correct too.
-Using a ssize_t would introduce a bug.
-
-The issue is that I wanted to test a case that should never happen,
-hence the WARN_ON_ONCE().
-
-I guess the best "fix" for now would be to remove the KUnit test with
--1, but there is a new KUnit feature to hide this kind of warning:
-https://lore.kernel.org/linux-kselftest/20250313114329.284104-1-acarmina@redhat.com/
-It is currently in linux-next, but I'm not sure it will be merged in
-Linux 6.15 .
-
-For now I'll keep this commit but I'll send a fix/update to either
-remove the test or use the new DEFINE_SUPPRESSED_WARNING macros
-depending on its merge status.
-
-> 
-> ------------[ cut here ]------------
-> WARNING: CPU: 7 PID: 145 at security/landlock/audit.c:142 get_hierarchy (security/landlock/audit.c:142)
-> Modules linked in:
-> CPU: 7 UID: 0 PID: 145 Comm: kunit_try_catch Tainted: G                 N  6.14.0-next-20250326-dev-00004-g4e57edc3e062-dirty #5 PREEMPT(undef)
-> Tainted: [N]=TEST
-> Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.2-debian-1.16.2-1 04/01/2014
-> RIP: 0010:get_hierarchy (security/landlock/audit.c:142)
-> Code: 83 e8 02 e8 18 00 84 c0 75 02 0f 0b 48 83 c4 08 48 89 d8 5b 41 5c 41 5e 5d c3 48 c7 c7 00 f3 21 83 e8 e2 e7 18 00 84 c0 75 e2 <0f> 0b eb de 48 89 75 e0 e8 a1 a9 a7 ff 48 8b 75 e0 e9 76 ff ff ff
-> // snip //
-> Call Trace:
->  <TASK>
-> test_get_hierarchy (security/landlock/audit.c:178 (discriminator 5))
-> ? test_get_denied_layer (security/landlock/audit.c:158)
-> ? lock_repin_lock (kernel/locking/lockdep.c:5649 kernel/locking/lockdep.c:5978)
-> ? __lock_acquire (kernel/locking/lockdep.c:4675 kernel/locking/lockdep.c:5189)
-> ? _raw_spin_unlock_irqrestore (./include/linux/spinlock_api_smp.h:151 kernel/locking/spinlock.c:194)
-> ? find_held_lock (kernel/locking/lockdep.c:5348)
-> ? trace_irq_enable (./include/trace/events/preemptirq.h:40 (discriminator 17))
-> ? trace_hardirqs_on (kernel/trace/trace_preemptirq.c:80)
-> ? kvm_clock_get_cycles (./arch/x86/include/asm/preempt.h:95 arch/x86/kernel/kvmclock.c:80 arch/x86/kernel/kvmclock.c:86)
-> ? ktime_get_ts64 (kernel/time/timekeeping.c:318 (discriminator 4) kernel/time/timekeeping.c:335 (discriminator 4) kernel/time/timekeeping.c:907 (discriminator 4))
-> kunit_try_run_case (lib/kunit/test.c:400 lib/kunit/test.c:443)
-> ? kunit_try_run_case_cleanup (lib/kunit/test.c:430)
-> 
-> 
+--=20
+paul-moore.com
