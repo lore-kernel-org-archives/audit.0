@@ -1,74 +1,144 @@
-Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com [209.85.128.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3B0E1D63D6
-	for <audit@vger.kernel.org>; Thu, 17 Apr 2025 04:45:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAA441F180E
+	for <audit@vger.kernel.org>; Tue, 22 Apr 2025 15:37:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744865136; cv=none; b=rw+dqE9ftoYT5sLuH7BSEUON4JA3Ug913gJGgM5DFTBQ8YlbKadyIFjOkYb8rjBzLXANPZYBriuXedEFJ6dQW3oHx9krKPMKyAfznYf40hGH7m7hLgqi+APAX6ItU3F3ln/8/l4dliImNEC3S16Ur7NmWHgdWwTcUKY+5dUPIQw=
+	t=1745336272; cv=none; b=BCoPnV7g9OV3sKPHncDelc7R8Ef/vpUOjsJugl3WdYFl5YGz7qL5hLEb676fZt3gafgAgbVs1/zvNbUXnvUJI6kmbffxLeAvxHZm6cA4eHsjebq3Vo7VP6h1YpJBN5xApAPQtGPJ2LDFr8qEgcfcg40gWidQrNtgfq9KJrjPVuM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744865136; c=relaxed/simple;
-	bh=xyTfxJPjT/FT2RxrfLY+7Sni/T27OxSE8JwnzRMqPaY=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=Ucbsp7bYw2kfhMAgHC6vqfJFiEk5YaI7z1h1y7Czl81CdBcOBthNYL+9LS0YXrKkCjaCrJYkSki+xeuN9gO6HQ+L0qBIHGxRDu00WVlL8d+QzyZk7FucGWR/ipgvp7LshaG1KTrUDt2PN121xM8gyIXJzzFUUaUqdREy69WKOjU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=UblB/rj2; arc=none smtp.client-ip=209.85.128.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+	s=arc-20240116; t=1745336272; c=relaxed/simple;
+	bh=jFZ1V84giT+YUQdEZUVPilmzVULgCGOUEFQfGNQ4RSk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=pCG2m+TR3iy3US5mVVTrtUAm1wOt5hRmymxM/lETfsgmVYbgeHtSHYupE+3834LMLhzOPj9Pi4ObmgFj1JlTZYVDAj2qjp5whjQ6j0rI/LsFgS7a8DQ35RpRCUw/9yx1mWwH3+QE6wS55t9e//Y+JiuWTrhv/W6tJRQglfux+SE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=BJ1kCbor; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="UblB/rj2"
-Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-70427fb838cso2614007b3.2
-        for <audit@vger.kernel.org>; Wed, 16 Apr 2025 21:45:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1744865133; x=1745469933; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=hK+UoriaNocNLwlVFNPRQ7NggNZSSb8YUIYC9+NMLvA=;
-        b=UblB/rj2tw34xOjF2DI30ieD+dTEck5Vfg8o3QzI/75XZKyxJw+PId05lk6xGWK8qS
-         Aersdh4D9dpG7nZkKoiLZrtl7Mr7NBQ2F4EjyDwnVuIgqhvfhmsQkP4Mi+LIIGb2XP20
-         FHNElK2q7ptSQchblP74gB+tYF5xjG4HZcfgWkkMBKBrzlaJrgl/e+X/tqKEz46BGoEK
-         wRbkH7I+HSwvKi2zKcnHkQjCul2Hft+vdsNNmmcg11DaUznMugpabtDBDerP7pRW7TP6
-         0MW9X92Ic5eyp2ozuiP0sV6RaV9z8+91JAt0JP//fcBxVCYJ31N2ata4D0a1xzI8tCgg
-         OQ+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744865133; x=1745469933;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=hK+UoriaNocNLwlVFNPRQ7NggNZSSb8YUIYC9+NMLvA=;
-        b=PLPPwdNQ2NOOmiqyyrnQqtqYyxF3J0AnS7214VtY9AsPH3IdsSAwEQm8uvGr88TnX/
-         I1w3WcA6QvKd2rwQMdyc/mVyPyWnA/hu7KuVhW86cj/Btz8XaszbQnJFxGG55L0ujixh
-         3xzvOwgne/YQjnFXGF+hib2yFYZmZus89ozmFlHz/ps2TxW41FqdwMN2V/EPKBqXrIQo
-         NiZaoo2GQd3W0B2U2gtjvKFh5xQrlwL7zV5lprSu3D/1yle2oYmYiTvnhKCIPe8rHrTc
-         6QJrCJ5A52ZiNa2tDvRi5tnSdNUKBa6jIjeFRO7LrvKolWRd9wCZHjj35J4gBfxoU1r4
-         Yr1A==
-X-Gm-Message-State: AOJu0YxzU50fGF3s3Ut5uJYyDWsZV/eBUZsOW3a8VQaGpH101b89XtuA
-	DaVKADrpqN3tB4k5jZ/uZlhg0C2pWGzWTN7jVt3WEJknNSEHvdPxZfQ9RUio2hnAH4h19cTQMi5
-	7wHBCQNxLM8Ifke6AyvBp7a1hqVfOiePZDqptfWD2VOiqtT3mAQ==
-X-Gm-Gg: ASbGncsv/07x5dqHvpxvhMi84aHaqkY0y3lCRh4kZECrSqX/zYbGN55qV1v8z/Pxr05
-	WeCXBiN84UYlATzUA5NWFfZhwMvjp2WIS2ISyPd+unPxrOWwWR8SlDgDTZBYyz36OWLc1n/9Axu
-	KahQwBGidq7JI0qOysIco=
-X-Google-Smtp-Source: AGHT+IHaaTXDxyzkI34Ogx4z396Q8pYsyPH6u8aitww6kJRPq2b5qvbBdxSj7005/QZyo9PV84jhijIDVkGDz1DLYvU=
-X-Received: by 2002:a05:690c:45c4:b0:6fd:33a5:59a with SMTP id
- 00721157ae682-706b32d5540mr65290467b3.18.1744865133397; Wed, 16 Apr 2025
- 21:45:33 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="BJ1kCbor"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1745336269;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Kcu1mJHODKObLksxc4A59swiNVK6LroG71Dl9SlbtDA=;
+	b=BJ1kCbormGwo74YJX8kGxB63IFA+rrjLKzVhnEAs4ASgEXssrk4ikAWl12TqyALb+OUrb9
+	8R4yvT3ieLGYBrmyhlQ1os4W9NrnRrtWZbxP1RQfrFiSOlt/eGyuO9Eqz17an8B96i5zdJ
+	HCt05hNnGlJJ/giCJ7UNS2zUHwg+9Eo=
+Received: from mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-581-hp0aCYEXNbOBG2kQPca4kw-1; Tue,
+ 22 Apr 2025 11:37:46 -0400
+X-MC-Unique: hp0aCYEXNbOBG2kQPca4kw-1
+X-Mimecast-MFC-AGG-ID: hp0aCYEXNbOBG2kQPca4kw_1745336265
+Received: from mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.40])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id AD11A1955DCC;
+	Tue, 22 Apr 2025 15:37:44 +0000 (UTC)
+Received: from madcap2.tricolour.ca (unknown [10.22.74.8])
+	by mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id B458B19560AB;
+	Tue, 22 Apr 2025 15:37:41 +0000 (UTC)
+Date: Tue, 22 Apr 2025 11:37:38 -0400
+From: Richard Guy Briggs <rgb@redhat.com>
+To: Paul Moore <paul@paul-moore.com>
+Cc: Linux-Audit Mailing List <linux-audit@lists.linux-audit.osci.io>,
+	LKML <linux-kernel@vger.kernel.org>, linux-modules@vger.kernel.org,
+	Linux Kernel Audit Mailing List <audit@vger.kernel.org>,
+	Eric Paris <eparis@parisplace.org>
+Subject: Re: [PATCH v2] audit,module: restore audit logging in load failure
+ case
+Message-ID: <aAe3wrAzD/7jBtHy@madcap2.tricolour.ca>
+References: <b96c64d522cf1c46dce1b8987e83f2f41ff2e5ee.1742231027.git.rgb@redhat.com>
+ <92e9622d6dd1bd3e59a36269275aa1fe@paul-moore.com>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: Paul Moore <paul@paul-moore.com>
-Date: Thu, 17 Apr 2025 00:45:22 -0400
-X-Gm-Features: ATxdqUFLjA9f3XxN-vWqT9Z0Rh5C33tqTW6J2RDudx4va0RmWzgc58zP-cWSx6E
-Message-ID: <CAHC9VhT=reDcOFbESm+A4iePM3MBm6BkMxneTf2ND=-63-Qm-g@mail.gmail.com>
-Subject: Regarding patch "fs: add kern_path_locked_negative()"
-To: linux-fsdevel@vger.kernel.org, Christian Brauner <brauner@kernel.org>
-Cc: audit@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <92e9622d6dd1bd3e59a36269275aa1fe@paul-moore.com>
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.40
 
-Christian and VFS folks, when touching audit code in a patch,
-especially one that is going to be merged into a linux-next tree,
-please remember to CC the audit mailing list.
+On 2025-04-11 14:23, Paul Moore wrote:
+> On Mar 17, 2025 Richard Guy Briggs <rgb@redhat.com> wrote:
+> > 
+> > The move of the module sanity check to earlier skipped the audit logging
+> > call in the case of failure and to a place where the previously used
+> > context is unavailable.
+> > 
+> > Add an audit logging call for the module loading failure case and get
+> > the module name when possible.
+> > 
+> > Link: https://issues.redhat.com/browse/RHEL-52839
+> > Fixes: 02da2cbab452 ("module: move check_modinfo() early to early_mod_check()")
+> > Signed-off-by: Richard Guy Briggs <rgb@redhat.com>
+> > ---
+> > Changelog:
+> > v2
+> > - use info->name for both audit_log_kern_module() calls and add const
+> > ---
+> >  include/linux/audit.h | 9 ++++-----
+> >  kernel/audit.h        | 2 +-
+> >  kernel/auditsc.c      | 2 +-
+> >  kernel/module/main.c  | 6 ++++--
+> >  4 files changed, 10 insertions(+), 9 deletions(-)
+> 
+> Agree with Petr's previous comment about the URL in the commit
+> description, if it isn't publicly accessible please don't include it in
+> the commit description; I'm going to remove it.
 
-https://lore.kernel.org/all/20250414-rennt-wimmeln-f186c3a780f1@brauner/
+Sorry, I thought I had checked it more than once to make sure it was
+visible.  It should be now.  Please re-add the link.
 
--- 
-paul-moore.com
+> > diff --git a/kernel/module/main.c b/kernel/module/main.c
+> > index 1fb9ad289a6f..efa62ace1b23 100644
+> > --- a/kernel/module/main.c
+> > +++ b/kernel/module/main.c
+> > @@ -3346,7 +3346,7 @@ static int load_module(struct load_info *info, const char __user *uargs,
+> >  
+> >  	module_allocated = true;
+> >  
+> > -	audit_log_kern_module(mod->name);
+> > +	audit_log_kern_module(info->name);
+> >  
+> >  	/* Reserve our place in the list. */
+> >  	err = add_unformed_module(mod);
+> > @@ -3506,8 +3506,10 @@ static int load_module(struct load_info *info, const char __user *uargs,
+> >  	 * failures once the proper module was allocated and
+> >  	 * before that.
+> >  	 */
+> > -	if (!module_allocated)
+> > +	if (!module_allocated) {
+> > +		audit_log_kern_module(info->name ? info->name : "(unavailable)");
+> 
+> In keeping with audit tradition, wouldn't we want this to be "?" instead
+> of "(unavailable)"?
+> 
+> >  		mod_stat_bump_becoming(info, flags);
+> > +	}
+> >  	free_copy(info, flags);
+> >  	return err;
+> >  }
+> > -- 
+> > 2.43.5
+> 
+> --
+> paul-moore.com
+> _______________________________________________
+> Linux-audit mailing list -- linux-audit@lists.linux-audit.osci.io
+> To unsubscribe send an email to linux-audit-leave@lists.linux-audit.osci.io
+
+- RGB
+
+--
+Richard Guy Briggs <rgb@redhat.com>
+Sr. S/W Engineer, Kernel Security, Base Operating Systems
+Remote, Ottawa, Red Hat Canada
+Upstream IRC: SunRaycer
+Voice: +1.613.860 2354 SMS: +1.613.518.6570
+
