@@ -1,154 +1,96 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f171.google.com (mail-qk1-f171.google.com [209.85.222.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2BC32DA91C
-	for <audit@vger.kernel.org>; Tue, 22 Apr 2025 20:44:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F4C21F4C8E
+	for <audit@vger.kernel.org>; Thu, 24 Apr 2025 22:18:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745354692; cv=none; b=Udx+nUnbVc7WlzdCF8oPqmhStokOSAe3fzF8WRgYXRcdKjIQBHAxTfNVKZgEzbYEKehUTW9ATmAK1PGS7uLr7L0vPfh4Tkl5YCa73QFgnUcvyHaYGdHI+Db965lhZPUD+ye9Yn3YuQVpSO/tUuAQdNQS4m6ct/+IQddNIEBgQp4=
+	t=1745533113; cv=none; b=gJaHHngf1XiX9aSCqcMAh/0+8X6tK9cHHG2Nw7sILXI0CLfYgdPS0H6boxc5Nnxx3RVXOymQInYkxBEYdRzDo+a6BerGokz/QwAUw0kZ49DoOVoTmyFo7c77J07seja8Ojhd3/2QNLu8mVo/OTbMSMq/eGCp9Obce4UfaBprajA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745354692; c=relaxed/simple;
-	bh=7VhY4PjIf81EWoXWHrFKIc936ZjMX/5D5dOVZdis28A=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=jS2It0T29I4R0FDVpG7vZSJ3Yzbrto2I/5lfFOcFksqtE04/t2Gyh1wnG+uIADqMw0hcZbWO4HzRInMR2M99eVAjdId7hVWLXeglROwcsBVfTgOY7vqWbjjJPEp4O+ALkG6pwrqlAcpbAobXgLa2Zo4Zur55IDPD/ZxKE/ilL10=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=AJDZ0/9U; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1745533113; c=relaxed/simple;
+	bh=l4f1xNB2dwWSdrG9upCnzaeNTP8GCePr0kItE5AT2h0=;
+	h=Date:Message-ID:MIME-Version:Content-Type:From:To:Cc:Subject:
+	 References:In-Reply-To; b=SQhqh/llwjfah410feQ9SD5q9HrIdbsvrNAZKMatYnnWewXLl6gICuRjJxzshHo9ocOxhDKK/n30YWhFO4iyyM0HPALcvNap8tEac/c5v72kZeLTQubaJQMyt5RLIie+gm3Rwq5MPkZjudFC+LM694Q2oxFYfOPGnZVstitDq4M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=UPnInYH3; arc=none smtp.client-ip=209.85.222.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="AJDZ0/9U"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1745354689;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=S+hOL6iZRO1BIU3i23We9soIGz6Aij367ODuBHv8NHI=;
-	b=AJDZ0/9UAgVfgVLO5zDtDsaWW7mapPyQ0Rp9VUA4FGNCM9xKpLGcmbCM9nnlJQ0Ey2t3P5
-	DOaCJKdoXCeaa9J1ZyCw+S1xvn2yOpxCVfMSgga+kxiSRPHoo0UyzNYeO8XZ7HFtNiih6U
-	3HkUzAFIxwLq5ZFauWDgf//fDkjIAws=
-Received: from mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-15-JcyJRqaQPXikpD9ghI48_Q-1; Tue,
- 22 Apr 2025 16:44:47 -0400
-X-MC-Unique: JcyJRqaQPXikpD9ghI48_Q-1
-X-Mimecast-MFC-AGG-ID: JcyJRqaQPXikpD9ghI48_Q_1745354686
-Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id D46541955DCC;
-	Tue, 22 Apr 2025 20:44:45 +0000 (UTC)
-Received: from x2.localnet (unknown [10.22.65.240])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id D409D18001DA;
-	Tue, 22 Apr 2025 20:44:43 +0000 (UTC)
-From: Steve Grubb <sgrubb@redhat.com>
-To: Richard Guy Briggs <rgb@redhat.com>, linux-audit@lists.linux-audit.osci.io
-Cc: Linux-Audit Mailing List <linux-audit@lists.linux-audit.osci.io>,
- LKML <linux-kernel@vger.kernel.org>, linux-modules@vger.kernel.org,
- Linux Kernel Audit Mailing List <audit@vger.kernel.org>,
- Eric Paris <eparis@parisplace.org>, Paul Moore <paul@paul-moore.com>
-Subject:
- Re: [PATCH v2] audit,module: restore audit logging in load failure case
-Date: Tue, 22 Apr 2025 16:44:41 -0400
-Message-ID: <2755922.lGaqSPkdTl@x2>
-Organization: Red Hat
-In-Reply-To:
- <CAHC9VhRhr0GMQB59DZ4-xJ788yEgAsUMBLNdYFL2UxioBUPhGQ@mail.gmail.com>
-References:
- <b96c64d522cf1c46dce1b8987e83f2f41ff2e5ee.1742231027.git.rgb@redhat.com>
- <aAe3wrAzD/7jBtHy@madcap2.tricolour.ca>
- <CAHC9VhRhr0GMQB59DZ4-xJ788yEgAsUMBLNdYFL2UxioBUPhGQ@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="UPnInYH3"
+Received: by mail-qk1-f171.google.com with SMTP id af79cd13be357-7c081915cf3so226281785a.1
+        for <audit@vger.kernel.org>; Thu, 24 Apr 2025 15:18:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1745533111; x=1746137911; darn=vger.kernel.org;
+        h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
+         :mime-version:message-id:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=251+9C3n6HOhFKPLs3FnNVOnITQVSwoWuSTYkyfbN34=;
+        b=UPnInYH3rId+B5sBPw0zXA8lCBZADPzWSRyQqsf5t8lwYqvuQVvPuReZ0XNwcfAlmx
+         rCXglJDkAkBuHXRon4A4TNs4GnrOrq3LfncNhcKarTW9D2x3aRwoNJZZ2aOUpYf0Sd98
+         doUUeaWtNBE1IS8yTA+GaNzXMA3y6PcwpCZJMtPxOtXL42SrwfTE/ngEUZ0SsFdTfd3u
+         +yPiGM4ByJH++mMyC4h4lMCJGLYcfvOF0N1WJf86DibbP/Z478gJnF9fFojlwSHMPQ0j
+         IFp4EvF3f/Y4OV+GJOrPMFoR2qQP5a2JRFIhFqw1jLEh6lxyIjR0VsAfTdk8Q1xyK+qq
+         +hMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1745533111; x=1746137911;
+        h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
+         :mime-version:message-id:date:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=251+9C3n6HOhFKPLs3FnNVOnITQVSwoWuSTYkyfbN34=;
+        b=tGFANCd79cS1W9ioC2hKH1upUm1/47YHRaYoSYYNc3L3rxkzo9Y46h238NZ3TWggZI
+         I7ifjJIgkxxIrMBQuSYMUxdcbB4o5g9zhwlpeaXt/TxMlFRMQfiZie/ZPh49vdWQtc1P
+         KHriG8oBVxz0eUn8hCL0cm7USc+h3AyO5Rr9c/Fv3dtdfC6Je8HVYN3TKaaI0b1j0AqB
+         vgKHoy3n+IvSzCGtrbkNF2S/xF7OdwyxNyWXAc4ko/esApY42tTRGq3wjiY7gVEXtPK6
+         rR25fE7keEdyjvDYElbjqUKyqc7Yw2LfxRawyMY37sgilGEwz0cTk6RDv/+SzPRJwWIu
+         4KQw==
+X-Forwarded-Encrypted: i=1; AJvYcCV8bu/BaKVNg1dyvF8SCWvgmuDxjdsSp/Nej1zwvTLGD8GdARd7nso4/eXjyDQfVpxj0Mp74w==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy3HCH+GgGA6SRWFqFcG859AUPItqun6qAaBjdhyU/bwCUe0A+4
+	FMpOvX88fdQFkyUVJqHnbYDMScLbbbLdCSUpXysbn1hkKL1gEs+3VnklvBOPGIDdI93oxZqu79Q
+	=
+X-Gm-Gg: ASbGncvfCcAUklhJAn5lvPzO5lj9OnZeXAFcC8KOHQZzIVmP1+RUJpzWDYVGDk5UG7J
+	6p9kn5RIoiUb7CIpFEXEY2hRBJ4bGhOCOu7rBJNjFE6CbcXXsFJx1E9k/K0b1A8WOJjkh0BIZjp
+	WFFw69VQymvsnpGY3bJo3J6gKaEa7AFL+xMGCH45N+X5lmcsUEQRDk/BtVnwyN3OnrnRglqWbFn
+	B7zm5ZHFa0mc5YHjnN1GyDFwvvbTePJsUoauoxznW0B14DuRTCr6qMn6DViVeI/00maw+D2zBtx
+	AdLp7Ro7qnSwML3gEwP8tEx9JRfCw/Tycy+5/x0r5XG326W6dT+toeb43bEx9gv7pB56n3QglON
+	LQfFiUyYH4A==
+X-Google-Smtp-Source: AGHT+IGCkjp7bhibsegJvEnhEdx+029sejsn8em3hGJ2OLmGOtsJSHM7xFwZ7JdT+eFzXvq5AWacag==
+X-Received: by 2002:a05:620a:430f:b0:7c7:5ad8:aece with SMTP id af79cd13be357-7c960719efcmr44339385a.25.1745533111053;
+        Thu, 24 Apr 2025 15:18:31 -0700 (PDT)
+Received: from localhost (pool-71-126-255-178.bstnma.fios.verizon.net. [71.126.255.178])
+        by smtp.gmail.com with UTF8SMTPSA id af79cd13be357-7c958c92193sm141850185a.10.2025.04.24.15.18.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Apr 2025 15:18:30 -0700 (PDT)
+Date: Thu, 24 Apr 2025 18:18:30 -0400
+Message-ID: <a64a1877ac344c22b3c86058e97d1d33@paul-moore.com>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="utf-8"
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
+MIME-Version: 1.0 
+Content-Type: text/plain; charset=UTF-8 
+Content-Transfer-Encoding: 8bit 
+X-Mailer: pstg-pwork:20250424_1707/pstg-lib:20250424_1742/pstg-pwork:20250424_1707
+From: Paul Moore <paul@paul-moore.com>
+To: Casey Schaufler <casey@schaufler-ca.com>, casey@schaufler-ca.com, eparis@redhat.com, linux-security-module@vger.kernel.org, audit@vger.kernel.org
+Cc: jmorris@namei.org, serge@hallyn.com, keescook@chromium.org, john.johansen@canonical.com, penguin-kernel@i-love.sakura.ne.jp, stephen.smalley.work@gmail.com, linux-kernel@vger.kernel.org, selinux@vger.kernel.org
+Subject: Re: [PATCH v3 1/5] Audit: Create audit_stamp structure
+References: <20250319222744.17576-2-casey@schaufler-ca.com>
+In-Reply-To: <20250319222744.17576-2-casey@schaufler-ca.com>
 
-On Tuesday, April 22, 2025 12:30:01=E2=80=AFPM Eastern Daylight Time Paul M=
-oore=20
-wrote:
-> On Tue, Apr 22, 2025 at 11:37=E2=80=AFAM Richard Guy Briggs <rgb@redhat.c=
-om>
-> wrote:
-> > On 2025-04-11 14:23, Paul Moore wrote:
-> >=20
-> > > On Mar 17, 2025 Richard Guy Briggs <rgb@redhat.com> wrote:
->=20
->=20
-> ...
->=20
->=20
-> > > > diff --git a/kernel/module/main.c b/kernel/module/main.c
-> > > > index 1fb9ad289a6f..efa62ace1b23 100644
-> > > > --- a/kernel/module/main.c
-> > > > +++ b/kernel/module/main.c
-> > > > @@ -3346,7 +3346,7 @@ static int load_module(struct load_info *info,
-> > > > const char __user *uargs,
-> > >
-> > > >
-> > > >
-> > > >     module_allocated =3D true;
-> > > >
-> > > >
-> > > >
-> > > > -   audit_log_kern_module(mod->name);
-> > > > +   audit_log_kern_module(info->name);
-> > > >
-> > > >
-> > > >
-> > > >     /* Reserve our place in the list. */
-> > > >     err =3D add_unformed_module(mod);
-> > > >=20
-> > > > @@ -3506,8 +3506,10 @@ static int load_module(struct load_info *inf=
-o,
-> > > > const char __user *uargs,
-> > >=20
-> > > >      * failures once the proper module was allocated and
-> > > >      * before that.
-> > > >      */
-> > > >=20
-> > > > -   if (!module_allocated)
-> > > > +   if (!module_allocated) {
-> > > > +           audit_log_kern_module(info->name ? info->name :
-> > > > "(unavailable)");
-> >
-> > > In keeping with audit tradition, wouldn't we want this to be "?"
-> > > instead of "(unavailable)"?
->=20
-> Any comment on the above?  This is more important than the non-public link
-> ...
+On Mar 19, 2025 Casey Schaufler <casey@schaufler-ca.com> wrote:
+> 
+> Replace the timestamp and serial number pair used in audit records
+> with a structure containing the two elements.
+> 
+> Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
+> ---
+>  kernel/audit.c   | 17 +++++++++--------
+>  kernel/audit.h   | 13 +++++++++----
+>  kernel/auditsc.c | 22 +++++++++-------------
+>  3 files changed, 27 insertions(+), 25 deletions(-)
 
-It would save some disk space and stay similar to all other events. I also=
-=20
-think it should be "?".
+Looks good to me, thanks for moving the timestamp and serial number
+closer together.
 
-=2DSteve
-
-> > > >             mod_stat_bump_becoming(info, flags);
-> > > >=20
-> > > > +   }
-> > > >=20
-> > > >     free_copy(info, flags);
-> > > >     return err;
-> > > > =20
-> > > >  }
-> > > >=20
-> > > > --
-> > > > 2.43.5
->=20
->=20
-> --=20
-> paul-moore.com
-> _______________________________________________
-> Linux-audit mailing list -- linux-audit@lists.linux-audit.osci.io
-> To unsubscribe send an email to linux-audit-leave@lists.linux-audit.osci.=
-io
-
-
-
-
+--
+paul-moore.com
