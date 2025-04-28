@@ -1,217 +1,166 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9767192D83;
-	Mon, 28 Apr 2025 15:05:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 307921DB124
+	for <audit@vger.kernel.org>; Mon, 28 Apr 2025 20:26:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745852732; cv=none; b=g3w5W9M02UEBoGcTweh+Xb6p5rAHgFweVu1oR0pl4DqoEHov1Nqpg3+zFY+G3ma8kiimYx7HZUNLYnXfNXAXEcQIeD5Lf9neilIcqbuo21CHIjj9n+XvbAr1Ojsp+27VHe8nM1QgKzjAi4t70AYLHwN/VQlUHPvXtE12W7Dzjwg=
+	t=1745871967; cv=none; b=SUeBFplVl1DxAiaciv1/QKiMGw+3VQbgBMKmUhRSE1GosqB22fCCXCTvYMxWy6X/LRmp72n2F475TawFuiqyrlgaTptf+c16lRZmbfD9I2uP9XA7O8uxUsiYAzqI4wiowqkTmUM8l/X4uZIig/zoNEvIQXI0CRwew8eJ2qsVcpc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745852732; c=relaxed/simple;
-	bh=VJxXe/Ga2jumdetbeBRYvHL7yi4RCMj/Ek53LW4jqPA=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To; b=mTSlu0AvfiOQqCY9YJfKr4qtDVq/C6CscPHEfoBRwbz4RvsJH0fVGPSECtZoAngM28/crpC9/ZiyWaSBg7ckYFjJrEZHNg4eUChlihmTTXXzWOxitMQW7e1V5xbNaVPsjHkmF8d+xcBvsmS1aylv5O854/bINLbYPXk6XjP1TnI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iVTSuYvj; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1745871967; c=relaxed/simple;
+	bh=VGf/QmZis3k8gsBX6t/gMBCbXXMSQRWv4SjNTZpDaCA=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=iJHddQnA3pkPndRWHmDJfW3t+Dgv6b0AwrF7pM4uklQ+y2lpuhZNVnXNb/Lhi+VwcRNN0ENCpfUuhmVaXXW2nS8iDiJ0Iht95LmhpNXuI1oKXyRResMSNsGQn88+Hp6AtK1gKTW8Hgj9sCrJLosPFoOaDrRSUUKGlkM3ELTi0Cg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=YUaNK8Dw; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iVTSuYvj"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0CE7CC4CEE4;
-	Mon, 28 Apr 2025 15:05:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1745852732;
-	bh=VJxXe/Ga2jumdetbeBRYvHL7yi4RCMj/Ek53LW4jqPA=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:From;
-	b=iVTSuYvjNmUeYSiWEuEEl722TPRNNSMcZEfDNMMXcgrnTA4Y1k8XDQy/rq9RVk0JG
-	 V7j1S08LtgwQqZ1uBzIB8gEM2xvVqowRGithWICn7J3JZabF4ApvJINi8g3N4q5LwE
-	 BFTYNRy0sJPpclkHMyQf9nqD52F9aG4ESc5FxnUjwbuT69lYfCvnmC8HrcobFXa4zk
-	 EXaqk8hmP82hyFaEjhgpL59DKTl1zYRDH3C1P9tIS1Sl7FE739OPOKAEg6a2wRNzWD
-	 /J9usLZhoVhpurE9DT0U4OGZnsttUVCrSwepq6EtiRFZ0PEXEAD6AQMPoaTLrQTX7e
-	 A3gICimQjCE+g==
-Date: Mon, 28 Apr 2025 10:05:30 -0500
-From: Bjorn Helgaas <helgaas@kernel.org>
-To: Chathura Rajapaksha <chathura.abeyrathne.lk@gmail.com>
-Cc: kvm@vger.kernel.org, Chathura Rajapaksha <chath@bu.edu>,
-	William Wang <xwill@bu.edu>,
-	Alex Williamson <alex.williamson@redhat.com>,
-	Paul Moore <paul@paul-moore.com>, Eric Paris <eparis@redhat.com>,
-	Niklas Schnelle <schnelle@linux.ibm.com>,
-	Xin Zeng <xin.zeng@intel.com>, Kevin Tian <kevin.tian@intel.com>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	Yahui Cao <yahui.cao@intel.com>, Yunxiang Li <Yunxiang.Li@amd.com>,
-	Dongdong Zhang <zhangdongdong@eswincomputing.com>,
-	Avihai Horon <avihaih@nvidia.com>, linux-kernel@vger.kernel.org,
-	audit@vger.kernel.org
-Subject: Re: [RFC PATCH 2/2] audit accesses to unassigned PCI config regions
-Message-ID: <20250428150530.GA670882@bhelgaas>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="YUaNK8Dw"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1745871965;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=C4oRenlf6ZXkOZ4M4A7BEPthPXLL9wn8/E4rBWOdjTQ=;
+	b=YUaNK8Dwb8qwUFRh2jySmGG0TSro//9+WZzSlcAjglX1qbMImCaoYJNZaagbLykzZgauc3
+	2aAwYtPNYPY51ErwOIkoqwcDbwFslE0swdSLSVH8LpOyJaTBJUpFQ9H6IEk96XXU+/2RjJ
+	J+UQ5UB28E+QpOEYzCE/keaxSUSk38E=
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com
+ [209.85.166.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-154-KTHbpmP5MnmoL4uMPsJxqg-1; Mon, 28 Apr 2025 16:26:04 -0400
+X-MC-Unique: KTHbpmP5MnmoL4uMPsJxqg-1
+X-Mimecast-MFC-AGG-ID: KTHbpmP5MnmoL4uMPsJxqg_1745871963
+Received: by mail-io1-f69.google.com with SMTP id ca18e2360f4ac-85b5c68c390so39384739f.0
+        for <audit@vger.kernel.org>; Mon, 28 Apr 2025 13:26:03 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1745871962; x=1746476762;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=C4oRenlf6ZXkOZ4M4A7BEPthPXLL9wn8/E4rBWOdjTQ=;
+        b=W3xKHrg4+1R+5+jzKw7QxBExsKMzi+W7x0gNGwzzAMSR+Jio2pH19GMLkuk46Xh6Je
+         IK6LwPiXzYePBKCqe3An2QHEwHlLfMHliBkpJfMFXbGny6Ew6Iy+qDvd6iwWDTvPk0tb
+         dln+zAGpK2lig6x1/5vs7KoGXUbXA4W95cqsgSXXMpb8+guezxf5Nn1YA/o9cVRcX8GO
+         ftnzVtlxRQ/GbT6pu7LYhhuxMPQl34uJc1EN279oqry2gY3izrIwqBmS2An74JX6dmt+
+         nZMQWFxZZphdOME0vChchukJR7OJ4Sr6tk86BGVzM5LELnmV++OholxJb/y+ma/d/sUZ
+         QNjg==
+X-Forwarded-Encrypted: i=1; AJvYcCVC4Lir7jIegnPal3KaBVDNczMeqWynUChFS5o4xbG7GXc9+Q41S7zI1Jqow4IaBeMwis8SOQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzhgVgUmxHPwMUkflw1NdOkKaZF8hN01BiQRaUrHHqPf/THYLiV
+	haHxmSzelIwXrZFKxReezWUFyD2vtJ+9s5VaztzC/v4c0xWAI/yKLDeq5WNo1MwUWOWLNZHdufM
+	+8S//O3x1pIQYx5hYWlhFu/PD8Dh4Rrk77eCOIvjM7tCGlocwcnFhJcPYGK69
+X-Gm-Gg: ASbGncubjsWY2P0W9Q54STAKk4qk2OGv/8TsBlArT2X5XabA8KSYBUQrdHBH3u09YpX
+	BVa43g5WImjAWFOG+behCaPvCR0nR/l93pe/DMdHnWnKoNiSrOM1MV04KOtglxSzalllzzgQ8wA
+	nOuf5whBI9ENkK+jf8IOIq737dYZT/oBiydrcQa/0HmUto8rHO78JM7AyruQJSf+HVzbpvQ/oIU
+	FgqDbRLw9Lwoo05S2HCLS3Gbhf5ENQYF7dg7pOmFFihAYie6HOVn1OwwyON4h2qa4VgMPshc9ub
+	WJX9c4kMl6lHtOQ=
+X-Received: by 2002:a05:6e02:380e:b0:3d4:6d6f:6e1f with SMTP id e9e14a558f8ab-3d93b63506dmr34582115ab.6.1745871962557;
+        Mon, 28 Apr 2025 13:26:02 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IEQ6RktMQ/g1jxZuRwgjhMKbfgCiAeUAio6yQ0WrdLPoqp16TVDnE3inrH72mfRdzeBq2m+wQ==
+X-Received: by 2002:a05:6e02:380e:b0:3d4:6d6f:6e1f with SMTP id e9e14a558f8ab-3d93b63506dmr34582015ab.6.1745871962207;
+        Mon, 28 Apr 2025 13:26:02 -0700 (PDT)
+Received: from redhat.com ([38.15.36.11])
+        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-3d9314f5772sm21529085ab.41.2025.04.28.13.25.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Apr 2025 13:26:01 -0700 (PDT)
+Date: Mon, 28 Apr 2025 14:25:58 -0600
+From: Alex Williamson <alex.williamson@redhat.com>
+To: Jason Gunthorpe <jgg@ziepe.ca>
+Cc: Chathura Rajapaksha <chathura.abeyrathne.lk@gmail.com>,
+ kvm@vger.kernel.org, Chathura Rajapaksha <chath@bu.edu>, Paul Moore
+ <paul@paul-moore.com>, Eric Paris <eparis@redhat.com>, Giovanni Cabiddu
+ <giovanni.cabiddu@intel.com>, Xin Zeng <xin.zeng@intel.com>, Yahui Cao
+ <yahui.cao@intel.com>, Bjorn Helgaas <bhelgaas@google.com>, Kevin Tian
+ <kevin.tian@intel.com>, Niklas Schnelle <schnelle@linux.ibm.com>, Yunxiang
+ Li <Yunxiang.Li@amd.com>, Dongdong Zhang
+ <zhangdongdong@eswincomputing.com>, Avihai Horon <avihaih@nvidia.com>,
+ linux-kernel@vger.kernel.org, audit@vger.kernel.org
+Subject: Re: [RFC PATCH 0/2] vfio/pci: Block and audit accesses to
+ unassigned config regions
+Message-ID: <20250428142558.263c5db1.alex.williamson@redhat.com>
+In-Reply-To: <20250428132455.GC1213339@ziepe.ca>
+References: <20250426212253.40473-1-chath@bu.edu>
+	<20250428132455.GC1213339@ziepe.ca>
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250426212253.40473-3-chath@bu.edu>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: VqQ2SaU-fo5NQc7oAxbiWiWEaJ3vh0j2JhLqKyGQP8I_1745871963
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Sat, Apr 26, 2025 at 09:22:49PM +0000, Chathura Rajapaksha wrote:
-> Some PCIe devices trigger PCI bus errors when accesses are made to
-> unassigned regions within their PCI configuration space. On certain
-> platforms, this can lead to host system hangs or reboots.
+On Mon, 28 Apr 2025 10:24:55 -0300
+Jason Gunthorpe <jgg@ziepe.ca> wrote:
+
+> On Sat, Apr 26, 2025 at 09:22:47PM +0000, Chathura Rajapaksha wrote:
+> > Some PCIe devices trigger PCI bus errors when accesses are made to
+> > unassigned regions within their PCI configuration space. On certain
+> > platforms, this can lead to host system hangs or reboots.  
 > 
-> The current vfio-pci driver allows guests to access unassigned regions
-> in the PCI configuration space. Therefore, when such a device is passed
-> through to a guest, the guest can induce a host system hang or reboot
-> through crafted configuration space accesses, posing a threat to
-> system availability.
+> Do you have an example of this? What do you mean by bus error?
 > 
-> This patch introduces auditing support for config space accesses to
-> unassigned regions. When enabled, this logs such accesses for all
-> passthrough devices. 
-> This feature is controlled via a new Kconfig option:
-
-Add blank line between paragraphs.
-
->   CONFIG_VFIO_PCI_UNASSIGNED_ACCESS_AUDIT
+> I would expect the device to return some constant like 0, or to return
+> an error TLP. The host bridge should convert the error TLP to
+> 0XFFFFFFF like all other read error conversions.
 > 
-> A new audit event type, AUDIT_VFIO, has been introduced to support
-> this, allowing administrators to monitor and investigate suspicious
-> behavior by guests.
+> Is it a device problem or host bridge problem you are facing?
 
-Use imperative mood ("Introduce" instead of "This patch introduces
-..." and "Add ..." instead of "A new type has been introduced").
+Or system problem.  Is it the access itself that generates a problem or
+is it what the device does as a result of the access?  If the latter,
+does this only remove a config space fuzzing attack vector against that
+behavior or do we expect the device cannot generate the same behavior
+via MMIO or IO register accesses?
 
-> Co-developed by: William Wang <xwill@bu.edu>
-> Signed-off-by: William Wang <xwill@bu.edu>
-> Signed-off-by: Chathura Rajapaksha <chath@bu.edu>
-> ---
->  drivers/vfio/pci/Kconfig           | 12 ++++++++
->  drivers/vfio/pci/vfio_pci_config.c | 46 ++++++++++++++++++++++++++++--
->  include/uapi/linux/audit.h         |  1 +
->  3 files changed, 57 insertions(+), 2 deletions(-)
+We've previously leaned in the direction that we depend on hardware to
+contain errors.  We cannot trap every access to the device or else we'd
+severely limit the devices available to use and the performance of
+those devices to the point that device assignment isn't worthwhile.
+
+PCI config space is a slow path, it's already trapped, and it's
+theoretically architected that we could restrict and audit much of it,
+though some devices do rely on access to unarchitected config space.
+But even within the architected space there are device specific
+capabilities with undocumented protocols, exposing unknown features of
+devices.  Does this incrementally make things better in general, or is
+this largely masking a poorly behaved device/system?
+
+> > 1. Support for blocking guest accesses to unassigned
+> >    PCI configuration space, and the ability to bypass this access control
+> >    for specific devices. The patch introduces three module parameters:
+> > 
+> >    block_pci_unassigned_write:
+> >    Blocks write accesses to unassigned config space regions.
+> > 
+> >    block_pci_unassigned_read:
+> >    Blocks read accesses to unassigned config space regions.
+> > 
+> >    uaccess_allow_ids:
+> >    Specifies the devices for which the above access control is bypassed.
+> >    The value is a comma-separated list of device IDs in
+> >    <vendor_id>:<device_id> format.
+> > 
+> >    Example usage:
+> >    To block guest write accesses to unassigned config regions for all
+> >    passed through devices except for the device with vendor ID 0x1234 and
+> >    device ID 0x5678:
+> > 
+> >    block_pci_unassigned_write=1 uaccess_allow_ids=1234:5678  
 > 
-> diff --git a/drivers/vfio/pci/Kconfig b/drivers/vfio/pci/Kconfig
-> index c3bcb6911c53..7f9f16262b90 100644
-> --- a/drivers/vfio/pci/Kconfig
-> +++ b/drivers/vfio/pci/Kconfig
-> @@ -42,6 +42,18 @@ config VFIO_PCI_IGD
->  	  and LPC bridge config space.
->  
->  	  To enable Intel IGD assignment through vfio-pci, say Y.
-> +
-> +config VFIO_PCI_UNASSIGNED_ACCESS_AUDIT
-> +	bool "Audit accesses to unassigned PCI configuration regions"
-> +	depends on AUDIT && VFIO_PCI_CORE
-> +	help
-> +	  Some PCIe devices are known to cause bus errors when accessing
-> +	  unassigned PCI configuration space, potentially leading to host
-> +	  system hangs on certain platforms. When enabled, this option
-> +	  audits accesses to unassigned PCI configuration regions.
-> +
-> +	  If you don't know what to do here, say N.
-> +
->  endif
->  
->  config VFIO_PCI_ZDEV_KVM
-> diff --git a/drivers/vfio/pci/vfio_pci_config.c b/drivers/vfio/pci/vfio_pci_config.c
-> index cb4d11aa5598..ddd10904d60f 100644
-> --- a/drivers/vfio/pci/vfio_pci_config.c
-> +++ b/drivers/vfio/pci/vfio_pci_config.c
-> @@ -25,6 +25,7 @@
->  #include <linux/uaccess.h>
->  #include <linux/vfio.h>
->  #include <linux/slab.h>
-> +#include <linux/audit.h>
->  
->  #include "vfio_pci_priv.h"
->  
-> @@ -1980,6 +1981,37 @@ static size_t vfio_pci_cap_remaining_dword(struct vfio_pci_core_device *vdev,
->  	return i;
->  }
->  
-> +enum vfio_audit {
-> +	VFIO_AUDIT_READ,
-> +	VFIO_AUDIT_WRITE,
-> +	VFIO_AUDIT_MAX,
-> +};
-> +
-> +static const char * const vfio_audit_str[VFIO_AUDIT_MAX] = {
-> +	[VFIO_AUDIT_READ]  = "READ",
-> +	[VFIO_AUDIT_WRITE] = "WRITE",
-> +};
-> +
-> +static void vfio_audit_access(const struct pci_dev *pdev,
-> +			      size_t count, loff_t *ppos, bool blocked, unsigned int op)
-> +{
-> +	struct audit_buffer *ab;
-> +
-> +	if (WARN_ON_ONCE(op >= VFIO_AUDIT_MAX))
-> +		return;
-> +	if (audit_enabled == AUDIT_OFF)
-> +		return;
-> +	ab = audit_log_start(audit_context(), GFP_ATOMIC, AUDIT_VFIO);
-> +	if (unlikely(!ab))
-> +		return;
-> +	audit_log_format(ab,
-> +			 "device=%04x:%02x:%02x.%d access=%s offset=0x%llx size=%ld blocked=%u\n",
-> +			 pci_domain_nr(pdev->bus), pdev->bus->number,
-> +			 PCI_SLOT(pdev->devfn), PCI_FUNC(pdev->devfn),
-> +			 vfio_audit_str[op], *ppos, count, blocked);
-> +	audit_log_end(ab);
-> +}
-> +
->  static ssize_t vfio_config_do_rw(struct vfio_pci_core_device *vdev, char __user *buf,
->  				 size_t count, loff_t *ppos, bool iswrite)
->  {
-> @@ -1989,6 +2021,7 @@ static ssize_t vfio_config_do_rw(struct vfio_pci_core_device *vdev, char __user
->  	int cap_start = 0, offset;
->  	u8 cap_id;
->  	ssize_t ret;
-> +	bool blocked;
->  
->  	if (*ppos < 0 || *ppos >= pdev->cfg_size ||
->  	    *ppos + count > pdev->cfg_size)
-> @@ -2011,13 +2044,22 @@ static ssize_t vfio_config_do_rw(struct vfio_pci_core_device *vdev, char __user
->  	cap_id = vdev->pci_config_map[*ppos];
->  
->  	if (cap_id == PCI_CAP_ID_INVALID) {
-> -		if (((iswrite && block_pci_unassigned_write) ||
-> +		blocked = (((iswrite && block_pci_unassigned_write) ||
->  		     (!iswrite && block_pci_unassigned_read)) &&
-> -		    !pci_uaccess_lookup(pdev))
-> +		    !pci_uaccess_lookup(pdev));
-> +		if (blocked)
->  			perm = &block_unassigned_perms;
->  		else
->  			perm = &unassigned_perms;
->  		cap_start = *ppos;
-> +		if (IS_ENABLED(CONFIG_VFIO_PCI_UNASSIGNED_ACCESS_AUDIT)) {
-> +			if (iswrite)
-> +				vfio_audit_access(pdev, count, ppos, blocked,
-> +						  VFIO_AUDIT_WRITE);
-> +			else
-> +				vfio_audit_access(pdev, count, ppos, blocked,
-> +						  VFIO_AUDIT_READ);
-> +		}
-
-Simplify this patch by adding "blocked" in the first patch.  Then you
-won't have to touch the permission checking that is unrelated to the
-audit logging.  Consider adding a helper to do the checking and return
-"blocked" so it doesn't clutter vfio_config_do_rw().
-
->  	} else if (cap_id == PCI_CAP_ID_INVALID_VIRT) {
->  		perm = &virt_perms;
->  		cap_start = *ppos;
-> diff --git a/include/uapi/linux/audit.h b/include/uapi/linux/audit.h
-> index 9a4ecc9f6dc5..c0aace7384f3 100644
-> --- a/include/uapi/linux/audit.h
-> +++ b/include/uapi/linux/audit.h
-> @@ -122,6 +122,7 @@
->  #define AUDIT_OPENAT2		1337	/* Record showing openat2 how args */
->  #define AUDIT_DM_CTRL		1338	/* Device Mapper target control */
->  #define AUDIT_DM_EVENT		1339	/* Device Mapper events */
-> +#define AUDIT_VFIO		1340	/* VFIO events */
->  
->  #define AUDIT_AVC		1400	/* SE Linux avc denial or grant */
->  #define AUDIT_SELINUX_ERR	1401	/* Internal SE Linux Errors */
-> -- 
-> 2.34.1
+> No module parameters please.
 > 
+> At worst the kernel should maintain a quirks list to control this,
+> maybe with a sysfs to update it.
+
+No module parameters might be difficult if we end up managing this as a
+default policy selection, but certainly agree that if we get into
+device specific behaviors we probably want those quirks automatically
+deployed by the kernel.  Thanks,
+
+Alex
+
