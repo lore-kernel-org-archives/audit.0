@@ -1,166 +1,119 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f170.google.com (mail-qk1-f170.google.com [209.85.222.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 307921DB124
-	for <audit@vger.kernel.org>; Mon, 28 Apr 2025 20:26:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 353262D0279
+	for <audit@vger.kernel.org>; Tue, 29 Apr 2025 13:44:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745871967; cv=none; b=SUeBFplVl1DxAiaciv1/QKiMGw+3VQbgBMKmUhRSE1GosqB22fCCXCTvYMxWy6X/LRmp72n2F475TawFuiqyrlgaTptf+c16lRZmbfD9I2uP9XA7O8uxUsiYAzqI4wiowqkTmUM8l/X4uZIig/zoNEvIQXI0CRwew8eJ2qsVcpc=
+	t=1745934252; cv=none; b=Zqh4ggCgZLLBIQlsuBATZsYWTSA/TVCYdOksJ1xO4B9rScyBSedAuiR+OLaBcissLbAysj3rewY2uYiitfKV/avrTkp/eqXJZf/XBAVuVNDCBvWaxwyQ4Aec428tWIAF1YVC7jfM9JpP5MSNh6YTQFw1FmwQewOEWXaB7iRpz/8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745871967; c=relaxed/simple;
-	bh=VGf/QmZis3k8gsBX6t/gMBCbXXMSQRWv4SjNTZpDaCA=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=iJHddQnA3pkPndRWHmDJfW3t+Dgv6b0AwrF7pM4uklQ+y2lpuhZNVnXNb/Lhi+VwcRNN0ENCpfUuhmVaXXW2nS8iDiJ0Iht95LmhpNXuI1oKXyRResMSNsGQn88+Hp6AtK1gKTW8Hgj9sCrJLosPFoOaDrRSUUKGlkM3ELTi0Cg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=YUaNK8Dw; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1745934252; c=relaxed/simple;
+	bh=khgmom5SwYGkHlS7uWpIwHY3reFluKKZuIoug5wMJyk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=uTAv5ImFBn72y3sYF0eOsyBLH40SqLAYLExbgI7bTADD6vwGx/f4MC9MwioJG0art6r1eXRcOmYM5/SaU6am/JqDHaUxuOX60Mo6tt/SFqeg6ZyNDdiUL1PprBIDNPok4kNDJGiU/cI1scpnzkvQ82RYxnlZNTmby/dGRSBqCzg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca; spf=pass smtp.mailfrom=ziepe.ca; dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b=R2NcB7Cx; arc=none smtp.client-ip=209.85.222.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ziepe.ca
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="YUaNK8Dw"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1745871965;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=C4oRenlf6ZXkOZ4M4A7BEPthPXLL9wn8/E4rBWOdjTQ=;
-	b=YUaNK8Dwb8qwUFRh2jySmGG0TSro//9+WZzSlcAjglX1qbMImCaoYJNZaagbLykzZgauc3
-	2aAwYtPNYPY51ErwOIkoqwcDbwFslE0swdSLSVH8LpOyJaTBJUpFQ9H6IEk96XXU+/2RjJ
-	J+UQ5UB28E+QpOEYzCE/keaxSUSk38E=
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com
- [209.85.166.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-154-KTHbpmP5MnmoL4uMPsJxqg-1; Mon, 28 Apr 2025 16:26:04 -0400
-X-MC-Unique: KTHbpmP5MnmoL4uMPsJxqg-1
-X-Mimecast-MFC-AGG-ID: KTHbpmP5MnmoL4uMPsJxqg_1745871963
-Received: by mail-io1-f69.google.com with SMTP id ca18e2360f4ac-85b5c68c390so39384739f.0
-        for <audit@vger.kernel.org>; Mon, 28 Apr 2025 13:26:03 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b="R2NcB7Cx"
+Received: by mail-qk1-f170.google.com with SMTP id af79cd13be357-7c559b3eb0bso357222985a.1
+        for <audit@vger.kernel.org>; Tue, 29 Apr 2025 06:44:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google; t=1745934250; x=1746539050; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=H3NiznvmeEzk9qrZsVXzuwmh6VHSrphUuExjP4cJOHk=;
+        b=R2NcB7Cx6w3QyVhqCCyu6Om5rClVB54CDe52fxvmuoZcyvHL+WfAKyMhGKpETH9rQX
+         9fYepbzsdZzYfoeYdEOdbIHodJ5JAnFzW4RRXQdaJ5hGjNND6QggmrDAtnf0M84h1i3D
+         W7+O3cC8FnnMOjMgmfILqNSokB6uVSwLOKkFy6OmCO6vno36wxc5ezG8a7HMRAT4gFsz
+         16vn4Wn6486gQkK5AGlXrS0vwb7VR8ma1wXzChBLms/zSdMRMglj4lqbNTFUugtSnYEL
+         QEhmJhsrXWlnf8OwZUoza3nFE4q4MgtAyt/dRmIHR2y01sA8JEjLEU9mxTVg1AD/Qftp
+         5IgA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745871962; x=1746476762;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=C4oRenlf6ZXkOZ4M4A7BEPthPXLL9wn8/E4rBWOdjTQ=;
-        b=W3xKHrg4+1R+5+jzKw7QxBExsKMzi+W7x0gNGwzzAMSR+Jio2pH19GMLkuk46Xh6Je
-         IK6LwPiXzYePBKCqe3An2QHEwHlLfMHliBkpJfMFXbGny6Ew6Iy+qDvd6iwWDTvPk0tb
-         dln+zAGpK2lig6x1/5vs7KoGXUbXA4W95cqsgSXXMpb8+guezxf5Nn1YA/o9cVRcX8GO
-         ftnzVtlxRQ/GbT6pu7LYhhuxMPQl34uJc1EN279oqry2gY3izrIwqBmS2An74JX6dmt+
-         nZMQWFxZZphdOME0vChchukJR7OJ4Sr6tk86BGVzM5LELnmV++OholxJb/y+ma/d/sUZ
-         QNjg==
-X-Forwarded-Encrypted: i=1; AJvYcCVC4Lir7jIegnPal3KaBVDNczMeqWynUChFS5o4xbG7GXc9+Q41S7zI1Jqow4IaBeMwis8SOQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzhgVgUmxHPwMUkflw1NdOkKaZF8hN01BiQRaUrHHqPf/THYLiV
-	haHxmSzelIwXrZFKxReezWUFyD2vtJ+9s5VaztzC/v4c0xWAI/yKLDeq5WNo1MwUWOWLNZHdufM
-	+8S//O3x1pIQYx5hYWlhFu/PD8Dh4Rrk77eCOIvjM7tCGlocwcnFhJcPYGK69
-X-Gm-Gg: ASbGncubjsWY2P0W9Q54STAKk4qk2OGv/8TsBlArT2X5XabA8KSYBUQrdHBH3u09YpX
-	BVa43g5WImjAWFOG+behCaPvCR0nR/l93pe/DMdHnWnKoNiSrOM1MV04KOtglxSzalllzzgQ8wA
-	nOuf5whBI9ENkK+jf8IOIq737dYZT/oBiydrcQa/0HmUto8rHO78JM7AyruQJSf+HVzbpvQ/oIU
-	FgqDbRLw9Lwoo05S2HCLS3Gbhf5ENQYF7dg7pOmFFihAYie6HOVn1OwwyON4h2qa4VgMPshc9ub
-	WJX9c4kMl6lHtOQ=
-X-Received: by 2002:a05:6e02:380e:b0:3d4:6d6f:6e1f with SMTP id e9e14a558f8ab-3d93b63506dmr34582115ab.6.1745871962557;
-        Mon, 28 Apr 2025 13:26:02 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IEQ6RktMQ/g1jxZuRwgjhMKbfgCiAeUAio6yQ0WrdLPoqp16TVDnE3inrH72mfRdzeBq2m+wQ==
-X-Received: by 2002:a05:6e02:380e:b0:3d4:6d6f:6e1f with SMTP id e9e14a558f8ab-3d93b63506dmr34582015ab.6.1745871962207;
-        Mon, 28 Apr 2025 13:26:02 -0700 (PDT)
-Received: from redhat.com ([38.15.36.11])
-        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-3d9314f5772sm21529085ab.41.2025.04.28.13.25.59
+        d=1e100.net; s=20230601; t=1745934250; x=1746539050;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=H3NiznvmeEzk9qrZsVXzuwmh6VHSrphUuExjP4cJOHk=;
+        b=hNcd6bZvzpu0ND0ZuSPajT2WghzxJzIEdjwk8FvTLX/JXQFUoEqZntvmJNY5DKTlNm
+         DU7yUfstmSvcv/OLZ763SFExi9acJTD7DXqB3m5+skGAO0x3nE09O02T6wTnAZEf4OzF
+         A2wSGhlto9RFCs/upr0ctQcaPvn0sbi/Egr0P5IhZcyGYmbk1JExRX9PRUte1FlqN8Ql
+         4ZhjT85vutFAEWKqkR/2IVWWozu4rVEsd6uhQve9DI9lm1JWxqQM+MH2Sa8c5nDsEFd6
+         euLDPfZsGq59uPkNMChLWutX7oxm8papZN2lTmo6hfU5bklLq/PebYb+KWAKa4uiBzhe
+         Nk6w==
+X-Forwarded-Encrypted: i=1; AJvYcCUa2n5C4knt3UvP7JEOKjsNfXvXbluui3oOuUzRzfCF2MoCJbNLyIaJQp10xjUlSldiPmYmEQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YylC/XJLfXwkenrZ7ZsSLM3ePdMqTvgTseoD3z6n+IoK0cY85LK
+	cl6G4xAp84WyhDHe+5wf2FiWN9QDY0VjqTPqf/1ed1XAbQUJyaWpRv48J896u9I=
+X-Gm-Gg: ASbGncvo4iBqVG1IeX1C/uqnY3jkGyvRJSotcsNFzciCiO/rsd8+1Lt5015gOHeL2ND
+	RsUCzsWhrMsUtmP6OyhE9btSyOnf153tLP4ZmySNUckeR6+SxmFDiOhrQI5m6uKo+T/W1v6NzaR
+	TRMLcjyb93/pIKgajjNkCwcuCBSXKipznNiVtsCjYfGmnM8dBap2vZU5D3gNOtoU5XA891DZO0q
+	RQ1a8rHK2J73Yr/NyTqMJbzL/76LGT5md/mwY811+23iMKRkAmBJJlz3geTAaqnGIz40GRZ1xEW
+	7QdbPtT5w/x0dPDEtexrbWp+BV5DLi+0aho/wv5auGpFYHRY9ORy6R+xCCcGttjlnd+e/5tjDgy
+	w5d7PVXMqPOhA34Lq/VY=
+X-Google-Smtp-Source: AGHT+IGa21onp27WGYH0jVBo4uRP+h7kSdtwA1BovLylZ30nroRsVmISeIOqnDPjCHw9jw8dVdXUhQ==
+X-Received: by 2002:a05:620a:3951:b0:7c5:602f:51fc with SMTP id af79cd13be357-7cabddaf5f3mr490871385a.44.1745934249986;
+        Tue, 29 Apr 2025 06:44:09 -0700 (PDT)
+Received: from ziepe.ca (hlfxns017vw-142-167-219-86.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.167.219.86])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7c958c921b4sm743361685a.19.2025.04.29.06.44.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Apr 2025 13:26:01 -0700 (PDT)
-Date: Mon, 28 Apr 2025 14:25:58 -0600
-From: Alex Williamson <alex.williamson@redhat.com>
-To: Jason Gunthorpe <jgg@ziepe.ca>
+        Tue, 29 Apr 2025 06:44:09 -0700 (PDT)
+Received: from jgg by wakko with local (Exim 4.97)
+	(envelope-from <jgg@ziepe.ca>)
+	id 1u9lFo-0000000AAmR-34V3;
+	Tue, 29 Apr 2025 10:44:08 -0300
+Date: Tue, 29 Apr 2025 10:44:08 -0300
+From: Jason Gunthorpe <jgg@ziepe.ca>
+To: Alex Williamson <alex.williamson@redhat.com>
 Cc: Chathura Rajapaksha <chathura.abeyrathne.lk@gmail.com>,
- kvm@vger.kernel.org, Chathura Rajapaksha <chath@bu.edu>, Paul Moore
- <paul@paul-moore.com>, Eric Paris <eparis@redhat.com>, Giovanni Cabiddu
- <giovanni.cabiddu@intel.com>, Xin Zeng <xin.zeng@intel.com>, Yahui Cao
- <yahui.cao@intel.com>, Bjorn Helgaas <bhelgaas@google.com>, Kevin Tian
- <kevin.tian@intel.com>, Niklas Schnelle <schnelle@linux.ibm.com>, Yunxiang
- Li <Yunxiang.Li@amd.com>, Dongdong Zhang
- <zhangdongdong@eswincomputing.com>, Avihai Horon <avihaih@nvidia.com>,
- linux-kernel@vger.kernel.org, audit@vger.kernel.org
-Subject: Re: [RFC PATCH 0/2] vfio/pci: Block and audit accesses to
- unassigned config regions
-Message-ID: <20250428142558.263c5db1.alex.williamson@redhat.com>
-In-Reply-To: <20250428132455.GC1213339@ziepe.ca>
+	kvm@vger.kernel.org, Chathura Rajapaksha <chath@bu.edu>,
+	Paul Moore <paul@paul-moore.com>, Eric Paris <eparis@redhat.com>,
+	Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
+	Xin Zeng <xin.zeng@intel.com>, Yahui Cao <yahui.cao@intel.com>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	Kevin Tian <kevin.tian@intel.com>,
+	Niklas Schnelle <schnelle@linux.ibm.com>,
+	Yunxiang Li <Yunxiang.Li@amd.com>,
+	Dongdong Zhang <zhangdongdong@eswincomputing.com>,
+	Avihai Horon <avihaih@nvidia.com>, linux-kernel@vger.kernel.org,
+	audit@vger.kernel.org
+Subject: Re: [RFC PATCH 0/2] vfio/pci: Block and audit accesses to unassigned
+ config regions
+Message-ID: <20250429134408.GC2260621@ziepe.ca>
 References: <20250426212253.40473-1-chath@bu.edu>
-	<20250428132455.GC1213339@ziepe.ca>
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+ <20250428132455.GC1213339@ziepe.ca>
+ <20250428142558.263c5db1.alex.williamson@redhat.com>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: VqQ2SaU-fo5NQc7oAxbiWiWEaJ3vh0j2JhLqKyGQP8I_1745871963
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250428142558.263c5db1.alex.williamson@redhat.com>
 
-On Mon, 28 Apr 2025 10:24:55 -0300
-Jason Gunthorpe <jgg@ziepe.ca> wrote:
+On Mon, Apr 28, 2025 at 02:25:58PM -0600, Alex Williamson wrote:
 
-> On Sat, Apr 26, 2025 at 09:22:47PM +0000, Chathura Rajapaksha wrote:
-> > Some PCIe devices trigger PCI bus errors when accesses are made to
-> > unassigned regions within their PCI configuration space. On certain
-> > platforms, this can lead to host system hangs or reboots.  
-> 
-> Do you have an example of this? What do you mean by bus error?
-> 
-> I would expect the device to return some constant like 0, or to return
-> an error TLP. The host bridge should convert the error TLP to
-> 0XFFFFFFF like all other read error conversions.
-> 
-> Is it a device problem or host bridge problem you are facing?
+> PCI config space is a slow path, it's already trapped, and it's
+> theoretically architected that we could restrict and audit much of it,
+> though some devices do rely on access to unarchitected config space.
+> But even within the architected space there are device specific
+> capabilities with undocumented protocols, exposing unknown features of
+> devices.  Does this incrementally make things better in general, or is
+> this largely masking a poorly behaved device/system?
 
-Or system problem.  Is it the access itself that generates a problem or
-is it what the device does as a result of the access?  If the latter,
-does this only remove a config space fuzzing attack vector against that
-behavior or do we expect the device cannot generate the same behavior
-via MMIO or IO register accesses?
+I think there would be merit in having a qemu option to secure the
+config space.
 
-We've previously leaned in the direction that we depend on hardware to
-contain errors.  We cannot trap every access to the device or else we'd
-severely limit the devices available to use and the performance of
-those devices to the point that device assignment isn't worthwhile.
+We talked about this before about presenting a perscribed virtualized
+config space.
 
-PCI config space is a slow path, it's already trapped, and it's
-theoretically architected that we could restrict and audit much of it,
-though some devices do rely on access to unarchitected config space.
-But even within the architected space there are device specific
-capabilities with undocumented protocols, exposing unknown features of
-devices.  Does this incrementally make things better in general, or is
-this largely masking a poorly behaved device/system?
+But we still have the issue that userpace with access to VFIO could
+crash the machine, on these uncontained platforms, which is not great.
 
-> > 1. Support for blocking guest accesses to unassigned
-> >    PCI configuration space, and the ability to bypass this access control
-> >    for specific devices. The patch introduces three module parameters:
-> > 
-> >    block_pci_unassigned_write:
-> >    Blocks write accesses to unassigned config space regions.
-> > 
-> >    block_pci_unassigned_read:
-> >    Blocks read accesses to unassigned config space regions.
-> > 
-> >    uaccess_allow_ids:
-> >    Specifies the devices for which the above access control is bypassed.
-> >    The value is a comma-separated list of device IDs in
-> >    <vendor_id>:<device_id> format.
-> > 
-> >    Example usage:
-> >    To block guest write accesses to unassigned config regions for all
-> >    passed through devices except for the device with vendor ID 0x1234 and
-> >    device ID 0x5678:
-> > 
-> >    block_pci_unassigned_write=1 uaccess_allow_ids=1234:5678  
-> 
-> No module parameters please.
-> 
-> At worst the kernel should maintain a quirks list to control this,
-> maybe with a sysfs to update it.
+It would be nice if the kernel could discover this, but it doesn't
+seem possible. There is so much in the SOC design and FW
+implementation that has to be done correctly for errors to be properly
+containable.
 
-No module parameters might be difficult if we end up managing this as a
-default policy selection, but certainly agree that if we get into
-device specific behaviors we probably want those quirks automatically
-deployed by the kernel.  Thanks,
-
-Alex
-
+Jason
