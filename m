@@ -1,136 +1,196 @@
-Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
+Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C81561C07C4
-	for <audit@vger.kernel.org>; Fri, 16 May 2025 18:35:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 186D827FD6F
+	for <audit@vger.kernel.org>; Fri, 16 May 2025 20:41:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747420520; cv=none; b=UU5KeIF8PCuugFR0p0PyzeXWKvRqTxBprqCbTnzbKzN/IwDcHGUFvS0h0zIs3QoB0m3+Vm0hwvu00vT1YqxI4VpE0Yw5vAuYV1kwsD6GGEG9fzxFI8pfzxWi9h02ydyC7Ibmytix00dMx2ia6WY63hUF4qX55T+/apdWa3qit1s=
+	t=1747428096; cv=none; b=OYk9wN2jgAN1jQ6MCc5tjZoFer2L2nce3+0PsYQ0xDYdntg/oaQHCNlJi4ymB0JIRjULpgzrKDYE8gF6KI6gv81/AhBmoa9FkYzuiTkcxQSMjOGXZMuUlr5mYCAXhJFBsK2feiJaqkk2oGvC2FFGuQuljqQ+k9u1RKzlSlaO2WI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747420520; c=relaxed/simple;
-	bh=/NlBqMOy3OEkgCo+YWYlCYiH+NIpaT+BAv6J6HbLuGg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JH00yLb//8aD+HRrWUpmwrYhtZTuOaekdPf7Hq/ckIhVDpQeUIEE1ob5kBLIm4FNcB2QbYv+/f4ehbWQLyNLlWVF0/GDC3qWC+yqtvA6dvnfC2eRT+oc2vNPxiCnFvW/zyCBX2T3OqXa4V4yZsxU4dFTyJzAt9jxipQQM4lo09c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca; spf=pass smtp.mailfrom=ziepe.ca; dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b=PsIeL1TE; arc=none smtp.client-ip=209.85.160.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ziepe.ca
+	s=arc-20240116; t=1747428096; c=relaxed/simple;
+	bh=XwuuFneW2BZLLz//vgZKvIX9FcOTRW2NYmS1y8zCoQU=;
+	h=Date:Message-ID:MIME-Version:Content-Type:From:To:Cc:Subject:
+	 References:In-Reply-To; b=N2daVKPvEtflLtnkjn5X2fMNJOZhXAPyt5lyna+iC6Bl88ZOaYeKNDsMENIeS3ykiFj+bZoygoxkcjA3CAWqdq2bPnIKruO4ThStrtHtzq0y0RX6xM14I5Fsul1FmkjJVn1gWXUP2rSuXUqpzar3a4i554yg5K7NGnSLbAu4zLs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=Y33WweJn; arc=none smtp.client-ip=209.85.160.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b="PsIeL1TE"
-Received: by mail-qt1-f179.google.com with SMTP id d75a77b69052e-47691d82bfbso42295051cf.0
-        for <audit@vger.kernel.org>; Fri, 16 May 2025 11:35:18 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="Y33WweJn"
+Received: by mail-qt1-f180.google.com with SMTP id d75a77b69052e-4947635914aso26922671cf.3
+        for <audit@vger.kernel.org>; Fri, 16 May 2025 13:41:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google; t=1747420517; x=1748025317; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=1BXn+vfm77+VTgYfWSD052O3sih3pqOBHF3asuJA1BI=;
-        b=PsIeL1TEcrC89ToAXFivYCsA6aRbflHAzB0Z4H7A5iGBAQLSNWm3iBdktnmZ4Qwegn
-         /RkqGiHR94Gg3WwgpaXjHcrbd0gGsVw4efyCzU03ezZxiPTEqk2ExyvX3wJonMpGsayf
-         8cZynTkRnNNqGh8TLi2MhLDuhDgs5enJ/WkjWab1OCCT/3cSckCqfpGLr3PG8HDOxESY
-         zSErgRo2WRc9g6s4osmO2VQylzKC8tGWUAgl7Xar+nA0Fp1lElPkFhhOVsBTovBNbsy4
-         eI5jtu09d7ZqMVYRO0UNwCZyvphf3qsAYv5uvCMr+8MhdpQFU0cGCHksk/i4gLdw1DHz
-         +HfQ==
+        d=paul-moore.com; s=google; t=1747428094; x=1748032894; darn=vger.kernel.org;
+        h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
+         :mime-version:message-id:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1Fdr5GyRg7g4dq6gLsQfcfIbWGz/AKi8pep4CtziFBk=;
+        b=Y33WweJnI75oNR9qB4dq4TnN0ntHH7MygxLQS/UlDoLNyw4GcJFXobwE9GGYfqyvl4
+         h1qNPapZaUdBP2Z/JbWy6nQLXYI1ir12Rk70/r49zJ1K5hSBMREt0QxTaB8S6tQYfywH
+         rulPkN+k2khYX8M05dUhFcLRMXjwgMDq+up3JB7ecRwUkPL+B108mauqswzfjH4+S29R
+         qwObkFo4JqpFplMZbVhzZzBc0JnaOIFFGb4LUNgA5CrKniGrDpJ76LHZZklcpIVYCncS
+         2uERw3GpFp+tbPMrfy81FQutvIS+4xEJePOk8XBixzKEQfNIsrEzIBKrEuEuz8J/nlLk
+         gMkw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747420517; x=1748025317;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1BXn+vfm77+VTgYfWSD052O3sih3pqOBHF3asuJA1BI=;
-        b=m5WUIRKdug/0Y4Y9vYUMF6Tc54v51W+LDOGyrnFd4DE0DbFzIBZQ9oLKQxhqn8BUyz
-         AaMvaSXJQ9AfHMvsNIkOr9S6vaxeORutX6UVREfZG5di4irMFm5mcTlb6+iAAlnG7ysC
-         54dG/pyxFg4eQVojDD4jts5MgAtOHZxLzLQLYfpiqE1toCQpaj9AFhomIXGPtY/EAPM1
-         4p//di0o46QI043cM04xnFJsG3nsdkfCOENSsfh8wDsbjVF5ZoCqAJoHJojgynvy+RQP
-         0ta5qhj8F+LugCu90h9Px+L7Dn1EkwZWG9i/LinhEi0Dz7++GVw1yqBLiLTgEurf3/d2
-         BK6Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUkKxuqIHhVfhu9FP3YemyQB6wPOYhwTqjJF5IUx26oOR5AQvMONvkndtrifYv5JYGpnerqqw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwkFuOGFy8aUEKAyQdQEF1Hp8J17m4MQXUsG35Vbw32zp5rW+aw
-	TymlW/tmz8H+XLrgX5IMkG/9JUF3gwpps8tmiKo8OeEsWuSeetVlLZoyrKaUBTE0LN0=
-X-Gm-Gg: ASbGncvhGc0sIqwcRLoZ+UA1ErVRRnWB1F2IBDBaZRooPvMWr8t4GNrNxhmLR2r0frO
-	gE5NT8b/3PICLZqZpTEPA6SWWttGqpQbOb0xCK1c7rw0RvnUq075InebFn9ZTdAjF2Z1oo409Z5
-	ZcPg7AI4sDr2h/18roXZmc6bxCNgyxvskKr/O60Yhex9QXGd1gNx8mJaj3fr2Vsy4joF8U4ityB
-	4DD5hCbVy2Ad24CMydrcCjhWyrPkOejcHIR91r91agygyVvkX9pl+3TMZLdjw2FAnXZNB/5Uriv
-	oY46LDkIRnLTXhxc9MhFOldEwKCQZUfedSjL1YUyjoVCnbTzqeWtwH+2pgdFt+BzkqLYra0YZrL
-	TpkTMp7dAysR/MKZCRB+Tp14MmMA=
-X-Google-Smtp-Source: AGHT+IGpq5KJYj/l1wOATwpZyhjeFxOQMatSSzVckaT9OfEIElh7VK70Bh6VZHAPSqyTk3x1rBi/hQ==
-X-Received: by 2002:a05:622a:2292:b0:494:7837:90d0 with SMTP id d75a77b69052e-494b098b2ccmr52651911cf.51.1747420517420;
-        Fri, 16 May 2025 11:35:17 -0700 (PDT)
-Received: from ziepe.ca (hlfxns017vw-142-167-56-70.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.167.56.70])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7cd467ef2fbsm149338685a.59.2025.05.16.11.35.16
+        d=1e100.net; s=20230601; t=1747428094; x=1748032894;
+        h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
+         :mime-version:message-id:date:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=1Fdr5GyRg7g4dq6gLsQfcfIbWGz/AKi8pep4CtziFBk=;
+        b=dZXbrgcWwAsPqD6pUAPGZRKUaS3CnZKmJXcr0oK89GFnXWMFa0Uie4RlQsQk4+XnVI
+         EGzpou4WertbV0QvJ4Mi/wZVKHkQj1yHfpp/XAgTDSi+i9O/Jk6htBqXskRN1UzAsa3x
+         U/TRB0Uu2R2q2d0TaGi1Dq+00Kk6x/GaV1Ts1afFVAQRaji90BMk9eXtXOioJrS3qe6p
+         rhGh7MpCXWAe73kfUboyD2A/YBjZD92/Pnb2OtPDjwgkItb9a6WbYsszckHGorgPSV2l
+         y9HX3Wblme9EYsj/hFtrvO67CnGBlf88KDHtwqWgnoKRCkWTPqkvNvs0QgN6JuaY7bIu
+         m0SQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUTYu8A0THoFH0HllerN++Ji6HIEmeJ4YTo6GHIhRTxzxgUUL3FYB2IP0/6Ocb0V96Eko+MhQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzmimRjSQBDpIpCJQW9X7D/NbmDtqcghNju/VMMswvwcrEpbfN8
+	w3Np+gjO6S09+5QdelQlXgWa5YEkq/LDvM68d5+amejxKbkJTObak5RmkSwRDyS+5w==
+X-Gm-Gg: ASbGncvGopPMqs8oO96dceCeV71w+rWNF+UC3DYYU8PV0vgJ7U7kOV2XIZzy8lZ1iD2
+	MLZwM4plbwCh+f1+Hok5wyYlnG5Z0al0S9hHTFRBkC4MJfwo5/EpoIsIyBLIE1xhsBRa6YjS0j/
+	HAZLumTX9V/0I7UaG/8fEJPkqYtTZ53hROXtfF4d/HcefQwtB5pCcjcsv+fbVzPD8GHfjlUGHhO
+	eGgInInsGGInT7ZvVEDVjcXe+LBZZUAwl1iSCsOLESw87mVZnLRDWgEyna1UX93MVGEmajgl0db
+	j/1At7477USoCrOJFanllgu6DKjh77zlSGL8KvMOuahRhj4jk6UYDZrjLjZJLOthDGBZBfxfIKe
+	rOxlkf+EQ1SeVRJSN+hAJ
+X-Google-Smtp-Source: AGHT+IExJBXnYQy1fph2QkBpi7lveyzJWjbqIPTJ+5kqceOC9VKa/MDC8RC4s3ohkpMHez45gWI0LA==
+X-Received: by 2002:ac8:714f:0:b0:494:b8bc:8adb with SMTP id d75a77b69052e-494b8bcca9emr31881741cf.5.1747428093791;
+        Fri, 16 May 2025 13:41:33 -0700 (PDT)
+Received: from localhost (pool-71-126-255-178.bstnma.fios.verizon.net. [71.126.255.178])
+        by smtp.gmail.com with UTF8SMTPSA id d75a77b69052e-494ae425388sm15534321cf.39.2025.05.16.13.41.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 May 2025 11:35:16 -0700 (PDT)
-Received: from jgg by wakko with local (Exim 4.97)
-	(envelope-from <jgg@ziepe.ca>)
-	id 1uFzts-00000002iAn-15rd;
-	Fri, 16 May 2025 15:35:16 -0300
-Date: Fri, 16 May 2025 15:35:16 -0300
-From: Jason Gunthorpe <jgg@ziepe.ca>
-To: Chathura Rajapaksha <chathura.abeyrathne.lk@gmail.com>
-Cc: Yunxiang.Li@amd.com, alex.williamson@redhat.com, audit@vger.kernel.org,
-	avihaih@nvidia.com, bhelgaas@google.com, chath@bu.edu,
-	eparis@redhat.com, giovanni.cabiddu@intel.com, kevin.tian@intel.com,
-	kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-	paul@paul-moore.com, schnelle@linux.ibm.com, xin.zeng@intel.com,
-	yahui.cao@intel.com, zhangdongdong@eswincomputing.com
-Subject: Re: [RFC PATCH 0/2] vfio/pci: Block and audit accesses to unassigned
- config regions
-Message-ID: <20250516183516.GA643473@ziepe.ca>
-References: <20250429134408.GC2260621@ziepe.ca>
- <20250516181754.7283-1-chath@bu.edu>
+        Fri, 16 May 2025 13:41:33 -0700 (PDT)
+Date: Fri, 16 May 2025 16:41:32 -0400
+Message-ID: <669e1abd542da9fbcfb466d134f01767@paul-moore.com>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250516181754.7283-1-chath@bu.edu>
+MIME-Version: 1.0 
+Content-Type: text/plain; charset=UTF-8 
+Content-Transfer-Encoding: 8bit 
+X-Mailer: pstg-pwork:20250516_1624/pstg-lib:20250516_1120/pstg-pwork:20250516_1624
+From: Paul Moore <paul@paul-moore.com>
+To: Chathura Rajapaksha <chathura.abeyrathne.lk@gmail.com>, kvm@vger.kernel.org
+Cc: Chathura Rajapaksha <chath@bu.edu>, William Wang <xwill@bu.edu>, Alex Williamson <alex.williamson@redhat.com>, Eric Paris <eparis@redhat.com>, Niklas Schnelle <schnelle@linux.ibm.com>, Xin Zeng <xin.zeng@intel.com>, Kevin Tian <kevin.tian@intel.com>, Bjorn Helgaas <bhelgaas@google.com>, Yahui Cao <yahui.cao@intel.com>, Yunxiang Li <Yunxiang.Li@amd.com>, Dongdong Zhang <zhangdongdong@eswincomputing.com>, Avihai Horon <avihaih@nvidia.com>, linux-kernel@vger.kernel.org, audit@vger.kernel.org
+Subject: Re: [PATCH RFC 2/2] audit accesses to unassigned PCI config regions
+References: <20250426212253.40473-3-chath@bu.edu>
+In-Reply-To: <20250426212253.40473-3-chath@bu.edu>
 
-On Fri, May 16, 2025 at 06:17:54PM +0000, Chathura Rajapaksha wrote:
-> Hi Jason and Alex,
+On Apr 26, 2025 Chathura Rajapaksha <chathura.abeyrathne.lk@gmail.com> wrote:
 > 
-> Thank you for the comments, and apologies for the delayed response.
+> Some PCIe devices trigger PCI bus errors when accesses are made to
+> unassigned regions within their PCI configuration space. On certain
+> platforms, this can lead to host system hangs or reboots.
 > 
-> On Mon, Apr 28, 2025 at 9:24 AM
-> Jason Gunthorpe <jgg@ziepe.ca> wrote:
-> > > Some PCIe devices trigger PCI bus errors when accesses are made to
-> > > unassigned regions within their PCI configuration space. On certain
-> > > platforms, this can lead to host system hangs or reboots.
-> >
-> > Do you have an example of this? What do you mean by bus error?
+> The current vfio-pci driver allows guests to access unassigned regions
+> in the PCI configuration space. Therefore, when such a device is passed
+> through to a guest, the guest can induce a host system hang or reboot
+> through crafted configuration space accesses, posing a threat to
+> system availability.
 > 
-> By PCI bus error, I was referring to AER-reported uncorrectable errors.
-> For example:
-> pcieport 0000:c0:01.1: PCIe Bus Error: severity=Uncorrected (Fatal), type=Transaction Layer, (Requester ID)
-> pcieport 0000:c0:01.1:   device [1022:1483] error status/mask=00004000/07a10000
-> pcieport 0000:c0:01.1:    [14] CmpltTO                (First)
+> This patch introduces auditing support for config space accesses to
+> unassigned regions. When enabled, this logs such accesses for all
+> passthrough devices. 
+> This feature is controlled via a new Kconfig option:
+> 
+>   CONFIG_VFIO_PCI_UNASSIGNED_ACCESS_AUDIT
+> 
+> A new audit event type, AUDIT_VFIO, has been introduced to support
+> this, allowing administrators to monitor and investigate suspicious
+> behavior by guests.
 
-That's sure looks like a device bug. You should not ever get time out
-for a config space read.
+I try to encourage people to put a sample audit record in the commit
+description as it helps others, even those not overly familiar with the
+Linux kernel, know what to expect in the audit log and provide feedback.
 
-> In another case, with a different device on a separate system, we
-> observed an uncorrectable machine check exception:
-> mce: [Hardware Error]: CPU 10: Machine Check Exception: 5 Bank 6: fb80000000000e0b
+> Co-developed by: William Wang <xwill@bu.edu>
+> 
+> Signed-off-by: William Wang <xwill@bu.edu>
+> Signed-off-by: Chathura Rajapaksha <chath@bu.edu>
+> ---
+>  drivers/vfio/pci/Kconfig           | 12 ++++++++
+>  drivers/vfio/pci/vfio_pci_config.c | 46 ++++++++++++++++++++++++++++--
+>  include/uapi/linux/audit.h         |  1 +
+>  3 files changed, 57 insertions(+), 2 deletions(-)
 
-FW turning AER into a MCE is not suitable to use as a virtualization
-host, IMHO. It is not possible to contain PCIe errors when they are
-turned into MCE.
+...
 
-> Is it feasible to support such use cases using a quirk-based mechanism?
-> For example, could we implement a quirk table that’s updateable via
-> sysfs, as you suggested?
+> diff --git a/drivers/vfio/pci/vfio_pci_config.c b/drivers/vfio/pci/vfio_pci_config.c
+> index cb4d11aa5598..ddd10904d60f 100644
+> --- a/drivers/vfio/pci/vfio_pci_config.c
+> +++ b/drivers/vfio/pci/vfio_pci_config.c
+> @@ -25,6 +25,7 @@
+>  #include <linux/uaccess.h>
+>  #include <linux/vfio.h>
+>  #include <linux/slab.h>
+> +#include <linux/audit.h>
+>  
+>  #include "vfio_pci_priv.h"
+>  
+> @@ -1980,6 +1981,37 @@ static size_t vfio_pci_cap_remaining_dword(struct vfio_pci_core_device *vdev,
+>  	return i;
+>  }
+>  
+> +enum vfio_audit {
+> +	VFIO_AUDIT_READ,
+> +	VFIO_AUDIT_WRITE,
+> +	VFIO_AUDIT_MAX,
+> +};
+> +
+> +static const char * const vfio_audit_str[VFIO_AUDIT_MAX] = {
+> +	[VFIO_AUDIT_READ]  = "READ",
+> +	[VFIO_AUDIT_WRITE] = "WRITE",
+> +};
 
-Dynamically updateable might be overkill, I think you have one
-defective device. Have you talked to the supplier to see if it can be
-corrected?
+We generally don't capitalize things like this in audit, "read" and
+"write" would be preferred.
 
-I think Alex is right to worry, if the device got this wrong, what
-other mistakes have been made? Supporting virtualization is more than
-just making a PCI device and using VFIO. You need to robustly design
-HW to have full containment as well, including managing errors.
+> +static void vfio_audit_access(const struct pci_dev *pdev,
+> +			      size_t count, loff_t *ppos, bool blocked, unsigned int op)
+> +{
+> +	struct audit_buffer *ab;
+> +
+> +	if (WARN_ON_ONCE(op >= VFIO_AUDIT_MAX))
+> +		return;
+> +	if (audit_enabled == AUDIT_OFF)
+> +		return;
+> +	ab = audit_log_start(audit_context(), GFP_ATOMIC, AUDIT_VFIO);
+> +	if (unlikely(!ab))
+> +		return;
+> +	audit_log_format(ab,
+> +			 "device=%04x:%02x:%02x.%d access=%s offset=0x%llx size=%ld blocked=%u\n",
+> +			 pci_domain_nr(pdev->bus), pdev->bus->number,
+> +			 PCI_SLOT(pdev->devfn), PCI_FUNC(pdev->devfn),
+> +			 vfio_audit_str[op], *ppos, count, blocked);
+> +	audit_log_end(ab);
+> +}
 
-Alternatively you could handle this in qemu by sanitizing the config
-space..
+In the commit description you talk about a general PCIe device issue
+in the first paragraph before going into the specifics of the VFIO
+driver.  That's all well and good, but it makes me wonder if this
+audit code above is better done as a generic PCI function that other
+PCI drivers could use if they had similar concerns?  Please correct
+me if I'm wrong, but other than symbol naming I don't see anyting
+above which is specific to VFIO.  Thoughts?
 
-Jason
+Beyond that, I might also change the "access=" field to "op=" as we
+already use the "op=" field name for similar things in audit, it would
+be good to leverage that familiarity here.  Similarly using "res=",
+specifically "res=0" for failure/blocked or "res=1" allowed, would
+better fit with audit conventions.
+
+> diff --git a/include/uapi/linux/audit.h b/include/uapi/linux/audit.h
+> index 9a4ecc9f6dc5..c0aace7384f3 100644
+> --- a/include/uapi/linux/audit.h
+> +++ b/include/uapi/linux/audit.h
+> @@ -122,6 +122,7 @@
+>  #define AUDIT_OPENAT2		1337	/* Record showing openat2 how args */
+>  #define AUDIT_DM_CTRL		1338	/* Device Mapper target control */
+>  #define AUDIT_DM_EVENT		1339	/* Device Mapper events */
+> +#define AUDIT_VFIO		1340	/* VFIO events */
+
+If the audit code above becomes more generalized as discussed, I would
+expect this to change to AUDIT_VFIO to AUDIT_PCI, or something similar.
+
+--
+paul-moore.com
