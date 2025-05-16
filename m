@@ -1,135 +1,173 @@
-Received: from sonic313-15.consmr.mail.ne1.yahoo.com (sonic313-15.consmr.mail.ne1.yahoo.com [66.163.185.38])
+Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com [209.85.219.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFCE32C2ACE
-	for <audit@vger.kernel.org>; Wed, 30 Apr 2025 20:59:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.163.185.38
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA2711547C9;
+	Fri, 16 May 2025 18:18:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746046749; cv=none; b=TTH1Bn0KbfmA5KeoVe1Qb+eXCZ0w5WGvJGqpB7q/4Hv9z6hP4tqiqiJ26A7SwtD6n+F0OlosvFknW3lIocaBYlMBzExzfR3EFKFT4Pm1+/kbYeQE4GpLUjUmMQhqYxnNB3pSCDqPFEI9teTzAA04U3hAY2bQsbKMiVujukJVNFs=
+	t=1747419487; cv=none; b=mTxJ0C/6loQXtaBqHWvtE+u7KFMegQNvqZ+p6NG7UdZ0E0Yjy5uv/hQLjIiAKfNkqu8INay3TrONrn4qrSSpmGIqZgw1XVwjdYeRdv+9NyMkXIOMNQhwkrcZNPW2L2uk+TYSdQUjeHxGa03cCDGuIhzLNWbdOy4YRJF60QCcAr4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746046749; c=relaxed/simple;
-	bh=X3V2lY6xt3KmbTiZ4jeylhjURL3PNT00MwS5+CYXf/o=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=FYPUIp+b4PQfeuxRXuG8/DVFWZXxEnNmJhZgU1E6a+d2iAf88JvyzIbzQNbjGgR6RWDmXZdUdo6jwfPWsS7tLg+bvk+XYU60iwlpns3+9ZVK9cnWq429tpqtmzcXRRIzrX/BwSA4vIf0M3spCYzoJjRC7cWZJVbj/RLDjteE5yM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com; spf=none smtp.mailfrom=schaufler-ca.com; dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b=bDOXR/To; arc=none smtp.client-ip=66.163.185.38
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=schaufler-ca.com
+	s=arc-20240116; t=1747419487; c=relaxed/simple;
+	bh=cOVJifAOKkgfglWuMdO1Rvc0JWJU2TdrcFrHkX83Zr8=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=jCLWzI6H803281PZcMqttdDDvylguCi2UKFtLFEfbyeOCH9iBOEqvqt0jHluhTTTVDKtqpbdCyjshtweAZeKhp+DL712id7/pVhD5nCgsi3kkfQxcv01U1ZsIo39IcZFv0J3So9/A9PPJNnF8KbQqytPI9WUQ0Yt+lf+cGhRGiY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jTrNSVJ3; arc=none smtp.client-ip=209.85.219.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b="bDOXR/To"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1746046740; bh=+gC+d7moRSAaJPJZhwxmGK5/40fNgFBiFFeRuG5b1KM=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=bDOXR/ToO3dTpbH4gZaidk7BW+4tLB2pAmjEwba4KBzQEkFzaz0OkA11HuOqQPje/u1waSWSwt/fPFU7ou1iIpsD3Lm9kxBw2PJp1AdJKUsZznIBanWy3cETGwl1h+7E0Nm5hyc2uNjvwFGK3abAIY7blk37pOnp2fSYX3H233YZKz//hBckOa1CdOan+9/OOAo6ARpStOnNpgm4LAzfmDYdK9KEyGTkGb0srWXxm2ORx4zHosBXuahxa+P+wJTqQepdwCvgKPZKciZmcAaZTU6adSmGA5YMGFNVZys1i8lMdPq9cCxvarMc/SxwwQXEU/aXExobKWZcwC2wq878/w==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1746046740; bh=c4rizytTzSsmojoEC2K8MOXTO+UQhlVH8u4AifleGw7=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=kkoXCHs4BWn8MKJhaIGxtzbwYL3zKCX/zsP/lxk5PCU0xfVSpsK4vmok5WG1WqTPVmKnGq7M/8a24da2dnUMrM4EgCwVG6vnAO1I2r64fCCthxqyZaoeaD+ji83tu1m+uc8P0IHf5hhFj2OOCHzoCrjZYP5fkojovD27Y0FR/TTJtyU+OswjpLTKFJFnTK30FSpJb2OsGH8mxy2WPCS+5WJHA2rJLq4J11X/jkIGVQEcVgZkLlMPfwRk788J/YcIeOTPjJAU0LK3dlhwXv6+sq5GYe6TjR4WsKet+Zw4yD63JauQ6uIk0dWXhzfEvI2nbThPUCNuCt4LnUnmdRvqbw==
-X-YMail-OSG: EmGTxl4VM1nm95CdTEC7vPAhmhB5PTVR6.8wsREeMwE7cxFAOFPFq1jRuHcUdmy
- eSzdbFra9.4qi5XG88xks2C_dSCQfx_5yJ2aK4zEejYkdsfsiYnCFVQ3tpIwmxLa0A5UfsAJx9Vn
- _IkUFjR2V.DVmdK2bRSeOTw8jP3OaFd486YtWjtYnHanumwMPyH5YQv.jmKGU7xWvWV8CrYT5O7G
- vP4FyE0p2iKy_TWQKZXUdcw1Vha5n6VAwkhD32JCUvTHRNl3h6EY6NraHvuacFSSdIyt4vgQUK19
- 4MgJRqf1rlZpcH8unuwJOHlp4.ikdr9ORfBphpd7CZXpVoPvJ0uPU1x5591FFCWXRZy4SQ0IzkTJ
- wldTX8zUjZhi3Wo2AVBqU_IyQJgoDkM9amvU8tHpkdABiYvC71GC0AzkPoZaSIw_oTsXOzH7VBFn
- rBZRZr5rTwus.Xuz.BNjkU39lb8u_znco_H1Iem5bTj4UVOENnIRpK1YNkXqiw0gH.RmAeC7pYEn
- dBqxb8Z7P_XlZzrEuKIXNpyGtP7Xc4uTGHanxc_aPY7EQgc0BChc0bhU_1ofDxkhmedNqtFOxgug
- boSsOu0YRRtXVAfxI28NUcWraTtJrCg3QnAW.pvYJFavRsI6gUjZaUnEXJ3ZIg3D1MCJqgOaJ.KH
- y0BVSDIQU1pFGZeIGLiIwnemevVincewipfw_uygh84mvItBOERbEbQrTS7QEYdiW1iy7_NPqLuP
- Zu8vv6kITXmhs.rDIWMkzcvXF9boHKUKHZ8Q84c1VtY7b8koJ8TCJMviSUfirDojgh6fFpKgUEnK
- _UpQeOTnzvQrGKCW8O7LAG2IKlvlUvMEfRGevSD3ItlIWIHMI3XbP_SEZATDx2YJmZJq1tOnGmSk
- o15pajfmJmGI7IRtkC37s49iEzaKLq8wBmtE5FKcQLGtRoGtyFKS2AEsX1VsLdTon8T_ZrF4hbMy
- KQyAKN8.ox.qFZi.8poHmiudXF89CJ7D.U35GbrTCuibNzgyAUMN9DzjkBvwMYf6XYCInQkEMGZx
- zTCs2dmr8gR8EeAfU6pOaRF6VwNodByOu5HWO0508.EBWuGxBxC_8yJbqlkqjnu.DMWCW9iODPam
- c0mHvT5VW6fgQfLiQ6KvG7szUcGfyWwGxx52Z70CT65DfyIaKBcML3NwKH4Nphmo3kIlFXwGn.OA
- qNRCOJ9dVueQku2MCiQh.q8wVb7ynPwW2kBv5jqzvraIYpJ5_pplWEWVhK1nl2m0EqkUD6lTAiy9
- nlr8STwx3bFLWc8a.DVm4VDyjwhBzw1ES7.AgKDCjUDj1Q0SnWM7yNskFQrMIegBRUA5KBl1HbZf
- LkdnPTc5aaQksn3J5azvLNj19VE86XLqNRvwpAwXMGRrnpmgjsJG_9D.EmY2bBwy4zOmgOpuBSmF
- eiLkbTbGQhnwLF6EwsPPCKUpECn64lPxtQFxn3w1bFkXf9C1iTJ8wspGBJNzxl6ks9y0ZAte.kYR
- Ba26DmyzshiuT7OtGUoos7w_CYzk7WPBRSrlqfw6Yq785e.Cc2q.qBWOTtpcB4AZvv5LaiGFKPFm
- lTmXT8n0y1JH_OS9Rwfyo98eIeiVgSYImD2CkU28VEDW5l5oj.WJ6rxsTN2VAXGSQB5hYUp52mcQ
- S7S6PSUu0.PMTLSIKnsGuPgwelfK2Vlj1i_.IByiAIHqwhF31IcVhJ8Cuna40PtT3HbZ2zyt2D9v
- Ktd2DSjPSGw_lxDYcNgx7h7XXLfsLs8C209.yRpmG18G6WC4QSiBu8F8is2q3HP6cFQRpnroUXqb
- eNDPfv70WV8szPH1DbxBJ8OJbl0RIp0rqAffwcNt8WR2y2GH3C5665T9n4pZuqAyHOeht3YsatR9
- h7Vi4dYo7.4QoPGStzq_7dLJPCzMq.4tMHM2zMjMJwxy62xe3e.8ktK1jICcnqEemVBwJ0JupQSM
- kz4Wp4iAM4Wf4nxZT62Qlpmjkoy8t_NxPxHZ1ZuJym9rdBdifjWFzTUz63I_NqxrBjVIanfNVg33
- .gLUyBPv7QRSHvoUeEgTeC9q5E.t.YyztGnUTj6D1c2KzQHApEY0TXzpMiLwVCAlbWOSgbd1z78T
- 3xWfJjZTSPUOBPymBFl5zEAd60bGTmQyt.xA73eAhpqajMwVmF8FSsmeC7vFqrVFwiZ_CIgzho4u
- aoHpuRZEA8sS2vx3G4Fk3euK3xK5I9pc0URf5N025_hwBXI78n43lTKp04I2Q0H6lBdSKwjXbANs
- tpiXeDBA8qR69MNKhifX9_5P89MlSnS3v89M1YjgHQ5OQjhuIC_2SOP9y3k5Y46COE5iTPppa673
- iRjkXLQGu2I4tgTgBHskKWQ0-
-X-Sonic-MF: <casey@schaufler-ca.com>
-X-Sonic-ID: 27ad3a78-a3a6-4fd0-a5b1-c54b774af32a
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic313.consmr.mail.ne1.yahoo.com with HTTP; Wed, 30 Apr 2025 20:59:00 +0000
-Received: by hermes--production-gq1-74d64bb7d7-mh87r (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 2fa6c2ffd89e3e47aa75eb5dbe1c77c5;
-          Wed, 30 Apr 2025 20:48:48 +0000 (UTC)
-Message-ID: <5a220cb2-17ef-4bc6-813b-5ae5c7818d97@schaufler-ca.com>
-Date: Wed, 30 Apr 2025 13:48:48 -0700
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jTrNSVJ3"
+Received: by mail-yb1-f175.google.com with SMTP id 3f1490d57ef6-e732386e4b7so2630228276.1;
+        Fri, 16 May 2025 11:18:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1747419484; x=1748024284; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cOVJifAOKkgfglWuMdO1Rvc0JWJU2TdrcFrHkX83Zr8=;
+        b=jTrNSVJ3qq2k7IFeUvnKSL5Vcxr1DpxTrqODySDe7TE6H5s4chCV0t51Yfb+Y/m1E7
+         gbIcwOjwTQVSSeTtMN8xPUSbeectk6iuQbLVBT4Quq7Idi2gZCgNPxJ7KF2tGa6SZhhh
+         333lTNPvaYXh58pR0H/X25QIpUZYOFSSsygh1Jdk0tJXwcxFrXhpEeO09fkqNy6iAfgr
+         q2IsjlGgsHQ1HUw/0GzxA+2fZ2AX0B0VSboJIkdeZ54ihl9eG8pML27BZJgvyOj7czm4
+         qzq+m4f0/vpzo3V+DIbZQROxJvPHKBesbIWgGxIlT7S5Ue9OQmR4O4SMC4DeUaTMiyJg
+         I0nA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1747419484; x=1748024284;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=cOVJifAOKkgfglWuMdO1Rvc0JWJU2TdrcFrHkX83Zr8=;
+        b=cANvC3R97XAByDQTY1/GuWTvb8GzruSVapD6RSn3mwVUE8KQAIfSE0oQy3dsoL/UTv
+         ixW0iBot6APGTxWEdk+kVP3dcw7F8A0n0DkcpojxjDUogzkwazAG4ViOR+5UHrpFTzcw
+         74NkkXP4CmVvFrLTrfch7owOHfxL1hYSOVKIkDwGOC1IJY4h7TktWD1jSMb5b7mirDYk
+         fLQJVgHjs9xJVwrYKUXKvanebk+UH/qbMUiC0DPsX2VmVq7WJA825rslRhjmiUrnjkF0
+         NihQ8hY21fFTxAmpt+am6chibRpiw69oLfl0vgOEL9T/5fld2xNxyPHSyF1qz8YxooAU
+         ZWPg==
+X-Forwarded-Encrypted: i=1; AJvYcCUVfg094ZC6FPTL6568IJlV/TadXJclTQo3ki0/qZg5nBCpZ1k8SjQRj6MyXgf37e7U7fUP@vger.kernel.org, AJvYcCW9HvsccTswntTKPuisHwRVJXK505rGxtyYmlY50PWAzUOisgwCEosjGJnJZFlT0tXSUAlsJOTyxsD/rSej@vger.kernel.org, AJvYcCWce7b1oiI4nMnI7JVB8q5gj8P3s8wv09K4dPHQcNVbXxGqTZA9xEbCH04aXyw/dmLscAmFqQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxtXZH6RpSVmqqh0DfzH6coIa9JC1RC7yP+xIORs1g5RAHf5HCS
+	F3e6xPfR874frLtgukZUipYAXG620+BGie9h4Rgq3eTpAN62rxYLFngV
+X-Gm-Gg: ASbGncs8g8zoHO60IjiDK1iMMcWLbWhI24sUx62RwuzjyYad1beMr0aQ/kdVHd7oqvl
+	vONOzPyoEgHxL0K+dQKPi03Ad1TrUC+AhkHqsvDT7iUU2cKhkgDLiKPmXGgpdMBhXAtgoRvJ7cd
+	r+0Jxr6IclAT/4DlHmgoKXQ1z7Bx0lPlE3m5mUgzOPuYK3w/8slAnoG7dW58FyMhY9uSBVrTVdA
+	XBbZ2jcgywWVY5WEBibxaZzeM/+ZScoyzieSVJccy0JhEbcG7GTvg5Bk46BxzJwWfKfg6YzBi+z
+	XSd9gC/y5EnzQ4xWc2xeORpGBtXR2xIHV5RTejkIf/d9IFfcrZlRX/iJiFgVcuDbl9HYAxl1bCy
+	J6GVFN+M/4GL5zHu51JOdSbMXTcAA
+X-Google-Smtp-Source: AGHT+IFg4SVeF1nkllpnnckIcQ27PUkeLDLWxWkuBT+D/NpxGX21o4kenkdJCNNoY2uLqASSjw9AZw==
+X-Received: by 2002:a05:6902:1b09:b0:e79:7ba6:f8d with SMTP id 3f1490d57ef6-e7b6d3bb248mr4919654276.7.1747419484486;
+        Fri, 16 May 2025 11:18:04 -0700 (PDT)
+Received: from master.chath-257608.iommu-security-pg0.clemson.cloudlab.us ([130.127.134.87])
+        by smtp.gmail.com with ESMTPSA id 3f1490d57ef6-e7b6ac88539sm700971276.19.2025.05.16.11.18.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 May 2025 11:18:03 -0700 (PDT)
+From: Chathura Rajapaksha <chathura.abeyrathne.lk@gmail.com>
+X-Google-Original-From: Chathura Rajapaksha <chath@bu.edu>
+To: jgg@ziepe.ca
+Cc: Yunxiang.Li@amd.com,
+	alex.williamson@redhat.com,
+	audit@vger.kernel.org,
+	avihaih@nvidia.com,
+	bhelgaas@google.com,
+	chath@bu.edu,
+	chathura.abeyrathne.lk@gmail.com,
+	eparis@redhat.com,
+	giovanni.cabiddu@intel.com,
+	kevin.tian@intel.com,
+	kvm@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	paul@paul-moore.com,
+	schnelle@linux.ibm.com,
+	xin.zeng@intel.com,
+	yahui.cao@intel.com,
+	zhangdongdong@eswincomputing.com
+Subject: Re: [RFC PATCH 0/2] vfio/pci: Block and audit accesses to unassigned config regions
+Date: Fri, 16 May 2025 18:17:54 +0000
+Message-Id: <20250516181754.7283-1-chath@bu.edu>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20250429134408.GC2260621@ziepe.ca>
+References: <20250429134408.GC2260621@ziepe.ca>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 4/5] Audit: multiple subject lsm values for netlabel
-To: Paul Moore <paul@paul-moore.com>
-Cc: eparis@redhat.com, linux-security-module@vger.kernel.org,
- audit@vger.kernel.org, jmorris@namei.org, serge@hallyn.com,
- keescook@chromium.org, john.johansen@canonical.com,
- penguin-kernel@i-love.sakura.ne.jp, stephen.smalley.work@gmail.com,
- linux-kernel@vger.kernel.org, selinux@vger.kernel.org,
- Casey Schaufler <casey@schaufler-ca.com>
-References: <20250319222744.17576-5-casey@schaufler-ca.com>
- <0211e4c6561bf2eabbad2bf75a760e03@paul-moore.com>
- <c53cf38a-f159-48b8-922a-550bd21b5951@schaufler-ca.com>
- <CAHC9VhTbrk_XovghLTtqPUv3br9aJbn2YcnFyn3uugTUKAHNFw@mail.gmail.com>
-Content-Language: en-US
-From: Casey Schaufler <casey@schaufler-ca.com>
-In-Reply-To: <CAHC9VhTbrk_XovghLTtqPUv3br9aJbn2YcnFyn3uugTUKAHNFw@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Mailer: WebService/1.1.23737 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
 
-On 4/30/2025 11:51 AM, Paul Moore wrote:
-> On Wed, Apr 30, 2025 at 12:25 PM Casey Schaufler <casey@schaufler-ca.com> wrote:
->> On 4/24/2025 3:18 PM, Paul Moore wrote:
->>> On Mar 19, 2025 Casey Schaufler <casey@schaufler-ca.com> wrote:
->>>> Refactor audit_log_task_context(), creating a new audit_log_subj_ctx().
->>>> This is used in netlabel auditing to provide multiple subject security
->>>> contexts as necessary.
->>>>
->>>> Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
->>>> ---
->>>>  include/linux/audit.h        |  7 +++++++
->>>>  kernel/audit.c               | 28 +++++++++++++++++++++-------
->>>>  net/netlabel/netlabel_user.c |  9 +--------
->>>>  3 files changed, 29 insertions(+), 15 deletions(-)
->>> Other than moving to the subject count supplied by the LSM
->>> initialization patchset previously mentioned, this looks fine to me.
->> I'm perfectly willing to switch once the LSM initialization patch set
->> moves past RFC.
-> It's obviously your choice as to if/when you switch, but I'm trying to
-> let you know that acceptance into the LSM tree is going to be
-> dependent on that switch happening.
+Hi Jason and Alex,
 
-Not a problem. Obviously, I'd prefer this patch going in before the
-LSM initialization work, but it is your call.
+Thank you for the comments, and apologies for the delayed response.
 
-> The initialization patchset is still very much alive, and the next
-> revision will not be an RFC.  I'm simply waiting on some additional
-> LSM specific reviews before posting the next revision so as to not
-> burn out people from looking at multiple iterations.  I've been told
-> privately by at least one LSM maintainer that reviewing the changes in
-> their code is on their todo list, but they have been slammed with
-> other work at their job and haven't had the time to look at that
-> patchset yet.  I realize you don't have those issues anymore, but I
-> suspect you are still sympathetic to those problems.
+On Mon, Apr 28, 2025 at 9:24 AM
+Jason Gunthorpe <jgg@ziepe.ca> wrote:
+> > Some PCIe devices trigger PCI bus errors when accesses are made to
+> > unassigned regions within their PCI configuration space. On certain
+> > platforms, this can lead to host system hangs or reboots.
+>
+> Do you have an example of this? What do you mean by bus error?
 
-Of course. Waiting on reviews can be frustrating.
+By PCI bus error, I was referring to AER-reported uncorrectable errors.
+For example:
+pcieport 0000:c0:01.1: PCIe Bus Error: severity=Uncorrected (Fatal), type=Transaction Layer, (Requester ID)
+pcieport 0000:c0:01.1:   device [1022:1483] error status/mask=00004000/07a10000
+pcieport 0000:c0:01.1:    [14] CmpltTO                (First)
 
-> If you're really anxious to continue work on this RIGHT NOW, you can
-> simply base your patchset on top of the initialization patchset.  Just
-> make sure you mention in the cover letter what you are using as a base
-> for the patchset.
+In another case, with a different device on a separate system, we
+observed an uncorrectable machine check exception:
+mce: [Hardware Error]: CPU 10: Machine Check Exception: 5 Bank 6: fb80000000000e0b
 
-As I don't anticipate serious changes to your patch set this makes sense.
+> I would expect the device to return some constant like 0, or to return
+> an error TLP. The host bridge should convert the error TLP to
+> 0XFFFFFFF like all other read error conversions.
+>
+> Is it a device problem or host bridge problem you are facing?
 
-> If that still doesn't offer any satisfaction, you can always
-> incorporate the feedback that I made in v2 that was ignored in your v3
-> posting :-P
+We haven’t been able to confirm definitively whether it’s a device or
+host bridge issue due to limited visibility into platform internals.
+However, we suspect it’s device-specific, as the same device triggered
+similar failures across two different systems when writing to a
+specific unassigned region in its config space. That said, we haven’t
+exhaustively tested across devices and platforms.
 
-Yeah, oops on that.
+If you have suggestions for identifying whether this stems from the
+device or host bridge, we’d appreciate the guidance.
 
+On Mon, Apr 28, 2025 at 4:26 PM
+Alex Williamson <alex.williamson@redhat.com> wrote:
+> Or system problem.  Is it the access itself that generates a problem or
+> is it what the device does as a result of the access?  If the latter,
+> does this only remove a config space fuzzing attack vector against that
+> behavior or do we expect the device cannot generate the same behavior
+> via MMIO or IO register accesses?
+
+Unfortunately, we can't say for certain whether the fault lies in the
+access itself or in the device's response. The cloud environments we
+tested on don’t provide sufficient low-level hardware insight to
+determine that. Please let me know if you have any pointers on how to
+determine this at the kernel level.
+
+This patch specifically aims to eliminate the config space fuzzing
+vector. We have not investigated whether similar behavior can be
+triggered through MMIO or IO register accesses.
+
+> > No module parameters please.
+> >
+> > At worst the kernel should maintain a quirks list to control this,
+> > maybe with a sysfs to update it.
+>
+> No module parameters might be difficult if we end up managing this as a
+> default policy selection, but certainly agree that if we get into
+> device specific behaviors we probably want those quirks automatically
+> deployed by the kernel.  Thanks,
+
+We used module parameters to give the flexibility to block unassigned
+config space accesses on specific devices, especially in cases where new
+problematic devices might emerge.
+
+Is it feasible to support such use cases using a quirk-based mechanism?
+For example, could we implement a quirk table that’s updateable via
+sysfs, as you suggested?
+
+Thank you for your time, and again, apologies for the delayed response.
+
+Thanks,
+Chathura
