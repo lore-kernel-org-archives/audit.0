@@ -1,134 +1,161 @@
-Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADE1C190057
-	for <audit@vger.kernel.org>; Mon, 26 May 2025 19:44:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE474270554
+	for <audit@vger.kernel.org>; Tue, 27 May 2025 13:10:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748288668; cv=none; b=R7FQib+sfrAMMhtGBCTU2m6VGcBxKyiX6pi6uTpjvGVamBS2764kR+1ANkWmRv9CcTbv5Yg8QdcLw31Q5xw+HmdGs6yUA+dW1a+iroSu4eS3UFOjVhTUXQImsIwQSNIr60aA/lwFKxwCI/gIq5KivW5eCs7zlMF48YQ5oOKii2Y=
+	t=1748351402; cv=none; b=roYbyGb1l87gi3g8yw1wXVJrQSpBEGfb42uw16o+B03TL8Qxt02dAQvafmscSk2olqJQP+VPXo7yitTvVs62ACnfFo6h4Ub604mZ+/mhTkDP8D90BDFwi1Ce422SGM7iWTcG73TMthM9cs8OcS9nDRTGUtxHIczMRax63wqiiv0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748288668; c=relaxed/simple;
-	bh=CK8JysKVIn1wabbBll5P2AsB0jqzQ5UGq0g3MIz+lOE=;
+	s=arc-20240116; t=1748351402; c=relaxed/simple;
+	bh=PGClDXKS+mM//o82pMKGcF/voIpuJytcmv+gL+wng68=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TQvjenjmn5wF+6qK4qTVZw2+lxcOjDBgLs3vEprJDnjEnLdiFETxq6OCHMd48Uh3cZtug8PUW0WRuGyM7KtahfolJ7u3rH8Ezp69Pfz0hKZboDUdiems9eFm2RYsQxwHG+Ut9XziVYJbkf2TskqzA7U7JWLLdnLUOogw+uIVGno=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca; spf=pass smtp.mailfrom=ziepe.ca; dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b=IEkOrNr0; arc=none smtp.client-ip=209.85.160.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ziepe.ca
+	 Content-Type:Content-Disposition:In-Reply-To; b=ddw6wthMbkgfxlaQsVYnGw0vNvsSFsjnlP32PVtWEqvvMs7Ne04lnzg51ZsPoGZd+KryZ3iKb5irzn/BAJ8WkzLQ1kpUHuwYKbCNHzVSd7W76JzH/5QLqBvVKdNC/BgZtESxPjZx4daE7LObeWiHYmW0I67VGqdBJcIkd0WD4g0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=bl+3Yhrh; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b="IEkOrNr0"
-Received: by mail-qt1-f177.google.com with SMTP id d75a77b69052e-476f4e9cf92so16526361cf.3
-        for <audit@vger.kernel.org>; Mon, 26 May 2025 12:44:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google; t=1748288665; x=1748893465; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=t6x3GVRBafOUbt6XMXviRAhsrN8EerSjpBJlqi+s3Vo=;
-        b=IEkOrNr05vSVGm5xCYwH8+78u+fCdbgo7DEG7nAAeSXD1LgmJYtFHLDxh6rlYyNMQj
-         NXTPrW+AopYqY3fGCCcWpDGbVv79A4+oIJH2tKWD0Oy4M+9MDroctPOVvgzhnP94V72P
-         3BIT1VGIBaU2QdR5vpHRcCjbHN6kgFN/C0/YgoDsqKKWYRnifdkib1ltMmygVFuRtIoF
-         2HUEvmR6Y7MOnr4HwSw0ElmAmpe7y19hsKnPnkoysMW1IlDaQmjOFP6TaPAXq128eWNa
-         ndpiZS2z8hJoYRq1mkgRV/Tc1qAiCvQkoRJkdS2hUtLLMx2pGo3aoAzhtsIrubg5cM/R
-         bz2Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1748288665; x=1748893465;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=t6x3GVRBafOUbt6XMXviRAhsrN8EerSjpBJlqi+s3Vo=;
-        b=CWOVC0lR3AQtG3RWnXKYdDxuf/E5J9xpnueCN8vYszuwKQWcfKldkom+wwYROLCat/
-         25UpTpzhojUGuojKYTZl8hLbaeAlsR4pRI6hA8v4Xpjnryh5l5ry04qg7K+yKeQtQaLP
-         P5At3lWrEkQ4vWkpp5ib/eiXUfmgH4q9GgHO0v4BWBMMrn6mQVT2s4KpBtm/bp8jkPnZ
-         wcUhnjak77iyPMk2U7q2E0Nu1LvMyPm+7+AXnOgRR7YywXfbOYaRfcIDIPvhrzSrgMu4
-         dgz8b8S2kjc77tA7KtwexLdgUqTOjD4O9YJXqNp3tKL2fH7D3DEZmlc7828KK0tZJoGa
-         uMjw==
-X-Forwarded-Encrypted: i=1; AJvYcCWGzqHQ3sSn0Ufko6q1FpOs7lKUGIMBs/TEdq3v59CKxe0VOYrqFqyvLyHg9SlFyDNZBurKAA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwDuz5b09r/vy8bcqr7FujNXF1jgZg2azbV0nNf3Gqd1EO3+w5n
-	ISvk8sZ9tOxcLKTilClIePwfF2MhEAIiFXTpEzLRXtGsy4m3jzV2r+Zu/uTSpF+IG9s=
-X-Gm-Gg: ASbGncsZ69RBmqFychhPG7logwomW2EWnZTdswJHp/+p9yfUZdC8hE832o+m+Qand/K
-	TA2bkS6imZFMjoq6s7CIW4f45WSMor8yP1h+RGJvoo1XrEfE/a+z8012lGGJZmYoFE44T1ZiQFj
-	Q/Z/IsOKeoOnCoVXo01pRJ9yUNgmQe867B8Uq+kJfpAP56qKd8P8ft8Tivh2t0vTGhfx/0wkH6o
-	c9NQTm6MZVD6Av1myYn0JwWUJsRUfUnmu2W+bSgIwkZVQBgL/WIDZjvE2iBnTM43B9qdRV+h4Pi
-	9Gcayj6K51iDclcxOcXxP4UuyMXUYAICIMIr2Eyq+fkBA48Y2ObH62spnCzJVd2YIZcVvFGB5vC
-	v2Oae+ZkmkQgUNTZNG8LDsndQTuA=
-X-Google-Smtp-Source: AGHT+IFxiSMJYUELeSfxwISguMW9AfotmvIS4kvd05cibYoRecWr7wlxSwNjUohVu4Je0SWxeRs4Pg==
-X-Received: by 2002:a05:622a:7e08:b0:489:7daf:c237 with SMTP id d75a77b69052e-49f480c8f2emr118958631cf.45.1748288665412;
-        Mon, 26 May 2025 12:44:25 -0700 (PDT)
-Received: from ziepe.ca (hlfxns017vw-142-167-56-70.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.167.56.70])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-494ae3f9244sm156310781cf.29.2025.05.26.12.44.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 May 2025 12:44:24 -0700 (PDT)
-Received: from jgg by wakko with local (Exim 4.97)
-	(envelope-from <jgg@ziepe.ca>)
-	id 1uJdkG-00000000UXa-1OLX;
-	Mon, 26 May 2025 16:44:24 -0300
-Date: Mon, 26 May 2025 16:44:24 -0300
-From: Jason Gunthorpe <jgg@ziepe.ca>
-To: Chathura Rajapaksha <chathura.abeyrathne.lk@gmail.com>
-Cc: Yunxiang.Li@amd.com, alex.williamson@redhat.com, audit@vger.kernel.org,
-	avihaih@nvidia.com, bhelgaas@google.com, chath@bu.edu,
-	eparis@redhat.com, giovanni.cabiddu@intel.com, kevin.tian@intel.com,
-	kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-	paul@paul-moore.com, schnelle@linux.ibm.com, xin.zeng@intel.com,
-	yahui.cao@intel.com, zhangdongdong@eswincomputing.com
-Subject: Re: [RFC PATCH 0/2] vfio/pci: Block and audit accesses to unassigned
- config regions
-Message-ID: <20250526194424.GG12328@ziepe.ca>
-References: <20250516183516.GA643473@ziepe.ca>
- <20250517171459.15231-1-chath@bu.edu>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="bl+3Yhrh"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1748351399;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=nd+q10cEIqH15mNq0pVlnhYbQLzcGmo26JmqeljKTxM=;
+	b=bl+3Yhrhn7417ink1d2/RIxtudWoh9G+YExVXPjV7Cb8+hxQ8dCRhKaYrmcHXvU1cDGi6U
+	kQwwovW2YVMsiYrF/5O5tf7ynvDMJTGyD/41OJ4eYlPqiD9y8gb4rqlSai767ZZZ/Dbkq0
+	ixLTH6BqPOyRLUZ4CNkwA5ocsFuQ4S8=
+Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-56-kdOODp4hPOWyIRLC1lSXXw-1; Tue,
+ 27 May 2025 09:09:54 -0400
+X-MC-Unique: kdOODp4hPOWyIRLC1lSXXw-1
+X-Mimecast-MFC-AGG-ID: kdOODp4hPOWyIRLC1lSXXw_1748351392
+Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 62F321956088;
+	Tue, 27 May 2025 13:09:51 +0000 (UTC)
+Received: from madcap2.tricolour.ca (unknown [10.22.74.2])
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 54EF118004A7;
+	Tue, 27 May 2025 13:09:47 +0000 (UTC)
+Date: Tue, 27 May 2025 09:09:44 -0400
+From: Richard Guy Briggs <rgb@redhat.com>
+To: Paul Moore <paul@paul-moore.com>
+Cc: Linux-Audit Mailing List <linux-audit@lists.linux-audit.osci.io>,
+	LKML <linux-kernel@vger.kernel.org>, linux-fsdevel@vger.kernel.org,
+	Linux Kernel Audit Mailing List <audit@vger.kernel.org>,
+	Eric Paris <eparis@parisplace.org>, Steve Grubb <sgrubb@redhat.com>,
+	Jan Kara <jack@suse.cz>, Amir Goldstein <amir73il@gmail.com>
+Subject: Re: [PATCH v1 1/2] audit: record fanotify event regardless of
+ presence  of rules
+Message-ID: <aDW5mI2dE7xOMMni@madcap2.tricolour.ca>
+References: <3c2679cb9df8a110e1e21b7f387b77ddfaacc289.1741210251.git.rgb@redhat.com>
+ <fb8db86ae7208a08277ddc0fb949419b@paul-moore.com>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250517171459.15231-1-chath@bu.edu>
+In-Reply-To: <fb8db86ae7208a08277ddc0fb949419b@paul-moore.com>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
 
-On Sat, May 17, 2025 at 05:14:59PM +0000, Chathura Rajapaksha wrote:
-> On Fri, May 16, 2025 at 2:35 PM Jason Gunthorpe <jgg@ziepe.ca> wrote:
-> > > By PCI bus error, I was referring to AER-reported uncorrectable errors.
-> > > For example:
-> > > pcieport 0000:c0:01.1: PCIe Bus Error: severity=Uncorrected (Fatal), type=Transaction Layer, (Requester ID)
-> > > pcieport 0000:c0:01.1:   device [1022:1483] error status/mask=00004000/07a10000
-> > > pcieport 0000:c0:01.1:    [14] CmpltTO                (First)
-> >
-> > That's sure looks like a device bug. You should not ever get time out
-> > for a config space read.
+On 2025-04-11 14:14, Paul Moore wrote:
+> On Mar  5, 2025 Richard Guy Briggs <rgb@redhat.com> wrote:
+> > 
+> > When no audit rules are in place, fanotify event results are
+> > unconditionally dropped due to an explicit check for the existence of
+> > any audit rules.  Given this is a report from another security
+> > sub-system, allow it to be recorded regardless of the existence of any
+> > audit rules.
+> > 
+> > To test, install and run the fapolicyd daemon with default config.  Then
+> > as an unprivileged user, create and run a very simple binary that should
+> > be denied.  Then check for an event with
+> > 	ausearch -m FANOTIFY -ts recent
+> > 
+> > Link: https://issues.redhat.com/browse/RHEL-1367
+> > Signed-off-by: Richard Guy Briggs <rgb@redhat.com>
+> > Acked-by: Jan Kara <jack@suse.cz>
+> > ---
+> >  include/linux/audit.h | 8 +-------
+> >  kernel/auditsc.c      | 2 +-
+> >  2 files changed, 2 insertions(+), 8 deletions(-)
+> > 
+> > diff --git a/include/linux/audit.h b/include/linux/audit.h
+> > index 0050ef288ab3..d0c6f23503a1 100644
+> > --- a/include/linux/audit.h
+> > +++ b/include/linux/audit.h
+> > @@ -418,7 +418,7 @@ extern void __audit_log_capset(const struct cred *new, const struct cred *old);
+> >  extern void __audit_mmap_fd(int fd, int flags);
+> >  extern void __audit_openat2_how(struct open_how *how);
+> >  extern void __audit_log_kern_module(char *name);
+> > -extern void __audit_fanotify(u32 response, struct fanotify_response_info_audit_rule *friar);
+> > +extern void audit_fanotify(u32 response, struct fanotify_response_info_audit_rule *friar);
+> >  extern void __audit_tk_injoffset(struct timespec64 offset);
+> >  extern void __audit_ntp_log(const struct audit_ntp_data *ad);
+> >  extern void __audit_log_nfcfg(const char *name, u8 af, unsigned int nentries,
+> > @@ -525,12 +525,6 @@ static inline void audit_log_kern_module(char *name)
+> >  		__audit_log_kern_module(name);
+> >  }
+> >  
+> > -static inline void audit_fanotify(u32 response, struct fanotify_response_info_audit_rule *friar)
+> > -{
+> > -	if (!audit_dummy_context())
+> > -		__audit_fanotify(response, friar);
+> > -}
 > 
-> Just to clarify, the above error was triggered by a write to the
-> configuration space. In fact, all the errors we have observed so far
-> were triggered by writes to unassigned PCI config space regions.
-
-Yuk, devices really shouldn't refuse to respond to writes or reads :(
-
-> So far, we have seen this issue on five PCIe devices across GPU and
-> storage classes from two different vendors. 
-
-Ugh, that's awful.
-
-> > Alternatively you could handle this in qemu by sanitizing the config
-> > space..
+> It seems like we should at least have an audit_enabled() check, yes?
+> We've had people complain about audit events being generated when audit
+> is disabled, any while we don't currently have such a check in place
+> here, I believe the dummy context check is doing that for us.
 > 
-> While it's possible to address this issue for QEMU-KVM guests by
-> modifying QEMU, PCIe devices can also be assigned directly to
-> user-space applications such as DPDK via VFIO. We thought addressing
-> this at the VFIO driver level would help mitigate the issue in a
-> broader context beyond virtualized environments.
+>   static inline void audit_fanotify(...)
+>   {
+>     if (!audit_enabled)
+>       return;
+>     __audit_fanotify(...);
+>   }
 
-VFIO can probably already trigger command timeouts if it tries hard
-enough, as long as it is a contained AER I don't see that the kernel
-*needs* to prevent it.. 
+That would be consistent with other security events messages.  I was
+going through the selinux code to see what it does and I am missing it
+if selinux checks with audit_enabled().  Are selinux messages somehow
+exempt from audit_enabled()?
 
-For virtualization I really do expect that any serious user will be
-tightly controlling the config space and maybe this finding just
-supports that qemu needs to be enhanced to have more configurability
-here.
+> >  static inline void audit_tk_injoffset(struct timespec64 offset)
+> >  {
+> >  	/* ignore no-op events */
+> > diff --git a/kernel/auditsc.c b/kernel/auditsc.c
+> > index 0627e74585ce..936825114bae 100644
+> > --- a/kernel/auditsc.c
+> > +++ b/kernel/auditsc.c
+> > @@ -2880,7 +2880,7 @@ void __audit_log_kern_module(char *name)
+> >  	context->type = AUDIT_KERN_MODULE;
+> >  }
+> >  
+> > -void __audit_fanotify(u32 response, struct fanotify_response_info_audit_rule *friar)
+> > +void audit_fanotify(u32 response, struct fanotify_response_info_audit_rule *friar)
+> >  {
+> >  	/* {subj,obj}_trust values are {0,1,2}: no,yes,unknown */
+> >  	switch (friar->hdr.type) {
+> > -- 
+> > 2.43.5
+> 
+> --
+> paul-moore.com
+> 
 
-It certainly is easier to add an option to qemu to make it block
-any address not in a cap chain than to add a bunch of PCI ID tables
-and detection to the kernel..
+- RGB
 
-Jason
+--
+Richard Guy Briggs <rgb@redhat.com>
+Sr. S/W Engineer, Kernel Security, Base Operating Systems
+Remote, Ottawa, Red Hat Canada
+Upstream IRC: SunRaycer
+Voice: +1.613.860 2354 SMS: +1.613.518.6570
+
