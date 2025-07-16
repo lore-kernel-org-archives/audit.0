@@ -1,240 +1,153 @@
-Received: from sonic310-30.consmr.mail.ne1.yahoo.com (sonic310-30.consmr.mail.ne1.yahoo.com [66.163.186.211])
+Received: from sonic312-30.consmr.mail.ne1.yahoo.com (sonic312-30.consmr.mail.ne1.yahoo.com [66.163.191.211])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E301B2820B6
-	for <audit@vger.kernel.org>; Tue, 15 Jul 2025 20:50:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.163.186.211
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AD3D2459E5
+	for <audit@vger.kernel.org>; Wed, 16 Jul 2025 21:27:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.163.191.211
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752612642; cv=none; b=b8xzFQD83phZOkZXitV9U3eoEXXEDf5OSYZcibJnJoIzPq22lOdRniH3jzt3TD4dQG38V9wJVcoiW7yXohJMWaJ9YYDDQk6RLvVJ2D5hR2yUoBlFMhYB0jR6nilLY+hCq5GDhBtyVlNZBwQwhMsAYYXMvNh+FuAlpExLsvUaiLQ=
+	t=1752701273; cv=none; b=IJR2jCHKbLq/BkGk+Ia1bnQGRupcoaVEv/HpxxkhInGZy9YD3Fc1jd1YZtb+PntTCeZzYXcsTdbdfEPXtwRKdF3qYxE4laKQsTf+pupUP7FSPrdahspeXF+NAKvNbVbONFxNXyaHl+L+OJs1hOPaxoypq2tjN3euAvgekEfIdnc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752612642; c=relaxed/simple;
-	bh=2luvZ3rqiBoEtpoW23pzMDM4/QRB3g6GQcH8HJUQnig=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=pEJXBVsrLfv+7WzAUxv8H0VsHlHuBu3TsOZoxm9BtgplQ+i12vZexjB6wbX7CjJyreoRhNmPVzCRLbZUgdsNs8g0SNAHyQC1R1rJGNEBxsetXZLjlNTf6CNk7PlVv/ooIZ6hVbTrqYvOBo+PHXEBQmSvTSqqBJhGEGa6/kKm8iw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com; spf=none smtp.mailfrom=schaufler-ca.com; dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b=j0vcvspz; arc=none smtp.client-ip=66.163.186.211
+	s=arc-20240116; t=1752701273; c=relaxed/simple;
+	bh=LzUCl3hoJEExpToziP9fTxrE872KV3dSO1feighJNnM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:References; b=OUucFgNTlFZgeo7EbLFSO5PmLeotDWJPCXDCeNGmIjKV80pLiH08CxtVuA7tIakUNeRTaQlumwpFYhF/Fo2cE+Q6i6iBCM3z33WYiGY+XXHdFFRXYIJlik6Th9hVvOmNkDNvcygYWVX1XMnRUlW5iIRZm91+cTqVRPRTR8JwI1w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com; spf=none smtp.mailfrom=schaufler-ca.com; dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b=Ot1xIJRl; arc=none smtp.client-ip=66.163.191.211
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=schaufler-ca.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b="j0vcvspz"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1752612632; bh=OApSiV87jIiW0m7oie12+pVRZVLDkiLDCQwZ9GxZu1k=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=j0vcvspzWqZrAF9gsGVvEgxKTTv8SJI8se4AVj24q+/tUPU8NkysTlaiZqyMjWLN/iVusQEJtR6ayHvzCBQybCTfdQ/uusFH0vPA0T1mzNlAcsuoRPlhSSEuj5PgnAZqrE3i7Bt/a2Bb77ySQ44beX0Ywg9a9ghHA3VrwqAGCTZKg5kuE3f7WbRB2IBG0zcGgF69+tFEKi8JgyL/MfRm7nvMMD9i92b3KT0xqqDyPZtXWpk5wV/3SghJ/6vEREzRBmR8ptzqhlDxTDST8lOSeSJoJUoDKpQoI8236n9MPvRzWf66nFzPR65iXTZTY0JUAxOKhjpj3boYugUCMn6P2A==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1752612632; bh=CaH8TZSjFpAk7L89aB7FEMMdldyG0D5Pe705mvk6ia5=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=lAV7X6pz1+zYj2KyEI+oxDNrQtcD1ZY+fVZEnNNsweRa8L8FwvL/u7SwrDbUb3tb6Au+EYxd/IbYrpnQBkjPpjOKi30QWdZrmKfiTid8naBqKrmJAlGaiG14SCJev96mvct0t0zw3CbOQ93KHH/yBwc2G51A6MTle3jEALLbV/eaRKXsMaHrCCu0oqr1NRuiniWxlovaPRWYN82A5/WLwTY2MM8F90/A8NlaRTB3aItF/1xhAxulr6QOnXfrF8HIodeFYneJbU9LnO1b+e3arwlbTDc236o+unnA0TgyRfKhFeWysmOe5eFCicVZV0G7YTWAO5YowfWrTqHRsU0kvA==
-X-YMail-OSG: dl7b3rkVM1kbuOGa.JnDfJaW4C8TiEvPXcUHh9J5BadlHeidVmAdJaw5q.SlOJm
- Ct_lkEIK4zw6_EoKwoayeEmGZwDaZwuNaVG.m_rI52yPkHpcc8mKzaS4E3KR9q2bsdgMBkex3mur
- vzAfUISjSiuAYI8s7wJ631OHc9H01vaAjkVEuppkR8CiUYQCRZWG8Z6UoQi5hO_3bg2HA6ooEb2k
- XUrR62xL_p76nV6gYlocmG1LLxVB_LTMoeAsV.Q0qol7Y4UtR.YblSgQ3xuduMF0VYaYxqVIWXwz
- TwJgFoGSJQmmxxgYNJaDH4DA9aLgsm6cFxKx0SkXeciovIf7AFIzVNotb5zbGR9MGgoRTb_nxY60
- ynZxENoLSKnLbm.mDHRM3YbSkT5x4ZgTOmB4Xz.AF66WGH2C1hviUrRtEBVHvlDm7eDimbBaWPKo
- MhBQU9lrNauvgoEiSqQsyEBSPrZ8Z3W1.R0PEIir4nyjM0gB69W9jx__Tfnzm7mF8cNj8LsQyM_2
- heH9LxiNwt2vQdXzLXGmYiZOKwaoH7jHyEsmRJ_goX5Gt2MRG6qG_45PyqMkwhtSXoRG0qX9T4B8
- Q1vAto0nUfw8NnRwzj55jVNYF1RKCNp_gvZx8vcUZKTLb9YBL2wdaBUNwY906Zh9IjOwwWZGk2DM
- 7y.aFOr1T4Z3fhNcYdr.W5ySrBKaR8PBKXjco2D3rXL5sFb29lOQSscfm6wmwsen32MJFqW8GLje
- MJgz3mMwVOEEiGn1cqFp9N50rbdHKpXUcdcrGIBgdnjLf77LXRT.TikvWycI2rMR2escxpzvuiMf
- Zxa8ZkxNzYgCrKqPOHZ69QM.UBMhjIylyh0E3CesWP9s21iAaGCf3eFz1XELY8ErCsJsRnxYrRX5
- 3.7SPEFm7BY8QvkEq8yl_6wCuF0EethmBQgY5rPn_VbUALgmo.36trqKqLnNDUwHyjPmw.HmA9zF
- pyIjVGyLIWXiMV7yVyb12Q9AnajGaQHd0YMPTxlUHEjbcboBnIEeCauWMab2ZhKHN54UDmG4NcE6
- EmXhHFUfiz8L.yuMiWBG4OOTSXSGf1NUgt8aivQ8pH73tFNAP61AugpNyi61yio_IsymxxU.BUOo
- 3RZjo3p6gPXIeVXITWUCxXFmWlwJ4FNJJ7wuvTAfWxhkRMVxoewy15dLg5OX8MImMSjfSsx7bVpD
- ZgEsN943GiZfRWSjT1zgm1TarHbCTbeOt7WtKUSJnBJEgR_pmdqzlUYB6wAGjnu2QWOhQxMo3v0l
- 9WyQItiSBvN1GNs.WAa5gXTuGZhYww0mrZkv.lUPAv0Bfr5QSSF0xDCuLBq80ksj3nfvfudFpiLK
- mmyhMTZPhi_T1IofgFBRY8fMEoGdI64pV2G1DIoYcfiqFUotFX071lV5nK.LL8GfuZVox.7nh5Nk
- eWZ4TFQNRyrLeBBGXA6.cbreWNU_gA8.KgcT.x0jYbRNuo8p88_a4xNt2b2dFPPXJQENa7wDjjK1
- eANhwh2KvDu6xIEpXx5wZqjXhJoivHNVPpxEwEYMRAEz.gAAa3_rUFsRJFgqaEfDwmRnBFXAW2ZD
- _DgRXHLK3baHWxd_Q0MhnkY56fl4qkUrXLXo9sOIZEBUJ3zrhHMSXFRXGwIMtSf7t7SVYNusLPaP
- nNqBUpw.se0TKax6MX4BaqwnzXFf0DtKLFQQjb_GoiXnpGDPUtvz2WOjFvWHBMY3yqrorVmWMWh8
- oGvb41uJuxPLZctCpUnGK839YxlG7Go33JN92Ffihby_f_ThblfKcMTsdWpgQLvGAXHfwhkUuaVK
- _lw066cSB48g2vYsCd55K3rcc.NIxq5RlTSDoyipEV7GJ0EZE81CvRQWeyKQJTcpngbaPDxHlXf6
- JaL2dyVcBDR.EBpYCTZopHiNhiCceccHXU_yqs8CiaGuP3a_KPwXPyU_o7Vh4DMjqAozHa5Siq4D
- NyElc34S.PLGePweuiDvJp0irG6TsXKJbWtBI_UjNfRaDK8q83E03qut1vmEH8mn9MvWHejI5Av4
- wi1ZumypNrpw8pYL64rspQOmGJv.z047vXFHY2C6rMfRJ5raGMtMIuo_VZjJlgI_Rz2FvQFtmXRy
- adtlP5OUmuDMFfhysSnU1ZA9BVSljlCNHqZ.awcd_RyPD8uwvj9O52n___c1m0FpDgKwzI..n4pC
- y2GNyMmDWVSePjfzO5eqqeTvT.mRfDRL_S.Kk0IkHujhhdSKSjpq1f6HU1Td9r02TmwSQUqKLbSU
- 1SHahZr1cSfncA4qa9sgvBkB7GkXRRN0QqS_lhiIKbbLMLg5bfyXxBvgRNZXGIhA.1Hr22tgPBbF
- fbaD3ZtLamIpJaLcTKmu8HRs-
+	dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b="Ot1xIJRl"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1752701265; bh=D+A4s2puEKRfCvZ3mdVLmiFNlIwcfme6AV7KlzI6Syc=; h=From:To:Cc:Subject:Date:References:From:Subject:Reply-To; b=Ot1xIJRl+iLEbC776m9QKyFlw9i1qTkfglXtfiYNkKwCC3WrX+1t4n6UQByTBKdYMby1CfDpmWhX6hritv97K7AnlFGrohrMExxdzqd4+kjgEjuh7YB5lzldA9jbQU/d4KHZFgjGT2cnxToloFzNN1fkqVyMhI2sNhj7lq8LSROp/TMyNXNaXXXpElTQBoARIzZSKi0bZiOXZ3eQ7gf8JY4KZbS1xftnWiTYPcIrzotP05cH8oohLzlGiqMhyuNuNQWOoI7chk3+LDRte7j4PEsuEBXrNPkN5uHWuQh8CdDxRJCRANJLxqOggss8CHmn2+NRZ2WBwjpJBl/yF9zinQ==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1752701265; bh=fYaojdwppR6oB7MgqaGHmkU05Yj+dCR04hO4QvW2Y6j=; h=X-Sonic-MF:From:To:Subject:Date:From:Subject; b=d7G6yIy9OQlWLMneskHyjraL1BPYgN8QhgwNI8hHgrQRguLJ+7fXFaLYF8dsc5mkOPt06SiL/a8TPbBi5OEf2v+cwWGWv8AZQcbpI3rm2jZfLbfHVY3Bq39tXvzS1b5O5YvJu6E6Ymz19VrOYfdAycoYJFvJIOLYCkJKs5Ouu+trU0THdfrkTIcT0Hl4a1ST4DGeSByyBlfV6x1X7WSlqM1ZpHgoSdZvth6r5S4zcHZPQSuKzrlWcjgfb/ZzIi+1L/LiYN5XzVnov2+BmKHIh+etklGKdirWdZ1vb1pPYQTgIAJTMwXYY99ioxJ4O7OjEKavlJEJ9ynbaElqVKXeOw==
+X-YMail-OSG: zj_kmoQVM1n3hC2Q_RftGB9VNCJIgqISqj_f4zD8dUSYsm5hxNT1LVMzgvTEmiX
+ _dvbFRgj04zbl6ZGelFYS.IiLFUF6lQ0LeFtGvoaMtZANxBGNVY96iBqr8ZemDY4ubs_s_XhXqDG
+ wyxbcuhWanqmEXA3kMpdS1lMug551aKD5c2N.kzceXZGtiCpJk2ANxqrSXgSZ89vARF.fnQDh0ZZ
+ YokhzRdbDEx.hLfovCyfKb6zkcrHSGEbqHBa.JTAYr2vQt0bCaqROaUXmcDPX0CqM34_QrKZeFxy
+ 7AsYeM3xuhrZrh2sKFiOJTx5cipt2ZJwG_0PwCzNETAz0QOd5b1l7EocX0hoxpw89hFifSoIUyBF
+ YJjaMas0bGFxTmBJUbpilrSe6_Uy.u7EHcagX4EbmMyV7ThnNb80b6h_FvqMuvBU94q2onQskIDw
+ WbabmMOHOQr2UGtUVLyrcYYdeZLpESGMEtslBr8OqGs839QpaDYv5OTpa4iVlTX00HP7usxnzjJz
+ qEKIeVS5gApevo5gES5vMz_8B1oya.r5X02lBf.wo8p7yFsniwS9dQwYLswRaS0OdB2CGhaKm1Hl
+ eTVOKSimgxGpGqSvOYHGURzOB_7SvWS6PaEcWPuhVqlYpXl3U89UPN5_IpuYIsmIZwI_gqVa4ENL
+ MPZNt.485v1DWeq3ftxQFLJRdlMKdJ5swYUaCO_Xz4TwRbpQ7QEv7RIcbyRkZIWPdcqZMgr73Qvf
+ nVI8AI0vN0ejOtWqoX.8fCO6tmxBWE.CJDE4S2NmJ.zpP0szjstgnYbesdiKZQEIJJomulNYH9bH
+ QbR8F9kEA8nQaGtfptvr6d946cncXgFaJIaHpITJItMiA.dMQZN_WQZjfbVq7upmvqhTxCrlVFci
+ Lqv5xusrFHfO.Tq1v_qmVtQf3OhCz1NZRMmgQL6AawJsdyEXoCtxZB_Krv9UddhAlzmOf2yWeQVy
+ pQGJA28IEErBFmYUKF0qTFibFIc0yZNPxmqQPnKYbmrS9ffJL49eQTMW7wilucmg4IZ8DwMlX9Wa
+ tsHMFHK2jZ5c14Uhjh3bxY_fsSPV1DBqWJVG0ja0W48Rgen1ryME0OCteGjXX2jv5RJfrYsiA53r
+ gXYX.M3CfwTPWRQPtcqjx_h7Qr8FA4Z3YGr12gDJZF6SCZ52no6BBYEn2USofLOFf25Q9WvOc4yE
+ 2l.YhaEtI_1xOja02OS0vK6hxlYRE5we7wfZCdSmsAdXDEvMYGMGqueVRPXXTC9xPIYRakFrDmWb
+ 9iafqcatVSsw9Ymg5v27TSY3hrtsfZj.TdsfpsiF62QLFICw_03JEVN7MUPtz03Cj9jIq.mILpld
+ h0fK3iKeb1dXfYEQ3G_ZOVLY4H5b9jiRiyjWOZHUKkwl1ILx1VCz51Hdyw6coJC2o2kCnWasp0hA
+ KqR0O8ZdLpKDZ6Ns13Nj4jIYqU_7mGWZTEDGMrVa2p0LQi3E00dnlvoAE.N2Um.ptdirmtYZ4VKx
+ UnJzKlpqoOji_BtIBLemc7VxC5GxG9GP7ELx2x0whEnC60ZSeFdya9NVrUup8HnhVPbpwW.KkVai
+ Vy24_k4_49R7b24jvnRgXkOkDvlvQZQeTPW276b5gr7DqoYXlv7Krdc3vrrVlfDCcNLI5UqwMRh_
+ Mn.dNXjc.7tItESwAa7yg.2_JRs1ymCW7Bc.Km3CNoFLGcw.LfmBFD6sUjewEyw.7zTbBBlDVrMZ
+ br1dQE2nDgqNYBLZWwa9lGU5BGXm0CSdlnTNfy3xMNjhsZPppqfRQ4jc3CkM2eoTEwitWXaCFtjc
+ payMxpzUsA.kewHBP757Ok_5H2cHgrvr54skAzY.tLcYTE73ToONDoGreU4Ka3QFmZ8zcyxlcCqO
+ wD4bB5hKgrFHc.gWoFTxJImFBb7na8Jonugna.bk6IuOkD_rQtDBvDOoR1vaiOXF1E2Gt8h5ZhH5
+ GbmgzWLVvULUxfmUuhYEDbGmA8ipX62WezuZmJgLghQgNhSN1el591SROCMYlg4iq2OcRZj2zJ.b
+ J1_juzzADUsfxLj9NhxUuA.NdVHabQUlLXrbAnOHeL64wcFyd.ePXsU5htna0n2CbbHEc5GoVg3K
+ Q3yr9eB2Twbh5_RY0XHb1PBLFcY_nQEiZ.F3p114VOoF6pZSCtcKqHPSPxqLUX2AkBRK6EBbAzoR
+ m5oAM8QNRuQktPmQzZY727PMYtXtx9BLO5ClmmSYmRtEjKBBUGjE1WzFiA66pjyGlI9vS7l6gDI8
+ sI8JQRdWq1cdaTCugYUztcyePFJkfupPXu8gxJ3S_9E_NRgJjvQJNDYwRgCVg38juEHHbYSLuD1N
+ GOWu56a3LrvuhThSw.wv6tkMFQA--
 X-Sonic-MF: <casey@schaufler-ca.com>
-X-Sonic-ID: c92e579f-d95b-415b-81b9-610dd7e70660
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic310.consmr.mail.ne1.yahoo.com with HTTP; Tue, 15 Jul 2025 20:50:32 +0000
-Received: by hermes--production-gq1-74d64bb7d7-4ndhm (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID e83d77ed7c13adb4e82ac288e4a5ab46;
-          Tue, 15 Jul 2025 20:40:20 +0000 (UTC)
-Message-ID: <88b13658-1a4c-4ebe-92b4-5be93c9356c9@schaufler-ca.com>
-Date: Tue, 15 Jul 2025 13:40:18 -0700
+X-Sonic-ID: 0f00651e-2484-48b5-87d7-3b47bf0aee9e
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic312.consmr.mail.ne1.yahoo.com with HTTP; Wed, 16 Jul 2025 21:27:45 +0000
+Received: by hermes--production-gq1-74d64bb7d7-lbnk4 (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID c82aa99504a499c14c18b1238d973034;
+          Wed, 16 Jul 2025 21:27:42 +0000 (UTC)
+From: Casey Schaufler <casey@schaufler-ca.com>
+To: casey@schaufler-ca.com,
+	paul@paul-moore.com,
+	eparis@redhat.com,
+	linux-security-module@vger.kernel.org,
+	audit@vger.kernel.org
+Cc: jmorris@namei.org,
+	serge@hallyn.com,
+	keescook@chromium.org,
+	john.johansen@canonical.com,
+	penguin-kernel@i-love.sakura.ne.jp,
+	stephen.smalley.work@gmail.com,
+	linux-kernel@vger.kernel.org,
+	selinux@vger.kernel.org
+Subject: [PATCH v5 0/5] Audit: Records for multiple security contexts
+Date: Wed, 16 Jul 2025 14:27:26 -0700
+Message-ID: <20250716212731.31628-1-casey@schaufler-ca.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 4/4] Audit: Add record for multiple object contexts
-To: Paul Moore <paul@paul-moore.com>, eparis@redhat.com,
- linux-security-module@vger.kernel.org, audit@vger.kernel.org
-Cc: jmorris@namei.org, serge@hallyn.com, keescook@chromium.org,
- john.johansen@canonical.com, penguin-kernel@i-love.sakura.ne.jp,
- stephen.smalley.work@gmail.com, linux-kernel@vger.kernel.org,
- selinux@vger.kernel.org, Casey Schaufler <casey@schaufler-ca.com>
-References: <20250607005134.10488-5-casey@schaufler-ca.com>
- <88f740c7efa914435e2223e90666c8b2@paul-moore.com>
- <9fcc7e8f-7d5c-4499-9693-787bd7ecc8ed@schaufler-ca.com>
-Content-Language: en-US
-From: Casey Schaufler <casey@schaufler-ca.com>
-In-Reply-To: <9fcc7e8f-7d5c-4499-9693-787bd7ecc8ed@schaufler-ca.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Mailer: WebService/1.1.24149 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
+Content-Transfer-Encoding: 8bit
+References: <20250716212731.31628-1-casey.ref@schaufler-ca.com>
 
-On 7/4/2025 1:18 PM, Casey Schaufler wrote:
-> On 6/16/2025 1:54 PM, Paul Moore wrote:
->> On Jun  6, 2025 Casey Schaufler <casey@schaufler-ca.com> wrote:
->>> Create a new audit record AUDIT_MAC_OBJ_CONTEXTS.
->>> An example of the MAC_OBJ_CONTEXTS record is:
->>>
->>>     type=MAC_OBJ_CONTEXTS
->>>     msg=audit(1601152467.009:1050):
->>>     obj_selinux=unconfined_u:object_r:user_home_t:s0
->>>
->>> When an audit event includes a AUDIT_MAC_OBJ_CONTEXTS record
->>> the "obj=" field in other records in the event will be "obj=?".
->>> An AUDIT_MAC_OBJ_CONTEXTS record is supplied when the system has
->>> multiple security modules that may make access decisions based
->>> on an object security context.
->>>
->>> Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
->>> ---
->>>  include/linux/audit.h      |  7 +++++
->>>  include/uapi/linux/audit.h |  1 +
->>>  kernel/audit.c             | 58 +++++++++++++++++++++++++++++++++++++-
->>>  kernel/auditsc.c           | 45 ++++++++---------------------
->>>  security/selinux/hooks.c   |  3 +-
->>>  security/smack/smack_lsm.c |  3 +-
->>>  6 files changed, 80 insertions(+), 37 deletions(-)
->> ..
->>
->>> diff --git a/kernel/audit.c b/kernel/audit.c
->>> index 0987b2f391cc..451c36965889 100644
->>> --- a/kernel/audit.c
->>> +++ b/kernel/audit.c
->>> @@ -2337,6 +2344,55 @@ int audit_log_task_context(struct audit_buffer *ab)
->>>  }
->>>  EXPORT_SYMBOL(audit_log_task_context);
->>>  
->>> +int audit_log_obj_ctx(struct audit_buffer *ab, struct lsm_prop *prop)
->>> +{
->>> +	int i;
->>> +	int rc;
->>> +	int error = 0;
->>> +	char *space = "";
->>> +	struct lsm_context ctx;
->>> +
->>> +	if (audit_obj_secctx_cnt < 2) {
->>> +		error = security_lsmprop_to_secctx(prop, &ctx, LSM_ID_UNDEF);
->>> +		if (error < 0) {
->>> +			if (error != -EINVAL)
->>> +				goto error_path;
->>> +			return error;
->>> +		}
->>> +		audit_log_format(ab, " obj=%s", ctx.context);
->>> +		security_release_secctx(&ctx);
->>> +		return 0;
->>> +	}
->>> +	audit_log_format(ab, " obj=?");
->>> +	error = audit_buffer_aux_new(ab, AUDIT_MAC_OBJ_CONTEXTS);
->>> +	if (error)
->>> +		goto error_path;
->>> +
->>> +	for (i = 0; i < audit_obj_secctx_cnt; i++) {
->>> +		rc = security_lsmprop_to_secctx(prop, &ctx,
->>> +						audit_obj_lsms[i]->id);
->>> +		if (rc < 0) {
->>> +			audit_log_format(ab, "%sobj_%s=?", space,
->>> +					 audit_obj_lsms[i]->name);
->>> +			if (rc != -EINVAL)
->>> +				audit_panic("error in audit_log_obj_ctx");
->>> +			error = rc;
->> Do we need the same logic as in audit_log_subj_ctx()?
-> I seriously debated the issue. Subjects always have data to put in
-> the aux record. Objects may or may not, in the AppArmor case. Not having
-> a subject context is an error, not having an object context is interesting,
-> but not necessarily an error. Hence the different treatment. You can tell
-> me I'm wrong, and I'll make them consistent.
->
->>> +		} else {
->>> +			audit_log_format(ab, "%sobj_%s=%s", space,
->>> +					 audit_obj_lsms[i]->name, ctx.context);
->>> +			security_release_secctx(&ctx);
->>> +		}
->>> +		space = " ";
->>> +	}
->>> +
->>> +	audit_buffer_aux_end(ab);
->>> +	return error;
->>> +
->>> +error_path:
->>> +	audit_panic("error in audit_log_obj_ctx");
->>> +	return error;
->>> +}
->>> +
->>>  void audit_log_d_path_exe(struct audit_buffer *ab,
->>>  			  struct mm_struct *mm)
->>>  {
->>> diff --git a/kernel/auditsc.c b/kernel/auditsc.c
->>> index 322d4e27f28e..0c28fa33d099 100644
->>> --- a/kernel/auditsc.c
->>> +++ b/kernel/auditsc.c
->>> @@ -1098,7 +1098,6 @@ static int audit_log_pid_context(struct audit_context *context, pid_t pid,
->>>  				 char *comm)
->>>  {
->>>  	struct audit_buffer *ab;
->>> -	struct lsm_context ctx;
->>>  	int rc = 0;
->>>  
->>>  	ab = audit_log_start(context, GFP_KERNEL, AUDIT_OBJ_PID);
->>> @@ -1108,15 +1107,9 @@ static int audit_log_pid_context(struct audit_context *context, pid_t pid,
->>>  	audit_log_format(ab, "opid=%d oauid=%d ouid=%d oses=%d", pid,
->>>  			 from_kuid(&init_user_ns, auid),
->>>  			 from_kuid(&init_user_ns, uid), sessionid);
->>> -	if (lsmprop_is_set(prop)) {
->>> -		if (security_lsmprop_to_secctx(prop, &ctx, LSM_ID_UNDEF) < 0) {
->>> -			audit_log_format(ab, " obj=(none)");
->>> -			rc = 1;
->>> -		} else {
->>> -			audit_log_format(ab, " obj=%s", ctx.context);
->>> -			security_release_secctx(&ctx);
->>> -		}
->>> -	}
->>> +	if (lsmprop_is_set(prop) && audit_log_obj_ctx(ab, prop))
->>> +		rc = 1;
->> We should probably use the return value from audit_log_obj_ctx().
-> Sure.
+The Linux audit system includes LSM based security "context" information
+in its events. Historically, only one LSM that uses security contexts can
+be active on a system. One of the few obsticles to allowing multiple LSM
+support is the inability to report more than one security context in an
+audit event. This patchset provides a mechanism to provide supplimental
+records containing more than one security context for subjects and
+objects.
 
-On further inspection, the callers of audit_log_obj_ctx() don't
-do anything with the return code, and similar functions have their
-returns treated the same way. Unless there's a major rework of the
-audit code there isn't any value in "using" the return code.
+The mechanism for reporting multiple security contexts inspired
+considerable discussion. It would have been possible to add multiple
+contexts to existing records using sophisticated formatting. This would
+have significant backward compatibility issues, and require additional
+parsing in user space code. Adding new records for an event that contain
+the contexts is more in keeping with the way audit events have been
+constructed in the past.
 
->>>  	audit_log_format(ab, " ocomm=");
->>>  	audit_log_untrustedstring(ab, comm);
->>>  	audit_log_end(ab);
->> ..
->>
->>> @@ -1780,15 +1756,16 @@ static void audit_log_exit(void)
->>>  						  axs->target_sessionid[i],
->>>  						  &axs->target_ref[i],
->>>  						  axs->target_comm[i]))
->>> -				call_panic = 1;
->>> +			call_panic = 1;
->>>  	}
->>>  
->>>  	if (context->target_pid &&
->>>  	    audit_log_pid_context(context, context->target_pid,
->>>  				  context->target_auid, context->target_uid,
->>>  				  context->target_sessionid,
->>> -				  &context->target_ref, context->target_comm))
->>> -			call_panic = 1;
->>> +				  &context->target_ref,
->>> +				  context->target_comm))
->>> +		call_panic = 1;
->> I appreciate the indent fixes, would you mind pulling this out and
->> submitting them separately?
-> Sure.
->
->> --
->> paul-moore.com
+Only audit events associated with system calls have required multiple
+records prior to this. Mechanism has been added allowing any event
+to be composed of multiple records. This should make it easier to
+add information to existing audit events without breaking backward
+compatability.
+
+v5:
+Comment on the LSM_ID_UNDEF behavior in security_secid_to_secctx().
+Change some names to better reflect their purpose.
+Move alignment changes into a separate patch.
+v4:
+Use LSM_ID_UNDEF when checking for valid LSM IDs in
+security_lsmprop_to_secctx().
+Fix the object record to include only those for LSMs that use them.
+Squash the two patches dealing with subject contexts.
+Base the patches on Paul Moore's LSM initialization patchset.
+https://lore.kernel.org/all/20250409185019.238841-31-paul@paul-moore.com/
+v3:
+Rework how security modules identify that they provide security
+contexts to the audit system. Maintain a list within the audit
+system of the security modules that provide security contexts.
+Revert the separate counts of subject and object contexts.
+v2:
+Maintain separate counts for LSMs using subject contexts and object
+contexts. AppArmor uses the former but not the latter.
+Correct error handling in object record creation.
+
+https://github.com/cschaufler/lsm-stacking#audit-6.16-rc4-v5
+
+Casey Schaufler (5):
+  Audit: Create audit_stamp structure
+  LSM: security_lsmblob_to_secctx module selection
+  Audit: Add record for multiple task security contexts
+  Audit: Fix indentation in audit_log_exit
+  Audit: Add record for multiple object contexts
+
+ include/linux/audit.h        |  23 +++
+ include/linux/security.h     |   6 +-
+ include/uapi/linux/audit.h   |   2 +
+ kernel/audit.c               | 274 ++++++++++++++++++++++++++++++-----
+ kernel/audit.h               |  13 +-
+ kernel/auditsc.c             |  65 +++------
+ net/netlabel/netlabel_user.c |   8 +-
+ security/apparmor/lsm.c      |   3 +
+ security/lsm.h               |   4 -
+ security/lsm_init.c          |   5 -
+ security/security.c          |  21 ++-
+ security/selinux/hooks.c     |   5 +
+ security/smack/smack_lsm.c   |   5 +
+ 13 files changed, 325 insertions(+), 109 deletions(-)
+
+-- 
+2.50.1
+
