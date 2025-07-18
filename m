@@ -1,82 +1,91 @@
-Received: from out-176.mta1.migadu.com (out-176.mta1.migadu.com [95.215.58.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com [209.85.219.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C167D10957
-	for <audit@vger.kernel.org>; Fri, 18 Jul 2025 20:38:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEDB921D3F4
+	for <audit@vger.kernel.org>; Fri, 18 Jul 2025 21:53:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752871099; cv=none; b=JQwiqa5qTSkVEm8fmsCPFNduTP6jmlJyxJDjwAHJyGY7a+4sXKB9N7v61pcLaLUQBO2zPMyopHbZAMmZT5nqHxDtc/f/ACE8niQSVTbS8QY/KFGWPTVNN6hLSYo+gCnu35b4G+QMMFZg1vBK/tvdwnkWuPjCh3pBL0UGgxZXC1E=
+	t=1752875585; cv=none; b=dcrUbiU8HQcuXw97IIoSp6iFuUEDOioh91ZvZ13MFUzkYupK8EMajxsD9fdt4akY72QED6F8YVCSwbOm/sHWkycuJyrK5xtD9nN/PS42YWpAy3ebkhItSelIkUpFhkm9txa1w5M6Pr6I2qq4Fmk2OWa2jBjVnlNMrU/FXutnkMY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752871099; c=relaxed/simple;
-	bh=AlSsbH4kX1OcQbvP9Y1wqo3dCVOQoo2TxQ9akrFfIXE=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=f5UpRvCfBEZE7ZpJrsHqYVOnalRlU1lmwoo+8xsjgotidiCy/sHGvRfOhn1hewPSOtXbvsDmjIPHQsI2cVfgHTrErSRyQ7ZmE5vNMNKAO09GKajuu9jqxLycb7qR2ATtjvzEf4RzSf5m+nyIQoNoTp0m//3841hOXbz6N+TN+q8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=cHfjIPne; arc=none smtp.client-ip=95.215.58.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1752875585; c=relaxed/simple;
+	bh=m/GVkH7kFga5E6DvDF13ZQV8++8dXVqa9LQzwKfgKw4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=AWemEWZ4MaVnXbS8Rgms2+/Hw2OwFMn9p+hckqAhhD696bunYYxF95J9DpgE8J5VydqxF7q2rQyMZKY0bJx1ikcYr0GSvaJ0q7M9dPnE1WGVIlhO/L+qYpp6dJk8V6o4ZkTBcFpisAp8EERQvZ4ljZ7nXdZ8KXJtufBO1Z/pZpk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=Q5B6q4uu; arc=none smtp.client-ip=209.85.219.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="cHfjIPne"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1752871093;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=50pMAbyQnwdgTZJ9btJV+F/njGuW6C2RnKWeUz9kqlA=;
-	b=cHfjIPnelcGPMwyHpn7fAW+3yO9rm+BYezUNfIMp9/0tTfvK2IBBVgHNm66GWYrUu15jdp
-	AplKmxmUNpeUu2T6/INAbaqsKG3GXK+yo0wLIwZdrDkqms7qU8L3z5urv+rnMZtCsbnXw0
-	XPiT96dfTJvaC1xi6TeaUIfGYpuDhdE=
-From: Thorsten Blum <thorsten.blum@linux.dev>
-To: Paul Moore <paul@paul-moore.com>,
-	Eric Paris <eparis@redhat.com>
-Cc: linux-hardening@vger.kernel.org,
-	Thorsten Blum <thorsten.blum@linux.dev>,
-	audit@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] audit: Replace deprecated strcpy() with strscpy()
-Date: Fri, 18 Jul 2025 22:37:34 +0200
-Message-ID: <20250718203734.347091-2-thorsten.blum@linux.dev>
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="Q5B6q4uu"
+Received: by mail-yb1-f169.google.com with SMTP id 3f1490d57ef6-e733e25bfc7so2208484276.3
+        for <audit@vger.kernel.org>; Fri, 18 Jul 2025 14:53:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1752875582; x=1753480382; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=F/cQbSOC5kbaML7lIX5aEU6S9YhJ0RymQUswAa6phlM=;
+        b=Q5B6q4uudbJ1JW9aniixTUzBJSecTybb7pbWTUnzgrt9vcKXpzTtXu7aAOvYvcaVC2
+         5m8jY65KSVjtF7tBQckcFl1qQ9SmPMw73eY4rUN0yOqUQj1DQbX3+LipS3VpN/pwmRxH
+         yfVT43TP79sWpavdCtosj9F4Ij6Q5nlZbhpk+H19mKPnyRShjkd1fXn521eKh5iuoyD0
+         skxSibpuLhWGEIUccMiwS8XJAf8YCsWOz1hpVcqml6xZjNo5jHjDiUgLDtdbkJYxMCz9
+         ZftlZOwFqGA8qfadd6QYXrPgcVF6mslscgHlG5sJNPsoV0f20A0ewpogj9ATkF3bZG/s
+         F3ow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1752875582; x=1753480382;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=F/cQbSOC5kbaML7lIX5aEU6S9YhJ0RymQUswAa6phlM=;
+        b=mOzyblaTPFEcsfMFsW/dabvR0leN6951oBEIh2CEB3w7OcPnt9pc4qr1irTauu/VIt
+         sayTMPE/WITJmTID3clFQ2KXjt4FB94iYv9JPAAwJNjCHl2R0NYV6phPgnZ0fzc68xcz
+         ksnIDtoDag3bErtggnL+kqoa9I/F5nRmRxqC3CjUL2MUlq0Mb4okCUFHac7TDNRA8zlp
+         Xu1+Bj+ed4qPwQoqEalYRgRLQPOvQtVro9mzCK61dcMSNJuGs6WLJcTLySEEvSpHlWrd
+         BELaL+Jv1t4xHMDHL1xs+nrbh1b4UkORpmKw2Dko4HTGIRsrYRGTiImCxZI64X+xPYKW
+         481A==
+X-Forwarded-Encrypted: i=1; AJvYcCU+V0kwQjr/169Os65sw67kUZqZQnFNc6gBDzh/z3LP8tcpYdmgxO3mdsehBJjAldazdnucPQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzT24YG5tlWCp3mMAzol24XRZieF7LdRR5kLV0cfZIjmx2h2KZn
+	H/v87lITrlag4HTSUI9cTkGEDG0QVLJmNqG/9TuijiVOgOELATwds6wjL15cvhBv9XrfderaDNG
+	k6K5Qd4Se5dgMsRYloFJD3el2cWlcqT5yoyRza5AD
+X-Gm-Gg: ASbGnctRvYcrJ91RbwhQietlPpnv1RdUdoPZju4pjFyEVQqn5X/mxq3YJE7Xhg7l1hC
+	oZtZv3yYAnfBdtKsN15UbgKojPuvg0sgK9tRoeTRo+xDoEh+vDI8rLwkNwSpfl148GOHwk3u01J
+	rIDI3I4sZ5VZInJQsLo8uVb41JUmOmP6m7D++O+0Mizqb2URG2NABKPm+96ExhN+S3Wrf/wNLIN
+	GVW5P0=
+X-Google-Smtp-Source: AGHT+IFf5bnxZbREvMvlsbfizsYWDzhgcbPnRrN1Pv/fcSWvOqeCSaHZjLEK4HTUY1AY4fj8c+1pm2RjoePlp3shqXo=
+X-Received: by 2002:a05:6902:e08:b0:e8c:93d4:b0ae with SMTP id
+ 3f1490d57ef6-e8c93d4b42amr10116844276.21.1752875581835; Fri, 18 Jul 2025
+ 14:53:01 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+References: <20250718203734.347091-2-thorsten.blum@linux.dev>
+In-Reply-To: <20250718203734.347091-2-thorsten.blum@linux.dev>
+From: Paul Moore <paul@paul-moore.com>
+Date: Fri, 18 Jul 2025 17:52:50 -0400
+X-Gm-Features: Ac12FXzCPEr9FkZrYDFFpVvOY_IL3QCEVZrKQZHLJkmmAUMqwWFbcM7dIijU3Ck
+Message-ID: <CAHC9VhSa_9cWiLfOUNiLPUa7PyECF-2hqzHZikYHj6QeYGMqEw@mail.gmail.com>
+Subject: Re: [PATCH] audit: Replace deprecated strcpy() with strscpy()
+To: Thorsten Blum <thorsten.blum@linux.dev>
+Cc: Eric Paris <eparis@redhat.com>, linux-hardening@vger.kernel.org, 
+	audit@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-strcpy() is deprecated; use strscpy() instead.
+On Fri, Jul 18, 2025 at 4:38=E2=80=AFPM Thorsten Blum <thorsten.blum@linux.=
+dev> wrote:
+>
+> strcpy() is deprecated; use strscpy() instead.
+>
+> Link: https://github.com/KSPP/linux/issues/88
+> Signed-off-by: Thorsten Blum <thorsten.blum@linux.dev>
+> ---
+>  kernel/audit_tree.c | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
 
-Link: https://github.com/KSPP/linux/issues/88
-Signed-off-by: Thorsten Blum <thorsten.blum@linux.dev>
----
- kernel/audit_tree.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+This looks fine to me, but as we are at -rc6 I'm going to hold off on
+merging this until after the upcoming merge window.
 
-diff --git a/kernel/audit_tree.c b/kernel/audit_tree.c
-index b0eae2a3c895..1605df0a171e 100644
---- a/kernel/audit_tree.c
-+++ b/kernel/audit_tree.c
-@@ -93,8 +93,10 @@ static struct kmem_cache *audit_tree_mark_cachep __ro_after_init;
- static struct audit_tree *alloc_tree(const char *s)
- {
- 	struct audit_tree *tree;
-+	size_t sz;
- 
--	tree = kmalloc(struct_size(tree, pathname, strlen(s) + 1), GFP_KERNEL);
-+	sz = strlen(s) + 1;
-+	tree = kmalloc(struct_size(tree, pathname, sz), GFP_KERNEL);
- 	if (tree) {
- 		refcount_set(&tree->count, 1);
- 		tree->goner = 0;
-@@ -103,7 +105,7 @@ static struct audit_tree *alloc_tree(const char *s)
- 		INIT_LIST_HEAD(&tree->list);
- 		INIT_LIST_HEAD(&tree->same_root);
- 		tree->root = NULL;
--		strcpy(tree->pathname, s);
-+		strscpy(tree->pathname, s, sz);
- 	}
- 	return tree;
- }
--- 
-2.50.1
-
+--=20
+paul-moore.com
