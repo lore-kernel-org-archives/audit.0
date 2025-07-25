@@ -1,91 +1,105 @@
-Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com [209.85.219.169])
+Received: from mail-qk1-f173.google.com (mail-qk1-f173.google.com [209.85.222.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEDB921D3F4
-	for <audit@vger.kernel.org>; Fri, 18 Jul 2025 21:53:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01AFF255F52
+	for <audit@vger.kernel.org>; Fri, 25 Jul 2025 20:49:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752875585; cv=none; b=dcrUbiU8HQcuXw97IIoSp6iFuUEDOioh91ZvZ13MFUzkYupK8EMajxsD9fdt4akY72QED6F8YVCSwbOm/sHWkycuJyrK5xtD9nN/PS42YWpAy3ebkhItSelIkUpFhkm9txa1w5M6Pr6I2qq4Fmk2OWa2jBjVnlNMrU/FXutnkMY=
+	t=1753476590; cv=none; b=CqRHITgMiW0eIHdXfejhWDMaIQM0rwv651POBiwgNCUtAnktqKK7RGr/zAhltX0tPLm8vHGDEruzxRlo18cfG9+hgSB8GWzn3ge+w4plPAlYNThk6WpSovoRNxUx5qQ6ZogQIee/aCVTCpQrVU8madK8fhNLiOlXrwJmmTdnWHA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752875585; c=relaxed/simple;
-	bh=m/GVkH7kFga5E6DvDF13ZQV8++8dXVqa9LQzwKfgKw4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=AWemEWZ4MaVnXbS8Rgms2+/Hw2OwFMn9p+hckqAhhD696bunYYxF95J9DpgE8J5VydqxF7q2rQyMZKY0bJx1ikcYr0GSvaJ0q7M9dPnE1WGVIlhO/L+qYpp6dJk8V6o4ZkTBcFpisAp8EERQvZ4ljZ7nXdZ8KXJtufBO1Z/pZpk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=Q5B6q4uu; arc=none smtp.client-ip=209.85.219.169
+	s=arc-20240116; t=1753476590; c=relaxed/simple;
+	bh=p2GNyAjE7iXApZkamXq7ckrswvmu22VaokMFBYbyKJ0=;
+	h=Date:Message-ID:From:To:Cc:Subject; b=sMuVqU+0oM1eNSazfwMhtHH0adk1vRpNSlQDXvCdS+ijD+d8Iz/cIwdDmIF7afErI3oF/OOiu/LmDHgJpx+oAGVCof2GgOYNHzdbU5qrS4EtIpxENXMXwIls83NU9xXhI5lGbh+qG4nJ2ipRActg3lFgosuINrbTNZmwHmRWMmo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=O5Pbwc7F; arc=none smtp.client-ip=209.85.222.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="Q5B6q4uu"
-Received: by mail-yb1-f169.google.com with SMTP id 3f1490d57ef6-e733e25bfc7so2208484276.3
-        for <audit@vger.kernel.org>; Fri, 18 Jul 2025 14:53:02 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="O5Pbwc7F"
+Received: by mail-qk1-f173.google.com with SMTP id af79cd13be357-7e050bd078cso242174885a.3
+        for <audit@vger.kernel.org>; Fri, 25 Jul 2025 13:49:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1752875582; x=1753480382; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=paul-moore.com; s=google; t=1753476588; x=1754081388; darn=vger.kernel.org;
+        h=subject:cc:to:from:message-id:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=F/cQbSOC5kbaML7lIX5aEU6S9YhJ0RymQUswAa6phlM=;
-        b=Q5B6q4uudbJ1JW9aniixTUzBJSecTybb7pbWTUnzgrt9vcKXpzTtXu7aAOvYvcaVC2
-         5m8jY65KSVjtF7tBQckcFl1qQ9SmPMw73eY4rUN0yOqUQj1DQbX3+LipS3VpN/pwmRxH
-         yfVT43TP79sWpavdCtosj9F4Ij6Q5nlZbhpk+H19mKPnyRShjkd1fXn521eKh5iuoyD0
-         skxSibpuLhWGEIUccMiwS8XJAf8YCsWOz1hpVcqml6xZjNo5jHjDiUgLDtdbkJYxMCz9
-         ZftlZOwFqGA8qfadd6QYXrPgcVF6mslscgHlG5sJNPsoV0f20A0ewpogj9ATkF3bZG/s
-         F3ow==
+        bh=VZIIxY6ABSv8z81ahgfn3koGHJXTOfKyAKvLEaDaLS8=;
+        b=O5Pbwc7FA7JZ4c40+pDWCcwmx23Rq9srEclzrEOn5POgcnuZnLMKJPEysR9XkqSDzI
+         qdH0Z4PMVnDGvnsMMbl0pGhDNpzQoHWM/XUmYEcO+ewrHHZNIcnS1Hdc7lJcdAOfQ53X
+         quE3LcTtGL6cvK5sWh3kJaSeCeZbrvRl0MXcPrSfnht4/Nmw3M351lmFjrwvrDfCHoM/
+         0XQA7rabXfZuUmJDtnrDOvh04cgcK4TXaZAtBVYyiga5HflFYq9semF3zMMevTwAN7mm
+         N5Z5PY/SUs78FuTBnFZe/HWwRr0g34+3DvTLTLdu9M70IghIslZj4yh2CiRaDu+4IZrj
+         hM/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752875582; x=1753480382;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1753476588; x=1754081388;
+        h=subject:cc:to:from:message-id:date:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=F/cQbSOC5kbaML7lIX5aEU6S9YhJ0RymQUswAa6phlM=;
-        b=mOzyblaTPFEcsfMFsW/dabvR0leN6951oBEIh2CEB3w7OcPnt9pc4qr1irTauu/VIt
-         sayTMPE/WITJmTID3clFQ2KXjt4FB94iYv9JPAAwJNjCHl2R0NYV6phPgnZ0fzc68xcz
-         ksnIDtoDag3bErtggnL+kqoa9I/F5nRmRxqC3CjUL2MUlq0Mb4okCUFHac7TDNRA8zlp
-         Xu1+Bj+ed4qPwQoqEalYRgRLQPOvQtVro9mzCK61dcMSNJuGs6WLJcTLySEEvSpHlWrd
-         BELaL+Jv1t4xHMDHL1xs+nrbh1b4UkORpmKw2Dko4HTGIRsrYRGTiImCxZI64X+xPYKW
-         481A==
-X-Forwarded-Encrypted: i=1; AJvYcCU+V0kwQjr/169Os65sw67kUZqZQnFNc6gBDzh/z3LP8tcpYdmgxO3mdsehBJjAldazdnucPQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzT24YG5tlWCp3mMAzol24XRZieF7LdRR5kLV0cfZIjmx2h2KZn
-	H/v87lITrlag4HTSUI9cTkGEDG0QVLJmNqG/9TuijiVOgOELATwds6wjL15cvhBv9XrfderaDNG
-	k6K5Qd4Se5dgMsRYloFJD3el2cWlcqT5yoyRza5AD
-X-Gm-Gg: ASbGnctRvYcrJ91RbwhQietlPpnv1RdUdoPZju4pjFyEVQqn5X/mxq3YJE7Xhg7l1hC
-	oZtZv3yYAnfBdtKsN15UbgKojPuvg0sgK9tRoeTRo+xDoEh+vDI8rLwkNwSpfl148GOHwk3u01J
-	rIDI3I4sZ5VZInJQsLo8uVb41JUmOmP6m7D++O+0Mizqb2URG2NABKPm+96ExhN+S3Wrf/wNLIN
-	GVW5P0=
-X-Google-Smtp-Source: AGHT+IFf5bnxZbREvMvlsbfizsYWDzhgcbPnRrN1Pv/fcSWvOqeCSaHZjLEK4HTUY1AY4fj8c+1pm2RjoePlp3shqXo=
-X-Received: by 2002:a05:6902:e08:b0:e8c:93d4:b0ae with SMTP id
- 3f1490d57ef6-e8c93d4b42amr10116844276.21.1752875581835; Fri, 18 Jul 2025
- 14:53:01 -0700 (PDT)
+        bh=VZIIxY6ABSv8z81ahgfn3koGHJXTOfKyAKvLEaDaLS8=;
+        b=EOsTn12oqjk8RMmrHVxAcey0ESpaHDDbVunxJAIW5iGta3Qbp6EuTVU7ijC8Ct9L/F
+         1u3uOuuiTTtNxKlMcydCl52nDpLaEev42fttpnWoursA6FbtuFARIRGwJg0sKx8HtiTP
+         EEVm77oQJeeI7tT6TTVlJe8UHip2JUSmhHw1FbuS1cfyOoLN+igyoytqZoy8v8aDkfLP
+         oi5+rOulxWUpT0POogLB0eO+lOWNkO+yJBu2TJnQ8kmxgAp4ZJJ6F7gL9GlPV8dKS9AB
+         ol8CMdP3vLuRMJsX64TTYmtw1QE2Qz0PHt7vStrs6vZLAkK0VR4L7ytvW6aaD/EjFvDF
+         vKwQ==
+X-Gm-Message-State: AOJu0Yz4VgngPZRxKi+V1wSjHnrlpP9brbJZsnJCg7XXZS0G5j+sKcAH
+	JuZDyer40Ghttotdh3LADOOYVDcwNkYjn93jWBuGOoavzCV4gVk90o0yG8Sq7uWeZA==
+X-Gm-Gg: ASbGnctMfaVderm2ls9zwnqCQ+h/RuefagDunJFHlPCa30c3UMBZNJcwSuCTPMkJFS+
+	MzEPV6Q7EXzNPdxFy6ekSK+/8CTB1a83gItMUeuzNtRlW0340b2bu+yL+hNA4OGkl9VoUnrzCXJ
+	mdw2CoVP6yECvuZW6M/WnHy9rZMGxwDSXqfZSjmo7jntMwxY6NEkFPoAYd/8T5bUTrq06yhJgqy
+	lc1ULS1t2BlBdeKcro/NFn9ZSTSZX9h7ZIIIvm0p8uM1WQsgUhTcePmK4LUmEsUU9OPTAX5nA0s
+	+RJHnbHgPXgGANJcsNcea4PAFVlM49/aWWa5E5LiGfjQOy9xBCTtxrEHekGt+DLJpZrwjFiUqXB
+	6FT0xYvd8bY2XJGgM2uuNvECIWHmpg8rRHTXwmoIlQxO94teeuFTonrtKCz58h1VfiMs=
+X-Google-Smtp-Source: AGHT+IGs1tp0h7Q9zEdF3FGJM/PEgCbtWDjUvz3/6PFOrimy1pC4YXH5BKmWx16MOmz4ZbnQctmj1Q==
+X-Received: by 2002:a05:620a:1d95:b0:7df:dea8:6384 with SMTP id af79cd13be357-7e63bfba1dcmr340213685a.47.1753476587890;
+        Fri, 25 Jul 2025 13:49:47 -0700 (PDT)
+Received: from localhost (pool-71-126-255-178.bstnma.fios.verizon.net. [71.126.255.178])
+        by smtp.gmail.com with UTF8SMTPSA id af79cd13be357-7e64388fa6fsm38402885a.76.2025.07.25.13.49.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Jul 2025 13:49:47 -0700 (PDT)
+Date: Fri, 25 Jul 2025 16:49:46 -0400
+Message-ID: <9f09c9e0e1e911b43be267640e89f2a3@paul-moore.com>
+From: Paul Moore <paul@paul-moore.com>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: audit@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] audit/audit-pr-20250725
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20250718203734.347091-2-thorsten.blum@linux.dev>
-In-Reply-To: <20250718203734.347091-2-thorsten.blum@linux.dev>
-From: Paul Moore <paul@paul-moore.com>
-Date: Fri, 18 Jul 2025 17:52:50 -0400
-X-Gm-Features: Ac12FXzCPEr9FkZrYDFFpVvOY_IL3QCEVZrKQZHLJkmmAUMqwWFbcM7dIijU3Ck
-Message-ID: <CAHC9VhSa_9cWiLfOUNiLPUa7PyECF-2hqzHZikYHj6QeYGMqEw@mail.gmail.com>
-Subject: Re: [PATCH] audit: Replace deprecated strcpy() with strscpy()
-To: Thorsten Blum <thorsten.blum@linux.dev>
-Cc: Eric Paris <eparis@redhat.com>, linux-hardening@vger.kernel.org, 
-	audit@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jul 18, 2025 at 4:38=E2=80=AFPM Thorsten Blum <thorsten.blum@linux.=
-dev> wrote:
->
-> strcpy() is deprecated; use strscpy() instead.
->
-> Link: https://github.com/KSPP/linux/issues/88
-> Signed-off-by: Thorsten Blum <thorsten.blum@linux.dev>
-> ---
->  kernel/audit_tree.c | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
+Linus,
 
-This looks fine to me, but as we are at -rc6 I'm going to hold off on
-merging this until after the upcoming merge window.
+A single audit patch for the upcoming Linux v6.17 merge window that
+restores logging of an audit event in the module load failure case.
 
---=20
+Paul
+
+--
+The following changes since commit 19272b37aa4f83ca52bdf9c16d5d81bdd1354494:
+
+  Linux 6.16-rc1 (2025-06-08 13:44:43 -0700)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/audit.git
+    tags/audit-pr-20250725
+
+for you to fetch changes up to ae1ae11fb277f1335d6bcd4935ba0ea985af3c32:
+
+  audit,module: restore audit logging in load failure case
+    (2025-06-16 17:00:06 -0400)
+
+----------------------------------------------------------------
+audit/stable-6.17 PR 20250725
+----------------------------------------------------------------
+
+Richard Guy Briggs (1):
+      audit,module: restore audit logging in load failure case
+
+ include/linux/audit.h |    9 ++++-----
+ kernel/audit.h        |    2 +-
+ kernel/auditsc.c      |    2 +-
+ kernel/module/main.c  |    6 ++++--
+ 4 files changed, 10 insertions(+), 9 deletions(-)
+
+--
 paul-moore.com
