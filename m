@@ -1,103 +1,107 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f50.google.com (mail-qv1-f50.google.com [209.85.219.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E110220F2C
-	for <audit@vger.kernel.org>; Wed,  6 Aug 2025 21:04:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9ED611B3937
+	for <audit@vger.kernel.org>; Thu,  7 Aug 2025 01:47:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754514267; cv=none; b=T+wL3Yrmi1m96umFby5aP585wJyh4Dv/CutFz7+M1B7dJjXJNW4pual//lSU6c0fxJLZcYfSGpZKy+7XEJkxD0o0LIFDVIEz/+HMsIZA34md959S8bIABEfDqfqX66tjVPCygKAnfpIi58EZMZkAXWcCRZHQjBDot/3zOQ5hxBQ=
+	t=1754531262; cv=none; b=rDk2FzhYOEzlo6pgHhAW+Ud9hc7qcPOUJOV//8EcyslWIn1vTRMA16QLZcu/82MAhaAOwMMoUvjCAjKcquPuwt11XK307uk5JUo+IgcwOyeDTq76oZx1fxHmvDYGTa+8EGzdTVmvaUaOy7gaLcHJHO+xQLpuhYzyHlP6QQTVwvU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754514267; c=relaxed/simple;
-	bh=nTBO2VfZVbhacy9nQazk9AO4gtqz+cLDnC6c+cJcUv4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-type; b=R5rS1gXSZHALWHjCpnkG/FkH1B7sn6SGHQlVzDaE6QbfOUBGEeRqFgbFs5udR+zb49C96fyvDSOBIImpDYCNqdiZSKYY8Z232jRm4vwM0KQLgshYnfosNIdFD3E87a/bdlf28ZLN7cpJkGKTJOPtSMxyjnTIMS4hFWXbEflnoyc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=TnWmksTl; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1754531262; c=relaxed/simple;
+	bh=3/ZBMbX1rfnr2/RwjuPJssXYwyCyUeok6+T+rCEfBb8=;
+	h=Date:Message-ID:MIME-Version:Content-Type:From:To:Cc:Subject:
+	 References:In-Reply-To; b=EVsaCqtmq8PAFkH0rTpHdEDnfroWc4e13Ui2csbsIFQ/THRVPDdKXHjUf/m1696l3QRJe6AUPSY4BKG0FJDct2PfRlxtoC6MGWG7o166y+Uyl3s5P0e/Oi7FSwoS08qGA9udhu0QQ3RgAUIwda2hYPz3A/6GIuOZQ8Qj+eWMRJo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=B4k4FZ1w; arc=none smtp.client-ip=209.85.219.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="TnWmksTl"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1754514263;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=LjA/k55gOeFwqG1BJhrtffC2mdTbEoqBb7PoziZp3QA=;
-	b=TnWmksTlDZaI6Ya2WniD0KvRLVzwOskUyVBhGOV5Xam1Ghm/R0IuRkbP0JMzbZJwMhP/Z6
-	K3GrDbgnunWPdXKnRbUfNWsBVtfeuldGOHUuFQRHA/MhSvTCAnaIx1pnCoDaYt3NAGIN4R
-	UYjoA3uZm5YE/U97BGo7t2xru8RINEc=
-Received: from mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-112-lO16nl6oMWa1DPvWRuY1SQ-1; Wed,
- 06 Aug 2025 17:04:20 -0400
-X-MC-Unique: lO16nl6oMWa1DPvWRuY1SQ-1
-X-Mimecast-MFC-AGG-ID: lO16nl6oMWa1DPvWRuY1SQ_1754514258
-Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 76E361955F3C;
-	Wed,  6 Aug 2025 21:04:18 +0000 (UTC)
-Received: from madcap2.tricolour.com (unknown [10.22.58.4])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id D4DFF3000198;
-	Wed,  6 Aug 2025 21:04:15 +0000 (UTC)
-From: Richard Guy Briggs <rgb@redhat.com>
-To: Linux-Audit Mailing List <linux-audit@lists.linux-audit.osci.io>,
-	LKML <linux-kernel@vger.kernel.org>,
-	linux-fsdevel@vger.kernel.org,
-	Linux Kernel Audit Mailing List <audit@vger.kernel.org>
-Cc: Paul Moore <paul@paul-moore.com>,
-	Eric Paris <eparis@parisplace.org>,
-	Steve Grubb <sgrubb@redhat.com>,
-	Richard Guy Briggs <rgb@redhat.com>,
-	Jan Kara <jack@suse.cz>,
-	Amir Goldstein <amir73il@gmail.com>
-Subject: [PATCH v2] audit: record fanotify event regardless of presence of rules
-Date: Wed,  6 Aug 2025 17:04:07 -0400
-Message-ID: <6a18a0b1af0ccca1fc56a8e82f02d5e4ab36149c.1754063834.git.rgb@redhat.com>
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="B4k4FZ1w"
+Received: by mail-qv1-f50.google.com with SMTP id 6a1803df08f44-70884da4b55so6149196d6.3
+        for <audit@vger.kernel.org>; Wed, 06 Aug 2025 18:47:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1754531259; x=1755136059; darn=vger.kernel.org;
+        h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
+         :mime-version:message-id:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=aY5+apIPDPz1zLZWet0eNNipx7u+zsC5VKHubvKB0qY=;
+        b=B4k4FZ1wJZ26kcCyeGSrszGuKAKl02WCI416bWqISmNCYvQ6EK0AwLXxPrtiF/M/fm
+         MF1URsmzdzSnjtufA6F0oLPbUx3DFAYc3mjPhq8qHsETHQtpzzA1uBK2jvfcuJAtWARt
+         8psGtVUIPqJUEgVFmIQTLPiUStheypEhm4FdE8E+q4ECs5mrE2GFlspXgM/2UyotyEkw
+         3h1N5F9N/dg0Plh2auIG28/P1Ux8s+lusU0xAMhRO/YymAXtDmme7kQ++SvAPv6xlKpb
+         IUdfapwquOomZ90aZB38VYLfQ1S0aF+VAb/G72wwKKH5UtsJ84+lL+ziZhM77AY8qq3a
+         Vrqw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1754531259; x=1755136059;
+        h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
+         :mime-version:message-id:date:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=aY5+apIPDPz1zLZWet0eNNipx7u+zsC5VKHubvKB0qY=;
+        b=hqQtqF1ismBo1B84YlVw5zs02TgbrRFrcAMejBj1LSxf3GOEYpy84Q8qEhiFwr3zy6
+         JPlGaLosvCFyN9WnvxuWDgkpabcSbVO8sMJj6ByksiOrjGeeJjP4olb4BoZQZpHTdUQe
+         LB20b4rZWc2rQ+rkS+Q4GGvm8OKoqUcoGymriSBJU2nTDTF4PI107OZlpvNwHW6y91xG
+         zVply8xZEG09PQ7WkxmHf3G04/OdhE4dOuVR8jhqMitfSL+rTQeYB3NnV3S43PZwpoDU
+         hzz36qoIwiX1WIJx136FRzwq2QRnFvfny5/almca6zhNl7+1HIoXXoizDsL1xeJtpibB
+         Y+7Q==
+X-Forwarded-Encrypted: i=1; AJvYcCXl3yEGtwVAwwsbKQG7vPxfv/QkcPiFccQ7cdavw/fsmFWkxDu41Z2RJtSXNO6mX35hsQe4sg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YydOxUhMJg6ZMRr/coznnGVi6X7UKzAZkYMQL7KR2SpYmOwJBOW
+	Q9JN00fNI4luk1Xz00MpQly61zgPo53FBPXAnvmbSJylrzET7AYtDPBgZ+ZDy22WkA==
+X-Gm-Gg: ASbGncsWbtwp7Q18m/etG4F8BTGK5k+BJJZd7AODhIZBU+luTTM3XpKPH5hdkWbxA6r
+	T1Cz87wjubm3IcMuIhJGeUgO33KHtKDILKDG6QProRVShv44Filp1mv+oH8HG8000ElOpxvJiE4
+	/DjJVkMPMcRRMSXOv6HusUnCF4sPsUaMT+v0IIIfQL7AG/uIDdojXgT0nrvBjQp/FyFAeS0BcrU
+	bScXDYmFgNiC0mGj5UzhrKvWjAyzA1E/29/go3knpKaIEsYQ+nM63Ey7FCheppgpAlaT9ErCb3I
+	XLB893hAa6jCY+fixk3KF9VBk1upWsWx7O8DY8tCQddI060xWfl7xXxXtYIfq+YsOYqQejB8thL
+	rQjTTeBONY2DLOPtS8JWOZA1y1D8Iy++wAXwaKGdC7T4rbMUkUrskGz+fwSCUagcQU0/X4BxJmn
+	o7fw==
+X-Google-Smtp-Source: AGHT+IG8gljUkhxjIhCTlEyvnsU1ykkoPiUWoXdbBKK7biBWjQdmiSFWNhS7Sn1nsxWyxlD0vdtbTg==
+X-Received: by 2002:a05:6214:20cf:b0:707:76a8:ee9d with SMTP id 6a1803df08f44-7097b055482mr61183906d6.51.1754531259574;
+        Wed, 06 Aug 2025 18:47:39 -0700 (PDT)
+Received: from localhost (pool-71-126-255-178.bstnma.fios.verizon.net. [71.126.255.178])
+        by smtp.gmail.com with UTF8SMTPSA id 6a1803df08f44-7077cd69b86sm93679226d6.42.2025.08.06.18.47.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Aug 2025 18:47:38 -0700 (PDT)
+Date: Wed, 06 Aug 2025 21:47:38 -0400
+Message-ID: <74767dff9834360b2100907df5142ab9@paul-moore.com>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
+MIME-Version: 1.0 
+Content-Type: text/plain; charset=UTF-8 
+Content-Transfer-Encoding: 8bit 
+X-Mailer: pstg-pwork:20250806_1659/pstg-lib:20250806_1657/pstg-pwork:20250806_1659
+From: Paul Moore <paul@paul-moore.com>
+To: Richard Guy Briggs <rgb@redhat.com>, Linux-Audit Mailing List <linux-audit@lists.linux-audit.osci.io>, LKML <linux-kernel@vger.kernel.org>, linux-fsdevel@vger.kernel.org, Linux Kernel Audit Mailing List <audit@vger.kernel.org>
+Cc: Eric Paris <eparis@parisplace.org>, Steve Grubb <sgrubb@redhat.com>, Richard Guy Briggs <rgb@redhat.com>, Jan Kara <jack@suse.cz>, Amir Goldstein <amir73il@gmail.com>
+Subject: Re: [PATCH v2] audit: record fanotify event regardless of presence of  rules
+References: <6a18a0b1af0ccca1fc56a8e82f02d5e4ab36149c.1754063834.git.rgb@redhat.com>
+In-Reply-To: <6a18a0b1af0ccca1fc56a8e82f02d5e4ab36149c.1754063834.git.rgb@redhat.com>
 
-When no audit rules are in place, fanotify event results are
-unconditionally dropped due to an explicit check for the existence of
-any audit rules.  Given this is a report from another security
-sub-system, allow it to be recorded regardless of the existence of any
-audit rules.
+On Aug  6, 2025 Richard Guy Briggs <rgb@redhat.com> wrote:
+> 
+> When no audit rules are in place, fanotify event results are
+> unconditionally dropped due to an explicit check for the existence of
+> any audit rules.  Given this is a report from another security
+> sub-system, allow it to be recorded regardless of the existence of any
+> audit rules.
+> 
+> To test, install and run the fapolicyd daemon with default config.  Then
+> as an unprivileged user, create and run a very simple binary that should
+> be denied.  Then check for an event with
+> 	ausearch -m FANOTIFY -ts recent
+> 
+> Link: https://issues.redhat.com/browse/RHEL-9065
+> Signed-off-by: Richard Guy Briggs <rgb@redhat.com>
+> ---
+> changelog:
+> v2
+> - re-add audit_enabled check
+> ---
+>  include/linux/audit.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-To test, install and run the fapolicyd daemon with default config.  Then
-as an unprivileged user, create and run a very simple binary that should
-be denied.  Then check for an event with
-	ausearch -m FANOTIFY -ts recent
+Merged into audit/dev-staging with the plan being to merge it to
+audit/dev once the merge window closes.
 
-Link: https://issues.redhat.com/browse/RHEL-9065
-Signed-off-by: Richard Guy Briggs <rgb@redhat.com>
----
-changelog:
-v2
-- re-add audit_enabled check
----
- include/linux/audit.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/include/linux/audit.h b/include/linux/audit.h
-index a394614ccd0b..e3f06eba9c6e 100644
---- a/include/linux/audit.h
-+++ b/include/linux/audit.h
-@@ -527,7 +527,7 @@ static inline void audit_log_kern_module(const char *name)
- 
- static inline void audit_fanotify(u32 response, struct fanotify_response_info_audit_rule *friar)
- {
--	if (!audit_dummy_context())
-+	if (audit_enabled)
- 		__audit_fanotify(response, friar);
- }
- 
--- 
-2.43.5
-
+--
+paul-moore.com
