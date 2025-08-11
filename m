@@ -1,126 +1,99 @@
-Received: from mail-il1-f170.google.com (mail-il1-f170.google.com [209.85.166.170])
+Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15C412882A2
-	for <audit@vger.kernel.org>; Fri,  8 Aug 2025 19:40:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 975DD1D61B7
+	for <audit@vger.kernel.org>; Mon, 11 Aug 2025 22:21:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754682044; cv=none; b=F06pAHRdON4jmznAksTKJ5bRKtMg0bkVAn0h05RuxqSgcJSlj+iBIqhhykrhOcoGc2s4PDRKZ+Px+mNEh6Iigp4GPr96QeSlLLI8F+8ZquMuUHjqNZhkkySv/4wCWTOiJBQPMqHIzJpgyg/tlqjtyHSFJU97fsU4BIGK0zgh6W4=
+	t=1754950888; cv=none; b=jflptEsbjCZMilhNSU7ky4HL+B7oYQtUkGiMHhwtAOr84O6GmnVDMfMy7wkkOWCsh1zPXLrmnK4+5xTVgQ+Ru4Iszz8l/DTEjllge3rdiLPSUIDUaAHxN4d3WeFBhkQvQNfbCNFiLQExrXBGKErndlp8AQJobO1qJC7ohutW1YM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754682044; c=relaxed/simple;
-	bh=fbC1sfGTRwM9KVR6ISJbEGyq/BzRDCIS9DtaXdb/r/c=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=l8tjuLc5L7/9FaUo1M4XxzOyqea7Xft/gXJLsiBC9GDAyTsa9aN28+YVKmKDpTQpVqvZOk1lqcoh2E6U3A/gNNyCL/EOUNOFyN0wFwVOrFGhj7+i8khrqz6iOrEpXEeTOs0+qU2Y6AVldo2pa238Yvth8os0brvENOC6fQI3i6g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=B8InPqWO; arc=none smtp.client-ip=209.85.166.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
+	s=arc-20240116; t=1754950888; c=relaxed/simple;
+	bh=qXhanpL+DK2WbdhWgqSJLD1CMqNGLtc5qG4llyV7dp0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=tfMttqc2Nxd7HB5TXd1s5QX3i2isKFtz00e9vF0ULHdehZGDiMQmaI9KUQUILeCHOUtdW8ccQ+qRwewIwAjDdpA9GcB7YTRA5/yjl16Okp1EUh+fxsSj7DzlLTRWzFMYTfsx48ygLuaMAjyAaMK52abL8A8TCtd0ulrN5BcNvgM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=btRRtqFp; arc=none smtp.client-ip=209.85.216.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="B8InPqWO"
-Received: by mail-il1-f170.google.com with SMTP id e9e14a558f8ab-3e41b930105so13681485ab.1
-        for <audit@vger.kernel.org>; Fri, 08 Aug 2025 12:40:41 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="btRRtqFp"
+Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-31f1da6d294so4471010a91.2
+        for <audit@vger.kernel.org>; Mon, 11 Aug 2025 15:21:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1754682041; x=1755286841; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=paul-moore.com; s=google; t=1754950887; x=1755555687; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=dMTURUrnQNZrOBYjWC1Rn+SnR4z6iblLoVxNeceVQhw=;
-        b=B8InPqWOcC6SuFMU3Zyp0g+xxcwJoCteiIftxSlM5dorsvmt423jpqIOIMUYFJ7OMr
-         X3BXZdMfkkf+ndfAMR8cBQiXiItcl1U2MtEtKaZ9KD2z31slE7/QFKEMROgNCcEF+/fB
-         qF1jo6j+dQnF/pkdE2DZQhiaYQfXZpCqW+nkp4SEi6biEjUHZXA4rIRVGpeacwQjDYly
-         1QE5AHbkbMwnR/w5kpCrv6eYNDD2SRuF/ozCRsVM5Ey+nO4u6WmN5O9vgHQbE3vqPaZP
-         VwIVoOU6yu/+iAnCb4acGyPZNeh70nyvi4RcCZ8ZHcpW0VB9Y4m/yQV672QibgwcZHsx
-         XMWA==
+        bh=TXdnb41bcMRYFaefBcCIWWyf9vYxHasNkQCzWhItBkQ=;
+        b=btRRtqFp9k1+3KHuadN8gK06YGLKpjW0+GWFyE9XG1iqlTQ16dWPQsFMmp51ph97Gj
+         dLwIiXpomEM44yjpyqMmDrEv4P3wjNHXIYW6cGkpDaJt/NKkVf8AqZoieUypJT2i/UIh
+         FriZsMf4aVn6qbLqdrEhohLz1rCS8ggHux2ODerie5ayBFWaS50j/EAqaLZj1aOLqcad
+         XeYbY6PtgZpCRy8xnD0CFzH0MaFNaYaCzvcvkzFmDqQauEGA0Uu7fEj4huf6/5yCOzLA
+         KlJb3aoG3F3DEp7WxAQxAi299lp1OJW51AUAGcvGJ+MdIoVSgb1gIWOzIOge6W2IRrdG
+         xKjA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754682041; x=1755286841;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1754950887; x=1755555687;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=dMTURUrnQNZrOBYjWC1Rn+SnR4z6iblLoVxNeceVQhw=;
-        b=ktcPM2yNurKMStVS9T4M1gq4sp+RBP1EUac5YZ80jCrPfrHHgLttUxYgNu3WTSzRvU
-         Yqw0J8g9oKJVYzirV0txT7WoHgiY775m7jOYnjcxlsew5zJfTiz1mHTPl0DfZHHg/qHC
-         Ry5APAlDQ8SZ72MzGyL/kZpbqbCxTMXWbR8AOt/JeUBgHWtLT6ZsYZqcqr4LyTkwuhgg
-         spWAFUju+ToEQp7TCSfzKh3+Apxf35g6GZwOJCfTW0qhQfuju/hEHYQv8cqWKI1SnB2q
-         jZuvmHaXtN2FmRCGjHpaqjmhxml8FKFdj72gkrKwl1RuLRHrPrrUGsQDDo1MYKRGL3xp
-         9iKA==
-X-Gm-Message-State: AOJu0Yx9Ug3kznaxnvHM5zBBGjLCUfz28gvnUW4aQh0qCj8arz9Q8sgU
-	22pH2g9/dVr1iNQLWi0hkdWNhQ27gHC54fdPN3rb81CkqR9hHW+YbaUdtTy4Du05DII=
-X-Gm-Gg: ASbGncsye7K9C41eT20BILvtQqJ3sAvhytxxpcIBFBZb5KMY1sZ31/U65wibqbOGx/h
-	ofDarjdrFTDyLAY/1HQVSUcvOsnjmAVpi1aCSfmmtIvS77jRkiUQOVu3FXE2a85njzoKJZs69Oo
-	jf8Ckes1JAVYC+YJ9H6whOqxrF9CnMbOovGnO67EZfXHX4iPsCOlgSrs+4YJ7wTrxCBvppysu1I
-	xGqrWBCC+niRJfDhXTBlUzOyJDg6sZL1TPiVGY/iXhZix6a8RtwId0XUqXV7a80XKWJRDEBxzPP
-	5CMMRXMN5+i6joVipr/Ebl5sDixN8nk0GkDJf/60XENZM4TXCdakS7eI65olhaIeWpwHTLLx1o7
-	dXdvT
-X-Google-Smtp-Source: AGHT+IFlTg6qyesY84rUV5KNJ8QLoCgYNF59EcWDBZiEsfgkJ/Ld63VaD6K6KCZdZ5B2HMUbA03MLA==
-X-Received: by 2002:a05:6e02:1a07:b0:3e5:31fe:a47d with SMTP id e9e14a558f8ab-3e5339b2925mr68396935ab.2.1754682041073;
-        Fri, 08 Aug 2025 12:40:41 -0700 (PDT)
-Received: from CMGLRV3.. ([2a09:bac5:8255:4e6::7d:6f])
-        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-3e533cdd3e6sm10482345ab.55.2025.08.08.12.40.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Aug 2025 12:40:40 -0700 (PDT)
-From: Frederick Lawler <fred@cloudflare.com>
-To: Paul Moore <paul@paul-moore.com>,
-	Eric Paris <eparis@redhat.com>
-Cc: audit@vger.kernel.org,
-	kernel-team@cloudflare.com,
-	linux-kernel@vger.kernel.org,
-	Frederick Lawler <fred@cloudflare.com>
-Subject: [RFC PATCH] audit: make ADUITSYSCALL optional again
-Date: Fri,  8 Aug 2025 14:40:34 -0500
-Message-ID: <20250808194034.3559323-2-fred@cloudflare.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250808194034.3559323-1-fred@cloudflare.com>
-References: <20250808194034.3559323-1-fred@cloudflare.com>
+        bh=TXdnb41bcMRYFaefBcCIWWyf9vYxHasNkQCzWhItBkQ=;
+        b=h4z+AyJkWElsx1b/KasO7rNqLG61Qyl+pAELTT3zY3uCxlWYOmWUWsi0mTRusmAC8x
+         TouoZjdbwaOZh1phfIjYkXlstIpdTkgD2s/Z1jUZLU7NNI2Fts1ldq6YScAPy+wExFr6
+         ImBSWM4FJ/dbBUI5bT8QDhJkUgCTGqgzH3lIS0Y7Yv2R1EpkzsiPwrRQw5kw6DDPi7zq
+         9rz1dK3mhtI1WYY9hLFFJ+L5oehUzQ01jnxikMX1QgsCft+/CVQuC+HnYO00IRRDUFUT
+         2ktHq+THR1buoZjuE7LfmBv9zwySdoKyZcBPmUUMB5INI/y3h7YjC41gdWMs0aBd8bJu
+         KC5g==
+X-Forwarded-Encrypted: i=1; AJvYcCXoBPc+X0cwur56iJg9TQYm/T0tfnq2pYw09614n0x4tIWpNXpOkyOqfunYW4NJ4E7NNBBYcg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxoxWkiI2d5Wx6CwrE6p357prrCgQ9fHRpsjmALeHgbi54tQssB
+	7/iXqw00K20yQv7xDvwbYy/SsURq5Htuym8JjgEECsR1fAf/dJXSQ5Gexs3+Uc6WKl0ky9mnZYS
+	0+BZ6jU9I4vW9V/cwkBg16OWiISkaxXvsLwqkiYH1
+X-Gm-Gg: ASbGncvaXbWGg706o3uYjheobS2mCWgx5VQPInkTv1pBoLR71/FoJl2OrC+SohZKIHz
+	rToBtc/j+7JT7DkwPDKQwYuRduAiaYKwJTLLGCAkBrXKRk/W3XId0n3/GaxSc5cE+6DBuzL0PAB
+	CoQ1Y6il81p68AxD8RjSall5ljvJVfPRTQMgdsdk8XtmmCbyMbj1OHORvV66zkw+xZmqlgMPrvc
+	+Gr/csalc+YiApJdA==
+X-Google-Smtp-Source: AGHT+IEss2X+BEVYoSZIRFPMdBMIECB9EsuPm1/5BEpb7wMtfKbuhIPqkxFcGxZboN3KJZ7oj0OWy4xB2RyQ2dN40eo=
+X-Received: by 2002:a17:90a:dfc4:b0:321:6ac:532b with SMTP id
+ 98e67ed59e1d1-321c0b3493dmr1670945a91.35.1754950886988; Mon, 11 Aug 2025
+ 15:21:26 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20250716212731.31628-5-casey@schaufler-ca.com>
+ <d5f0d7a5edea8511ab4467e0fb225b8b@paul-moore.com> <4f6c9294-dfb3-45cf-8f46-c1a0063d2921@schaufler-ca.com>
+In-Reply-To: <4f6c9294-dfb3-45cf-8f46-c1a0063d2921@schaufler-ca.com>
+From: Paul Moore <paul@paul-moore.com>
+Date: Mon, 11 Aug 2025 18:21:14 -0400
+X-Gm-Features: Ac12FXyMjcnxuMYwY6jL1gdJPw-g9F2DzMGA2F70iCe8j7vzY4irDpbe-2aJOKM
+Message-ID: <CAHC9VhR-Jd8JGhEETSBLDQA843FtsyN+ocM1XjfA_A6g+tJeng@mail.gmail.com>
+Subject: Re: [PATCH v5 4/5] Audit: Fix indentation in audit_log_exit
+To: Casey Schaufler <casey@schaufler-ca.com>
+Cc: eparis@redhat.com, linux-security-module@vger.kernel.org, 
+	audit@vger.kernel.org, jmorris@namei.org, serge@hallyn.com, 
+	keescook@chromium.org, john.johansen@canonical.com, 
+	penguin-kernel@i-love.sakura.ne.jp, stephen.smalley.work@gmail.com, 
+	linux-kernel@vger.kernel.org, selinux@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Since the introduction of commit cb74ed278f80 ("audit: always enable
-syscall auditing when supported and audit is enabled"), eBPF
-technologies are being adopted to track syscalls for auditing purposes.
-Those technologies add an additional overhead ontop of AUDITSYSCALL.
-Additionally, AUDIT infrastructure has expanded to include INTEGRITY which
-offers some advantages over eBPF technologies, such as early-init/boot
-integrity logs with. Therefore, make ADUITSYSCALL optional
-again, but keep it default y.
+On Tue, Aug 5, 2025 at 7:06=E2=80=AFPM Casey Schaufler <casey@schaufler-ca.=
+com> wrote:
+> On 8/5/2025 12:39 PM, Paul Moore wrote:
+> > On Jul 16, 2025 Casey Schaufler <casey@schaufler-ca.com> wrote:
+> >> Fix two indentation errors in audit_log_exit().
+> >>
+> >> Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
+> >> ---
+> >>  kernel/auditsc.c | 7 ++++---
+> >>  1 file changed, 4 insertions(+), 3 deletions(-)
+> > As this is indepdendent of all the other changes in this patchset, I'm
+> > going to merge this into audit/dev-staging now and audit/dev later when
+> > the merge window is closed.
+>
+> Spiffy. Thank You.
 
-Signed-off-by: Frederick Lawler <fred@cloudflare.com>
----
- init/Kconfig | 11 ++++++++---
- 1 file changed, 8 insertions(+), 3 deletions(-)
+... and now it's in audit/dev, thanks!
 
-diff --git a/init/Kconfig b/init/Kconfig
-index af4c2f085455..2552918deb45 100644
---- a/init/Kconfig
-+++ b/init/Kconfig
-@@ -487,16 +487,21 @@ config AUDIT
- 	help
- 	  Enable auditing infrastructure that can be used with another
- 	  kernel subsystem, such as SELinux (which requires this for
--	  logging of avc messages output).  System call auditing is included
--	  on architectures which support it.
-+	  logging of avc messages output). Does not do system-call
-+	  auditing without CONFIG_AUDITSYSCALL.
- 
- config HAVE_ARCH_AUDITSYSCALL
- 	bool
- 
- config AUDITSYSCALL
--	def_bool y
-+	bool "Enable system-call auditing support"
- 	depends on AUDIT && HAVE_ARCH_AUDITSYSCALL
-+	default y
- 	select FSNOTIFY
-+	help
-+	  Enable low-overhead system-call auditing infrastructure that
-+	  can be used indepdently or with another kernel subsystem,
-+	  such as SELiux.
- 
- source "kernel/irq/Kconfig"
- source "kernel/time/Kconfig"
--- 
-2.43.0
-
+--=20
+paul-moore.com
