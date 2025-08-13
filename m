@@ -1,116 +1,98 @@
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0443922425B
-	for <audit@vger.kernel.org>; Mon, 11 Aug 2025 22:23:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 274742BE7BC
+	for <audit@vger.kernel.org>; Wed, 13 Aug 2025 05:38:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754951005; cv=none; b=K52gRXFpWACoSWCSdc3McGBlTePJ2zQfohz6V7uTjqqRK25mtvv7FY14HTfqL0vUZb66Y5eoiOpr03f/YCrDuZTBJXvOcltOeK5vANkWbH+BStA6p7GTXoXu1ZxuplwVj7Qw/iT1BUnJDu/fuG4gT/5MUzPrvcK0PwCwgGEkaoM=
+	t=1755063496; cv=none; b=C5MU0TmhrwkTtBF7dsUIVgDrDcznkoK3E/dvSyavsaQx+jn3JbK3yC7GzUMAP+RRnOQmPTz/jL3miGobhiaiKjdnT84ldeZfDoOeSs87pmGaCUS+cUeOWeXJOuHeC+SROupWSg3KweQs+/jM7RKUXez+Zo9EJ/2mnGoNZVgC3dU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754951005; c=relaxed/simple;
-	bh=UkjdFhfkD/5MPGo9lrvJIpAtslR7NzBNQeU9GjEIVS4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=o8bCRZj3HeYIoSNDGmuDuT4wFF56eCmRn3oKHUHhjmY2el1o2ag20oaKasD9yacdsIf1sLn1s/PqwwDF72gbYmtyQjqt383gegpsh5C9VFkBK5kEb5f3VS4UKD+llqolK4zw0oYevFonW/CFs28XNyIoMQ3Jq26tlpkfpjq3syE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=VQmJ9bwJ; arc=none smtp.client-ip=209.85.214.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+	s=arc-20240116; t=1755063496; c=relaxed/simple;
+	bh=fz7vpn3vSH+1er2D1cBKJjGlj43FOUOvtWS0JgPz0aE=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=sqBvCkDnk7jfQMj96f3bha+24Nmi1Zw0upZtBMK3BdTwvWn2LYdFg4wYaRz3q2yxgK2iqMbx5kgB6IMpRsENA/C6VqeYlgLc7PoGkvJu4USIP+/AR/P7JR88va4ZF2loKXf8CRoe6zoKTj5l7+K1OrLtRYFi4A697zchVJDmBYw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=EB7ZJSF9; arc=none smtp.client-ip=209.85.128.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="VQmJ9bwJ"
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-24099fade34so35068335ad.0
-        for <audit@vger.kernel.org>; Mon, 11 Aug 2025 15:23:23 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="EB7ZJSF9"
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-459e3926cbbso26240645e9.1
+        for <audit@vger.kernel.org>; Tue, 12 Aug 2025 22:38:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1754951003; x=1755555803; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BqRVwbRElxBdPXk8lHsckCVjfIRqkrurOlwpMKEN7BE=;
-        b=VQmJ9bwJjq7NqmL65iNeFkBh+Ge9NCFhKyWZftypmXP+/uAHG7wQm/Zgf6FMKYZS+z
-         +tTMy9gQLYG0PnpKM7PVHR53L2E4L0Gd19THj1TyLej+OoteZXFT5PnJB1o11MSUN//b
-         YgQAvGypyDjdlH2JwcZpita+BDoyBG4siomr9xQnyN90PL2aGnQxGqe9HUO0C0mBJ9Cq
-         tGVOzW/risvTcO3fROub+p7EULiCTtv8dxBOy/AP+H1yBRSaYsZ1y/IysT1MmTtx/SWJ
-         RVq80ogNIMh5xCAbvljTyJNvU8YT+9XzmyOkdvFa/e+86b8TCohnJR6dwhqK+UA/xqUf
-         zTtg==
+        d=linaro.org; s=google; t=1755063492; x=1755668292; darn=vger.kernel.org;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=RZtm3WhRjngbfc2XVyDmoZGiMzQGpKQ9/Z/Y44j56eU=;
+        b=EB7ZJSF9LGiDssAhP2jSLBJ97II5P0jZ2sJ4jNsj3q5dsvFUiuZD3uUgcJ+4S3JEyS
+         Ar+4xAJfmPXiK2WT6QTkJCB6b3DVAlpFjRTdpHjgaFk+V/J+TkHz/J0ueu4BH4PBpl0N
+         s2zUELa36hMfIJ2p6pn8/Eru0qtgUmogQ6pjgfJ4ceoPWmS8PVZXIjMVNvEmLAysGZQ6
+         rNDoF00LLR4Bgm0s9ADXk9Y3k4B6mUwSrgVgP6nc8X6lemM4X1PxP6yfR4ivzCZWGHR9
+         cjFny+PeMKHhphAYuQpMpgrgsKx0BvV8nfihWCIR9cdEH4+WJ4Lx/+nzgz28Jx5lnL3W
+         L5aw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754951003; x=1755555803;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=BqRVwbRElxBdPXk8lHsckCVjfIRqkrurOlwpMKEN7BE=;
-        b=DhqWHMH4pArMPCphjYmqfcI5Z46bJARrIsgZREvBsbyomYubF+ig1Nu7o+/Y8eHpuU
-         C7K23yIRo7KHyv3oo0khmbr8Dih7hbeLYLqsacfR6B8gIxgpoTevC05toPpG5SMm3whQ
-         4UzLpRQTz6ClyLLOtQUoizu/sGMfz2pjMnaKaLglIwfMHkPg+JZZGps1t++HzdNKwdhe
-         R68WP5Dn1fC2pXU+bgmm5emH2gExutdqX9QcAjfwLC5dURHMUFzm3m3pZbbup9Uwv47A
-         X6EzhBA5Hwx/EF+j+C71/Bo3tpJy3KbYOMsR6QE5H9oRyc8vLh5O2PkNLMoZ+IAHy4WC
-         DT6w==
-X-Forwarded-Encrypted: i=1; AJvYcCVyIw7d4OI9PUwAqKh+EMcrkhV/IowpCnyybubX9IZ5cp7yKgrvxY62tfBl3L1VTgDjXYIUCQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz7pLQb8ruWRslvWez6Vl1r1g1n6Z7/9a2Mt8WRDRNu5n+KGbqJ
-	mGwL2P1j0mBSWZFuFTqLc1efeCs21eKPbWT9ZmzV608oUAegZ74SSQTluXcgWL+4WufVpc8xZfT
-	8MvnTfRNEr/0rPHnnivSrkVgE1BeoX92eu5JMxw//
-X-Gm-Gg: ASbGncsRrt6JLsr+FrgaHOXYRlQnoSFcrW65QKeVVJuCVSpuNmRDRAew8sSYIsULd5M
-	YZWjfTlrSOr1z3F9QNXRImMdg8hUpiofysPw5+v7kisjaNdmX8/6WftFfY9CoM6bHUfiguMW3AT
-	bjjI9g7wqKutNAbTtg4N+8CB7YHBDwm+fk9mCiT5D3hZpV9c8ode2V7q7Ney0wT5gwt7BfRMVOS
-	9h3tAw=
-X-Google-Smtp-Source: AGHT+IGOFn6nK9TXlaa8CkF00jvK01f6MUwhUi89/qVrrGCFQDmatsrEWgtc5jXmtyHYczNSCnTUlh5awjVGJA2HI2M=
-X-Received: by 2002:a17:902:ea0c:b0:23d:f986:6472 with SMTP id
- d9443c01a7336-242fc287481mr14184195ad.25.1754951003328; Mon, 11 Aug 2025
- 15:23:23 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1755063492; x=1755668292;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=RZtm3WhRjngbfc2XVyDmoZGiMzQGpKQ9/Z/Y44j56eU=;
+        b=G/6zWVs2Y8VvH58X4D1lHrMPq5MVkUUWba4Km6uM/FzMka+PXaAlypL2QgIPExqpSq
+         ooJuyp6mV+uS3iUJ8uY4+XmKJy1JUfMJg6+3rksWMvKDRuJzIof17E0D3coY3fpiwV8a
+         6O9EyxVP0UszUF5ZI52P9bY1QukePxUwe6M08mcAJXS6pMADrPHpNY/ITxDmRNmyRKVF
+         4VlNt+fKIPd3qH4q7ZauFYlTjYSJ7Cng0nZL/LHb9HTvclyZ6WbeznsjGX3gPRvIDs4o
+         7g7THpb4J78KKTKEz3qZj8zMUNxuCUm/V+BzwiB2ozJVABvAJFJq5vCO8sA7JerKjUmR
+         wkaQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUfSWmaWnF3qw4zUuu248xRfEXuRLWrZEb+QUurqAuI5gdxNPzltd1oir4gP/8QqZi+LtGWTw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwoOiUcwW9A1lrubyvn4UxqK0z8DdrNlVXW0fv2bQ9bQjWySf2N
+	WkTf+Um5D1z8ITOYr1tujU02E1Z39wofpwSp9uQ43YBem75yEwouJumNa9gwe4fRRAU=
+X-Gm-Gg: ASbGnctCfeJhM160W3H6yQy0X9y5CMPMvsiaq3Y0f7MCf2J3PHmDW7s4EKkrz9MVMEw
+	WzUJACKzpzCYVW2/xXcAo6XYdLxN5l8ViYZV4Jdk/HV+80xi9JshRtrtN246+lEOdy6/yS2A5xi
+	DJ/C9XSEh/7kgLGk7RhkMnn06LhBp/AUgM60jwY35u50q/dlw4/l4TLIn17DIUD1I9HN4VCNmID
+	GpTPHcmaEx/wvQEm2MCtH+PMW0IoQqoqlHMxEOSfINMeTcnqtOYp0PNyaf6w07EB1Q4TIN04qQQ
+	EncsT84i9A21V7tnu1Ig5FRlGxAHIgrwcxe4dX8s4oVHvZakWunljzP1ig1shS02FpyTt1uNolW
+	ae6tDw33wlA9opR4Va2jitojTwSI=
+X-Google-Smtp-Source: AGHT+IH+A9B65CILVNd8g+8r1zIX9u7ub4DQznDepgDLM6ZOnlHu2xwuwZKKdRqHmlx+u58rKL4KAQ==
+X-Received: by 2002:a05:600c:45cc:b0:458:f70d:ebdd with SMTP id 5b1f17b1804b1-45a165dc8dcmr13438905e9.16.1755063492511;
+        Tue, 12 Aug 2025 22:38:12 -0700 (PDT)
+Received: from localhost ([196.207.164.177])
+        by smtp.gmail.com with UTF8SMTPSA id 5b1f17b1804b1-45a16def069sm14136905e9.20.2025.08.12.22.38.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Aug 2025 22:38:12 -0700 (PDT)
+Date: Wed, 13 Aug 2025 08:38:08 +0300
+From: Dan Carpenter <dan.carpenter@linaro.org>
+To: Casey Schaufler <casey@schaufler-ca.com>
+Cc: Paul Moore <paul@paul-moore.com>, Eric Paris <eparis@redhat.com>,
+	audit@vger.kernel.org, kernel-janitors@vger.kernel.org
+Subject: [PATCH] audit: add a missing tab
+Message-ID: <aJwkwMRSxUAvI4dF@stanley.mountain>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <6a18a0b1af0ccca1fc56a8e82f02d5e4ab36149c.1754063834.git.rgb@redhat.com>
- <74767dff9834360b2100907df5142ab9@paul-moore.com> <aJSyXpsVfU+PfFzN@madcap2.tricolour.ca>
-In-Reply-To: <aJSyXpsVfU+PfFzN@madcap2.tricolour.ca>
-From: Paul Moore <paul@paul-moore.com>
-Date: Mon, 11 Aug 2025 18:23:10 -0400
-X-Gm-Features: Ac12FXzlcanNoS7j2e973OwKiT9rlNsc4IrrFZzGeXXhu4-6krmOTM7sf1LTA6A
-Message-ID: <CAHC9VhQY_0wm_Wz7HD0wv0Xc_Pikv3FNtw4_ppGSYLyyKdFJWA@mail.gmail.com>
-Subject: Re: [PATCH v2] audit: record fanotify event regardless of presence of rules
-To: Richard Guy Briggs <rgb@redhat.com>
-Cc: Linux-Audit Mailing List <linux-audit@lists.linux-audit.osci.io>, 
-	LKML <linux-kernel@vger.kernel.org>, linux-fsdevel@vger.kernel.org, 
-	Linux Kernel Audit Mailing List <audit@vger.kernel.org>, Eric Paris <eparis@parisplace.org>, 
-	Steve Grubb <sgrubb@redhat.com>, Jan Kara <jack@suse.cz>, Amir Goldstein <amir73il@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Mailer: git-send-email haha only kidding
 
-On Thu, Aug 7, 2025 at 10:04=E2=80=AFAM Richard Guy Briggs <rgb@redhat.com>=
- wrote:
-> On 2025-08-06 21:47, Paul Moore wrote:
-> > On Aug  6, 2025 Richard Guy Briggs <rgb@redhat.com> wrote:
-> > >
-> > > When no audit rules are in place, fanotify event results are
-> > > unconditionally dropped due to an explicit check for the existence of
-> > > any audit rules.  Given this is a report from another security
-> > > sub-system, allow it to be recorded regardless of the existence of an=
-y
-> > > audit rules.
-> > >
-> > > To test, install and run the fapolicyd daemon with default config.  T=
-hen
-> > > as an unprivileged user, create and run a very simple binary that sho=
-uld
-> > > be denied.  Then check for an event with
-> > >     ausearch -m FANOTIFY -ts recent
-> > >
-> > > Link: https://issues.redhat.com/browse/RHEL-9065
-> > > Signed-off-by: Richard Guy Briggs <rgb@redhat.com>
-> > > ---
-> > > changelog:
-> > > v2
-> > > - re-add audit_enabled check
-> > > ---
-> > >  include/linux/audit.h | 2 +-
-> > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > Merged into audit/dev-staging with the plan being to merge it to
-> > audit/dev once the merge window closes.
->
-> Thanks Paul.
+Someone got a bit carried away deleting tabs.  Add it back.
 
-Now merged into audit/dev, thanks!
+Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
+---
+ kernel/auditsc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---=20
-paul-moore.com
+diff --git a/kernel/auditsc.c b/kernel/auditsc.c
+index 1c29541c8fb6..497bda0043fb 100644
+--- a/kernel/auditsc.c
++++ b/kernel/auditsc.c
+@@ -1778,7 +1778,7 @@ static void audit_log_exit(void)
+ 						  axs->target_sessionid[i],
+ 						  &axs->target_ref[i],
+ 						  axs->target_comm[i]))
+-			call_panic = 1;
++				call_panic = 1;
+ 	}
+ 
+ 	if (context->target_pid &&
+-- 
+2.47.2
+
