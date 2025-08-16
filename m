@@ -1,60 +1,59 @@
-Received: from sonic310-30.consmr.mail.ne1.yahoo.com (sonic310-30.consmr.mail.ne1.yahoo.com [66.163.186.211])
+Received: from sonic303-27.consmr.mail.ne1.yahoo.com (sonic303-27.consmr.mail.ne1.yahoo.com [66.163.188.153])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBBF72EA469
-	for <audit@vger.kernel.org>; Sat, 16 Aug 2025 16:42:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.163.186.211
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83BEA2F60B6
+	for <audit@vger.kernel.org>; Sat, 16 Aug 2025 16:42:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.163.188.153
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755362522; cv=none; b=ZzShfQ7K99lYSMzNGUrLoQgkdWxOU8eR0PH1/vSb7Q3tJsKksw0w8mvd6poXN2qSlUsodNdR0UpQ4nav1hFHwU9PQHawIsnruzw5+7TEK+b7TqEJirhdHNkPZS8YK25NSoZmaPqeQOgbMviHAQT5xQET+zxcM0eR9x2kySYAniU=
+	t=1755362525; cv=none; b=cG3gqdOWJ0zmWZXimBc7+mo98Vnbyp2pn5opGvt2S4lK8BR7C9vW1jtFLHWU7BkNqibSNXVnJghLFCkIKsEnGwI7wPgfP2GKDTZUCXctuef9Gw7+kuaYJf/gCFQJefxTVTHCZx3+FOxB0+f4T9xCh9Nbsq106P6mSnhyyK95+bU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755362522; c=relaxed/simple;
-	bh=IfyU0SLKhVx4/evH4GZoQneZPuk9OIpaNSSabTsfFxo=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=QD7Fc4de5ikFxrNqE7obzn6A1Z3eXd2JzZJBoMRQNgn3/GiGUCH36r40tuxrd0lVumQvnPt7gJsQ/RhxPexG7cdOEERlgYHhNANZu+09nrihpiV6YHiCzget/o75maTQ0cq02QXmLblAp3UO/+eGOsvclu+y50Bn+cdUdWfj2f0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com; spf=none smtp.mailfrom=schaufler-ca.com; dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b=ZctXdS7V; arc=none smtp.client-ip=66.163.186.211
+	s=arc-20240116; t=1755362525; c=relaxed/simple;
+	bh=LzUCl3hoJEExpToziP9fTxrE872KV3dSO1feighJNnM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:References; b=X8LuRJ2MqhHqHkom7PwgIKcc68Y45X1USiWOh3K7XCDGYhyT04gCPZPb25aVhoUQovirJScqmGYMEoNNfxr3TWFfUGJj8t/IVgfxeDSS5tCH86d1ZI4NblvmWW0begY0NZJFxz9uNukl/ToKX20kQIzH8ivBUhW8EwcAiYTxRws=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com; spf=none smtp.mailfrom=schaufler-ca.com; dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b=nEl8U3Ex; arc=none smtp.client-ip=66.163.188.153
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=schaufler-ca.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b="ZctXdS7V"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1755362520; bh=fY+bnHMn1zvihdkur8/hjRqH2qCiWCld0D1nWQRQIQk=; h=From:To:Cc:Subject:Date:In-Reply-To:References:From:Subject:Reply-To; b=ZctXdS7Vei2WaPC0PV5/VEPrq12NM0LRW5l//omX9peartivXWNxHd4w63ovoe8m6f81LV+7cq21xtT4OT+TdK64piK/Cl+wiX3Ujkel3978IscUG+sPjCGYlirnvN4hFpFDeXbb3o4G34zxVXsRHmLnx2wmWgLIV1A/RKKZskzlWRT2c9wKmL6xBG1qO/Kcplpv+H9ENfE1VAWt8L7asn2eFRfWYUoJ1gyjc1Kx6CdlF52BT0t+OaoHrFy8KM3DTeYmI276rCR1zRMuoH/46ZPGnHC3hXregfVbprawy2UmRFlwJE/PnCDeTdZUx5/b5poQZCCtGXGrOg/A6rTcFA==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1755362520; bh=LbayN2cdKXH4dOY63ex4uyZbhEOi7agd57tfRfnrm/U=; h=X-Sonic-MF:From:To:Subject:Date:From:Subject; b=DmOlX6qBdnZm/Jqri/uSglaGlBB+JfCskAMK/KC3VHf9gPa+sr5oa3JuQSE6m2JjwG9TjoOMXjR9OGAFnFATX699o8ZTtECHNwQGjb9GeDc57IDH25Av7xXPTY0TJhe7+Lrp7W9wpaan0PVwoRnCnRB/zmvdiplcTq8BuMJrteB9hZkmPkY8gjLDHiBfekgXF6f+TJvtWev2Wc/1jfwVExRMnAsrAEOZirwKH7nYTCxiJE9rpl3MuAlBrkC/IpVq2KrGB3zzLt0r+5Gy7v40X6xQTt4DeCSQBky/yTBsViRbC0Q2MF/hd1Pm2C+3ECGaEbSQONzEZUm3q5c9UcHk/Q==
-X-YMail-OSG: Eh8n8gIVM1k9N3KPs4TySABCYcvWEvOLX67P9EH3fK4H6fQA.pktdSmyrB0Sx.s
- rAHI29DRWMPpiBMg1MVFGBVksG4EfJ572QU22VsDljCIdKgvs6kWSdYHUrxkd8VEk.ceK1h51wk3
- TsKU3XuuCmNFHYWUOkgu_ePXCNGvAJgbzt6qakeNUSGt9SvF7aBe1FT5wPXFfAJ6yhMOSb9dLzwN
- ySLZyCIUvJD2WGw1KJUBhtuiv1VCrMADkcMhn9lt8EoKa_clLcWIIidxcnKFsvTUuJC0lOdImeMQ
- FnkZmW_id41C4AW6sy7D95tyESpTQY_bZqYM0WXlzKA6EenlGxHzIGctXc8T1SLVRezcTMP4aXyg
- .8jZrlX0l5kDe8XcrYTWV7RkU_ui95Y45ZCIyKCG5zjIy8GT_KZd0H2iK._ZlL3Iug1tRE6rUMr5
- rU8UzA2i4kOpgMnpq65fYLX_gLvgf3ZQP3rYcRpz68Nm3dQlrk.fAJ1URULbj.Bl95gVSOrozAry
- x.rZemwLhrEiyskNvF34OYmIa7ad9VD9_0SDG_bvIBrbpkZx.IPh4pfH8NdbVE6kd9.6px.w62tY
- 5c.yBU3A.6mRukcVoCnwBWfXKG.XqXwFuVtsrX0sN.hdFl5tdgyY7pt2q3yIQjvTWkQulQaLNe3y
- uLnVCnzdGvsZXNUR2vYpl0PY8t8qB.Xf_3N_BQKtk.IRSzbTU.q3u7RSt5.GrZAQtvEeJobMOdS3
- XTPnKo8T9zpQezcMk5Tc.0ebMFihbLFy0K0DBHy_718ihqhQqTwulrk9x6E0YZy05P4osM_IDls1
- v6dix38ZSuzPe3oogLQBK.owgHsQh6ItC.Zj6r0Z8zd_e8xBfpztQS5TlVFiLP1DO5YgfIYqYLN6
- 583ZEPSB0oXZ2uK_lgk_17xJryik5R.FxnMHWz96PHVGM49n_PpaVxB_CYO1lsF_5esuta0voFI6
- HYnswvtBDtyCmXI5two9y8rSTnn2EnoexvvyVNB7y0oEiVEKCPu73rEMbwE1ydzxLhYVvvUit.fg
- _z.MIZMbaynsJJWUEQcEdo9IKWgwGTqu8hRMQbWnLva1JqKApQcOXhLYJXjH19yO0f6sUxVZgPHb
- DT5Z8Es0cwZPVxUaBAtXxfrFC84nfZJCmO22kOpjPqzKAClFEOk9yiefEyKMLc5qDZdvwm_5Fvue
- _3SB_NIclr.LETW8G2v3KFghotZZe2HXv7qJUHiX_b6oXn0FCI.rrSmRaRm.ffMyW.QjeDpEDCGl
- 1DGOLiaYeV1Pqbd6H9ScVRR9H_lhith2LCNKBOoi8GwJAnNlkfy.2SJosBBF7G_5GHWMCR3c9b.9
- XYDivXbEn7M1LpAGcIYe8HyFhy8jyTzb3_ppRWUCtjCw1CpgVTz7o9qaw_atgJcIgiFnA14q4W52
- bYDwWBE17T6Ky667F_fvE1b7n664_GjnvDQgV7UAtEcEq5RelcTlOLKe6Yrzy4FoosT5MKtFankk
- 3RyGxfh.fuA69h.RDrJTuCptI4koFzDAHC1WFarEBoEnHSmLrDQrPLmqUZRx70UOqNfwxwjNXr6o
- LJ9ij93Eh8iqfpj_H2G87OID3XzXFZDecMViqNL1B8KsyWg9Wsuz4TKMxbwQdNCsZbJNmMvGLU07
- E44U4yU3ONgeh9zyU828Ljj1ZOnSx9nsqtAvWeEsoiaS461vLHNYw74nRZhZzkqeUowlnjMSOIg0
- 9gwcDB5QuBXQwWexppnUTxoh5MbN0r9paIjAFsBcWpWESG8ZB0Y7iV4t0_VfqEgslStVd1qmiEuH
- Bj0JDysG5BMok6MJlz6okp6gwzHiUTTtbmIbPy34znhyFdvZIY.xCUzsbZ2ju.fDLwi4r8C7EPfs
- RSw0rhKTaDlfO5ZVPmioqyE.Dqrm21K82ruRGJRbPD_PUf2B2ve_wwuq1153NxmEH2ZxgfbqsEF1
- kx.bidhCZFdQt_XRG65qgQ6hcbSvdzTvLh.TyXuD5iPir.KGqgG1hyuYpgVko8HDVwxl5Xwq.kh8
- cx_XJ1M6EzDP8nO99yVOkUnZ3K8XHmUmWIsZQo05a4bltz3Px77QKBHSJpZLEXE0CgYk46xIOaOR
- pIzNZ9v.Ziyj3jbAot_NeqEOVVFXXaMmce7gcRbTBL.GGlqE0vNnJwkNx8dKv82QMBFOACjv7F9T
- QfBfcrVeZgL6IOfZ0DmFgmRNtz19i3fTyM5PVHzoHvewC7ztrf2AvPw37KyWhbUG8xoCyvtTXKXa
- .h1lyswBKXPjYcXxF5I8zDqTCWdb16RXJfUhhlnPbdo7rHt_69aQXa5AxhULsPg._ikDmdWdVf1f
- .3CePD4EnuXLOSHzX7M_PAdGj3Fs-
+	dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b="nEl8U3Ex"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1755362517; bh=D+A4s2puEKRfCvZ3mdVLmiFNlIwcfme6AV7KlzI6Syc=; h=From:To:Cc:Subject:Date:References:From:Subject:Reply-To; b=nEl8U3ExyK8q2NDtm2QbVM8k9Mh2f8ErwLoPHsgBfwj9ZquUhShNF1Z9+fUwDVpw5tATwj821Eac7Wk6QlksrM9x2QVEUq9W8kmeSgKKF0Bke+70hxnRfR4E9MdDBa71z3moNHZ1sG01DApjeoInKd1boUhQrkeLIk98AgncLDNxMgR0pGmDI3q7UTWbCSAgCLi0g+4wucN9xrB9X9yEZsl24qqyYu4vVEuFposaZEU5hjZOHw1jL1ZE0DNqCGSCcSP7BbsaUr9FJhvu7ss+Q55itcapSWD3WjXhBAeWMEGB8mPjvPBeKV92s9kXJgZ3qQJ8b5TBVI3j9WuMsFJpvw==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1755362517; bh=PyNE3QwL6ADIqBMJz37yIKeZixQ2H0LcsDPEfsz5rQu=; h=X-Sonic-MF:From:To:Subject:Date:From:Subject; b=lkcWvrVicrSQOZv9DOSYaUKPbzBtlQXm41XMcvBHDixNnykECtyKr0NNEzvsF4F3TBIQ+lcxxuiL3vejFX3FqZkjYThxGe5b+0RpbY5X1gRSZujpMKIhhI3E6CMt4e6tIZmACD/zWQ5wtSDMVHEQQ58MefxFyud4KGL/JvbXMAA0wMddpRYNnd3RNHfBZsCCogNM1gYyPAhlLJn0QZTFurjoIjKHm//j/e7ewDPJ2Dx/acdA8k66NUGho0iOyV79s8fXbFNPOvj8z9+Y9cJrZs3e5V0dBjy9CTbVFuwvVEp6WWtOx+1pptxE1tVF0u8ox5FV71vuR8XLtp7856I5/w==
+X-YMail-OSG: .trXr3YVM1kHaebagFcoRlPYoa2pr3slXNsZnTUQaWMTSognFXPfX41WNbK.XcM
+ Gi4LmTtxfSy0jV_AOzB_5gssLq0Yjyy.9.0HtdQeFLFs7i.pz5fZr3EAJeMJGbfm0J37IBNn6RSU
+ xAeq0Ma5f7fHRP1Wh_DdCk4BWddmG.W7rEicsTSG20wlUsCaI0LZk2RwOqFqy9.w0ddDu90bQHiu
+ E0CvkJfg3PXD61Rindz2FkHEjKWHK2h_yOOdHcAC6uCo1wR.1bxzbOL_btrckvlWsmc.cbCOJiBj
+ dRhM0D7CXryK8Rg4h0vwmGo1tEnymj64.3aFXpCHR4qVOpdjYN_MJhEU6mcSbjJP9jovTw6ZJcFO
+ yABuQg.CCfostoCthijgwMLx.XRDuW3gcacRyXekFqUTU_FScMXyBzAcgvjqKK7tFzmmAQDC01CK
+ 2_Jd48zOkHpzh3b2.xlfstDZ_l6OCGswkZXLaKHekLYOU4fDABC.ZNfowqAQuL6CfzbcwmrctgYW
+ SkwuZ9BpxGnuJA5j9ZGaPSTJLBahNhpnmX7Te1rFXOjJsFXPNmIByIXZq9k1Xpwd0ZGlyAip4H3_
+ pkn7Fc748fxov3GJTQ_kLFcXFuo7fNHSqqckRpHOoyxHlUl4XwoyjLrHTNHEtMThdiK.iG8w3Iub
+ wcB.uPcsoGYCDKI8DU5YimPYJsXKJ_Kb8On8fJt7gXZ3amKEHdJIL9l0DPBlCyWQsmaTtK4XWWnY
+ jrkPj99ya9ABqSVICx8QSwFc5PY7rlyeOPYUvZR3Op1EbvjcCu5fP4yDYlIO5kVaqTgC064Anq58
+ 9sS5MQaSMlBizTmRJkl0lGCm.h.b1gH3b8V7g6NiNB8VE_sVVgcT350droO.LIK34KuuOcbr_xX1
+ Cinsx0ZkQPRKZmBW9al7ngLcUn47MnvUDm.sQdRFMr.7i7k1VpjoZmpp_eGPyhxGyUK0qLYuaZ9B
+ hlOVjxyDwWXkA_NOL2Ok4LQ.71oKVWbAsAfsQfeioTnRVcvvhjApas9ZqihwAe4q.ZzIYcO6MYZB
+ fcatzob6e7cE3xinYxiYTLUX7ihl4axQADD3UKu7JnpcgJreFSqZZnv1quomgqnk0Kle8u8dN40V
+ rHx9YHQclf.PkBhvzUSXhEDQJitKUxmopDbSxQ3Ct4Q4ES.oYJarI7qV_Vse751LFbQtbLqUM7xo
+ hCG8L5CoBAv0eK4GQj3Uju01ykhlW_iQLjubWi1Kj8VznztecemKImAjC.rg7jpVL8Vz61ZA4XCs
+ KZ3HY3CH4Ouyae5Z43vilGkXb3ndzq2_Nd59hyU4DSOWhdjTWZ1k1.mg1n6U8Thz0AZH8DCmy6_l
+ RrrMPPrbabebJ6ExnQaQbRDBejnfAn0OYxVRcnZuoommg.B9g6tvCNtOoUGxG9_cX08CgAH33k3R
+ ZgKs7hVsuDtqFRqolHv4h5v87Id2H6cVm.M30ocofGxHH3hyKEhI2ZnicPSvBIjOi4fiMgn.mHOU
+ qn1zOm5Q0cIHax1bmSgQJcfvlvPuhQKrfZSRU8Wlc9CrhAbehTYjjkUCvzWf1reglVQVVYFBlMzd
+ X8vIryOpuZCbqCWugCllMoumuwZIyRtMg.Djz.KHTZDeNrejdh.hvHMlXz19u9.8tGjVoqlsewup
+ wzueaAjwn.OYaVTfNr1EMwHP0PsoTx1LFP2UVs6R.2863swW6P991DI.lzbQToI8JOeUtla2ONIF
+ dm6YqdEJzo4fX0_4E3j3spwtoCh3deCpEzjMppgVORUQgXQwDinEs1Am._8KaDSkHu.rVKeJ1Hg0
+ mxDkWWUDXX12ZdUrySxsZHSN88IaEtxSYIurbwJax8tqHC96xV539U0XvrL68IFmGo0XUVzZVlz8
+ k_fvcw5DUbErPsMZUSNcmf.z5k_mE8v5ABMwiiX_Dk1BWfDHdIwEBNO9QHeYzYuPEoVHpZPv5znm
+ FbQQz3rxQfJ3qf00SxvmQu4yuxXyQ4tKS1uuFwmSbgLxMQPGCZ5i1sTJxEO4V32Z.rbC_ehehDDU
+ P7tN3XGdYbkbENnaC28FYZr1UhtQWGVV5.U34ztu3oIzw_fJxcWZ85rQX9gfSpOA3Xmkf9gJvFUq
+ ZnqNF94iw2OuXbawYRxGPVRKSTv.rz9_3uIHO1L9qAi4lkpsTor7KG4Vki4GBA0kBPPL_WlpnXmp
+ LvsRMM5cUfRUManKcRZmeuxzlj9KnuQ8WqweXbwuzCHzvmrwLcXUNLf0kpmsctO81_QGD8dLGPR.
+ ARZydcG6In9qc2Vi8QhilN568E8OQJUG.M7NwysKfeYgaT_gojBFyOG4A7hFnambfx2LKDL32mcI
+ eTGmWz.qxnfERF.mj9vCq
 X-Sonic-MF: <casey@schaufler-ca.com>
-X-Sonic-ID: ad2a0721-8dc7-4b24-ad2d-9848e8b27c9e
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic310.consmr.mail.ne1.yahoo.com with HTTP; Sat, 16 Aug 2025 16:42:00 +0000
+X-Sonic-ID: 9e61bf04-052a-4a3a-9223-318438cb2654
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic303.consmr.mail.ne1.yahoo.com with HTTP; Sat, 16 Aug 2025 16:41:57 +0000
 Received: by hermes--production-gq1-74d64bb7d7-5qmwx (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 12cf07a2fbb9800c7a9ea9632f3a0835;
-          Sat, 16 Aug 2025 16:41:58 +0000 (UTC)
+          Sat, 16 Aug 2025 16:41:52 +0000 (UTC)
 From: Casey Schaufler <casey@schaufler-ca.com>
 To: casey@schaufler-ca.com,
 	paul@paul-moore.com,
@@ -69,12 +68,10 @@ Cc: jmorris@namei.org,
 	stephen.smalley.work@gmail.com,
 	linux-kernel@vger.kernel.org,
 	selinux@vger.kernel.org
-Subject: [PATCH v5 4/5] Audit: Fix indentation in audit_log_exit
-Date: Sat, 16 Aug 2025 09:41:39 -0700
-Message-ID: <20250816164140.6045-5-casey@schaufler-ca.com>
+Subject: [PATCH v5 0/5] Audit: Records for multiple security contexts
+Date: Sat, 16 Aug 2025 09:41:35 -0700
+Message-ID: <20250816164140.6045-1-casey@schaufler-ca.com>
 X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20250816164140.6045-1-casey@schaufler-ca.com>
-References: <20250816164140.6045-1-casey@schaufler-ca.com>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
@@ -82,38 +79,75 @@ List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+References: <20250816164140.6045-1-casey.ref@schaufler-ca.com>
 
-Fix two indentation errors in audit_log_exit().
+The Linux audit system includes LSM based security "context" information
+in its events. Historically, only one LSM that uses security contexts can
+be active on a system. One of the few obsticles to allowing multiple LSM
+support is the inability to report more than one security context in an
+audit event. This patchset provides a mechanism to provide supplimental
+records containing more than one security context for subjects and
+objects.
 
-Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
----
- kernel/auditsc.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+The mechanism for reporting multiple security contexts inspired
+considerable discussion. It would have been possible to add multiple
+contexts to existing records using sophisticated formatting. This would
+have significant backward compatibility issues, and require additional
+parsing in user space code. Adding new records for an event that contain
+the contexts is more in keeping with the way audit events have been
+constructed in the past.
 
-diff --git a/kernel/auditsc.c b/kernel/auditsc.c
-index 322d4e27f28e..84173d234d4a 100644
---- a/kernel/auditsc.c
-+++ b/kernel/auditsc.c
-@@ -1780,15 +1780,16 @@ static void audit_log_exit(void)
- 						  axs->target_sessionid[i],
- 						  &axs->target_ref[i],
- 						  axs->target_comm[i]))
--				call_panic = 1;
-+			call_panic = 1;
- 	}
- 
- 	if (context->target_pid &&
- 	    audit_log_pid_context(context, context->target_pid,
- 				  context->target_auid, context->target_uid,
- 				  context->target_sessionid,
--				  &context->target_ref, context->target_comm))
--			call_panic = 1;
-+				  &context->target_ref,
-+				  context->target_comm))
-+		call_panic = 1;
- 
- 	if (context->pwd.dentry && context->pwd.mnt) {
- 		ab = audit_log_start(context, GFP_KERNEL, AUDIT_CWD);
+Only audit events associated with system calls have required multiple
+records prior to this. Mechanism has been added allowing any event
+to be composed of multiple records. This should make it easier to
+add information to existing audit events without breaking backward
+compatability.
+
+v5:
+Comment on the LSM_ID_UNDEF behavior in security_secid_to_secctx().
+Change some names to better reflect their purpose.
+Move alignment changes into a separate patch.
+v4:
+Use LSM_ID_UNDEF when checking for valid LSM IDs in
+security_lsmprop_to_secctx().
+Fix the object record to include only those for LSMs that use them.
+Squash the two patches dealing with subject contexts.
+Base the patches on Paul Moore's LSM initialization patchset.
+https://lore.kernel.org/all/20250409185019.238841-31-paul@paul-moore.com/
+v3:
+Rework how security modules identify that they provide security
+contexts to the audit system. Maintain a list within the audit
+system of the security modules that provide security contexts.
+Revert the separate counts of subject and object contexts.
+v2:
+Maintain separate counts for LSMs using subject contexts and object
+contexts. AppArmor uses the former but not the latter.
+Correct error handling in object record creation.
+
+https://github.com/cschaufler/lsm-stacking#audit-6.16-rc4-v5
+
+Casey Schaufler (5):
+  Audit: Create audit_stamp structure
+  LSM: security_lsmblob_to_secctx module selection
+  Audit: Add record for multiple task security contexts
+  Audit: Fix indentation in audit_log_exit
+  Audit: Add record for multiple object contexts
+
+ include/linux/audit.h        |  23 +++
+ include/linux/security.h     |   6 +-
+ include/uapi/linux/audit.h   |   2 +
+ kernel/audit.c               | 274 ++++++++++++++++++++++++++++++-----
+ kernel/audit.h               |  13 +-
+ kernel/auditsc.c             |  65 +++------
+ net/netlabel/netlabel_user.c |   8 +-
+ security/apparmor/lsm.c      |   3 +
+ security/lsm.h               |   4 -
+ security/lsm_init.c          |   5 -
+ security/security.c          |  21 ++-
+ security/selinux/hooks.c     |   5 +
+ security/smack/smack_lsm.c   |   5 +
+ 13 files changed, 325 insertions(+), 109 deletions(-)
+
 -- 
 2.50.1
 
