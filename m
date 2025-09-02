@@ -1,100 +1,115 @@
-Received: from sonic308-15.consmr.mail.ne1.yahoo.com (sonic308-15.consmr.mail.ne1.yahoo.com [66.163.187.38])
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54E6724DFF4
-	for <audit@vger.kernel.org>; Sat, 30 Aug 2025 16:02:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.163.187.38
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BED54238C3A
+	for <audit@vger.kernel.org>; Tue,  2 Sep 2025 11:00:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756569760; cv=none; b=WRNAa2Zg/5Avsm4zEZbnMW61Ql1fby4NXhdBM67/MeJ/yGfxBr/HGPkI4R0hnVkSAqAXgaiMKMNf2xWwd6PFUAuGNdDFVwwT28KULlYOFftctDYCkKrv9GrJRxN4zGHMXKPuT5f8CBsOHG1MkOhQJPUKLnFjOArAjZ4SVXBZMzU=
+	t=1756810858; cv=none; b=AzpIi3KwcUaAkfZ0HWqmumDN1dRnjbe5UGSIJKvu6TByH72FDbyDuCDLPMnYbHSQut9TyXX308H+nK+bO0W/5bNTVaFmplJrRYyxKGrZaJVqeo4I5KYcF7ZtrGqdyFkWTYgpjbRvidU6BZrv4nlhe3uh8JmAmsGFbnKnuQEkhYc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756569760; c=relaxed/simple;
-	bh=h6Kv4MLU5D0qa95VwZu+T1SQxDTE4mAm8HdMidMKxbg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=X42kXkzI9x2O9Hj0WBaCraq5oLiXLpq1lzKbwKufdJzmKuUF0yb+usqANaC+ySMejrloKt93XVaJ/jp+r8BmJUrZK/rY+akh7+9hu1M+GhNcvJYB3B5X9lUT6p6SChOlmsnf1DqDORjk1crtP5ztgJ2wOgeGJkgeS7Ku8trKkZk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com; spf=none smtp.mailfrom=schaufler-ca.com; dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b=KizHdrY+; arc=none smtp.client-ip=66.163.187.38
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=schaufler-ca.com
+	s=arc-20240116; t=1756810858; c=relaxed/simple;
+	bh=TGflyUFEOFiUqx8BIfQsPKxLGuTGYKbRxXEMzKyG68g=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=olvH5jFCC5ts0pH5D5TfNEJG0BIyOm3AKiok0UL0Z2/INANSc8AaqCbG27Lduu5yQ9RRwPOpXDyLEUvNx1Jyi98yXD4f8//f3xiKSH/B6fr94tDz2MW8opBeDCgeODxrrbyecL52EwavMEa+e0AV4eHhbdrFLlbEJCnxj2occlQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aisle.com; spf=pass smtp.mailfrom=aisle.com; dkim=pass (2048-bit key) header.d=aisle.com header.i=@aisle.com header.b=mPAyu8sX; arc=none smtp.client-ip=209.85.128.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aisle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aisle.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b="KizHdrY+"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1756569758; bh=lf5YxXe3wERb30ft13xY8rG2yVlyo1de6EHDnd4WiOY=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=KizHdrY+WjgAsI3YgRj6USglmevMEsRZTUvaAuKofBMfTKlb05TSDVetCSTohAwznpOeGoF2mMoEgj3spXdMxWk4o7FmuJKTNZjg/Aq/ucrgIX3ivEXzHHB1vMVCISU6P0VKYEPGYU6x7Pz7tr/Ggjr1rAV3CkPQMbks/vjoIEyxAIM2VzovvV/DzBboRb9efnigLJo5iQIOjEOYcb9k1gobgTYwR9RNiFIbz4s+CbTqfchOaNOdsQOzLMY5895a1ubHssiqcLSeZV4wOm47S1d+cT/lr41phDdeQrSde4MYc0l9M1sWy2cBnq1rwyorZnZd6oEAB3zUV4hb1PW7+A==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1756569758; bh=gmZJ4i5lWstm2gwYnwOwOj30iy5fJN1YUp2NL655R2I=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=GuaaksEz2cF97b/E5EIFz7vPCKJSGp/uB/IsFAwFNolw0orz8x7PBdEKpydTUsLIC3KkyX8wJqCze3elETUKWOEOLveZicLPgscGYbqkQOpXi20YFZ97rPav1i4tuUkZzKV28Ghg50uGoyWrmUTZVm/Zul70MPHhNZITeWbfFKs/joO4XDusng+7yT1aJqzxxjNdnd5YY2lpJmAF3i5ygUTv5N8UlZoePuOZ7H6TGx5n+EXe3e6RQKkWTd7WTqFGEKRDKmn0D/LWFJJxZL2o7D14Zh6LipXffDNWtQqwMgiaXiCLO0kvK/R8jy72GoZtbFvld5tQ6BBkqeXzf1yKOg==
-X-YMail-OSG: CLALg4YVM1n2PDGmmwJ1egWq0cMLWTqw9To9a1DADbl6jVr_0FUovqe8BPJ9xjU
- mpAjFWUFUr.qWS9m.5DXvRiJ4Bt0UpkEzvaYhlYVaC5KmYcsRsPpM0gqBVM3nDi8FJHZSYcv8Oe7
- 40aqrEJKI95we8u_552s4hssFjwsBCaoUIsycYWB461iO8VNHuYiZufA3Ee.fhPjqxi2W2FT4Qoo
- jPtjZkjKFGCLA4i62QRXIiv9i849sISXsbGpUYOweg4P7OJ42ql9wfSPhf4IunL8cMosoOzizViO
- Uhs8KqlwlaBSMArhtna_DzG4H7uUUho_yxzSl5Rf916dr2Gh8XvkTO2ApuQ3xWkuKZM93iXqyWdt
- GZ6FE1gzCvPiRl8Ro27P6SpHtC1XnwE.wzrIIjjSs8FO1vLrFGwCrhPphfJEP_f.qUg9K7CM.lPj
- ntOf2mOtlHqXASLJs8ND0Fo8ZRCZuwBIfRkgJaZabWyLCAVytlhVbgpWQiaxsvrDqk54PbBd1.Jv
- iYKLsmkXrcloXwyJZGbRf2JLCpLv2B5PiSQ594xv_s5wt1ofrbFz1onhgMRrYEO6BdN5d_87hkt_
- UT9vfW4sexJKVs.RE.UnZgOgBovbpvqKQ5S15RPuOtSNPeIYrpxKu4yIFiAhHMjgXogSAobitpOh
- Yek7qKUcV2Ew7ZwS0H17EyVkpOl4z_GaT0IGg3bNCzhmKc5J80WOXNyKN9gY0ZgyogZAupymnwhK
- sKErXtVpDMNDM1LOfPheiOEaqZvH.hF0MWS8Ms46R_VLrP68l.p9UeLv8ufyo9Ygyr425jRP_nhR
- FAthHv80HMHRbyjLAqUgxILHyOx5TSUxT441OjxleOpjom1fMHocyEpoqhArjPe1WqQQW7NhWVcL
- 7sCqC6MsmPxLPvinQTo.q0KY543BnnA2D2vH.qCZiV_TY7jMSCyzY7b0KjumHH.SYePi0XNnQpGg
- O4pg_0hdbah2VY3EnbsKwiCuOKK4sxypoOc2TQWvePOrSTIEzxzl1ki.suMwbhDaYlSzv6hGsk1Q
- e6lqZp.L15KYZ6VjqGwK5gCT1u797lXo87UcM8rCKkyOBEBEga.yROrpgyVQmXtsAY2UrCMdExMR
- QFitELxDslhuH6j6i2Vi0qm1Xn46h3SA5UaNIoktjMDDydKrUFTxAvQjod8tqV_WPa5HSWYZdH6m
- 9x5.cTvUagPT4iKcfSfKVxE9EXEQuUjFgPdFyX_f1L6mJ79Mb.8OjvyOGO39gqoYC0GM9uMZp8AP
- Ky5YZJiEzY1.pp8sklX.IOOm68zHT8OZaF1A04OkdWfQDBzOECARSEtJvSolvb3fJEcGvina12.P
- IpetMzlaU_8IMlHfo2aEsl_O1Ln.JIVkztMRSO6wFmg.I17axsxlkJKqWCb48_jXGKyNw.AN4jwl
- ZxWiDAUHOd9EqPDWQKMF9Ysm_gO3uiprlXHVUGjva3A6_Xbqns7gGpNdkvnTXTaDJlDKlEIyp1Ez
- OUamDSI7g2JWtB5NUJKr2WSONTA.VVmWw3kEml9Jrd_w7meu1YU1AA5mdWS3AdYYbqfEcT3ik1ta
- PFDdiIPqr.3YTu8RSeMy1g1oiYYkXJHFyp8_azHKUPMKt2sBvlVNsqe4M9yiCESkeLexbysBJn.R
- EK8I2FgB6UmmzyvEC63mDGVCgvxrijeFw_VC5Z1C2.8avbpLE2M1H8UaK1MQ5RhTjSk4sVfy81U1
- mmJQssAsO84F0sZZRN1Ttk4CuD9bBJ3DcKKpkL6pdVG5KwNO0QEXHYff.YgtNNRYb4S1Ynkm1QGs
- GfM5jZqlpZKrFbCHbHGfZeCZkaFl5BvbWXawHEU_YUkkSqyPF8GeGcmeSNSjv0FK2CbAoifN5wBp
- XNObpY.g.08dlRsxZlBwSJU_PZHnS4Iim_k4RsqEMpq.v3t4maC6UHyLYJ.bdQd87CylXmdPZw5x
- fY7p6lTKoAO89e8xPp0euOw9Z.NCdD8QtHJnt8AlmBMBYlBvh4BT2kF.Q6OlPdtd7JAZVC0BcgDP
- 0hTacYZFk0I0Gy_YfhveWKa_9iHrRkOM9np9WCVPGeBtNidZKkptxY9D2qRs7og2zT1QRZwfsThH
- Hw15BidbIr2PlZqHR2SYnEf4VHYJ0lpmyJuIaf10Y7usPGlYj.FhBYyy7Xm4ORqZz8SOS6YIyh4O
- THSR6uOVird7FHjTwBh556olIpQ3yL2wa6A4KmApu4Mbdo7yGFfsB3WtqC7yhIJMXP7oVH.Sn6X9
- kbM7Kr31y74qsAHmxzk_nB9r.R3UHlKZULo6J.B0-
-X-Sonic-MF: <casey@schaufler-ca.com>
-X-Sonic-ID: 2afd97eb-3d4c-41bf-b716-43836558ef00
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic308.consmr.mail.ne1.yahoo.com with HTTP; Sat, 30 Aug 2025 16:02:38 +0000
-Received: by hermes--production-gq1-7bfc77444d-7l9vb (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 261e6242d60e90c99a8fd30b59c0cef4;
-          Sat, 30 Aug 2025 15:42:21 +0000 (UTC)
-Message-ID: <43a0ff8e-f814-4305-a0f7-04c820b8f39c@schaufler-ca.com>
-Date: Sat, 30 Aug 2025 08:42:18 -0700
+	dkim=pass (2048-bit key) header.d=aisle.com header.i=@aisle.com header.b="mPAyu8sX"
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-45b82a21eeeso33488235e9.2
+        for <audit@vger.kernel.org>; Tue, 02 Sep 2025 04:00:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=aisle.com; s=google; t=1756810854; x=1757415654; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=9hUXNYxsmPHfvn2ncRV+JurxIcEZ24THJsmI/NLywYI=;
+        b=mPAyu8sXxX8dMXRDUYlp0r5QAxgB60I86Z9VMAwyIjRO0E4xhlAjrfhfJBk920YmIL
+         MX+eFrffVzPUTCiSgmcStLMTiKdCfMOGFh4Jpaa0r2fSZflOXl48li/fF3z9J612npZp
+         A018fg4rjbqsRSPn8y+ASnTEfECQtweJfJLLz6xj95a17lfz8mUkwZWUSgzGYRgqcZiC
+         lamfF3cESeKWMCPDOudrWdqOkR8zggQN8LBU5XwLbbdUN8NqQaUqQuSgU9xYZFeTDG49
+         olsqNOBF1cFgJpQJG3KctyKMXIijQhnjhJaGhyvWKri5/QvhCTK/R7p9Dje5gZnYs0Q8
+         teaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1756810854; x=1757415654;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=9hUXNYxsmPHfvn2ncRV+JurxIcEZ24THJsmI/NLywYI=;
+        b=dfMXHua65RlUeicICsCt9qadSdPdTh+P4hDd/ARZlmfnJdX2RR0Yya2zK62KouLOTZ
+         +qhNT3us/DqSqIRzTmAhmS8b+QxMNKSb0sEma+o3HpFXGTN4Gd5yFjW4ctvmEGtVCia/
+         Pb8pH0m7XirEMW+B+r8nJ4Fj8fQbYBNvYYEQOKI1p4RptUG1Mzd40pEEi851aJ2fbxIS
+         MliWcpjJDURG/dhElgr/SuIhkr75pudsAAOTUWR+25ROF0ZnYJNd74Dcy7vnW/MnGTad
+         n7v+2e0MrDWG6H2nAF8DY/UsYcoCfk5/cuQ5RhcQcdn4PYeOVgoKv78rH/JSG8cPzu6q
+         uLeg==
+X-Forwarded-Encrypted: i=1; AJvYcCXKqVnzFStYF0f/sghZ4elmgwpw7dLMOfxrw/iPaGAQ0EiKR/F90zEmDcxWoUApMuy8Js3Jyw==@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywz7anuhlqBmbdxQWj9g7vUgsY0yB6MbdzzdUK5Gaj1m/Sgk7Ic
+	BXixij5uQKg4mzDIZqwTh7jUXH9vljcwufGLIXzaVXeUZnZWtEEC5icXKQGN0qv/b+w=
+X-Gm-Gg: ASbGncskj1yC9dFpwS/z8pQER4HT1Pm9cEdNapRfnQTDyG0y/NAG+DZMg3i77WFPWOM
+	9zpx3Tiu7KON/KN3uUMyXY+BCFt+c6b4BryvT5ztqDvj2a96WI2FGYWbLZc5dmLf8oVqxtxL2+r
+	vI1wM38ihheF4d/NwdqoVwKGaoSx4yAp8lV8K+9hlbV6QJgncO0hU1VrwskSGaabgqHrj/5AUKS
+	P0zXqNUgdBv0GdW4Zu2Nl2IrNDqhFXBCTUoC38yN2BFZsJMZjJ1q+za2WNzolNbSjB995CVdCke
+	K3Dqgsvezy3ef2Uki3/y7QKba0SEaDxBVamZNwafkcv4K1OUhcds2DTCry/5kumzQ8TTbyRha18
+	wrLHeMyEpGryTaOCT+/YoCMCd03im5mo5wKo1V2cFtE1e0EcLy9REA2QA/9fMhB89um5DQdKpMg
+	UogPvQCDBTEIslYCj5W/9AuJ6/FiM4zQ==
+X-Google-Smtp-Source: AGHT+IHM3xDjBaDs993Sm3AD7Y8PW48gckpE6MbRpRa9a5y0fBrOMm+jxslbINuLX/D1S6JiqV9eTg==
+X-Received: by 2002:a05:6000:420b:b0:3d0:9781:6e50 with SMTP id ffacd0b85a97d-3d1dc5a2b8dmr10911493f8f.13.1756810853911;
+        Tue, 02 Sep 2025 04:00:53 -0700 (PDT)
+Received: from localhost (static-23-234-110-88.cust.tzulo.com. [23.234.110.88])
+        by smtp.gmail.com with UTF8SMTPSA id 00721157ae682-723a85aac02sm4211777b3.73.2025.09.02.04.00.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 02 Sep 2025 04:00:53 -0700 (PDT)
+From: Stanislav Fort <stanislav.fort@aisle.com>
+X-Google-Original-From: Stanislav Fort <disclosure@aisle.com>
+To: paul@paul-moore.com,
+	audit@vger.kernel.org
+Cc: torvalds@linuxfoundation.org,
+	eparis@redhat.com,
+	security@kernel.org,
+	linux-kernel@vger.kernel.org,
+	Stanislav Fort <disclosure@aisle.com>
+Subject: [PATCH] audit: fix out-of-bounds read in audit_compare_dname_path
+Date: Tue,  2 Sep 2025 14:00:49 +0300
+Message-Id: <20250902110049.4437-1-disclosure@aisle.com>
+X-Mailer: git-send-email 2.39.3 (Apple Git-146)
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 1/4] Audit: Create audit_stamp structure
-To: Paul Moore <paul@paul-moore.com>, eparis@redhat.com,
- linux-security-module@vger.kernel.org, audit@vger.kernel.org
-Cc: jmorris@namei.org, serge@hallyn.com, keescook@chromium.org,
- john.johansen@canonical.com, penguin-kernel@i-love.sakura.ne.jp,
- stephen.smalley.work@gmail.com, linux-kernel@vger.kernel.org,
- selinux@vger.kernel.org, Casey Schaufler <casey@schaufler-ca.com>
-References: <20250816172859.6437-2-casey@schaufler-ca.com>
- <e6e9ea4bacac5553810f7963533a71ca@paul-moore.com>
-Content-Language: en-US
-From: Casey Schaufler <casey@schaufler-ca.com>
-In-Reply-To: <e6e9ea4bacac5553810f7963533a71ca@paul-moore.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Mailer: WebService/1.1.24362 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
+Content-Transfer-Encoding: 8bit
 
-On 8/30/2025 7:14 AM, Paul Moore wrote:
-> On Aug 16, 2025 Casey Schaufler <casey@schaufler-ca.com> wrote:
->> Replace the timestamp and serial number pair used in audit records
->> with a structure containing the two elements.
->>
->> Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
->> ---
->>  kernel/audit.c   | 17 +++++++++--------
->>  kernel/audit.h   | 13 +++++++++----
->>  kernel/auditsc.c | 22 +++++++++-------------
->>  3 files changed, 27 insertions(+), 25 deletions(-)
-> Merged into audit/dev, thanks.
+When a watch on dir=/ is combined with an fsnotify event for a
+single-character name directly under / (e.g., creating /a), an
+out-of-bounds read can occur in audit_compare_dname_path().
 
-Thank you.
+The helper parent_len() returns 1 for "/". In audit_compare_dname_path(),
+when parentlen equals the full path length (1), the code sets p = path + 1
+and pathlen = 1 - 1 = 0. The subsequent loop then dereferences
+p[pathlen - 1] (i.e., p[-1]), causing an out-of-bounds read.
 
->
-> --
-> paul-moore.com
->
+Fix this by adding a pathlen > 0 check to the while loop condition
+to prevent the out-of-bounds access.
+
+Reported-by: Stanislav Fort <disclosure@aisle.com>
+Suggested-by: Linus Torvalds <torvalds@linuxfoundation.org>
+Signed-off-by: Stanislav Fort <disclosure@aisle.com>
+---
+ kernel/auditfilter.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/kernel/auditfilter.c b/kernel/auditfilter.c
+index e3f42018ed46..f7708fe2c457 100644
+--- a/kernel/auditfilter.c
++++ b/kernel/auditfilter.c
+@@ -1326,7 +1326,7 @@ int audit_compare_dname_path(const struct qstr *dname, const char *path, int par
+ 
+ 	/* handle trailing slashes */
+ 	pathlen -= parentlen;
+-	while (p[pathlen - 1] == '/')
++	while (pathlen > 0 && p[pathlen - 1] == '/')
+ 		pathlen--;
+ 
+ 	if (pathlen != dlen)
+-- 
+2.39.3 (Apple Git-146)
+
