@@ -1,58 +1,58 @@
-Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
+Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D429340D97
-	for <audit@vger.kernel.org>; Tue,  2 Sep 2025 18:52:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CEFA45C0B
+	for <audit@vger.kernel.org>; Tue,  2 Sep 2025 20:59:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756839170; cv=none; b=ijQ1QRf9iv5fLTVk7bOlcpp8Fjy3f55MgqeEanosM+tnqdL26Q+Ls6gynNe/Nc6gAHvGfUdylvYI+1s6DUw0kxmU6sIvsrNqr//a0NObBRIkVKiAv3H5QfNtmda6eDBegER1kRGeo69ZDn+nQp9LSfd46uGY2Kyo8HsjU19XF38=
+	t=1756846745; cv=none; b=KXilONmiER6/u1MCLDHFJi4Q0pjTIAPLgkTdnrX8dm34JsammwYeHamCFVNimzwkzolyFDSZe4FQNfvjSgBmeJgADJr8FL8e9A+j2/tRLvjs4tDv8ZMPQWoHowu0T1lOo2v0AyMkbdeDNKoUrGSZR3r6GEYYjE52muLzhrqR+gA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756839170; c=relaxed/simple;
-	bh=fr7XTb8icgTgStQB1vrTEUr1xcJEqpWSb5+Jkocg7DI=;
+	s=arc-20240116; t=1756846745; c=relaxed/simple;
+	bh=J9nG8nHGWXEat57wAwMEnyjPAAOUbLQ9R91NZPCq/Zg=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=UqaDGYbWsjth9Ph9Sfb9ht+kG3p/f+ClWO0WZU2YL/HUyWXMv6TYEW+U26I6sYJv9fxvLqol8OyBxkL6X4J/BkN61rKdIFWDkXwbm42ugaykxluTxmvWynV/+VvwITiam67X1JfY9xVmptVj5Ht5CkPseKhoJlFpMecCUeWp8gg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=fx1s+z/S; arc=none smtp.client-ip=209.85.216.41
+	 To:Cc:Content-Type; b=NAWnp6tNpzz9eZqQhjY9wbSrrBF1RcTc5d8UT4HPqwF9jPOklL9VIlg0/Yhktzwh2IlLrs5OducB3DwXCqT5PrddRmklf4EM+UgmtgvFZWLYtmMoiZGnMuc6WdnUU7rYsufMgWsqSFnFBI/22ZcuOc2ibylAlvgnMCd5FwU70BM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=DUPSSqGR; arc=none smtp.client-ip=209.85.210.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="fx1s+z/S"
-Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-3280264a6e8so2878410a91.3
-        for <audit@vger.kernel.org>; Tue, 02 Sep 2025 11:52:48 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="DUPSSqGR"
+Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-7723bf02181so2570294b3a.1
+        for <audit@vger.kernel.org>; Tue, 02 Sep 2025 13:59:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1756839168; x=1757443968; darn=vger.kernel.org;
+        d=paul-moore.com; s=google; t=1756846742; x=1757451542; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=DUfEfExsv4Z4JExYVeI/bpLS60sngib6QHvkE0J/awg=;
-        b=fx1s+z/SKoe+ljrmqDqR/AHrXf6b2xFMnbhbr6b9pRHIvtNxJlFc482OjB1mljjN++
-         RDlBR5tdeJ5PewL1fphBxqXyXdtd+G66z5acFhjo4owUjOLgVs6Qh/890k18V+lCm5Ry
-         QI5el9mmBp+MYmdgjnPSRZNgzoHFC3RscjAxKMF7GYjyCEkOK1JAlTTi8vRmTIZ5XCne
-         dZCfA4c7eZW8Cyt1/Ve1I6V5jeWHuS5MAnE9DSs11hmCbkUk9vp+l0QW9lvN5abAuF1W
-         32yW8DBEwEcp0SxVNotQAHcRG5fvSvDDgIsShFQJ/EJYe23vyL3fI96h8mlQvjq9xunm
-         Shog==
+        bh=rHqjHIQglM9tK4JfRDog5euxPxNLOlXWFw8/kHoTSCE=;
+        b=DUPSSqGRyhJIfDv2vCrcwU01xeUlrqmwRL8NIvc8L8gk9vF1iPVxhwf5MfhC1oYYS5
+         l9PreG8F0UhefIeIlqKOt/yGEMkqTQlqGImSOq5AXzITNNyFeKGrSm3vnu/wA12zOKsQ
+         j0+ql+ExGryPbx1YSfsMxI/UL8sm0WLLBHdvbWHkqsRUavkAp3iN1ixoBehksG7uGtO3
+         HBtrOM+/qT7jb4CX3FHyph5dBFQs8mieRubC2qqtDjRCFdetf7HxzXB8+bjO0HULSj9u
+         SGay9pdtOkB9NHpU0sd1zq+5MzAFKODgMqB7i02cHua5yyzIj1yTvy7JMzNDlHe5xUo6
+         KmSQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756839168; x=1757443968;
+        d=1e100.net; s=20230601; t=1756846742; x=1757451542;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=DUfEfExsv4Z4JExYVeI/bpLS60sngib6QHvkE0J/awg=;
-        b=VPQ9iSJtyXkqPxuUP3RDD8ek0DjQGzg0TxT2mgt8yKin9uZM0oSRc0lzIN6xDDdHst
-         fRvjawybeJvduewbOiivS/QcHKqkSYFg/RuJR7MGhSXgZoT52lPUXtF1+7993co3Yw9l
-         cnsZy1BU99vKbyyY2LNb/Y9O17lWJrWM6Bu5WWY3mloUxQtm9KL25N4XGlMNpvVpoNRc
-         /ylrtVNcjvJiwdY+IjnxeAQLohaBGbTc2HHsPFPXZNFSntDSYp9SOZjfEMInuPyArCFd
-         HUrdEjFWXCUHU7sz0DXaAt0wV4c5uoU0b6Xn33bIGjFDS0len/97AuVzhO8YTj5ZGl3M
-         z5fw==
-X-Gm-Message-State: AOJu0YzCz14NeLrvjBn5YibfZRPIC3QKEt72sOn9QXtbwpqmcMYz/hBf
-	sIMVU2FpXH8RIpDY2DHTPpFH7VjjW6Q/ACXG1bSVKriWCukR3fxjMjqc2jfL89/feUNPDbp0TXJ
-	5psEvnUg7nnjGEKCSJOhSl2gRJlEb5/xWpPKZV4D+
-X-Gm-Gg: ASbGncuccpEkLG3VSvTPVV08yKepDlDQf/2xBAzsvcHOeifk+v2NV98LZS1ko1ajlsp
-	0rkYUrirxMgxYAarm86UsZ8M1fRkM2rmllRRYW9Rj5riJwDERotL1y6GqXdf5XjjI053UEFhQlE
-	nfNX+FnvwA04MyTQ/w8lypaYdyV+SIse/Sqp6pR4sixvxeQIk3xusliHyb7y3glkGOXln9eEfbC
-	JmZAfk=
-X-Google-Smtp-Source: AGHT+IGc/tElwygvDdKTlYySO7qXJLf9sHKlds8hH12yn8duF1CFLBxwB+Ce4DYuyOC7qDDzBWrnuHn3cqjkCkYBF50=
-X-Received: by 2002:a17:90b:48cb:b0:323:28ac:4594 with SMTP id
- 98e67ed59e1d1-32815414089mr13758791a91.5.1756839167864; Tue, 02 Sep 2025
- 11:52:47 -0700 (PDT)
+        bh=rHqjHIQglM9tK4JfRDog5euxPxNLOlXWFw8/kHoTSCE=;
+        b=jsLnCa6hKqrQ4zjoPCItX3A1v3jVe2Ufei0fB+jwPdzItfZE1FV0ANJdgW081d3liY
+         Q1LcpAXjw52r7idF+WTlXmw4K3DFMvaxyhKnmYS9iv6trletD224I4A3Eu2dt5CqoMBP
+         gjxWhhSfEZvyd5w6y007YPP5PM+7+ukLdvzCNo/mbmWMF9spG8Hcl3h7tQ5veiIZm5xS
+         WKaneLMwOC2Re8XFGvHGAZaNff06exPjiuQD9FuAsfFOE2MpuFhx3R3kO+/Zr42UqQoz
+         Wn/2uvbUv0rdOiyqDwCOtIHcZgwJms752WbRP+xx8NJVIZPowsZACRYdRpOgbv4w3dMM
+         SYxw==
+X-Gm-Message-State: AOJu0Ywuq0Q4s1M1Y+APFLMwhpGA1jRKSFj6XgbS7fwqCvNdg/98rM8u
+	RnkMo0Q1HecVJkF1hWcJPVNhVxaAPt/hhCZO3+h+8wdtkz6pfhTTl0UGoIRZswf/7g10l9bAJXl
+	1bIvHNbLNEVkbg2/XGd8a1TE8dOSpizamMzFJb9cM
+X-Gm-Gg: ASbGncvfmQKR9O7w5LlAsoVUSvDkImhr117Ssm7WP93yQajH5C5upmtSVghOAdXCjJ6
+	FiyJ0zIiFuHJWol9pBDHYAax8y5hehFrY6wKgUFTC90jpGTCPmvzyDKowMhWTuqW6BXbtHoW1X4
+	iv0PMIIpd8T+GZMtTZib1ZdFP+JdfLursQVnK0FynNWBoNwzICIi4m7yH2W/9YfrW2+OVGB4ai4
+	mqrXIrSCu2buzQ/mQ==
+X-Google-Smtp-Source: AGHT+IE1fkssuy6KH7HrWuu3hk96oiKXN56SvxmU18nMFRkqxb2w1JoLMH9tRZQ1AZUqR+zEZU2ZkkVx8lfhABsQOlM=
+X-Received: by 2002:a05:6a21:644d:b0:245:ff00:530e with SMTP id
+ adf61e73a8af0-245ff0055afmr3376344637.7.1756846742483; Tue, 02 Sep 2025
+ 13:59:02 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
@@ -62,9 +62,9 @@ MIME-Version: 1.0
 References: <20250902110049.4437-1-disclosure@aisle.com> <CAHC9VhQsmaGPM7+6HX9vqjPjG7fXwV+F19+U052qaT4DYrwnFA@mail.gmail.com>
 In-Reply-To: <CAHC9VhQsmaGPM7+6HX9vqjPjG7fXwV+F19+U052qaT4DYrwnFA@mail.gmail.com>
 From: Paul Moore <paul@paul-moore.com>
-Date: Tue, 2 Sep 2025 14:52:35 -0400
-X-Gm-Features: Ac12FXy8XdXnZE9C0slRKpG3WzWsuHhhZo5xmbrDdxHDLPKkaXJ-L6LVm3df_zY
-Message-ID: <CAHC9VhRtXzSGafaqLm_EDq=rj4BhDaOkaS0uJ89W-Scw2Zyxuw@mail.gmail.com>
+Date: Tue, 2 Sep 2025 16:58:50 -0400
+X-Gm-Features: Ac12FXz4PNQBy5gQYBTLTutR4yE4-W2AMj1vXuCtuzSByaZveumuHQYDPD1cI8E
+Message-ID: <CAHC9VhQnx38fdardU+Q=JF_8mXPZJ_UcMnOTnTv0zoNUvT_y_A@mail.gmail.com>
 Subject: Re: [PATCH] audit: fix out-of-bounds read in audit_compare_dname_path
 To: Stanislav Fort <stanislav.fort@aisle.com>
 Cc: audit@vger.kernel.org, torvalds@linuxfoundation.org, eparis@redhat.com, 
@@ -95,11 +95,6 @@ h + 1
 > > Reported-by: Stanislav Fort <disclosure@aisle.com>
 > > Suggested-by: Linus Torvalds <torvalds@linuxfoundation.org>
 > > Signed-off-by: Stanislav Fort <disclosure@aisle.com>
-
-I also just noticed a disconnect on the email address.  I can leave
-the Reported-by email as disclosure@, but do you mind if I convert
-your Signed-off-by email to stanislav.fort@?
-
 > > ---
 > >  kernel/auditfilter.c | 2 +-
 > >  1 file changed, 1 insertion(+), 1 deletion(-)
@@ -111,7 +106,11 @@ your Signed-off-by email to stanislav.fort@?
 > I'm building a test kernel right now to test things, but did you
 > verify that the path matching fixed in e92eebb0d611 still works
 > correctly?
->
+
+The basic testing I've done today looks good.  If you can let me know
+about the email in your sign-off we can get this merged and up to
+Linus this week.
+
 > > diff --git a/kernel/auditfilter.c b/kernel/auditfilter.c
 > > index e3f42018ed46..f7708fe2c457 100644
 > > --- a/kernel/auditfilter.c
