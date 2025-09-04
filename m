@@ -1,84 +1,128 @@
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D3F8305076
-	for <audit@vger.kernel.org>; Thu,  4 Sep 2025 15:07:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.198
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CA2C3164D4
+	for <audit@vger.kernel.org>; Thu,  4 Sep 2025 15:13:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756998427; cv=none; b=k6MttKpBaA9DB8+AhFsyfv7oGJk0FVvcnLU+i2w3wixUrkT229kPW6HCvI7X5rt9YRsYpnWohIj+/xLeSWtyxr87Wj5BtmYa94Q40s06dV3H8j+y6cAPsI66jgOceMfTyjmqTK4ksqcJcfRdubqJcwBkC6f2EUpqvEM/Wg0DwXI=
+	t=1756998795; cv=none; b=JLh0m84JpyOIf0M0n25sBGiRdmXmjvnw5CN3Tr096cv+Tdd2zIdcWhR2ymFSkxnUB2nqkuLV+C/3iOjsPfiQoVUKFs0N3N4CESaeQM4VImXao9amzOUQm18yLPWBpykZaJjyatGmuqRiUsngvlygxkWFGgGqBS/JUYdE1r1mflU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756998427; c=relaxed/simple;
-	bh=WdSMSR85x87X0+DfffqCowskGNW4tPHLqZlvNo3jcgU=;
-	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
-	 Content-Type; b=e1oXNkjKBkcXBPIeAQf8tWhvso1sr3TkwDqn/Y6j1bK+x4WBfgLHvH+ASH/X2OwPqgnmjercR7WMPoF6S258w4zURZD/uE/i3XfcZwmwwX/aI1QkdjLzAxo0Uczu0t2vlnnO1xiXENksD4xIkmxtnCfw9kCtMs/l4px/6u2RtlA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.198
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-il1-f198.google.com with SMTP id e9e14a558f8ab-3f42b6cf6b1so14639815ab.2
-        for <audit@vger.kernel.org>; Thu, 04 Sep 2025 08:07:05 -0700 (PDT)
+	s=arc-20240116; t=1756998795; c=relaxed/simple;
+	bh=hQTesLUjwHoE69NvEeQegylR6nw/aEJIYz4xhLEq3pA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=UEDvKpI2s1iV8lsdE12mpwVw8iPr6n/K/jTvU7h5cV3qG6Q2uqFWHA21JhR8JkOnYuVZ85IBwKExU7f5McZdqcjFPedTVnCw8GsFxqx53n9eL07aUqwdZ/0aTOterC95QuDAwqo8xZ24hrNtjHMVeXZqOLAwULGYLv8UPY8bRvY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=UP2GPhlu; arc=none smtp.client-ip=209.85.216.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="UP2GPhlu"
+Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-323267b98a4so1001508a91.1
+        for <audit@vger.kernel.org>; Thu, 04 Sep 2025 08:13:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1756998792; x=1757603592; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zWu8/uT79TLkFHaoOripy/trgu/RnF6WTT4bI5QB+j8=;
+        b=UP2GPhlufJlo2H9mMansZCVVWhp68Pga8Sejr7LmgodmZ9OubjzRQpP88lmM9LZlgw
+         e8AHDTQ59N5nOMiY463I6pC9wYaD7xuC0gpB2H76rOVBTlnkxluh3eTI+gI1vKyvclrq
+         aYE4R5RJqTR81u9Kb/3JvVM3cwNddTcllGP2O6pNyo6jHkLYSoRu+MYpCxGm9M5XrT92
+         3Yj+LS0K2MdxsPlPWct3ub5YB+lSLdCPrSnDpgKfHtVm1JiOWKi+wXPFiJcgDY8N2g6V
+         cBD5Y5bOO1vSzArNfMdXLDSoeBjxXm8/hdzif34lCqXfD2Up+bp7vKZLlhTiAWwBIxCY
+         SEsg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756998425; x=1757603225;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=tLO91xyldPwJGtv4KAJ9Dss03Zr2mNg6Ty96jb715OM=;
-        b=I6oNCgPRgFufq1sFQNPlIpK9vSMvxKzbC9VTwaM3IbBnyfepA6KvqfnR2Vp9dBLOoq
-         gQAnf9N8FGEmNMB7FRPqm2VjIVqHc15nzTya/7g8kyv/J7OCDymfahP/olOKL0S5lBkF
-         P55NvzlvCve5UMluvE1TqWTiXHLy7Pomi11RzwVZ8htqmyD7ZQ+5KunX2l5gisC0o94s
-         ygsOKiHyArvnydJZcKHs/A2cqxLr3pKQ4CctVodevspJZPn/4PN85eiTiU6GKAOQjkhv
-         H59rBFadixwnYstjge5+H4i+YQeNUlL+m8Mc5wP4APB2Bh7Vdko4xkqMXttFppxEr0vd
-         AW0g==
-X-Forwarded-Encrypted: i=1; AJvYcCULYeyltM/suS9Xs8Bx0+LZbkHFDe5RmzYnFPolmy4Oey40pzpQAvzEj7pAQumWb2Wp7CZNhg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwAiJAeSXx3MvOFbz5Fj7o1rJSgn2qpoXAYalE/aMT6t0CewPJ/
-	TbRBs6d8LLUKH+J19v9M5kKrB4EzDLeb2cNBne6Uj9Vmfccy+FWqa0VgLQ/pddXRkHEqbzfQXmQ
-	qzYPBYmCC37Depbl15ovOxr6GzdHEPcATo3ANi6+UycV9O6Tkwsuu0wbfIno=
-X-Google-Smtp-Source: AGHT+IGPt5XXPZQ71LRSq35os/98bkbkleFEzJZRK9KO1wphEAorWaJE0sjRcGoS9N8q2GtO62tIzPc9fUr+UXPnANVDnXDcNjgk
+        d=1e100.net; s=20230601; t=1756998792; x=1757603592;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=zWu8/uT79TLkFHaoOripy/trgu/RnF6WTT4bI5QB+j8=;
+        b=MscCJV3cSwUA1ykG0YUJ/+BzCqt/1tK/nGduJ6p1VN8fJlF7rsDlQ9UZ4HdDwNsBHA
+         e8IYFbT/z8mnQkdltgmO5JRNfEZvMP6SkW4Ja2gFyXdQmC4OaR07dMSpXpw10udTg91u
+         7kzn0jIwPQHxJzPQiDO/SFeyDujp8hiW5AgA88KowPtJ3Cus1C9YJQe6ka3tb/YOEV7m
+         2OAA9phQlipe/4Fwmbam1CT68EhcDj8g3ask4xmTljy8XBxxyA/EyudM4e1jRBXplh6a
+         JDy9pivYsKFOiwCZPeXGGLIqc+YEVGY2iqkFzbOOsz4FWZVz3CEnfrCHz5tPCp3dq/BS
+         gjCg==
+X-Forwarded-Encrypted: i=1; AJvYcCUdu1m5rUs9jrx7eYaqr906vgC4h2R2C117nOobCM9UlFn3CaIljeWJopmFW09vWGeL+pdi4A==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzJ9150spuoPg9b5UglRQT1QrQJ4V4u/kIn4dQZLykGEw9uT1s4
+	fWDyQ5hUIqCelFev5M6DJ0B9VEyk4WXQ5pQ2Ib1a9Jzwk7/tA1gxOlGRDYOeDDVKwxIUthEnTz6
+	K67CRJWT2edzFtAPnpBHhIsHdypY4EHlMRLoHGAXG
+X-Gm-Gg: ASbGncuFIHTkA2G4x2thwoXG/lOPkFP4IikLujk+EWsIrRPcdNAP52YuXW1XqnWdlLO
+	mfqiXAWHk8SkAY7xOsUpS36ajqgqllTQKyV/ke1148sANjSSmPN84HnNL77nSOHjY3yWX35mGgE
+	5W766AbmS0Xp7uIw9rSxwpSMnG8sZdQvIiwcn3AXV4hTnR6qfUzOotqH4MX8VUFhTroZq1x5IY4
+	CY+Mww+XZeW7q80Eg==
+X-Google-Smtp-Source: AGHT+IGqcMqHHAT75zSTTPlBqCVyFcn6AnTIKyagfTnT5D4zUa/iS7NyI7Sait1maUMEoXcJ2nw24OBTrZDWN8ZihOE=
+X-Received: by 2002:a17:90b:2ec7:b0:327:e59d:2cc2 with SMTP id
+ 98e67ed59e1d1-32815436083mr27618387a91.10.1756998792394; Thu, 04 Sep 2025
+ 08:13:12 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:144c:b0:3ef:969c:c91 with SMTP id
- e9e14a558f8ab-3f400097800mr372808605ab.6.1756998424765; Thu, 04 Sep 2025
- 08:07:04 -0700 (PDT)
-Date: Thu, 04 Sep 2025 08:07:04 -0700
-In-Reply-To: <68b93e3c.a00a0220.eb3d.0000.GAE@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <68b9ab18.050a0220.192772.0008.GAE@google.com>
+References: <68b93e3c.a00a0220.eb3d.0000.GAE@google.com> <68b9ab18.050a0220.192772.0008.GAE@google.com>
+In-Reply-To: <68b9ab18.050a0220.192772.0008.GAE@google.com>
+From: Paul Moore <paul@paul-moore.com>
+Date: Thu, 4 Sep 2025 11:12:59 -0400
+X-Gm-Features: Ac12FXzmdDvybcxdLMeRBs2OONbitrTJM6yCl57blUt8t099sFu8t2Ati4PBkBs
+Message-ID: <CAHC9VhR6+cHx+FvonHtAvuNZ-Ls77HjGnU5k5VR7qy1BUSaxdA@mail.gmail.com>
 Subject: Re: [syzbot] [kernel?] INFO: trying to register non-static key in
  skb_dequeue (4)
-From: syzbot <syzbot+bb185b018a51f8d91fd2@syzkaller.appspotmail.com>
-To: apparmor@lists.ubuntu.com, audit@vger.kernel.org, casey@schaufler-ca.com, 
+To: syzbot <syzbot+bb185b018a51f8d91fd2@syzkaller.appspotmail.com>
+Cc: apparmor@lists.ubuntu.com, audit@vger.kernel.org, casey@schaufler-ca.com, 
 	davem@davemloft.net, edumazet@google.com, eparis@redhat.com, 
 	eric.dumazet@gmail.com, horms@kernel.org, jmorris@namei.org, 
 	john.johansen@canonical.com, kuba@kernel.org, linux-kernel@vger.kernel.org, 
 	linux-security-module@vger.kernel.org, luto@kernel.org, 
 	netdev@vger.kernel.org, omosnace@redhat.com, pabeni@redhat.com, 
-	paul@paul-moore.com, peterz@infradead.org, selinux@vger.kernel.org, 
-	serge@hallyn.com, stephen.smalley.work@gmail.com, 
-	syzkaller-bugs@googlegroups.com, tglx@linutronix.de
+	peterz@infradead.org, selinux@vger.kernel.org, serge@hallyn.com, 
+	stephen.smalley.work@gmail.com, syzkaller-bugs@googlegroups.com, 
+	tglx@linutronix.de
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-syzbot has bisected this issue to:
+On Thu, Sep 4, 2025 at 11:07=E2=80=AFAM syzbot
+<syzbot+bb185b018a51f8d91fd2@syzkaller.appspotmail.com> wrote:
+>
+> syzbot has bisected this issue to:
+>
+> commit eb59d494eebd4c5414728a35cdea6a0ba78ff26e
+> Author: Casey Schaufler <casey@schaufler-ca.com>
+> Date:   Sat Aug 16 17:28:58 2025 +0000
+>
+>     audit: add record for multiple task security contexts
+>
+> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=3D1199fe6258=
+0000
+> start commit:   5d50cf9f7cf2 Add linux-next specific files for 20250903
+> git tree:       linux-next
+> final oops:     https://syzkaller.appspot.com/x/report.txt?x=3D1399fe6258=
+0000
+> console output: https://syzkaller.appspot.com/x/log.txt?x=3D1599fe6258000=
+0
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=3D7d2429dff5531=
+d80
+> dashboard link: https://syzkaller.appspot.com/bug?extid=3Dbb185b018a51f8d=
+91fd2
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=3D15b9a312580=
+000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=3D16819e6258000=
+0
+>
+> Reported-by: syzbot+bb185b018a51f8d91fd2@syzkaller.appspotmail.com
+> Fixes: eb59d494eebd ("audit: add record for multiple task security contex=
+ts")
+>
+> For information about bisection process see: https://goo.gl/tpsmEJ#bisect=
+ion
 
-commit eb59d494eebd4c5414728a35cdea6a0ba78ff26e
-Author: Casey Schaufler <casey@schaufler-ca.com>
-Date:   Sat Aug 16 17:28:58 2025 +0000
+The timing on this is amusing, I got the sysbot report just as I
+merged a fix for this provided by Eric Dumazet :)
 
-    audit: add record for multiple task security contexts
+https://lore.kernel.org/audit/20250904072537.2278210-1-edumazet@google.com
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1199fe62580000
-start commit:   5d50cf9f7cf2 Add linux-next specific files for 20250903
-git tree:       linux-next
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=1399fe62580000
-console output: https://syzkaller.appspot.com/x/log.txt?x=1599fe62580000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=7d2429dff5531d80
-dashboard link: https://syzkaller.appspot.com/bug?extid=bb185b018a51f8d91fd2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15b9a312580000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16819e62580000
+The commit has the appropriate syzbot tags so this should close out
+automatically.
 
-Reported-by: syzbot+bb185b018a51f8d91fd2@syzkaller.appspotmail.com
-Fixes: eb59d494eebd ("audit: add record for multiple task security contexts")
-
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+--=20
+paul-moore.com
