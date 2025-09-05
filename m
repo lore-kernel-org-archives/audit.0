@@ -1,172 +1,104 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3960324728B
-	for <audit@vger.kernel.org>; Thu,  4 Sep 2025 16:59:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E24EE1B6CE9
+	for <audit@vger.kernel.org>; Fri,  5 Sep 2025 15:37:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757005172; cv=none; b=E5uGP3DYjT+poDn//mijKoNhMzKktd2HlJSJ07XLm4uachx1R3/+SSAge3BwcDp4acLtxyICY0kEkvT55VW5JlbLCVQYR5qdUsPFNsE4hpbTWGYtoydCEv0R9xN8gJMujue8oGQel8NFVG7O3PPRbLIk2XCs/BjgW4bbZfFptjQ=
+	t=1757086628; cv=none; b=DnqnTQGGWZpv3FnGPrh9XrQefqsIhenEki6BWq4uMoasGTGLPwOn+gn6DcpMHeSPXeiiGTVEQOnv802hVTsTFPld1NWkmW1Y9QhMQ34Qd9n7ewNnWPvgPqoi1EHEkmoKaojVTH0TVG8LNUzcEya1eSfDUIvvjCojzyYR/aziYwI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757005172; c=relaxed/simple;
-	bh=GwGa1VVBJOYX6Cuh5Z3rjCzdVbbjZ7uaala3loTkIO8=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=qaRsGResAFTJezaEI1fsvCKpbIWVZZ6ECspFid4RfFUVYALW0tRRBQOKNTZr+lTS2nOOguesXnvuhyToLAT9wgDprwAwa4SPwPHi/hCPzZ0zvfm6wKenkRcw4LI9ILKGWV4t2WJmjoZAaOO8OL4tQNgesavu1N11GucXuTaiFD4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=DZ15NHZl; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1757086628; c=relaxed/simple;
+	bh=Kg1vnljwk728S3xcpj5uPtZq0cPx87y/XAxf6Mbkg0w=;
+	h=Date:Message-ID:From:To:Cc:Subject; b=ESXYqlFqVy97zjo9AMMmN4+S21NBgrpPVmEPijHiLnGM4WICHTf/Tc1TbCJGM7eNsq7B9Xt+96lNGpmoEJTV/jkQyhA3R+FTt7+5dltsppRQzCT2mULF1yeNifKGe2kfDKD15/p2cgyp+eKBbUvfDwbIapYC9xle3ntJj1ycFH4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=Adxer/jb; arc=none smtp.client-ip=209.85.160.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="DZ15NHZl"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1757005169;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=lXvCrt+DTTQMf7tnGktkXK8dIlODkW2gH3Cn4in8KJk=;
-	b=DZ15NHZlqPUpij/JQ1AhezdvpSiMZQFb8LRv2fy68aUz+biDV6Sv1obW1U0TlfI456CaEM
-	nKj1cnucPHPDnv+3jkG6kyrPkGyJNh5Kf+jnweOF6dWxdyPBL9QRYGc4Ed2stGHjk3Qvpf
-	GheYEcAnvxk8EmawEv6/IJO6AKnpmBw=
-Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-157-qktPnUO2N3aKwQ0BmKt3UA-1; Thu,
- 04 Sep 2025 12:59:27 -0400
-X-MC-Unique: qktPnUO2N3aKwQ0BmKt3UA-1
-X-Mimecast-MFC-AGG-ID: qktPnUO2N3aKwQ0BmKt3UA_1757005166
-Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 0BBB018002C1;
-	Thu,  4 Sep 2025 16:59:26 +0000 (UTC)
-Received: from wsxc.redhat.com (unknown [10.96.134.42])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 9005B3002D27;
-	Thu,  4 Sep 2025 16:59:23 +0000 (UTC)
-From: Ricardo Robaina <rrobaina@redhat.com>
-To: audit@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: paul@paul-moore.com,
-	eparis@redhat.com,
-	Ricardo Robaina <rrobaina@redhat.com>
-Subject: [PATCH v1] audit: merge loops in __audit_inode_child()
-Date: Thu,  4 Sep 2025 13:59:19 -0300
-Message-ID: <20250904165919.3362000-1-rrobaina@redhat.com>
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="Adxer/jb"
+Received: by mail-qt1-f180.google.com with SMTP id d75a77b69052e-4b33945989bso40313181cf.2
+        for <audit@vger.kernel.org>; Fri, 05 Sep 2025 08:37:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1757086626; x=1757691426; darn=vger.kernel.org;
+        h=subject:cc:to:from:message-id:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=H8H2BgOZaIRqj4/CcuEuveM9YTYIhVsemNvoFOFsf3o=;
+        b=Adxer/jbSeczynoeFKEXClu7cZMZCpAF3YLWX+s0HTBWs6TBpLyV2vLRrfiKsaIL+D
+         ZhqpWBTavn9Db2BIGlnBvqmcOzF+JUsAekaEgCeJUNaUOhJSFPDZvzVMOHvs1SgKpkc+
+         AqHd2pYm09ShlOUEubo9sDUSMc4cOwing3C7JUwsdbz9IWkiKFgSsczRcOMLXwytPuxi
+         KuenPdohzMQWfiTAL9YTg/4MvUnlnFc0fLVwKC4ejK9wCe8q+XtUUpJyJojGjuaO+QO/
+         807AVC+9b2a8UsjoH8Ki4j2CCxzj1IJMBp5zP1w9YFfVis/G07DkxoN6TNdR/fngx0cu
+         tqPg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1757086626; x=1757691426;
+        h=subject:cc:to:from:message-id:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=H8H2BgOZaIRqj4/CcuEuveM9YTYIhVsemNvoFOFsf3o=;
+        b=ppN9i/8zHGLI8NURaIied2RGbTz9hkfJ7eZ6FW4wv6zh8/mrFwUUccNoTZ+vuFZfOF
+         ZoWlYomfJwuYC8itAo21R/cpaImmhINizrG/2TGsO19XhCGsq9W2W3Xg+fyG+KRSmel6
+         00iyt2nqtkeefRArTRQdXN2z9pPGDLk/lQGZpjaNEkiHRoeuJVsdaVieyXKcj5QHBWK5
+         7RSVYAd2J7nSkZgslApaxeo0DJFTl8QCosqS2LNLB8Hwn7BQZ+nxBlVzs4En1scbDbZT
+         KFc3oYjsRj3G0HQ3WjFxY3B5B3HYcmR2txvoWdIUsArW44ymKnk3eyajyYtihsYPoVbK
+         aFSg==
+X-Gm-Message-State: AOJu0YxeN6XNlZZfe+pqqhS1QXkU7Frf04h2hCle1/b6KPe+tF++DTyK
+	vBgx2qVsd2BsQwGuRnZtt4LCJmfPMuIZhobOSUqAIsHYyY+j50Cs3X/7ix0c0Lf27lGpOJfC9PT
+	F3og=
+X-Gm-Gg: ASbGncuFE9FTCyXgO/nb858e0cpN8A8QqIzUzFpo4SgOsehVG1b4q8g3iuB13++llO5
+	uGejBUbdNoa06bQqzGwRHqK+T1GR1Nv/yLPQKNPHy8KytoA02Za3qVQXVvTHQiYTbeYibKEpcE8
+	cnwPF2T8tNgOT5+CzdRL2qi8iZaNn710NEGlBi1FlrUfOD6xvJXvVvz6W7DH8AR363SC1+i9NFx
+	l3MKWsGb0ROGD5AcZJ3XAcdexgsWhV0uOy0wTxVoKewKQHDqkIWT1bd0uEtBizuiJ6SIpDh77NV
+	ZozZ3UtbyN7If+TptywuzQvyIn7y5NC3zyfwrUjTJ5vW10l2ee0Af5nWUR+jEg/vfwtY3rXtdLg
+	DYc+lz/c5ttuFp4qDViFckEmWnWV2DLAEhF02n7ChnJdPV++Nu0Szx/5Ds6Mf9bweUcd+TT1X/d
+	JYdQo=
+X-Google-Smtp-Source: AGHT+IHso3j+0e//Z9vqXwH7srvuoY144d5Q5A5/ORbPudxl8GItsfJbG1VzD6dz0JwkeY/cN1Uv6A==
+X-Received: by 2002:a05:622a:5e1b:b0:4b4:56a6:42b1 with SMTP id d75a77b69052e-4b456a6498cmr110458451cf.47.1757086625566;
+        Fri, 05 Sep 2025 08:37:05 -0700 (PDT)
+Received: from localhost (pool-71-126-255-178.bstnma.fios.verizon.net. [71.126.255.178])
+        by smtp.gmail.com with UTF8SMTPSA id d75a77b69052e-4b5d57c6e0asm33881781cf.51.2025.09.05.08.37.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 05 Sep 2025 08:37:04 -0700 (PDT)
+Date: Fri, 05 Sep 2025 11:37:03 -0400
+Message-ID: <6af833b45f68db4612ca52dd839d5662@paul-moore.com>
+From: Paul Moore <paul@paul-moore.com>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: audit@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] audit/audit-pr-20250905
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
 
-Whenever there's audit context, __audit_inode_child() gets called
-numerous times, which can lead to high latency in scenarios that
-create too many sysfs/debugfs entries at once, for instance, upon
-device_add_disk() invocation.
+Linus,
 
-   # uname -r
-   6.17.0-rc3+
+A single small audit patch to fix a potential out-of-bounds read caused
+by a negative array index when comparing paths.  Please merge for v6.17.
 
-   # auditctl -a always,exit -F path=/tmp -k foo
-   # time insmod loop max_loop=1000
-   real 0m42.753s
-   user 0m0.000s
-   sys  0m42.494s
+Paul
 
-   # perf record -a insmod loop max_loop=1000
-   # perf report --stdio |grep __audit_inode_child
-   37.95%  insmod  [kernel.kallsyms]  [k] __audit_inode_child
+--
+The following changes since commit 8f5ae30d69d7543eee0d70083daf4de8fe15d585:
 
-__audit_inode_child() searches for both the parent and the child
-in two different loops that iterate over the same list. This
-process can be optimized by merging these into a single loop,
-without changing the function behavior or affecting the code's
-readability.
+  Linux 6.17-rc1 (2025-08-10 19:41:16 +0300)
 
-This patch merges the two loops that walk through the list
-context->names_list into a single loop. This optimization resulted
-in around 54% performance enhancement for the benchmark.
+are available in the Git repository at:
 
-   # uname -r
-   6.17.0-rc3+-enhanced
+  https://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/audit.git
+    tags/audit-pr-20250905
 
-   # auditctl -a always,exit -F path=/tmp -k foo
-   # time insmod loop max_loop=1000
-   real 0m19.388s
-   user 0m0.000s
-   sys  0m19.149s
+for you to fetch changes up to 4540f1d23e7f387880ce46d11b5cd3f27248bf8d:
 
-Signed-off-by: Ricardo Robaina <rrobaina@redhat.com>
----
- kernel/auditsc.c | 40 ++++++++++++++++++----------------------
- 1 file changed, 18 insertions(+), 22 deletions(-)
+  audit: fix out-of-bounds read in audit_compare_dname_path()
+    (2025-09-03 16:46:23 -0400)
 
-diff --git a/kernel/auditsc.c b/kernel/auditsc.c
-index eb98cd6fe91f..7abfb68687fb 100644
---- a/kernel/auditsc.c
-+++ b/kernel/auditsc.c
-@@ -2437,44 +2437,40 @@ void __audit_inode_child(struct inode *parent,
- 	if (inode)
- 		handle_one(inode);
- 
--	/* look for a parent entry first */
- 	list_for_each_entry(n, &context->names_list, list) {
--		if (!n->name ||
--		    (n->type != AUDIT_TYPE_PARENT &&
--		     n->type != AUDIT_TYPE_UNKNOWN))
-+		/* can only match entries that have a name */
-+		if (!n->name)
- 			continue;
- 
--		if (n->ino == parent->i_ino && n->dev == parent->i_sb->s_dev &&
--		    !audit_compare_dname_path(dname,
--					      n->name->name, n->name_len)) {
-+		/* look for a parent entry first */
-+		if (!found_parent &&
-+		    (n->type == AUDIT_TYPE_PARENT || n->type == AUDIT_TYPE_UNKNOWN) &&
-+		    (n->ino == parent->i_ino && n->dev == parent->i_sb->s_dev &&
-+		     !audit_compare_dname_path(dname, n->name->name, n->name_len))) {
- 			if (n->type == AUDIT_TYPE_UNKNOWN)
- 				n->type = AUDIT_TYPE_PARENT;
- 			found_parent = n;
--			break;
- 		}
--	}
- 
--	cond_resched();
--
--	/* is there a matching child entry? */
--	list_for_each_entry(n, &context->names_list, list) {
--		/* can only match entries that have a name */
--		if (!n->name ||
--		    (n->type != type && n->type != AUDIT_TYPE_UNKNOWN))
--			continue;
--
--		if (!strcmp(dname->name, n->name->name) ||
--		    !audit_compare_dname_path(dname, n->name->name,
-+		/* is there a matching child entry? */
-+		if (!found_child &&
-+		    (n->type == type || n->type == AUDIT_TYPE_UNKNOWN) &&
-+		    (!strcmp(dname->name, n->name->name) ||
-+		     !audit_compare_dname_path(dname, n->name->name,
- 						found_parent ?
- 						found_parent->name_len :
--						AUDIT_NAME_FULL)) {
-+						AUDIT_NAME_FULL))) {
- 			if (n->type == AUDIT_TYPE_UNKNOWN)
- 				n->type = type;
- 			found_child = n;
--			break;
- 		}
-+
-+		if (found_parent && found_child)
-+			break;
- 	}
- 
-+	cond_resched();
-+
- 	if (!found_parent) {
- 		/* create a new, "anonymous" parent record */
- 		n = audit_alloc_name(context, AUDIT_TYPE_PARENT);
--- 
-2.51.0
+----------------------------------------------------------------
+audit/stable-6.17 PR 20250905
+----------------------------------------------------------------
 
+Stanislav Fort (1):
+      audit: fix out-of-bounds read in audit_compare_dname_path()
+
+ kernel/auditfilter.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+--
+paul-moore.com
