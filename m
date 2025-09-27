@@ -1,165 +1,154 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com [209.85.219.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE5A427B500
-	for <audit@vger.kernel.org>; Fri, 26 Sep 2025 19:30:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2531E13B58B
+	for <audit@vger.kernel.org>; Sat, 27 Sep 2025 03:07:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758915051; cv=none; b=qXQ0aHF5hTy3CprXXYAQcCp5A9fp8F6XywnEhswxT3OpifN9c4XiU9TKzFzwOrI6Xr0VnvwDMNjXpunuUDlhDUdChBiX1/MgRyj1ZiApjDjve0fujLi4/7+hNFUWgQFeLt3UCUeDJQDO4tYcJXiEbxb25F0XjUPZMTc/6z4+ddM=
+	t=1758942451; cv=none; b=h2cuxa69JzQIxmtwjiPVavDgLW0sOlYQhrbJhJFNAJOw62w9GwRn8ngT4AUAezvCdBmIEBfT9NIZvSZSYso3bYvMZa+Z+T5ozjAxY37tc1BBsk3a+SAzo0uTxTnMh1Bd38znCToYjhJA1lBATloRCK57x6wpALuGdPuI0Du0FIo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758915051; c=relaxed/simple;
-	bh=uYge2qoJeTVTxB09I1cGTmN1ssAnBlp6sQZnc7Jhs5s=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=D/P62jImfXnB+daOkioiqqlPaNNap31ho/NgZDVqTkkC2kWYmFZkCpzwa/w+FhVl2W9c2xkFj3T3sitHlDtE/tGzKd9ARgLVo2Y0fmtYXFcmsj+jLDXu9VMbp/gkZAyoGG9tMsTNySXjqhZuamgZy7JcNi+PUgm8wM1g3F0/pFA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Ao+UMGt1; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1758942451; c=relaxed/simple;
+	bh=KIWllFg56if3TbC6uvy6hmJ9HqcpA05vzmey5qzXPvc=;
+	h=Date:Message-ID:From:To:Cc:Subject; b=XG+o5Vwwdz1HWbOSO5hTtkNNK5qq/4dPGlOvkpZTZjUaiwV0RM2w6L2QabrJiUEPsTQcm6qS4t/cmfrdVer5/DcXgzU4d088LtoosHjwNPOUeNIQSSMOWHONOn1NB9zLnbTlHCVrBrYbuykIp3aA+n0++oWyMSHg6K+sTXYa5FI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=XB7lOwWV; arc=none smtp.client-ip=209.85.219.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Ao+UMGt1"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1758915048;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=uIPspSLX9lThfAZ+Y5dkohRcaszaIDWglOFteDGsE5E=;
-	b=Ao+UMGt1vG4QqB+0kxWoep1nhuV+cSXEreCS2UgBPeo5SFisXjohiklAzlt524TKAI5quV
-	8JrLlXuTBlCtozeuEnzyRgxVTuqvTctg0D9g68aYeDIyfvMKUYEx24q+5j8gZ+bzsQD6ew
-	LwNRt+0pd9CqCBcDAixnlt0e8Wi4fvI=
-Received: from mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-266-hn6MuAqPP_m_w_IXuCNlpQ-1; Fri,
- 26 Sep 2025 15:30:45 -0400
-X-MC-Unique: hn6MuAqPP_m_w_IXuCNlpQ-1
-X-Mimecast-MFC-AGG-ID: hn6MuAqPP_m_w_IXuCNlpQ_1758915044
-Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id B08A319560AE;
-	Fri, 26 Sep 2025 19:30:42 +0000 (UTC)
-Received: from wsxc.redhat.com (unknown [10.96.134.97])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id EFED319560A2;
-	Fri, 26 Sep 2025 19:30:37 +0000 (UTC)
-From: Ricardo Robaina <rrobaina@redhat.com>
-To: audit@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	netfilter-devel@vger.kernel.org,
-	coreteam@netfilter.org
-Cc: paul@paul-moore.com,
-	eparis@redhat.com,
-	pablo@netfilter.org,
-	kadlec@netfilter.org,
-	fw@strlen.de,
-	ej@inai.de,
-	Ricardo Robaina <rrobaina@redhat.com>
-Subject: [PATCH v3] audit: include source and destination ports to NETFILTER_PKT
-Date: Fri, 26 Sep 2025 16:30:35 -0300
-Message-ID: <20250926193035.2158860-1-rrobaina@redhat.com>
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="XB7lOwWV"
+Received: by mail-qv1-f46.google.com with SMTP id 6a1803df08f44-799572d92b0so25369536d6.3
+        for <audit@vger.kernel.org>; Fri, 26 Sep 2025 20:07:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1758942449; x=1759547249; darn=vger.kernel.org;
+        h=subject:cc:to:from:message-id:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qSAgZfMkE5F9jENlrny3LvdLwkaNKorgXutltGU+x+0=;
+        b=XB7lOwWVBawLFA2yKand2UwL2+v/I3rFVXMysduEPrlZ3MBX09NPq8tQApRKmAUusi
+         SyY0yE/GghdcwTrVvibaUzBH4Nq9a1dIYEuR4yQYwDraUMiqLvSdo84nXJoVEUDmCzER
+         Z68ZwVEoDR7md99XHvtvJWvksja/0VB00PeYCHpK9qgncBq+lupRcTLuuad2PPJCTSEF
+         l+M72j+3gsn+KXQ8f/jrtselF7AZadLdsueTKIF2R7xTjYjRVYYvos3nuTrZ7SmvlXhh
+         dAFMCra7qYkqCxvpJZ93tlE2qJc0W9j189yJL0hB+LUK5WQPO0ZC75uVuteKXbm7hcBd
+         ZRJg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1758942449; x=1759547249;
+        h=subject:cc:to:from:message-id:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=qSAgZfMkE5F9jENlrny3LvdLwkaNKorgXutltGU+x+0=;
+        b=vWn2e2c0bIa01E31KTS1FyR4sPk0nhIC0E7rOzD7Gb46lLtWfbOqP+6NIZbmubTSei
+         lnXJgd53tIHnu6f92uvxesLvrcv645eKmAz8BOjpQQ5wsh+PkK4Q+IxtQXtHUMvASbPw
+         GJDcXYAjx5US5DjKh+XZOIBEsUZ9Axc0XOANLOCK0UbRUh9GVFoLINdfMiSPiYoMM7K8
+         OiOB3R9ZVFTtDejt1vULi7irnY9taEf3oHHvgwq1wR4UPLtVNAuqJ46PsXmWz872qgta
+         UTyM0J2u38aSP2Jx7aDjVgWBvIU7+Yf3ZEZLGjNH7Db1QvYMq01zPx0Jm8RTuG9vodBa
+         lU5w==
+X-Gm-Message-State: AOJu0YxE4m5jB7snNHFakrXyh4So5N96SpqYksa+/Xz2eIAsV3pqL+Lg
+	PhCR40FGRihjUg8NKgxHLn7FK8U5HIxcYIe79RHmPAHRcZ253mYiaGFkP5jXKMiScA==
+X-Gm-Gg: ASbGncvYE5WPa5LPgFjp8URBw0sWb/yT9tvL8DuqtUW68GiYoch81i8YZ7ldMwRnqaa
+	Fim4m5IKRXFKcEr4DifM+t2AmMs8wKq3JjoSdWKxM6p07X5A1mTmAD5kEdjw1waq+LjotMXcRD6
+	xCKM1+MFmIVp7Rl2qkcvpSrcmVSV6tIX5h3hjne4UgAdD0hkT60YVwR256ejgiBWKhdCBHtPpUw
+	MHDuMWD9lR7Ao2UQk7es5zYQcwSdwNHu4DUpwhRkB1ajzJKtSUribzMjXGOp0zp8NYxGo/RclKj
+	OZGLGPD8JZCl53Pkj6bR1mAEEys+4pn6fqfswNBmCrJTRQA2m4uRiIj6gWnqP+Cj+dieVNnEmcK
+	wC7JAmqR6ABMiuNmCsCSf8gnN5xbIIv+2vmxYpoeytPVy/j0tB2kOAL3xMEdxwrcjHV2s
+X-Google-Smtp-Source: AGHT+IFoAiAET4/RXIIfogT0oBdVsHUQY8o6xwNhVDRzeLKHFonA8GbaIF5LImVO4PtEuu8oqTAuUA==
+X-Received: by 2002:a05:6214:43c3:b0:801:7267:3cd8 with SMTP id 6a1803df08f44-80172673d7fmr139528036d6.39.1758942448929;
+        Fri, 26 Sep 2025 20:07:28 -0700 (PDT)
+Received: from localhost (pool-71-126-255-178.bstnma.fios.verizon.net. [71.126.255.178])
+        by smtp.gmail.com with UTF8SMTPSA id 6a1803df08f44-8016ce9a34bsm35543566d6.57.2025.09.26.20.07.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 26 Sep 2025 20:07:28 -0700 (PDT)
+Date: Fri, 26 Sep 2025 23:07:27 -0400
+Message-ID: <3161e6addb7d3e6c8297ff058ad8236d@paul-moore.com>
+From: Paul Moore <paul@paul-moore.com>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: audit@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] audit/audit-pr-20250926
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
 
-NETFILTER_PKT records show both source and destination
-addresses, in addition to the associated networking protocol.
-However, it lacks the ports information, which is often
-valuable for troubleshooting.
+Linus,
 
-This patch adds both source and destination port numbers,
-'sport' and 'dport' respectively, to TCP, UDP, UDP-Lite and
-SCTP-related NETFILTER_PKT records.
+Here are the audit patches for the upcoming Linux v6.18 merge window:
 
- type=NETFILTER_PKT ... saddr=127.0.0.1 daddr=127.0.0.1 proto=icmp
- type=NETFILTER_PKT ... saddr=::1 daddr=::1 proto=ipv6-icmp
- type=NETFILTER_PKT ... daddr=127.0.0.1 proto=udp sport=38173 dport=42424
- type=NETFILTER_PKT ... daddr=::1 proto=udp sport=56852 dport=42424
- type=NETFILTER_PKT ... daddr=127.0.0.1 proto=tcp sport=57022 dport=42424
- type=NETFILTER_PKT ... daddr=::1 proto=tcp sport=50810 dport=42424
- type=NETFILTER_PKT ... daddr=127.0.0.1 proto=sctp sport=54944 dport=42424
- type=NETFILTER_PKT ... daddr=::1 proto=sctp sport=57963 dport=42424
+- Proper audit support for multiple LSMs
 
-Link: https://github.com/linux-audit/audit-kernel/issues/162
-Signed-off-by: Ricardo Robaina <rrobaina@redhat.com>
----
- net/netfilter/xt_AUDIT.c | 47 ++++++++++++++++++++++++++++++++++++----
- 1 file changed, 43 insertions(+), 4 deletions(-)
+  As the audit subsystem predated the work to enable multiple LSMs,
+  some additional work was needed to support logging the different LSM
+  labels for the subjects/tasks and objects on the system.  Casey's
+  patches add new auxillary records for subjects and objects that convey
+  the additional labels.
 
-diff --git a/net/netfilter/xt_AUDIT.c b/net/netfilter/xt_AUDIT.c
-index b6a015aee0ce..fb16f20cfb1b 100644
---- a/net/netfilter/xt_AUDIT.c
-+++ b/net/netfilter/xt_AUDIT.c
-@@ -19,6 +19,7 @@
- #include <linux/netfilter_bridge/ebtables.h>
- #include <net/ipv6.h>
- #include <net/ip.h>
-+#include <linux/sctp.h>
- 
- MODULE_LICENSE("GPL");
- MODULE_AUTHOR("Thomas Graf <tgraf@redhat.com>");
-@@ -37,8 +38,27 @@ static bool audit_ip4(struct audit_buffer *ab, struct sk_buff *skb)
- 	if (!ih)
- 		return false;
- 
--	audit_log_format(ab, " saddr=%pI4 daddr=%pI4 proto=%hhu",
--			 &ih->saddr, &ih->daddr, ih->protocol);
-+	switch (ih->protocol) {
-+	case IPPROTO_TCP:
-+		audit_log_format(ab, " saddr=%pI4 daddr=%pI4 proto=%hhu sport=%hu dport=%hu",
-+				 &ih->saddr, &ih->daddr, ih->protocol,
-+				 ntohs(tcp_hdr(skb)->source), ntohs(tcp_hdr(skb)->dest));
-+		break;
-+	case IPPROTO_UDP:
-+	case IPPROTO_UDPLITE:
-+		audit_log_format(ab, " saddr=%pI4 daddr=%pI4 proto=%hhu sport=%hu dport=%hu",
-+				 &ih->saddr, &ih->daddr, ih->protocol,
-+				 ntohs(udp_hdr(skb)->source), ntohs(udp_hdr(skb)->dest));
-+		break;
-+	case IPPROTO_SCTP:
-+		audit_log_format(ab, " saddr=%pI4 daddr=%pI4 proto=%hhu sport=%hu dport=%hu",
-+				 &ih->saddr, &ih->daddr, ih->protocol,
-+				 ntohs(sctp_hdr(skb)->source), ntohs(sctp_hdr(skb)->dest));
-+		break;
-+	default:
-+		audit_log_format(ab, " saddr=%pI4 daddr=%pI4 proto=%hhu",
-+				 &ih->saddr, &ih->daddr, ih->protocol);
-+	}
- 
- 	return true;
- }
-@@ -57,8 +77,27 @@ static bool audit_ip6(struct audit_buffer *ab, struct sk_buff *skb)
- 	nexthdr = ih->nexthdr;
- 	ipv6_skip_exthdr(skb, skb_network_offset(skb) + sizeof(_ip6h), &nexthdr, &frag_off);
- 
--	audit_log_format(ab, " saddr=%pI6c daddr=%pI6c proto=%hhu",
--			 &ih->saddr, &ih->daddr, nexthdr);
-+	switch (nexthdr) {
-+	case IPPROTO_TCP:
-+		audit_log_format(ab, " saddr=%pI6c daddr=%pI6c proto=%hhu sport=%hu dport=%hu",
-+				 &ih->saddr, &ih->daddr, nexthdr,
-+				 ntohs(tcp_hdr(skb)->source), ntohs(tcp_hdr(skb)->dest));
-+		break;
-+	case IPPROTO_UDP:
-+	case IPPROTO_UDPLITE:
-+		audit_log_format(ab, " saddr=%pI6c daddr=%pI6c proto=%hhu sport=%hu dport=%hu",
-+				 &ih->saddr, &ih->daddr, nexthdr,
-+				 ntohs(udp_hdr(skb)->source), ntohs(udp_hdr(skb)->dest));
-+		break;
-+	case IPPROTO_SCTP:
-+		audit_log_format(ab, " saddr=%pI6c daddr=%pI6c proto=%hhu sport=%hu dport=%hu",
-+				 &ih->saddr, &ih->daddr, nexthdr,
-+				 ntohs(sctp_hdr(skb)->source), ntohs(sctp_hdr(skb)->dest));
-+		break;
-+	default:
-+		audit_log_format(ab, " saddr=%pI6c daddr=%pI6c proto=%hhu",
-+				 &ih->saddr, &ih->daddr, nexthdr);
-+	}
- 
- 	return true;
- }
--- 
-2.51.0
+- Ensure fanotify audit events are always generated  
 
+  Generally speaking security relevant subsystems always generate audit
+  events, unless explicitly ignored.  However, up to this point fanotify
+  events had been ignored by default, but starting with this pull request
+  fanotify follows convention and generates audit events by default.
+
+- Replace an instance of strcpy() with strscpy()  
+
+- Minor indentation, style, and comment fixes
+
+Paul
+
+--
+The following changes since commit 8f5ae30d69d7543eee0d70083daf4de8fe15d585:
+
+  Linux 6.17-rc1 (2025-08-10 19:41:16 +0300)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/audit.git
+    tags/audit-pr-20250926
+
+for you to fetch changes up to d2c773159327f4d2f6438acf1ae2ae9ac0ca46a9:
+
+  audit: fix skb leak when audit rate limit is exceeded
+    (2025-09-10 19:55:00 -0400)
+
+----------------------------------------------------------------
+audit/stable-6.18 PR 20250926
+----------------------------------------------------------------
+
+Casey Schaufler (5):
+      audit: fix indentation in audit_log_exit()
+      audit: create audit_stamp structure
+      lsm: security_lsmblob_to_secctx module selection
+      audit: add record for multiple task security contexts
+      audit: add record for multiple object contexts
+
+Dan Carpenter (1):
+      audit: add a missing tab
+
+Eric Dumazet (1):
+      audit: init ab->skb_list earlier in audit_buffer_alloc()
+
+Gerald Yang (1):
+      audit: fix skb leak when audit rate limit is exceeded
+
+Kieran Moy (1):
+      audit: fix typo in auditfilter.c comment
+
+Richard Guy Briggs (1):
+      audit: record fanotify event regardless of presence of rules
+
+Thorsten Blum (1):
+      audit: Replace deprecated strcpy() with strscpy()
+
+ include/linux/audit.h        |   25 +++
+ include/linux/security.h     |    6 
+ include/uapi/linux/audit.h   |    2 
+ kernel/audit.c               |  280 ++++++++++++++++++++++++++++++-----
+ kernel/audit.h               |   13 +
+ kernel/audit_tree.c          |    6 
+ kernel/auditfilter.c         |    2 
+ kernel/auditsc.c             |   63 ++-----
+ net/netlabel/netlabel_user.c |    8 -
+ security/apparmor/lsm.c      |    3 
+ security/security.c          |   18 ++
+ security/selinux/hooks.c     |    5 
+ security/smack/smack_lsm.c   |    5 
+ 13 files changed, 334 insertions(+), 102 deletions(-)
+
+--
+paul-moore.com
