@@ -1,219 +1,113 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98B3C2D3226
-	for <audit@vger.kernel.org>; Fri, 24 Oct 2025 15:55:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59CBE26A0AD
+	for <audit@vger.kernel.org>; Mon, 27 Oct 2025 22:45:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761321310; cv=none; b=gTOdp+v6gUTqk/vGlmO5wuBq8alO4Sp0h/vqp76P3YRTqxEEFmkQYtwYJIQ0hhoURYdmNhOJqB16f1eJH9Yie8PQ5kCazkQyXSf6tMtODECdl06hOkq+1CQDOMGmuZbJNp4+b+KjqOv0g65Qun2C3C1JB5mETR6JFTgVfzoqyN4=
+	t=1761605131; cv=none; b=qjJIX554TFwtq1OP7LN33MVBI6ySoblqnP9naKmMSM7HQGXGe1Er9cNE/E7haCbvJdrGKfpmEZzTZKveyvWSL1URKR8cci0wmKJrtEqgImZeS/vsuXl7CgeE7HAPi61DflrYcQ9qS4DC28bx1DKb2WRYNU3dmt21e280Nfj/VGw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761321310; c=relaxed/simple;
-	bh=XUUjiT/LL39HQxlWRGK1kB2VdbDdz5ho6javHy1jlVE=;
+	s=arc-20240116; t=1761605131; c=relaxed/simple;
+	bh=MzekvaBxqzCTIOaqmW2QGZ9OLZMQ5s6TtJvJNVKtffA=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=hvwUhTWzFf4DGTuBvGhmq09/RlwmITdkl1p5BqEzVwjo0UDQ56byGnUIszES/emtpsbynMGqxGIdeeF5Y0+vi1IlXzERxdXgIcgMGEB3pcI6wkO+oPrLXAnDUVdYfXX+4jaVO1oX3brcTTVImHfqAIJLFUYL7MOo3pVHqZFnTCA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=NW84+P4X; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	 To:Cc:Content-Type; b=hn0p5TcnFLg66h6ziv0hmXPagZE2X8uIZQR+MElx3pEJ81GaHL6cB9il2ma/8odkBhVucjFRCNQ92MuJB+tEAOBKamH+RR/HToWvCHWT7TKwFfVXUN2C601XlnULYe9er0MxtjVpmraNS9tGayLkHQcnMy6vwIho7HBCOv5YRHw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qzIe9YG6; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="NW84+P4X"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1761321306;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=PJ8CBgdnp0x5YCgKtD8+31O84jKpAdCiNyX8xfEa5uQ=;
-	b=NW84+P4XGmP89WhSHonWcYGjUzJoGNkxeoMyvOpp4UyxqI+sFsWBVo8eZR7ROFxYKd/h7r
-	Q1l/Jekl6KJuKTdrJnFz4HoXoZKvXulszFcyyVzvYhpuPq8CHPwLfpQo5sigviPzgOswWu
-	HhiuOZielUrS2FzHMOae0B5g8fqAmYA=
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
- [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-135-erQ2B9i3OJi-utgJF_98Hg-1; Fri, 24 Oct 2025 11:55:05 -0400
-X-MC-Unique: erQ2B9i3OJi-utgJF_98Hg-1
-X-Mimecast-MFC-AGG-ID: erQ2B9i3OJi-utgJF_98Hg_1761321304
-Received: by mail-ej1-f72.google.com with SMTP id a640c23a62f3a-b48635cf06fso374591266b.1
-        for <audit@vger.kernel.org>; Fri, 24 Oct 2025 08:55:05 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761321304; x=1761926104;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=PJ8CBgdnp0x5YCgKtD8+31O84jKpAdCiNyX8xfEa5uQ=;
-        b=QokOWDENyamFcXvs/390/AnAUXsSv+Ed02cfK53/HeZD1T2fDKuYyt1zwHcXDuhX32
-         2M6nJwpZ1JiNwkHpHxaSW0vEbX4Zw7o5GNsUPFy+moqI26xld5XGLqs9GoSQ/oy20XuH
-         dtlZ5NZ9yvgkJO7hhndLs3pSzEFv8bjMoZw7wdSSVJ7BRVwe623B589qyxUfk0IvjiCy
-         auH5oEe4VOsnNCFoW+wJskwO+p+BrFB4G4rtq8KPp+uAyMh1wgKBQcLGqhQzcbbtWhEy
-         InfQTkm4MOPthBUS0lnD5dHVF+HK8eaNf7p6xG2/AJcAJFHgsCqA77cDcv8RA6JJeYxe
-         7GWA==
-X-Gm-Message-State: AOJu0YzQTFdBAh6JZdgRe3f1fSdd8shHKzH1jtwWdQ5XMOuqDeWKS47n
-	R58BqPK9wsOY0mSapBXGQuZ4TY8Lw9hQ1dRhTEoz8V9RzJ0zJjRgeyIxKyNvcTy12Y918k932VD
-	dQxkH3RDtvyRS77hPmtJUm6nPwdEstXmph0E2M8S5lQBWBfCZrgCELLvFO6SW1vBPafp28NrMZO
-	VBkeSvzAtGAmXhGyuksuRA6wLfSpFFpkkW6eQTMM97eA==
-X-Gm-Gg: ASbGnct4c1yp3SALYdjz5ePFAW+k+xFt/2TAu2QUd0zsYmCKqN1PSKVB7nzazmbzi9D
-	qjcskpd5nkGPB2YIxCQT8IHw1NzFqKvGMs5pO+ItEhVFVlIGYCVJcziTjyAcD5Obmg1jWvIaZIk
-	p5X7r3whpA0res5z9csU5ZafT0uT7eolAZm8LdIVHEL6LJXogBU8Nc510s
-X-Received: by 2002:a17:907:9448:b0:b04:626e:f43d with SMTP id a640c23a62f3a-b64751284f6mr3012891366b.47.1761321303757;
-        Fri, 24 Oct 2025 08:55:03 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IEoFO2lt2SNKwryeKYy2tueF7Ewy+SHv0qWkyzbxhfUjzu6PXuLi7pGKg6VF6E0uZH8YqujQA1JKEKxkPE9qq4=
-X-Received: by 2002:a17:907:9448:b0:b04:626e:f43d with SMTP id
- a640c23a62f3a-b64751284f6mr3012889366b.47.1761321303380; Fri, 24 Oct 2025
- 08:55:03 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qzIe9YG6"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DFC5C19422
+	for <audit@vger.kernel.org>; Mon, 27 Oct 2025 22:45:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1761605131;
+	bh=MzekvaBxqzCTIOaqmW2QGZ9OLZMQ5s6TtJvJNVKtffA=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=qzIe9YG6i1b2MC+6IPWBqa6IWADt/354RwLaj6Czyf/NYdQar1Jt4I8RVwfLxHonR
+	 xtQC+LO1vJAtU53m8oIsvnWKcbWYrFScdKgvarhSdMGzpNikYMOZ82/Qdbvpt+74gH
+	 zMKnuZXFjxwklIliNKybJntjTuahqSwPwHQcLrY5R3HzC2/hDpa7z+rColGZDE6EXk
+	 klQXuHyHBZQyjKBEGF1tDZf8pjegpHPtDqtkBpSdhFHKrey4WH+MxtmxSnsLffRDsi
+	 caD5c+Ev5vln/7n7jQPv/JhSQq+pH/0GPEjZr5Q4EoWpYu9XDo3+HE8sscXk9giD2K
+	 p9ktKcYqkB9qw==
+Received: by mail-qt1-f179.google.com with SMTP id d75a77b69052e-4ecf0336b61so20556611cf.0
+        for <audit@vger.kernel.org>; Mon, 27 Oct 2025 15:45:31 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWma3sT7V5gRgrC+HYtm1KO+V+3F1enRsVWtMqBZDuv0nzVGeTYFJn8ugPlUA93BA5YKBb2XA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwwGH2UGXK5hvrJaOVSR268/7LxxVLYQJZcr4Nb9nkLMyessN9s
+	2Ua4pqE6mrPNGEeN8EgL5mcj2xqo6J4q/TBiK2oy/lABV9/EJnd5KPpVkJ8kFaG7Y7vzy/vwXn9
+	351ZF4OEvADuh4scmEY+MrkRz3SERS7M=
+X-Google-Smtp-Source: AGHT+IEcX0DwJ6LoYUg47sZ0IcXXgpk9xiTYJdHyAcmsWVhGl1PokArKqBeTkvsuiKfBamYohf+YGYUjKzZgMLppQVA=
+X-Received: by 2002:a05:622a:4c0f:b0:4eb:9fad:8b4f with SMTP id
+ d75a77b69052e-4ed075eb4famr19479011cf.61.1761605130177; Mon, 27 Oct 2025
+ 15:45:30 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251022123644.1560744-1-rrobaina@redhat.com> <cd4576d9d4a00366283a116ab14231f5@paul-moore.com>
-In-Reply-To: <cd4576d9d4a00366283a116ab14231f5@paul-moore.com>
-From: Ricardo Robaina <rrobaina@redhat.com>
-Date: Fri, 24 Oct 2025 12:54:51 -0300
-X-Gm-Features: AS18NWC7wcZUbzwsc4ajI_C_1nQT7HFinNeXWRIipzFTOwu9q12KDZ3DloNlX1I
-Message-ID: <CAABTaaA6BvcYP7_0KrOtXW7ehNH=RrZk4QFWoPujevXOJEY=Sw@mail.gmail.com>
-Subject: Re: [PATCH v2] audit: merge loops in __audit_inode_child()
+References: <20251025001022.1707437-1-song@kernel.org> <CAHC9VhTb2p3DL_knRgFyDv396BwH-KhwR0cBhqLQ-KdgcA1yLw@mail.gmail.com>
+In-Reply-To: <CAHC9VhTb2p3DL_knRgFyDv396BwH-KhwR0cBhqLQ-KdgcA1yLw@mail.gmail.com>
+From: Song Liu <song@kernel.org>
+Date: Mon, 27 Oct 2025 15:45:18 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW6O96aJbZptVY754tQ1-C_JtH8PwS1oZX6a1Tch7ehEkg@mail.gmail.com>
+X-Gm-Features: AWmQ_bl38fPXDA690MppliPLheSL177BkxdQbbb4ElOx6ChpvbND7oMhlAAAttI
+Message-ID: <CAPhsuW6O96aJbZptVY754tQ1-C_JtH8PwS1oZX6a1Tch7ehEkg@mail.gmail.com>
+Subject: Re: [RFC bpf-next] lsm: bpf: Remove lsm_prop_bpf
 To: Paul Moore <paul@paul-moore.com>
-Cc: audit@vger.kernel.org, linux-kernel@vger.kernel.org, eparis@redhat.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: siGeuYii_kZcR-toLzSii6RYdDM3jrYdBk04YrWHVAk_1761321304
-X-Mimecast-Originator: redhat.com
+Cc: bpf@vger.kernel.org, linux-security-module@vger.kernel.org, 
+	jmorris@namei.org, serge@hallyn.com, casey@schaufler-ca.com, 
+	kpsingh@kernel.org, mattbobrowski@google.com, ast@kernel.org, 
+	daniel@iogearbox.net, andrii@kernel.org, john.johansen@canonical.com, 
+	eparis@redhat.com, audit@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Oct 23, 2025 at 3:41=E2=80=AFPM Paul Moore <paul@paul-moore.com> wr=
+On Mon, Oct 27, 2025 at 2:14=E2=80=AFPM Paul Moore <paul@paul-moore.com> wr=
 ote:
 >
-> On Oct 22, 2025 Ricardo Robaina <rrobaina@redhat.com> wrote:
+> On Fri, Oct 24, 2025 at 8:10=E2=80=AFPM Song Liu <song@kernel.org> wrote:
 > >
-> > Whenever there's audit context, __audit_inode_child() gets called
-> > numerous times, which can lead to high latency in scenarios that
-> > create too many sysfs/debugfs entries at once, for instance, upon
-> > device_add_disk() invocation.
+> > lsm_prop_bpf is not used in any code. Remove it.
 > >
-> >    # uname -r
-> >    6.17.0-rc3+
+> > Signed-off-by: Song Liu <song@kernel.org>
 > >
-> >    # auditctl -a always,exit -F path=3D/tmp -k foo
-> >    # time insmod loop max_loop=3D1000
-> >    real 0m42.753s
-> >    user 0m0.000s
-> >    sys  0m42.494s
-> >
-> >    # perf record -a insmod loop max_loop=3D1000
-> >    # perf report --stdio |grep __audit_inode_child
-> >    37.95%  insmod  [kernel.kallsyms]  [k] __audit_inode_child
-> >
-> > __audit_inode_child() searches for both the parent and the child
-> > in two different loops that iterate over the same list. This
-> > process can be optimized by merging these into a single loop,
-> > without changing the function behavior or affecting the code's
-> > readability.
-> >
-> > This patch merges the two loops that walk through the list
-> > context->names_list into a single loop. This optimization resulted
-> > in around 54% performance enhancement for the benchmark.
-> >
-> >    # uname -r
-> >    6.17.0-rc3+-enhanced
-> >
-> >    # auditctl -a always,exit -F path=3D/tmp -k foo
-> >    # time insmod loop max_loop=3D1000
-> >    real 0m19.388s
-> >    user 0m0.000s
-> >    sys  0m19.149s
-> >
-> > Signed-off-by: Ricardo Robaina <rrobaina@redhat.com>
 > > ---
-> >  kernel/auditsc.c | 39 +++++++++++++++++----------------------
-> >  1 file changed, 17 insertions(+), 22 deletions(-)
 > >
-> > diff --git a/kernel/auditsc.c b/kernel/auditsc.c
-> > index d1966144bdfe..8cebc016d9eb 100644
-> > --- a/kernel/auditsc.c
-> > +++ b/kernel/auditsc.c
-> > @@ -2416,41 +2416,36 @@ void __audit_inode_child(struct inode *parent,
-> >       if (inode)
-> >               handle_one(inode);
-> >
-> > -     /* look for a parent entry first */
-> >       list_for_each_entry(n, &context->names_list, list) {
-> > -             if (!n->name ||
-> > -                 (n->type !=3D AUDIT_TYPE_PARENT &&
-> > -                  n->type !=3D AUDIT_TYPE_UNKNOWN))
-> > +             /* can only match entries that have a name */
-> > +             if (!n->name)
-> >                       continue;
-> >
-> > -             if (n->ino =3D=3D parent->i_ino && n->dev =3D=3D parent->=
-i_sb->s_dev &&
-> > -                 !audit_compare_dname_path(dname,
-> > -                                           n->name->name, n->name_len)=
-) {
-> > +             /* look for a parent entry first */
-> > +             if (!found_parent &&
-> > +                 (n->ino =3D=3D parent->i_ino && n->dev =3D=3D parent-=
->i_sb->s_dev &&
-> > +                  !audit_compare_dname_path(dname, n->name->name, n->n=
-ame_len))) {
-> >                       if (n->type =3D=3D AUDIT_TYPE_UNKNOWN)
-> >                               n->type =3D AUDIT_TYPE_PARENT;
+> > Or did I miss any user of it?
+> > ---
+> >  include/linux/lsm/bpf.h  | 16 ----------------
+> >  include/linux/security.h |  2 --
+> >  2 files changed, 18 deletions(-)
+> >  delete mode 100644 include/linux/lsm/bpf.h
 >
-> As mentioned in my feedback on your v1 patch, we can probably set
-> n->type equal to AUDIT_TYPE_PARENT without checking n->type first
-> as it we want this set to AUDIT_TYPE_PARENT regardless.
->
-> Please either fix this, or explain why it needs to be the way that it
-> is in your v2 patch.
->
-> >                       found_parent =3D n;
-> > -                     break;
-> > -             }
-> > -     }
-> > -
-> > -     cond_resched();
-> > -
-> > -     /* is there a matching child entry? */
-> > -     list_for_each_entry(n, &context->names_list, list) {
-> > -             /* can only match entries that have a name */
-> > -             if (!n->name ||
-> > -                 (n->type !=3D type && n->type !=3D AUDIT_TYPE_UNKNOWN=
-))
-> > +                     if (found_child)
-> > +                             break;
-> >                       continue;
-> > +             }
-> >
-> > -             if (!strcmp(dname->name, n->name->name) ||
-> > -                 !audit_compare_dname_path(dname, n->name->name,
-> > +             /* is there a matching child entry? */
-> > +             if (!found_child &&
-> > +                 (n->type =3D=3D type || n->type =3D=3D AUDIT_TYPE_UNK=
-NOWN) &&
-> > +                 (!strcmp(dname->name, n->name->name) ||
-> > +                  !audit_compare_dname_path(dname, n->name->name,
-> >                                               found_parent ?
-> >                                               found_parent->name_len :
-> > -                                             AUDIT_NAME_FULL)) {
-> > +                                             AUDIT_NAME_FULL))) {
-> >                       if (n->type =3D=3D AUDIT_TYPE_UNKNOWN)
-> >                               n->type =3D type;
-> >                       found_child =3D n;
-> > -                     break;
-> > +                     if (found_parent)
-> > +                             break;
-> >               }
-> >       }
-> >
-> > --
-> > 2.51.0
->
-> --
-> paul-moore.com
->
+> You probably didn't miss any direct reference to lsm_prop_bpf, but the
+> data type you really should look for when deciding on this is
+> lsm_prop.  There are a number of LSM hooks that operate on a lsm_prop
+> struct instead of secid tokens, and without a lsm_prop_bpf
+> struct/field in the lsm_prop struct a BPF LSM will be limited compared
+> to other LSMs.  Perhaps that limitation is okay, but it is something
 
-Hi Paul,
+I think audit is the only user of lsm_prop (via audit_names and
+audit_context). For BPF based LSM or audit, I don't think we need
+specific lsm_prop. If anything is needed, we can implement it with
+task local storage or inode local storage.
 
-Thanks for the heads-up!
-Now I realize I misunderstood that piece of your review the first time
-I read it. I'll fix it and post a newer version of this patch shortly.
+CC audit@ and Eric Paris for more comments on audit side.
 
+> that should be discussed; I see you've added KP to the To/CC line, I
+> would want to see an ACK from him before I merge anything removing
+> lsm_prop_bpf.
+
+Matt Bobrowski is the co-maintainer of BPF LSM. I think we are OK
+with his Reviewed-by?
+
+> I haven't checked to see if the LSM hooks associated with a lsm_prop
+> struct are currently allowed for a BPF LSM, but I would expect a patch
+> removing the lsm_prop_bpf struct/field to also disable those LSM hooks
+> for BPF LSM use.
+
+I don't think we need to disable anything here. When lsm_prop was
+first introduced in [1], nothing was added to handle BPF.
+
+Thanks,
+Song
+
+[1] https://lore.kernel.org/linux-security-module/20241009173222.12219-1-ca=
+sey@schaufler-ca.com/
