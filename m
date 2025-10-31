@@ -1,151 +1,170 @@
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9A2432F75D;
-	Fri, 31 Oct 2025 08:06:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 130E73128CE
+	for <audit@vger.kernel.org>; Fri, 31 Oct 2025 12:33:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761897979; cv=none; b=SDNRhha2mwuOzijp4ZdFttTqMYzzflC8+tr9ZBnVUXlSWayrfzj2FK/mighaaSGCgnO4reYxZbNHlvp9tANDOjgUn1xTUQIep17dBWMHd9d9xlDuY2gTula8DYg62XDOG6NlID6nZjFaUVA8QafBaVjLXzwYirjAGgNNkezlJAU=
+	t=1761914025; cv=none; b=tL1pn2kd9bf41dl+MzPSiR5mXH2uudu1+Ya/Zmbpci5vRFbt3phsZFCM4QdPdMNiUAcoKd31/xBzHCoLzPDKyT2qt5ss2huRogFNO2LHQVSw8VscI6JOtSGJgrexDwutCnQjJllG8OLu4BZEBjXuBKGkiBkHPmushy+Q+3gBGS0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761897979; c=relaxed/simple;
-	bh=YOmqd7Qrk+F4D8q0rLPzB0CBi5WACVgF9sV3TVqmWIg=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=ufNo7PjY3MEIl/52JBCVphhZqbQ1HCHfFBFgkhzp4xV0K3t4eqtPfghZt3R8wUcjgD29D6J+S+2mIGODu6IQ/rIkRTboJLrAOvOW8l1lCkE5/FOi3PI+RsRuUNXiRXnpIgVqIs6fawuwlkpbmGt0aroZ42WnHy0JdQ7wPeVSUOc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=FBw4eMw1; arc=none smtp.client-ip=62.89.141.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
+	s=arc-20240116; t=1761914025; c=relaxed/simple;
+	bh=hhvoDG1p4Idmhj90naB+8tfs6n6cweOVDReT+ZoN46o=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=qZvWbJqWhQIixtvTbI/ePxWxfpNGOEy494zs3k44tY0X5doAfWUVBJ2OAGvcUD2PKdb5+dXHvjLTaCppF/RuqQqfS+kENBGAFFlN96I3O2eQ+EOk/BgnzlrqeVlh6CcISJnJQG3LCKgBqhT/woGK+UFqMdSOTSJtY+YN9cdP+I4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=f/6ddAeK; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="FBw4eMw1"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=linux.org.uk; s=zeniv-20220401; h=Sender:Content-Type:MIME-Version:
-	Message-ID:Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:
-	Content-ID:Content-Description:In-Reply-To:References;
-	bh=WPFFDy+O21qt5q+XeU/u9iNgDfB/U0qzznfTB3bhtnc=; b=FBw4eMw1Vx0Qh4TP6exSRzkH+I
-	jBARV0LN2URl9D9PexOkwawI2ujFhiUUMO26dWxK8PnzWyUsz7brlYu/0GdRurrr5QfTUodGZZz6f
-	Tu92KgwEC4UAmaEOiu4lqK6oIncuT709zXQNEprQ2oAoEupORU0G9QlVrigKgYsHBYvHD7dszu1XF
-	jkjt1fv0FTO/oVNmzLg0IFbVEQ/HFYkiRgeMxBNX2k3vrmbohon2YHIPWlXSFtW3LSJsEY0Cry+9+
-	wF/u650IFMcFN5u/wXyg8Go8zAz3us5jr5ijJasDB8A6TfPOCif/gWAxckkBrw3iNXMfPUOjNDkbY
-	3P4GgnuQ==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1vEk9H-0000000GtOa-322w;
-	Fri, 31 Oct 2025 08:06:15 +0000
-Date: Fri, 31 Oct 2025 08:06:15 +0000
-From: Al Viro <viro@zeniv.linux.org.uk>
-To: audit@vger.kernel.org
-Cc: Linus Torvalds <torvalds@linux-foundation.org>,
-	linux-fsdevel@vger.kernel.org, Paul Moore <paul@paul-moore.com>
-Subject: [viro@zeniv.linux.org.uk: [RFC] audit reporting (or not reporting)
- pathnames on early failures in syscalls]
-Message-ID: <20251031080615.GB2441659@ZenIV>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="f/6ddAeK"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1761914023;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=lqTzzOfqb2xXUL+MIDv385l+thVQ8udUyxoY+CmjZCs=;
+	b=f/6ddAeKbrOVhXA/SAv4hj6AAZNjEC/ce9ECe347Vs3GJobOB3N8WOoUTTIDwWByq13Fwl
+	mSessDOwGpUCRvzrNoUfNEbIxeYE4SMRtI45s9kulnpSQAgCn+UjrO2XQ06xWzq3Ai/uXx
+	GzSJZ/st3I/2vVDOt8R0r5gTH2DnK2o=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-573-NzbbOq0BNM6ap0_x8crshg-1; Fri,
+ 31 Oct 2025 08:33:39 -0400
+X-MC-Unique: NzbbOq0BNM6ap0_x8crshg-1
+X-Mimecast-MFC-AGG-ID: NzbbOq0BNM6ap0_x8crshg_1761914018
+Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 91CCB1800451;
+	Fri, 31 Oct 2025 12:33:38 +0000 (UTC)
+Received: from wsxc.redhat.com (unknown [10.96.134.34])
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 4D90F18004D8;
+	Fri, 31 Oct 2025 12:33:36 +0000 (UTC)
+From: Ricardo Robaina <rrobaina@redhat.com>
+To: audit@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: paul@paul-moore.com,
+	eparis@redhat.com,
+	Ricardo Robaina <rrobaina@redhat.com>
+Subject: [PATCH v3] audit: merge loops in __audit_inode_child()
+Date: Fri, 31 Oct 2025 09:33:28 -0300
+Message-ID: <20251031123328.1758743-1-rrobaina@redhat.com>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Sender: Al Viro <viro@ftp.linux.org.uk>
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
 
-OK, that's two misspellings of the list name already;-/
+Whenever there's audit context, __audit_inode_child() gets called
+numerous times, which can lead to high latency in scenarios that
+create too many sysfs/debugfs entries at once, for instance, upon
+device_add_disk() invocation.
 
-Al, deeply embarrassed and crawling to get some sleep...
+   # uname -r
+   6.18.0-rc2+
 
------ Forwarded message from Al Viro <viro@zeniv.linux.org.uk> -----
+   # auditctl -a always,exit -F path=/tmp -k foo
+   # time insmod loop max_loop=1000
+   real 0m46.676s
+   user 0m0.000s
+   sys 0m46.405s
 
-Date: Fri, 31 Oct 2025 07:58:56 +0000
-From: Al Viro <viro@zeniv.linux.org.uk>
-To: linux-audit@vger.kernel.org
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, linux-fsdevel@vger.kernel.org, Paul Moore <paul@paul-moore.com>
-Subject: [RFC] audit reporting (or not reporting) pathnames on early failures in syscalls
+   # perf record -a insmod loop max_loop=1000
+   # perf report --stdio |grep __audit_inode_child
+   32.73%  insmod [kernel.kallsyms] [k] __audit_inode_child
 
-	FWIW, I've just noticed that a patch in the series I'd been
-reordering had the following chunk:
-@@ -1421,20 +1421,16 @@ static int do_sys_openat2(int dfd, const char __user *filename,
-                          struct open_how *how)
- {
-        struct open_flags op;
--       struct filename *tmp;
-        int err, fd;
+__audit_inode_child() searches for both the parent and the child
+in two different loops that iterate over the same list. This
+process can be optimized by merging these into a single loop,
+without changing the function behavior or affecting the code's
+readability.
+
+This patch merges the two loops that walk through the list
+context->names_list into a single loop. This optimization resulted
+in around 51% performance enhancement for the benchmark.
+
+   # uname -r
+   6.18.0-rc2-enhancedv3+
+
+   # auditctl -a always,exit -F path=/tmp -k foo
+   # time insmod loop max_loop=1000
+   real 0m22.899s
+   user 0m0.001s
+   sys 0m22.652s
+
+Signed-off-by: Ricardo Robaina <rrobaina@redhat.com>
+---
+ kernel/auditsc.c | 43 +++++++++++++++++++------------------------
+ 1 file changed, 19 insertions(+), 24 deletions(-)
+
+diff --git a/kernel/auditsc.c b/kernel/auditsc.c
+index d1966144bdfe..dd0563a8e0be 100644
+--- a/kernel/auditsc.c
++++ b/kernel/auditsc.c
+@@ -2416,41 +2416,36 @@ void __audit_inode_child(struct inode *parent,
+ 	if (inode)
+ 		handle_one(inode);
  
-        err = build_open_flags(how, &op);
-        if (unlikely(err))
-                return err;
+-	/* look for a parent entry first */
+ 	list_for_each_entry(n, &context->names_list, list) {
+-		if (!n->name ||
+-		    (n->type != AUDIT_TYPE_PARENT &&
+-		     n->type != AUDIT_TYPE_UNKNOWN))
++		/* can only match entries that have a name */
++		if (!n->name)
+ 			continue;
  
--       tmp = getname(filename);
--       if (IS_ERR(tmp))
--               return PTR_ERR(tmp);
+-		if (n->ino == parent->i_ino && n->dev == parent->i_sb->s_dev &&
+-		    !audit_compare_dname_path(dname,
+-					      n->name->name, n->name_len)) {
+-			if (n->type == AUDIT_TYPE_UNKNOWN)
+-				n->type = AUDIT_TYPE_PARENT;
++		/* look for a parent entry first */
++		if (!found_parent &&
++		    (n->type == AUDIT_TYPE_PARENT || n->type == AUDIT_TYPE_UNKNOWN) &&
++		    (n->ino == parent->i_ino && n->dev == parent->i_sb->s_dev &&
++		     !audit_compare_dname_path(dname, n->name->name, n->name_len))) {
++			n->type = AUDIT_TYPE_PARENT;
+ 			found_parent = n;
+-			break;
+-		}
+-	}
 -
-        fd = get_unused_fd_flags(how->flags);
-        if (likely(fd >= 0)) {
--               struct file *f = do_filp_open(dfd, tmp, &op);
-+               struct filename *name __free(putname) = getname(filename);
-+               struct file *f = do_filp_open(dfd, name, &op);
-                if (IS_ERR(f)) {
-                        put_unused_fd(fd);
-                        fd = PTR_ERR(f);
+-	cond_resched();
+-
+-	/* is there a matching child entry? */
+-	list_for_each_entry(n, &context->names_list, list) {
+-		/* can only match entries that have a name */
+-		if (!n->name ||
+-		    (n->type != type && n->type != AUDIT_TYPE_UNKNOWN))
++			if (found_child)
++				break;
+ 			continue;
++		}
+ 
+-		if (!strcmp(dname->name, n->name->name) ||
+-		    !audit_compare_dname_path(dname, n->name->name,
++		/* is there a matching child entry? */
++		if (!found_child &&
++		    (n->type == type || n->type == AUDIT_TYPE_UNKNOWN) &&
++		    (!strcmp(dname->name, n->name->name) ||
++		     !audit_compare_dname_path(dname, n->name->name,
+ 						found_parent ?
+ 						found_parent->name_len :
+-						AUDIT_NAME_FULL)) {
++						AUDIT_NAME_FULL))) {
+ 			if (n->type == AUDIT_TYPE_UNKNOWN)
+ 				n->type = type;
+ 			found_child = n;
+-			break;
++			if (found_parent)
++				break;
+ 		}
+ 	}
+ 
+-- 
+2.51.0
 
-	From the VFS or userland POV there's no problem - we would get a
-different error reported e.g. in case when *both* EMFILE and ENAMETOOLONG
-would be applicable, but that's perfectly fine.  However, from the audit
-POV it changes behaviour.
-
-	Consider behaviour of openat2(2).
-1.  we do sanity checks on the last ('usize') argument.  If they
-fail, we are done.
-2.  we copy struct open_how from userland ('how' argument).
-If copyin fails, we are done.
-3.  we do sanity checks on how->flags, how->resolve and how->mode.
-If they fail, we are done.
-4.  we copy the pathname to be opened from userland ('filename' argument).
-If that fails, or if the pathname is either empty or too long, we are done.
-5.  we reserve an unused file descriptor.  If that fails, we are done.
-6.  we allocate an empty struct file.  If that fails, we are done.
-7.  we finally get around to the business - finding and opening the damn thing.
-Which also can fail, of course.
-
-	We are expected to be able to produce a record of failing
-syscall.  If we fail on step 4, well, the lack of pathname to come with
-the record is to be expected - we have failed to get it, after all.
-The same goes for failures on steps 1..3 - we hadn't gotten around to
-looking at the pathname yet, so there's no pathname to report.	What (if
-anything) makes "insane how->flags" different from "we have too many
-descriptors opened already"?  The contents of the pathname is equally
-irrelevant in both cases.  Yet in the latter case (failure at step 5)
-the pathname would get reported.  Do we need to preserve that behaviour?
-
-	Because the patch quoted above would change it.  It puts the failure
-to allocate a descriptor into the same situation as failures on steps 1..3.
-
-	As far as I can see, there are three possible approaches:
-
-1) if the current kernel imports the pathname before some check, that shall
-always remain that way, no matter what.  Audit might be happy, but nobody
-else would - we'll need to document that constraint and watch out for such
-regressions.  And I'm pretty sure that over the years there had been
-other such changes that went into mainline unnoticed.
-
-2) reordering is acceptable.  Of course, the pathname import must happen
-before we start using it, but that's the only real constraint.  That would
-mean the least headache for everyone other than audit folks.
-
-3) import the pathnames as early as possible.  It would mean a non-trivial
-amount of churn, but it's at least a definite policy - validity of change
-depends only on the resulting code, not the comparison with the earlier
-state, as it would in case (1).  From QoI POV it's as nice as audit folks
-could possibly ask, but it would cause quite a bit of churn to get there.
-Not impossible to do, but I would rather not go there without a need.
-Said that, struct filename handling is mostly a decent match to CLASS()
-machinery, and all required churn wouldn't be hard to fold into conversion
-to that.
-
-	My preference would be (2), obviously.	However, it really depends
-upon the kind of requirements audit users have.  Note that currently the
-position of pathname import in the sequence is not documented anywhere,
-so there's not much audit users can rely upon other than "the current
-behaviour is such-and-such, let's hope it doesn't change"... ;-/
-
-	Comments?
-
-
------ End forwarded message -----
