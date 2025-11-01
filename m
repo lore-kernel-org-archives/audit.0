@@ -1,56 +1,64 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8863A1A76DE
-	for <audit@vger.kernel.org>; Fri, 31 Oct 2025 14:45:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E78CC26CE2E;
+	Sat,  1 Nov 2025 04:04:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761921940; cv=none; b=LdTmKkyV0qloF2AWGJFkm14o5V9dz+a23tsdm13K8Hf2bNMVQbak1qxj8jVFg5XqtvFE6H7vrFLTPsKo5quqmO9CW/PLkrg6B9QYeHuhp0fmsMqTx7x9+krvk4u08O7MMilP2naDUivMBtFyVhEN4GGpRFvtdyQViWEEwuA/X8E=
+	t=1761969857; cv=none; b=YHmcZpEsTWuAVxuN33K/Jm2pMmhToWDsIAPOW029gmCCLkhqZwydjw9FAppvmPZx29QY6IGsd3NjbuaecgW6dPCRMH4S3JnfZcTG1/Arq8EEJKDiQzPksl+//xRbLbDOve+cC0Og+IpmIvVXMPygALOvZP19u/6+LrhapEFyIsE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761921940; c=relaxed/simple;
-	bh=s/h+xeadJlbYtXcDkYDQSaTnoitNRuKIJsoQoIQocw8=;
+	s=arc-20240116; t=1761969857; c=relaxed/simple;
+	bh=+06dwvzshapU/FsXZklgruPzCGBFbLFbTd1DiaDxtSc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jZ/L4n6LCt/40wpn5Gb0kb8a7PQoVJP8CKOWeyWH90JXw2IQnI9g2T3bE4SJGaP2KU8HYCSotNMPmC/+VjfzplkX3Nfa0LSogrOrstw4Ux8Q8aQ9bXhsFz5P6giFBrqqvGq4LNzzY112vtJqSTRQ5RrW5kv/rY3nXN3pwo/tLFM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=GBzTv0hc; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=XDslNVi+C8JN3DKwVPQjaHQyJn+F/q79WJOFPn5Lx3Eg6+77Nk879a7zayqBnN4rlWCUCxK+r0olFY2hWJaOerpEqmG/6o+CBOw5AzeiteeSoXMRKymYyCqwqb/EJebE6P1pP8eGESutU3zJMjgwg/C4jZ3q6j2VdglCK/k4S/Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RdiHz/ju; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="GBzTv0hc"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1761921936;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=DX4abzNNClk60Xm9uZ5i2oidpiAB527b9PJpwtS6gkQ=;
-	b=GBzTv0hcecbxAvkIPVewszOKR66ss4Gcp3QdobXfhjCRO7vrxdrWaFGTWRvQXFebZPc5tO
-	qLx52oQBZNQ+J0PpQUxprs2/FnLrgQNf0yVOGAE0+WrHTFb9vdxwzlcxIxglDImKlsPE/L
-	A3KPyQrJRvAfSKkhxOW/CwsWqoSdxZw=
-Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-381-Hp1EnfCVMieKYgQTZUtNsA-1; Fri,
- 31 Oct 2025 10:45:33 -0400
-X-MC-Unique: Hp1EnfCVMieKYgQTZUtNsA-1
-X-Mimecast-MFC-AGG-ID: Hp1EnfCVMieKYgQTZUtNsA_1761921931
-Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 1ABCC1954B00;
-	Fri, 31 Oct 2025 14:45:31 +0000 (UTC)
-Received: from madcap2.tricolour.ca (unknown [10.22.76.12])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id C01A41954128;
-	Fri, 31 Oct 2025 14:45:28 +0000 (UTC)
-Date: Fri, 31 Oct 2025 10:45:25 -0400
-From: Richard Guy Briggs <rgb@redhat.com>
-To: Al Viro <viro@zeniv.linux.org.uk>
-Cc: audit@vger.kernel.org, Linus Torvalds <torvalds@linux-foundation.org>,
-	linux-fsdevel@vger.kernel.org, Paul Moore <paul@paul-moore.com>,
-	Linux-Audit Mailing List <linux-audit@lists.linux-audit.osci.io>
-Subject: Re: [viro@zeniv.linux.org.uk: [RFC] audit reporting (or not
- reporting) pathnames on early failures in syscalls]
-Message-ID: <aQTLhZGOkufsFs9W@madcap2.tricolour.ca>
-References: <20251031080615.GB2441659@ZenIV>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RdiHz/ju"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1761969854; x=1793505854;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=+06dwvzshapU/FsXZklgruPzCGBFbLFbTd1DiaDxtSc=;
+  b=RdiHz/juus//8cfjZMwq2Wy96ASyNQDtPD383HbZPhbTEM5aH8x/0dca
+   4Nne3+hIIZsrbr2AezY201TwwCHOVg8O2Sm4/h2B05qEYMRGTDtngE9J4
+   G4OdhX0oN3Hxj2QNpxqRg8SehDWyguQioBM9n8fvL8scAl+bHFXUpQXQZ
+   5Gsg4HiRs5bXItXFivelNFaQyHVD/unC5Wh/peHfEe3J4BJUf3tWkHtGG
+   biEakdaMVogfkj0+ayUaxZRXRj1ezEBMWEM9IBFd8sK2K23/YsNe7GKOc
+   CvD+PXt5iZGFf8Fvezz/9PKNJ9OEAZ3aqnbTeN7qKdgqxCFCw1284JRnV
+   g==;
+X-CSE-ConnectionGUID: ss3EbAv8QWSxohDQRBS3Mg==
+X-CSE-MsgGUID: Jry4pUs9TIi5yE7BoFDxrA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11599"; a="63336063"
+X-IronPort-AV: E=Sophos;i="6.19,271,1754982000"; 
+   d="scan'208";a="63336063"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Oct 2025 21:04:13 -0700
+X-CSE-ConnectionGUID: A7zAVQ6JSDSpEQhsipyv2w==
+X-CSE-MsgGUID: 7l2A/wjCQyKRaxhB7bOolw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,271,1754982000"; 
+   d="scan'208";a="191537965"
+Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
+  by orviesa005.jf.intel.com with ESMTP; 31 Oct 2025 21:04:11 -0700
+Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1vF2qV-000NuG-2z;
+	Sat, 01 Nov 2025 04:04:07 +0000
+Date: Sat, 1 Nov 2025 12:03:16 +0800
+From: kernel test robot <lkp@intel.com>
+To: Ricardo Robaina <rrobaina@redhat.com>, audit@vger.kernel.org,
+	linux-kernel@vger.kernel.org, netfilter-devel@vger.kernel.org,
+	coreteam@netfilter.org
+Cc: oe-kbuild-all@lists.linux.dev, paul@paul-moore.com, eparis@redhat.com,
+	fw@strlen.de, pablo@netfilter.org, kadlec@netfilter.org,
+	Ricardo Robaina <rrobaina@redhat.com>
+Subject: Re: [PATCH v4 2/2] audit: include source and destination ports to
+ NETFILTER_PKT
+Message-ID: <202511011146.aPtw8SOn-lkp@intel.com>
+References: <6ac2baf0d5ae176cbd3279a4dff9e2c7750c6d45.1761918165.git.rrobaina@redhat.com>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
@@ -59,122 +67,158 @@ List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251031080615.GB2441659@ZenIV>
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
+In-Reply-To: <6ac2baf0d5ae176cbd3279a4dff9e2c7750c6d45.1761918165.git.rrobaina@redhat.com>
 
-On 2025-10-31 08:06, Al Viro wrote:
-> OK, that's two misspellings of the list name already;-/
+Hi Ricardo,
 
-Adding the audit userspace list to get Steve Grubb's certification take on this.
+kernel test robot noticed the following build errors:
 
-> Al, deeply embarrassed and crawling to get some sleep...
-> 
-> ----- Forwarded message from Al Viro <viro@zeniv.linux.org.uk> -----
-> 
-> Date: Fri, 31 Oct 2025 07:58:56 +0000
-> From: Al Viro <viro@zeniv.linux.org.uk>
-> To: linux-audit@vger.kernel.org
-> Cc: Linus Torvalds <torvalds@linux-foundation.org>, linux-fsdevel@vger.kernel.org, Paul Moore <paul@paul-moore.com>
-> Subject: [RFC] audit reporting (or not reporting) pathnames on early failures in syscalls
-> 
-> 	FWIW, I've just noticed that a patch in the series I'd been
-> reordering had the following chunk:
-> @@ -1421,20 +1421,16 @@ static int do_sys_openat2(int dfd, const char __user *filename,
->                           struct open_how *how)
->  {
->         struct open_flags op;
-> -       struct filename *tmp;
->         int err, fd;
->  
->         err = build_open_flags(how, &op);
->         if (unlikely(err))
->                 return err;
->  
-> -       tmp = getname(filename);
-> -       if (IS_ERR(tmp))
-> -               return PTR_ERR(tmp);
-> -
->         fd = get_unused_fd_flags(how->flags);
->         if (likely(fd >= 0)) {
-> -               struct file *f = do_filp_open(dfd, tmp, &op);
-> +               struct filename *name __free(putname) = getname(filename);
-> +               struct file *f = do_filp_open(dfd, name, &op);
->                 if (IS_ERR(f)) {
->                         put_unused_fd(fd);
->                         fd = PTR_ERR(f);
-> 
-> 	From the VFS or userland POV there's no problem - we would get a
-> different error reported e.g. in case when *both* EMFILE and ENAMETOOLONG
-> would be applicable, but that's perfectly fine.  However, from the audit
-> POV it changes behaviour.
-> 
-> 	Consider behaviour of openat2(2).
-> 1.  we do sanity checks on the last ('usize') argument.  If they
-> fail, we are done.
-> 2.  we copy struct open_how from userland ('how' argument).
-> If copyin fails, we are done.
-> 3.  we do sanity checks on how->flags, how->resolve and how->mode.
-> If they fail, we are done.
-> 4.  we copy the pathname to be opened from userland ('filename' argument).
-> If that fails, or if the pathname is either empty or too long, we are done.
-> 5.  we reserve an unused file descriptor.  If that fails, we are done.
-> 6.  we allocate an empty struct file.  If that fails, we are done.
-> 7.  we finally get around to the business - finding and opening the damn thing.
-> Which also can fail, of course.
-> 
-> 	We are expected to be able to produce a record of failing
-> syscall.  If we fail on step 4, well, the lack of pathname to come with
-> the record is to be expected - we have failed to get it, after all.
-> The same goes for failures on steps 1..3 - we hadn't gotten around to
-> looking at the pathname yet, so there's no pathname to report.	What (if
-> anything) makes "insane how->flags" different from "we have too many
-> descriptors opened already"?  The contents of the pathname is equally
-> irrelevant in both cases.  Yet in the latter case (failure at step 5)
-> the pathname would get reported.  Do we need to preserve that behaviour?
-> 
-> 	Because the patch quoted above would change it.  It puts the failure
-> to allocate a descriptor into the same situation as failures on steps 1..3.
-> 
-> 	As far as I can see, there are three possible approaches:
-> 
-> 1) if the current kernel imports the pathname before some check, that shall
-> always remain that way, no matter what.  Audit might be happy, but nobody
-> else would - we'll need to document that constraint and watch out for such
-> regressions.  And I'm pretty sure that over the years there had been
-> other such changes that went into mainline unnoticed.
-> 
-> 2) reordering is acceptable.  Of course, the pathname import must happen
-> before we start using it, but that's the only real constraint.  That would
-> mean the least headache for everyone other than audit folks.
-> 
-> 3) import the pathnames as early as possible.  It would mean a non-trivial
-> amount of churn, but it's at least a definite policy - validity of change
-> depends only on the resulting code, not the comparison with the earlier
-> state, as it would in case (1).  From QoI POV it's as nice as audit folks
-> could possibly ask, but it would cause quite a bit of churn to get there.
-> Not impossible to do, but I would rather not go there without a need.
-> Said that, struct filename handling is mostly a decent match to CLASS()
-> machinery, and all required churn wouldn't be hard to fold into conversion
-> to that.
-> 
-> 	My preference would be (2), obviously.	However, it really depends
-> upon the kind of requirements audit users have.  Note that currently the
-> position of pathname import in the sequence is not documented anywhere,
-> so there's not much audit users can rely upon other than "the current
-> behaviour is such-and-such, let's hope it doesn't change"... ;-/
-> 
-> 	Comments?
-> 
-> 
-> ----- End forwarded message -----
-> 
+[auto build test ERROR on pcmoore-audit/next]
+[also build test ERROR on netfilter-nf/main nf-next/master linus/master v6.18-rc3 next-20251031]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-- RGB
+url:    https://github.com/intel-lab-lkp/linux/commits/Ricardo-Robaina/audit-add-audit_log_packet_ip4-and-audit_log_packet_ip6-helper-functions/20251031-220605
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/audit.git next
+patch link:    https://lore.kernel.org/r/6ac2baf0d5ae176cbd3279a4dff9e2c7750c6d45.1761918165.git.rrobaina%40redhat.com
+patch subject: [PATCH v4 2/2] audit: include source and destination ports to NETFILTER_PKT
+config: arc-randconfig-002-20251101 (https://download.01.org/0day-ci/archive/20251101/202511011146.aPtw8SOn-lkp@intel.com/config)
+compiler: arc-linux-gcc (GCC) 8.5.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251101/202511011146.aPtw8SOn-lkp@intel.com/reproduce)
 
---
-Richard Guy Briggs <rgb@redhat.com>
-Sr. S/W Engineer, Kernel Security, Base Operating Systems
-Remote, Ottawa, Red Hat Canada
-Upstream IRC: SunRaycer
-Voice: +1.613.860 2354 SMS: +1.613.518.6570
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511011146.aPtw8SOn-lkp@intel.com/
 
+All errors (new ones prefixed by >>):
+
+   kernel/audit.c: In function 'audit_log_packet_ip4':
+>> kernel/audit.c:2555:3: error: a label can only be part of a statement and a declaration is not a statement
+      struct tcphdr _tcph;
+      ^~~~~~
+>> kernel/audit.c:2556:3: error: expected expression before 'const'
+      const struct tcphdr *th;
+      ^~~~~
+>> kernel/audit.c:2558:3: error: 'th' undeclared (first use in this function); did you mean 'ih'?
+      th = skb_header_pointer(skb, skb_transport_offset(skb), sizeof(_tcph), &_tcph);
+      ^~
+      ih
+   kernel/audit.c:2558:3: note: each undeclared identifier is reported only once for each function it appears in
+   kernel/audit.c:2568:3: error: a label can only be part of a statement and a declaration is not a statement
+      struct udphdr _udph;
+      ^~~~~~
+   kernel/audit.c:2569:3: error: expected expression before 'const'
+      const struct udphdr *uh;
+      ^~~~~
+>> kernel/audit.c:2571:3: error: 'uh' undeclared (first use in this function); did you mean 'ih'?
+      uh = skb_header_pointer(skb, skb_transport_offset(skb), sizeof(_udph), &_udph);
+      ^~
+      ih
+   kernel/audit.c:2580:3: error: a label can only be part of a statement and a declaration is not a statement
+      struct sctphdr _sctph;
+      ^~~~~~
+   kernel/audit.c:2581:3: error: expected expression before 'const'
+      const struct sctphdr *sh;
+      ^~~~~
+>> kernel/audit.c:2583:3: error: 'sh' undeclared (first use in this function); did you mean 'ih'?
+      sh = skb_header_pointer(skb, skb_transport_offset(skb), sizeof(_sctph), &_sctph);
+      ^~
+      ih
+   kernel/audit.c: In function 'audit_log_packet_ip6':
+   kernel/audit.c:2616:3: error: a label can only be part of a statement and a declaration is not a statement
+      struct tcphdr _tcph;
+      ^~~~~~
+   kernel/audit.c:2617:3: error: expected expression before 'const'
+      const struct tcphdr *th;
+      ^~~~~
+   kernel/audit.c:2619:3: error: 'th' undeclared (first use in this function); did you mean 'ih'?
+      th = skb_header_pointer(skb, skb_transport_offset(skb), sizeof(_tcph), &_tcph);
+      ^~
+      ih
+   kernel/audit.c:2629:3: error: a label can only be part of a statement and a declaration is not a statement
+      struct udphdr _udph;
+      ^~~~~~
+   kernel/audit.c:2630:3: error: expected expression before 'const'
+      const struct udphdr *uh;
+      ^~~~~
+   kernel/audit.c:2632:3: error: 'uh' undeclared (first use in this function); did you mean 'ih'?
+      uh = skb_header_pointer(skb, skb_transport_offset(skb), sizeof(_udph), &_udph);
+      ^~
+      ih
+   kernel/audit.c:2641:3: error: a label can only be part of a statement and a declaration is not a statement
+      struct sctphdr _sctph;
+      ^~~~~~
+   kernel/audit.c:2642:3: error: expected expression before 'const'
+      const struct sctphdr *sh;
+      ^~~~~
+   kernel/audit.c:2644:3: error: 'sh' undeclared (first use in this function); did you mean 'ih'?
+      sh = skb_header_pointer(skb, skb_transport_offset(skb), sizeof(_sctph), &_sctph);
+      ^~
+      ih
+
+
+vim +2555 kernel/audit.c
+
+  2543	
+  2544	bool audit_log_packet_ip4(struct audit_buffer *ab, struct sk_buff *skb)
+  2545	{
+  2546		struct iphdr _iph;
+  2547		const struct iphdr *ih;
+  2548	
+  2549		ih = skb_header_pointer(skb, skb_network_offset(skb), sizeof(_iph), &_iph);
+  2550		if (!ih)
+  2551			return false;
+  2552	
+  2553		switch (ih->protocol) {
+  2554		case IPPROTO_TCP:
+> 2555			struct tcphdr _tcph;
+> 2556			const struct tcphdr *th;
+  2557	
+> 2558			th = skb_header_pointer(skb, skb_transport_offset(skb), sizeof(_tcph), &_tcph);
+  2559			if (!th)
+  2560				return false;
+  2561	
+  2562			audit_log_format(ab, " saddr=%pI4 daddr=%pI4 proto=%hhu sport=%hu dport=%hu",
+  2563					 &ih->saddr, &ih->daddr, ih->protocol,
+  2564					 ntohs(th->source), ntohs(th->dest));
+  2565			break;
+  2566		case IPPROTO_UDP:
+  2567		case IPPROTO_UDPLITE:
+  2568			struct udphdr _udph;
+  2569			const struct udphdr *uh;
+  2570	
+> 2571			uh = skb_header_pointer(skb, skb_transport_offset(skb), sizeof(_udph), &_udph);
+  2572			if (!uh)
+  2573				return false;
+  2574	
+  2575			audit_log_format(ab, " saddr=%pI4 daddr=%pI4 proto=%hhu sport=%hu dport=%hu",
+  2576					 &ih->saddr, &ih->daddr, ih->protocol,
+  2577					 ntohs(uh->source), ntohs(uh->dest));
+  2578			break;
+  2579		case IPPROTO_SCTP:
+  2580			struct sctphdr _sctph;
+  2581			const struct sctphdr *sh;
+  2582	
+> 2583			sh = skb_header_pointer(skb, skb_transport_offset(skb), sizeof(_sctph), &_sctph);
+  2584			if (!sh)
+  2585				return false;
+  2586	
+  2587			audit_log_format(ab, " saddr=%pI4 daddr=%pI4 proto=%hhu sport=%hu dport=%hu",
+  2588					 &ih->saddr, &ih->daddr, ih->protocol,
+  2589					 ntohs(sh->source), ntohs(sh->dest));
+  2590			break;
+  2591		default:
+  2592			audit_log_format(ab, " saddr=%pI4 daddr=%pI4 proto=%hhu",
+  2593					 &ih->saddr, &ih->daddr, ih->protocol);
+  2594		}
+  2595	
+  2596		return true;
+  2597	}
+  2598	EXPORT_SYMBOL(audit_log_packet_ip4);
+  2599	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
