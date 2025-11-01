@@ -1,154 +1,230 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 222EC19047A;
-	Sat,  1 Nov 2025 13:14:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E616E2C0F66
+	for <audit@vger.kernel.org>; Sat,  1 Nov 2025 17:36:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762002859; cv=none; b=h4DPDg7Iow2NhxPxM/WzU+Mu1xkbeh7rGqeoLXfkuw1LdDG3Mc23XG8waQ6RwMuz/cbIViqyTmY/6+tkoQHtYbXtWSyzrGhzkvUJRtj0Vc1rfxJvFi2h9R7sXd/1OoMuTIi1i7xQUPrGiAOxx2tsHQCrsow7GGPW3cA/q4ixe38=
+	t=1762018580; cv=none; b=O3MHDYtO4LSXxRBpqfwsxSB60X5OnsiNv5L5isUM7n1KYhRZJDK7fXfOmxo9Qw8Vx0sqxMi+T1iQrbg0pzz+X++JPQT1qd5cS7gBQXxngG/DSmVBDKEnNxBYONv17aLFIDj3UgsbynTakM7pW/PDEv6rl8Sg2b5+hylFw9O4+w8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762002859; c=relaxed/simple;
-	bh=ucC1SBjyqXAhBZLxgwerYDBWb772Y9+WJyoKPT5a5qM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ldcYgsvhWs4Sk+wMafe2sdiWGa4+zCohh4NxHlkdT3OAUaOzExl6rk0+T/gsIZy+ixJEa23DhP/odW/9ZNosqK6gaNpGzxutDK1Y8q6bMpHelLNfcJ+cG+BGJAzHoA0T8YYF6kkRqxuqsvCDJSiz2pgg6RqiIVjKPe8iV8WlF0o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aJS2B/Hz; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1762018580; c=relaxed/simple;
+	bh=qf+ePpzEwV0T+sTFpqMnaKsTkQ7S334BUUkS2amf07A=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=N3w27TwGThhZEouj2bFwwudV9FkUtWkG+THWKNknnJp8yHzFIyMytTO1J0cia7rGsnwzJEAe7uDpQf+9EnlU/ZieSKnyaz4jw8beT1CS/Y6iHjD+t6iAWeMqWht3Gp2Yro1wdfOHfqYRZu+FyKUHSsdius/P8naOFs5jwPs6dnw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=bmKcNf3b; arc=none smtp.client-ip=209.85.210.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aJS2B/Hz"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1762002857; x=1793538857;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ucC1SBjyqXAhBZLxgwerYDBWb772Y9+WJyoKPT5a5qM=;
-  b=aJS2B/HzHzHZI9hqKWVZiYAw+vquSRVWv+5ZNRHt4zts3ZC2BN/UrqXd
-   sfhIWI56WAYEsHjqQm0h8qE6mZHSrLQJXbJ3GfGbwYzlDt/ozwYExYfnY
-   62I8xIQlVFrrudNU/VRBTKUQ30STF+UtoMbbtF/JzOeiYoaIiAwp982VP
-   cAFwr4Gv9uSf0Kzd7y76LTCEpc/W++Y14VHNSUKlvt1/xhkvpKOis4cfQ
-   y6mNArMrGJxCcO3UY+gpAa6v34J7kYtAIyzGTBKxJWH79kI/ofTxemSgY
-   sstABj/wcgq9e95ZwPAEY53iZQN7357Edxw0l2dwB37Q9Sk1HPiCzemvP
-   Q==;
-X-CSE-ConnectionGUID: tXrqGzXuRwqYJrlovlHM4A==
-X-CSE-MsgGUID: uYyarzo2RyCRhiE64kXYpQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11599"; a="64176842"
-X-IronPort-AV: E=Sophos;i="6.19,272,1754982000"; 
-   d="scan'208";a="64176842"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2025 06:14:16 -0700
-X-CSE-ConnectionGUID: iLqsQlKqThKyeTHgT5PBRg==
-X-CSE-MsgGUID: A4yJHSMuQkKs8h759JW5ZQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,272,1754982000"; 
-   d="scan'208";a="186144478"
-Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
-  by fmviesa007.fm.intel.com with ESMTP; 01 Nov 2025 06:14:14 -0700
-Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1vFBQp-000OHo-2a;
-	Sat, 01 Nov 2025 13:14:11 +0000
-Date: Sat, 1 Nov 2025 21:14:02 +0800
-From: kernel test robot <lkp@intel.com>
-To: Ricardo Robaina <rrobaina@redhat.com>, audit@vger.kernel.org,
-	linux-kernel@vger.kernel.org, netfilter-devel@vger.kernel.org,
-	coreteam@netfilter.org
-Cc: oe-kbuild-all@lists.linux.dev, paul@paul-moore.com, eparis@redhat.com,
-	fw@strlen.de, pablo@netfilter.org, kadlec@netfilter.org,
-	Ricardo Robaina <rrobaina@redhat.com>
-Subject: Re: [PATCH v4 1/2] audit: add audit_log_packet_ip4 and
- audit_log_packet_ip6 helper functions
-Message-ID: <202511012016.TaXzGDDi-lkp@intel.com>
-References: <cfafc5247fbfcd2561de16bcff67c1afd5676c9e.1761918165.git.rrobaina@redhat.com>
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="bmKcNf3b"
+Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-7a9c64dfa8aso206105b3a.3
+        for <audit@vger.kernel.org>; Sat, 01 Nov 2025 10:36:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1762018578; x=1762623378; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=LyP1MTVcSsvaltoQodpw/+JP577TbPxpgLTVd2irWKs=;
+        b=bmKcNf3b0d51rp7vCe1Z1Y4WfxolfO5r0F3dejGvegs0J0dN0FVs/E5qvNHJTrj3oq
+         78TBpuYuAPzjkDiisX91VxNPNJoY3faYPhpLTCcnQnYn82PpiG8MaAVSF2k0+GxWLs2i
+         j6vSd8TuV0NLXQ9MkMAOJZaLJiBL78WzxgsKv/fuPylMiGSk3KzArc7o2GWeSrKh4z8t
+         FzcTdLpWom/hL2tr7wQ4W6wDC9uqkGmZIgzruWhyJK1UTM8zgutp8QZNL+IgitPjffFH
+         490vYogFhehf/3LleDmma1Nngh31HHFPGJ8JClzTmp4JJSSmmMSks2/SkaBDDYSyklTp
+         7rGg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1762018578; x=1762623378;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=LyP1MTVcSsvaltoQodpw/+JP577TbPxpgLTVd2irWKs=;
+        b=UGrUCSt++M/pZZo9u998TRgspuN2TGkLiWsLsCDbU1UMTyOeBpcP/yzxVFVycgoBof
+         pVKm8s/8v5m8kkj/YtiiZVYbKhM8mwvUn66KBqV+1IQo2W2dFd9AheYJk7Ci1qV5NUgH
+         gfPWc83+vOemErMuuDYd/zlf14fwD8N0WB8MYMFR2HdFmgC0gRzlQMI7tN32bhXzctNE
+         HoIvSlkhLhifM2okKhfN6FzLILQAXY47LyOio5TEEhjo5Jo1e83dMzR3lanPoyP/aROA
+         a/yR19n4bEs8ajNpdpTv1PIgunqAjf/WJ3DI+pEILpddRUtq/JSKQkgesoj8A5Qq9WMK
+         jDYA==
+X-Gm-Message-State: AOJu0YwA/Pxz2VjgVyhcosSIKW4cAv1NTQuzhE6t3YhPQH3deGRjhcsJ
+	s90lInOGq79pzVjAoTOvfJuD3Oao2X/PAYGUG2QHEpS1bg1VjOIrWKdaIzhm+TMDYBheq5nFTCt
+	MhN/R/mfw3ySoG2lF7QhD/rknAi7fMBa3uKDV1VIH1htPhto6ihrAlQ==
+X-Gm-Gg: ASbGncvorxjFtakgbT3PHHnT4TmeUBWgwwDz+H7jnMA2QdZeVTJhyVkRSx0hkeLdhz+
+	1ba3UM1Xh+K9O9VChujpGORsViGNKrcyDlyEyYZlYUVHT227haaAowcE/zMO5KV48MeGI52vTeh
+	vo07TddVhSszpKoniiYeOcMcycmLF8FRvx3XQ9YQ+y5Q6V8J/7B6kTTOhNw4pzi9S9lSmos4uVW
+	tAi7tGcFzh9+c1Bt9HCvz6utzbOnr8JOwmRXCiiAuM0QH4Qk4VIlove8xG6wZeYHBZhW/E=
+X-Google-Smtp-Source: AGHT+IHJixs3LJQKqZ6RgM4jbxOe6M9rOVhd3EkrJ5bmspsc9xawkZoiw/W6biXQ+gB/NK1xJYNE4PeS+rXwIu/l6zQ=
+X-Received: by 2002:a05:6a20:6a0b:b0:334:9b5d:3876 with SMTP id
+ adf61e73a8af0-348c9d69d6cmr9955170637.4.1762018577974; Sat, 01 Nov 2025
+ 10:36:17 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cfafc5247fbfcd2561de16bcff67c1afd5676c9e.1761918165.git.rrobaina@redhat.com>
+References: <20251031080615.GB2441659@ZenIV>
+In-Reply-To: <20251031080615.GB2441659@ZenIV>
+From: Paul Moore <paul@paul-moore.com>
+Date: Sat, 1 Nov 2025 13:36:06 -0400
+X-Gm-Features: AWmQ_bkElVTmY1Q6A1T5hxRqSk7rkRDygri652wrM2uBDucqgiGJyvzOlz080g4
+Message-ID: <CAHC9VhTqhGCPJ37mAhKRE2SEnHup5+gSPoZV-SZkoszfcUk0xw@mail.gmail.com>
+Subject: Re: [viro@zeniv.linux.org.uk: [RFC] audit reporting (or not
+ reporting) pathnames on early failures in syscalls]
+To: Al Viro <viro@zeniv.linux.org.uk>
+Cc: audit@vger.kernel.org, Linus Torvalds <torvalds@linux-foundation.org>, 
+	linux-fsdevel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Ricardo,
+On Fri, Oct 31, 2025 at 4:06=E2=80=AFAM Al Viro <viro@zeniv.linux.org.uk> w=
+rote:
+>         FWIW, I've just noticed that a patch in the series I'd been
+> reordering had the following chunk:
+> @@ -1421,20 +1421,16 @@ static int do_sys_openat2(int dfd, const char __u=
+ser *filename,
+>                           struct open_how *how)
+>  {
+>         struct open_flags op;
+> -       struct filename *tmp;
+>         int err, fd;
+>
+>         err =3D build_open_flags(how, &op);
+>         if (unlikely(err))
+>                 return err;
+>
+> -       tmp =3D getname(filename);
+> -       if (IS_ERR(tmp))
+> -               return PTR_ERR(tmp);
+> -
+>         fd =3D get_unused_fd_flags(how->flags);
+>         if (likely(fd >=3D 0)) {
+> -               struct file *f =3D do_filp_open(dfd, tmp, &op);
+> +               struct filename *name __free(putname) =3D getname(filenam=
+e);
+> +               struct file *f =3D do_filp_open(dfd, name, &op);
+>                 if (IS_ERR(f)) {
+>                         put_unused_fd(fd);
+>                         fd =3D PTR_ERR(f);
+>
+>         From the VFS or userland POV there's no problem - we would get a
+> different error reported e.g. in case when *both* EMFILE and ENAMETOOLONG
+> would be applicable, but that's perfectly fine.  However, from the audit
+> POV it changes behaviour.
+>
+>         Consider behaviour of openat2(2).
+> 1.  we do sanity checks on the last ('usize') argument.  If they
+> fail, we are done.
+> 2.  we copy struct open_how from userland ('how' argument).
+> If copyin fails, we are done.
+> 3.  we do sanity checks on how->flags, how->resolve and how->mode.
+> If they fail, we are done.
+> 4.  we copy the pathname to be opened from userland ('filename' argument)=
+.
+> If that fails, or if the pathname is either empty or too long, we are don=
+e.
+> 5.  we reserve an unused file descriptor.  If that fails, we are done.
+> 6.  we allocate an empty struct file.  If that fails, we are done.
+> 7.  we finally get around to the business - finding and opening the damn =
+thing.
+> Which also can fail, of course.
+>
+>         We are expected to be able to produce a record of failing
+> syscall.  If we fail on step 4, well, the lack of pathname to come with
+> the record is to be expected - we have failed to get it, after all.
+> The same goes for failures on steps 1..3 - we hadn't gotten around to
+> looking at the pathname yet, so there's no pathname to report.  What (if
+> anything) makes "insane how->flags" different from "we have too many
+> descriptors opened already"?  The contents of the pathname is equally
+> irrelevant in both cases.  Yet in the latter case (failure at step 5)
+> the pathname would get reported.  Do we need to preserve that behaviour?
 
-kernel test robot noticed the following build errors:
+With the only real difference, from an audit perspective, between the
+current behavior and the proposed reordering being audit doesn't
+record a pathname in the case a fd can't be allocated, I'm not too
+bothered by the change.
 
-[auto build test ERROR on pcmoore-audit/next]
-[also build test ERROR on netfilter-nf/main nf-next/master linus/master v6.18-rc3 next-20251031]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Based on discussions with people that actually use audit on real
+systems, on open failure the pathname is most interesting when the
+failure is caused by a permission failure somewhere along the path
+walk, the you're-trying-to-access-things-you-shouldn't-be-accessing
+case.  Even with the reordering we still do the getname() call before
+the do_filp_open() (duh) so we are fine in that regard.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Ricardo-Robaina/audit-add-audit_log_packet_ip4-and-audit_log_packet_ip6-helper-functions/20251031-220605
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/audit.git next
-patch link:    https://lore.kernel.org/r/cfafc5247fbfcd2561de16bcff67c1afd5676c9e.1761918165.git.rrobaina%40redhat.com
-patch subject: [PATCH v4 1/2] audit: add audit_log_packet_ip4 and audit_log_packet_ip6 helper functions
-config: m68k-defconfig (https://download.01.org/0day-ci/archive/20251101/202511012016.TaXzGDDi-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 15.1.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251101/202511012016.TaXzGDDi-lkp@intel.com/reproduce)
+I suppose one could make an argument about someone possibly trying to
+do something "bad" and bumping into the open file limit, either as a
+test or the exploit itself, and wanting to audit that.  However, in
+this case I think the pathname is probably the least interesting thing
+here, the goal would likely be to successfully open the file (or hit
+the limit) in which case the user would surely pick a file they know
+they would be able to open, making the pathname a bit boring and not
+very useful as an indicator of bad behavior.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202511012016.TaXzGDDi-lkp@intel.com/
+>         Because the patch quoted above would change it.  It puts the fail=
+ure
+> to allocate a descriptor into the same situation as failures on steps 1..=
+3.
+>
+>         As far as I can see, there are three possible approaches:
+>
+> 1) if the current kernel imports the pathname before some check, that sha=
+ll
+> always remain that way, no matter what.  Audit might be happy, but nobody
+> else would - we'll need to document that constraint and watch out for suc=
+h
+> regressions.  And I'm pretty sure that over the years there had been
+> other such changes that went into mainline unnoticed.
 
-All errors (new ones prefixed by >>):
+Re: regressions ... sadly we don't have great audit test coverage at
+this point.  We used to have a pretty good test suite thanks to the
+security certification work, but I never could get the distros to do
+the maintenance/upkeep of the test suite outside the scope of the
+certification effort so it has fallen out of use.  We've got a
+smaller, easier to run and maintain test suite which is "okay" but it
+still has a number of gaps; thankfully we're starting to see some
+renewed effort there which makes me happy.
 
-   net/netfilter/nft_log.c: In function 'nft_log_eval_audit':
->> net/netfilter/nft_log.c:48:31: error: implicit declaration of function 'audit_log_packet_ip4'; did you mean 'audit_log_capset'? [-Wimplicit-function-declaration]
-      48 |                         fam = audit_log_packet_ip4(ab, skb) ? NFPROTO_IPV4 : -1;
-         |                               ^~~~~~~~~~~~~~~~~~~~
-         |                               audit_log_capset
->> net/netfilter/nft_log.c:51:31: error: implicit declaration of function 'audit_log_packet_ip6'; did you mean 'audit_log_capset'? [-Wimplicit-function-declaration]
-      51 |                         fam = audit_log_packet_ip6(ab, skb) ? NFPROTO_IPV6 : -1;
-         |                               ^~~~~~~~~~~~~~~~~~~~
-         |                               audit_log_capset
+> 2) reordering is acceptable.  Of course, the pathname import must happen
+> before we start using it, but that's the only real constraint.  That woul=
+d
+> mean the least headache for everyone other than audit folks.
 
+I'm not sure it really bothers me at this point in time.  Can we make
+an agreement that reordering is okay right now, but if we have a
+certification requirement in the future about having a pathname if
+earlier we can revisit/rework this?
 
-vim +48 net/netfilter/nft_log.c
+... and yes, I know people hate security certifications, and just
+"security" in general.  Fine, whatever, good for you.  However, like
+it or not, these certifications make or break the use of Linux in a
+number of situations that are important to a lot of users.  If we want
+to ensure that Linux continues to be a viable solution across a large
+number of use cases, and not just the small handful of hyperscalers,
+one of the things we need to do is make sure Linux can continue to
+meet these security certifications.
 
-    28	
-    29	static void nft_log_eval_audit(const struct nft_pktinfo *pkt)
-    30	{
-    31		struct sk_buff *skb = pkt->skb;
-    32		struct audit_buffer *ab;
-    33		int fam = -1;
-    34	
-    35		if (!audit_enabled)
-    36			return;
-    37	
-    38		ab = audit_log_start(NULL, GFP_ATOMIC, AUDIT_NETFILTER_PKT);
-    39		if (!ab)
-    40			return;
-    41	
-    42		audit_log_format(ab, "mark=%#x", skb->mark);
-    43	
-    44		switch (nft_pf(pkt)) {
-    45		case NFPROTO_BRIDGE:
-    46			switch (eth_hdr(skb)->h_proto) {
-    47			case htons(ETH_P_IP):
-  > 48				fam = audit_log_packet_ip4(ab, skb) ? NFPROTO_IPV4 : -1;
-    49				break;
-    50			case htons(ETH_P_IPV6):
-  > 51				fam = audit_log_packet_ip6(ab, skb) ? NFPROTO_IPV6 : -1;
-    52				break;
-    53			}
-    54			break;
-    55		case NFPROTO_IPV4:
-    56			fam = audit_log_packet_ip4(ab, skb) ? NFPROTO_IPV4 : -1;
-    57			break;
-    58		case NFPROTO_IPV6:
-    59			fam = audit_log_packet_ip6(ab, skb) ? NFPROTO_IPV6 : -1;
-    60			break;
-    61		}
-    62	
-    63		if (fam == -1)
-    64			audit_log_format(ab, " saddr=? daddr=? proto=-1");
-    65	
-    66		audit_log_end(ab);
-    67	}
-    68	
+> 3) import the pathnames as early as possible.  It would mean a non-trivia=
+l
+> amount of churn, but it's at least a definite policy - validity of change
+> depends only on the resulting code, not the comparison with the earlier
+> state, as it would in case (1).  From QoI POV it's as nice as audit folks
+> could possibly ask, but it would cause quite a bit of churn to get there.
+> Not impossible to do, but I would rather not go there without a need.
+> Said that, struct filename handling is mostly a decent match to CLASS()
+> machinery, and all required churn wouldn't be hard to fold into conversio=
+n
+> to that.
+>
+>         My preference would be (2), obviously.  However, it really depend=
+s
+> upon the kind of requirements audit users have.  Note that currently the
+> position of pathname import in the sequence is not documented anywhere,
+> so there's not much audit users can rely upon other than "the current
+> behaviour is such-and-such, let's hope it doesn't change"... ;-/
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Like I said above, I'm okay with option #2 so long as we can move the
+pathname capture earlier if needed at some point in the future.  I
+don't want to inflict pain on the kernel if it isn't needed, but I've
+also grown very weary of having to fight with every subsystem out
+there to claw things back that are necessary for adoption.  If you
+need a hard and fast policy now, then it would have to be option #3,
+but if we all promise to be reasonable adults I'm okay with option #2.
+
+--=20
+paul-moore.com
