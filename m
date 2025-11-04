@@ -1,292 +1,181 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from sonic313-14.consmr.mail.ne1.yahoo.com (sonic313-14.consmr.mail.ne1.yahoo.com [66.163.185.37])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2872F3016FE
-	for <audit@vger.kernel.org>; Mon,  3 Nov 2025 11:05:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 818A93019B3
+	for <audit@vger.kernel.org>; Tue,  4 Nov 2025 16:10:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.163.185.37
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762167940; cv=none; b=N3zCLGEVjQnxP+UARJ2BqwxIlzp6lGIOf2JxNcIP58vQytsP0pHp8l1nNSheizzJQS04IE0XjWQsjarNw6QP6wSVeXcgR6HeF6WGHGRIlcfJkPt0DXOV7azk33rkCPZPfHxwyZQFa08g9kEraOiGRbPe3V+8xQL+aejnZc9hJK0=
+	t=1762272635; cv=none; b=kXJbXiFydMd09DjvW0GIae5WIFyZRxgTusdA8K1GE6DBBxiF75hCPAXvKEcBF8dLhNB507atpRdAGbL0YC2kZ6WeYfjBFcyCbUEScByTH00UkLtQrGX7ql3KrcbZaciIBVof+qYgd6Fxp810PCFD75r2CIc4iK+8ps4oXTsqNWk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762167940; c=relaxed/simple;
-	bh=gfTwUykB/RnmTajqRSHRxKNiOaTJwE/JIgeSdjNjNDU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=pivZW8d9/yDZiPiOsoWed2P9bZw9MFMmZjbkVM38d+zTrZazZRyr+4970MRfD1yvibXF4SjceKSrg+S3OshsYv3ZoGhS4z2jg+lrjQYtEN4yLhytvJvUpigCz4a7+7Op4nAZC6KnoFNLKwRZ015d0o3tn+hYVtd+BKpAFCcd4NI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=FMv4kxOF; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1762272635; c=relaxed/simple;
+	bh=F5wTwlPeqv/P0weo9Z3cX7yXdvdLkgndYm6p3j3f/kc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=oUGpUpsYQ3XvOa1wDxwfR9nlwvFB0T6HxhWzKuuH4U7h0tVXy4P6YOA5vK5SdNuIluFcriTu0wEKW6Ryn4/cQQQC2AaG/um2oSv6pi5GM9n+OeOQiatIhTYE9JPSPugCYGIanoDiedx8bwmfgnGQ9yP8ChjpcLlsiAyHtdQdNsM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com; spf=none smtp.mailfrom=schaufler-ca.com; dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b=FzYeH9t/; arc=none smtp.client-ip=66.163.185.37
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=schaufler-ca.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="FMv4kxOF"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1762167937;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=9xCrDGRchnnGTkwO6YdV7uPKVA0+6GBpSaManbFOJHM=;
-	b=FMv4kxOF9OrN58AMVvanVWHzLkeknnlm7z8Sf9M0Ao5UvLcCnOhCG/euzW0x5d/NA3bc6c
-	otFy7EFHi0mx8+dBzN1PnCTdBHLiWqmcB3Grbt8qY6JcqHbCQaM7sUJSx3aJWoWQyTCivU
-	LCu6jt0vaQ5F8tLZLIyHrvQkXa7obOM=
-Received: from mail-pl1-f200.google.com (mail-pl1-f200.google.com
- [209.85.214.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-79-6otE9sgnM9qHdFncBoaS4A-1; Mon, 03 Nov 2025 06:05:36 -0500
-X-MC-Unique: 6otE9sgnM9qHdFncBoaS4A-1
-X-Mimecast-MFC-AGG-ID: 6otE9sgnM9qHdFncBoaS4A_1762167935
-Received: by mail-pl1-f200.google.com with SMTP id d9443c01a7336-28bd8b3fa67so40252895ad.2
-        for <audit@vger.kernel.org>; Mon, 03 Nov 2025 03:05:35 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762167935; x=1762772735;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9xCrDGRchnnGTkwO6YdV7uPKVA0+6GBpSaManbFOJHM=;
-        b=N6pf2PfpaKo2KfqXriCvIzebMJ8qjDV3E1esVtfworRdzR51470wGNhmioC3//a+iY
-         U6JqHInkR8kcOvnc1TIrN4BAa9dEDnLDNh3GzfmzhB8FJ1UKiR+aql+nLiKkmuesP1nX
-         xt/IN92QUipruy8wZfr1te7NcBJqRpx90rNgTqL+PVp4lUzAa2INHkx6Nm1oavYveswO
-         id2rlEjDwnX10Y84Wy0Co1ijzLc/ZoH971lH8hV8+jBay2Nuni2qQOawpvqV5Hkf5PjX
-         gJSIyuW3dragrpLWxwVW7liAVmJk64D0Tdcya982CDH4cu2tEqzVfWA8/0x/h295W675
-         9l4Q==
-X-Gm-Message-State: AOJu0Yw3Z3s06Qy0ntKHRW7CreHbcXAguRGZ4cqELhUZrpI/9skp/QiV
-	TONgNaVkopT7aeyHUC+cSVbnnI03NN5HZGscjJT2MjW4WhMksausL6P+SuzSWGM4R6O0Dmz+9Ze
-	Xq3QE3Nm3ZGtrQMWB+7vEC+BPmCZvnheyPaBVmBNTb1rwVs0MBwmCsCu2UxrL5l0xkZPMBFfFjC
-	ZCV1ixgOfsCV2iyXdV9NBL+sI+JhPUAFQ=
-X-Gm-Gg: ASbGncvHiCa4+B/Ss1Xo43PMXqcPhkcN2jj2fAYEWxI2P58wB7dZjhjt2Wo9dulGQyI
-	8skmkfIMXUDR0uLbmSJ2sdgdxlbox45sJ8eaIFHrAvOmTCJ3WVByeLKklf9340HIF6azQIZAdBi
-	/ypQH3qUH32sEHP22wH/VysgvnHaK1/PDN7QX1zz4FPU0ijE57JdFGh2A=
-X-Received: by 2002:a17:903:11cd:b0:27d:c542:fe25 with SMTP id d9443c01a7336-2951a587e32mr155174735ad.41.1762167934864;
-        Mon, 03 Nov 2025 03:05:34 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IGA5xxOqESC5njIUuwo8X7aUkUUbc4ngsKRBvL0f6Uy3SwdFfrZxjJ/xB3v9LkidFvC0hMkhLozQ/mE6e5SuA8=
-X-Received: by 2002:a17:903:11cd:b0:27d:c542:fe25 with SMTP id
- d9443c01a7336-2951a587e32mr155174295ad.41.1762167934419; Mon, 03 Nov 2025
- 03:05:34 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b="FzYeH9t/"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1762272632; bh=tribQdEuQHZnZfmWubrTsreLihCksXvfegAHEnde0Qg=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=FzYeH9t/K9NDb7vZHCiPJmd4rfDmdxM2gs/yl7AahhQZcvWMa+iiaiK3w3mIEC2q6k3VTp6BkRTI7p20OJd07+yN0iP231CkVxJi32vtLwGAlHq8UXaWuIfd2nlNyQPny/+8JL+ddO7tJ4hHRS81eoNK1nQXuJ8RsJxF2SFjvrZVl24k0Wq0/JRYMyH5GmRwbwtVKXyQxJjmkLQHobXikjRebNuF0CcCPrCzcLqOczD2Yvw9F7vHgUk66ftBawbeE4Khe9poN2sXWgxTmzlcOYtNWbEeiWfDdJeFwMbs796MKe1an4/gwmzCmUPyasESqEiBYHxgo9PXT+GDWLHcfg==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1762272632; bh=ibgqXtQqQnJVQW3Wp9aEj76JDJI+DwVl6Hc9ei1YlNp=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=FTxexeVA2zMCz/SMgopeQY2cxnpTZflUdE7TSUeXw2937MBzw6bpSDxac/kBAkABo8eWOaaH6W7MKRaYv3JDDZwnwdcyhREBt8yjXGUhIhfTEyWrVHTO/IA5hHD8dLWQvzwN1oTM6YyIxX/XwiqHNTnKSTvd+XZwss2BdpM+4Df6lc+GwSXzcvIZV4WCAfjD+JAIBQIFVISlZxPvyduqBPEppdx8djtRcbGopAR8CPC0oCnvh+yeiB7wsNv+XYWOfTlIPrjkYeo0UAK5juFE1qlT2Z/NMHdsNffBPYx3Zqz9qX5AN3q1hNINeEVesTwF2kxDdUFcUF5DLuKa8sXtqg==
+X-YMail-OSG: BlAm0CgVM1kr39uzWq9dBnRV1Sp1ZFfu6Mimh8dNIGQNqbpnQQfM10bZ_cY9vrB
+ 2xnbw6L6DpPPuCPp8DBytsz6v9PhoooJD8c4XoY5QFvc.hRPNYvoys7uTi8GQ1tPTZslfX.AfN_d
+ du4v5B_hSNZrZqs4tHSF4I16El_mZ4uaTcF7FL8dMhMS0q2VrMCnrxlEB0_uTmfrBkkzfR4h2bEM
+ 24jNxrchux7RFIZnoy5Xfs_DgErjAqESiG1GJWmUKKOLfDnyTESegC8Bf2piSOTdrlU3m9.bdKEj
+ L_zKzuI0kAcVrfRZvZgmRDwdERIDmXvQaaBhs6EChhFwotdJecQZst4gXcxz8ToCmLj9CGxeo3o5
+ s63LSxszt3cDuhqsSJn8tfJURUfht8iNK0UgCI_tZXRT_MaBG68jrEJoP4GXq_oyYd0nYOJh_I5t
+ pNEL_OA_CkuJfSOZ9sIqpkZXgfGa6P7yz38fr0eTKzOLou_luNOeeIGX_DC.UUZYHyFn8mqZxDoe
+ dPWJASG.TiXpNl1mbQUEZYPSoB8MqtOzQ8vfNnEq1iSpC7zFXXZ.yQ6Tf_cXeIes0HrSgNOpWc0I
+ FRFrLlaQlvAXoFeUbNQHANp3x3czYJ6v9YJaw.C9jpz5g_Z9kwgOOZktiEbv5O_f3zemXrCzfhIZ
+ JEc9vYxPvUY1H8wfbIOr7Oo4KTsGwMkkuD6kbF9Mv.7sQ8pIwYkxwu7fhLfWM6agQ9BMz9pVcb7R
+ UwBq60NV.AoGi5GKsyTC4H0YmB4xWVTkPR7tq7mgGcZVBPFevUE.WNBRiQxbv6Ot1P1Woo7AhXD1
+ in3uaDVEwbWhVwnMGFVYgyZCvpkmccJ3Mepq2EvDqPaBMdsomSlW2_chL0v4x23ynJpjNCCwhHpI
+ 68mOI5b4vPHs.N6GWTNIQvdokNVudil1b7TssAtHn3OTz63gB7rTnUck1ttUT7Bzw9qeUnkKqfSz
+ _rPHSJeqca5L2Ae6A0bsyQPHXJuTnMloFtCWsRWstqd3zUzFy.6JAnfUgG1cZ9AGXnJqfGN.YDaN
+ 2N9IN5M3tJP9IQnABceD_f4gmv52oeHUiQV0JKEdaqJgx_HWxiB1E7WvDA9Ho3CRX28U.bAuVIgR
+ yoaOTAN8qRU0Il_Sz0skHyemDeE_HrPVjzjBXGvBDrlv9N5YV8YP.uCx_cp7hv0oRH_NGZsaZ0uX
+ XzQ61HlvhZCgs9L0aehNaFSSNCeswA4me8Z1aROmQM1eAiB2ii0Df9GJWCwc99LIwZ0DL9mVR0zy
+ m4vv4HLkPuhold6x0Pq_WdGRQr_PpjbFO3TIa3KUGCVc9X.XRMwMmaG7dABE.zPotX0k_25ZTyvM
+ 5gyzz4lNObhNX2FgH98P5CiJ_xXz_qWmmJdXiB3sReh8KXyLLOVvd_6QT718m0hhsuImw4m3TGf9
+ XeDT8tp0VljLeR.YdH95UpeJS_S.mjjI2Ygwro_ZPscOTP9c9aie4cerVPoWMZBfFlw1wLr8brdI
+ cZL0Shj3Ml0TSzmAxItyUMKcfdrqIQcmrdBsgdJ2u8X7HKP6BCZkQWOlFYsTliQMOYOMNygK_Liq
+ uCicsLPY664rb4EwfVyM.Lta5yebJcho5lgJUu3yxZKsV7n06Ha6Ax7VbBp8jxyAU0x8k48.n3iK
+ 2oLKQgAvY2A3N8kyMzvL48FqOCqOwZnwmkdLVrJvbE7U4.wRcIgZmAVOt0CHjIru.Qzbeyuxq4WH
+ 2SIb12rTrk22ufC16iTWzR8CsbzGkcN1fFsh2CC0ky4gbEsE8.ToAKcMh3FDNZhIZa9CS_lNZY9i
+ ZYwAabVgZQ_cpL3nLr7bVuODRFpfB9spwrtSo.BwCJUa4mFuHSuuU1_WjTCzwWk4.duojbq.EeVR
+ Dhs3zYmfmixC0BEbMfo6YbNNdftKnS.lUZjqO8jqPi.0uwANyMh6BVOGcgt_RI3Sh_ndMSYrHzm9
+ .HPe9oO_f85IHpgWUdxaVrfbFvbXQCExAKge2mlP7OXfUNfMYQohIKuToftzFxDf03iDTAWqXs1O
+ .gg3vL6_v8pnHxu_yK6ewDI3Z1EszVWRAvq7CKHDOo0va5_3MyALhQPKyvosvn3SfR9M3n1o4WRp
+ grsdOXTlyJSGyxsWpPuolKmmvuJZmDWNXGJBCfIALuXTyHZwnY_lTih3MyO1ioS9FSWM1tBD91ey
+ DvbXW_xmFURg4SKGb3HvL1P.mfuRZO0wkwNF_wQK2TOGZSQD2OkRITHQL81rJo41LHKblV6Eawg9
+ FJcWJDPIMOClW2qzqke2TzmabE_A.vFsq7wfCUCQn8aNErdom0w9GJoQP4bjPraQ5mLI4bOqUyBd
+ vt0TWKks6thsL96F53WhkIUNfUIGEkQ--
+X-Sonic-MF: <casey@schaufler-ca.com>
+X-Sonic-ID: 3dd02983-d416-427c-9230-2a67029a5c13
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic313.consmr.mail.ne1.yahoo.com with HTTP; Tue, 4 Nov 2025 16:10:32 +0000
+Received: by hermes--production-gq1-86c5846576-qzzfn (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 941545f190b32d1bdf3fc1f206b502e7;
+          Tue, 04 Nov 2025 16:00:22 +0000 (UTC)
+Message-ID: <4c8a2252-5df3-451b-b6f5-e87cf7a161b9@schaufler-ca.com>
+Date: Tue, 4 Nov 2025 08:00:20 -0800
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <6ac2baf0d5ae176cbd3279a4dff9e2c7750c6d45.1761918165.git.rrobaina@redhat.com>
- <202511011146.aPtw8SOn-lkp@intel.com>
-In-Reply-To: <202511011146.aPtw8SOn-lkp@intel.com>
-From: Ricardo Robaina <rrobaina@redhat.com>
-Date: Mon, 3 Nov 2025 08:05:22 -0300
-X-Gm-Features: AWmQ_blix0O5YM7w_tT0WXs6Pqjmi5gLv0k1Qz_HlHfym8b0laV-ctbmO_s95gk
-Message-ID: <CAABTaaCqzGoWKiRp40wh8JzJCq5OukdH+3HpGYN9OvnORpdjaA@mail.gmail.com>
-Subject: Re: [PATCH v4 2/2] audit: include source and destination ports to NETFILTER_PKT
-To: kernel test robot <lkp@intel.com>
-Cc: audit@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	netfilter-devel@vger.kernel.org, coreteam@netfilter.org, 
-	oe-kbuild-all@lists.linux.dev, paul@paul-moore.com, eparis@redhat.com, 
-	fw@strlen.de, pablo@netfilter.org, kadlec@netfilter.org
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: Om7qKUMjtZeB-cGvJsyg0pRjl3-UUAdzYARa2BSwwps_1762167935
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RFC 5/15] LSM: Single calls in secid hooks
+To: Paul Moore <paul@paul-moore.com>, eparis@redhat.com,
+ linux-security-module@vger.kernel.org, audit@vger.kernel.org
+Cc: jmorris@namei.org, serge@hallyn.com, keescook@chromium.org,
+ john.johansen@canonical.com, penguin-kernel@i-love.sakura.ne.jp,
+ stephen.smalley.work@gmail.com, linux-kernel@vger.kernel.org,
+ selinux@vger.kernel.org, Casey Schaufler <casey@schaufler-ca.com>
+References: <20250621171851.5869-6-casey@schaufler-ca.com>
+ <ee015074a9019ef4725f7e613fd76f86@paul-moore.com>
+Content-Language: en-US
+From: Casey Schaufler <casey@schaufler-ca.com>
+In-Reply-To: <ee015074a9019ef4725f7e613fd76f86@paul-moore.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Mailer: WebService/1.1.24652 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
 
-Same thing here. I didn't get these warning messages in my local
-build. I'll fix it and submit a new version.
+On 10/14/2025 4:12 PM, Paul Moore wrote:
+> On Jun 21, 2025 Casey Schaufler <casey@schaufler-ca.com> wrote:
+>> security_socket_getpeersec_stream(), security_socket_getpeersec_dgram()
+>> and security_secctx_to_secid() can only provide a single security context
+>> or secid to their callers.  Open code these hooks to return the first
+>> hook provided. Because only one "major" LSM is allowed there will only
+>> be one hook in the list, with the excepton being BPF. BPF is not expected
+>> to be using these interfaces.
+>>
+>> Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
+>> ---
+>>  security/security.c | 24 ++++++++++++++++++++----
+>>  1 file changed, 20 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/security/security.c b/security/security.c
+>> index db85006d2fd5..2286285f8aea 100644
+>> --- a/security/security.c
+>> +++ b/security/security.c
+>> @@ -3806,8 +3806,13 @@ EXPORT_SYMBOL(security_lsmprop_to_secctx);
+>>   */
+>>  int security_secctx_to_secid(const char *secdata, u32 seclen, u32 *secid)
+>>  {
+>> +	struct lsm_static_call *scall;
+>> +
+>>  	*secid = 0;
+>> -	return call_int_hook(secctx_to_secid, secdata, seclen, secid);
+>> +	lsm_for_each_hook(scall, secctx_to_secid) {
+>> +		return scall->hl->hook.secctx_to_secid(secdata, seclen, secid);
+>> +	}
+>> +	return LSM_RET_DEFAULT(secctx_to_secid);
+>>  }
+>>  EXPORT_SYMBOL(security_secctx_to_secid);
+> Two thoughts come to mind:
+>
+> If we are relying on BPF not using these hooks we should remove the BPF
+> callback.  It looks like the secctx_to_secid and socket_getpeersec_stream
+> callbacks are already absent from the BPF LSM, so it's just a matter of
+> working with the BPF folks to see if socket_getpeersec_dgram can be
+> removed.  If it can't be removed, you'll need to find another solution.
 
-On Sat, Nov 1, 2025 at 1:05=E2=80=AFAM kernel test robot <lkp@intel.com> wr=
-ote:
->
-> Hi Ricardo,
->
-> kernel test robot noticed the following build errors:
->
-> [auto build test ERROR on pcmoore-audit/next]
-> [also build test ERROR on netfilter-nf/main nf-next/master linus/master v=
-6.18-rc3 next-20251031]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
->
-> url:    https://github.com/intel-lab-lkp/linux/commits/Ricardo-Robaina/au=
-dit-add-audit_log_packet_ip4-and-audit_log_packet_ip6-helper-functions/2025=
-1031-220605
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/audit.git=
- next
-> patch link:    https://lore.kernel.org/r/6ac2baf0d5ae176cbd3279a4dff9e2c7=
-750c6d45.1761918165.git.rrobaina%40redhat.com
-> patch subject: [PATCH v4 2/2] audit: include source and destination ports=
- to NETFILTER_PKT
-> config: arc-randconfig-002-20251101 (https://download.01.org/0day-ci/arch=
-ive/20251101/202511011146.aPtw8SOn-lkp@intel.com/config)
-> compiler: arc-linux-gcc (GCC) 8.5.0
-> reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/archi=
-ve/20251101/202511011146.aPtw8SOn-lkp@intel.com/reproduce)
->
-> If you fix the issue in a separate patch/commit (i.e. not just a new vers=
-ion of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202511011146.aPtw8SOn-lkp=
-@intel.com/
->
-> All errors (new ones prefixed by >>):
->
->    kernel/audit.c: In function 'audit_log_packet_ip4':
-> >> kernel/audit.c:2555:3: error: a label can only be part of a statement =
-and a declaration is not a statement
->       struct tcphdr _tcph;
->       ^~~~~~
-> >> kernel/audit.c:2556:3: error: expected expression before 'const'
->       const struct tcphdr *th;
->       ^~~~~
-> >> kernel/audit.c:2558:3: error: 'th' undeclared (first use in this funct=
-ion); did you mean 'ih'?
->       th =3D skb_header_pointer(skb, skb_transport_offset(skb), sizeof(_t=
-cph), &_tcph);
->       ^~
->       ih
->    kernel/audit.c:2558:3: note: each undeclared identifier is reported on=
-ly once for each function it appears in
->    kernel/audit.c:2568:3: error: a label can only be part of a statement =
-and a declaration is not a statement
->       struct udphdr _udph;
->       ^~~~~~
->    kernel/audit.c:2569:3: error: expected expression before 'const'
->       const struct udphdr *uh;
->       ^~~~~
-> >> kernel/audit.c:2571:3: error: 'uh' undeclared (first use in this funct=
-ion); did you mean 'ih'?
->       uh =3D skb_header_pointer(skb, skb_transport_offset(skb), sizeof(_u=
-dph), &_udph);
->       ^~
->       ih
->    kernel/audit.c:2580:3: error: a label can only be part of a statement =
-and a declaration is not a statement
->       struct sctphdr _sctph;
->       ^~~~~~
->    kernel/audit.c:2581:3: error: expected expression before 'const'
->       const struct sctphdr *sh;
->       ^~~~~
-> >> kernel/audit.c:2583:3: error: 'sh' undeclared (first use in this funct=
-ion); did you mean 'ih'?
->       sh =3D skb_header_pointer(skb, skb_transport_offset(skb), sizeof(_s=
-ctph), &_sctph);
->       ^~
->       ih
->    kernel/audit.c: In function 'audit_log_packet_ip6':
->    kernel/audit.c:2616:3: error: a label can only be part of a statement =
-and a declaration is not a statement
->       struct tcphdr _tcph;
->       ^~~~~~
->    kernel/audit.c:2617:3: error: expected expression before 'const'
->       const struct tcphdr *th;
->       ^~~~~
->    kernel/audit.c:2619:3: error: 'th' undeclared (first use in this funct=
-ion); did you mean 'ih'?
->       th =3D skb_header_pointer(skb, skb_transport_offset(skb), sizeof(_t=
-cph), &_tcph);
->       ^~
->       ih
->    kernel/audit.c:2629:3: error: a label can only be part of a statement =
-and a declaration is not a statement
->       struct udphdr _udph;
->       ^~~~~~
->    kernel/audit.c:2630:3: error: expected expression before 'const'
->       const struct udphdr *uh;
->       ^~~~~
->    kernel/audit.c:2632:3: error: 'uh' undeclared (first use in this funct=
-ion); did you mean 'ih'?
->       uh =3D skb_header_pointer(skb, skb_transport_offset(skb), sizeof(_u=
-dph), &_udph);
->       ^~
->       ih
->    kernel/audit.c:2641:3: error: a label can only be part of a statement =
-and a declaration is not a statement
->       struct sctphdr _sctph;
->       ^~~~~~
->    kernel/audit.c:2642:3: error: expected expression before 'const'
->       const struct sctphdr *sh;
->       ^~~~~
->    kernel/audit.c:2644:3: error: 'sh' undeclared (first use in this funct=
-ion); did you mean 'ih'?
->       sh =3D skb_header_pointer(skb, skb_transport_offset(skb), sizeof(_s=
-ctph), &_sctph);
->       ^~
->       ih
->
->
-> vim +2555 kernel/audit.c
->
->   2543
->   2544  bool audit_log_packet_ip4(struct audit_buffer *ab, struct sk_buff=
- *skb)
->   2545  {
->   2546          struct iphdr _iph;
->   2547          const struct iphdr *ih;
->   2548
->   2549          ih =3D skb_header_pointer(skb, skb_network_offset(skb), s=
-izeof(_iph), &_iph);
->   2550          if (!ih)
->   2551                  return false;
->   2552
->   2553          switch (ih->protocol) {
->   2554          case IPPROTO_TCP:
-> > 2555                  struct tcphdr _tcph;
-> > 2556                  const struct tcphdr *th;
->   2557
-> > 2558                  th =3D skb_header_pointer(skb, skb_transport_offs=
-et(skb), sizeof(_tcph), &_tcph);
->   2559                  if (!th)
->   2560                          return false;
->   2561
->   2562                  audit_log_format(ab, " saddr=3D%pI4 daddr=3D%pI4 =
-proto=3D%hhu sport=3D%hu dport=3D%hu",
->   2563                                   &ih->saddr, &ih->daddr, ih->prot=
-ocol,
->   2564                                   ntohs(th->source), ntohs(th->des=
-t));
->   2565                  break;
->   2566          case IPPROTO_UDP:
->   2567          case IPPROTO_UDPLITE:
->   2568                  struct udphdr _udph;
->   2569                  const struct udphdr *uh;
->   2570
-> > 2571                  uh =3D skb_header_pointer(skb, skb_transport_offs=
-et(skb), sizeof(_udph), &_udph);
->   2572                  if (!uh)
->   2573                          return false;
->   2574
->   2575                  audit_log_format(ab, " saddr=3D%pI4 daddr=3D%pI4 =
-proto=3D%hhu sport=3D%hu dport=3D%hu",
->   2576                                   &ih->saddr, &ih->daddr, ih->prot=
-ocol,
->   2577                                   ntohs(uh->source), ntohs(uh->des=
-t));
->   2578                  break;
->   2579          case IPPROTO_SCTP:
->   2580                  struct sctphdr _sctph;
->   2581                  const struct sctphdr *sh;
->   2582
-> > 2583                  sh =3D skb_header_pointer(skb, skb_transport_offs=
-et(skb), sizeof(_sctph), &_sctph);
->   2584                  if (!sh)
->   2585                          return false;
->   2586
->   2587                  audit_log_format(ab, " saddr=3D%pI4 daddr=3D%pI4 =
-proto=3D%hhu sport=3D%hu dport=3D%hu",
->   2588                                   &ih->saddr, &ih->daddr, ih->prot=
-ocol,
->   2589                                   ntohs(sh->source), ntohs(sh->des=
-t));
->   2590                  break;
->   2591          default:
->   2592                  audit_log_format(ab, " saddr=3D%pI4 daddr=3D%pI4 =
-proto=3D%hhu",
->   2593                                   &ih->saddr, &ih->daddr, ih->prot=
-ocol);
->   2594          }
->   2595
->   2596          return true;
->   2597  }
->   2598  EXPORT_SYMBOL(audit_log_packet_ip4);
->   2599
->
+That should be doable. If BPF decides they want to use lsm_prop data
+they already have a passel of work to do, and I see that they have
+already suggested removing the BPF data from lsm_prop.
+The socket_getpeersec_dgram interface uses secids, not lsm_prop, but
+that's an artifact of networking attitude, not what's "right" for it.
+
+> Instead of opening up the call_int_hook() wrapper here, what would it
+> look like if we enforced the single callback rule at LSM registration
+> time?
+
+I have considered that approach in the past. It would require that
+security_add_hooks() know which hooks are single callback and only
+call lsm_static_call_init() if no LSM had requested the hook before.
+This would be fairly straight forward and have the advantage of allowing
+the infrastructure to report which single callback hooks have been
+chosen and which disallowed. It does raise the question of whether the
+LSM that requested the hook should be notified in the case it was
+discarded. That's messy, as there are multiple single callback hooks,
+and you could have a case where some are chosen and others disallowed.
+I would go without notification, as it's hard to say what an LSM would
+do with that information.
+
+I'll give it a go in the next version.
+
+>> @@ -4268,8 +4273,13 @@ EXPORT_SYMBOL(security_sock_rcv_skb);
+>>  int security_socket_getpeersec_stream(struct socket *sock, sockptr_t optval,
+>>  				      sockptr_t optlen, unsigned int len)
+>>  {
+>> -	return call_int_hook(socket_getpeersec_stream, sock, optval, optlen,
+>> -			     len);
+>> +	struct lsm_static_call *scall;
+>> +
+>> +	lsm_for_each_hook(scall, socket_getpeersec_stream) {
+>> +		return scall->hl->hook.socket_getpeersec_stream(sock, optval,
+>> +								optlen, len);
+>> +	}
+>> +	return LSM_RET_DEFAULT(socket_getpeersec_stream);
+>>  }
+>>  
+>>  /**
+>> @@ -4289,7 +4299,13 @@ int security_socket_getpeersec_stream(struct socket *sock, sockptr_t optval,
+>>  int security_socket_getpeersec_dgram(struct socket *sock,
+>>  				     struct sk_buff *skb, u32 *secid)
+>>  {
+>> -	return call_int_hook(socket_getpeersec_dgram, sock, skb, secid);
+>> +	struct lsm_static_call *scall;
+>> +
+>> +	lsm_for_each_hook(scall, socket_getpeersec_dgram) {
+>> +		return scall->hl->hook.socket_getpeersec_dgram(sock, skb,
+>> +							       secid);
+>> +	}
+>> +	return LSM_RET_DEFAULT(socket_getpeersec_dgram);
+>>  }
+>>  EXPORT_SYMBOL(security_socket_getpeersec_dgram);
+>>  
+>> -- 
+>> 2.47.0
 > --
-> 0-DAY CI Kernel Test Service
-> https://github.com/intel/lkp-tests/wiki
->
-
+> paul-moore.com
