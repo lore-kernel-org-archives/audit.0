@@ -1,62 +1,30 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from Chamillionaire.breakpoint.cc (Chamillionaire.breakpoint.cc [91.216.245.30])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E7C534BA46
-	for <audit@vger.kernel.org>; Thu,  6 Nov 2025 16:53:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 669A4A41;
+	Thu,  6 Nov 2025 23:21:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.216.245.30
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762448013; cv=none; b=OzHAAI/0rJHMLulHWcg90kcfjWWMfTcmLQuKWZ740GunjU+PaDnog7NJY82HimQBk+9nM9J0RPKvRYo8HM43gbFlxQJVN3k5VLGCf7fDnEgF04kOV2A8g9/a4cTfzBQEOfUOEpP8wXV9FjpYKe+V0mECr7FG84+6/UZllvbgolM=
+	t=1762471280; cv=none; b=bw3WRKM52aQvjTq+HdpNuAsMEqH8faBcCMukZkL1DXg0jKDV2zNYHV5kEmuvH8p3GmcgUAZDM+gqV0/h6G2q8rb1HwZmn7N8U0LRJauFkUUJPLnSb3wV/4/DIpiX9jCQXvMPwx0juBp4mVx/3lgBBrZQl0dyxuiriIc50nTV2V4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762448013; c=relaxed/simple;
-	bh=xcI3fxWr3wsaBdkMdmkh8A2alUjJf+s4H+Q9lIEQ9jg=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=SpFkcnSoYAGoaSr7mJ4v6x4GufKY/7ywBweF9E1FU/wyApNUhRRp+zrevQnVlIFUVPPr8XuPJu3dUfxAci+CkKfXPzK362x8bTgkxeyXD3sbddGp1u4hXQ9OSgv9AF3EoLeqVIwWmT3zwW1qXYACI89pdMZB4IhyIiY12byq5ko=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Y+jSYDwB; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Y+jSYDwB"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1762448010;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=so0OXNKYddzfc7/g5QVtuwqh5H9GBtOvc8rrxcPEA+U=;
-	b=Y+jSYDwBUQJAszCk2LF54wYs9IbAA1N6A26sm28awSTIUxp89atpuC/4ToW8ZSl3/7GArc
-	Nijpqxusvc4oteU9r1Uiveqr6eEj+aeKYczfmA9deLv00t1f7Ep3zvGBIyF+uGEMri9Hvg
-	Dp47uuYyYwM5q2DNRDQhut1+006hJLM=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-639-aE-lWsyyMai9jL-XEYDmLg-1; Thu,
- 06 Nov 2025 11:53:25 -0500
-X-MC-Unique: aE-lWsyyMai9jL-XEYDmLg-1
-X-Mimecast-MFC-AGG-ID: aE-lWsyyMai9jL-XEYDmLg_1762448004
-Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id CD50B195609F;
-	Thu,  6 Nov 2025 16:53:23 +0000 (UTC)
-Received: from wsxc.redhat.com (unknown [10.96.134.113])
-	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 746E31800584;
-	Thu,  6 Nov 2025 16:53:20 +0000 (UTC)
-From: Ricardo Robaina <rrobaina@redhat.com>
-To: audit@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	netfilter-devel@vger.kernel.org,
-	coreteam@netfilter.org
-Cc: paul@paul-moore.com,
-	eparis@redhat.com,
-	fw@strlen.de,
-	pablo@netfilter.org,
-	kadlec@netfilter.org,
-	Ricardo Robaina <rrobaina@redhat.com>
-Subject: [PATCH v5 2/2] audit: include source and destination ports to NETFILTER_PKT
-Date: Thu,  6 Nov 2025 13:53:05 -0300
-Message-ID: <b44ec08fbb011bc73ad2760676e0bbfda2ca9585.1762434837.git.rrobaina@redhat.com>
-In-Reply-To: <cover.1762434837.git.rrobaina@redhat.com>
+	s=arc-20240116; t=1762471280; c=relaxed/simple;
+	bh=59732leBYnImKyqBll6UrPZp0KO2CPY/oH6YlG+CJTg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=SBisyLMQeAJLVt1wT1zeDXVQhCG4ooJO3jzuK0Z5sFjl3SSX1UAVhrICzhsbMr1FLv7fMZ2kX5PuVZccAFcfIKW2ldiIaJF4rNLwKBCyYAd3t89o8BaBGrjftFXIuuLExSM0S/GGiStK1AOFdkzXUPJkvaNQISBpQ0ARpAviNWU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=strlen.de; spf=pass smtp.mailfrom=strlen.de; arc=none smtp.client-ip=91.216.245.30
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=strlen.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=strlen.de
+Received: by Chamillionaire.breakpoint.cc (Postfix, from userid 1003)
+	id 6F724601A1; Fri,  7 Nov 2025 00:21:16 +0100 (CET)
+Date: Fri, 7 Nov 2025 00:21:16 +0100
+From: Florian Westphal <fw@strlen.de>
+To: Ricardo Robaina <rrobaina@redhat.com>
+Cc: audit@vger.kernel.org, linux-kernel@vger.kernel.org,
+	netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
+	paul@paul-moore.com, eparis@redhat.com, pablo@netfilter.org,
+	kadlec@netfilter.org
+Subject: Re: [PATCH v5 0/2] audit: improve NETFILTER_PKT records
+Message-ID: <aQ0tbO8YNNdOP5KS@strlen.de>
 References: <cover.1762434837.git.rrobaina@redhat.com>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
@@ -64,154 +32,22 @@ List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1762434837.git.rrobaina@redhat.com>
 
-NETFILTER_PKT records show both source and destination
-addresses, in addition to the associated networking protocol.
-However, it lacks the ports information, which is often
-valuable for troubleshooting.
+Ricardo Robaina <rrobaina@redhat.com> wrote:
+> Currently, NETFILTER_PKT records lack source and destination
+> port information, which is often valuable for troubleshooting.
+> This patch series adds ports numbers, to NETFILTER_PKT records.
+> 
+> The first patch refactors netfilter-related code, by moving
+> duplicated code to audit.c, creating two helper functions:
+> 'audit_log_packet_ip4' and 'audit_log_packet_ip6'. 
+> The second one, improves the NETFILTER_PKT records, by 
+> including source and destination ports for protocols of
+> interest.
 
-This patch adds both source and destination port numbers,
-'sport' and 'dport' respectively, to TCP, UDP, UDP-Lite and
-SCTP-related NETFILTER_PKT records.
+I'll assume this will go via audit tree, so:
 
- $ TESTS="netfilter_pkt" make -e test &> /dev/null
- $ ausearch -i -ts recent |grep NETFILTER_PKT
- type=NETFILTER_PKT ... proto=icmp
- type=NETFILTER_PKT ... proto=ipv6-icmp
- type=NETFILTER_PKT ... proto=udp sport=46333 dport=42424
- type=NETFILTER_PKT ... proto=udp sport=35953 dport=42424
- type=NETFILTER_PKT ... proto=tcp sport=50314 dport=42424
- type=NETFILTER_PKT ... proto=tcp sport=57346 dport=42424
-
-Link: https://github.com/linux-audit/audit-kernel/issues/162
-
-Signed-off-by: Ricardo Robaina <rrobaina@redhat.com>
----
- kernel/audit.c | 83 +++++++++++++++++++++++++++++++++++++++++++++++---
- 1 file changed, 79 insertions(+), 4 deletions(-)
-
-diff --git a/kernel/audit.c b/kernel/audit.c
-index 09764003db74..71dcadf12c99 100644
---- a/kernel/audit.c
-+++ b/kernel/audit.c
-@@ -60,6 +60,7 @@
- #include <net/netns/generic.h>
- #include <net/ip.h>
- #include <net/ipv6.h>
-+#include <linux/sctp.h>
- 
- #include "audit.h"
- 
-@@ -2544,13 +2545,50 @@ bool audit_log_packet_ip4(struct audit_buffer *ab, struct sk_buff *skb)
- {
- 	struct iphdr _iph;
- 	const struct iphdr *ih;
-+	struct tcphdr _tcph;
-+	const struct tcphdr *th;
-+	struct udphdr _udph;
-+	const struct udphdr *uh;
-+	struct sctphdr _sctph;
-+	const struct sctphdr *sh;
- 
- 	ih = skb_header_pointer(skb, skb_network_offset(skb), sizeof(_iph), &_iph);
- 	if (!ih)
- 		return false;
- 
--	audit_log_format(ab, " saddr=%pI4 daddr=%pI4 proto=%hhu",
--			 &ih->saddr, &ih->daddr, ih->protocol);
-+	switch (ih->protocol) {
-+	case IPPROTO_TCP:
-+		th = skb_header_pointer(skb, skb_transport_offset(skb), sizeof(_tcph), &_tcph);
-+		if (!th)
-+			return false;
-+
-+		audit_log_format(ab, " saddr=%pI4 daddr=%pI4 proto=%hhu sport=%hu dport=%hu",
-+				 &ih->saddr, &ih->daddr, ih->protocol,
-+				 ntohs(th->source), ntohs(th->dest));
-+		break;
-+	case IPPROTO_UDP:
-+	case IPPROTO_UDPLITE:
-+		uh = skb_header_pointer(skb, skb_transport_offset(skb), sizeof(_udph), &_udph);
-+		if (!uh)
-+			return false;
-+
-+		audit_log_format(ab, " saddr=%pI4 daddr=%pI4 proto=%hhu sport=%hu dport=%hu",
-+				 &ih->saddr, &ih->daddr, ih->protocol,
-+				 ntohs(uh->source), ntohs(uh->dest));
-+		break;
-+	case IPPROTO_SCTP:
-+		sh = skb_header_pointer(skb, skb_transport_offset(skb), sizeof(_sctph), &_sctph);
-+		if (!sh)
-+			return false;
-+
-+		audit_log_format(ab, " saddr=%pI4 daddr=%pI4 proto=%hhu sport=%hu dport=%hu",
-+				 &ih->saddr, &ih->daddr, ih->protocol,
-+				 ntohs(sh->source), ntohs(sh->dest));
-+		break;
-+	default:
-+		audit_log_format(ab, " saddr=%pI4 daddr=%pI4 proto=%hhu",
-+				 &ih->saddr, &ih->daddr, ih->protocol);
-+	}
- 
- 	return true;
- }
-@@ -2562,6 +2600,12 @@ bool audit_log_packet_ip6(struct audit_buffer *ab, struct sk_buff *skb)
- 	const struct ipv6hdr *ih;
- 	u8 nexthdr;
- 	__be16 frag_off;
-+	struct tcphdr _tcph;
-+	const struct tcphdr *th;
-+	struct udphdr _udph;
-+	const struct udphdr *uh;
-+	struct sctphdr _sctph;
-+	const struct sctphdr *sh;
- 
- 	ih = skb_header_pointer(skb, skb_network_offset(skb), sizeof(_ip6h), &_ip6h);
- 	if (!ih)
-@@ -2570,8 +2614,39 @@ bool audit_log_packet_ip6(struct audit_buffer *ab, struct sk_buff *skb)
- 	nexthdr = ih->nexthdr;
- 	ipv6_skip_exthdr(skb, skb_network_offset(skb) + sizeof(_ip6h), &nexthdr, &frag_off);
- 
--	audit_log_format(ab, " saddr=%pI6c daddr=%pI6c proto=%hhu",
--			 &ih->saddr, &ih->daddr, nexthdr);
-+	switch (nexthdr) {
-+	case IPPROTO_TCP:
-+		th = skb_header_pointer(skb, skb_transport_offset(skb), sizeof(_tcph), &_tcph);
-+		if (!th)
-+			return false;
-+
-+		audit_log_format(ab, " saddr=%pI6c daddr=%pI6c proto=%hhu sport=%hu dport=%hu",
-+				 &ih->saddr, &ih->daddr, nexthdr,
-+				 ntohs(th->source), ntohs(th->dest));
-+		break;
-+	case IPPROTO_UDP:
-+	case IPPROTO_UDPLITE:
-+		uh = skb_header_pointer(skb, skb_transport_offset(skb), sizeof(_udph), &_udph);
-+		if (!uh)
-+			return false;
-+
-+		audit_log_format(ab, " saddr=%pI6c daddr=%pI6c proto=%hhu sport=%hu dport=%hu",
-+				 &ih->saddr, &ih->daddr, nexthdr,
-+				 ntohs(uh->source), ntohs(uh->dest));
-+		break;
-+	case IPPROTO_SCTP:
-+		sh = skb_header_pointer(skb, skb_transport_offset(skb), sizeof(_sctph), &_sctph);
-+		if (!sh)
-+			return false;
-+
-+		audit_log_format(ab, " saddr=%pI6c daddr=%pI6c proto=%hhu sport=%hu dport=%hu",
-+				 &ih->saddr, &ih->daddr, nexthdr,
-+				 ntohs(sh->source), ntohs(sh->dest));
-+		break;
-+	default:
-+		audit_log_format(ab, " saddr=%pI6c daddr=%pI6c proto=%hhu",
-+				 &ih->saddr, &ih->daddr, nexthdr);
-+	}
- 
- 	return true;
- }
--- 
-2.51.1
-
+Acked-by: Florian Westphal <fw@strlen.de>
