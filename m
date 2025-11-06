@@ -1,38 +1,59 @@
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.2])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 227F7302CDC
-	for <audit@vger.kernel.org>; Wed,  5 Nov 2025 10:36:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.2
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C812286D57
+	for <audit@vger.kernel.org>; Thu,  6 Nov 2025 16:53:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762338992; cv=none; b=gQiRkOLfBjsQ3Ht0VM71CZhrwM3f4P7+wh8mIHBNA/r8iFJ6LB0YHHnDyOM7YD1mZwAcZfdqVurSgkv19nXy7JVW8WSjPwztaXFjzAGPGUldFpfeFUAHT5KUzn9sDTg8uD1H+A58OPCMj2r3Jrl7+jpAcT1Mhy6zg+sUZrSqWiE=
+	t=1762448004; cv=none; b=IfSiC3311C1pRUVFkpYj0Nma9RYNtk4xEQRXnWR8S/eDyj8uT29nEvzEWYI/tWMuDYkKRPp/W8G1OBKkIeffo+JqY+fwAVgXj5/5UpFntjOYf8JoGdodQ76keCpiX5CECGyM0nO/5UVUo7xJnl6UfSwP0o4GNpczmBxwCYGGzuc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762338992; c=relaxed/simple;
-	bh=KhVQYgtLy/lZjMJVc/kTtZFYjzRY898BO4FylZpxBuQ=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=paMpXr8HurcB5CCB5/BEtzzd330sLtf4PgIzGH2fVQCnL8ST4tmzt7Uv2wLbI8KsnTS3KWtDcxeA/gz8O9Z2R868q/q+rfPmXCDLb+ocXtVreaAibfTuE8shrTdaqF/up8C8eJ6HRE+fWuGNiaexQSdZvieE5w+iAsODRp6pgPA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=cwpMi1qx; arc=none smtp.client-ip=220.197.31.2
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	s=arc-20240116; t=1762448004; c=relaxed/simple;
+	bh=JpRqcPxnyiahrRWopQHqL/udNfz8xFLZ4IJJ1yNFRzE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=LzYl8j1Wzf5IM/rvdq63fgAfuVyjOSAJVGoxz4mWGz6jEYJDTgobJHSNcPG/ZnwwvhndZD1TiwVvPofLLt1i4mWEPSHw8H9hsDXMtd5pTTSwa2dDRx/CQu9r6FRpt6JDxhNYN66kwqoJLG61J95+67hrGtlh8nL9pLs02nyYLeA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=P4Dh4HG6; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="cwpMi1qx"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=tZ
-	tXPz8G8Ta+6xYtNjx6aED98awUEA6hqIPRhy6FCGY=; b=cwpMi1qxwUyUHANhHF
-	Q/Xpl56TE2Z15MPmoC1YhiXa6XHXdFHErF65W3UIrLdTT18qbLZ/Y30I2PJV+RUd
-	VoRA3BbX1S587xyHNAAG14y3lmws6BWnBzNOmBxxgWAc57KEz6ojOfLbADCewBOP
-	arHLQ+35mK7O73lGXGuCRXrzQ=
-Received: from localhost.localdomain (unknown [])
-	by gzga-smtp-mtada-g1-3 (Coremail) with SMTP id _____wD39wSEKAtpS1hWBw--.11801S2;
-	Wed, 05 Nov 2025 18:35:49 +0800 (CST)
-From: Gongwei Li <13875017792@163.com>
-To: audit@vger.kernel.org
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="P4Dh4HG6"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1762448001;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=jfaHKlPxHr/Mtq+6BIhwUxcOaTw79FDWo9JAt0vNPf8=;
+	b=P4Dh4HG6AqQOAHBchWKM1nZMa/9ktoo1YoaZUlmPCvt/qaQkFjPlIBt5LXx2YMpeNEQdlw
+	ytK/gXnS6olpjeOM93Y+HAelkYCkZYRxJJDC1GXZwXddIS+OAMy5WYpF0qMeUHXIaBGR85
+	lsG8neC7+LLw7RalyAUmzkOTe+hWjec=
+Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-112-xY4CcUjtNz2QogZHgjJ15Q-1; Thu,
+ 06 Nov 2025 11:53:17 -0500
+X-MC-Unique: xY4CcUjtNz2QogZHgjJ15Q-1
+X-Mimecast-MFC-AGG-ID: xY4CcUjtNz2QogZHgjJ15Q_1762447996
+Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id A47DA19560B3;
+	Thu,  6 Nov 2025 16:53:15 +0000 (UTC)
+Received: from wsxc.redhat.com (unknown [10.96.134.113])
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 4F9151800362;
+	Thu,  6 Nov 2025 16:53:11 +0000 (UTC)
+From: Ricardo Robaina <rrobaina@redhat.com>
+To: audit@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	netfilter-devel@vger.kernel.org,
+	coreteam@netfilter.org
 Cc: paul@paul-moore.com,
 	eparis@redhat.com,
-	Gongwei Li <ligongwei@kylinos.cn>
-Subject: [PATCH] audit: Use kzalloc instead of kmalloc/memset
-Date: Wed,  5 Nov 2025 18:36:19 +0800
-Message-Id: <20251105103619.110504-1-13875017792@163.com>
-X-Mailer: git-send-email 2.25.1
+	fw@strlen.de,
+	pablo@netfilter.org,
+	kadlec@netfilter.org,
+	Ricardo Robaina <rrobaina@redhat.com>
+Subject: [PATCH v5 0/2] audit: improve NETFILTER_PKT records
+Date: Thu,  6 Nov 2025 13:53:03 -0300
+Message-ID: <cover.1762434837.git.rrobaina@redhat.com>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
@@ -40,43 +61,30 @@ List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wD39wSEKAtpS1hWBw--.11801S2
-X-Coremail-Antispam: 1Uf129KBjvdXoW7Jr48tF1DXw4rGFyDKr4kJFb_yoWfKFg_ZF
-	WIqr1qkF4jyF10vw45Gay3uFsIva40kr4fCa4YvFy5Xw1kGw4Sg348ZrWa9rZrXrWktFsx
-	uw1DCrnrKa13KjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-	9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IUewa93UUUUU==
-X-CM-SenderInfo: rprtmlyvqrllizs6il2tof0z/1tbiXAT8umkLH9zbDgAAsq
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
 
-From: Gongwei Li <ligongwei@kylinos.cn>
+Currently, NETFILTER_PKT records lack source and destination
+port information, which is often valuable for troubleshooting.
+This patch series adds ports numbers, to NETFILTER_PKT records.
 
-Replace kmalloc+memset by kzalloc
-for better readability and simplicity.
+The first patch refactors netfilter-related code, by moving
+duplicated code to audit.c, creating two helper functions:
+'audit_log_packet_ip4' and 'audit_log_packet_ip6'. 
+The second one, improves the NETFILTER_PKT records, by 
+including source and destination ports for protocols of
+interest.
 
-This addresses the warning below:
+Ricardo Robaina (2):
+  audit: add audit_log_packet_ip4 and audit_log_packet_ip6 helper
+    functions
+  audit: include source and destination ports to NETFILTER_PKT
 
-WARNING: kzalloc should be used for data, instead of kmalloc/memset
+ include/linux/audit.h    |  12 +++++
+ kernel/audit.c           | 114 +++++++++++++++++++++++++++++++++++++++
+ net/netfilter/nft_log.c  |  43 ++-------------
+ net/netfilter/xt_AUDIT.c |  43 ++-------------
+ 4 files changed, 134 insertions(+), 78 deletions(-)
 
-Signed-off-by: Gongwei Li <ligongwei@kylinos.cn>
----
- kernel/auditfilter.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
-
-diff --git a/kernel/auditfilter.c b/kernel/auditfilter.c
-index f7708fe2c..db014d724 100644
---- a/kernel/auditfilter.c
-+++ b/kernel/auditfilter.c
-@@ -638,10 +638,9 @@ static struct audit_rule_data *audit_krule_to_data(struct audit_krule *krule)
- 	void *bufp;
- 	int i;
- 
--	data = kmalloc(struct_size(data, buf, krule->buflen), GFP_KERNEL);
-+	data = kzalloc(struct_size(data, buf, krule->buflen), GFP_KERNEL);
- 	if (unlikely(!data))
- 		return NULL;
--	memset(data, 0, sizeof(*data));
- 
- 	data->flags = krule->flags | krule->listnr;
- 	data->action = krule->action;
 -- 
-2.25.1
+2.51.1
 
