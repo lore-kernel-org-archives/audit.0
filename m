@@ -1,66 +1,66 @@
-Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
+Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com [209.85.160.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 077431D61BC
-	for <audit@vger.kernel.org>; Fri,  7 Nov 2025 21:50:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20A17299A81
+	for <audit@vger.kernel.org>; Fri,  7 Nov 2025 22:46:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762552244; cv=none; b=e1Hgtb6J9vmcmGe6gJ7Svj+HO4PGQO+te3OI0bzvEOKS9/ECC+nyv0jX8S9FXyHoUUUww0moprkwmFk8xqiyAL00gozG8i85/a1Nz6KPmNMRgKqma/WjZ67eZU1sacORSqo4tunshpSzI5j/hy53dUMWXG4zpmkfeakTMsmvNmE=
+	t=1762555584; cv=none; b=b0kF6gTMtxLd302eQq785MStfxnYAD+deyxsN+MollN1rdlGwvlEuaoQWSI9+AYvSd+NieKyYyoHwd5cZ6Iqozi9x34vQ2NqdjyR1muUpX0aQJpOeOs2S4qCwtGLycRdGoUpKzIqxCcygfrVd333Ira8c/AzFSPBbav7lgDK2E8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762552244; c=relaxed/simple;
-	bh=pyLdhXK+e9aYqC0P31ccDopOnZF1MrhAcR9qbpwJoj8=;
+	s=arc-20240116; t=1762555584; c=relaxed/simple;
+	bh=Iw0djrGj0E1EeAmzCQwmf4P9quCFdn1G1qnajo2IswA=;
 	h=Date:Message-ID:MIME-Version:Content-Type:From:To:Cc:Subject:
-	 References:In-Reply-To; b=t67bW7XgAth/cbH3LF0lzf28wTZyJF3vkPR4M5k2VZnFsBRdkgb5egMAUNuIjwitR3AwNiUNnrW5dmbTBlvVjelq+qMzP/0dOfFe7zhsQM56nnbtjId/AF5aZI1RQbBhEToyGP9e8LQ5ysDhdRsiMh9oX2ySGF9qBjpbF/hnDaE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=Yzr0+uWX; arc=none smtp.client-ip=209.85.160.173
+	 References:In-Reply-To; b=bs+FhupRuNPJ4REBxR8ntPpKnURVstCn6YluIIglewlEnXTQhBI+KXcVFnwBlpxCRzQFE5tGScekwSV1ZGeCdKwGoiBXB2LSKLmuevpQj6ZyYK1IfZRjJ7n5ITOAgPfrsMa9DmHtYj2p+wS60EQyMdjgStYKBnR4PS4L2jWVKOs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=Y37ErSiH; arc=none smtp.client-ip=209.85.160.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="Yzr0+uWX"
-Received: by mail-qt1-f173.google.com with SMTP id d75a77b69052e-4e8850b09eeso9521011cf.0
-        for <audit@vger.kernel.org>; Fri, 07 Nov 2025 13:50:42 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="Y37ErSiH"
+Received: by mail-qt1-f178.google.com with SMTP id d75a77b69052e-4ed8e22689dso7642321cf.1
+        for <audit@vger.kernel.org>; Fri, 07 Nov 2025 14:46:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1762552242; x=1763157042; darn=vger.kernel.org;
+        d=paul-moore.com; s=google; t=1762555580; x=1763160380; darn=vger.kernel.org;
         h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
          :mime-version:message-id:date:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=QmoTkq/M8jICHPZ59r+DbNONIA6SHcI9Tq5Z/TFZHS4=;
-        b=Yzr0+uWX9y8maaLAoumVIlQ25OBsnB6rkY/07veYawgHwfnBFux7WAkVFXqQennQ8t
-         w3sGSjwqvEv7AMdWRYk8VVWWuwzvhBtJejwn21Wp67ceb8pIG4lnU+PYHquk2iD8R+ou
-         9gQm4jc2X/r1RURMm9Vp/q/YBD/1T8uZVedTZuG2VL3c5EdGUVoGYaoCpgGoAJVxvm1M
-         iIEzKd296L9G/7/I/7Eb+9hHXA+LhrVAYVdgHKEQVxeONpEgnUurxngk2XJbZFXRUilM
-         /ZCcHuFNKTIgvZGttUsCMk9zc+L/ZvMkPLRRfirZNxQebFHnTGi0ffmUBhua1E9pkkRN
-         6Jmg==
+        bh=LLmOflXkVRsPG430Y/bM1DxcagZMiyutQotB6mJKGqY=;
+        b=Y37ErSiH4Isan3caNYKDLIEIsV77MBpWe/YiN+tvF/g0CpXXvUE3DSr4FHkaDjvm37
+         HU25KiqHTNV60ZiCsYzOMvS1HJruZknV8Pwwfro4xSXUV/nWQg8uSd7UfWvLjYOq58bF
+         yQUClq9RlHRYpObM41GxH9NnxWe+wMg2j77RDBWG1zExYLuh+dPNWC9Lj3U2AOqK+DMx
+         KVknOFKG3FceXGCpSQEYE0ux3POONuMPreTSV2q+q1D29sc5EBuoOMRJfAzVGR0mWKvL
+         LpYT1KBfsIpV3HbpzGgZAtVseewMON6p3Kog9y+tFzi5/hzsn1B+/O5Noe/OqS6ngot1
+         tshQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762552242; x=1763157042;
+        d=1e100.net; s=20230601; t=1762555580; x=1763160380;
         h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
          :mime-version:message-id:date:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=QmoTkq/M8jICHPZ59r+DbNONIA6SHcI9Tq5Z/TFZHS4=;
-        b=c8aOp1UwBN8ppEiH31KOBwNCg+gz51TETT56L72No7c8S1QpRIiIYyoadmo3a4S2TD
-         dZvdskVVLLXUItG0m4fE/xVR1G5B79zk8LNRqQ8bF4iDnfoiDkaN/2FuD1EupExK7l19
-         mCnDymG6nbIG0V3eDAu29/THpX1RPuap0SDZCDCeRldUdEtST5Vd4wAt4vQJsASYMHj4
-         UWSNRPGvsv8y6ojLAe1cAB74mkjSS4o9xVZhdFkYiaI3AC6Rc+r7qtAfkzQOheEgwl0w
-         r30ySLI+VHGUzSMmQCoaxLrBF8fz+wjSx1NAlL3r4xCE3aJDV9kH/lAx7nhRATv/wauN
-         QnQg==
-X-Forwarded-Encrypted: i=1; AJvYcCX77yq9MOBsuajNNmO/R4z1b0vab1mvjQ9SBuS79Y0zEzVrPovNabMcrQqQ1zp/xDhK/FmYRw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxX+w/jfqJoYVfDBdLS/Wm2mFOiTPGdWGirzkrWU0Un3ay64uID
-	Vukj+lNsbcev0g5tCiDkl4g+1bM966kbNOTtcmpwSv+B/bqUDkvM3iYnalM2/J61pg==
-X-Gm-Gg: ASbGncvvDYm4cEw7iKAwrOvQjbHzTE5lGOTe+3QSXvB9fnDbTAp/YQCzSL0ruzdJRvA
-	QxHu8zei97+sS6HPYSV3Am7ol7lYOGK3uI4Rgu7y3MWbVy6t596FfR7ByJpE496ItViW3cRMdUN
-	R2KuqI227Y+9qW/LpJOe27J4Z+3JAX8sBJIkKe+buVEXeF3Jgx82Ss45SQoysMmaNf3UMMCC9Nn
-	v97Gzyi9KOsxjiX8NDSsViwtbxvmIFRGE1IV6Wz8Io1kfLLLEEM7P/p1I5GWiDHSuvsV1/U+uIB
-	KPI+4WK9HVUMEAlMHMai/MavGWJkuwE2nM4zxYpwiY+E95uB4yVABAuioXB3OcRbBXVAXb3kHia
-	UR8Rt7k9L0cDb45V7zsb5TJVQq5eCvWZpxCoGWGMLfxEXiCavImfjgKbss6rEqeRTxo1kQDKTy6
-	SL3yuadHg+n1/+ItTFBlHhCiyDBvBLyQrH+7sBWSTFDugL0PAJwTkO3UPS
-X-Google-Smtp-Source: AGHT+IGBsd98wCcuB1QNhGT9aKSRlEdnLcFa0mRVXHbfEi8hgtEWG9e4T8/HI0hMNHHgXfKIqunFKg==
-X-Received: by 2002:ac8:5a0f:0:b0:4ec:eec7:4850 with SMTP id d75a77b69052e-4eda4f7ec78mr7855511cf.44.1762552242055;
-        Fri, 07 Nov 2025 13:50:42 -0800 (PST)
+        bh=LLmOflXkVRsPG430Y/bM1DxcagZMiyutQotB6mJKGqY=;
+        b=jcWf5GMgTp1FyrS7gv5mKZoUcUYQS52MCXn5QcEf6zUmiBmyEg1V/BPV9UbtsgiVpN
+         nA6DgJLYn4Uw/OfMYzpANY9dKa/BMXS3UarjFUPil4DL0Y1NV++nXKQXwQkjf+zv0LFx
+         eYo6bGdXewgUV90ja7zJirkllwHgTa9Jt7PNymdvt7n9o6ptw+litpmoZquxJM5kp26C
+         VrJTsu5tw58NKZuY7gvtK+ejmDFSvrTKiqrDi9hkZBvXzMWHrC4bG0OTBxjx8OuLWyBz
+         G9VPUcZjWJxUsztu8VgRlSFAg9MpDIh6Pq7s4MV0rlLap55IWGapj4JGHIWtiNnv6INc
+         7XDA==
+X-Forwarded-Encrypted: i=1; AJvYcCUWqWXhoHbrnJ4IXX+rvai8t+QgdQZLa2CKziM7QP7OLkXKxFJXwNNh6+bTvGLeg0ZP2TAyhw==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx94l8sCKoutotxpgUrdjqBmJ2toVEGx+SsbEU3GqfRgApCCnKd
+	EsMHCEpKKZh4A5Eni1UsyJh+pTkfVv3c3VOV9feHsx526vGwxWJ+6nnjl1hHs3XxUg==
+X-Gm-Gg: ASbGncvGazAe3h8N7KuQDr/+6rTYFT2Masxm7XMWpa2dLmjYpokm4EsE+KY8G+JRVd4
+	I3r9W9gd0eBvHlq5Zm1qkhZdY7oZ075MAN8u/ameL5ohAAwgnYC6npLQ2nDilmJlTk9UXNa2jL5
+	994OAcRXBC05RByJqLIjUhpcidK0O7qIfLssEV7FElFBqEYdYc1UmlGjur5z7E8sjDJ2TuUtO8J
+	DQ0xVJVfk7YaklGkb1fAXQMVmd7DiG5JiVh71QXSTy4gH4P+jmKMHre2oiOAL3bfljMliTR8H38
+	oeTVJUad5srFSa+w9cZG5SFWwBlIeTUp9PHT8mpdhrmLni9bzaLwBeBAuLRtayfhh4ivU2cMjPY
+	n0ucvkzOK+904VEGl64yJxhs+Y1kVnm49ZUOGi+ifucOj4RHuia60JV1MihRxhyqgpyo3ugqD3E
+	4Lja/bh8971IDA6h6HGJ6nnWCBhwh+zmMIQ8MKRKnTnrLQkQIX5QCXU5sG
+X-Google-Smtp-Source: AGHT+IHrQn8HXQkHpkHyR17I/vgJvQDZ3PvcxfyB/9NyJzEb8+tk8bEQSW8kbFzruHMF1M4pLru8Dw==
+X-Received: by 2002:a05:622a:1455:b0:4eb:a2ab:4175 with SMTP id d75a77b69052e-4eda4fa3eebmr10623901cf.39.1762555579930;
+        Fri, 07 Nov 2025 14:46:19 -0800 (PST)
 Received: from localhost (pool-71-126-255-178.bstnma.fios.verizon.net. [71.126.255.178])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8823896818asm3361046d6.14.2025.11.07.13.50.40
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4eda56132c0sm3554831cf.7.2025.11.07.14.46.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Nov 2025 13:50:41 -0800 (PST)
-Date: Fri, 07 Nov 2025 16:50:40 -0500
-Message-ID: <54043277138c6499c0ced9bbdcae7cf5@paul-moore.com>
+        Fri, 07 Nov 2025 14:46:19 -0800 (PST)
+Date: Fri, 07 Nov 2025 17:46:18 -0500
+Message-ID: <e92df5b09f0907f78bb07467b38d2330@paul-moore.com>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
@@ -69,59 +69,215 @@ List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0 
 Content-Type: text/plain; charset=UTF-8 
 Content-Transfer-Encoding: 8bit 
-X-Mailer: pstg-pwork:20251107_1632/pstg-lib:20251106_1733/pstg-pwork:20251107_1632
+X-Mailer: pstg-pwork:20251107_1632/pstg-lib:20251107_1737/pstg-pwork:20251107_1632
 From: Paul Moore <paul@paul-moore.com>
-To: Ricardo Robaina <rrobaina@redhat.com>, audit@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc: eparis@redhat.com, Ricardo Robaina <rrobaina@redhat.com>
-Subject: Re: [PATCH v3] audit: merge loops in __audit_inode_child()
-References: <20251031123328.1758743-1-rrobaina@redhat.com>
-In-Reply-To: <20251031123328.1758743-1-rrobaina@redhat.com>
+To: Ricardo Robaina <rrobaina@redhat.com>, audit@vger.kernel.org, linux-kernel@vger.kernel.org, netfilter-devel@vger.kernel.org, coreteam@netfilter.org
+Cc: eparis@redhat.com, fw@strlen.de, pablo@netfilter.org, kadlec@netfilter.org, Ricardo Robaina <rrobaina@redhat.com>
+Subject: Re: [PATCH v5 1/2] audit: add audit_log_packet_ip4 and  audit_log_packet_ip6 helper functions
+References: <acd8109245882afd78cdf2805a2344c20fef1a08.1762434837.git.rrobaina@redhat.com>
+In-Reply-To: <acd8109245882afd78cdf2805a2344c20fef1a08.1762434837.git.rrobaina@redhat.com>
 
-On Oct 31, 2025 Ricardo Robaina <rrobaina@redhat.com> wrote:
+On Nov  6, 2025 Ricardo Robaina <rrobaina@redhat.com> wrote:
 > 
-> Whenever there's audit context, __audit_inode_child() gets called
-> numerous times, which can lead to high latency in scenarios that
-> create too many sysfs/debugfs entries at once, for instance, upon
-> device_add_disk() invocation.
+> Netfilter code (net/netfilter/nft_log.c and net/netfilter/xt_AUDIT.c)
+> have to be kept in sync. Both source files had duplicated versions of
+> audit_ip4() and audit_ip6() functions, which can result in lack of
+> consistency and/or duplicated work.
 > 
->    # uname -r
->    6.18.0-rc2+
-> 
->    # auditctl -a always,exit -F path=/tmp -k foo
->    # time insmod loop max_loop=1000
->    real 0m46.676s
->    user 0m0.000s
->    sys 0m46.405s
-> 
->    # perf record -a insmod loop max_loop=1000
->    # perf report --stdio |grep __audit_inode_child
->    32.73%  insmod [kernel.kallsyms] [k] __audit_inode_child
-> 
-> __audit_inode_child() searches for both the parent and the child
-> in two different loops that iterate over the same list. This
-> process can be optimized by merging these into a single loop,
-> without changing the function behavior or affecting the code's
-> readability.
-> 
-> This patch merges the two loops that walk through the list
-> context->names_list into a single loop. This optimization resulted
-> in around 51% performance enhancement for the benchmark.
-> 
->    # uname -r
->    6.18.0-rc2-enhancedv3+
-> 
->    # auditctl -a always,exit -F path=/tmp -k foo
->    # time insmod loop max_loop=1000
->    real 0m22.899s
->    user 0m0.001s
->    sys 0m22.652s
+> This patch adds two helper functions in audit.c that can be called by
+> netfilter code commonly, aiming to improve maintainability and
+> consistency.
 > 
 > Signed-off-by: Ricardo Robaina <rrobaina@redhat.com>
+> Acked-by: Florian Westphal <fw@strlen.de>
 > ---
->  kernel/auditsc.c | 43 +++++++++++++++++++------------------------
->  1 file changed, 19 insertions(+), 24 deletions(-)
+>  include/linux/audit.h    | 12 +++++++++++
+>  kernel/audit.c           | 39 ++++++++++++++++++++++++++++++++++++
+>  net/netfilter/nft_log.c  | 43 ++++------------------------------------
+>  net/netfilter/xt_AUDIT.c | 43 ++++------------------------------------
+>  4 files changed, 59 insertions(+), 78 deletions(-)
 
-Looks good to me, merged into audit/dev, thanks!
+...
+
+> diff --git a/net/netfilter/nft_log.c b/net/netfilter/nft_log.c
+> index e35588137995..f53fb4222134 100644
+> --- a/net/netfilter/nft_log.c
+> +++ b/net/netfilter/nft_log.c
+> @@ -26,41 +26,6 @@ struct nft_log {
+>  	char			*prefix;
+>  };
+>  
+> -static bool audit_ip4(struct audit_buffer *ab, struct sk_buff *skb)
+> -{
+> -	struct iphdr _iph;
+> -	const struct iphdr *ih;
+> -
+> -	ih = skb_header_pointer(skb, skb_network_offset(skb), sizeof(_iph), &_iph);
+> -	if (!ih)
+> -		return false;
+> -
+> -	audit_log_format(ab, " saddr=%pI4 daddr=%pI4 proto=%hhu",
+> -			 &ih->saddr, &ih->daddr, ih->protocol);
+> -
+> -	return true;
+> -}
+> -
+> -static bool audit_ip6(struct audit_buffer *ab, struct sk_buff *skb)
+> -{
+> -	struct ipv6hdr _ip6h;
+> -	const struct ipv6hdr *ih;
+> -	u8 nexthdr;
+> -	__be16 frag_off;
+> -
+> -	ih = skb_header_pointer(skb, skb_network_offset(skb), sizeof(_ip6h), &_ip6h);
+> -	if (!ih)
+> -		return false;
+> -
+> -	nexthdr = ih->nexthdr;
+> -	ipv6_skip_exthdr(skb, skb_network_offset(skb) + sizeof(_ip6h), &nexthdr, &frag_off);
+> -
+> -	audit_log_format(ab, " saddr=%pI6c daddr=%pI6c proto=%hhu",
+> -			 &ih->saddr, &ih->daddr, nexthdr);
+> -
+> -	return true;
+> -}
+> -
+>  static void nft_log_eval_audit(const struct nft_pktinfo *pkt)
+>  {
+>  	struct sk_buff *skb = pkt->skb;
+> @@ -80,18 +45,18 @@ static void nft_log_eval_audit(const struct nft_pktinfo *pkt)
+>  	case NFPROTO_BRIDGE:
+>  		switch (eth_hdr(skb)->h_proto) {
+>  		case htons(ETH_P_IP):
+> -			fam = audit_ip4(ab, skb) ? NFPROTO_IPV4 : -1;
+> +			fam = audit_log_packet_ip4(ab, skb) ? NFPROTO_IPV4 : -1;
+>  			break;
+>  		case htons(ETH_P_IPV6):
+> -			fam = audit_ip6(ab, skb) ? NFPROTO_IPV6 : -1;
+> +			fam = audit_log_packet_ip6(ab, skb) ? NFPROTO_IPV6 : -1;
+>  			break;
+>  		}
+>  		break;
+>  	case NFPROTO_IPV4:
+> -		fam = audit_ip4(ab, skb) ? NFPROTO_IPV4 : -1;
+> +		fam = audit_log_packet_ip4(ab, skb) ? NFPROTO_IPV4 : -1;
+>  		break;
+>  	case NFPROTO_IPV6:
+> -		fam = audit_ip6(ab, skb) ? NFPROTO_IPV6 : -1;
+> +		fam = audit_log_packet_ip6(ab, skb) ? NFPROTO_IPV6 : -1;
+>  		break;
+>  	}
+
+We can probably take this a step further by moving the case statements
+into the audit functions too.  I think this will make some of the other
+changes a bit cleaner and should reduce the amount of audit code in the
+NFT code.
+
+If we don't want to do that, it might be worthwhile to take the
+NFPROTO_BRIDGE protocol family reset shown below in audit_log_nft_skb()
+and use that in the nft_log_eval_audit() function so we aren't
+duplicating calls into the audit code.
+
+[WARNING: completely untested code, but you should get the basic idea]
+
+diff --git a/kernel/audit.c b/kernel/audit.c
+index 26a332ffb1b8..72ba3f51f859 100644
+--- a/kernel/audit.c
++++ b/kernel/audit.c
+@@ -2538,6 +2538,59 @@ static void audit_log_set_loginuid(kuid_t koldloginuid, kuid_t kloginuid,
+        audit_log_end(ab);
+ }
+ 
++int audit_log_nft_skb(struct audit_buffer *ab,
++                     struct sk_buff *skb, u8 nfproto)
++{
++       /* find the IP protocol in the case of NFPROTO_BRIDGE */
++       if (nfproto == NFPROTO_BRIDGE) {
++               switch (eth_hdr(skb)->h_proto) {
++               case htons(ETH_P_IP):
++                       nfproto = NFPROTO_IPV4;
++               case htons(ETH_P_IPV6):
++                       nfproto = NFPROTO_IPV6;
++               default:
++                       goto unknown_proto;
++               }
++       }
++
++       switch (nfproto) {
++       case NFPROTO_IPV4: {
++               struct iphdr iph;
++               const struct iphdr *ih;
++
++               ih = skb_header_pointer(skb, skb_network_offset(skb),
++                                       sizeof(_iph), &_iph);
++               if (!ih)
++                       return -ENOMEM;
++
++               audit_log_format(ab, " saddr=%pI4 daddr=%pI4 proto=%hhu",
++                                &ih->saddr, &ih->daddr, ih->protocol);
++               break;
++       }
++       case NFPROTO_IPV6: {
++               struct ipv6hdr iph;
++               const struct ipv6hdr *ih;
++
++               ih = skb_header_pointer(skb, skb_network_offset(skb),
++                                       sizeof(_iph), &_iph);
++               if (!ih)
++                       return -ENOMEM;
++
++               audit_log_format(ab, " saddr=%pI6 daddr=%pI6 proto=%hhu",
++                                &ih->saddr, &ih->daddr, ih->protocol);
++               break;
++       }
++       default:
++               goto unknown_proto;
++       }
++
++       return 0;
++
++unknown_proto:
++       audit_log_format(ab, " saddr=? daddr=? proto=?");
++       return -EPFNOSUPPORT;
++}
++
+ /**
+  * audit_set_loginuid - set current task's loginuid
+  * @loginuid: loginuid value
+diff --git a/net/netfilter/nft_log.c b/net/netfilter/nft_log.c
+index e35588137995..6f444e2ad70a 100644
+--- a/net/netfilter/nft_log.c
++++ b/net/netfilter/nft_log.c
+@@ -75,28 +75,7 @@ static void nft_log_eval_audit(const struct nft_pktinfo *pkt)
+                return;
+ 
+        audit_log_format(ab, "mark=%#x", skb->mark);
+-
+-       switch (nft_pf(pkt)) {
+-       case NFPROTO_BRIDGE:
+-               switch (eth_hdr(skb)->h_proto) {
+-               case htons(ETH_P_IP):
+-                       fam = audit_ip4(ab, skb) ? NFPROTO_IPV4 : -1;
+-                       break;
+-               case htons(ETH_P_IPV6):
+-                       fam = audit_ip6(ab, skb) ? NFPROTO_IPV6 : -1;
+-                       break;
+-               }
+-               break;
+-       case NFPROTO_IPV4:
+-               fam = audit_ip4(ab, skb) ? NFPROTO_IPV4 : -1;
+-               break;
+-       case NFPROTO_IPV6:
+-               fam = audit_ip6(ab, skb) ? NFPROTO_IPV6 : -1;
+-               break;
+-       }
+-
+-       if (fam == -1)
+-               audit_log_format(ab, " saddr=? daddr=? proto=-1");
++       audit_log_nft_skb(ab, skb, nft_pf(pkt));
+ 
+        audit_log_end(ab);
+ }
 
 --
 paul-moore.com
