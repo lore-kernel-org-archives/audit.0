@@ -1,60 +1,68 @@
-Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
+Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2946224A049
-	for <audit@vger.kernel.org>; Sun,  9 Nov 2025 22:40:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D71C824A049
+	for <audit@vger.kernel.org>; Sun,  9 Nov 2025 22:42:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762728009; cv=none; b=KZT+63mdNyyeYA4cd8/iGGPoQyKoaQ+uMFFrP+HPobmIIHXDBP/YgT4iauixjKVt2flINDRcDJ0uthWhAmlAPHgEj8X3ZukKAgEt+6RhFpTT3ECslCMELDhVehWlfzj8obyiwoAMkg0uevxmMpoSaBrqTIXyAVHAngXGczX/IJM=
+	t=1762728140; cv=none; b=mrDYiPdZ5puxU6JRx+MvFRVcETQwKMUhrukT6BJMuiXxg/Ns33bhsnn+NT0BOCOXrjzFWecK9iwcIAc1RUwwtGZMte9gH2jyod6nP+a+2zaxM+e/fxG2j2CXmzNkho1+1lBBMVAOcEJFlbYNYRhrMuXCE8PB9oOrQZvoX6ukBXc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762728009; c=relaxed/simple;
-	bh=Zz/RLnXj/ZlmR8T7NF7hLX/IgWqO3vnZx7+cRUL2HaQ=;
+	s=arc-20240116; t=1762728140; c=relaxed/simple;
+	bh=qIjdEUO4UIxlK8RXL91T93B918tKVIx5tlbLeaqNZTs=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=mhwD0DtDWWRkq9++coicXHj7qbWJ7mY10kURkfCdhiv4DN6xk1PrKUzPJt75l4oS3gj2xnc2yCxNagPWk+ZYBJ12jOY0nEDci8hnqSa3RxmW4rp/hcrXhpJRbQKL7yjGlcm13AJHPl5lpl8GB0039znHhYe+1s0gDEy9pb7uZN0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hm/ZXnqL; arc=none smtp.client-ip=209.85.208.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 To:Cc:Content-Type; b=ulcfb9fyFafkhfKAm+lfk7pXHUv5+beam1n+BjF2cZ1jxhO2YnU/7VJw1eS8sKf9ppNaUnQLi+MMlPK57fOtwkR85gQE2oIRWJuiZntXp5/m/G0R1M1a6MAAOzO6mUl3r1DGuYfaw0oFjMiUwgK2E+uS19lP+E4wVs3qq9tRhno=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=MzX4VfDs; arc=none smtp.client-ip=209.85.218.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hm/ZXnqL"
-Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-64165cd689eso1677403a12.0
-        for <audit@vger.kernel.org>; Sun, 09 Nov 2025 14:40:06 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="MzX4VfDs"
+Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-b7291af7190so359272066b.3
+        for <audit@vger.kernel.org>; Sun, 09 Nov 2025 14:42:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1762728005; x=1763332805; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Zz/RLnXj/ZlmR8T7NF7hLX/IgWqO3vnZx7+cRUL2HaQ=;
-        b=hm/ZXnqLeWIkLRXqpmqqqjAVkNtWvpAoYc4xya6uI0mJrk2a7gM9QAerILpH6Mu6Li
-         dOxlReETQNYnRRfRwXVpcVvRq1hi8WfKyi4ny4mrkxpqwLcX3qEZQbdkTj6RSASb5lao
-         fCc/aDC8H0owkjusWW4nDlpBl2nyvw2IQBvC1+5mZ4b+0ifon9Nx6CPpxJ3JtHK79Tsq
-         jHjWzP2ppXQC6g1b2kUDW55NuOu5fHsTcnrsnJ7yjC4rsioE8r7Wye+GXj7ChtrpFbO9
-         7inDbkRVthpXWyZqk3ySGO9dDL3F0/j/MTmpFLsQwoWWv29LCg9znLefrV88a2kaTcCr
-         jEuw==
+        d=linux-foundation.org; s=google; t=1762728136; x=1763332936; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=7S1tPI9KX5FxZpbFA6GTKD9y2rwBJh6/sJGdbAgzg24=;
+        b=MzX4VfDsnyjNO0R0WafNm74z/mAMlXZi2wgGt/ByHmFKH03MtFD0c1Ic1GShzg7/lE
+         Q3xQgiZ4GiotpvNqKQOb6P9JzqQrehpMi8twO20QcQ+j1R4ZD2SDs5hG+y+WB1/GJn/E
+         k9taFObJ48GV+2HskA2OjteraGRrbHHldHY4s=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762728005; x=1763332805;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=Zz/RLnXj/ZlmR8T7NF7hLX/IgWqO3vnZx7+cRUL2HaQ=;
-        b=UUk+8g79uZzIHMmbitb2ZBt0RBv3JyvUyS0z8cbAISFC/qmWX+tFeV3HVQxm+aKtuu
-         RnD0wYk5ht4PxwMCFwCEbiYIaSBwEeoOF/mpl7hC53NP9jUN/QDiKgpe/8jlQI5OkMDz
-         +QNnTnS37RCamACrox2ijFkgtMEjB9RfL/OYjBAAXCNiHP5CfDgXexCspLrrCbCungok
-         M+KDwaBrolFuY01gBhb/kZKz5PcPOTL2dj8YrrjuDPD4IKBmr6OBo+yrv8gB4NY8Plmv
-         QCNyIz4tZVamF9d4gFlHYEJSkJ7t5YZ9Fz0PpcxLGdhJdpxM3kR4a1c7VXYM7OhB8Upv
-         qiYQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUf1RWrFrO0hcwU6quzKRVGwCq7W0mtjMGvLBKhbQNLiWrTo7KWVvGg4SvpDfQooa91ZowozA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzBKbfvZq8f5izUsPHBlLWoa9d1GcCeTUfWe4XyJHaqDU+wYn24
-	RiZl9bG3x4NiVGQiede5+6LBrkybO1xninb1seAmxukqN9Stv33OLIUo1wA49HpIPocNSMIyOKy
-	QH8ABLByiJRQeaiflHA6S9Gs2Y3rnRcc=
-X-Gm-Gg: ASbGncs8JI6k3aL0Vm2770lI9rz25n3lqots6c1p1vUfNRC0p8zne5PvR0LCqX6oHpZ
-	uopvS/LdC7/odDUfUBFGe/MzyQ9J2CDHi8gXNHMOyb2sa6GHrsU/S/H4Mcn8BRBWqcrTdfDhZOf
-	m33lVFr0YCCf6KYUMALtt5vUO6Tjz8jwRozkcDvdCjCCeiioktoDglWdXwX8sbm2dz71RG6eWho
-	1DLMj/pOa285MKZc22I7IBRWvMPVxEB1UZIqAayKwvQlNQWi3XD3zP/6RBq8tc34Obhj/KaDM8t
-	idKIPMbdJFTjYXY=
-X-Google-Smtp-Source: AGHT+IEf2G3FM0i2bVmOUG7+vPY37y6f5todMu8F9N/qNHio4HbRPNWL68hqLfVk+zbwZK2GIQZm3Q4XqlDpU7RXT50=
-X-Received: by 2002:a17:907:60d6:b0:b6d:545e:44f6 with SMTP id
- a640c23a62f3a-b72d0954176mr884727066b.12.1762728005401; Sun, 09 Nov 2025
- 14:40:05 -0800 (PST)
+        d=1e100.net; s=20230601; t=1762728136; x=1763332936;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7S1tPI9KX5FxZpbFA6GTKD9y2rwBJh6/sJGdbAgzg24=;
+        b=vfXxqZk2TXaPHdoDR0k064YeSbRzbh2lI8TkJh7BZvg7W088Vxv9c+RMwS9N2y+Tc7
+         C5MD+OKKb9FcNsuRy4zOpJZ69e13XWff1dm/TG6FiCGrFOvUNcnwNctIkDyIRKNL0c5o
+         gVgR9wiaVWZNJABNuZIAJlA6l76HJi1PVHQWUKrV7tzcR0kS70FEbu25ID/rsMFcDyv6
+         V8aJ6r1QcJy1c2IjNDLCGIQlmcJLG4+TdYKOhNJETIKho+NzfhxnEGZNjTdeR55IEA5T
+         JxABesY7fcDhsxgzz83fEzGOm04bDrsv4WUjt6Ep/ccJmHMKzvkb7xR4iOH4lSiDz0Wb
+         2Dug==
+X-Forwarded-Encrypted: i=1; AJvYcCW7uMkpRihV2mjhqbsTcroFCOp36/v8nPrtacD7SEyWP6EU9T7PFVJyVMs6O3Y2QvAsSgvC+Q==@vger.kernel.org
+X-Gm-Message-State: AOJu0YymTogMqZo27npL/9uIGvRXYRFuNof47Dejpqzr95d8Atqpn/Aw
+	49YPQvDOj6aa5W3sjh+iTQ+6Vco9zl/DHbI30HKKwQE3RB/MPpB9FzYOaFY67sdKihnKOQezLqj
+	GJxBaxJc=
+X-Gm-Gg: ASbGncv1wsw6tBW5mvF59Y9IN4UPGiFGz0Lp8+AdGe/Te9UZsah2+toA2xOxW0NGsiC
+	WF3U/Hfn+uGohLXJHNeZgRAHVk6ztnrKxRIsqorSN3CxHRKbO+RComvGGSeBgt4EsDfl1LVypBl
+	+MjLMD09k8NA9ZtNzkEhbJniBU4EEapNjcntv4uGVB9JcmNTuO9oj4GYBT5/Ku+Hx+vh95Cw5Lo
+	LHzVL6/nUT11d2qkG9S3Z6voJO5b3+KqrgxyZw9+uQHoLF70Wo/LKjNIrF5dwEGqzXTDR9zcNUK
+	gbLd1V+6rRz8ygtjp2dAdFFz2FodJtBpDYSUuZiY75dR6mxF6sDtjqcUNcOF+uKpc4OQNwFCzBk
+	XVW3M1WI/M3VJnQkK4Iao7i5nMlVFYrQg1xbGYJbz+W/R6zJnzi+JKw4loUev/bAlIdg4Ng+FCT
+	HGUjg/Kf+PimDKEvISR4DsnVlbdXKyn0SH1HogXhon3azXZNzWuQ==
+X-Google-Smtp-Source: AGHT+IH8Cjx/CvUErdHXI6yEabo+5BFfTQeK6/t+x2oDN3hzNDCepfwkitzG/piT1NgG6eSUnZpPrw==
+X-Received: by 2002:a17:906:eeca:b0:b70:b52a:5597 with SMTP id a640c23a62f3a-b72e045a333mr638355066b.40.1762728136029;
+        Sun, 09 Nov 2025 14:42:16 -0800 (PST)
+Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com. [209.85.218.50])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b72bc09629fsm944202266b.0.2025.11.09.14.42.14
+        for <audit@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 09 Nov 2025 14:42:14 -0800 (PST)
+Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-b3c2db014easo447938266b.0
+        for <audit@vger.kernel.org>; Sun, 09 Nov 2025 14:42:14 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCWr+VXS6vwgHCl0hUxl7RR8+DFBa6tfFYqNW7AWTlaj0/czcli1/v4laeEm4ZOl2yVxCnJMJA==@vger.kernel.org
+X-Received: by 2002:a17:907:7246:b0:b72:5e29:5084 with SMTP id
+ a640c23a62f3a-b72e02729dfmr660861066b.4.1762728134438; Sun, 09 Nov 2025
+ 14:42:14 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
@@ -68,60 +76,33 @@ References: <20251109063745.2089578-1-viro@zeniv.linux.org.uk>
  <CAGudoHGCkDXsFnc30k10w-thxNZ5c0B9j26kOWsCXkOV8ueeEA@mail.gmail.com>
  <CAHk-=whxKKnh=rtO9sq0uUL76YGLB3YTb98DVBub_84_nO6txA@mail.gmail.com> <CAGudoHHA_dDXMZFh1=U=AjPsqK9PRUGq3fQ_GjOdebUBK-sn3g@mail.gmail.com>
 In-Reply-To: <CAGudoHHA_dDXMZFh1=U=AjPsqK9PRUGq3fQ_GjOdebUBK-sn3g@mail.gmail.com>
-From: Mateusz Guzik <mjguzik@gmail.com>
-Date: Sun, 9 Nov 2025 23:39:53 +0100
-X-Gm-Features: AWmQ_bm4fdxC6v1rOIJ15dLgNbIpqHp2QfAR172JK6y5Y6KlspYKYyOefkgBoCA
-Message-ID: <CAGudoHHMgY0NnN0FX_OQnV578Wu1e03VjO8+3tUA8XDxwy_Smg@mail.gmail.com>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Sun, 9 Nov 2025 14:41:58 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wj5GSLaqf+rVE6u-4-rzdUK+OM_oUnPLQoqVY4J_F0uRw@mail.gmail.com>
+X-Gm-Features: AWmQ_bk5CNTgXVq9Wj4DrVDvXfYphjsw9So7wK98LkhJD7EILYp-AjhoG9v3pfw
+Message-ID: <CAHk-=wj5GSLaqf+rVE6u-4-rzdUK+OM_oUnPLQoqVY4J_F0uRw@mail.gmail.com>
 Subject: Re: [RFC][PATCH 10/13] get rid of audit_reusename()
-To: Linus Torvalds <torvalds@linux-foundation.org>
+To: Mateusz Guzik <mjguzik@gmail.com>
 Cc: Al Viro <viro@zeniv.linux.org.uk>, linux-fsdevel@vger.kernel.org, 
 	brauner@kernel.org, jack@suse.cz, paul@paul-moore.com, axboe@kernel.dk, 
 	audit@vger.kernel.org, io-uring@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Sun, Nov 9, 2025 at 11:33=E2=80=AFPM Mateusz Guzik <mjguzik@gmail.com> w=
-rote:
->
-> On Sun, Nov 9, 2025 at 11:29=E2=80=AFPM Linus Torvalds
-> <torvalds@linux-foundation.org> wrote:
-> >
-> > On Sun, 9 Nov 2025 at 14:18, Mateusz Guzik <mjguzik@gmail.com> wrote:
-> > >
-> > > You would need 256 bytes to cover almost all of this.
-> >
-> > Why would you care to cover all of that?
-> >
-> > Your very numbers show that 128 bytes covers 97+% of all cases (and
-> > 160 bytes is at 99.8%)
-> >
-> > The other cases need to be *correct*, of course, but not necessarily
-> > optimized for.
-> >
-> > If we can do 97% of all filenames with a simple on-stack allocation,
-> > that would be a huge win.
-> >
-> > (In fact, 64 bytes covers 90% of the cases according to your numbers).
-> >
+On Sun, 9 Nov 2025 at 14:33, Mateusz Guzik <mjguzik@gmail.com> wrote:
 >
 > The programs which pass in these "too long" names just keep doing it,
-> meaning with a stack-based scheme which forces an extra SMAP trip
-> means they are permanently shafted. It's not that only a small % of
-> their lookups is penalized.
->
-> However, now that I wrote, I figured one could create a trivial
-> heuristic: if a given process had too many long names in a row, switch
-> to go directly to kmem going forward? Reset the flag on exec.
 
-Geez, that was rather poorly stated. Let me try again:
+Sure. So what?
 
-1. The programs which pass long names just keep doing for majority of
-their lookups, meaning the extra overhead from failing to fit on the
-stack will be there for most of their syscalls.
+We optimize for the common case.
 
-2. I noted a heuristic could be added to detect these wankers and go
-straight to kmem in their case. One trivial idea is to bump a counter
-task_struct for every long name and dec for every short name, keep it
-bounded. If it goes past a threshold for long names, skip stack
-allocs. Then indeed a smaller on-stack buffer would be a great win
-overall.
+Sure, there's an extra SMAP sequence for people using longer names,
+but while those SMAP things are costly compared to individual
+instructions, they aren't costly in the *big* picture.
+
+They are a pipeline stall, not some kind of horrendous thing.
+
+It would be *more* expensive to try to keep statistics than it is to
+just say "long pathnames are more expensive than short ones".
+
+                Linus
