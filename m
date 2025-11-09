@@ -1,34 +1,34 @@
 Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33EC138F9C;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4783241CB7;
 	Sun,  9 Nov 2025 06:37:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762670271; cv=none; b=JtlxsZ5EEZ+zu2JNf780WYtVPcYRApeuwoIINwmFv7VA4f3w/f4HAaqZ+CZmuy8yvKDR/CoomrDZaJHl5zQi4l7KVWQXiNwzqpleQWEyeaxCK1omdtRs6Oo+yQv8SXHYvrCNxtRkcXYL3rGiE2EN6I2GRILaBn7qMXqHU+G+I5I=
+	t=1762670271; cv=none; b=WhimD6NFy9vGr+Hznf5psU6X330eTuZPBwAhJChfixSB+ygcjpe/iyJrdCHCmy9jLxgSwZG5+4Owhxa5PFq51DqOZ1EeV3iIplTgcVlcvL+ZT5zu36zKfTTEfREds+gug8scgXzHsab0bP8WHrE7bvpqXufhHU4fx18MuKmGH9k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1762670271; c=relaxed/simple;
-	bh=ejixYtbS5/J13hPkZAA0xbfFwhUsT8keMfQ9xW+VTHo=;
+	bh=YXvExZ6nFYMYGW5Yow8JrqcueNyhJE1qx9yl2S9CFNI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=PyeJKwRznX5tVAKo1I+ISPXBKlgxgkY/zioLFK1T79dFLy1qEL3d8eKfEnzdTpQiNUif2kSs8DaI0gon/dOJnfYvsOyPxArz+CyOK/IoOKpj0mMK10xm6JtEklC7gUTmmpcomCTQjzzPSnIhOjdBWvVgA6W1IvkszKNoj+YnXAE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=JW6RFjZV; arc=none smtp.client-ip=62.89.141.173
+	 MIME-Version; b=kVVsyTw0a6OYhNPxwnEmVd8orRGUYvf0hRyfvfFPzad/lQ4MaNh8cc081B53C8Eg6EpHNZL3VDkJnvvZgWpxLfeKczIYfcii1G9rmH9nebClzJjaHnnbcBjzXODrXyiolOTxBsy8D14hBmWR/LXx5qun97LCdYVcFFIg+xDom/Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=t7ZoDXsb; arc=none smtp.client-ip=62.89.141.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="JW6RFjZV"
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="t7ZoDXsb"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=linux.org.uk; s=zeniv-20220401; h=Sender:Content-Transfer-Encoding:
 	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
 	Reply-To:Content-Type:Content-ID:Content-Description;
-	bh=dtcntkzvfcdf8HXOy2/XIfUxX4DMLOCsDkWNa4rKvpM=; b=JW6RFjZV5C+hRLv5XTAGj96bho
-	5HmhmXEaE2DJufiEeHgRiZBczAJUL7eSMrycc5kmynEYwJeTBKOePvL8NapxhrXUrgS++Bje5rOD5
-	SeckIvLYPeYHZIywHph90mvtZwfuaJD6GkyRohtM/3ilP9Ouzt0UxA7CbD9HJSO8lBFHRfRSs9VMb
-	ixAeX5tGuOKOFBViQI2ccwCEApMjXZnIaX8khfQOopJWcPOL5YNe9qiFh5xHWZ/GS77R+l+CL24cC
-	C3lXkyQglttI9FX4fJ/AFsi+QrBOhwpYVwIXNbhNvQs6qezSrtRWn4vOGSsDESS/0HRFtxiY0frxa
-	O5vRYSug==;
+	bh=2OVGejaTIaqTifOZGRFKTB6zyUq35WGbXMjA6hnZtbo=; b=t7ZoDXsbxeLWCoY8yjMq5se07Q
+	bcSED/P0dXfRD+NsKjJP6B2IfQvTyLXF/hnkOb/+k0Fc9LohkOBMjKYwlZebDDxGS8WA9QuK1I4Z+
+	SZilhrZDcdYetf5fUwGLSXge2fbcdMKq5pKqey0GChiBJuwMWha52uQ69o67Enh+oRcdD9AwGfCUS
+	lEBh/9HKU0miOH8luLnlAc6HvHxqP01J2eQMDV8ENZ+H4aQmNynkFAv7vD0TTYCc1s69EUvOVpGIF
+	NZovAt+r61Fy7uxMKLTBscBtlzI8kFwu/xf9ZgLM0Rp6CwT2ggNqWJXdEMzx/tEPSYeEfPmg0dnTN
+	/7umuPcg==;
 Received: from viro by zeniv.linux.org.uk with local (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1vHz3a-00000008lcL-2Wp7;
-	Sun, 09 Nov 2025 06:37:46 +0000
+	id 1vHz3b-00000008ldY-07hj;
+	Sun, 09 Nov 2025 06:37:47 +0000
 From: Al Viro <viro@zeniv.linux.org.uk>
 To: linux-fsdevel@vger.kernel.org
 Cc: torvalds@linux-foundation.org,
@@ -39,9 +39,9 @@ Cc: torvalds@linux-foundation.org,
 	axboe@kernel.dk,
 	audit@vger.kernel.org,
 	io-uring@vger.kernel.org
-Subject: [RFC][PATCH 09/13] do_readlinkat(): import pathname only once
-Date: Sun,  9 Nov 2025 06:37:41 +0000
-Message-ID: <20251109063745.2089578-10-viro@zeniv.linux.org.uk>
+Subject: [RFC][PATCH 13/13] struct filename ->refcnt doesn't need to be atomic
+Date: Sun,  9 Nov 2025 06:37:45 +0000
+Message-ID: <20251109063745.2089578-14-viro@zeniv.linux.org.uk>
 X-Mailer: git-send-email 2.49.0
 In-Reply-To: <20251109063745.2089578-1-viro@zeniv.linux.org.uk>
 References: <20251109063745.2089578-1-viro@zeniv.linux.org.uk>
@@ -54,53 +54,92 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: Al Viro <viro@ftp.linux.org.uk>
 
-Take getname_flags() and putname() outside of retry loop.
-
-Since getname_flags() is the only thing that cares about LOOKUP_EMPTY,
-don't bother with setting LOOKUP_EMPTY in lookup_flags - just pass it
-to getname_flags() and be done with that.
-
-The things could be further simplified by use of cleanup.h stuff, but
-let's not clutter the patch with that.
+... or visible outside of audit, really.  Note that references
+held in delayed_filename always have refcount 1, and from the
+moment of complete_getname() or equivalent point in getname...()
+there is no references to struct filename instance anywhere
+that would be visible to other threads.
 
 Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
 ---
- fs/stat.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ fs/namei.c         | 8 ++++----
+ include/linux/fs.h | 8 +-------
+ kernel/auditsc.c   | 6 ++++++
+ 3 files changed, 11 insertions(+), 11 deletions(-)
 
-diff --git a/fs/stat.c b/fs/stat.c
-index 6c79661e1b96..ee9ae2c3273a 100644
---- a/fs/stat.c
-+++ b/fs/stat.c
-@@ -566,13 +566,13 @@ static int do_readlinkat(int dfd, const char __user *pathname,
- 	struct path path;
- 	struct filename *name;
- 	int error;
--	unsigned int lookup_flags = LOOKUP_EMPTY;
-+	unsigned int lookup_flags = 0;
- 
- 	if (bufsiz <= 0)
- 		return -EINVAL;
- 
-+	name = getname_flags(pathname, LOOKUP_EMPTY);
- retry:
--	name = getname_flags(pathname, lookup_flags);
- 	error = filename_lookup(dfd, name, lookup_flags, &path, NULL);
- 	if (unlikely(error)) {
- 		putname(name);
-@@ -593,11 +593,11 @@ static int do_readlinkat(int dfd, const char __user *pathname,
- 		error = (name->name[0] == '\0') ? -ENOENT : -EINVAL;
- 	}
- 	path_put(&path);
--	putname(name);
- 	if (retry_estale(error, lookup_flags)) {
- 		lookup_flags |= LOOKUP_REVAL;
- 		goto retry;
- 	}
-+	putname(name);
- 	return error;
+diff --git a/fs/namei.c b/fs/namei.c
+index bb306177b8a3..9863cc319181 100644
+--- a/fs/namei.c
++++ b/fs/namei.c
+@@ -128,7 +128,7 @@
+ static inline void initname(struct filename *name)
+ {
+ 	name->aname = NULL;
+-	atomic_set(&name->refcnt, 1);
++	name->refcnt = 1;
  }
  
+ static struct filename *
+@@ -283,13 +283,13 @@ void putname(struct filename *name)
+ 	if (IS_ERR_OR_NULL(name))
+ 		return;
+ 
+-	refcnt = atomic_read(&name->refcnt);
++	refcnt = name->refcnt;
+ 	if (unlikely(refcnt != 1)) {
+ 		if (WARN_ON_ONCE(!refcnt))
+ 			return;
+ 
+-		if (!atomic_dec_and_test(&name->refcnt))
+-			return;
++		name->refcnt--;
++		return;
+ 	}
+ 
+ 	if (unlikely(name->name != name->iname)) {
+diff --git a/include/linux/fs.h b/include/linux/fs.h
+index d57c8e21be13..4ea32aba847b 100644
+--- a/include/linux/fs.h
++++ b/include/linux/fs.h
+@@ -2835,7 +2835,7 @@ extern struct kobject *fs_kobj;
+ struct audit_names;
+ struct filename {
+ 	const char		*name;	/* pointer to actual string */
+-	atomic_t		refcnt;
++	int			refcnt;
+ 	struct audit_names	*aname;
+ 	const char		iname[];
+ };
+@@ -2944,12 +2944,6 @@ int delayed_getname_uflags(struct delayed_filename *v, const char __user *, int)
+ void dismiss_delayed_filename(struct delayed_filename *);
+ struct filename *complete_getname(struct delayed_filename *);
+ 
+-static inline struct filename *refname(struct filename *name)
+-{
+-	atomic_inc(&name->refcnt);
+-	return name;
+-}
+-
+ extern int finish_open(struct file *file, struct dentry *dentry,
+ 			int (*open)(struct inode *, struct file *));
+ extern int finish_no_open(struct file *file, struct dentry *dentry);
+diff --git a/kernel/auditsc.c b/kernel/auditsc.c
+index e59a094bb9f7..d71fc73455b2 100644
+--- a/kernel/auditsc.c
++++ b/kernel/auditsc.c
+@@ -2169,6 +2169,12 @@ static struct audit_names *audit_alloc_name(struct audit_context *context,
+ 	return aname;
+ }
+ 
++static inline struct filename *refname(struct filename *name)
++{
++	name->refcnt++;
++	return name;
++}
++
+ /**
+  * __audit_getname - add a name to the list
+  * @name: name to add
 -- 
 2.47.3
 
