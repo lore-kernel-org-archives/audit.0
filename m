@@ -1,123 +1,97 @@
-Received: from mail-qk1-f176.google.com (mail-qk1-f176.google.com [209.85.222.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06464274B58
-	for <audit@vger.kernel.org>; Fri,  7 Nov 2025 22:46:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33F1D1C5D7D;
+	Sun,  9 Nov 2025 06:37:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762555584; cv=none; b=JoYGuzFrWNeVRpWIqIyptLMVaKm/yUb5gggy4uTYN8jOe7k4QA3zjX2g3qvzCp1smZ6mav7pCF4BCjDj4VLGZ3a7S3BctHMDYk6tMQZt4DfWsuA3YtBTAi0jGlOiPgz044SqHJ+ZeSDxsTebSqzYC1T52nFD+NIv3e6GJM6UcNk=
+	t=1762670270; cv=none; b=foDywCkeqg/To8d+BfcxBAiGjbniKW6Bop/n2HcHKFKhA1qCvB7BRz6tOGEibwaxZxsE2G1VZrrxIS4ST89hVIumuFIk9AW4F0WsSM/PtorKtts79Cf6O/iEn7XHcs2ilys6hXlcZx1lGCP41CmAocA2QfswoKRXLpo7aMzLjlU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762555584; c=relaxed/simple;
-	bh=exM2y4bXCjZMQxm7NJdgWLyhnwqAYQhkw/iId3BFS+8=;
-	h=Date:Message-ID:MIME-Version:Content-Type:From:To:Cc:Subject:
-	 References:In-Reply-To; b=DWO9I3+YMKMiErP4EYf7i1ZS57AAb8WOtjxUzjhcIM6shUVibAwQG3US3DwSZyoBtmRt0csPg4/yJeH8H+A1gYNjIR/QPIdENzu9CZ5jYvVmsxtfXnLIwgkwR0DgsrTYGAccYSjMljGIkTlY2yDZVLPnLB3LjTVFpgX8SnMkMH0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=KVYUmF+4; arc=none smtp.client-ip=209.85.222.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+	s=arc-20240116; t=1762670270; c=relaxed/simple;
+	bh=5MEqgjhpmzI29H1uV/1SQLwXuo398WOo5iQ8G4kZTTs=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=IAoA9zbfe3RcAA7uU/DoiRR1aXiWVn3i8ZIa0hM9vTbZVZncHJ7ijO7eXMOUXWKZLR+gz+4cIozxlb/7kP8Y7uDi8ZUckSRpozBb2ewnumLaUD801BbDsea4czvZykUKWjy6v0j6uF5jRNXhSgywz9jBYmuMQzscgDlz2YakGn0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=wRBujgxm; arc=none smtp.client-ip=62.89.141.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="KVYUmF+4"
-Received: by mail-qk1-f176.google.com with SMTP id af79cd13be357-89048f76ec2so127957485a.1
-        for <audit@vger.kernel.org>; Fri, 07 Nov 2025 14:46:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1762555582; x=1763160382; darn=vger.kernel.org;
-        h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
-         :mime-version:message-id:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=MkmPvv21zjwIVzkW8sxRUn2RFjg0W7CBZpQyks/0r2w=;
-        b=KVYUmF+4V85J7wkDvBX3yrVHN5+YA71d5bxsyxqohUm2OmHoZwGu9JWjnf0UhwtVvO
-         pW4QIjxXvTG5Ix+VkbzhoPxxUsPK4C6sZa69vVq4BohCiqNBFnYS7pNeBbG2h9J+7HKc
-         4qCPr27R6XCpoUPA1rNEPqwZrcYlpC21iUzho/0/oqa3hMFManvilFCpf+iACvMbKxzt
-         RMljVYOJXELWE8fQzf8jdQYPtEtofibVTvfb4vJ+P61bX5nDzbDk02HEUhwqzN3ATSji
-         io+vgmyxH+Nb+j+j2uieD0odIG+HYtwb6vXjj03Oj2ucT/sEVYYDEpyFww+eEHsy/Dnw
-         SVtQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762555582; x=1763160382;
-        h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
-         :mime-version:message-id:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=MkmPvv21zjwIVzkW8sxRUn2RFjg0W7CBZpQyks/0r2w=;
-        b=xQmXD/jUwQv4/8GfIKM8iemGUnek7XMamLynHmwYuLv7qoNtg67SB5mxSEoKFrzIZ2
-         yvT9ByjFKSzepJpW6DJBORj7PAh39HasWgtxrZYCliCcvnj8NLZGDmwbr9r9eslO0VEk
-         Wq9LEMpPA/2eFlN//mVZznPu4PlTp0loP2vEY88PiXrbW5frXAGsxLL6ZGumCn/tVcuh
-         +RkCrLmRW/aEGZRXrNHK+uVw03wvR/liEgalYSG9J4DA8wiGEUvwWTx32ki9gdAgEuL2
-         xRxEt1WwQ4figbZNg3FcuIEP9WIBJ4oQgCsWidF4Wg+UOHI2oTyGuEqPoYjNwBP5gfxS
-         Lodw==
-X-Forwarded-Encrypted: i=1; AJvYcCWrMIIiFSz1I3GDFpaIRWwxBlW4iiAkrq6KB/7CXKLthQ3KBorx2dh4RAQ3I9csHMWPkHokvw==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx7fhYh6Y5RrekV79THW3OfhIN6LST7mZwzuzjR/cM3MKMIOOf+
-	S1Z7LBSAdWiCImzHaQrnFBzGVPFaMmW9ZaUHr1gB7W2y2vSRHrnZ3ITL/RJ0qb/WMXWHFo3CbQ5
-	mTRo=
-X-Gm-Gg: ASbGncsOPJkBs8ZNP+gZNM2G9ILp0Obvy3/0iHNK8SAa5BJnBmgD7KIF3sZ/syjilgk
-	3tQwlkaK5LxudSHD92XUqMIb5Mrt77QfK5hIWRTEjtPm6kNw7b222sDeXId9KmEcB1KFGCe/W6A
-	G3IASBtRfeHoxSrG5BaMvp7tPlN1Ho019LzMSOYBJK2mzAMwZ1TioPQnMgrrAY0SfHZHrMWfxlt
-	gYqksgQvBhur2XTmecSg0hajzUxsvSAyeROBcoCJ6meAR1qRWFvBQr0uRDU2Y/ypOF3S61KTPfX
-	+15MCfG1XaMUD9Y6LlfSbJ6P6Ujf3wQjjfOTMybVm7bijNDUm/W1pK2vFQ86svN9yzOmdvIAjSr
-	3Jcwme6lbHjKfqOGRD3jiIEM5+CvkQgDt+SSdr/EKYZmKw0laUQ57epE/LhWg6q0+OgNAckV64w
-	9limcth+5KGYD6SVNCMnKy9qfU39cwvdFmqQfNQbGQCn803X81uj/q0zua
-X-Google-Smtp-Source: AGHT+IGW2w5cYMyEJm74NZs2gDmZaOfaiPNwFh5FQ3KOXZnvYLTWQ2yOy1B0NxEYIggNl+tUwAUNgQ==
-X-Received: by 2002:a05:620a:4153:b0:892:8439:2efa with SMTP id af79cd13be357-8b257f02acemr121709485a.23.1762555581926;
-        Fri, 07 Nov 2025 14:46:21 -0800 (PST)
-Received: from localhost (pool-71-126-255-178.bstnma.fios.verizon.net. [71.126.255.178])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-8b2355c334dsm512663685a.12.2025.11.07.14.46.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Nov 2025 14:46:20 -0800 (PST)
-Date: Fri, 07 Nov 2025 17:46:20 -0500
-Message-ID: <a396108e2b9f19f0c453a44c8e7be873@paul-moore.com>
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="wRBujgxm"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=linux.org.uk; s=zeniv-20220401; h=Sender:Content-Transfer-Encoding:
+	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
+	Reply-To:Content-Type:Content-ID:Content-Description;
+	bh=H3lRaX9hzJYaGyPHgtEsqC7lsKDUGMd09oess7PslzA=; b=wRBujgxmD+7Nj7zqiunCbeNK6m
+	4ZfGkuiyFSAr/eJNo7V+t5OQDOGnsSicKcqxZav7DPEqCGf5oqgu6q+KtiGEOF80+vjo9Eku6oZrO
+	UzQW8ZBVCTXnVECl+Ksz589nedh+mbB8Nfo4BxKKHS41ml7zV33j9gkOEVj1ldPtWmdLYyGUfuvRj
+	YMJENNhilRzhxRg90GXj2qgE3VVU+Lg2++MEooS03azE33EzzQHqjLU9hVnZY8I6YAV+fSC3dCLYT
+	4TXLrVgP+DxLO6WHZt5+pi3D+Gpoih5tIGMQD9Fmx8k/HxQgQrBCLowWUrrHkDrBenXZxsc5p7eIb
+	cAHXO0NQ==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1vHz3a-00000008lc7-1zU4;
+	Sun, 09 Nov 2025 06:37:46 +0000
+From: Al Viro <viro@zeniv.linux.org.uk>
+To: linux-fsdevel@vger.kernel.org
+Cc: torvalds@linux-foundation.org,
+	brauner@kernel.org,
+	jack@suse.cz,
+	mjguzik@gmail.com,
+	paul@paul-moore.com,
+	axboe@kernel.dk,
+	audit@vger.kernel.org,
+	io-uring@vger.kernel.org
+Subject: [RFC][PATCH 07/13] user_statfs(): import pathname only once
+Date: Sun,  9 Nov 2025 06:37:39 +0000
+Message-ID: <20251109063745.2089578-8-viro@zeniv.linux.org.uk>
+X-Mailer: git-send-email 2.49.0
+In-Reply-To: <20251109063745.2089578-1-viro@zeniv.linux.org.uk>
+References: <20251109063745.2089578-1-viro@zeniv.linux.org.uk>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 
-Content-Type: text/plain; charset=UTF-8 
-Content-Transfer-Encoding: 8bit 
-X-Mailer: pstg-pwork:20251107_1632/pstg-lib:20251107_1737/pstg-pwork:20251107_1632
-From: Paul Moore <paul@paul-moore.com>
-To: Ricardo Robaina <rrobaina@redhat.com>, audit@vger.kernel.org, linux-kernel@vger.kernel.org, netfilter-devel@vger.kernel.org, coreteam@netfilter.org
-Cc: eparis@redhat.com, fw@strlen.de, pablo@netfilter.org, kadlec@netfilter.org, Ricardo Robaina <rrobaina@redhat.com>
-Subject: Re: [PATCH v5 2/2] audit: include source and destination ports to  NETFILTER_PKT
-References: <b44ec08fbb011bc73ad2760676e0bbfda2ca9585.1762434837.git.rrobaina@redhat.com>
-In-Reply-To: <b44ec08fbb011bc73ad2760676e0bbfda2ca9585.1762434837.git.rrobaina@redhat.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Sender: Al Viro <viro@ftp.linux.org.uk>
 
-On Nov  6, 2025 Ricardo Robaina <rrobaina@redhat.com> wrote:
-> 
-> NETFILTER_PKT records show both source and destination
-> addresses, in addition to the associated networking protocol.
-> However, it lacks the ports information, which is often
-> valuable for troubleshooting.
-> 
-> This patch adds both source and destination port numbers,
-> 'sport' and 'dport' respectively, to TCP, UDP, UDP-Lite and
-> SCTP-related NETFILTER_PKT records.
-> 
->  $ TESTS="netfilter_pkt" make -e test &> /dev/null
->  $ ausearch -i -ts recent |grep NETFILTER_PKT
->  type=NETFILTER_PKT ... proto=icmp
->  type=NETFILTER_PKT ... proto=ipv6-icmp
->  type=NETFILTER_PKT ... proto=udp sport=46333 dport=42424
->  type=NETFILTER_PKT ... proto=udp sport=35953 dport=42424
->  type=NETFILTER_PKT ... proto=tcp sport=50314 dport=42424
->  type=NETFILTER_PKT ... proto=tcp sport=57346 dport=42424
-> 
-> Link: https://github.com/linux-audit/audit-kernel/issues/162
-> 
-> Signed-off-by: Ricardo Robaina <rrobaina@redhat.com>
-> Acked-by: Florian Westphal <fw@strlen.de>
-> ---
->  kernel/audit.c | 83 +++++++++++++++++++++++++++++++++++++++++++++++---
->  1 file changed, 79 insertions(+), 4 deletions(-)
+Convert the user_path_at() call inside a retry loop into getname_flags() +
+filename_lookup() + putname() and leave only filename_lookup() inside
+the loop.
 
-This looks fine to me, although it may change a bit based on the
-discussion around patch 1/2.  However, two things I wanted to comment
-on in this patch:
+In this case we never pass LOOKUP_EMPTY, so getname_flags() is equivalent
+to plain getname().
 
-- Please try to stick to an 80 char line width for audit code.  There are
-obvious exceptions like printf-esque strings, etc. but the
-skb_header_pointer() calls in this patch could be easily split into
-multiple lines, each under 80 chars.
+The things could be further simplified by use of cleanup.h stuff, but
+let's not clutter the patch with that.
 
-- This isn't a general comment, but in this particular case it would be
-nice to move the protocol header variables into their associated switch
-case (see what I did in patch 1/2).
+Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
+---
+ fs/statfs.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
---
-paul-moore.com
+diff --git a/fs/statfs.c b/fs/statfs.c
+index a45ac85e6048..a5671bf6c7f0 100644
+--- a/fs/statfs.c
++++ b/fs/statfs.c
+@@ -99,8 +99,9 @@ int user_statfs(const char __user *pathname, struct kstatfs *st)
+ 	struct path path;
+ 	int error;
+ 	unsigned int lookup_flags = LOOKUP_FOLLOW|LOOKUP_AUTOMOUNT;
++	struct filename *name = getname(pathname);
+ retry:
+-	error = user_path_at(AT_FDCWD, pathname, lookup_flags, &path);
++	error = filename_lookup(AT_FDCWD, name, lookup_flags, &path, NULL);
+ 	if (!error) {
+ 		error = vfs_statfs(&path, st);
+ 		path_put(&path);
+@@ -109,6 +110,7 @@ int user_statfs(const char __user *pathname, struct kstatfs *st)
+ 			goto retry;
+ 		}
+ 	}
++	putname(name);
+ 	return error;
+ }
+ 
+-- 
+2.47.3
+
