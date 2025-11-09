@@ -1,34 +1,34 @@
 Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 340A921018A;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29B7F25771;
 	Sun,  9 Nov 2025 06:37:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762670271; cv=none; b=f0kUUImSpqnTtaZAra9H6kAN6OfLb5Efx/1lJoFLdeWthG3745Vu8Q/sP9FwaHDebpWdsT7aemgXpN8H92CDqPCw1keauBmRqkVWQVyhsPt1O4jt7Q9er78f2anzwZUR2w+s/DU7lb8rgH+M2iOiMHf0Za8436zDa1giZOQOPpY=
+	t=1762670271; cv=none; b=IY2rfFwqVzIWBlwOngTphHpAvk0qb/mhv+1guitWgQmAyIgf4frpIk7+FDR3sus/TxdHN+6nLSpDvYvofTa7utetbecx1Z5rYLhbPrIHz/TtkA2nmCHvkL9uqYJoQPuOosvHIvOJHh70l1Q4+09lhLLui1KFDlx7aLT+pe+vkCw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1762670271; c=relaxed/simple;
-	bh=baMOPtk3nbJJvzRoLOvYH128FU/gcEoAgtiDd1Hx3fQ=;
+	bh=0YgR4JPIv4trQtTKKjsZyS87DZYBNKhfp3ECxkZq4Jk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=cuuYlHQWFLZw4mJYYvW0SVn1B8xosn+QHe1rrrs+vN6tHi+16qXYV5M02v+QWTj8t6xrqTvNZpWzQJQrOm9WN6MsIK/bzWQDILY4LDLP8s0Krf+I/w1HZ2wF6u+8VVoDUVfw3yQnEoYPX7L2MYaGFeJ0t5v7K+6Au2Gpp1XsHB0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=U7QNuNul; arc=none smtp.client-ip=62.89.141.173
+	 MIME-Version; b=ida9/4imRM9Jeza5+v9jBhWslbJkGdi0rYJyo/uQZWin01PpjJxWKEblmIoOhxVtSR6KLDWXsvlTbEMOcBCyy1tu/2YoBzM+b4iRs6xDFIlXnTmHix2ZolmAE78+2uOaE1ImE5i/NIF3CrFvb9GAu1d1lxn3n94hOEVfagynreY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=QGPz4eTm; arc=none smtp.client-ip=62.89.141.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="U7QNuNul"
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="QGPz4eTm"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=linux.org.uk; s=zeniv-20220401; h=Sender:Content-Transfer-Encoding:
 	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
 	Reply-To:Content-Type:Content-ID:Content-Description;
-	bh=cKIa+FRKqhlosKFiCPklZ3Ftnw6IS15CGX1Ala1Uzf8=; b=U7QNuNuljnugaMJd7aGc66iicY
-	pAXh2QP5DGGAD25hrbS7qd7GVyOo8nbePZjl8vtIsL0cHrPedc/AhLEgLbQWhZ7SuwxbZ0by8jmsQ
-	lHmGk2wwWlKVz2vIO6z//4Fez+44Rkydb+sPnx2yxF+sL1kiFJ0kqmU/sXJSG+GSEEz/EHdOpZr4k
-	3ajgQTgTAP8CYNn0Nn28W9EPmil7ihagjXSdaGeqgRvR54aLOidmnfbEmc0S4Bn+8BTOA1gcZSXc7
-	0+KZrIQmujHnzZK2ra7o6kh8vS7tq/3EBoWX7fo47Ng98FXIeuFbGjzlkJxODW2toywIy6Uywzoy3
-	G95q212w==;
+	bh=rf0QBWjyFpio5L0bss+WOUIUsJ9vjsc4nuTYKt2zUvY=; b=QGPz4eTm1oIVRutzVPWvecoFkZ
+	mt8UgKqpc7sB02M4cORONVeH+alU9c4FH8zFIUtpG0T6h3pxvGPeBk/RRLx/+bxYG8bdda7Tu2fDu
+	V2RGw2oJsf9rrcKpT+wm7L7BNCo9mTKKsdJFoSATHOZFUunGUN9jPJUJM/LyCKCbzCMxK4yBJ5HR0
+	Rs6ZZAEFhfKgh6yLWNnKIlDQksdiFkfVVQh2/FIZG7nbRwevXXmggHyGNtyPrwpvsXaacJpNWsFOB
+	T5D4Z/WYrQWm1ZxRYH1Xds6NhYOgW8l/YuSmCWb9j4pz205xbtDhNWpE5Av9I40F7lAQXm7jdN0JV
+	Q/wf5ThQ==;
 Received: from viro by zeniv.linux.org.uk with local (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1vHz3Z-00000008lbC-3dq3;
-	Sun, 09 Nov 2025 06:37:45 +0000
+	id 1vHz3a-00000008lba-0Vjp;
+	Sun, 09 Nov 2025 06:37:46 +0000
 From: Al Viro <viro@zeniv.linux.org.uk>
 To: linux-fsdevel@vger.kernel.org
 Cc: torvalds@linux-foundation.org,
@@ -39,9 +39,9 @@ Cc: torvalds@linux-foundation.org,
 	axboe@kernel.dk,
 	audit@vger.kernel.org,
 	io-uring@vger.kernel.org
-Subject: [RFC][PATCH 01/13] do_faccessat(): import pathname only once
-Date: Sun,  9 Nov 2025 06:37:33 +0000
-Message-ID: <20251109063745.2089578-2-viro@zeniv.linux.org.uk>
+Subject: [RFC][PATCH 03/13] do_fchownat(): import pathname only once
+Date: Sun,  9 Nov 2025 06:37:35 +0000
+Message-ID: <20251109063745.2089578-4-viro@zeniv.linux.org.uk>
 X-Mailer: git-send-email 2.49.0
 In-Reply-To: <20251109063745.2089578-1-viro@zeniv.linux.org.uk>
 References: <20251109063745.2089578-1-viro@zeniv.linux.org.uk>
@@ -69,48 +69,43 @@ let's not clutter the patch with that.
 
 Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
 ---
- fs/open.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ fs/open.c | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
 
 diff --git a/fs/open.c b/fs/open.c
-index 3d64372ecc67..db8fe2b5463d 100644
+index e9a08a820e49..e5110f5e80c7 100644
 --- a/fs/open.c
 +++ b/fs/open.c
-@@ -471,6 +471,7 @@ static int do_faccessat(int dfd, const char __user *filename, int mode, int flag
- 	int res;
- 	unsigned int lookup_flags = LOOKUP_FOLLOW;
- 	const struct cred *old_cred = NULL;
+@@ -804,17 +804,17 @@ int do_fchownat(int dfd, const char __user *filename, uid_t user, gid_t group,
+ 		int flag)
+ {
+ 	struct path path;
+-	int error = -EINVAL;
++	int error;
+ 	int lookup_flags;
 +	struct filename *name;
  
- 	if (mode & ~S_IRWXO)	/* where's F_OK, X_OK, W_OK, R_OK? */
- 		return -EINVAL;
-@@ -480,8 +481,6 @@ static int do_faccessat(int dfd, const char __user *filename, int mode, int flag
+ 	if ((flag & ~(AT_SYMLINK_NOFOLLOW | AT_EMPTY_PATH)) != 0)
+-		goto out;
++		return -EINVAL;
  
- 	if (flags & AT_SYMLINK_NOFOLLOW)
- 		lookup_flags &= ~LOOKUP_FOLLOW;
--	if (flags & AT_EMPTY_PATH)
+ 	lookup_flags = (flag & AT_SYMLINK_NOFOLLOW) ? 0 : LOOKUP_FOLLOW;
+-	if (flag & AT_EMPTY_PATH)
 -		lookup_flags |= LOOKUP_EMPTY;
- 
- 	if (access_need_override_creds(flags)) {
- 		old_cred = access_override_creds();
-@@ -489,8 +488,9 @@ static int do_faccessat(int dfd, const char __user *filename, int mode, int flag
- 			return -ENOMEM;
- 	}
- 
-+	name = getname_uflags(filename, flags);
++	name = getname_uflags(filename, flag);
  retry:
--	res = user_path_at(dfd, filename, lookup_flags, &path);
-+	res = filename_lookup(dfd, name, lookup_flags, &path, NULL);
- 	if (res)
+-	error = user_path_at(dfd, filename, lookup_flags, &path);
++	error = filename_lookup(dfd, name, lookup_flags, &path, NULL);
+ 	if (error)
  		goto out;
- 
-@@ -530,6 +530,7 @@ static int do_faccessat(int dfd, const char __user *filename, int mode, int flag
+ 	error = mnt_want_write(path.mnt);
+@@ -829,6 +829,7 @@ int do_fchownat(int dfd, const char __user *filename, uid_t user, gid_t group,
  		goto retry;
  	}
  out:
 +	putname(name);
- 	if (old_cred)
- 		put_cred(revert_creds(old_cred));
+ 	return error;
+ }
  
 -- 
 2.47.3
