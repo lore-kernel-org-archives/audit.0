@@ -1,140 +1,101 @@
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22C4318A956;
-	Mon, 10 Nov 2025 19:58:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B01422F261F
+	for <audit@vger.kernel.org>; Mon, 10 Nov 2025 20:53:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762804719; cv=none; b=Le9TY7xvCt/iELz0lCfI3sa0xQ/SYt+MoaQJL0sXU1icza4ChVg19BZVXwP6jF/YbATkWZYyBqAMi57DrjoF2D6y34tGpWQZc4tBnqVfQZfZouL1iSWDHtyMVPInijKFN0TtRsUq5bChM9uAroBwZeF+neSkdV5BwGxQGhVzKtA=
+	t=1762807998; cv=none; b=lfUOrnmN/RV98Iu3ZvjNotiedU8UHZPt0GcI0x1UCmvZl1T5qgup2FBDK0eWFK856RpZDUPlIESUE3j2iTCtjQQYn5V0Ph7pHhEcOzOw2gFzMIvJSYJ2HGd8UNKKgNe+yrf/7TW7/gZoyxbiXULSzCNVTGlfqcu0syZ30VLKJRI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762804719; c=relaxed/simple;
-	bh=zzUMAVc+YltOZz/0m9lDa5bDZglHhhA+42+qMgWTBVM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ywlo+v9Bqiz7+HhFU7F6rqOjwzk5FKXcPWgsdCSh6dadzs5gUCmdEo58WHzRbC9+w2zgGmy7v/4zU86XmzibuXJI19to/aRn+Nufo0TRFvdnl+edubu7o7Ch6OZ6YyV6ICKsiPZ1eB74fgMomCpps6v9yihqznwQ2XGu3tCP97Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=jUDCKcBp; arc=none smtp.client-ip=62.89.141.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
+	s=arc-20240116; t=1762807998; c=relaxed/simple;
+	bh=JX9r00UWOioSGgY9OIngH/ryyDZlP1m8Vn4QG2kc5H4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=M+m6GQeGn1WVBHdDaeZ0FG5bSEg6oRx07Dqr/c7J+xEyRSD6Wz8ZYLEudTiMcsA8dzOqgDgY9LiaU2JNBvFopqV9nDajHePNugGL+/MzmAIzvMHigV4hm4x0DCz7Nwstp1roU4wKXdH7A6BhVFtrwIMJJkV/lY2s8reodntB7UI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=TPMyloj3; arc=none smtp.client-ip=209.85.208.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="jUDCKcBp"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=6P0jRtBdbPeH9TaBadc+VJlhiYAMnrlWk/flaJZ0tDY=; b=jUDCKcBp4fnfkjSGgEAo0fqtHG
-	hwJCCspPX1bf6ei8ytIFjFBw7Y1AV3+e8apSeeqPWQxKEtXNBvzhNRH/s27LKTME9wf6TusI7HpS5
-	Kj7Lr9iV6h54Gc/uI6+Z5pdHXMLEPMmfna6yUU1wCYscL+97KToHAT3KnZucmFCLv+gVM80o8dxUx
-	YZ4gQ2wCXieqcEE0XzBPvoNIjBJDY7yzMibhH3NYSC274xYxYDKWDLFYfcmDb0zXpVyhbPOmioOnq
-	2R2+08spG7Pc1FKFB40Xz8eXb/fYWu0HbnneXYSPxASdyiXa6w/5/ID9QBncqLsE62l3c1lh76Fxd
-	5N/vyZNA==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1vIY25-0000000Gb8H-2eaC;
-	Mon, 10 Nov 2025 19:58:33 +0000
-Date: Mon, 10 Nov 2025 19:58:33 +0000
-From: Al Viro <viro@zeniv.linux.org.uk>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: linux-fsdevel@vger.kernel.org, brauner@kernel.org, jack@suse.cz,
-	mjguzik@gmail.com, paul@paul-moore.com, axboe@kernel.dk,
-	audit@vger.kernel.org, io-uring@vger.kernel.org
-Subject: Re: [RFC][PATCH 10/13] get rid of audit_reusename()
-Message-ID: <20251110195833.GN2441659@ZenIV>
-References: <20251109063745.2089578-1-viro@zeniv.linux.org.uk>
- <20251109063745.2089578-11-viro@zeniv.linux.org.uk>
- <CAHk-=wgXvEK66gjkKfUxZ+G8n50Ms65MM6Sa9Vj9cTFg7_WAkA@mail.gmail.com>
- <CAHk-=wjA=iXRyu1-ABST43vdT60Md9zpQDJ4Kg14V3f_2Bf+BA@mail.gmail.com>
- <20251110051748.GJ2441659@ZenIV>
- <CAHk-=wgBewVovNTK4=O=HNbCZSQZgQMsFjBTq6bNFW2FZJcxnQ@mail.gmail.com>
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="TPMyloj3"
+Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-6419b7b4b80so1967861a12.2
+        for <audit@vger.kernel.org>; Mon, 10 Nov 2025 12:53:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1762807995; x=1763412795; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Rf8vYmew6sPCWLS1uooTayzzz1zVmg4FNt5aKYULseU=;
+        b=TPMyloj3GXVYYAuGb03fJ32y8sUZNdIYiagEoS6IIUSWB9e4WCLlVQxzV72fQXecO5
+         1Xv2viMoeJBn7N0us+sYnT1suZN3JDE1r+qLmoNvCWwZ+ao06CNn1qFGbtPC2jxOAIfY
+         MCtwxEmlx+eutS1Exbir4o4oQzgpbA8/E3Rdg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1762807995; x=1763412795;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Rf8vYmew6sPCWLS1uooTayzzz1zVmg4FNt5aKYULseU=;
+        b=OdccPznpxLoCC3G0Rwl59ZvtDk3gt7Vrz1SfPD/Vip6ZevkjmKzjQAXLWWiuHghpnN
+         0emJBb9aHqO2J5OCshrLbw7jMQfzNTYdXXoe2lx0MFXHhzWimmL8GHTjJcgc/zkK47Rg
+         fQR7xAHNpA1abXMGRev/Acip+60ZsYthxbDYHAWPxNMd3ck/gHuZJts64+VbA4AoDCGZ
+         dSdH/eQ1nG9W0Bq42MXO7TcesqIb2NtZFRa/MIdIRn3sTDMFghEGIMJcDMEtAkecuU//
+         1ydRH5FJFdCoexZdQSj01lMDijNZWmr0Ox9l9xoIvZ8kP/KlBARHtyEKfplSCtUGYHWP
+         FD0w==
+X-Forwarded-Encrypted: i=1; AJvYcCVI1uNp8KGsVRlsPiNoBM4NnVxASB344sjQqNqIPIRA8yrQtaaMWV0ET4ymrfSfenKq1hdw8w==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxmG2JjREF+c+4jlLfm5Moug9CTDdZm/PHYTWD7XXmTsBfwKuMA
+	MGLurWfsqDvnM6r4aSrsijVzW0mqX6HI9vkipGyc1pjEr1Qpqeha7Q3Iujf/RJh989xUFyyK5vm
+	BvPTvxTM=
+X-Gm-Gg: ASbGncvjBSDYbHkB7OvzVBmedyz/l3ZQVydiT/zWrCMITY3eHNkzMhYKKh8N9dkpGZ1
+	Hc9wghVGzIbDvlY3KpzL0whdG/cixJmgtsNlosAhdVcYWj7Q1yGw508UBraccCJ3yp/41bANHp0
+	FMAvk4/1FRqdzZypiq3JPhaXDDLX66PqYn6qTOudC4a+PqHYGVT61uSX/MK04n7yPrwj2j5v+7X
+	lsBdP8ibM9DnYrdnfjvlhVQ1i3l9KQ3kXlJsqaDT3V/jW9P8+WDAFfnqxr7theN+PtH04x5bPF7
+	RCtFfXmFBjKwsI9BzVzrpuLaWR4MOut9Dtv2ByfC614MvCnzRZ7cuLuZmE+2ly/QVgndgtYGJvN
+	mybPYIWBlFBO0VKO5p0yUTciiGdWpaMMWTeUwGv/BcLaj0yOSFAIEBV+rJxZn5sa7YDthqGVjiF
+	ZfhEwW0vJXgXZSoiewIK5itnhU8OK/3FGQ3Bj/VxoP2nmPiT/xDQ==
+X-Google-Smtp-Source: AGHT+IFvzP19GhON5M3RpvC52XgFhkzQjqRPhKlh33kRKcIwJrQ1Bt17ZAvdgaNp/5J7dH4qERFxvQ==
+X-Received: by 2002:a17:906:eecc:b0:b72:dc33:3d36 with SMTP id a640c23a62f3a-b72e056d8e5mr706488666b.49.1762807994952;
+        Mon, 10 Nov 2025 12:53:14 -0800 (PST)
+Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com. [209.85.218.41])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b72bdbcb043sm1190839066b.6.2025.11.10.12.53.13
+        for <audit@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 10 Nov 2025 12:53:13 -0800 (PST)
+Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-b3c2c748bc8so441697566b.2
+        for <audit@vger.kernel.org>; Mon, 10 Nov 2025 12:53:13 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCUxrwoi6roRd9RZhIcWdQGEv/C85jxNtK4NlrAVc8X3qL+bAJsJe6NPUANYuivfMo/WgXcz7w==@vger.kernel.org
+X-Received: by 2002:a17:907:7b96:b0:b40:fba8:4491 with SMTP id
+ a640c23a62f3a-b72e0310d6fmr1100087666b.17.1762807993264; Mon, 10 Nov 2025
+ 12:53:13 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wgBewVovNTK4=O=HNbCZSQZgQMsFjBTq6bNFW2FZJcxnQ@mail.gmail.com>
-Sender: Al Viro <viro@ftp.linux.org.uk>
+References: <20251109063745.2089578-1-viro@zeniv.linux.org.uk>
+ <20251109063745.2089578-11-viro@zeniv.linux.org.uk> <CAHk-=wgXvEK66gjkKfUxZ+G8n50Ms65MM6Sa9Vj9cTFg7_WAkA@mail.gmail.com>
+ <CAHk-=wjA=iXRyu1-ABST43vdT60Md9zpQDJ4Kg14V3f_2Bf+BA@mail.gmail.com>
+ <20251110051748.GJ2441659@ZenIV> <CAHk-=wgBewVovNTK4=O=HNbCZSQZgQMsFjBTq6bNFW2FZJcxnQ@mail.gmail.com>
+ <20251110195833.GN2441659@ZenIV>
+In-Reply-To: <20251110195833.GN2441659@ZenIV>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Mon, 10 Nov 2025 12:52:57 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wi3vpw5W6rV6VKxa9PYF3Xwn5_6AT=OwqBWO79g6N1B_A@mail.gmail.com>
+X-Gm-Features: AWmQ_blj7UCkHVNWD8MxILQgPkvzV6LzxIw6bD27yUdHSxmjHA7zzLofljDreO4
+Message-ID: <CAHk-=wi3vpw5W6rV6VKxa9PYF3Xwn5_6AT=OwqBWO79g6N1B_A@mail.gmail.com>
+Subject: Re: [RFC][PATCH 10/13] get rid of audit_reusename()
+To: Al Viro <viro@zeniv.linux.org.uk>
+Cc: linux-fsdevel@vger.kernel.org, brauner@kernel.org, jack@suse.cz, 
+	mjguzik@gmail.com, paul@paul-moore.com, axboe@kernel.dk, 
+	audit@vger.kernel.org, io-uring@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Mon, Nov 10, 2025 at 08:41:45AM -0800, Linus Torvalds wrote:
+On Mon, 10 Nov 2025 at 11:58, Al Viro <viro@zeniv.linux.org.uk> wrote:
+>
+> If we go that way, do you see any problems with treating
+> osf_{ufs,cdfs}_mount() in the same manner?  Yes, these are pathnames,
 
-> > IMO things like "xfs" or "ceph" don't look like pathnames - if
-> > anything, we ought to use copy_mount_string() for consistency with
-> > mount(2)...
-> 
-> Oh, absolutely not.
-> 
-> But that code certainly could just do strndup_user(). That's the
-> normal thing for "get a string from user space" these days, but it
-> didn't historically exist..
+Hmm. In those cases, the ENAMETOOLONG thing actually does make sense -
+exactly because they are pathnames.
 
-There would be a minor change in errors (s/ENAMETOOLONG/EINVAL/
-and s/ENOENT/EINVAL/, AFAICS), but nobody really gives a damn,
-so...
+So I think that in those two places using getname() is fairly natural
+and gets us the natural error handling too. No?
 
-If we go that way, do you see any problems with treating
-osf_{ufs,cdfs}_mount() in the same manner?  Yes, these are pathnames,
-but the strings copied there are going to be fed (after another round
-of copying) to lookup_bdev(), i.e. getname_kernel().  At least that
-way it would be consistent with what mount(2) does...
-
-diff --git a/arch/alpha/kernel/osf_sys.c b/arch/alpha/kernel/osf_sys.c
-index a08e8edef1a4..21a8f985999b 100644
---- a/arch/alpha/kernel/osf_sys.c
-+++ b/arch/alpha/kernel/osf_sys.c
-@@ -454,42 +454,34 @@ static int
- osf_ufs_mount(const char __user *dirname,
- 	      struct ufs_args __user *args, int flags)
- {
--	int retval;
-+	char *devname __free(kfree) = NULL;
- 	struct cdfs_args tmp;
--	struct filename *devname;
- 
--	retval = -EFAULT;
- 	if (copy_from_user(&tmp, args, sizeof(tmp)))
--		goto out;
--	devname = getname(tmp.devname);
--	retval = PTR_ERR(devname);
-+		return -EFAULT;
-+
-+	devname = strndup_user(tmp.devname, PATH_MAX);
- 	if (IS_ERR(devname))
--		goto out;
--	retval = do_mount(devname->name, dirname, "ext2", flags, NULL);
--	putname(devname);
-- out:
--	return retval;
-+		return PTR_ERR(devname);
-+
-+	return do_mount(devname, dirname, "ext2", flags, NULL);
- }
- 
- static int
- osf_cdfs_mount(const char __user *dirname,
- 	       struct cdfs_args __user *args, int flags)
- {
--	int retval;
-+	char *devname __free(kfree) = NULL;
- 	struct cdfs_args tmp;
--	struct filename *devname;
- 
--	retval = -EFAULT;
- 	if (copy_from_user(&tmp, args, sizeof(tmp)))
--		goto out;
--	devname = getname(tmp.devname);
--	retval = PTR_ERR(devname);
-+		return -EFAULT;
-+
-+	devname = strndup_user(tmp.devname, PATH_MAX);
- 	if (IS_ERR(devname))
--		goto out;
--	retval = do_mount(devname->name, dirname, "iso9660", flags, NULL);
--	putname(devname);
-- out:
--	return retval;
-+		return PTR_ERR(devname);
-+
-+	return do_mount(devname, dirname, "iso9660", flags, NULL);
- }
- 
- static int
-
+              Linus
