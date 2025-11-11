@@ -1,112 +1,151 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f44.google.com (mail-io1-f44.google.com [209.85.166.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65C232EAB61
-	for <audit@vger.kernel.org>; Tue, 11 Nov 2025 11:06:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D85030216A
+	for <audit@vger.kernel.org>; Tue, 11 Nov 2025 14:41:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762859178; cv=none; b=NsH8nWen4bWxcPpdGKxZ1auABj/uvsC8x9LZPEojy7H8Gx664IvsFKXTOa2MKBYJ4qrTPoDpuAacP+iFaX8CX6+IPe/bNvdOq4N0QVln2TjgKMvlVDsWv9WnMTlMOjGO4AQpQEidfjvxB9GvIlOT1L+5hCj1Eue+75mhA5W0pwU=
+	t=1762872089; cv=none; b=YoB5dZLYyiar6gxdOwHz//kPj/vO+Iokntr5BhNFs3U8W3IVKlJppJ+GNVqZiriAbvNvJ7KZiWSF7MNstwyaPFBkG0o+H050GMu8skiBI3XfrXPGBqUQShw8JIZ+dIX9VQvmMx4ni6fxLmL6nrGiCe9Z5uQFKh3Hj0mmY2xwHJ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762859178; c=relaxed/simple;
-	bh=wgdtMOgnIdauBeWDydYoY+O9WRpPfmsDE4Q2ko8WTUY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=TZm8IYox6VK4uNKSjLv1njAwoUl509tpix9gkHJtLoIEHugDnp04BzkA2EW59KHiZnyJOQUXCe7EIxt7XQY2v8QEiOL5OFTqSxhDze0ijjtcy2b/T829sRtwdwqwud9GOv/U2CttEL/TuKfmtRvSj4Mn+Oz67hOCIY8a42XOLX4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=PhRG8HFr; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1762872089; c=relaxed/simple;
+	bh=KSxZLglOxeS+T2/tlk7iOWOgFgF+QB8I9cVugzlebVI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=KcbeXKexjncTRzOr40kczbdCnCJDza41ErUogeeBVK9f4h+HzvMsqWtzby/DYlHRTI7xtTSt9P83ZxHjQnzvc7qXzqHmOlBnWk8h++ZXtEKBpmmkFjHJq63oGyVHEt5t8WprB+iYlLEfpR9DKcSgdGfQPm4xJZjbVgcGOoWOmkQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=hjxI1RFj; arc=none smtp.client-ip=209.85.166.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="PhRG8HFr"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1762859175;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=0GDbVFAUnTTBAQqYxAS+qt3Sk5mP5Wt8XB64j/zpUDE=;
-	b=PhRG8HFroB6GPirs2SXZ37iLXipSyOs8In5E6vm13EDnOmwHMibCNY4EZMue8NdNbErTs3
-	hq1h6nQBo7kjaijb5gEpTnz4cQ3bIyE+prqZtQYqWIJyNHTtnjkLBzMxCiaReAO7oLXUAH
-	foAKcgICzQ5ZXmH7ycWSf+T42rzOz60=
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
- [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-528-nd26juW5NzWDcZOZntJk7w-1; Tue, 11 Nov 2025 06:06:12 -0500
-X-MC-Unique: nd26juW5NzWDcZOZntJk7w-1
-X-Mimecast-MFC-AGG-ID: nd26juW5NzWDcZOZntJk7w_1762859171
-Received: by mail-ej1-f71.google.com with SMTP id a640c23a62f3a-b6d7405e6a8so70413266b.1
-        for <audit@vger.kernel.org>; Tue, 11 Nov 2025 03:06:11 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="hjxI1RFj"
+Received: by mail-io1-f44.google.com with SMTP id ca18e2360f4ac-93e7e87c21bso214580139f.3
+        for <audit@vger.kernel.org>; Tue, 11 Nov 2025 06:41:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1762872086; x=1763476886; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=LHq/vGiBYX19IyAjvpsj0s82ScpRukDdLxz2HyIHoFY=;
+        b=hjxI1RFjk2o0gLtNesbkZPWIteNI1zXP3oSxD3r1To+j8a0ykk4vwKn5XUQS50xfYq
+         zjJprVUNDuCLbQ6fRKHE0SP3yBYXMvUoi0Pe2l/69KLMHTh6xra5w+h/gTjYXl5tj2th
+         TL8l4GAsroQ46W1vS4gNVr2preXtRpg+a5KrUx85y26VjYh+NypoZAXyLJ0XbnxlZYbj
+         0nps8bbn2XkR6/1ZjHL8bomE2lOm+dHJqPj70VZfupWhrmUj31+2nil9/h7JFBo5zwSS
+         cSuBhzlTqslcHBA5A45yaqlpzZC+DCiynQM304FE7XX3s6mcuPteShTUna7vp6YtIiQY
+         QPrA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762859171; x=1763463971;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=0GDbVFAUnTTBAQqYxAS+qt3Sk5mP5Wt8XB64j/zpUDE=;
-        b=vwaO7GuNHPSlC+EfeKCQtXaroHPimflrBzgwWta/i7TG962B5P5Sqy8nuI9hrqtFRk
-         1L9kpxHac0WSQgBWNsbKUwN80k9LQFg2INLpUosq6nbIki6BBikO/bzgxSi6mfS2P6gE
-         9m0fFUTNt7YH20Cx2bB/qyiCtZpqHY9KrA8fW0Z7zb4pccGYWPPeaYzADVT1ccQARtGH
-         3uOwJykBiJHiYct0jnshSNg77nz5iUYPrHVqKlNyWyb0YMVOPc9EbctX1IshDKlzG+kk
-         XfqgcyZXqplAbLYQnWG1TSmHiMWHrVyJz7gTEwgLq0VN/jB5k9WlZpXRN0XMjUxtb4pP
-         U73g==
-X-Forwarded-Encrypted: i=1; AJvYcCX8/0C39VXSEPpi3vuE8IXDKEbrQeT48eMikqHIjgJBpb/dZJveTyr+pI89ZMwi1FGga45C8Q==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzjJAUcQ6QMX+MJQJg0xHvFUYUPDdxN29UF+25nx0F/JB8S+7rH
-	9KhDXyxQaf3a01gMwkr6I2tLDgTBswyAWQd46S94JFBFGyO8Lt35MADkmr8QO+cIKm+eIPPff/y
-	T9RIC3iBwehLX1murmoSI6v15jlchybmv+hDKmwIN3XnyQ3suw8yUGP9yUg43Hmf/E+RNsx23lZ
-	POrV9C9/28ItSF3VIkWrLQLur7eG2S1LM=
-X-Gm-Gg: ASbGncvewGU9mj3vU0N7QIU0nPRHCUgfFUGO9SfdZBg7jPsO0kV3rP1P5bl57AufDz0
-	dQb8H4p0gGWJkbKyIysSn1EKLbREqPumkLGMvfcDQSHfeUg8ls1z3mOnOE/fayp74/rb7BFynmz
-	xUeW4PC5Klb0VSL0XQ0/AQk7AuDNP8JhkSxOaL2QzPEEJPpPXG5xp/K+JfJrlAYlkhTodFCYNf9
-	t01vnxu0uwrYDid
-X-Received: by 2002:a17:907:847:b0:b07:e258:4629 with SMTP id a640c23a62f3a-b731d592612mr365867366b.16.1762859170919;
-        Tue, 11 Nov 2025 03:06:10 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IH00joUcH98KIScPdspMz6C7WmzE6y9BjmZMzMPi9/1/g0CWswqBDBalNWaO//kifqVOVeSio6hNYd8TE3PJWo=
-X-Received: by 2002:a17:907:847:b0:b07:e258:4629 with SMTP id
- a640c23a62f3a-b731d592612mr365865466b.16.1762859170594; Tue, 11 Nov 2025
- 03:06:10 -0800 (PST)
+        d=1e100.net; s=20230601; t=1762872086; x=1763476886;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=LHq/vGiBYX19IyAjvpsj0s82ScpRukDdLxz2HyIHoFY=;
+        b=F+WTZqKJ1mMOauug5zyn+XyOfl/RfGVFrN6fuq1JmF7kQNeyPrFzjn9FYV+Z7qWfjn
+         irFH01r00Fqb3zqmSe8/F+fK9rOx+/+tGgnFE02FMbP6t8FfOB28Xn6rVGlrsflpvfxR
+         Dc56bbAvrHqSdH5I9sHVt2r/UfXFCjQOX+6Qe1hoj0r8YHRTT+4yQptf8V4/KVaSMWKS
+         K+4LvnaqMZOcbEu2CaIE7aICCgekkKqVw6ArPSEOjFvG1gIo1VOfIiDQlRsRDW09GUSZ
+         tcO0tpI4IZRJITO74WjDq6dYZArTx21oSJnex+2G7Lyg+D8O43TUcg28m9IQTfzWtov8
+         jKDQ==
+X-Forwarded-Encrypted: i=1; AJvYcCW3tN+6Qtp+YvxxAs0jLNTyRhhnm7sV1BuPrzuZmGMLhT/AC5LuV61yMaN3E0MB5/0rLzI6DA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwCtBWx8DdmZhHRR1Hv8OYqOuOa+O2WLVf3qEZRJBLaxXQlEIrZ
+	IQoqTzUA5eiwLbW/feTl7JtyTMTmi0blMqbS05QZNRlafwoZAiEtxY2NWSBP2lSA+w0=
+X-Gm-Gg: ASbGncsMaAWuMBbbvpsFtBrg3NCXJbhdisIIaShecW2WNBxL9DCDMZc+Wv+GlpXCL/W
+	EDKgR9xjiOJjM1IRNkDLOuml95qPmwrLmrEhH9D7hRDCfIkqthFO0oCCw8PKDWUtp+eQdoGVDnA
+	NpVffbIF+e2vnSnxLWBpISZBx/dS572UvYruFfeSSKz2XAklUF4jA6g5aEtY0RH6ZJHxaWho1Cl
+	f8XK2eW/7t88P/I1Bhj6HWOPpcOokThCl2NJbEYYyN2DDkNu4jgZgy9qLJOdZo8N8hKv9YNsH90
+	HQQ4l+k9fBOodE7jSTX2+m+OKX9g+/mb5eC87rboXfEjoeb9H9fGQO1HunzMk5dKExJE/UI9n8J
+	DIRP0696uGav204HHE0qGBP+Lo5vOf3CdUSLL62Tww5jLZztaxnVAXr+ss/JV2pPu8qvOgGTGmw
+	==
+X-Google-Smtp-Source: AGHT+IF9qtXDJkW7aPNIhYGjEhbbO2h9PE5MLJY4LFYe3Ab10AJRovJe55m7m89B0ZJ6/+08nI7FPg==
+X-Received: by 2002:a05:6602:6087:b0:887:638a:29b5 with SMTP id ca18e2360f4ac-9489602c03cmr1526890739f.9.1762872086130;
+        Tue, 11 Nov 2025 06:41:26 -0800 (PST)
+Received: from [192.168.1.150] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-5b746806d41sm6259258173.20.2025.11.11.06.41.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Nov 2025 06:41:25 -0800 (PST)
+Message-ID: <257804ed-438e-4085-a8c2-ac107fe4c73d@kernel.dk>
+Date: Tue, 11 Nov 2025 07:41:24 -0700
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <acd8109245882afd78cdf2805a2344c20fef1a08.1762434837.git.rrobaina@redhat.com>
- <e92df5b09f0907f78bb07467b38d2330@paul-moore.com> <CAABTaaCVsFOmouRZED_DTMPy_EimSAsercz=8A3RLTUYnpvf_A@mail.gmail.com>
- <aRHd_WFBcyiL1Ufe@strlen.de>
-In-Reply-To: <aRHd_WFBcyiL1Ufe@strlen.de>
-From: Ricardo Robaina <rrobaina@redhat.com>
-Date: Tue, 11 Nov 2025 08:05:59 -0300
-X-Gm-Features: AWmQ_bms7BujCKPIYEHexBScB1G6ShV9xg4dnReCgV_Fb1MzdZWI32KI09CCb4A
-Message-ID: <CAABTaaA7XKVcV8GdmdkKLP+9gfKpv5f4oJupVXzR6KEaOFS9cQ@mail.gmail.com>
-Subject: Re: [PATCH v5 1/2] audit: add audit_log_packet_ip4 and
- audit_log_packet_ip6 helper functions
-To: Florian Westphal <fw@strlen.de>
-Cc: Paul Moore <paul@paul-moore.com>, audit@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, netfilter-devel@vger.kernel.org, 
-	coreteam@netfilter.org, eparis@redhat.com, pablo@netfilter.org, 
-	kadlec@netfilter.org
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: ZJJP2ntTTV72eg3uToKx6mzE7Qx0D93zqQV-NEZ4lxQ_1762859171
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC][PATCH 11/13] allow incomplete imports of filenames
+To: Al Viro <viro@zeniv.linux.org.uk>, linux-fsdevel@vger.kernel.org
+Cc: torvalds@linux-foundation.org, brauner@kernel.org, jack@suse.cz,
+ mjguzik@gmail.com, paul@paul-moore.com, audit@vger.kernel.org,
+ io-uring@vger.kernel.org
+References: <20251109063745.2089578-1-viro@zeniv.linux.org.uk>
+ <20251109063745.2089578-12-viro@zeniv.linux.org.uk>
+Content-Language: en-US
+From: Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <20251109063745.2089578-12-viro@zeniv.linux.org.uk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Mon, Nov 10, 2025 at 9:43=E2=80=AFAM Florian Westphal <fw@strlen.de> wro=
-te:
->
-> Ricardo Robaina <rrobaina@redhat.com> wrote:
-> > > +int audit_log_nft_skb(struct audit_buffer *ab,
-> > > +                     struct sk_buff *skb, u8 nfproto)
-> > Thanks for reviewing this patch, Paul.
-> >
-> > It makes sense to me. I'll work on a newer version addressing your sugg=
-estions.
->
-> Nit, but as you need to resend anyway, can you also make this
-> 'const struct sk_buff *' ?
->
-> Also, given this isn't nftables specific, I suggest
-> audit_log_nf_skb, audit_log_netfilter_skb or some such instead.
->
-> Thanks.
->
+On 11/8/25 11:37 PM, Al Viro wrote:
+> There are two filename-related problems in io_uring and its
+> interplay with audit.
+> 
+> Filenames are imported when request is submitted and used when
+> it is processed.  Unfortunately, the latter may very well
+> happen in a different thread.  In that case the reference to
+> filename is put into the wrong audit_context - that of submitting
+> thread, not the processing one.  Audit logics is called by
+> the latter, and it really wants to be able to find the names
+> in audit_context current (== processing) thread.
+> 
+> Another related problem is the headache with refcounts -
+> normally all references to given struct filename are visible
+> only to one thread (the one that uses that struct filename).
+> io_uring violates that - an extra reference is stashed in
+> audit_context of submitter.  It gets dropped when submitter
+> returns to userland, which can happen simultaneously with
+> processing thread deciding to drop the reference it got.
+> 
+> We paper over that by making refcount atomic, but that means
+> pointless headache for everyone.
+> 
+> Solution: the notion of partially imported filenames.  Namely,
+> already copied from userland, but *not* exposed to audit yet.
+> 
+> io_uring can create that in submitter thread, and complete the
+> import (obtaining the usual reference to struct filename) in
+> processing thread.
+> 
+> Object: struct delayed_filename.
+> 
+> Primitives for working with it:
+> 
+> delayed_getname(&delayed_filename, user_string) - copies the name
+> from userland, returning 0 and stashing the address of (still incomplete)
+> struct filename in delayed_filename on success and returning -E... on
+> error.
+> 
+> delayed_getname_uflags(&delayed_filename, user_string, atflags) - similar,
+> in the same relation to delayed_getname() as getname_uflags() is to getname()
+> 
+> complete_getname(&delayed_getname) - completes the import of filename stashed
+> in delayed_getname and returns struct filename to caller, emptying delayed_getname.
 
-Sure!
+dismiss_delayed_filename()
 
+> diff --git a/io_uring/openclose.c b/io_uring/openclose.c
+> index bfeb91b31bba..6bc14f626923 100644
+> --- a/io_uring/openclose.c
+> +++ b/io_uring/openclose.c
+> @@ -121,6 +118,7 @@ int io_openat2(struct io_kiocb *req, unsigned int issue_flags)
+>  	struct file *file;
+>  	bool resolve_nonblock, nonblock_set;
+>  	bool fixed = !!open->file_slot;
+> +	struct filename *name __free(putname) = complete_getname(&open->filename);
+>  	int ret;
+>  
+>  	ret = build_open_flags(&open->how, &op);
+
+I don't think this will work as-is - the prep has been done on the
+request, but we could be retrying io_openat2(). That will happen if this
+function returns -EAGAIN. That will then end up with a cleared out
+filename for the second (blocking) invocation.
+
+-- 
+Jens Axboe
