@@ -1,94 +1,112 @@
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2565434A777;
-	Tue, 11 Nov 2025 01:16:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65C232EAB61
+	for <audit@vger.kernel.org>; Tue, 11 Nov 2025 11:06:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762823779; cv=none; b=fHttkBTPR/FSX5VtxpG9w8xjmGZEySK1jU2nBzONDc9xaAPefgVDf0YqSSpZD21eDBjW2nZG/Yw2rkgfotMwuxLd4kwok7Ye8r0Mt4sXUidPXR340JtP+7A1hXOm/UYWDcVCC6dWmy2JnPO+8YIzyilAPmcMrESP1sZHXYer3V8=
+	t=1762859178; cv=none; b=NsH8nWen4bWxcPpdGKxZ1auABj/uvsC8x9LZPEojy7H8Gx664IvsFKXTOa2MKBYJ4qrTPoDpuAacP+iFaX8CX6+IPe/bNvdOq4N0QVln2TjgKMvlVDsWv9WnMTlMOjGO4AQpQEidfjvxB9GvIlOT1L+5hCj1Eue+75mhA5W0pwU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762823779; c=relaxed/simple;
-	bh=XImp6UKfQMc8nWLP3InWK+vRI+Q+z5Bl+A73Vs5CEEs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=O7oiBUxi8sFp7CF+8TiXOOgAVQcyV58owl8rosSuNpCAJbkBT+etSoIKrTgLiiH8atlhZmUn5OKhOLKLp7Pitpn/RqoUpuPPbz+MQu6K0MO6HvNIdPtAxpvXMXwXsGOqdfq+DnzT1AfqPNOs+1olMGifUvqnlNlb1W+O4rMkvT4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=Rz1JaZiJ; arc=none smtp.client-ip=62.89.141.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
+	s=arc-20240116; t=1762859178; c=relaxed/simple;
+	bh=wgdtMOgnIdauBeWDydYoY+O9WRpPfmsDE4Q2ko8WTUY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=TZm8IYox6VK4uNKSjLv1njAwoUl509tpix9gkHJtLoIEHugDnp04BzkA2EW59KHiZnyJOQUXCe7EIxt7XQY2v8QEiOL5OFTqSxhDze0ijjtcy2b/T829sRtwdwqwud9GOv/U2CttEL/TuKfmtRvSj4Mn+Oz67hOCIY8a42XOLX4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=PhRG8HFr; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="Rz1JaZiJ"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=KwPHQTrb85GpboWuTxokP9UMdwAPwbBgiUZWHNypQ3w=; b=Rz1JaZiJTnnu+m0OT1p6Lsdd4F
-	pVNA1rm3N9h9ByhwiUI3zZaxgDn7TlxjGCJf5ynzy5pVlyvlgqDMFzyLhYYr9siAky52pP76WEgGu
-	pYa+CwrK19bzwTt8kH2tRb2doANF0ftVrakit1pfmSFwU08NimGIGDd3Nr/+BQvnOG1rjSPnEj+S2
-	3B/7SZX9c+ibKpjmpeXQ6D2ycIiFwhpdPrwAsNSF+G+e+sjl4aMWz9MpoUZvpPsSxZO1JeJwoemO7
-	/xwcQbqCWv2SqpCutWsVHVBHAtpXaZCXQEbsi/5+VwCayoAyv/O160aAWBIkdxoyhFM72xhhYVOhz
-	axdNbV0A==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1vIczV-00000005F74-3eh0;
-	Tue, 11 Nov 2025 01:16:13 +0000
-Date: Tue, 11 Nov 2025 01:16:13 +0000
-From: Al Viro <viro@zeniv.linux.org.uk>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: linux-fsdevel@vger.kernel.org, brauner@kernel.org, jack@suse.cz,
-	mjguzik@gmail.com, paul@paul-moore.com, axboe@kernel.dk,
-	audit@vger.kernel.org, io-uring@vger.kernel.org
-Subject: Re: [RFC][PATCH 10/13] get rid of audit_reusename()
-Message-ID: <20251111011613.GO2441659@ZenIV>
-References: <20251109063745.2089578-1-viro@zeniv.linux.org.uk>
- <20251109063745.2089578-11-viro@zeniv.linux.org.uk>
- <CAHk-=wgXvEK66gjkKfUxZ+G8n50Ms65MM6Sa9Vj9cTFg7_WAkA@mail.gmail.com>
- <CAHk-=wjA=iXRyu1-ABST43vdT60Md9zpQDJ4Kg14V3f_2Bf+BA@mail.gmail.com>
- <20251110051748.GJ2441659@ZenIV>
- <CAHk-=wgBewVovNTK4=O=HNbCZSQZgQMsFjBTq6bNFW2FZJcxnQ@mail.gmail.com>
- <20251110195833.GN2441659@ZenIV>
- <CAHk-=wi3vpw5W6rV6VKxa9PYF3Xwn5_6AT=OwqBWO79g6N1B_A@mail.gmail.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="PhRG8HFr"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1762859175;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=0GDbVFAUnTTBAQqYxAS+qt3Sk5mP5Wt8XB64j/zpUDE=;
+	b=PhRG8HFroB6GPirs2SXZ37iLXipSyOs8In5E6vm13EDnOmwHMibCNY4EZMue8NdNbErTs3
+	hq1h6nQBo7kjaijb5gEpTnz4cQ3bIyE+prqZtQYqWIJyNHTtnjkLBzMxCiaReAO7oLXUAH
+	foAKcgICzQ5ZXmH7ycWSf+T42rzOz60=
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
+ [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-528-nd26juW5NzWDcZOZntJk7w-1; Tue, 11 Nov 2025 06:06:12 -0500
+X-MC-Unique: nd26juW5NzWDcZOZntJk7w-1
+X-Mimecast-MFC-AGG-ID: nd26juW5NzWDcZOZntJk7w_1762859171
+Received: by mail-ej1-f71.google.com with SMTP id a640c23a62f3a-b6d7405e6a8so70413266b.1
+        for <audit@vger.kernel.org>; Tue, 11 Nov 2025 03:06:11 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1762859171; x=1763463971;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=0GDbVFAUnTTBAQqYxAS+qt3Sk5mP5Wt8XB64j/zpUDE=;
+        b=vwaO7GuNHPSlC+EfeKCQtXaroHPimflrBzgwWta/i7TG962B5P5Sqy8nuI9hrqtFRk
+         1L9kpxHac0WSQgBWNsbKUwN80k9LQFg2INLpUosq6nbIki6BBikO/bzgxSi6mfS2P6gE
+         9m0fFUTNt7YH20Cx2bB/qyiCtZpqHY9KrA8fW0Z7zb4pccGYWPPeaYzADVT1ccQARtGH
+         3uOwJykBiJHiYct0jnshSNg77nz5iUYPrHVqKlNyWyb0YMVOPc9EbctX1IshDKlzG+kk
+         XfqgcyZXqplAbLYQnWG1TSmHiMWHrVyJz7gTEwgLq0VN/jB5k9WlZpXRN0XMjUxtb4pP
+         U73g==
+X-Forwarded-Encrypted: i=1; AJvYcCX8/0C39VXSEPpi3vuE8IXDKEbrQeT48eMikqHIjgJBpb/dZJveTyr+pI89ZMwi1FGga45C8Q==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzjJAUcQ6QMX+MJQJg0xHvFUYUPDdxN29UF+25nx0F/JB8S+7rH
+	9KhDXyxQaf3a01gMwkr6I2tLDgTBswyAWQd46S94JFBFGyO8Lt35MADkmr8QO+cIKm+eIPPff/y
+	T9RIC3iBwehLX1murmoSI6v15jlchybmv+hDKmwIN3XnyQ3suw8yUGP9yUg43Hmf/E+RNsx23lZ
+	POrV9C9/28ItSF3VIkWrLQLur7eG2S1LM=
+X-Gm-Gg: ASbGncvewGU9mj3vU0N7QIU0nPRHCUgfFUGO9SfdZBg7jPsO0kV3rP1P5bl57AufDz0
+	dQb8H4p0gGWJkbKyIysSn1EKLbREqPumkLGMvfcDQSHfeUg8ls1z3mOnOE/fayp74/rb7BFynmz
+	xUeW4PC5Klb0VSL0XQ0/AQk7AuDNP8JhkSxOaL2QzPEEJPpPXG5xp/K+JfJrlAYlkhTodFCYNf9
+	t01vnxu0uwrYDid
+X-Received: by 2002:a17:907:847:b0:b07:e258:4629 with SMTP id a640c23a62f3a-b731d592612mr365867366b.16.1762859170919;
+        Tue, 11 Nov 2025 03:06:10 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IH00joUcH98KIScPdspMz6C7WmzE6y9BjmZMzMPi9/1/g0CWswqBDBalNWaO//kifqVOVeSio6hNYd8TE3PJWo=
+X-Received: by 2002:a17:907:847:b0:b07:e258:4629 with SMTP id
+ a640c23a62f3a-b731d592612mr365865466b.16.1762859170594; Tue, 11 Nov 2025
+ 03:06:10 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wi3vpw5W6rV6VKxa9PYF3Xwn5_6AT=OwqBWO79g6N1B_A@mail.gmail.com>
-Sender: Al Viro <viro@ftp.linux.org.uk>
+References: <acd8109245882afd78cdf2805a2344c20fef1a08.1762434837.git.rrobaina@redhat.com>
+ <e92df5b09f0907f78bb07467b38d2330@paul-moore.com> <CAABTaaCVsFOmouRZED_DTMPy_EimSAsercz=8A3RLTUYnpvf_A@mail.gmail.com>
+ <aRHd_WFBcyiL1Ufe@strlen.de>
+In-Reply-To: <aRHd_WFBcyiL1Ufe@strlen.de>
+From: Ricardo Robaina <rrobaina@redhat.com>
+Date: Tue, 11 Nov 2025 08:05:59 -0300
+X-Gm-Features: AWmQ_bms7BujCKPIYEHexBScB1G6ShV9xg4dnReCgV_Fb1MzdZWI32KI09CCb4A
+Message-ID: <CAABTaaA7XKVcV8GdmdkKLP+9gfKpv5f4oJupVXzR6KEaOFS9cQ@mail.gmail.com>
+Subject: Re: [PATCH v5 1/2] audit: add audit_log_packet_ip4 and
+ audit_log_packet_ip6 helper functions
+To: Florian Westphal <fw@strlen.de>
+Cc: Paul Moore <paul@paul-moore.com>, audit@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, netfilter-devel@vger.kernel.org, 
+	coreteam@netfilter.org, eparis@redhat.com, pablo@netfilter.org, 
+	kadlec@netfilter.org
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: ZJJP2ntTTV72eg3uToKx6mzE7Qx0D93zqQV-NEZ4lxQ_1762859171
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Nov 10, 2025 at 12:52:57PM -0800, Linus Torvalds wrote:
-> On Mon, 10 Nov 2025 at 11:58, Al Viro <viro@zeniv.linux.org.uk> wrote:
+On Mon, Nov 10, 2025 at 9:43=E2=80=AFAM Florian Westphal <fw@strlen.de> wro=
+te:
+>
+> Ricardo Robaina <rrobaina@redhat.com> wrote:
+> > > +int audit_log_nft_skb(struct audit_buffer *ab,
+> > > +                     struct sk_buff *skb, u8 nfproto)
+> > Thanks for reviewing this patch, Paul.
 > >
-> > If we go that way, do you see any problems with treating
-> > osf_{ufs,cdfs}_mount() in the same manner?  Yes, these are pathnames,
-> 
-> Hmm. In those cases, the ENAMETOOLONG thing actually does make sense -
-> exactly because they are pathnames.
-> 
-> So I think that in those two places using getname() is fairly natural
-> and gets us the natural error handling too. No?
+> > It makes sense to me. I'll work on a newer version addressing your sugg=
+estions.
+>
+> Nit, but as you need to resend anyway, can you also make this
+> 'const struct sk_buff *' ?
+>
+> Also, given this isn't nftables specific, I suggest
+> audit_log_nf_skb, audit_log_netfilter_skb or some such instead.
+>
+> Thanks.
+>
 
-Seeing that we don't do that for native mount(2)...  Hell knows -
-the thing is, import is done early in syscall, before we know what
-does that particular filesystem type expect.  It's not always a pathname
-of any sort.
+Sure!
 
-Note that empty string for the first argument of mount(2) is perfectly
-fine - for some values of the 5th (flags) and 3rd (type) ones.
-So plain getname() is not an option and we do, unfortunately, need the
-sucker imported before we start parsing the flags, etc.
-
-I'd love to take security_sb_mount() - it's an utter shitshow of API,
-inherently racy, etc., but currently it takes a kernelspace string for
-the first argument (dev_name) and is called before we'd even started
-to look at flags (so the instances have to essentially duplicate flags
-parsing, among other things).
-
-But that's a lot of massage and it will require the LSM crowd acceptance ;-/
-If earlier attempts are anything to go by, there will be a lot of
-resistance.
-
-BTW, take a look at apparmor_sb_mount() and aa_bind_mount().  Compare
-the calls of kern_path() in aa_bind_mount() and in do_loopback() and
-note that the damn thing relies upon both pathwalks resolving to the
-same location...
