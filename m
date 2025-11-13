@@ -1,107 +1,190 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C9AA2C0262;
-	Wed, 12 Nov 2025 09:27:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CDBA2D979C
+	for <audit@vger.kernel.org>; Thu, 13 Nov 2025 10:11:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762939622; cv=none; b=Noi3PxLXgUoNieueP41eQ90sBl8mI0VHx/eqU6o5ck9RhXes23c+7lLq2u4J/0+wl5YwwuRRpeZJD6wnGp8i8zOhByqt/kmVS79WvVEvPfOIG5KUfjQ+akbF97WU1GM0RTl3AUmg/1uGGvBJRtj3Q0q54zO226pcdCPW2iNwtL4=
+	t=1763028672; cv=none; b=gJBVtHrxuS2KCuOwpLTRskCYtRscir79uaEFFPdbl064Dya48xY3NQGMlTazwfAg+lWJk0xPBQaBq26eUWYoUgJudSt9PogMDUdeE3CD29yBH6P2fKMCucGORCKUsftEVmIL1d27iauyrdkosY63+ZS9h3PzE4m60LtWsELymLc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762939622; c=relaxed/simple;
-	bh=tzj3k6L3b4wtUUGs2kY8wMsmgxCApPIQYNMfJWD2J+w=;
+	s=arc-20240116; t=1763028672; c=relaxed/simple;
+	bh=zgRFi3u7a6nGZXuIEF1Khfjkui3bqgs5nGnibG5m/vw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=J+f7apY3NrbFcIgrefpgA3dvSNiZ2Be0PWTGMhfBRyEQcNSpfNgsSwLq0IdyLVnYn6Oo4CGDrojRyDRZRsEh3vWjFApGTV9X8ICBlc8KBWBCKWnFF1BwBcbNJUwRy0u4pMENSgV6m9YGRlwKsKXeOYz3MEpaF1LVcNtdf5L+CYw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aTK7B/Kx; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=a1V6V78KH++FpJz3lTt1rcaZCPR0Gmv4zRy1RUT7HmSkkx4JFzv59U5XuTW39EWaO4NfsSGQukdj4z7E+HxpJaVarg9oKltswxrJ7E6+grw53BP9Ku5wI2ETuJxQ253A8v/bTjwq4SgVwLvctQZ00gBCP3J2c6No6mk2W17mE2E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=UN5rYj6F; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=Y2cTM4Lz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=UN5rYj6F; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=Y2cTM4Lz; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aTK7B/Kx"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCEFFC19423;
-	Wed, 12 Nov 2025 09:26:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762939621;
-	bh=tzj3k6L3b4wtUUGs2kY8wMsmgxCApPIQYNMfJWD2J+w=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=aTK7B/Kx5Eli+wyOD3suTessJcs4rf+yTWEZ++vJtNHAcAg6yxtbYL9hR96MF5bgz
-	 wfxV2wIYNdpd5gEseFk9ubxg00l8S6vO4hrBFATt5wGZ/y6S57cHqqi09j1KN662ua
-	 +DNpDzpz6IbsrmmwGsiNCPxfbZJ+Gg2gb3QAuo57AIm2ZC63D4U3FlRBGywTo3NKtn
-	 WKgeft3sXG0bUqW4WfLlbfiaBdHjA1HJhiExdCoSwGvlR/ohHLc+DX7DdeSBkfWYuN
-	 5uCcBHoueZus3VJEtVAg5bQJuBtC4huAx0WE/IkfjRmigblelXz2WcCfOWU8aGeNNA
-	 +1ZJMikl95tQg==
-Date: Wed, 12 Nov 2025 10:26:57 +0100
-From: Christian Brauner <brauner@kernel.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Al Viro <viro@zeniv.linux.org.uk>, linux-fsdevel@vger.kernel.org, 
-	jack@suse.cz, mjguzik@gmail.com, paul@paul-moore.com, axboe@kernel.dk, 
-	audit@vger.kernel.org, io-uring@vger.kernel.org
-Subject: Re: [RFC][PATCH 10/13] get rid of audit_reusename()
-Message-ID: <20251112-warzen-zusichern-8aa56fe3a744@brauner>
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="UN5rYj6F";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="Y2cTM4Lz";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="UN5rYj6F";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="Y2cTM4Lz"
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 8F16821747;
+	Thu, 13 Nov 2025 10:11:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1763028668; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=SeiVtudgHN1hofwS4ktOJQIzcYNLapUABaiXBIABs28=;
+	b=UN5rYj6FAcEl+rcTEn0STzroiUWmI+Bdp/xpQnwfjxA0DaOQr2ZMviTbOYlk2Rmb6Ovtha
+	78U9vHAbOpQcQ+G8f1uC+v8IOs62C8i07Eik7qOt7ZPpgpQBspcpr76CVmSu9RMhWsJYK2
+	egu5D9HPoR7cxHP4qFnps04++ayhIwI=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1763028668;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=SeiVtudgHN1hofwS4ktOJQIzcYNLapUABaiXBIABs28=;
+	b=Y2cTM4Lz4z9vSnOiYnoS5wLeynj2Vv9uVO6fJgoI14wFIkus2YK27MNF2mqt536hqtGSoy
+	oLFg0eBAARUtGdAA==
+Authentication-Results: smtp-out1.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1763028668; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=SeiVtudgHN1hofwS4ktOJQIzcYNLapUABaiXBIABs28=;
+	b=UN5rYj6FAcEl+rcTEn0STzroiUWmI+Bdp/xpQnwfjxA0DaOQr2ZMviTbOYlk2Rmb6Ovtha
+	78U9vHAbOpQcQ+G8f1uC+v8IOs62C8i07Eik7qOt7ZPpgpQBspcpr76CVmSu9RMhWsJYK2
+	egu5D9HPoR7cxHP4qFnps04++ayhIwI=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1763028668;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=SeiVtudgHN1hofwS4ktOJQIzcYNLapUABaiXBIABs28=;
+	b=Y2cTM4Lz4z9vSnOiYnoS5wLeynj2Vv9uVO6fJgoI14wFIkus2YK27MNF2mqt536hqtGSoy
+	oLFg0eBAARUtGdAA==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 8524A3EA61;
+	Thu, 13 Nov 2025 10:11:08 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id xGF5ILyuFWmMHgAAD6G6ig
+	(envelope-from <jack@suse.cz>); Thu, 13 Nov 2025 10:11:08 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+	id 3C6ACA0976; Thu, 13 Nov 2025 11:11:04 +0100 (CET)
+Date: Thu, 13 Nov 2025 11:11:04 +0100
+From: Jan Kara <jack@suse.cz>
+To: Al Viro <viro@zeniv.linux.org.uk>
+Cc: linux-fsdevel@vger.kernel.org, torvalds@linux-foundation.org, 
+	brauner@kernel.org, jack@suse.cz, mjguzik@gmail.com, paul@paul-moore.com, 
+	axboe@kernel.dk, audit@vger.kernel.org, io-uring@vger.kernel.org
+Subject: Re: [RFC][PATCH 01/13] do_faccessat(): import pathname only once
+Message-ID: <ar5w6zlak3mhwo6b5u2p2mxyquvzlzj5hovvnu54vpoxcfnfdp@6rnfonz3vfme>
 References: <20251109063745.2089578-1-viro@zeniv.linux.org.uk>
- <20251109063745.2089578-11-viro@zeniv.linux.org.uk>
- <CAHk-=wgXvEK66gjkKfUxZ+G8n50Ms65MM6Sa9Vj9cTFg7_WAkA@mail.gmail.com>
- <CAHk-=wjA=iXRyu1-ABST43vdT60Md9zpQDJ4Kg14V3f_2Bf+BA@mail.gmail.com>
- <20251110051748.GJ2441659@ZenIV>
- <CAHk-=wgBewVovNTK4=O=HNbCZSQZgQMsFjBTq6bNFW2FZJcxnQ@mail.gmail.com>
+ <20251109063745.2089578-2-viro@zeniv.linux.org.uk>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAHk-=wgBewVovNTK4=O=HNbCZSQZgQMsFjBTq6bNFW2FZJcxnQ@mail.gmail.com>
+In-Reply-To: <20251109063745.2089578-2-viro@zeniv.linux.org.uk>
+X-Spamd-Result: default: False [-3.80 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	MID_RHS_NOT_FQDN(0.50)[];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	ARC_NA(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[10];
+	MIME_TRACE(0.00)[0:+];
+	RCVD_COUNT_THREE(0.00)[3];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	FROM_HAS_DN(0.00)[];
+	FREEMAIL_CC(0.00)[vger.kernel.org,linux-foundation.org,kernel.org,suse.cz,gmail.com,paul-moore.com,kernel.dk];
+	TO_DN_SOME(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.cz:email,suse.com:email]
+X-Spam-Flag: NO
+X-Spam-Score: -3.80
+X-Spam-Level: 
 
-On Mon, Nov 10, 2025 at 08:41:45AM -0800, Linus Torvalds wrote:
-> On Sun, 9 Nov 2025 at 21:17, Al Viro <viro@zeniv.linux.org.uk> wrote:
-> >
-> > That's more about weird callers of getname(), but...
-> >
-> > #ifdef CONFIG_SYSFS_SYSCALL
-> > static int fs_index(const char __user * __name)
-> > {
-> >         struct file_system_type * tmp;
-> >         struct filename *name;
-> >         int err, index;
-> >
-> >         name = getname(__name);
+On Sun 09-11-25 06:37:33, Al Viro wrote:
+> Convert the user_path_at() call inside a retry loop into getname_flags() +
+> filename_lookup() + putname() and leave only filename_lookup() inside
+> the loop.
 > 
-> Yeah, ok, this is certainly a somewhat unusual pattern in that "name"
-> here is not a pathname, but at the same time I can't fault this code
-> for using a convenient function for "allocate and copy a string from
-> user space".
+> Since we have the default logics for use of LOOKUP_EMPTY (passed iff
+> AT_EMPTY_PATH is present in flags), just use getname_uflags() and
+> don't bother with setting LOOKUP_EMPTY in lookup_flags - getname_uflags()
+> will pass the right thing to getname_flags() and filename_lookup()
+> doesn't care about LOOKUP_EMPTY at all.
 > 
-> > Yes, really - echo $((`sed -ne "/.\<$1$/=" </proc/filesystems` - 1))
-> > apparently does deserve a syscall.  Multiplexor, as well (other
-> > subfunctions are about as hard to implement in userland)...
+> The things could be further simplified by use of cleanup.h stuff, but
+> let's not clutter the patch with that.
 > 
-> I think those are all "crazy legacy from back in the dark ages when we
-> thought iBCS2 was a goal".
-> 
-> I doubt anybody uses that 'sysfs()' system call, and it's behind the
-> SYSFS_SYSCALL config variable that was finally made "default n" this
-> year, but has actually had a help-message that called it obsolete
-> since at least 2014.
-> 
-> The code predates not just git, but the bitkeeper history too - and
-> we've long since removed all the actual iBCS2 code (see for example
-> commit 612a95b4e053: "x86: remove iBCS support", which removed some
-> binfmt left-overs - back in 2008).
-> 
-> > IMO things like "xfs" or "ceph" don't look like pathnames - if
-> > anything, we ought to use copy_mount_string() for consistency with
-> > mount(2)...
-> 
-> Oh, absolutely not.
-> 
-> But that code certainly could just do strndup_user(). That's the
-> normal thing for "get a string from user space" these days, but it
-> didn't historically exist..
-> 
-> That said, I think that code will  just get removed, so it's not even
-> worth worrying about. I don't think anybody even *noticed* that we
-> made it "default n" after all these years.
+> Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
 
-Nobody noticed at all when I flipped the switch earlier this year. I
-explicitly dit it to prepare for removal of the sysfs() system call so
-I'm happy to pull the trigger any time!
+Looks good. Feel free to add:
 
-https://lore.kernel.org/all/20250415-dezimieren-wertpapier-9fd18a211a41@brauner
+Reviewed-by: Jan Kara <jack@suse.cz>
+
+								Honza
+
+> ---
+>  fs/open.c | 7 ++++---
+>  1 file changed, 4 insertions(+), 3 deletions(-)
+> 
+> diff --git a/fs/open.c b/fs/open.c
+> index 3d64372ecc67..db8fe2b5463d 100644
+> --- a/fs/open.c
+> +++ b/fs/open.c
+> @@ -471,6 +471,7 @@ static int do_faccessat(int dfd, const char __user *filename, int mode, int flag
+>  	int res;
+>  	unsigned int lookup_flags = LOOKUP_FOLLOW;
+>  	const struct cred *old_cred = NULL;
+> +	struct filename *name;
+>  
+>  	if (mode & ~S_IRWXO)	/* where's F_OK, X_OK, W_OK, R_OK? */
+>  		return -EINVAL;
+> @@ -480,8 +481,6 @@ static int do_faccessat(int dfd, const char __user *filename, int mode, int flag
+>  
+>  	if (flags & AT_SYMLINK_NOFOLLOW)
+>  		lookup_flags &= ~LOOKUP_FOLLOW;
+> -	if (flags & AT_EMPTY_PATH)
+> -		lookup_flags |= LOOKUP_EMPTY;
+>  
+>  	if (access_need_override_creds(flags)) {
+>  		old_cred = access_override_creds();
+> @@ -489,8 +488,9 @@ static int do_faccessat(int dfd, const char __user *filename, int mode, int flag
+>  			return -ENOMEM;
+>  	}
+>  
+> +	name = getname_uflags(filename, flags);
+>  retry:
+> -	res = user_path_at(dfd, filename, lookup_flags, &path);
+> +	res = filename_lookup(dfd, name, lookup_flags, &path, NULL);
+>  	if (res)
+>  		goto out;
+>  
+> @@ -530,6 +530,7 @@ static int do_faccessat(int dfd, const char __user *filename, int mode, int flag
+>  		goto retry;
+>  	}
+>  out:
+> +	putname(name);
+>  	if (old_cred)
+>  		put_cred(revert_creds(old_cred));
+>  
+> -- 
+> 2.47.3
+> 
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
