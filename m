@@ -1,225 +1,128 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26E1426A0D5
-	for <audit@vger.kernel.org>; Thu, 13 Nov 2025 13:37:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B7D02F5302;
+	Fri, 14 Nov 2025 06:47:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763041040; cv=none; b=G0Z/5svPCAfx0GvmpsMrxkUz//e9Jr6NjyYwCvqJD5zD6Ii1OekBfyO9Be2QVcTacfM44H7X6ZQbqBgztn/SV2GU11qGqtI706mRH+0fYeKOH5BVmEFBFwDvC1C9PFqK7m4f1M35N9hzcaYpNvDPL8TOzzLL+JsaxN/IOyoCEMM=
+	t=1763102825; cv=none; b=ubCr8I23C3CB82rIje4jRxXk//DmoqsnXiQd2Jpy7gpPQDJv47Fka15+/N+McFufpi5ZhjizsOUqPXSHfTch2wUgxbjrCc2PH8Ai32IPl4/iiWSMq2aHwPkGxaXwmV1X6DIWyKnOg28t5mkPsLXgStPFbXGnbctYKv7zx8WhRB8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763041040; c=relaxed/simple;
-	bh=2FzgnZIQLuOVX0RH5mGPET2t8lF+QMG5icCyZ4hWhW0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=AMD6wPzyFEsiVtEMLk8IxLV0abHx0IsDb936JUJidyyw/fBK2UyKhgLEIHTU+BrvFT9s6mfLtEQlP2685XqyuPVMx1qKW5VvNJlATbUhFdztZY6SL0EFgjXLYFnEeG4t3vGsZVmVmaxBSq7ZfEtUd8b6i1mQj/XwG0OsukdPe2c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=PdUuFJeX; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1763102825; c=relaxed/simple;
+	bh=2bNbiyJhl4Jc1gvwo/vbBa9cW/SBjZcz3GWngZobUEk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=TKSzlppz5NRQH2dzcmGRpdSOj5gYAze+krqsWlOJK2uUnsvQY3ivipWOwZMpuBPJ93z3aifpfZFR/bZjlSYJdQOFZ9iTlX7TahtgpVrirncZw0V09oA87EzanrwVT3w21cNtySoxX3i+LQxOr8K84N2cfbAZBKhEHmL/zssMmoc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=D9STe0pf; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="PdUuFJeX"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1763041038;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=lG9jBUv4bu7c9vc+o3EVxRmkon7wuELm/GLx4exidZ0=;
-	b=PdUuFJeX0E4FJa4t9mTd0jMpHFP7Z7TFQVtAYIbfYH467PLZ7IKYc3FUaoO6Q1hhTdB4Kb
-	PicqGdwyelFQrkPPq9hcvD6sLMughhg2fxd5Z6QCI7hayALsRIUfoS7LUYR4FHEDChZf/n
-	KadnwT2KIIIxW9/wsTKI50DfK+nYOO0=
-Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-94-OLyiRvp3OoasHsel3Zt3Lg-1; Thu,
- 13 Nov 2025 08:37:17 -0500
-X-MC-Unique: OLyiRvp3OoasHsel3Zt3Lg-1
-X-Mimecast-MFC-AGG-ID: OLyiRvp3OoasHsel3Zt3Lg_1763041035
-Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 54DE718002FD;
-	Thu, 13 Nov 2025 13:37:15 +0000 (UTC)
-Received: from wsxc.redhat.com (unknown [10.96.134.76])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id A855C1955F1B;
-	Thu, 13 Nov 2025 13:37:11 +0000 (UTC)
-From: Ricardo Robaina <rrobaina@redhat.com>
-To: audit@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	netfilter-devel@vger.kernel.org,
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="D9STe0pf"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1763102823; x=1794638823;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=2bNbiyJhl4Jc1gvwo/vbBa9cW/SBjZcz3GWngZobUEk=;
+  b=D9STe0pfJOS5lh4Jrb8+4j/hZkJaF+QtE4sqk8FLm61l6JnISutt6Gxf
+   LD7eotlGnEop162v3rY7CFJbbKjpkBqtsAytARmph/nj5AgD7Szu+ESbK
+   r9G7UvdYYXBaVcp2YeL2vQZ3XOGfJAjhuSOlOF//b05JwJ3mAyTN4tSXn
+   wnW9tMPVoVECtIVh2KqiCK66T8FFNVCNItUbY1A6imKBji972BoB/xDwS
+   4viocuN02DE2/k4UMf1ylkkkVBT0Nwu28dqpB9VaFZzkjOX20K17Pqm+G
+   jPH97ntUpcuJyXZeHk+Fu0NBbLLozk6md4ALgHC7GA9i5LFvEp0i5q3Vk
+   g==;
+X-CSE-ConnectionGUID: 4LRLhBpVRMuNxhn3Qi3bvw==
+X-CSE-MsgGUID: 2KE43yb/Q/2CWfgb9NTGXQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11612"; a="65227561"
+X-IronPort-AV: E=Sophos;i="6.19,304,1754982000"; 
+   d="scan'208";a="65227561"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Nov 2025 22:47:02 -0800
+X-CSE-ConnectionGUID: 2RAAAqvFS2mMjPWuGEXJrQ==
+X-CSE-MsgGUID: k1ttSeOaQ92CmvdI2uisCg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,304,1754982000"; 
+   d="scan'208";a="193824044"
+Received: from lkp-server01.sh.intel.com (HELO 7b01c990427b) ([10.239.97.150])
+  by orviesa003.jf.intel.com with ESMTP; 13 Nov 2025 22:47:00 -0800
+Received: from kbuild by 7b01c990427b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1vJnaD-0006F7-0W;
+	Fri, 14 Nov 2025 06:46:57 +0000
+Date: Fri, 14 Nov 2025 14:46:02 +0800
+From: kernel test robot <lkp@intel.com>
+To: Ricardo Robaina <rrobaina@redhat.com>, audit@vger.kernel.org,
+	linux-kernel@vger.kernel.org, netfilter-devel@vger.kernel.org,
 	coreteam@netfilter.org
-Cc: paul@paul-moore.com,
-	eparis@redhat.com,
-	fw@strlen.de,
-	pablo@netfilter.org,
-	kadlec@netfilter.org,
+Cc: oe-kbuild-all@lists.linux.dev, paul@paul-moore.com, eparis@redhat.com,
+	fw@strlen.de, pablo@netfilter.org, kadlec@netfilter.org,
 	Ricardo Robaina <rrobaina@redhat.com>
-Subject: [PATCH v6 2/2] audit: include source and destination ports to NETFILTER_PKT
-Date: Thu, 13 Nov 2025 10:36:56 -0300
-Message-ID: <6b1a0c1c964b295d6ecaf9b50b80cbc650e63ba3.1763036807.git.rrobaina@redhat.com>
-In-Reply-To: <cover.1763036807.git.rrobaina@redhat.com>
-References: <cover.1763036807.git.rrobaina@redhat.com>
+Subject: Re: [PATCH v6 1/2] audit: add audit_log_nf_skb helper function
+Message-ID: <202511141108.IPL3PRtd-lkp@intel.com>
+References: <589b485078a65c766bcdee2fd9881c540813f8c5.1763036807.git.rrobaina@redhat.com>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <589b485078a65c766bcdee2fd9881c540813f8c5.1763036807.git.rrobaina@redhat.com>
 
-NETFILTER_PKT records show both source and destination
-addresses, in addition to the associated networking protocol.
-However, it lacks the ports information, which is often
-valuable for troubleshooting.
+Hi Ricardo,
 
-This patch adds both source and destination port numbers,
-'sport' and 'dport' respectively, to TCP, UDP, UDP-Lite and
-SCTP-related NETFILTER_PKT records.
+kernel test robot noticed the following build warnings:
 
- $ TESTS="netfilter_pkt" make -e test &> /dev/null
- $ ausearch -i -ts recent |grep NETFILTER_PKT
- type=NETFILTER_PKT ... proto=icmp
- type=NETFILTER_PKT ... proto=ipv6-icmp
- type=NETFILTER_PKT ... proto=udp sport=46333 dport=42424
- type=NETFILTER_PKT ... proto=udp sport=35953 dport=42424
- type=NETFILTER_PKT ... proto=tcp sport=50314 dport=42424
- type=NETFILTER_PKT ... proto=tcp sport=57346 dport=42424
+[auto build test WARNING on pcmoore-audit/next]
+[also build test WARNING on netfilter-nf/main nf-next/master linus/master v6.18-rc5 next-20251113]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Link: https://github.com/linux-audit/audit-kernel/issues/162
+url:    https://github.com/intel-lab-lkp/linux/commits/Ricardo-Robaina/audit-include-source-and-destination-ports-to-NETFILTER_PKT/20251113-223721
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/audit.git next
+patch link:    https://lore.kernel.org/r/589b485078a65c766bcdee2fd9881c540813f8c5.1763036807.git.rrobaina%40redhat.com
+patch subject: [PATCH v6 1/2] audit: add audit_log_nf_skb helper function
+config: x86_64-rhel-9.4 (https://download.01.org/0day-ci/archive/20251114/202511141108.IPL3PRtd-lkp@intel.com/config)
+compiler: gcc-14 (Debian 14.2.0-19) 14.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251114/202511141108.IPL3PRtd-lkp@intel.com/reproduce)
 
-Signed-off-by: Ricardo Robaina <rrobaina@redhat.com>
----
- kernel/audit.c | 103 +++++++++++++++++++++++++++++++++++++++++++++++--
- 1 file changed, 99 insertions(+), 4 deletions(-)
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511141108.IPL3PRtd-lkp@intel.com/
 
-diff --git a/kernel/audit.c b/kernel/audit.c
-index 5c302c4592db..39c4f26c484d 100644
---- a/kernel/audit.c
-+++ b/kernel/audit.c
-@@ -60,6 +60,7 @@
- #include <net/netns/generic.h>
- #include <net/ip.h>
- #include <net/ipv6.h>
-+#include <linux/sctp.h>
- 
- #include "audit.h"
- 
-@@ -2517,8 +2518,55 @@ int audit_log_nf_skb(struct audit_buffer *ab,
- 		if (!ih)
- 			return -ENOMEM;
- 
--		audit_log_format(ab, " saddr=%pI4 daddr=%pI4 proto=%hhu",
--				 &ih->saddr, &ih->daddr, ih->protocol);
-+		switch (ih->protocol) {
-+		case IPPROTO_TCP: {
-+			struct tcphdr _tcph;
-+			const struct tcphdr *th;
-+
-+			th = skb_header_pointer(skb, skb_transport_offset(skb),
-+						sizeof(_tcph), &_tcph);
-+			if (!th)
-+				return -ENOMEM;
-+
-+			audit_log_format(ab, " saddr=%pI4 daddr=%pI4 proto=%hhu sport=%hu dport=%hu",
-+					 &ih->saddr, &ih->daddr, ih->protocol,
-+					 ntohs(th->source), ntohs(th->dest));
-+			break;
-+		}
-+		case IPPROTO_UDP:
-+		case IPPROTO_UDPLITE: {
-+			struct udphdr _udph;
-+			const struct udphdr *uh;
-+
-+			uh = skb_header_pointer(skb, skb_transport_offset(skb),
-+						sizeof(_udph), &_udph);
-+			if (!uh)
-+				return -ENOMEM;
-+
-+			audit_log_format(ab, " saddr=%pI4 daddr=%pI4 proto=%hhu sport=%hu dport=%hu",
-+					 &ih->saddr, &ih->daddr, ih->protocol,
-+					 ntohs(uh->source), ntohs(uh->dest));
-+			break;
-+		}
-+		case IPPROTO_SCTP: {
-+			struct sctphdr _sctph;
-+			const struct sctphdr *sh;
-+
-+			sh = skb_header_pointer(skb, skb_transport_offset(skb),
-+						sizeof(_sctph), &_sctph);
-+			if (!sh)
-+				return -ENOMEM;
-+
-+			audit_log_format(ab, " saddr=%pI4 daddr=%pI4 proto=%hhu sport=%hu dport=%hu",
-+					 &ih->saddr, &ih->daddr, ih->protocol,
-+					 ntohs(sh->source), ntohs(sh->dest));
-+			break;
-+		}
-+		default:
-+			audit_log_format(ab, " saddr=%pI4 daddr=%pI4 proto=%hhu",
-+					 &ih->saddr, &ih->daddr, ih->protocol);
-+		}
-+
- 		break;
- 	}
- 	case NFPROTO_IPV6: {
-@@ -2536,8 +2584,55 @@ int audit_log_nf_skb(struct audit_buffer *ab,
- 		ipv6_skip_exthdr(skb, skb_network_offset(skb) + sizeof(iph),
- 				 &nexthdr, &frag_off);
- 
--		audit_log_format(ab, " saddr=%pI6c daddr=%pI6c proto=%hhu",
--				 &ih->saddr, &ih->daddr, nexthdr);
-+		switch (nexthdr) {
-+		case IPPROTO_TCP: {
-+			struct tcphdr _tcph;
-+			const struct tcphdr *th;
-+
-+			th = skb_header_pointer(skb, skb_transport_offset(skb),
-+						sizeof(_tcph), &_tcph);
-+			if (!th)
-+				return -ENOMEM;
-+
-+			audit_log_format(ab, " saddr=%pI6c daddr=%pI6c proto=%hhu sport=%hu dport=%hu",
-+					 &ih->saddr, &ih->daddr, nexthdr,
-+					 ntohs(th->source), ntohs(th->dest));
-+			break;
-+		}
-+		case IPPROTO_UDP:
-+		case IPPROTO_UDPLITE: {
-+			struct udphdr _udph;
-+			const struct udphdr *uh;
-+
-+			uh = skb_header_pointer(skb, skb_transport_offset(skb),
-+						sizeof(_udph), &_udph);
-+			if (!uh)
-+				return -ENOMEM;
-+
-+			audit_log_format(ab, " saddr=%pI6c daddr=%pI6c proto=%hhu sport=%hu dport=%hu",
-+					 &ih->saddr, &ih->daddr, nexthdr,
-+					 ntohs(uh->source), ntohs(uh->dest));
-+			break;
-+		}
-+		case IPPROTO_SCTP: {
-+			struct sctphdr _sctph;
-+			const struct sctphdr *sh;
-+
-+			sh = skb_header_pointer(skb, skb_transport_offset(skb),
-+						sizeof(_sctph), &_sctph);
-+			if (!sh)
-+				return -ENOMEM;
-+
-+			audit_log_format(ab, " saddr=%pI6c daddr=%pI6c proto=%hhu sport=%hu dport=%hu",
-+					 &ih->saddr, &ih->daddr, nexthdr,
-+					 ntohs(sh->source), ntohs(sh->dest));
-+			break;
-+		}
-+		default:
-+			audit_log_format(ab, " saddr=%pI6c daddr=%pI6c proto=%hhu",
-+					 &ih->saddr, &ih->daddr, nexthdr);
-+		}
-+
- 		break;
- 	}
- 	default:
+All warnings (new ones prefixed by >>):
+
+   net/netfilter/nft_log.c: In function 'nft_log_eval_audit':
+>> net/netfilter/nft_log.c:33:13: warning: unused variable 'fam' [-Wunused-variable]
+      33 |         int fam = -1;
+         |             ^~~
+
+
+vim +/fam +33 net/netfilter/nft_log.c
+
+96518518cc417bb Patrick McHardy 2013-10-14  28  
+1a893b44de45288 Phil Sutter     2018-05-30  29  static void nft_log_eval_audit(const struct nft_pktinfo *pkt)
+1a893b44de45288 Phil Sutter     2018-05-30  30  {
+1a893b44de45288 Phil Sutter     2018-05-30  31  	struct sk_buff *skb = pkt->skb;
+1a893b44de45288 Phil Sutter     2018-05-30  32  	struct audit_buffer *ab;
+1a893b44de45288 Phil Sutter     2018-05-30 @33  	int fam = -1;
+1a893b44de45288 Phil Sutter     2018-05-30  34  
+1a893b44de45288 Phil Sutter     2018-05-30  35  	if (!audit_enabled)
+1a893b44de45288 Phil Sutter     2018-05-30  36  		return;
+1a893b44de45288 Phil Sutter     2018-05-30  37  
+1a893b44de45288 Phil Sutter     2018-05-30  38  	ab = audit_log_start(NULL, GFP_ATOMIC, AUDIT_NETFILTER_PKT);
+1a893b44de45288 Phil Sutter     2018-05-30  39  	if (!ab)
+1a893b44de45288 Phil Sutter     2018-05-30  40  		return;
+1a893b44de45288 Phil Sutter     2018-05-30  41  
+1a893b44de45288 Phil Sutter     2018-05-30  42  	audit_log_format(ab, "mark=%#x", skb->mark);
+1a893b44de45288 Phil Sutter     2018-05-30  43  
+832662a8b1d3d70 Ricardo Robaina 2025-11-13  44  	audit_log_nf_skb(ab, skb, nft_pf(pkt));
+1a893b44de45288 Phil Sutter     2018-05-30  45  
+1a893b44de45288 Phil Sutter     2018-05-30  46  	audit_log_end(ab);
+1a893b44de45288 Phil Sutter     2018-05-30  47  }
+1a893b44de45288 Phil Sutter     2018-05-30  48  
+
 -- 
-2.51.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
