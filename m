@@ -1,225 +1,109 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B32923E35E
-	for <audit@vger.kernel.org>; Fri, 14 Nov 2025 12:36:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CFB122FDEA;
+	Wed, 19 Nov 2025 01:12:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763123801; cv=none; b=WS8eq0XTX11BlGkO5f0eDqPIZTBBG2wOdfSYvxmPXwuTJAVzrGUPeEys2f7Xu7GhtY7OFMh0/DDD0wzYAwzirrwRzIZyeCLwvn1U1WWSPY+1WNR6MQJ4HL/6l/bftBVf3rIqoHOObFQx8TSnEj1AprMus7o6Iqixm3hBklzMA/Y=
+	t=1763514748; cv=none; b=KaWI1zOX8QJCDuWRhh1B+3TEur3BJ06W7hL4vHKMmTre/s39TkOR4spdaeQ5VG4CqJXFyi9SyHQjXODozu+fcMUmZsfVhQGFIeGHSxPX1LlI4XXsyvZpqzQzaZTBJzPSfVc2aeDj+iZE9EY1x4Kc+MhVzkQcnwsQZqLz4EpUfoU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763123801; c=relaxed/simple;
-	bh=2FzgnZIQLuOVX0RH5mGPET2t8lF+QMG5icCyZ4hWhW0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=WhuVrmn8vXqXJLj5Nl/v5/WNxoVC5ja8jvKVoUWIxr9nfIWpbeZdG3tfJS/QTewH6CBT1aypkekirDNGwM+KnNVR6lY5N67SIiOZZMGW7Gd0VdvALqsHYUdusrauE7xYikHqLLixlSCIx+fIxSAYW9L9QR0s5v57M/+HCieWG9o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=aP9TImmD; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1763514748; c=relaxed/simple;
+	bh=2Rx8XCdzHjJIlTspDM1ljFO+dt4sCkDup0S9W+r6mCI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=n0TMaH59igp+UuCp3E+3zf6psDmudYdeWIrow9aLD8EC1QdAlWxvwdm7Th5iBHsYMd3mlw0Tr2SCnpSydVYATY4WXs8MHKFigP1+YOanIpE3T8iiTCAJZOn08S0WL5udx2OsJgVcfBTqupMmXzk7bfE5sLm2NBgJP3vMLQuoV80=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=Nd5xbeJu; arc=none smtp.client-ip=62.89.141.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="aP9TImmD"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1763123798;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=lG9jBUv4bu7c9vc+o3EVxRmkon7wuELm/GLx4exidZ0=;
-	b=aP9TImmD4u9i8Bd8fTa1EkNtf1pGbgmQrsCgtzZ9zypyHWSP99APMEIrPW9KeXATEpsIhk
-	1838SuhQxXKkjlmGbk2Xk6H5TeSUu2+WxJUJE5SosaXymj/MNJtmcRnVzshDMwJGGXUn8g
-	g0A48iD3rH/gFkjKyxxFmeLRcCTQI5c=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-296-fZG_BpHhNRiVWZJyZCakSw-1; Fri,
- 14 Nov 2025 07:36:35 -0500
-X-MC-Unique: fZG_BpHhNRiVWZJyZCakSw-1
-X-Mimecast-MFC-AGG-ID: fZG_BpHhNRiVWZJyZCakSw_1763123793
-Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 8EBBB19560AA;
-	Fri, 14 Nov 2025 12:36:33 +0000 (UTC)
-Received: from wsxc.redhat.com (unknown [10.96.134.52])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id D67821800949;
-	Fri, 14 Nov 2025 12:36:29 +0000 (UTC)
-From: Ricardo Robaina <rrobaina@redhat.com>
-To: audit@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	netfilter-devel@vger.kernel.org,
-	coreteam@netfilter.org
-Cc: paul@paul-moore.com,
-	eparis@redhat.com,
-	fw@strlen.de,
-	pablo@netfilter.org,
-	kadlec@netfilter.org,
-	Ricardo Robaina <rrobaina@redhat.com>
-Subject: [PATCH v7 2/2] audit: include source and destination ports to NETFILTER_PKT
-Date: Fri, 14 Nov 2025 09:36:17 -0300
-Message-ID: <0fb9e8efdc66c2bbd3d9b81e808c58407f7b4b68.1763122537.git.rrobaina@redhat.com>
-In-Reply-To: <cover.1763122537.git.rrobaina@redhat.com>
-References: <cover.1763122537.git.rrobaina@redhat.com>
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="Nd5xbeJu"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=ez5hPH+ChtRiWvVs9RI2L5Gbgi4SNbK/1ae/jYD9A5g=; b=Nd5xbeJuKkYDpaKp+IP1rUny1z
+	wJ3MSgpyz4YFNZZYgcPyQR0qn4aCFpyCVXNCtaejweH2XTamRV1OQzCyQNr09jFZPu5QttWM9P3Zf
+	59ULI/tBiLPmBgUMBpqhc5DZBkj81we4bRzSr8SrCm73sK1CIo7FliRcEo+LZSM/BtwKwIretN45W
+	BALGh86YpN7CeRDkerYfnyjMoV7iKT6+XaysEieGM0RivNpC++PF1KgcF8E5n2vXPnch86eqQmR09
+	5I/fxmzjJ/APmjrBdp5Kjem1sy1b+Mbd4KtPXNAaj+gqy76vpns+gK7CDh/prKcb9wgsXiqA88vEI
+	4XKzMkCA==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1vLWkB-000000047t2-1Zr9;
+	Wed, 19 Nov 2025 01:12:23 +0000
+Date: Wed, 19 Nov 2025 01:12:23 +0000
+From: Al Viro <viro@zeniv.linux.org.uk>
+To: Jens Axboe <axboe@kernel.dk>
+Cc: linux-fsdevel@vger.kernel.org, torvalds@linux-foundation.org,
+	brauner@kernel.org, jack@suse.cz, mjguzik@gmail.com,
+	paul@paul-moore.com, audit@vger.kernel.org,
+	io-uring@vger.kernel.org
+Subject: Re: [RFC][PATCH 11/13] allow incomplete imports of filenames
+Message-ID: <20251119011223.GL2441659@ZenIV>
+References: <20251109063745.2089578-1-viro@zeniv.linux.org.uk>
+ <20251109063745.2089578-12-viro@zeniv.linux.org.uk>
+ <257804ed-438e-4085-a8c2-ac107fe4c73d@kernel.dk>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <257804ed-438e-4085-a8c2-ac107fe4c73d@kernel.dk>
+Sender: Al Viro <viro@ftp.linux.org.uk>
 
-NETFILTER_PKT records show both source and destination
-addresses, in addition to the associated networking protocol.
-However, it lacks the ports information, which is often
-valuable for troubleshooting.
+On Tue, Nov 11, 2025 at 07:41:24AM -0700, Jens Axboe wrote:
 
-This patch adds both source and destination port numbers,
-'sport' and 'dport' respectively, to TCP, UDP, UDP-Lite and
-SCTP-related NETFILTER_PKT records.
+> > diff --git a/io_uring/openclose.c b/io_uring/openclose.c
+> > index bfeb91b31bba..6bc14f626923 100644
+> > --- a/io_uring/openclose.c
+> > +++ b/io_uring/openclose.c
+> > @@ -121,6 +118,7 @@ int io_openat2(struct io_kiocb *req, unsigned int issue_flags)
+> >  	struct file *file;
+> >  	bool resolve_nonblock, nonblock_set;
+> >  	bool fixed = !!open->file_slot;
+> > +	struct filename *name __free(putname) = complete_getname(&open->filename);
+> >  	int ret;
+> >  
+> >  	ret = build_open_flags(&open->how, &op);
+> 
+> I don't think this will work as-is - the prep has been done on the
+> request, but we could be retrying io_openat2(). That will happen if this
+> function returns -EAGAIN. That will then end up with a cleared out
+> filename for the second (blocking) invocation.
 
- $ TESTS="netfilter_pkt" make -e test &> /dev/null
- $ ausearch -i -ts recent |grep NETFILTER_PKT
- type=NETFILTER_PKT ... proto=icmp
- type=NETFILTER_PKT ... proto=ipv6-icmp
- type=NETFILTER_PKT ... proto=udp sport=46333 dport=42424
- type=NETFILTER_PKT ... proto=udp sport=35953 dport=42424
- type=NETFILTER_PKT ... proto=tcp sport=50314 dport=42424
- type=NETFILTER_PKT ... proto=tcp sport=57346 dport=42424
+If retry happens in a different thread, we do have a problem ;-/
+This -EAGAIN might've come from ->open() itself (io_openat2() sets
+O_NONBLOCK on the same calls), and by that point we have already
+shoved that filename in direction of audit...
 
-Link: https://github.com/linux-audit/audit-kernel/issues/162
+IMO the first 10 commits (up to and including audit_reusename() removal)
+are useful on their own, but io_openat2() part does look broken.
 
-Signed-off-by: Ricardo Robaina <rrobaina@redhat.com>
----
- kernel/audit.c | 103 +++++++++++++++++++++++++++++++++++++++++++++++--
- 1 file changed, 99 insertions(+), 4 deletions(-)
+Hmm...  FWIW, we could do a primitive like
 
-diff --git a/kernel/audit.c b/kernel/audit.c
-index 5c302c4592db..39c4f26c484d 100644
---- a/kernel/audit.c
-+++ b/kernel/audit.c
-@@ -60,6 +60,7 @@
- #include <net/netns/generic.h>
- #include <net/ip.h>
- #include <net/ipv6.h>
-+#include <linux/sctp.h>
- 
- #include "audit.h"
- 
-@@ -2517,8 +2518,55 @@ int audit_log_nf_skb(struct audit_buffer *ab,
- 		if (!ih)
- 			return -ENOMEM;
- 
--		audit_log_format(ab, " saddr=%pI4 daddr=%pI4 proto=%hhu",
--				 &ih->saddr, &ih->daddr, ih->protocol);
-+		switch (ih->protocol) {
-+		case IPPROTO_TCP: {
-+			struct tcphdr _tcph;
-+			const struct tcphdr *th;
-+
-+			th = skb_header_pointer(skb, skb_transport_offset(skb),
-+						sizeof(_tcph), &_tcph);
-+			if (!th)
-+				return -ENOMEM;
-+
-+			audit_log_format(ab, " saddr=%pI4 daddr=%pI4 proto=%hhu sport=%hu dport=%hu",
-+					 &ih->saddr, &ih->daddr, ih->protocol,
-+					 ntohs(th->source), ntohs(th->dest));
-+			break;
-+		}
-+		case IPPROTO_UDP:
-+		case IPPROTO_UDPLITE: {
-+			struct udphdr _udph;
-+			const struct udphdr *uh;
-+
-+			uh = skb_header_pointer(skb, skb_transport_offset(skb),
-+						sizeof(_udph), &_udph);
-+			if (!uh)
-+				return -ENOMEM;
-+
-+			audit_log_format(ab, " saddr=%pI4 daddr=%pI4 proto=%hhu sport=%hu dport=%hu",
-+					 &ih->saddr, &ih->daddr, ih->protocol,
-+					 ntohs(uh->source), ntohs(uh->dest));
-+			break;
-+		}
-+		case IPPROTO_SCTP: {
-+			struct sctphdr _sctph;
-+			const struct sctphdr *sh;
-+
-+			sh = skb_header_pointer(skb, skb_transport_offset(skb),
-+						sizeof(_sctph), &_sctph);
-+			if (!sh)
-+				return -ENOMEM;
-+
-+			audit_log_format(ab, " saddr=%pI4 daddr=%pI4 proto=%hhu sport=%hu dport=%hu",
-+					 &ih->saddr, &ih->daddr, ih->protocol,
-+					 ntohs(sh->source), ntohs(sh->dest));
-+			break;
-+		}
-+		default:
-+			audit_log_format(ab, " saddr=%pI4 daddr=%pI4 proto=%hhu",
-+					 &ih->saddr, &ih->daddr, ih->protocol);
-+		}
-+
- 		break;
- 	}
- 	case NFPROTO_IPV6: {
-@@ -2536,8 +2584,55 @@ int audit_log_nf_skb(struct audit_buffer *ab,
- 		ipv6_skip_exthdr(skb, skb_network_offset(skb) + sizeof(iph),
- 				 &nexthdr, &frag_off);
- 
--		audit_log_format(ab, " saddr=%pI6c daddr=%pI6c proto=%hhu",
--				 &ih->saddr, &ih->daddr, nexthdr);
-+		switch (nexthdr) {
-+		case IPPROTO_TCP: {
-+			struct tcphdr _tcph;
-+			const struct tcphdr *th;
-+
-+			th = skb_header_pointer(skb, skb_transport_offset(skb),
-+						sizeof(_tcph), &_tcph);
-+			if (!th)
-+				return -ENOMEM;
-+
-+			audit_log_format(ab, " saddr=%pI6c daddr=%pI6c proto=%hhu sport=%hu dport=%hu",
-+					 &ih->saddr, &ih->daddr, nexthdr,
-+					 ntohs(th->source), ntohs(th->dest));
-+			break;
-+		}
-+		case IPPROTO_UDP:
-+		case IPPROTO_UDPLITE: {
-+			struct udphdr _udph;
-+			const struct udphdr *uh;
-+
-+			uh = skb_header_pointer(skb, skb_transport_offset(skb),
-+						sizeof(_udph), &_udph);
-+			if (!uh)
-+				return -ENOMEM;
-+
-+			audit_log_format(ab, " saddr=%pI6c daddr=%pI6c proto=%hhu sport=%hu dport=%hu",
-+					 &ih->saddr, &ih->daddr, nexthdr,
-+					 ntohs(uh->source), ntohs(uh->dest));
-+			break;
-+		}
-+		case IPPROTO_SCTP: {
-+			struct sctphdr _sctph;
-+			const struct sctphdr *sh;
-+
-+			sh = skb_header_pointer(skb, skb_transport_offset(skb),
-+						sizeof(_sctph), &_sctph);
-+			if (!sh)
-+				return -ENOMEM;
-+
-+			audit_log_format(ab, " saddr=%pI6c daddr=%pI6c proto=%hhu sport=%hu dport=%hu",
-+					 &ih->saddr, &ih->daddr, nexthdr,
-+					 ntohs(sh->source), ntohs(sh->dest));
-+			break;
-+		}
-+		default:
-+			audit_log_format(ab, " saddr=%pI6c daddr=%pI6c proto=%hhu",
-+					 &ih->saddr, &ih->daddr, nexthdr);
-+		}
-+
- 		break;
- 	}
- 	default:
--- 
-2.51.1
+int putname_to_incomplete(struct incomplete_name *v, struct filename *name)
+{
+	if (likely(name->refcnt == 1)) {
+		v->__incomplete_filename = name;
+		return 0;
+	}
+	v->__incomplete_filename = <duplicate name>;
+	putname(name);
+	if (unlikely(!v->__incomplete_filename))
+		return -ENOMEM;
+	return 0;
+}
 
+and have
+                if (ret == -EAGAIN &&
+		    (!resolve_nonblock && (issue_flags & IO_URING_F_NONBLOCK))) {
+			ret = putname_to_incomplete(&open->filename,
+						    no_free_ptr(name));
+			if (unlikely(ret))
+				goto err;
+			return -EAGAIN;
+		}
+
+in io_openat2() (in addition to what's already done in 11/13).  Workable or
+too disgusting?
