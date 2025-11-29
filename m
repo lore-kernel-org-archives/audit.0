@@ -1,249 +1,123 @@
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB3FE24111D;
-	Sat, 29 Nov 2025 17:01:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C55D36D4E6
+	for <audit@vger.kernel.org>; Sat, 29 Nov 2025 17:33:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764435703; cv=none; b=Tv+Ks9lvPUavGCu2w62ALkUktI7pnaXELfcEM/ogKaioF0XAQ9sEpH5dw4vRJP+OZzg13/yCpTJ3ingu9YZHWYBYaQ6+SO/C0QhpyJZ0AsXrN3tDzd6MkKCbKbObzlDEhp5IHy1CKIM7E3eGiMZ/IMnxR6C6DuKG0CmVeJp73l4=
+	t=1764437619; cv=none; b=FR2BEeIYkowPmzpfMGf4YzT5z1p4ZwCEHi07F3bPof3iRrm5fM+HpfglwBS2RHLqhgiLlrTAjh4mrO3PR/fo+LL5SatkLnQbaiAqV/q9bk2Bv3ZGBO4UZEdWe1uj0zj592cLZSGrZ2aRVHIBhEyi39gZdHvYTjUzUZS4W4FBOIg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764435703; c=relaxed/simple;
-	bh=gSa3erVK1eCx1MDa7RSMZLkBrcegXQHmTb/pVP2dlv0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=IYPOx/4CUdgIOquBuu5SKbsalEHOKkOIDk1JL3V/nD0c3w2u35UU9eutwoH4NHYzC2GNIBNgD5maMsFvTITKgfaNh/b7Gjnay0XlEOo9yMkPONXTFkfY2J5IN73D3hOCDL9hujGjhrrhmqcIIpCRJlIn2F6gqYj4XQ8uzgjPwbE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=ji4yXAAl; arc=none smtp.client-ip=62.89.141.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
+	s=arc-20240116; t=1764437619; c=relaxed/simple;
+	bh=+lgN8J0IowAdNicv/d1NP7IzfMlJS8XCtDt0GRjHDXQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=hd/YXNj2EdRybznU6vg+RBniAxXVwBnwI8eCHUXhjlUB8RfeVOVnG2uPtVOI1MXb8kyHDJtNF5v7RDKevGT+cLByDrb3+ipIrOajN1jzkGnGqyjB1wbU7ZJ6oyilz77XV/m2qhXO9DvS4SK8dKdtmQl7d2p/2k2Xtd4TzLfxoPA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cBIQh5S2; arc=none smtp.client-ip=209.85.218.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="ji4yXAAl"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=linux.org.uk; s=zeniv-20220401; h=Sender:Content-Transfer-Encoding:
-	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
-	Reply-To:Content-Type:Content-ID:Content-Description;
-	bh=DcYWl/EHvWXFU6YbNDJg2t6W+OVZCU4RQWjm21d53dI=; b=ji4yXAAlVvGPlu7ioUWq9XFAon
-	h2if9seoaWa42cV1MBPFUZ7xHzrLnTAQz63Dqr8JYdSbcjfcWO0Ueniq76oT6PQkrDdp4ziXpwS8X
-	jQ9jgpYBCnn+Pe83euBRC6E8o/wW/uh+BJlb2qBd34z9dZnPwQ56TtTZSP1tyG0Mkx0PdOKFU5zwu
-	npoQqzJzhXFpr1k1URfS1V2rq+NoebnPiUnD8MEyjX1ZJkC1+zxg+sN5ElrQzNbHxCiCEIvh/mKzg
-	4++sal0ixgAb2+sJW86vT3MSi0y0eH98aevlkiQvK26y4GNWlGOY17yUmOEjg823iU0dkD9LHba6m
-	wHMfe8Yg==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.99 #2 (Red Hat Linux))
-	id 1vPOKN-00000000dDE-3Opr;
-	Sat, 29 Nov 2025 17:01:43 +0000
-From: Al Viro <viro@zeniv.linux.org.uk>
-To: linux-fsdevel@vger.kernel.org
-Cc: torvalds@linux-foundation.org,
-	brauner@kernel.org,
-	jack@suse.cz,
-	mjguzik@gmail.com,
-	paul@paul-moore.com,
-	axboe@kernel.dk,
-	audit@vger.kernel.org,
-	io-uring@vger.kernel.org
-Subject: [RFC PATCH v2 14/18] struct filename: use names_cachep only for getname() and friends
-Date: Sat, 29 Nov 2025 17:01:38 +0000
-Message-ID: <20251129170142.150639-15-viro@zeniv.linux.org.uk>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20251129170142.150639-1-viro@zeniv.linux.org.uk>
-References: <20251129170142.150639-1-viro@zeniv.linux.org.uk>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cBIQh5S2"
+Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-b7697e8b01aso567845566b.2
+        for <audit@vger.kernel.org>; Sat, 29 Nov 2025 09:33:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1764437615; x=1765042415; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xqBHGbcsAsVVRiASRLwDbcSq7PIrgcMaytoi2qLw8ec=;
+        b=cBIQh5S22M8W7nQha18KSIsIWPzTRaCbRI5sSO/+y2bwDuwhWZtyqruSKCsYmjmRLJ
+         xfQKDzZZrOrZ6UsfwXxs29D5TS7Ob49q50+gUcBMVCuxirPP7vtZhSbOPjr8PdPchbAz
+         zQaSH2gLKwAlYhO3VjKuZMCRydvPQlSKEOx+L+bQd9+8ZlYe02yuSvbBxcorQKHuh3ly
+         HNHocYoXhoFSxsSSu8DsyggFt3SOTDCSkW5xsvzfiyu0GxIYIcBTKbu5o8gaVOvYUGFB
+         cEfv7vGw2Yh2imYaTWPqLTBQiaOHXhPo0k7be8eRTExYYiMQgX3GcQUG//3gsJ8hGKtC
+         3rTQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1764437615; x=1765042415;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=xqBHGbcsAsVVRiASRLwDbcSq7PIrgcMaytoi2qLw8ec=;
+        b=MBfUqPLtNTTlGEgt40ij8HrGwIL6EY8OXBHv7xQv9uNRuf/kLtItgcui608i+Bg216
+         owN0lPw43ACKK6vtH08b70FbEwvZKYNoYR+8qh406AEfkmuUnPPQEv+VG7ffO2Y7gkQW
+         6suZGArxQPIPxzgTOdL1jx9IExlkNwAVpjErXoDx3Mr2X1AhHqt3BcT1FhdGysKAd+ae
+         5WBdHm2Bukw+uUxL34gJXlm9X+W4Md/y+tatzgzHlI6+zdSOzOFd00Y+VZdGhVWJpFMW
+         tFhKkSC1gMW7pZnVDdFOY01SMfXloQOvYgMdlbjywoHamvbVTwr6vgVkIr5zk9Z8LWhZ
+         UEyA==
+X-Forwarded-Encrypted: i=1; AJvYcCUPIl3cbatLmfoJGcM2fCaB8pQy7wIEFkPza7eAECK6X+XXZPJljRcZUfrpN/pv4d67zdAtDg==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxyg0YyPOBDD8ioCHEd89cwMoyJVKc8HSiG63bryy1kVBZ0jdma
+	X3rZ3X7/oEVy+evyk6hB8mgvRXtBm2T6u/zHVtzJTatyinvh7sYhD/uXLAXReilHXVjtIeU1vwQ
+	X8fkUwnHzlECvzGc5cf0p+yCDJeGItyc=
+X-Gm-Gg: ASbGncu1I7QhWfGXkKHfoGZ+/2Od+rnc8gffQ19fLIsTHdC6t+zv3xLZmUJWsFzSsVz
+	cKgfQzmQTd0qMOD0tmbxHtZONch4Cek1rf4af1/wvnxnDeniY7EOWJpIkrE85UTHcf9Dv5muIyg
+	ndCPF5rSkRTG3YVLkvlMeHFPmM8uUI54L7zX0CezHlN22yRFun+gmVnP8F5/NuPH8miGuNUMij0
+	sHToypOFQFCzPYpRq0nQf9jKOU5WDw+YdqX3k3KrBFKluCYNik0xwfDNYYtHdzwD24RjfdEyyaS
+	LJsGX1xY8HjBCNL5t14TWakMVg==
+X-Google-Smtp-Source: AGHT+IGCyw0hgpfwbdp3a3E31TdyZ9pXIJL/jdDuy8vbFKa1VPNcT6NEqn4DspaZQIjyW4rDdWr2eMhKOKbCgdYDBbM=
+X-Received: by 2002:a17:906:c14b:b0:b73:398c:c595 with SMTP id
+ a640c23a62f3a-b767156556amr3928338466b.19.1764437614344; Sat, 29 Nov 2025
+ 09:33:34 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Sender: Al Viro <viro@ftp.linux.org.uk>
+References: <20251129170142.150639-1-viro@zeniv.linux.org.uk> <20251129170142.150639-16-viro@zeniv.linux.org.uk>
+In-Reply-To: <20251129170142.150639-16-viro@zeniv.linux.org.uk>
+From: Mateusz Guzik <mjguzik@gmail.com>
+Date: Sat, 29 Nov 2025 18:33:22 +0100
+X-Gm-Features: AWmQ_blvi087-G2CtHlEiHh6F6ijMslc1kpUveo4D1zCzMmn1FqYhm25LkTHXDE
+Message-ID: <CAGudoHFjycOW1ROqsm1_8j47AGawjXC3kVctvWURFvSDvhq2jg@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 15/18] struct filename: saner handling of long names
+To: Al Viro <viro@zeniv.linux.org.uk>
+Cc: linux-fsdevel@vger.kernel.org, torvalds@linux-foundation.org, 
+	brauner@kernel.org, jack@suse.cz, paul@paul-moore.com, axboe@kernel.dk, 
+	audit@vger.kernel.org, io-uring@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-        Instances of struct filename come from names_cachep (via
-__getname()).  That is done by getname_flags() and getname_kernel()
-and these two are the main callers of __getname().  However, there are
-other callers that simply want to allocate PATH_MAX bytes for uses that
-have nothing to do with struct filename.
+On Sat, Nov 29, 2025 at 6:01=E2=80=AFPM Al Viro <viro@zeniv.linux.org.uk> w=
+rote:
+>  void __init filename_init(void)
+>  {
+> -       names_cachep =3D kmem_cache_create_usercopy("names_cache", PATH_M=
+AX, 0,
+> -                       SLAB_HWCACHE_ALIGN|SLAB_PANIC, 0, PATH_MAX, NULL)=
+;
+> +       names_cachep =3D kmem_cache_create_usercopy("names_cache", sizeof=
+(struct filename), 0,
+> +                       SLAB_HWCACHE_ALIGN|SLAB_PANIC, offsetof(struct fi=
+lename, iname),
+> +                                               EMBEDDED_NAME_MAX, NULL);
+>  }
+>
+[snip]
+> diff --git a/include/linux/fs.h b/include/linux/fs.h
+> index 59c5c67985ab..0b01adcfa425 100644
+> --- a/include/linux/fs.h
+> +++ b/include/linux/fs.h
+> @@ -2833,11 +2833,13 @@ extern struct kobject *fs_kobj;
+>
+>  /* fs/open.c */
+>  struct audit_names;
+> +
+> +#define EMBEDDED_NAME_MAX      128
+>  struct filename {
+>         const char              *name;  /* pointer to actual string */
+>         atomic_t                refcnt;
+>         struct audit_names      *aname;
+> -       const char              iname[];
+> +       const char              iname[EMBEDDED_NAME_MAX];
+>  };
+>  static_assert(offsetof(struct filename, iname) % sizeof(long) =3D=3D 0);
+>
 
-	We want saner allocation rules for long pathnames, so that struct
-filename would *always* come from names_cachep, with the out-of-line
-pathname getting kmalloc'ed.  For that we need to be able to change the
-size of objects allocated by getname_flags()/getname_kernel().
+This makes sizeof struct filename 152 bytes. At the same time because
+of the SLAB_HWCACHE_ALIGN flag, the obj is going to take 192 bytes.
 
-	That requires the rest of __getname() users to stop using
-names_cachep; we could explicitly switch all of those to kmalloc(),
-but that would cause quite a bit of noise.  So the plan is to switch
-getname_...() to new helpers and turn __getname() into a wrapper for
-kmalloc().  Remaining __getname() users could be converted to explicit
-kmalloc() at leisure, hopefully along with figuring out what size do
-they really want - PATH_MAX is an overkill for some of them, used out
-of laziness ("we have a convenient helper that does 4K allocations and
-that's large enough, let's use it").
+I don't know what would be the nice way to handle this in Linux, but
+as is this is just failing to take advantage of memory which is going
+to get allocated anyway.
 
-	As a side benefit, names_cachep is no longer used outside
-of fs/namei.c, so we can move it there and be done with that.
-
-Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
----
- fs/dcache.c        |  8 +-------
- fs/internal.h      |  2 ++
- fs/namei.c         | 37 ++++++++++++++++++++++++++++---------
- include/linux/fs.h |  6 ++----
- 4 files changed, 33 insertions(+), 20 deletions(-)
-
-diff --git a/fs/dcache.c b/fs/dcache.c
-index 035cccbc9276..761283f13200 100644
---- a/fs/dcache.c
-+++ b/fs/dcache.c
-@@ -3246,10 +3246,6 @@ static void __init dcache_init(void)
- 	runtime_const_init(ptr, dentry_hashtable);
- }
- 
--/* SLAB cache for __getname() consumers */
--struct kmem_cache *names_cachep __ro_after_init;
--EXPORT_SYMBOL(names_cachep);
--
- void __init vfs_caches_init_early(void)
- {
- 	int i;
-@@ -3263,9 +3259,7 @@ void __init vfs_caches_init_early(void)
- 
- void __init vfs_caches_init(void)
- {
--	names_cachep = kmem_cache_create_usercopy("names_cache", PATH_MAX, 0,
--			SLAB_HWCACHE_ALIGN|SLAB_PANIC, 0, PATH_MAX, NULL);
--
-+	filename_init();
- 	dcache_init();
- 	inode_init();
- 	files_init();
-diff --git a/fs/internal.h b/fs/internal.h
-index 9b2b4d116880..e16e72b246c2 100644
---- a/fs/internal.h
-+++ b/fs/internal.h
-@@ -68,6 +68,8 @@ int vfs_tmpfile(struct mnt_idmap *idmap,
- 		struct file *file, umode_t mode);
- struct dentry *d_hash_and_lookup(struct dentry *, struct qstr *);
- 
-+void __init filename_init(void);
-+
- /*
-  * namespace.c
-  */
-diff --git a/fs/namei.c b/fs/namei.c
-index 62e992e4f152..cf7d8608ce4e 100644
---- a/fs/namei.c
-+++ b/fs/namei.c
-@@ -125,6 +125,25 @@
- 
- #define EMBEDDED_NAME_MAX	(PATH_MAX - offsetof(struct filename, iname))
- 
-+/* SLAB cache for struct filename instances */
-+static struct kmem_cache *names_cachep __ro_after_init;
-+
-+void __init filename_init(void)
-+{
-+	names_cachep = kmem_cache_create_usercopy("names_cache", PATH_MAX, 0,
-+			SLAB_HWCACHE_ALIGN|SLAB_PANIC, 0, PATH_MAX, NULL);
-+}
-+
-+static inline struct filename *alloc_filename(void)
-+{
-+	return kmem_cache_alloc(names_cachep, GFP_KERNEL);
-+}
-+
-+static inline void free_filename(struct filename *p)
-+{
-+	kmem_cache_free(names_cachep, p);
-+}
-+
- static inline void initname(struct filename *name)
- {
- 	name->aname = NULL;
-@@ -164,7 +183,7 @@ getname_flags(const char __user *filename, int flags)
- 	char *kname;
- 	int len;
- 
--	result = __getname();
-+	result = alloc_filename();
- 	if (unlikely(!result))
- 		return ERR_PTR(-ENOMEM);
- 
-@@ -181,13 +200,13 @@ getname_flags(const char __user *filename, int flags)
- 	 */
- 	if (unlikely(len <= 0)) {
- 		if (unlikely(len < 0)) {
--			__putname(result);
-+			free_filename(result);
- 			return ERR_PTR(len);
- 		}
- 
- 		/* The empty path is special. */
- 		if (!(flags & LOOKUP_EMPTY)) {
--			__putname(result);
-+			free_filename(result);
- 			return ERR_PTR(-ENOENT);
- 		}
- 	}
-@@ -201,7 +220,7 @@ getname_flags(const char __user *filename, int flags)
- 	if (unlikely(len == EMBEDDED_NAME_MAX)) {
- 		struct filename *p = getname_long(result, filename);
- 		if (IS_ERR(p)) {
--			__putname(result);
-+			free_filename(result);
- 			return p;
- 		}
- 		result = p;
-@@ -242,7 +261,7 @@ struct filename *getname_kernel(const char * filename)
- 	struct filename *result;
- 	int len = strlen(filename) + 1;
- 
--	result = __getname();
-+	result = alloc_filename();
- 	if (unlikely(!result))
- 		return ERR_PTR(-ENOMEM);
- 
-@@ -254,13 +273,13 @@ struct filename *getname_kernel(const char * filename)
- 
- 		tmp = kmalloc(size, GFP_KERNEL);
- 		if (unlikely(!tmp)) {
--			__putname(result);
-+			free_filename(result);
- 			return ERR_PTR(-ENOMEM);
- 		}
- 		tmp->name = (char *)result;
- 		result = tmp;
- 	} else {
--		__putname(result);
-+		free_filename(result);
- 		return ERR_PTR(-ENAMETOOLONG);
- 	}
- 	memcpy((char *)result->name, filename, len);
-@@ -287,10 +306,10 @@ void putname(struct filename *name)
- 	}
- 
- 	if (name->name != name->iname) {
--		__putname(name->name);
-+		free_filename((struct filename *)name->name);
- 		kfree(name);
- 	} else
--		__putname(name);
-+		free_filename(name);
- }
- EXPORT_SYMBOL(putname);
- 
-diff --git a/include/linux/fs.h b/include/linux/fs.h
-index bbae3cfdc338..59c5c67985ab 100644
---- a/include/linux/fs.h
-+++ b/include/linux/fs.h
-@@ -2957,10 +2957,8 @@ static inline int finish_open_simple(struct file *file, int error)
- extern void __init vfs_caches_init_early(void);
- extern void __init vfs_caches_init(void);
- 
--extern struct kmem_cache *names_cachep;
--
--#define __getname()		kmem_cache_alloc(names_cachep, GFP_KERNEL)
--#define __putname(name)		kmem_cache_free(names_cachep, (void *)(name))
-+#define __getname()		kmalloc(PATH_MAX, GFP_KERNEL)
-+#define __putname(name)		kfree(name)
- 
- extern struct super_block *blockdev_superblock;
- static inline bool sb_is_blkdev_sb(struct super_block *sb)
--- 
-2.47.3
-
+Perhaps the macro could be bumped to 168 and the size checked with a
+static assert on 64 bit platforms? Or some magic based on reported
+cache line size.
