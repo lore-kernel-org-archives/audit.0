@@ -1,38 +1,50 @@
-Received: from beta.bencteux.fr (114.ip-51-178-41.eu [51.178.41.114])
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31F0D2147FB;
-	Mon, 24 Nov 2025 20:02:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=51.178.41.114
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CBB21F4168;
+	Sat, 29 Nov 2025 17:01:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764014584; cv=none; b=nkAFVGIhNVcVKKFRYddOXSbnPqXahHH6geEQ/zGLKXZWy06WzwieYuI+tl70YCqVGJ/j9ouQ7L1kFes2JViAR6Efh8ouVYyRGmRpeoWaJXfWRwRW0zB8CAHcb9nikYwGx8w0cC3IorIPC3lUOPpmmDL+6MXCinctUcIok3U2BR4=
+	t=1764435699; cv=none; b=VhQIdcQRv1+H2PPDOOE2E9J4ImVrnybJp0PlEMBP3aiTMwiydm5lEbwAOMcmlig5PlA2t9rEe2x5qfyJg83tTrZJD3cCgH8O1EX7Q6lGVHBu7+ety277NqFW0h0n+YYrNrDEwcpVkCtixGzsoCFv3r8jl+NDHt7KI8H0gJS3pgo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764014584; c=relaxed/simple;
-	bh=oilSQorDJ2YLiex3kfij5+AakgCpFNdWBbn9OHcANjw=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=esPW4+hqrXHIPQ6X983GTxN20fSiAAvIRi8qQNYqRJ7p01Zrn4BkYCT+xKt+wjI1fFXK/R/32Wz57uidGwkU7N7d+p9DB1tzrB7O56iHjncP6N+gW6xt/gMfOO4nezVQV9B4Hma1zD00XrV9/1XvS1KU73dFWSnG/XYWpq3ozeY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bencteux.fr; spf=pass smtp.mailfrom=bencteux.fr; dkim=pass (1024-bit key) header.d=bencteux.fr header.i=@bencteux.fr header.b=K8B53eYS; arc=none smtp.client-ip=51.178.41.114
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bencteux.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bencteux.fr
+	s=arc-20240116; t=1764435699; c=relaxed/simple;
+	bh=xQ7El2M28M0wHx+P+g8Yo1qBcNgqMr0WmiWcFdzVu9w=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=XvF27EPT529bo790suBLTfTYTTdJC9ru6QpGXH9cAgqpxqiEkz3uaGr5xMtbbQTnU+TbO2m9+O3q0Vc6lAeBt++WaZmj6SGkMAIeAbltPqKc8coe7dA0JR7KWaUMAlCuWd2bdIJ3fG44kJBHXyAeYuvtRoHcbr8CF8JvqT6Ve1s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=T4Emt3U4; arc=none smtp.client-ip=62.89.141.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=bencteux.fr header.i=@bencteux.fr header.b="K8B53eYS"
-Received: from localhost (88-178-48-87.subs.proxad.net [88.178.48.87])
-	by beta.bencteux.fr (Postfix) with ESMTPSA id 6ED2A40208;
-	Mon, 24 Nov 2025 21:00:03 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=bencteux.fr; s=mail;
-	t=1764014403; bh=oilSQorDJ2YLiex3kfij5+AakgCpFNdWBbn9OHcANjw=;
-	h=From:To:Cc:Subject:Date:From;
-	b=K8B53eYSdje3zwSqT2q2JwwkPzRFNBBcmmzX3w0zGQ1oLqoAHPkhkhI1BbXLY5pyp
-	 y7J3B+CClP0jAxgNZy5ScD4rk5u4RoeP4dMYcSwsqK2ZiLlORl9TtYL2IlVHHNsZII
-	 D9R9WnillDY3C1bhdvaM01HMq/LPeC3C9tIel2tI=
-From: Jeffrey Bencteux <jeff@bencteux.fr>
-To: audit@vger.kernel.org,
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="T4Emt3U4"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=linux.org.uk; s=zeniv-20220401; h=Sender:Content-Transfer-Encoding:
+	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
+	Reply-To:Content-Type:Content-ID:Content-Description;
+	bh=OSmE8RDttZ57sO3CJH0P4rRo3qRd5TrH+VcvqqudS9I=; b=T4Emt3U468OJpWCEF3VRYAR/ll
+	NrngMAi2N4+03J2sWont+MJqyvSrCoOH1lA8vA5MbkgaGEpLXKEviheoy7/ipVY7BFatvGwqhpuU1
+	M8BoBhPA1mi9z2JXs/A28B8splPaCWZz12SK/iPthYoIvYtfEssVpfXBP4KfWsQwpz9+cbtdB7+69
+	S91M7w0OjBHpWb/A3Ka7e4opjn0ZAghy83oTB4ivEPap1HSTjLyafNSaudFX8rYzSJjI2Q78pfXYB
+	Jjz8R0IbMFZc/XhjVX9tw1NbP3coMJ3I43J4O7TZFYFLmk7cbjFELZoBZtU9KuztPxrd1sO2a1tU+
+	/27i2QlQ==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.99 #2 (Red Hat Linux))
+	id 1vPOKN-00000000dCh-0yab;
+	Sat, 29 Nov 2025 17:01:43 +0000
+From: Al Viro <viro@zeniv.linux.org.uk>
+To: linux-fsdevel@vger.kernel.org
+Cc: torvalds@linux-foundation.org,
+	brauner@kernel.org,
+	jack@suse.cz,
+	mjguzik@gmail.com,
 	paul@paul-moore.com,
-	eparis@redhat.com
-Cc: linux-kernel@vger.kernel.org
-Subject: [PATCH] audit: add fchmodat2() to change attributes class
-Date: Mon, 24 Nov 2025 20:49:30 +0100
-Message-ID: <20251124194930.8576-1-jeff@bencteux.fr>
-X-Mailer: git-send-email 2.49.0
+	axboe@kernel.dk,
+	audit@vger.kernel.org,
+	io-uring@vger.kernel.org
+Subject: [RFC PATCH v2 06/18] chroot(2): import pathname only once
+Date: Sat, 29 Nov 2025 17:01:30 +0000
+Message-ID: <20251129170142.150639-7-viro@zeniv.linux.org.uk>
+X-Mailer: git-send-email 2.52.0
+In-Reply-To: <20251129170142.150639-1-viro@zeniv.linux.org.uk>
+References: <20251129170142.150639-1-viro@zeniv.linux.org.uk>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
@@ -40,37 +52,46 @@ List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Sender: Al Viro <viro@ftp.linux.org.uk>
 
-fchmodat2(), introduced in version 6.6 is currently not in the change
-attribute class of audit. Calling fchmodat2() to change a file
-attribute in the same fashion than chmod() or fchmodat() will bypass
-audit rules such as:
+Convert the user_path_at() call inside a retry loop into getname_flags() +
+filename_lookup() + putname() and leave only filename_lookup() inside
+the loop.
 
--w /tmp/test -p rwa -k test_rwa
+In this case we never pass LOOKUP_EMPTY, so getname_flags() is equivalent
+to plain getname().
 
-The current patch adds fchmodat2() to the change attributes class.
+The things could be further simplified by use of cleanup.h stuff, but
+let's not clutter the patch with that.
 
-Signed-off-by: Jeffrey Bencteux <jeff@bencteux.fr>
+Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
 ---
- include/asm-generic/audit_change_attr.h | 3 +++
- 1 file changed, 3 insertions(+)
+ fs/open.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/include/asm-generic/audit_change_attr.h b/include/asm-generic/audit_change_attr.h
-index cc840537885f..ddd90bbe40df 100644
---- a/include/asm-generic/audit_change_attr.h
-+++ b/include/asm-generic/audit_change_attr.h
-@@ -26,6 +26,9 @@ __NR_fremovexattr,
- __NR_fchownat,
- __NR_fchmodat,
- #endif
-+#ifdef __NR_fchmodat2
-+__NR_fchmodat2,
-+#endif
- #ifdef __NR_chown32
- __NR_chown32,
- __NR_fchown32,
-
-base-commit: ac3fd01e4c1efce8f2c054cdeb2ddd2fc0fb150d
+diff --git a/fs/open.c b/fs/open.c
+index 8bc2f313f4a9..e67baae339fc 100644
+--- a/fs/open.c
++++ b/fs/open.c
+@@ -603,8 +603,9 @@ SYSCALL_DEFINE1(chroot, const char __user *, filename)
+ 	struct path path;
+ 	int error;
+ 	unsigned int lookup_flags = LOOKUP_FOLLOW | LOOKUP_DIRECTORY;
++	struct filename *name = getname(filename);
+ retry:
+-	error = user_path_at(AT_FDCWD, filename, lookup_flags, &path);
++	error = filename_lookup(AT_FDCWD, name, lookup_flags, &path, NULL);
+ 	if (error)
+ 		goto out;
+ 
+@@ -628,6 +629,7 @@ SYSCALL_DEFINE1(chroot, const char __user *, filename)
+ 		goto retry;
+ 	}
+ out:
++	putname(name);
+ 	return error;
+ }
+ 
 -- 
-2.49.0
+2.47.3
 
