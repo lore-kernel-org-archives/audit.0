@@ -1,34 +1,34 @@
 Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32ECA225A5B;
-	Sat, 29 Nov 2025 17:01:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB46323373D;
+	Sat, 29 Nov 2025 17:01:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764435701; cv=none; b=fmswT4cmL/hew6/h6avPXEgybc3woHortENUFRAaSXkqa30xNUZ0Fc+owvJaqQf55V0N103gytFbfSGcJAW8tNv/JAQPl9aZeia7BTVTN0YcmEpV9xAN4KQ87DQE+Ne6pgrktAA706vt8pLucI1tAhErAmEQR2zel9Qx2FuL35k=
+	t=1764435702; cv=none; b=OV7/0MPD8v4Fmk0RNZs+NiBUnncZnh/ZC5rlLQNsE4KHypYit7Zf6xriOf2qwdOJFeY7LCp2YoomG4U4pD+QEGth7pA0xc2Jzko2hGycIj1p4dXEjcYWpDDxEwEavtq/sK0udkTNLFk1IUwaUgA/G0T0k0fFJw43AIgsMa7HH+8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764435701; c=relaxed/simple;
-	bh=E9Jim91cYu+hjfovMTAFNHpMUpWA1Dh3B6NDhEnGz0M=;
+	s=arc-20240116; t=1764435702; c=relaxed/simple;
+	bh=QPsA95FqkoqhZwspP+I0M8hqJMt14cqnl0F7hFCckZc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=gv8WLOT+Sr1Cf9T9sCXbX+7ie6Y+Mgl4GthF2xMH0wfzttPpQp8bwS5ZJqgkQklQXoleOuj1JCy1eBLeSrDisyYy03UbePaBKTpokYrXstJv03Znl8Mg4GZsX4SpmBp3QaeFxKmq7O6dl/gjHiUg+SAYWClG0B3vK1gacU1coHA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=NZEcLrTZ; arc=none smtp.client-ip=62.89.141.173
+	 MIME-Version; b=GSs8k2PQdSru90BeFpL1Tts0L7L42Nia4BgTbpzNZJT01eJQTUutojRG6e21szmb7YYNIfOyQL5QtIhOTQXyQsZWcNpcZr+jkgV+JBPIrwwdv3HJqd7IkwFjFD5+Eiw3phHcteoztTpT1hip1WFnR6a8idQsiOc1UpSQl3wajDw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=nORElcFX; arc=none smtp.client-ip=62.89.141.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="NZEcLrTZ"
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="nORElcFX"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=linux.org.uk; s=zeniv-20220401; h=Sender:Content-Transfer-Encoding:
 	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
 	Reply-To:Content-Type:Content-ID:Content-Description;
-	bh=9w85sx1iZaHMSmctqEpLCcaa+NQBcfmgJNR7W4Z/A98=; b=NZEcLrTZCynyPBfy2FUn6MUbHF
-	Fkz7D05w9EclnWfY/ipxLNyw6taUrmmjxsK5fIJgm1KoRua+9Usz9qxZriXujO5mfTibCX2tDy7YZ
-	FhZoltT0CWg/XLbWRKxw51d3/YpsvdtI//77QO2KZ2DIKdqm5Ll+Zf1qy5olZOBzzeU9yAGSF93Yr
-	BJ3GPDuO4nrmLsJkHcS5ekx5QYgJMrvajpN3ssPewoy0F7UdS03h24alFuhdyEY5NudrMmrXqvK6u
-	c80K34KiDkwOkfd5/O/dgMNzvbflS5PmHEQR/zfzDdpx167ULD4TIYWuj4TvOkR6glHI2mN0Ky1lR
-	oJxZm1JA==;
+	bh=dnuK+nfSVSM8EnnK0uwzWnmtu2jEW/yLVrHY/kiG4UY=; b=nORElcFXZIM+PZtx1nWH5bOkZt
+	VHIGK5a3y6Tv0bG/Ku5dhUwLqANlxxAZZcKTIzuFkS34gcK3Vd6WJjZ92s3w+qdFMwdc73XC75XG3
+	tOKIj+Q88sM8iZL6P6Rj3pW0dAjP0AgM1dKiG1++gCVcyVcfwHtdopNDq783wH+pNoUGwL/gSk94k
+	EnVm4EqVjhKoHQ5INCAgU/Lm9vg+/y9cer5BpYLhzwrt1I+0hRf50/lHKPAiU1M0kzCrNkUf1t66N
+	kZDj5Qn/CuYo67DxoZumbabb07B+OqvbbmdCEgScUoRUsZ2aiKi9LsBC7qQfxhR/wvO0d2PPc2US3
+	HkgHuUyA==;
 Received: from viro by zeniv.linux.org.uk with local (Exim 4.99 #2 (Red Hat Linux))
-	id 1vPOKM-00000000dCC-2xnC;
-	Sat, 29 Nov 2025 17:01:42 +0000
+	id 1vPOKO-00000000dET-1ZhJ;
+	Sat, 29 Nov 2025 17:01:44 +0000
 From: Al Viro <viro@zeniv.linux.org.uk>
 To: linux-fsdevel@vger.kernel.org
 Cc: torvalds@linux-foundation.org,
@@ -39,9 +39,9 @@ Cc: torvalds@linux-foundation.org,
 	axboe@kernel.dk,
 	audit@vger.kernel.org,
 	io-uring@vger.kernel.org
-Subject: [RFC PATCH v2 02/18] do_fchmodat(): import pathname only once
-Date: Sat, 29 Nov 2025 17:01:26 +0000
-Message-ID: <20251129170142.150639-3-viro@zeniv.linux.org.uk>
+Subject: [RFC PATCH v2 18/18] struct filename ->refcnt doesn't need to be atomic
+Date: Sat, 29 Nov 2025 17:01:42 +0000
+Message-ID: <20251129170142.150639-19-viro@zeniv.linux.org.uk>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20251129170142.150639-1-viro@zeniv.linux.org.uk>
 References: <20251129170142.150639-1-viro@zeniv.linux.org.uk>
@@ -54,58 +54,101 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: Al Viro <viro@ftp.linux.org.uk>
 
-Convert the user_path_at() call inside a retry loop into getname_flags() +
-filename_lookup() + putname() and leave only filename_lookup() inside
-the loop.
-
-Since we have the default logics for use of LOOKUP_EMPTY (passed iff
-AT_EMPTY_PATH is present in flags), just use getname_uflags() and
-don't bother with setting LOOKUP_EMPTY in lookup_flags - getname_uflags()
-will pass the right thing to getname_flags() and filename_lookup()
-doesn't care about LOOKUP_EMPTY at all.
-
-The things could be further simplified by use of cleanup.h stuff, but
-let's not clutter the patch with that.
+... or visible outside of audit, really.  Note that references
+held in delayed_filename always have refcount 1, and from the
+moment of complete_getname() or equivalent point in getname...()
+there won't be any references to struct filename instance left
+in places visible to other threads.
 
 Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
 ---
- fs/open.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ fs/namei.c         | 10 +++++-----
+ include/linux/fs.h |  8 +-------
+ kernel/auditsc.c   |  6 ++++++
+ 3 files changed, 12 insertions(+), 12 deletions(-)
 
-diff --git a/fs/open.c b/fs/open.c
-index db8fe2b5463d..e9a08a820e49 100644
---- a/fs/open.c
-+++ b/fs/open.c
-@@ -682,6 +682,7 @@ static int do_fchmodat(int dfd, const char __user *filename, umode_t mode,
- 		       unsigned int flags)
+diff --git a/fs/namei.c b/fs/namei.c
+index 8530d75fb270..d6eac90084e1 100644
+--- a/fs/namei.c
++++ b/fs/namei.c
+@@ -146,7 +146,7 @@ static inline void free_filename(struct filename *p)
+ static inline void initname(struct filename *name)
  {
- 	struct path path;
-+	struct filename *name;
- 	int error;
- 	unsigned int lookup_flags;
- 
-@@ -689,11 +690,9 @@ static int do_fchmodat(int dfd, const char __user *filename, umode_t mode,
- 		return -EINVAL;
- 
- 	lookup_flags = (flags & AT_SYMLINK_NOFOLLOW) ? 0 : LOOKUP_FOLLOW;
--	if (flags & AT_EMPTY_PATH)
--		lookup_flags |= LOOKUP_EMPTY;
--
-+	name = getname_uflags(filename, flags);
- retry:
--	error = user_path_at(dfd, filename, lookup_flags, &path);
-+	error = filename_lookup(dfd, name, lookup_flags, &path, NULL);
- 	if (!error) {
- 		error = chmod_common(&path, mode);
- 		path_put(&path);
-@@ -702,6 +701,7 @@ static int do_fchmodat(int dfd, const char __user *filename, umode_t mode,
- 			goto retry;
- 		}
- 	}
-+	putname(name);
- 	return error;
+ 	name->aname = NULL;
+-	atomic_set(&name->refcnt, 1);
++	name->refcnt = 1;
  }
  
+ static int getname_long(struct filename *name, const char __user *filename)
+@@ -284,13 +284,13 @@ void putname(struct filename *name)
+ 	if (IS_ERR_OR_NULL(name))
+ 		return;
+ 
+-	refcnt = atomic_read(&name->refcnt);
++	refcnt = name->refcnt;
+ 	if (unlikely(refcnt != 1)) {
+ 		if (WARN_ON_ONCE(!refcnt))
+ 			return;
+ 
+-		if (!atomic_dec_and_test(&name->refcnt))
+-			return;
++		name->refcnt--;
++		return;
+ 	}
+ 
+ 	if (unlikely(name->name != name->iname))
+@@ -323,7 +323,7 @@ int putname_to_delayed(struct delayed_filename *v, struct filename *__name)
+ 	struct filename *name __free(putname) = no_free_ptr(__name);
+ 	struct filename *copy;
+ 
+-	if (likely(atomic_read(&name->refcnt) == 1)) {
++	if (likely(name->refcnt == 1)) {
+ 		v->__incomplete_filename = no_free_ptr(name);
+ 		return 0;
+ 	}
+diff --git a/include/linux/fs.h b/include/linux/fs.h
+index 52ee3bc1baa9..b21814b93dcd 100644
+--- a/include/linux/fs.h
++++ b/include/linux/fs.h
+@@ -2837,7 +2837,7 @@ struct audit_names;
+ #define EMBEDDED_NAME_MAX	128
+ struct filename {
+ 	const char		*name;	/* pointer to actual string */
+-	atomic_t		refcnt;
++	int			refcnt;
+ 	struct audit_names	*aname;
+ 	const char		iname[EMBEDDED_NAME_MAX];
+ };
+@@ -2947,12 +2947,6 @@ void dismiss_delayed_filename(struct delayed_filename *);
+ int putname_to_delayed(struct delayed_filename *, struct filename *);
+ struct filename *complete_getname(struct delayed_filename *);
+ 
+-static inline struct filename *refname(struct filename *name)
+-{
+-	atomic_inc(&name->refcnt);
+-	return name;
+-}
+-
+ extern int finish_open(struct file *file, struct dentry *dentry,
+ 			int (*open)(struct inode *, struct file *));
+ extern int finish_no_open(struct file *file, struct dentry *dentry);
+diff --git a/kernel/auditsc.c b/kernel/auditsc.c
+index e59a094bb9f7..d71fc73455b2 100644
+--- a/kernel/auditsc.c
++++ b/kernel/auditsc.c
+@@ -2169,6 +2169,12 @@ static struct audit_names *audit_alloc_name(struct audit_context *context,
+ 	return aname;
+ }
+ 
++static inline struct filename *refname(struct filename *name)
++{
++	name->refcnt++;
++	return name;
++}
++
+ /**
+  * __audit_getname - add a name to the list
+  * @name: name to add
 -- 
 2.47.3
 
