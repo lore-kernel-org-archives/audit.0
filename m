@@ -1,34 +1,34 @@
 Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C45AE31283F;
-	Tue, 16 Dec 2025 03:54:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CFE2312803;
+	Tue, 16 Dec 2025 03:54:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765857298; cv=none; b=Y9lVc9pVkfHGmWLUKorwZWSAyODP44rWyy/NTk6Sdoz7G4WKkKXEbTxVn4LfNCF1xu1NUqTgMRiXi3w7SMal4gEyb6Wvr+niNzb50GnczJpjCXon7Rrat+4QcOjze+pnEQw5ibvl/eKqOiBo86etNM6gJnzMHuBlui43weWP0s4=
+	t=1765857299; cv=none; b=fTciQZtwIq5VLxi4Ts9160OPI/lgIGPNLh2iiaQhsOls7S9SFnKuoVK44uJykkWTuknhXJ/Zxwga72ZLRXc/4DU5IzHSX7pesHIjd0I6kqniiXbe+IC6OpOpljnR359ObQCHBs2eapd4ArQK1f5fE2BcAzaKfCC32daxeJCnSIg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765857298; c=relaxed/simple;
-	bh=lUNdt9aHq9kzNNWp8Kylraqjc+Cf9GYejJrl9RAZwDw=;
+	s=arc-20240116; t=1765857299; c=relaxed/simple;
+	bh=S4VYrqztxn3qx2+ce8nOumRfGqsXr/vKT8X35BxAw9s=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=sBGDhAcD6gxihxRQuuRTVMATeHc6Hcq95DIyCwFfE9LA5UpbD+bMgqsBnJvbwUoz59uFnlTtfRLt7/2foGnecAAJe91xhycIUpMD+x+r6mdBhwFjjJSlPhM/v12sI3Y+hrYV4qUjoqejtyF2ll9XMwYD7Al6OGu0qq6w1WRebFE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=kg9UCy+h; arc=none smtp.client-ip=62.89.141.173
+	 MIME-Version; b=BSGyKBtjFl7IIFH7EZ04z4RbltFWKW05AV/z5LN7AJAbtWUnlLRba2I13qmnpn3kG+4jSR+y2/25aoAlQR4kK1qAad+80psvKgFA0nK4v1XYZPWcwEOiRIHJU73WvkwhTYc5HlzNsulJo3eCSJJJGGf9PoBbTbjwew1fJpWdh34=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=r8nkNad4; arc=none smtp.client-ip=62.89.141.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="kg9UCy+h"
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="r8nkNad4"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=linux.org.uk; s=zeniv-20220401; h=Sender:Content-Transfer-Encoding:
 	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
 	Reply-To:Content-Type:Content-ID:Content-Description;
-	bh=ZIlG9KS8Rwh0aHQ/9boEXA29Zfm9oooDLZyOQ0XaJCE=; b=kg9UCy+hJmC9TF5h75L+KC/uQf
-	vA3ZCL/9NpnGCFUBOQEIpSTihFSVQjFN5DzZLTuFnkqnRS+PKzw8LXP9GwlGkUGccDjTULZOB+k1X
-	dBXkM623iRAaZH17GyDzzEFaCp7qlI1/qiV/udpEzwz8RNg/1spoh/xF5khUfMK5jNK4C/GbNEtXP
-	y47bkcEyOcfeEhCFvv4GJjsK+YQjIOqlZaoNQS4qb/X9HuLaJMlB0X1/TEpNGHOR3t+TRcv96Dr97
-	hvusTQeqWCyq9M8fk4T688oKUVRBqlf/DA2aXlfZwEvkgK3smwJ7/0MI+DZPJAupnW/4lg9g/rtEu
-	ArO56LKQ==;
+	bh=mxa3cbqR5z2NPq9lAeRLIRLOjiQkAso1d9Wu9XUX5zE=; b=r8nkNad4hXV+URJB4qQ2yAxOPW
+	jWM9X95xX6dQQ6b5CKbIUlHuTpNc0qmad3R+Pha8udiMiaO1qAn7AToy2TIst95vUZL74Gax01TGO
+	GgbCVMgmQUNHjmSGqkosWiYt0XC/M6VRbROmRYUPfQP0/lFxS+gW5HnaJ/ivyF7Z70P3MHrhib4dK
+	xTAyITjioWWzn6eiGspOGDYKtfg3SYwt3P5tjA90AQIFTssv0OWZWFxCGq6T9dPF+wsgc+6IJkN4r
+	9LlB4PMzQanufN/SSwWXBIr2wp6Q0/gikd/iXi//6wMB13SJgEk0MNgh9alfathqY3rvXfY1z0pe3
+	pWQt9IFA==;
 Received: from viro by zeniv.linux.org.uk with local (Exim 4.99 #2 (Red Hat Linux))
-	id 1vVM9h-0000000GwL7-3C1Z;
-	Tue, 16 Dec 2025 03:55:21 +0000
+	id 1vVM9f-0000000GwJR-3Tso;
+	Tue, 16 Dec 2025 03:55:19 +0000
 From: Al Viro <viro@zeniv.linux.org.uk>
 To: linux-fsdevel@vger.kernel.org
 Cc: torvalds@linux-foundation.org,
@@ -40,9 +40,9 @@ Cc: torvalds@linux-foundation.org,
 	audit@vger.kernel.org,
 	io-uring@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [RFC PATCH v3 32/59] file_[gs]etattr(2): switch to CLASS(filename_maybe_null)
-Date: Tue, 16 Dec 2025 03:54:51 +0000
-Message-ID: <20251216035518.4037331-33-viro@zeniv.linux.org.uk>
+Subject: [RFC PATCH v3 12/59] getname_flags() massage, part 1
+Date: Tue, 16 Dec 2025 03:54:31 +0000
+Message-ID: <20251216035518.4037331-13-viro@zeniv.linux.org.uk>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20251216035518.4037331-1-viro@zeniv.linux.org.uk>
 References: <20251216035518.4037331-1-viro@zeniv.linux.org.uk>
@@ -55,49 +55,73 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: Al Viro <viro@ftp.linux.org.uk>
 
+In case of long name don't reread what we'd already copied.
+memmove() it instead.  That avoids the possibility of ending
+up with empty name there and the need to look at the flags
+on the slow path.
+
 Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
 ---
- fs/file_attr.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ fs/namei.c | 33 ++++++++++++++++-----------------
+ 1 file changed, 16 insertions(+), 17 deletions(-)
 
-diff --git a/fs/file_attr.c b/fs/file_attr.c
-index 915e9a40cd42..b547161be742 100644
---- a/fs/file_attr.c
-+++ b/fs/file_attr.c
-@@ -372,7 +372,6 @@ SYSCALL_DEFINE5(file_getattr, int, dfd, const char __user *, filename,
- 		unsigned int, at_flags)
- {
- 	struct path filepath __free(path_put) = {};
--	struct filename *name __free(putname) = NULL;
- 	unsigned int lookup_flags = 0;
- 	struct file_attr fattr;
- 	struct file_kattr fa;
-@@ -393,7 +392,7 @@ SYSCALL_DEFINE5(file_getattr, int, dfd, const char __user *, filename,
- 	if (usize < FILE_ATTR_SIZE_VER0)
- 		return -EINVAL;
+diff --git a/fs/namei.c b/fs/namei.c
+index f22cfdff72ab..ea7efbddc7f4 100644
+--- a/fs/namei.c
++++ b/fs/namei.c
+@@ -174,36 +174,35 @@ getname_flags(const char __user *filename, int flags)
+ 	 */
+ 	if (unlikely(len == EMBEDDED_NAME_MAX)) {
+ 		const size_t size = offsetof(struct filename, iname[1]);
+-		kname = (char *)result;
++		struct filename *p;
  
--	name = getname_maybe_null(filename, at_flags);
-+	CLASS(filename_maybe_null, name)(filename, at_flags);
- 	if (!name && dfd >= 0) {
- 		CLASS(fd, f)(dfd);
- 		if (fd_empty(f))
-@@ -426,7 +425,6 @@ SYSCALL_DEFINE5(file_setattr, int, dfd, const char __user *, filename,
- 		unsigned int, at_flags)
- {
- 	struct path filepath __free(path_put) = {};
--	struct filename *name __free(putname) = NULL;
- 	unsigned int lookup_flags = 0;
- 	struct file_attr fattr;
- 	struct file_kattr fa;
-@@ -456,7 +454,7 @@ SYSCALL_DEFINE5(file_setattr, int, dfd, const char __user *, filename,
- 	if (error)
- 		return error;
- 
--	name = getname_maybe_null(filename, at_flags);
-+	CLASS(filename_maybe_null, name)(filename, at_flags);
- 	if (!name && dfd >= 0) {
- 		CLASS(fd, f)(dfd);
- 		if (fd_empty(f))
+ 		/*
+ 		 * size is chosen that way we to guarantee that
+ 		 * result->iname[0] is within the same object and that
+ 		 * kname can't be equal to result->iname, no matter what.
+ 		 */
+-		result = kzalloc(size, GFP_KERNEL);
+-		if (unlikely(!result)) {
+-			__putname(kname);
++		p = kzalloc(size, GFP_KERNEL);
++		if (unlikely(!p)) {
++			__putname(result);
+ 			return ERR_PTR(-ENOMEM);
+ 		}
+-		result->name = kname;
+-		len = strncpy_from_user(kname, filename, PATH_MAX);
++		memmove(result, &result->iname, EMBEDDED_NAME_MAX);
++		kname = (char *)result;
++		p->name = kname;
++		len = strncpy_from_user(kname + EMBEDDED_NAME_MAX,
++					filename + EMBEDDED_NAME_MAX,
++					PATH_MAX - EMBEDDED_NAME_MAX);
+ 		if (unlikely(len < 0)) {
+-			__putname(kname);
+-			kfree(result);
++			kfree(p);
++			__putname(result);
+ 			return ERR_PTR(len);
+ 		}
+-		/* The empty path is special. */
+-		if (unlikely(!len) && !(flags & LOOKUP_EMPTY)) {
+-			__putname(kname);
+-			kfree(result);
+-			return ERR_PTR(-ENOENT);
+-		}
+-		if (unlikely(len == PATH_MAX)) {
+-			__putname(kname);
+-			kfree(result);
++		if (unlikely(len == PATH_MAX - EMBEDDED_NAME_MAX)) {
++			kfree(p);
++			__putname(result);
+ 			return ERR_PTR(-ENAMETOOLONG);
+ 		}
++		result = p;
+ 	}
+ 	initname(result);
+ 	audit_getname(result);
 -- 
 2.47.3
 
