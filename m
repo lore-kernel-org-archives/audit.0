@@ -1,34 +1,34 @@
 Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 686E9313E1B;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5954831329D;
 	Tue, 16 Dec 2025 03:54:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765857298; cv=none; b=Guz6fq/ys6UBuZQgX6dRKldr5L8nuMw6hgmMOo40cNQuoXJCEZy9OgN19lJ6NdfmbeZouL8masq/jWEnySlZunVuPubEDvYTwqwoXQ16bB6SX+PLmYylG0pcQp2jfnw1lhkhv0n8coqinXAbw4c9jkBWB3OZfraiFIMlDSPTgNE=
+	t=1765857297; cv=none; b=XblCxCJwpY5hPT2Vi8EpVNWZeQgo1UXcKkM9GGBQZkmfjfbu9ffMqWPB60GZsG8LMV81nvI+SApKiV7nW67Zzd8Q5VUbWmUwnhRbwTqgZ0GxxgQxKGC29SW113rc/TrJAee+t5A99xx5zVt8ePCcWGM66it57TZ4Ww7A2gLr/F4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765857298; c=relaxed/simple;
-	bh=9rjy/O7zk9NHa0zEpN/u8HwvuzoJz5ExAtWTchA9beE=;
+	s=arc-20240116; t=1765857297; c=relaxed/simple;
+	bh=dKazOTpP98uEsD5tvT0eCFSPEKi73Z7M/OFRDrSl8h4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=lbDXGezFFZVAlNZjmVteqvDMkEyYVphwt5C5bKtYaQRu13qtE8dSQQNh/lDz3fI6Nm93QsWsUYtfzaWBDaIzF1c51dbJqkYDayZmxWBVMcGyb1GuvPbbZ+HxKrIMQq8a2ZiGtN8HR0d4FKIWHDVytzfdEO6d3OppeZvbz0q/5Dw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=KDN1vu5l; arc=none smtp.client-ip=62.89.141.173
+	 MIME-Version; b=Hfr106AgqG+yEPUFwOAQ5gRS/NSZZkONxu/58A8zyhCPlCZKKgybCwnkJTWuainX22+/2WaxZ6JERyppW18h6QnRueP+E79JlooOrgnLrxX062Dj3b9y+lLjZtrbzjoEKPhcAiiwndXwDa4+KVDS8NabW88Xq0Y+yWN/l7tB3kI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=UvPnDkL0; arc=none smtp.client-ip=62.89.141.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="KDN1vu5l"
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="UvPnDkL0"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=linux.org.uk; s=zeniv-20220401; h=Sender:Content-Transfer-Encoding:
 	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
 	Reply-To:Content-Type:Content-ID:Content-Description;
-	bh=W1bsT0yqh7PPRDzd1LW2lGzYKFRbDxQSk7TwwEivM5Q=; b=KDN1vu5lpjzztXS72hBTNdUZJ4
-	dv7mcaW+qw/CpE8zvt4jI0SO0Ad73jIFlJjAbaORTrLaE8R0roMRvgbnr7CL43byzhmAZxYTbv8cY
-	Q/Nfw2lO8atJbfi9RdzrM5i3v2itRq/uyRtadIGTHgVsHg57APPZkTyUDYbdImuDdHWR8CcGnsP6V
-	ISLm/ZtGnSmzPRu3cQGQmLnACzEojXYoxeMzIfprQjU2Kpaf6fvlR4nB4RGr37XXQnuBdwly2en4h
-	73IrYqCP7PrmqmBKEFqFEUUrI2IaUJ7fCeuA8vpcfVFc9JK2j0W3JHgVbVFO6aozK/htQfiIzsp9M
-	KG8yHLNA==;
+	bh=/taDnA0SgX1kjdBTGSIJQ+UnMnEm3NgXYjqO+SzjTkM=; b=UvPnDkL0IhCR+6D1UuILbfY7OM
+	amMR7Scg1UkyevFJ4ioE42G2hh6unZm++Tbf96fnqarlSLcq5Au5E7yivgAzS9o1aCp57TTQvA1Xu
+	cUxU/FmtwiobvAs3lOuRoOyebwPSnyu8ECPVeWoPVkTJ8g/5yLLMAPJ3smAMJZlOSaOIJBpHtqAMz
+	qmPVygLbQHxqlSCMqWM4SocT39ITH2VrHB3GIBEKS3AGiE79+0rhCGQOT4g+8Sq3hDuwSA+tJY9b9
+	I1WBIYRd/VDPSZz+NdEjpP7f1AzEMH2VJE+DWTLQ0mBLOXBO3APtOjXZCqKxO0NWH7UDXnbWmp5Ya
+	8mYQRv/A==;
 Received: from viro by zeniv.linux.org.uk with local (Exim 4.99 #2 (Red Hat Linux))
-	id 1vVM9i-0000000GwLq-2EUa;
-	Tue, 16 Dec 2025 03:55:22 +0000
+	id 1vVM9h-0000000GwKu-2FHa;
+	Tue, 16 Dec 2025 03:55:21 +0000
 From: Al Viro <viro@zeniv.linux.org.uk>
 To: linux-fsdevel@vger.kernel.org
 Cc: torvalds@linux-foundation.org,
@@ -40,9 +40,9 @@ Cc: torvalds@linux-foundation.org,
 	audit@vger.kernel.org,
 	io-uring@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [RFC PATCH v3 38/59] do_fchownat(): unspaghettify a bit...
-Date: Tue, 16 Dec 2025 03:54:57 +0000
-Message-ID: <20251216035518.4037331-39-viro@zeniv.linux.org.uk>
+Subject: [RFC PATCH v3 29/59] simplify the callers of do_open_execat()
+Date: Tue, 16 Dec 2025 03:54:48 +0000
+Message-ID: <20251216035518.4037331-30-viro@zeniv.linux.org.uk>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20251216035518.4037331-1-viro@zeniv.linux.org.uk>
 References: <20251216035518.4037331-1-viro@zeniv.linux.org.uk>
@@ -57,55 +57,29 @@ Sender: Al Viro <viro@ftp.linux.org.uk>
 
 Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
 ---
- fs/open.c | 28 ++++++++++++----------------
- 1 file changed, 12 insertions(+), 16 deletions(-)
+ fs/exec.c | 10 ++--------
+ 1 file changed, 2 insertions(+), 8 deletions(-)
 
-diff --git a/fs/open.c b/fs/open.c
-index 7254eda9f4a5..425c09d83d7f 100644
---- a/fs/open.c
-+++ b/fs/open.c
-@@ -810,30 +810,26 @@ int do_fchownat(int dfd, const char __user *filename, uid_t user, gid_t group,
- 	struct path path;
- 	int error;
- 	int lookup_flags;
--	struct filename *name;
- 
- 	if ((flag & ~(AT_SYMLINK_NOFOLLOW | AT_EMPTY_PATH)) != 0)
- 		return -EINVAL;
- 
- 	lookup_flags = (flag & AT_SYMLINK_NOFOLLOW) ? 0 : LOOKUP_FOLLOW;
--	name = getname_uflags(filename, flag);
-+	CLASS(filename_uflags, name)(filename, flag);
- retry:
- 	error = filename_lookup(dfd, name, lookup_flags, &path, NULL);
--	if (error)
--		goto out;
--	error = mnt_want_write(path.mnt);
--	if (error)
--		goto out_release;
--	error = chown_common(&path, user, group);
--	mnt_drop_write(path.mnt);
--out_release:
--	path_put(&path);
--	if (retry_estale(error, lookup_flags)) {
--		lookup_flags |= LOOKUP_REVAL;
--		goto retry;
-+	if (!error) {
-+		error = mnt_want_write(path.mnt);
-+		if (!error) {
-+			error = chown_common(&path, user, group);
-+			mnt_drop_write(path.mnt);
-+		}
-+		path_put(&path);
-+		if (retry_estale(error, lookup_flags)) {
-+			lookup_flags |= LOOKUP_REVAL;
-+			goto retry;
-+		}
- 	}
--out:
--	putname(name);
- 	return error;
+diff --git a/fs/exec.c b/fs/exec.c
+index b7d8081d12ea..5b4110c7522e 100644
+--- a/fs/exec.c
++++ b/fs/exec.c
+@@ -815,14 +815,8 @@ static struct file *do_open_execat(int fd, struct filename *name, int flags)
+  */
+ struct file *open_exec(const char *name)
+ {
+-	struct filename *filename = getname_kernel(name);
+-	struct file *f = ERR_CAST(filename);
+-
+-	if (!IS_ERR(filename)) {
+-		f = do_open_execat(AT_FDCWD, filename, 0);
+-		putname(filename);
+-	}
+-	return f;
++	CLASS(filename_kernel, filename)(name);
++	return do_open_execat(AT_FDCWD, filename, 0);
  }
+ EXPORT_SYMBOL(open_exec);
  
 -- 
 2.47.3
