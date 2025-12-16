@@ -1,33 +1,33 @@
 Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAF3031281F;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75644312811;
 	Tue, 16 Dec 2025 03:54:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765857294; cv=none; b=rL6yQ2wtUMsUYSkNb30D59kV4cCFtct05x35RDZ1HUerkeooHilv4O1NSlBat44pMnOIx0FQE5O3fcN/yd9rgENIk7ue99QZ53sjgFGiiFU+jJThJJowMYWs0OWZbj/iwqylGSyTDJgd5xcxphFZVHY6QlIJeR+iVt4GW2j8J4M=
+	t=1765857294; cv=none; b=i0X6mPu/FoDq6Zt/hfFcGvrGeD+B+8GLf7Qta2LsZMKKyxYHYT6F+VQUqTPkPg/iGw3y9stcbOEAesOzuinSkCPdm82/ijv5ZPq3O2ybs0fNIEzOXwrCMCxDe5mT8jCKUPf/M5GkXqhK6HwI25iDCMYQKi4E/Lhb7XVSTZ5jzDk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1765857294; c=relaxed/simple;
-	bh=qpbEh74C7X6CMdyErt/mFhuRxl7OR107Lve/D1Fg8nk=;
+	bh=+1i0jwxyk8DGf0W2+2Zfb4jLSGnyQvm9v3lj6zBMWXQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=oMV3w0ZFZUfbc4rTEHGRa8oqlS/MHTiX+ovhjyoRY2WWlymHc3aSpxdSe3IzemrdfZ4BWeHE3Q6kEfpub48gUWLc1ANGnwyv13SzDoc9678SZor3mpx1Q0UDp1NPvwtUOqI+3OMkU/ihlUKfh6PTgdRY6BIT1DLvrp40rYtA9+k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=bUewawCT; arc=none smtp.client-ip=62.89.141.173
+	 MIME-Version; b=jRBAgruQ1SqcTJYWS4zNl6oSeDXBzCRvl9Yo+qEGeLdcsPksknpUyPP5YoGa9bCMK7frhOzI+L+V12xxySQSZaZ07iEOF7rYxeMlFRqdNOtcKQZx6kloOILAgjCJyNVtQ8uB4c0skNiwQ686yqDLOoLQU1Hm5Jx4V1hPZKNw0Jw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=oQPE9ZHD; arc=none smtp.client-ip=62.89.141.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="bUewawCT"
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="oQPE9ZHD"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=linux.org.uk; s=zeniv-20220401; h=Sender:Content-Transfer-Encoding:
 	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
 	Reply-To:Content-Type:Content-ID:Content-Description;
-	bh=ZRNw5T+EPwnN4beWbwOL70l+2wFKlInh6bFNrece6Q0=; b=bUewawCT2hGKQaGJ4ID6jfHt18
-	mh+7jzFiDHiBdTGtAiM/xTQzxBBt5n2W6b1O0/Q2kFP0fGY/84XK2rBpWkNFMnE3+CZeb2fZNUgYg
-	Lxb1WW/ly8JWYvI26n223hPuJHQw98t9/ZfRqPHEV3f6kQlfEtlrJD2ZzavnfzuEBbI3Yjzazof1A
-	5sXHYiLfeOResDZdCZyxHZkx/elBLxTT+cBCTHEj8e7a2hWw2xWLCpquXmUOrlu2C8gjTCnOMYYuy
-	inFUXHnKSS3PueYgnmZyJYNorKkrNs+asqBopAeFhvPz1b40SjWZ2ceRWoJbzV4D5q1se/m04WCL5
-	TlKohmBA==;
+	bh=6lhUcDw8YnPMZe9i+imJJtFRGzopLM7v6pMBLQdGXEA=; b=oQPE9ZHDJ9AauIKsUujkam7XOM
+	ZazGGoN1eb3i62McV4GfVzaQAATceE+XQdEfgZLtnqKj8RYi+/t63UBWi9qEq6Jo/HWvB74KMdYFq
+	OVipuyxhDYmZoPoUR+bvEVy67e2H/pyMlPbsfeVzmeiDO6Yr7X+cI/96k24BBQGATrn/EA4OqfQuU
+	QfqArefXcSj9jAo17eU6Lq+9vCm/YdrGZZSTd1JQtj0VoFwDB8eWEkIUumgD3d76PWIS/2c3BkufV
+	Ern4BYs6gV4/Paz5H1sRO/QRu/+ql0986ZDUZfinR/JWFGSHXdxtyKh9PCR1ohX/KEUC4u0rfW6YD
+	HhBthSKQ==;
 Received: from viro by zeniv.linux.org.uk with local (Exim 4.99 #2 (Red Hat Linux))
-	id 1vVM9g-0000000GwJe-0Uls;
+	id 1vVM9g-0000000GwJu-1jyS;
 	Tue, 16 Dec 2025 03:55:20 +0000
 From: Al Viro <viro@zeniv.linux.org.uk>
 To: linux-fsdevel@vger.kernel.org
@@ -40,9 +40,9 @@ Cc: torvalds@linux-foundation.org,
 	audit@vger.kernel.org,
 	io-uring@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [RFC PATCH v3 16/59] fs: hide names_cache behind runtime const machinery
-Date: Tue, 16 Dec 2025 03:54:35 +0000
-Message-ID: <20251216035518.4037331-17-viro@zeniv.linux.org.uk>
+Subject: [RFC PATCH v3 19/59] allow to use CLASS() for struct filename *
+Date: Tue, 16 Dec 2025 03:54:38 +0000
+Message-ID: <20251216035518.4037331-20-viro@zeniv.linux.org.uk>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20251216035518.4037331-1-viro@zeniv.linux.org.uk>
 References: <20251216035518.4037331-1-viro@zeniv.linux.org.uk>
@@ -55,76 +55,56 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: Al Viro <viro@ftp.linux.org.uk>
 
-From: Mateusz Guzik <mjguzik@gmail.com>
+Not all users match that model, but quite a few do.  No mindless
+mass conversions, please...
 
-s/names_cachep/names_cache/ for consistency with dentry cache.
+Added:
+CLASS(filename, name)(user_path) =>
+	getname(user_path)
+CLASS(filename_kernel, name)(string) =>
+	getname_kernel(string)
+CLASS(filename_flags, name)(user_path, flags) =>
+	getname_flags(user_path, flags)
+CLASS(filename_uflags, name)(user_path, flags) =>
+	getname_uflags(user_path, flags)
+CLASS(filename_maybe_null, name)(user_path, flags) =>
+	getname_maybe_null(user_path, flags)
+CLASS(filename_complete_delayed, name)(delayed) =>
+	complete_getname(delayed)
+CLASS(filename_consume, name)(filename) =>
+	no_free_ptr(filename)
+all with putname() as destructor.
 
-Signed-off-by: Mateusz Guzik <mjguzik@gmail.com>
+"flags" in filename_flags() is in LOOKUP_... space, only LOOKUP_EMPTY matters.
+"flags" in filename_uflags() and filename_maybe_null() is in AT_...... space,
+and only AT_EMPTY_PATH matters.
+
+These conventions might be worth reconsidering...
+
 Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
 ---
- fs/namei.c                        | 16 ++++++++++------
- include/asm-generic/vmlinux.lds.h |  3 ++-
- 2 files changed, 12 insertions(+), 7 deletions(-)
+ include/linux/fs.h | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/fs/namei.c b/fs/namei.c
-index 9053aeee05d5..15e14802cabb 100644
---- a/fs/namei.c
-+++ b/fs/namei.c
-@@ -41,6 +41,8 @@
- #include <linux/init_task.h>
- #include <linux/uaccess.h>
+diff --git a/include/linux/fs.h b/include/linux/fs.h
+index b711f46ba8f5..db0d89dd1229 100644
+--- a/include/linux/fs.h
++++ b/include/linux/fs.h
+@@ -2527,6 +2527,14 @@ void dismiss_delayed_filename(struct delayed_filename *);
+ int putname_to_delayed(struct delayed_filename *, struct filename *);
+ struct filename *complete_getname(struct delayed_filename *);
  
-+#include <asm/runtime-const.h>
++DEFINE_CLASS(filename, struct filename *, putname(_T), getname(p), const char __user *p)
++EXTEND_CLASS(filename, _kernel, getname_kernel(p), const char *p)
++EXTEND_CLASS(filename, _flags, getname_flags(p, f), const char __user *p, unsigned int f)
++EXTEND_CLASS(filename, _uflags, getname_uflags(p, f), const char __user *p, unsigned int f)
++EXTEND_CLASS(filename, _maybe_null, getname_maybe_null(p, f), const char __user *p, unsigned int f)
++EXTEND_CLASS(filename, _consume, no_free_ptr(p), struct filename *p)
++EXTEND_CLASS(filename, _complete_delayed, complete_getname(p), struct delayed_filename *p)
 +
- #include "internal.h"
- #include "mount.h"
- 
-@@ -124,23 +126,25 @@
-  */
- 
- /* SLAB cache for struct filename instances */
--static struct kmem_cache *names_cachep __ro_after_init;
-+static struct kmem_cache *__names_cache __ro_after_init;
-+#define names_cache	runtime_const_ptr(__names_cache)
- 
- void __init filename_init(void)
- {
--	names_cachep = kmem_cache_create_usercopy("names_cache", sizeof(struct filename), 0,
--			SLAB_HWCACHE_ALIGN|SLAB_PANIC, offsetof(struct filename, iname),
--						EMBEDDED_NAME_MAX, NULL);
-+	__names_cache = kmem_cache_create_usercopy("names_cache", sizeof(struct filename), 0,
-+			 SLAB_HWCACHE_ALIGN|SLAB_PANIC, offsetof(struct filename, iname),
-+			 EMBEDDED_NAME_MAX, NULL);
-+	runtime_const_init(ptr, __names_cache);
- }
- 
- static inline struct filename *alloc_filename(void)
- {
--	return kmem_cache_alloc(names_cachep, GFP_KERNEL);
-+	return kmem_cache_alloc(names_cache, GFP_KERNEL);
- }
- 
- static inline void free_filename(struct filename *p)
- {
--	kmem_cache_free(names_cachep, p);
-+	kmem_cache_free(names_cache, p);
- }
- 
- static inline void initname(struct filename *name)
-diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
-index 8ca130af301f..eeb070f330bd 100644
---- a/include/asm-generic/vmlinux.lds.h
-+++ b/include/asm-generic/vmlinux.lds.h
-@@ -972,7 +972,8 @@
- #define RUNTIME_CONST_VARIABLES						\
- 		RUNTIME_CONST(shift, d_hash_shift)			\
- 		RUNTIME_CONST(ptr, dentry_hashtable)			\
--		RUNTIME_CONST(ptr, __dentry_cache)
-+		RUNTIME_CONST(ptr, __dentry_cache)			\
-+		RUNTIME_CONST(ptr, __names_cache)
- 
- /* Alignment must be consistent with (kunit_suite *) in include/kunit/test.h */
- #define KUNIT_TABLE()							\
+ extern int finish_open(struct file *file, struct dentry *dentry,
+ 			int (*open)(struct inode *, struct file *));
+ extern int finish_no_open(struct file *file, struct dentry *dentry);
 -- 
 2.47.3
 
