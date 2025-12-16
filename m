@@ -1,34 +1,34 @@
 Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70412312827;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A203331282E;
 	Tue, 16 Dec 2025 03:54:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765857295; cv=none; b=DZB8D69c18AFOPc8ZqjsszMrh5zZwuvIFxH57mzt+AFFI6Hcvu5mmmoFLWJJW0decRP/Ui/8O0khOfh/70GikEqRqNpmHNuOumHNg45FnkSoaHrdsuMCbtoFI0jpzq6dcKdKOYOcjo0+mkspni/U5hPrMSWteCVZpVFMmdHggFk=
+	t=1765857295; cv=none; b=A6BPVBNRqMIUhSrq5EtI+D16DYae5UHpiiEyB5scutwcJJ7H3T0AsGYM09ict+RM5I58kAp6i2EBwYARYbOzoq2Gu/sjITVFeiLBZxswL1agTwK8dAVniy9C0DfqnBm/BhGBVaU8G+QW1eUEez2dgbQw9DQXda3iJvCos7gnVR0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1765857295; c=relaxed/simple;
-	bh=C+2EcojQwnwv5U/vpMob42+W8dy1bNTjOKNG9HnaK5w=;
+	bh=vjvo+k64W7ElGUEZkimf09BlPWP0vtIGNHy4LOBhMWw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=anIwXnaMK40GoScXdsC68z+41OIc3kVomkFwZRJNAUiM4fikMUkaAN0Hr1sd8Qu8ypBx3bg3kX69zeR5fssf4q6h9dreHdBhvl+Om0eUHHT13Yg370VxEowPoV311UTo3NO/1bpcEZ/ET/3az/D2T0JgFLYA/WfWCjxKilhP4rE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=C/Yn+Nno; arc=none smtp.client-ip=62.89.141.173
+	 MIME-Version; b=p79jGvlW/XUX0lLRVVqgZQb6+9Pd1BmwuBzwSp0oe4YEyBTeQ5y73GL8wrAminPEw8Z9An9X3vleI7XuDidHTbcs6nsWIdpv787ac/fkvy4MTc2Gwyh91x2hf3L4gDpfLWMqIq+4pJcNj1+qhDNb4vH+fWxercn682b3q1go/6k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=wiFae3i2; arc=none smtp.client-ip=62.89.141.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="C/Yn+Nno"
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="wiFae3i2"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=linux.org.uk; s=zeniv-20220401; h=Sender:Content-Transfer-Encoding:
 	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
 	Reply-To:Content-Type:Content-ID:Content-Description;
-	bh=nX+MJLbNwZ93pbRcj4nhRonYJnvqZZukCpm52ExmhG4=; b=C/Yn+Nno+TxYAgVSwm9Efs58sc
-	I6q2yZEv/68PcwWcfMSUyDl1x8hk0mSfhwWosX0n2cCpNtyS65+6G9rvcFzx4OPMI8iZhwB8z8XZR
-	b5OdNU/vd1n2OZpYSIVDPRvIFMJ/A+gBLxJcmQChY2txmc22DFLt4irXdxjn3b/RxZy8bPgsrH2q4
-	ojmpFqhxPb/Y+ASXu5XCJItie+b2g6ABJ9Pgrih7mCtJxiPNKDSOOQyJsODvJPLD8iSiJ7gqddG80
-	IM5NqEp+bfk+0TioiNpLkQj1nMV+SnjN3vREOl30ojjnfuyVLg2Di3j//GTi8jzZPkZkQQHQ0crDj
-	+eaRVpIA==;
+	bh=z8Xh2rzqJWEtazMX5hjsiMAeLADvZxxnPoSk2BC2U/8=; b=wiFae3i20xsupWHVSApsixREGR
+	4VZmxawpsSpUu5bHa8E7OZniHPVOsnNroZmkqa+EgHcUv4o+1TFzRZjlmPwT+vdFZ2eaF8uge3Ksj
+	YJydiAFBqTey+0yinySFLfNQSINc1Z72qtZr+6pB7Jzpa+DGAHPYaKCEgRnhRPkKDvhaWjgB/p+Ak
+	JNGRfAbMt1AgB3676g+17AWZHWmULEd5YcRc+ISZOqHCFXyeBicCJ9nN5eEX/9IlQlB4I/PgaA2zb
+	FDne30LtuIHd4XEZOb+FSexJwzEOZRqJp8DR9ylXvGfN4vQr/3LQVN/lJb6hqe87NT3rGzI5qhkBp
+	XlX9D1rg==;
 Received: from viro by zeniv.linux.org.uk with local (Exim 4.99 #2 (Red Hat Linux))
-	id 1vVM9g-0000000GwKF-3GHF;
-	Tue, 16 Dec 2025 03:55:20 +0000
+	id 1vVM9h-0000000GwKh-18YG;
+	Tue, 16 Dec 2025 03:55:21 +0000
 From: Al Viro <viro@zeniv.linux.org.uk>
 To: linux-fsdevel@vger.kernel.org
 Cc: torvalds@linux-foundation.org,
@@ -40,9 +40,9 @@ Cc: torvalds@linux-foundation.org,
 	audit@vger.kernel.org,
 	io-uring@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [RFC PATCH v3 22/59] move_mount(): filename_lookup() accepts ERR_PTR() as filename
-Date: Tue, 16 Dec 2025 03:54:41 +0000
-Message-ID: <20251216035518.4037331-23-viro@zeniv.linux.org.uk>
+Subject: [RFC PATCH v3 26/59] rename do_filp_open() to do_file_open()
+Date: Tue, 16 Dec 2025 03:54:45 +0000
+Message-ID: <20251216035518.4037331-27-viro@zeniv.linux.org.uk>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20251216035518.4037331-1-viro@zeniv.linux.org.uk>
 References: <20251216035518.4037331-1-viro@zeniv.linux.org.uk>
@@ -55,37 +55,98 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: Al Viro <viro@ftp.linux.org.uk>
 
-no need to check it in the caller
+"filp" thing never made sense; seeing that there are exactly 4 callers
+in the entire tree (and it's neither exported nor even declared in
+linux/*/*.h), there's no point keeping that ugliness.
+
+FWIW, the 'filp' thing did originate in OSD&I; for some reason Tanenbaum
+decided to call the object representing an opened file 'struct filp',
+the last letter standing for 'position'.  In all Unices, Linux included,
+the corresponding object had always been 'struct file'...
 
 Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
 ---
- fs/namespace.c | 6 ------
- 1 file changed, 6 deletions(-)
+ fs/exec.c            | 2 +-
+ fs/internal.h        | 2 +-
+ fs/namei.c           | 2 +-
+ fs/open.c            | 4 ++--
+ io_uring/openclose.c | 2 +-
+ 5 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/fs/namespace.c b/fs/namespace.c
-index c58674a20cad..9d0d8ed16264 100644
---- a/fs/namespace.c
-+++ b/fs/namespace.c
-@@ -4427,9 +4427,6 @@ SYSCALL_DEFINE5(move_mount,
- 		uflags = AT_EMPTY_PATH;
+diff --git a/fs/exec.c b/fs/exec.c
+index 9d5ebc9d15b0..b7d8081d12ea 100644
+--- a/fs/exec.c
++++ b/fs/exec.c
+@@ -780,7 +780,7 @@ static struct file *do_open_execat(int fd, struct filename *name, int flags)
+ 	if (flags & AT_EMPTY_PATH)
+ 		open_exec_flags.lookup_flags |= LOOKUP_EMPTY;
  
- 	to_name = getname_maybe_null(to_pathname, uflags);
--	if (IS_ERR(to_name))
--		return PTR_ERR(to_name);
--
- 	if (!to_name && to_dfd >= 0) {
- 		CLASS(fd_raw, f_to)(to_dfd);
- 		if (fd_empty(f_to))
-@@ -4453,9 +4450,6 @@ SYSCALL_DEFINE5(move_mount,
- 		uflags = AT_EMPTY_PATH;
+-	file = do_filp_open(fd, name, &open_exec_flags);
++	file = do_file_open(fd, name, &open_exec_flags);
+ 	if (IS_ERR(file))
+ 		return file;
  
- 	from_name = getname_maybe_null(from_pathname, uflags);
--	if (IS_ERR(from_name))
--		return PTR_ERR(from_name);
--
- 	if (!from_name && from_dfd >= 0) {
- 		CLASS(fd_raw, f_from)(from_dfd);
- 		if (fd_empty(f_from))
+diff --git a/fs/internal.h b/fs/internal.h
+index e44146117a42..5c3e4eac34f2 100644
+--- a/fs/internal.h
++++ b/fs/internal.h
+@@ -189,7 +189,7 @@ struct open_flags {
+ 	int intent;
+ 	int lookup_flags;
+ };
+-extern struct file *do_filp_open(int dfd, struct filename *pathname,
++extern struct file *do_file_open(int dfd, struct filename *pathname,
+ 		const struct open_flags *op);
+ extern struct file *do_file_open_root(const struct path *,
+ 		const char *, const struct open_flags *);
+diff --git a/fs/namei.c b/fs/namei.c
+index af7fd253a712..f6b5d6a657da 100644
+--- a/fs/namei.c
++++ b/fs/namei.c
+@@ -4858,7 +4858,7 @@ static struct file *path_openat(struct nameidata *nd,
+ 	return ERR_PTR(error);
+ }
+ 
+-struct file *do_filp_open(int dfd, struct filename *pathname,
++struct file *do_file_open(int dfd, struct filename *pathname,
+ 		const struct open_flags *op)
+ {
+ 	struct nameidata nd;
+diff --git a/fs/open.c b/fs/open.c
+index 2fea68991d42..3d2e2a2554c5 100644
+--- a/fs/open.c
++++ b/fs/open.c
+@@ -1382,7 +1382,7 @@ struct file *file_open_name(struct filename *name, int flags, umode_t mode)
+ 	int err = build_open_flags(&how, &op);
+ 	if (err)
+ 		return ERR_PTR(err);
+-	return do_filp_open(AT_FDCWD, name, &op);
++	return do_file_open(AT_FDCWD, name, &op);
+ }
+ 
+ /**
+@@ -1436,7 +1436,7 @@ static int do_sys_openat2(int dfd, const char __user *filename,
+ 	if (IS_ERR(tmp))
+ 		return PTR_ERR(tmp);
+ 
+-	return FD_ADD(how->flags, do_filp_open(dfd, tmp, &op));
++	return FD_ADD(how->flags, do_file_open(dfd, tmp, &op));
+ }
+ 
+ int do_sys_open(int dfd, const char __user *filename, int flags, umode_t mode)
+diff --git a/io_uring/openclose.c b/io_uring/openclose.c
+index 95ba8c5b5fc8..95fcb612ad9c 100644
+--- a/io_uring/openclose.c
++++ b/io_uring/openclose.c
+@@ -138,7 +138,7 @@ int io_openat2(struct io_kiocb *req, unsigned int issue_flags)
+ 			goto err;
+ 	}
+ 
+-	file = do_filp_open(open->dfd, name, &op);
++	file = do_file_open(open->dfd, name, &op);
+ 	if (IS_ERR(file)) {
+ 		/*
+ 		 * We could hang on to this 'fd' on retrying, but seems like
 -- 
 2.47.3
 
