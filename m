@@ -1,33 +1,33 @@
 Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 535F2311599;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5ED15311C19;
 	Tue, 16 Dec 2025 03:54:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765857292; cv=none; b=ChGXsIiVsJfj7ZRDnByY2tBuq0yhv12I6n3z7o3I+7iJLi8Fe6c2J2ZFx9mxd2OP94MiLl3Y3ok+kX2/47RgVWdpRaRle/DtUME2MigqWIO6iZQaqnjrKsm0SFG4q63I37lhgVozcMGeJMdMGx08J+Xi6se8wxY0QDzSkZvQ0jI=
+	t=1765857292; cv=none; b=BiVFWRARlPrG1gukInQ25dBGUSVQxj8DjxZR3lEH9BoZmk2XYBnP7SaHBJ9n7bUfrmgZZXS0YXTf0gAQJVjOU7UWHc+67FyYRvarDee86Ef4hOCKmIw5oSjzVlwDYh19MfjcIcgIj4K6AVNI1E9LpukAjWzsVWd+UuLX2P+CVKQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1765857292; c=relaxed/simple;
-	bh=zFlDLU2alFVD/MwuTFbdq6QS587tb9atKC26F68cFjo=;
+	bh=4oxuQFLk8YkIq/5mYSLl2XCxIvuC91NG8EaCN9dotBs=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=nHML1Fnw6Y7LsUanaGv6rhR+HFbASn9PPD35aLAfdbRY9bPlqVtBwVwgI6JEAicJXsOBSs8c/ORbOXQt1vOZ1i9GxxKuTVMaHfnaWFvEGQ88TTt0sg/gnrh/JLesQwWqz9HF0K4aJf0Fy3pmrvh/UfXBPkbNKPOiGt59QsGwvB4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=ELkT/aZj; arc=none smtp.client-ip=62.89.141.173
+	 MIME-Version; b=dfoJN6vTQIeMlCS+EobK2y4VwkZ65o+tkOOpBeeA8/TQN4FwQ76szCzVnL7hcKq9elgmQOkR8gfowzAqdeGLWTNCjR0jK6f6etYJS+O/CUZn92LbPcHTiZCE5PgA4MpzzBP6YSuBwsbNSAbbveN2HHKegRoiCUhXL2TfhkDaxyE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=Lbnc+pq+; arc=none smtp.client-ip=62.89.141.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="ELkT/aZj"
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="Lbnc+pq+"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=linux.org.uk; s=zeniv-20220401; h=Sender:Content-Transfer-Encoding:
 	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
 	Reply-To:Content-Type:Content-ID:Content-Description;
-	bh=KE0bqgoAYg4WN/vY/qas7LhrImQSJi8EcGd+/Tk2T7o=; b=ELkT/aZjoe+4w38oxhHjW32mj7
-	KlhZpqFckSRazJNv9Vyl52gIdsJc8fNwgow/ftKfDCjm6jOPaS2AjDOjEACW5K+SLsbGqqBT1CXop
-	f+7UuST5NmWGBAIXSypgGqrERYasxIJnZ707j5m/L0EjvNUo9cq5RCk01+r7O/vEkjpTOGAbeP2uX
-	RA9hDe+7m2ce9CDSLcgr8cZTw5y3Qe7omiSLjsuuY9sPPy1TZw8NW+xtXcC7XurvhSksHDKc6ZxW9
-	CetKnJxTLEHSkLKgAX2VY2OuCHa/AHBWJmRz/Q7vtmMeEAFwzkL1TLZieFnpBSA++EBkeod+iaSIz
-	u1wNZT+A==;
+	bh=12NAM8k9D9tYz7pZJw55n8bdiFp2kiCbLsvUoQCJquE=; b=Lbnc+pq+S9fGV0nw14zpAbhCTK
+	nJfi9fUZDCgDpQOnqlB/PQ8yEW5pllRCfhEYjuASm0yQi97LiAa6V29Wl7uMtXqdzbIxHLiZsJEN4
+	iBoN+6nZOlKKCB4lGbn28g/lhzJYrF2sfxdOPW9yBXxqzqeJ8h+mEmc+VjR4sN1gZgeSavPOTUfZz
+	hjcmoGZvj1Vzw8BRqoSyRcY2crz2H4Y/V8iPcTMQGrY6QtP2gwNakTFcyy7Vrc+FvwPb2Y+pWz+ZF
+	1sIDKJuBSRmTAquHsMFpkKD/goSqOMInM0y7fpslDvKmLsURvUGiAAsrm81e4VQt56nRfNf8xPD+E
+	obkz9fsw==;
 Received: from viro by zeniv.linux.org.uk with local (Exim 4.99 #2 (Red Hat Linux))
-	id 1vVM9f-0000000GwJ7-1esV;
+	id 1vVM9f-0000000GwIt-0cyA;
 	Tue, 16 Dec 2025 03:55:19 +0000
 From: Al Viro <viro@zeniv.linux.org.uk>
 To: linux-fsdevel@vger.kernel.org
@@ -40,9 +40,9 @@ Cc: torvalds@linux-foundation.org,
 	audit@vger.kernel.org,
 	io-uring@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [RFC PATCH v3 08/59] do_sys_truncate(): import pathname only once
-Date: Tue, 16 Dec 2025 03:54:27 +0000
-Message-ID: <20251216035518.4037331-9-viro@zeniv.linux.org.uk>
+Subject: [RFC PATCH v3 05/59] chdir(2): import pathname only once
+Date: Tue, 16 Dec 2025 03:54:24 +0000
+Message-ID: <20251216035518.4037331-6-viro@zeniv.linux.org.uk>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20251216035518.4037331-1-viro@zeniv.linux.org.uk>
 References: <20251216035518.4037331-1-viro@zeniv.linux.org.uk>
@@ -67,35 +67,28 @@ let's not clutter the patch with that.
 
 Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
 ---
- fs/open.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ fs/open.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
 diff --git a/fs/open.c b/fs/open.c
-index 6f48fa9c756a..2fea68991d42 100644
+index a2d775bec8c1..67c114bdeac5 100644
 --- a/fs/open.c
 +++ b/fs/open.c
-@@ -129,14 +129,16 @@ EXPORT_SYMBOL_GPL(vfs_truncate);
- int do_sys_truncate(const char __user *pathname, loff_t length)
- {
- 	unsigned int lookup_flags = LOOKUP_FOLLOW;
-+	struct filename *name;
+@@ -555,8 +555,9 @@ SYSCALL_DEFINE1(chdir, const char __user *, filename)
  	struct path path;
  	int error;
- 
- 	if (length < 0)	/* sorry, but loff_t says... */
- 		return -EINVAL;
- 
-+	name = getname(pathname);
+ 	unsigned int lookup_flags = LOOKUP_FOLLOW | LOOKUP_DIRECTORY;
++	struct filename *name = getname(filename);
  retry:
--	error = user_path_at(AT_FDCWD, pathname, lookup_flags, &path);
+-	error = user_path_at(AT_FDCWD, filename, lookup_flags, &path);
 +	error = filename_lookup(AT_FDCWD, name, lookup_flags, &path, NULL);
- 	if (!error) {
- 		error = vfs_truncate(&path, length);
- 		path_put(&path);
-@@ -145,6 +147,7 @@ int do_sys_truncate(const char __user *pathname, loff_t length)
- 		lookup_flags |= LOOKUP_REVAL;
+ 	if (error)
+ 		goto out;
+ 
+@@ -573,6 +574,7 @@ SYSCALL_DEFINE1(chdir, const char __user *, filename)
  		goto retry;
  	}
+ out:
 +	putname(name);
  	return error;
  }
