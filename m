@@ -1,96 +1,124 @@
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 210AF2DA757
-	for <audit@vger.kernel.org>; Tue, 16 Dec 2025 02:18:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E8B63115AF;
+	Tue, 16 Dec 2025 03:54:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765851511; cv=none; b=qehSx1npFxnHILQBSs+IZScvCy7luUdm6s3N/SMRdJVDojiyp4OQALWGpQYkbrj3WqFyIbgS97Jfbo9iKoNRVsRrpypsz4lzEH49HgzkpgaaMfR82UCE+DtT4wc3F9H8bfavXhCZVXaCqYCNySoxteCg18cf+u/j3LbECKlCDGg=
+	t=1765857291; cv=none; b=lYnbkOAJKTDqMNLi8yt6qQML6qAYaYSvdZ3A8XJWTbyM3tq9A6MzfMCKdIpPG9ryYOnoSlZceoARjToX3t358sI2fT6RRdTlScF3YTtKLE8qGDCODysTPvMyEambzHDeFcug6hb9an9gG+EjX1fmkw3LQ8GmXC+MNCEn1Q7wQJ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765851511; c=relaxed/simple;
-	bh=87IUC5B+EmxqpWOYohTUfn4MeP9hxTM96c9slLvqD+M=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=jo0FlfGkEkuJT+BJQk6qePG9DDDIwDUNZXR6mrD70+R6Iba97AIut/90oxWIPtZD8PQLHckcXSWU5+ooFJrEJUjaA0i6tLrUM7NJ7fHPlB85TMDI7/FyZ2Iub6rfXk7qDA8bqfCK1zdounuzry+TBJTOJagBGRLZsmv+tdKU57s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=bRDzwOHK; arc=none smtp.client-ip=209.85.214.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+	s=arc-20240116; t=1765857291; c=relaxed/simple;
+	bh=z/VLR9eMxqpn2kvuklpoYwJtnuXwpuC7asBssPdV4t8=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=Yp7MPB0jMr7Zz4IoJoLdpMMMyO+PxWrExP3CqA2sEplt+EFEqc5Icaoow2DJXzgq9ubWpmIbuJfqZrJivuAMzwb5e9eM7EIxGNCoakcOBLOEuU/u5/u+rLbirQmsTJ5LHNAJEaURzn6NxNB4UBaVYxDxROPa1BSfyip/hzFZw/s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=pcjUgE3B; arc=none smtp.client-ip=62.89.141.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="bRDzwOHK"
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2a0c09bb78cso13748255ad.0
-        for <audit@vger.kernel.org>; Mon, 15 Dec 2025 18:18:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1765851508; x=1766456308; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gRjpFIpOzRZ2BiN5IiVV5goUIm9mEGJRGqt04cQHEgw=;
-        b=bRDzwOHKf+ddNhsIaSzQ+GVimdKudyYrZ6qE9F6bTCB6zCFsplK7eGPK8aPLqbGsBm
-         qyBUCyBYT7CNuVtCISJbBZoJECVSkk9VcJ3FMicEfoG3NYs2ZgWoXgSR9KE3sF0+uoAn
-         91+qMg0e1z/llL18hp634ePTGGivr/aT3drbwVJOKAxXE0+RBbQZxanYJf44YtBJRMaX
-         1Gk55GB71x/bDfIkT7ZN+wWRPDEUmy04x2jovo99d1j9YNRYxqewExSj9xo/TRRn8jyM
-         TicxeTNWsh5u5sTWZDC9w1BB8MaVJmUP6qKhVxXQlsykmiVJTJx3nZPvRpJbz34L8o3c
-         YPGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765851508; x=1766456308;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=gRjpFIpOzRZ2BiN5IiVV5goUIm9mEGJRGqt04cQHEgw=;
-        b=LnSlwmJr4Fi8xpqXuY8WXXqqVaBKq7pWktAFUEwqlFVFcTs83iObJs8W3wpkwbmmle
-         qnJJztl1u8/ueplpU+kHC2nV8cnKArhZYh7bx9SQxt5ylHGSSkSyMSkkDqK8Z+/z/cD2
-         7HkjHafl57p1/aZIGlwNNf/TF0V9MueMR0GFSod7p2mMZ0TnglIzANdfJaxrGcQbelUG
-         FPRDT7ymJPtWQ6bZad+xNd3i3sWrkxUdLTDLkFFwhMH2wGJIqNmcPhkXw8UGtUKM5lAv
-         /ajCAm2V2kjUpxY2Ka6bb6AUbd9CN9KE2EEmXhSy1QhJM+/qkPZNpAeHLEKogDZJqM4T
-         uMbg==
-X-Forwarded-Encrypted: i=1; AJvYcCUJkK12zglUDut8XVU4s/M2AqwL+rzqEG5s5e8DeAXSuhW/0N26d3dGm9Y54crdyTJapkHoUg==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz254ycX8+GiByEzuGyEACm/IAEGYvFgkTlL3/bNA0fRE8zaKUx
-	3+3MJf3F7xrjuC6RjkoqNiaq5hLFweqMpcMH9EAlR9g+paufi+A8C/+7306CnBTBoSYmTcxHLGe
-	ImQls7ImzJCx0y2/OULd6cfTqnBI0Y0g/5oUk1FOO
-X-Gm-Gg: AY/fxX5IBBfiGuqGpoAhSqV2aEAQgIk/j9haGNZ91YXf5XhbeL8orUGyQPPV2f4TBsI
-	9FDboafy62N8M2dKGo0pFxF/6ljFrcjzKvrJkwsNO0h1QvvENRw6BcLIJ2oh/JH+5oucbwMAw08
-	u+7Q20BY9QEzg9eOAZuOfn6efbyGlLgsD8MzCl4SNdnoyDJ+9j67Zym0QmpFegf3EmvNOPNCXSU
-	Rc5iZXoiklv8oSac5iPg4EPwblSqtsXz4+xrcW23BHvcKZyeS1JckEa9XACAYU+LNoVQR4=
-X-Google-Smtp-Source: AGHT+IFN0n0Z1ONhFG1K1mRun3mzBO+ovfpXWV0d4D3ZLmKRc7ZoVjis/NHaXg57M0CIY4CVmn7rWzSq94ROZvDyD9s=
-X-Received: by 2002:a17:902:f786:b0:295:55f:8ebb with SMTP id
- d9443c01a7336-29f24e9fb9dmr117523255ad.21.1765851508255; Mon, 15 Dec 2025
- 18:18:28 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="pcjUgE3B"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=linux.org.uk; s=zeniv-20220401; h=Sender:Content-Transfer-Encoding:
+	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
+	Reply-To:Content-Type:Content-ID:Content-Description;
+	bh=psyse3tF8YfUqMHWKKqTPMQFoI6DnJDYxVm2oFFXrG8=; b=pcjUgE3BcltxGsi7YIigOtnx8e
+	2Tn3cqRa5VpD6SeDPKQFO54G8ZceH1j3LO+OQgjrfTx8FLBoBUpyNwB6oJgEJ39YmOMsIRpWcO+W6
+	harvNUgfA3QWuPGUUbN6Ea4YPi/NwY/kQX9KheuIBv07i1FLJXWLdbf2awTeh0meqQO8SZBM4YhKu
+	PQ4oER17eIQ9pd18qC6w7ZBlTQuR5zvCPGGuIFRUfken19mJfkvGzTgXXNhDead5Ep8RMFyfgIedP
+	vEo2VdBlAPl6CeDpLVneTh5CPfWNFg9RqmbujPWBFiiCsZJWkSqyjewqeP+BpuDPxOKy3oaVamlH7
+	7/QqMgVw==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.99 #2 (Red Hat Linux))
+	id 1vVM9f-0000000GwIp-0Gs1;
+	Tue, 16 Dec 2025 03:55:19 +0000
+From: Al Viro <viro@zeniv.linux.org.uk>
+To: linux-fsdevel@vger.kernel.org
+Cc: torvalds@linux-foundation.org,
+	brauner@kernel.org,
+	jack@suse.cz,
+	mjguzik@gmail.com,
+	paul@paul-moore.com,
+	axboe@kernel.dk,
+	audit@vger.kernel.org,
+	io-uring@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [RFC PATCH v3 04/59] do_utimes_path(): import pathname only once
+Date: Tue, 16 Dec 2025 03:54:23 +0000
+Message-ID: <20251216035518.4037331-5-viro@zeniv.linux.org.uk>
+X-Mailer: git-send-email 2.52.0
+In-Reply-To: <20251216035518.4037331-1-viro@zeniv.linux.org.uk>
+References: <20251216035518.4037331-1-viro@zeniv.linux.org.uk>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251129170142.150639-1-viro@zeniv.linux.org.uk> <20251129170142.150639-19-viro@zeniv.linux.org.uk>
-In-Reply-To: <20251129170142.150639-19-viro@zeniv.linux.org.uk>
-From: Paul Moore <paul@paul-moore.com>
-Date: Mon, 15 Dec 2025 21:18:16 -0500
-X-Gm-Features: AQt7F2qp5TJTQsl_u69giqHIzesppxwKZN0S7rImDG0A9kbJZcYWwHrgoa-C3BU
-Message-ID: <CAHC9VhQ4Mh=UYYFw83RYEG6VfcNpx9QSXdQbBgY0WG0Rb7a_9Q@mail.gmail.com>
-Subject: Re: [RFC PATCH v2 18/18] struct filename ->refcnt doesn't need to be atomic
-To: Al Viro <viro@zeniv.linux.org.uk>
-Cc: linux-fsdevel@vger.kernel.org, torvalds@linux-foundation.org, 
-	brauner@kernel.org, jack@suse.cz, mjguzik@gmail.com, axboe@kernel.dk, 
-	audit@vger.kernel.org, io-uring@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Sender: Al Viro <viro@ftp.linux.org.uk>
 
-On Sat, Nov 29, 2025 at 12:01=E2=80=AFPM Al Viro <viro@zeniv.linux.org.uk> =
-wrote:
->
-> ... or visible outside of audit, really.  Note that references
-> held in delayed_filename always have refcount 1, and from the
-> moment of complete_getname() or equivalent point in getname...()
-> there won't be any references to struct filename instance left
-> in places visible to other threads.
->
-> Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
-> ---
->  fs/namei.c         | 10 +++++-----
->  include/linux/fs.h |  8 +-------
->  kernel/auditsc.c   |  6 ++++++
->  3 files changed, 12 insertions(+), 12 deletions(-)
+Convert the user_path_at() call inside a retry loop into getname_flags() +
+filename_lookup() + putname() and leave only filename_lookup() inside
+the loop.
 
-Acked-by: Paul Moore <paul@paul-moore.com>
+Since we have the default logics for use of LOOKUP_EMPTY (passed iff
+AT_EMPTY_PATH is present in flags), just use getname_uflags() and
+don't bother with setting LOOKUP_EMPTY in lookup_flags - getname_uflags()
+will pass the right thing to getname_flags() and filename_lookup()
+doesn't care about LOOKUP_EMPTY at all.
 
---=20
-paul-moore.com
+The things could be further simplified by use of cleanup.h stuff, but
+let's not clutter the patch with that.
+
+Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
+---
+ fs/utimes.c | 13 +++++++------
+ 1 file changed, 7 insertions(+), 6 deletions(-)
+
+diff --git a/fs/utimes.c b/fs/utimes.c
+index 86f8ce8cd6b1..84889ea1780e 100644
+--- a/fs/utimes.c
++++ b/fs/utimes.c
+@@ -8,6 +8,7 @@
+ #include <linux/compat.h>
+ #include <asm/unistd.h>
+ #include <linux/filelock.h>
++#include "internal.h"
+ 
+ static bool nsec_valid(long nsec)
+ {
+@@ -83,27 +84,27 @@ static int do_utimes_path(int dfd, const char __user *filename,
+ {
+ 	struct path path;
+ 	int lookup_flags = 0, error;
++	struct filename *name;
+ 
+ 	if (flags & ~(AT_SYMLINK_NOFOLLOW | AT_EMPTY_PATH))
+ 		return -EINVAL;
+ 
+ 	if (!(flags & AT_SYMLINK_NOFOLLOW))
+ 		lookup_flags |= LOOKUP_FOLLOW;
+-	if (flags & AT_EMPTY_PATH)
+-		lookup_flags |= LOOKUP_EMPTY;
++	name = getname_uflags(filename, flags);
+ 
+ retry:
+-	error = user_path_at(dfd, filename, lookup_flags, &path);
++	error = filename_lookup(dfd, name, lookup_flags, &path, NULL);
+ 	if (error)
+-		return error;
+-
++		goto out;
+ 	error = vfs_utimes(&path, times);
+ 	path_put(&path);
+ 	if (retry_estale(error, lookup_flags)) {
+ 		lookup_flags |= LOOKUP_REVAL;
+ 		goto retry;
+ 	}
+-
++out:
++	putname(name);
+ 	return error;
+ }
+ 
+-- 
+2.47.3
+
