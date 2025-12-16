@@ -1,33 +1,33 @@
 Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C74C43128A1;
-	Tue, 16 Dec 2025 03:54:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E6D63128A3;
+	Tue, 16 Dec 2025 03:54:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765857296; cv=none; b=Q4dmAVcXY6dx5oHmx642avVYRMg2kAruJPziphiqInnxTrowA/NXwX32fS8u8F1fLMBZbDFDPe0c0YsUXX3LydvzoQpsCba18YfrEDBTajL9c1aGCFVETS+8QLnS1mshIGPdy+SiGaobi8XXSY5G9izD3zTyuymlQmbFvr+lcWg=
+	t=1765857296; cv=none; b=U4CKtTYsDGOfBxQR2Mmy9ZlJf+HZrFk3Iqa6ll+5TvbWjPe5J1tI23xg1tzDzdnghelBYpPQh8QcwdCPhpSIKXlFRcNEbr6uXCLs/8iESQGR2LMsg+EF8Sc8EhHe7ZIK6mio+5svTSPBPHAE8gfZ1LkGsC6AFK7/kOj0w3JWziM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1765857296; c=relaxed/simple;
-	bh=eXKVmukn3ymqplJ5Nf+zMmgxI0ovB5ZcpB+UI18vaPQ=;
+	bh=ltTrYl7GN0DzsMvuK83DN/Ol0bNTuyKzVNTK64WoEE0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=qAyJFkek7EFBPguR132lLFxqeH3uISL03+Ouv8xw1rFxQpz7tAlAlYaMpVz0aCqZefyBu3lP5TG4iLNC2CR8OOO6LOSa/AJG8pT2JmCPPamWpPXe6rOuJ2wyPDLFMDMHgDSxP7wVu3pdtjzGNoqCMbctzpcIBd3CoTZpujPUTpE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=AIrjIx8v; arc=none smtp.client-ip=62.89.141.173
+	 MIME-Version; b=MHr4gMMPO//N6dPr5sEy06dGhu71vCTsKGuC4HNxoLN3oEcD7vFvoMsQD1NWranjV5c5uft3g747i0DSi50yVIfVTLG1rDq2I/4uWgGePWmmMLmy5pK9I8zU565GyW4M0P9eL5xTwgNrVNFONb757lntPtAPeNQ3dS+GtJL7gJk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=n6qxSoWI; arc=none smtp.client-ip=62.89.141.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="AIrjIx8v"
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="n6qxSoWI"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=linux.org.uk; s=zeniv-20220401; h=Sender:Content-Transfer-Encoding:
 	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
 	Reply-To:Content-Type:Content-ID:Content-Description;
-	bh=fmXZq62g6UELg+AE+ZD10sFlI/M451x/DE+rYFKzrjo=; b=AIrjIx8vy/aUZq77YqoSQjqiNE
-	rjgQTGFxc9+GUNnJ7pPnH7RgITOZAGPlZcHeTCLkJ8Euxts9wCjhTn/Dq73OifsA7ZtNHIoqdjljk
-	FQvQq5pAP+6/1Kv0Ch5NyxlFvmr56MReJ1ub3HlWwmCGzOWg91F7wILzaZXG70c67FFr+uDo42Whr
-	XXEyWCdpIXFIJPIiBS5hRicw46SCChf/O7Ku2ygalcEKFsQkwZg02V0dOYOZQDD2ye/mTy9B09Drl
-	ntLKWT3vYaISB7oNe0Rii1NS/ir6tZoW5r2Y9OwIXvX1nsP26zS2MVV6QJKDBSKesA44T7Z5q87k1
-	cuJxY/8w==;
+	bh=qwJAhJsvJ2SJYlVcArGg+7WWNzPWS5syBQcg8iMXPSQ=; b=n6qxSoWItZefHBpqcxEMN1PCyO
+	nSgD7OtiSg/FcQm9gKwYSA3n6Mxg8ywl+958p5JlQKppgkJg6igdhfYYJTc/caiKLAe/Fetz4UqoC
+	vMbSicyLUdkBSZHErmh4S3La7mYEqvySWjCyDHOmcpKL9YdtbIxClxDNf2/HN4ulxX134zNjFnN9V
+	bgZkKRHOU/rHnu2zJpxFKgyN+lxSSsc0gF4CkLdeJl7FngFhXKESfbaNers+ojr4k/gUamuXcFW8f
+	OtzZeDp+01+9VXOBCPH+Edb7ACW+aB2COIvAZ9bZOqnq+G8m0DwLKC2apoS6X0o0PgU4CHy7/touu
+	s1lf6Xng==;
 Received: from viro by zeniv.linux.org.uk with local (Exim 4.99 #2 (Red Hat Linux))
-	id 1vVM9h-0000000GwKq-1sjh;
+	id 1vVM9h-0000000GwL9-3Zqa;
 	Tue, 16 Dec 2025 03:55:21 +0000
 From: Al Viro <viro@zeniv.linux.org.uk>
 To: linux-fsdevel@vger.kernel.org
@@ -40,9 +40,9 @@ Cc: torvalds@linux-foundation.org,
 	audit@vger.kernel.org,
 	io-uring@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [RFC PATCH v3 28/59] simplify the callers of file_open_name()
-Date: Tue, 16 Dec 2025 03:54:47 +0000
-Message-ID: <20251216035518.4037331-29-viro@zeniv.linux.org.uk>
+Subject: [RFC PATCH v3 33/59] mount_setattr(2): don't mess with LOOKUP_EMPTY
+Date: Tue, 16 Dec 2025 03:54:52 +0000
+Message-ID: <20251216035518.4037331-34-viro@zeniv.linux.org.uk>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20251216035518.4037331-1-viro@zeniv.linux.org.uk>
 References: <20251216035518.4037331-1-viro@zeniv.linux.org.uk>
@@ -55,174 +55,36 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: Al Viro <viro@ftp.linux.org.uk>
 
-It accepts ERR_PTR() for name and does the right thing in that case.
-That allows to simplify the logics in callers, making them trivial
-to switch to CLASS(filename).
+just use CLASS(filename_uflags) + filename_lookup()
 
 Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
 ---
- fs/open.c        | 10 ++--------
- kernel/acct.c    |  4 +---
- mm/huge_memory.c | 15 +++------------
- mm/swapfile.c    | 21 +++------------------
- 4 files changed, 9 insertions(+), 41 deletions(-)
+ fs/namespace.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/fs/open.c b/fs/open.c
-index ac8dedea8daf..7254eda9f4a5 100644
---- a/fs/open.c
-+++ b/fs/open.c
-@@ -1398,14 +1398,8 @@ struct file *file_open_name(struct filename *name, int flags, umode_t mode)
-  */
- struct file *filp_open(const char *filename, int flags, umode_t mode)
- {
--	struct filename *name = getname_kernel(filename);
--	struct file *file = ERR_CAST(name);
--
--	if (!IS_ERR(name)) {
--		file = file_open_name(name, flags, mode);
--		putname(name);
--	}
--	return file;
-+	CLASS(filename_kernel, name)(filename);
-+	return file_open_name(name, flags, mode);
- }
- EXPORT_SYMBOL(filp_open);
+diff --git a/fs/namespace.c b/fs/namespace.c
+index 9d0d8ed16264..d632180f9b1a 100644
+--- a/fs/namespace.c
++++ b/fs/namespace.c
+@@ -4978,8 +4978,6 @@ SYSCALL_DEFINE5(mount_setattr, int, dfd, const char __user *, path,
+ 		lookup_flags &= ~LOOKUP_AUTOMOUNT;
+ 	if (flags & AT_SYMLINK_NOFOLLOW)
+ 		lookup_flags &= ~LOOKUP_FOLLOW;
+-	if (flags & AT_EMPTY_PATH)
+-		lookup_flags |= LOOKUP_EMPTY;
  
-diff --git a/kernel/acct.c b/kernel/acct.c
-index 2a2b3c874acd..812808e5b1b8 100644
---- a/kernel/acct.c
-+++ b/kernel/acct.c
-@@ -218,7 +218,6 @@ static int acct_on(const char __user *name)
- 	/* Difference from BSD - they don't do O_APPEND */
- 	const int open_flags = O_WRONLY|O_APPEND|O_LARGEFILE;
- 	struct pid_namespace *ns = task_active_pid_ns(current);
--	struct filename *pathname __free(putname) = getname(name);
- 	struct file *original_file __free(fput) = NULL;	// in that order
- 	struct path internal __free(path_put) = {};	// in that order
- 	struct file *file __free(fput_sync) = NULL;	// in that order
-@@ -226,8 +225,7 @@ static int acct_on(const char __user *name)
- 	struct vfsmount *mnt;
- 	struct fs_pin *old;
+ 	kattr = (struct mount_kattr) {
+ 		.lookup_flags	= lookup_flags,
+@@ -4992,7 +4990,8 @@ SYSCALL_DEFINE5(mount_setattr, int, dfd, const char __user *, path,
+ 	if (err <= 0)
+ 		return err;
  
--	if (IS_ERR(pathname))
--		return PTR_ERR(pathname);
-+	CLASS(filename, pathname)(name);
- 	original_file = file_open_name(pathname, open_flags, 0);
- 	if (IS_ERR(original_file))
- 		return PTR_ERR(original_file);
-diff --git a/mm/huge_memory.c b/mm/huge_memory.c
-index 40cf59301c21..a6d37902b73d 100644
---- a/mm/huge_memory.c
-+++ b/mm/huge_memory.c
-@@ -4692,23 +4692,18 @@ static int split_huge_pages_in_file(const char *file_path, pgoff_t off_start,
- 				pgoff_t off_end, unsigned int new_order,
- 				long in_folio_offset)
- {
--	struct filename *file;
- 	struct file *candidate;
- 	struct address_space *mapping;
--	int ret = -EINVAL;
- 	pgoff_t index;
- 	int nr_pages = 1;
- 	unsigned long total = 0, split = 0;
- 	unsigned int min_order;
- 	unsigned int target_order;
- 
--	file = getname_kernel(file_path);
--	if (IS_ERR(file))
--		return ret;
--
-+	CLASS(filename_kernel, file)(file_path);
- 	candidate = file_open_name(file, O_RDONLY, 0);
- 	if (IS_ERR(candidate))
--		goto out;
-+		return -EINVAL;
- 
- 	pr_debug("split file-backed THPs in file: %s, page offset: [0x%lx - 0x%lx], new_order: %u, in_folio_offset: %ld\n",
- 		 file_path, off_start, off_end, new_order, in_folio_offset);
-@@ -4757,12 +4752,8 @@ static int split_huge_pages_in_file(const char *file_path, pgoff_t off_start,
- 	}
- 
- 	filp_close(candidate, NULL);
--	ret = 0;
--
- 	pr_debug("%lu of %lu file-backed THP split\n", split, total);
--out:
--	putname(file);
--	return ret;
-+	return 0;
- }
- 
- #define MAX_INPUT_BUF_SZ 255
-diff --git a/mm/swapfile.c b/mm/swapfile.c
-index 46d2008e4b99..25120cf7c480 100644
---- a/mm/swapfile.c
-+++ b/mm/swapfile.c
-@@ -2831,7 +2831,6 @@ SYSCALL_DEFINE1(swapoff, const char __user *, specialfile)
- 	struct file *swap_file, *victim;
- 	struct address_space *mapping;
- 	struct inode *inode;
--	struct filename *pathname;
- 	unsigned int maxpages;
- 	int err, found = 0;
- 
-@@ -2840,14 +2839,10 @@ SYSCALL_DEFINE1(swapoff, const char __user *, specialfile)
- 
- 	BUG_ON(!current->mm);
- 
--	pathname = getname(specialfile);
--	if (IS_ERR(pathname))
--		return PTR_ERR(pathname);
--
-+	CLASS(filename, pathname)(specialfile);
- 	victim = file_open_name(pathname, O_RDWR|O_LARGEFILE, 0);
--	err = PTR_ERR(victim);
- 	if (IS_ERR(victim))
--		goto out;
-+		return PTR_ERR(victim);
- 
- 	mapping = victim->f_mapping;
- 	spin_lock(&swap_lock);
-@@ -2964,8 +2959,6 @@ SYSCALL_DEFINE1(swapoff, const char __user *, specialfile)
- 
- out_dput:
- 	filp_close(victim, NULL);
--out:
--	putname(pathname);
- 	return err;
- }
- 
-@@ -3392,7 +3385,6 @@ static struct swap_cluster_info *setup_clusters(struct swap_info_struct *si,
- SYSCALL_DEFINE2(swapon, const char __user *, specialfile, int, swap_flags)
- {
- 	struct swap_info_struct *si;
--	struct filename *name;
- 	struct file *swap_file = NULL;
- 	struct address_space *mapping;
- 	struct dentry *dentry;
-@@ -3422,12 +3414,7 @@ SYSCALL_DEFINE2(swapon, const char __user *, specialfile, int, swap_flags)
- 	INIT_WORK(&si->discard_work, swap_discard_work);
- 	INIT_WORK(&si->reclaim_work, swap_reclaim_work);
- 
--	name = getname(specialfile);
--	if (IS_ERR(name)) {
--		error = PTR_ERR(name);
--		name = NULL;
--		goto bad_swap;
--	}
-+	CLASS(filename, name)(specialfile);
- 	swap_file = file_open_name(name, O_RDWR | O_LARGEFILE | O_EXCL, 0);
- 	if (IS_ERR(swap_file)) {
- 		error = PTR_ERR(swap_file);
-@@ -3635,8 +3622,6 @@ SYSCALL_DEFINE2(swapon, const char __user *, specialfile, int, swap_flags)
- out:
- 	if (!IS_ERR_OR_NULL(folio))
- 		folio_release_kmap(folio, swap_header);
--	if (name)
--		putname(name);
- 	if (inode)
- 		inode_unlock(inode);
- 	return error;
+-	err = user_path_at(dfd, path, kattr.lookup_flags, &target);
++	CLASS(filename_uflags, name)(path, flags);
++	err = filename_lookup(dfd, name, kattr.lookup_flags, &target, NULL);
+ 	if (!err) {
+ 		err = do_mount_setattr(&target, &kattr);
+ 		path_put(&target);
 -- 
 2.47.3
 
