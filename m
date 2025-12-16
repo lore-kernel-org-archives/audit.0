@@ -1,104 +1,99 @@
-Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57CE7332EA7
-	for <audit@vger.kernel.org>; Tue, 16 Dec 2025 04:32:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7E0F335087;
+	Tue, 16 Dec 2025 05:22:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765859550; cv=none; b=CECN97e0381uvYJgM9LcvyyB8zuQNBvc0UA81ejm+eVI9qz6ZX9nBwDg8SHQ7fcTcHAQg+jmaM6tqd8yWoiAJoS1CIdcw1s+r3XVT7v1pVBNBdSegRZkRAos3Ld81UXUVEwv92zZS5ch4Fn5qgd7hXhAJ5o+Cjtx/tIzZveJ190=
+	t=1765862581; cv=none; b=n2xUIA+Rz2pySkcgjeft1IjG9tjQTNwtyaMjn2quZE7RlOytCkCnQ6J+G6ePAsPRAxA0nSrv+Ka9n6jJ8qngmj4qLzCFGbar8ahMqAkYMysYXYmesgG5OAnEUH8QSNTOaZC3QM/boFtHnsemlj6CuHnAP+rx5igLuY+YzLpz/qs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765859550; c=relaxed/simple;
-	bh=JAC7T84OH3rJpKA9s8hbP8b38NGlwWMNJLYmPCkoa0A=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=BwM/8AyswQ1G2GtigmbnPK9r1tfe2Kvza3lJHOJqqhz03YSRAZ4HUSgpC9yHFqjUzuAl5+vAGacBTDfUBhiOc70LvBSLnbT0wniblxW4Gaho96Wa11NYGKBLWbCcG3dmmqb+e/mlMrQs0pJM0lhgvh+Q87VlKggkCPX4/OoIpQw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=dnuy74tg; arc=none smtp.client-ip=209.85.208.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+	s=arc-20240116; t=1765862581; c=relaxed/simple;
+	bh=ANTiFC7CAQbX9HvT6WD6bVN8bSCuRsdBVrcj0kRllXI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=t8I/xtFwOfiakwloqJHKzbJh2DV1jGBbJQjt4JhiiVdsb9Zin4wHG36tlyhCvKRFZDuh6mHeS54E/BTh42pW/ju9E5A7HwgTD6l+ud9xeSnCJKeIsRhm9S3ttl2Lq34zV4T8ipiGphh0KLTf3IAOCd3gp9GlPJEuGR6di4sJzvc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=KkyHTRR7; arc=none smtp.client-ip=62.89.141.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="dnuy74tg"
-Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-6495c4577adso5827575a12.3
-        for <audit@vger.kernel.org>; Mon, 15 Dec 2025 20:32:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1765859541; x=1766464341; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=u04lKI+ITCEhSjyN8l/3SfN1GaX76pkUdUELbvLmtVI=;
-        b=dnuy74tgEdeg4sZQHPQgfnWfF65ZIaEb5VaAbZbGlMltJVDW0a5u0idlX00NVT9MKv
-         aZEye1jQa/uTxf9x3WflndEYSycittJiYS4qGTFjnB2wgj5nLvrkoDLkfrTvUXZsVqJJ
-         GjdJkjtJqCXh0J0oBfcOTARTHjwr6JFQic18M=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765859541; x=1766464341;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=u04lKI+ITCEhSjyN8l/3SfN1GaX76pkUdUELbvLmtVI=;
-        b=EhVdrBG94cdiWSOQhpKOOE7yCL6Axeoiiz8jUS9x9Kx7xZEjYLffdUMzTMzDJ/d0be
-         OoPWKCj4frlU/5zXc7hwMtQW8urxCi0H3DnF1LbPXsbq/WdDP830+H65AJJBI+j7jbUI
-         Mtjj6gTMjQ/3ktXpVOEa3QbWTuiHJ4gjcPUs/v9uiScUUDWQLiv2dMeqt/i0lyGQIvcX
-         WQ0jV35QxywcrC3ZQl2Q0RPM4x8m+GkX+4urYecieYk+SC4rz+Yej3/G6s7bmC1NMELW
-         WtDNF04ZMxNlh9OROghWiplxtQNst+PDkA7lxvWO81g801NuRWT6HnwqM8jZcYu333/u
-         zV5A==
-X-Forwarded-Encrypted: i=1; AJvYcCWBssf1GupiteRMgM0lfJXEDdbjgwsR80GIg1ddshC+sM3SkXZrnux9BLKz1EBDbYk5M4d03Q==@vger.kernel.org
-X-Gm-Message-State: AOJu0YywbssNlIA7IS0Aw6ab9RqHtPJaN6XW22gQOfSS29axdm2ZTmdN
-	W0x271i2g6PqCWaomZtUa/89q3QKAAW8xK/se+gezQhcTIdzLkGWYkxnTw56eNmt8BwbcUUky12
-	i25zPCSh9ww==
-X-Gm-Gg: AY/fxX73oBpBxwa3+YFs2lkeNB7754cbd5srD4VVIHcXXqq7/oySvuStcuc7K0cFyO0
-	h+dyOIRIsYQS5DIwmOpZl2SqyExPtaQnLsbsTYo2mPIaceIpLK9sCB4PJOZH7ptqPfTJEIb097n
-	UY+9YOfEoaZYmVyiH63p3J8L5PoUm7l9cAOmMeBjDTVOIgHIuceWrLH3dAH1IQSCbIk1YVBFW4t
-	jMc7xJ7pAsVsWE1L2NbkmqucZGdKq0KKKrt1TGyJF77cxA9PcOGuzxfLGkTfPoN+juOQWcNSEN8
-	Uql/0BIVrALl74mCPA87V2cdgjoBc169znHeGYIlPovxW8IfPJeJxbCXPEeYMU/k+CEBZYTfi/5
-	4H2TmQYRJVcOnAly8MfS1+VuSIB54EwmMRFJ7mP0i3kegsagPpICgWg6+m0ZsYQpw8oJNExZBD+
-	nlJg4vshPfnXzHU4Uxh2aIP4N5zQMvAw8ylZO+dYfbALboZ6HYU+lCJOYkezGc
-X-Google-Smtp-Source: AGHT+IEQwq39W1Gn2Rdi5CHCc3ah9BDn54KsFDZfJ1EeZuVMy4zQYB2rVZ8dMikvMA5gZD8OxIE6yQ==
-X-Received: by 2002:a17:906:c103:b0:b72:b289:6de3 with SMTP id a640c23a62f3a-b7d23d0430amr1429845266b.58.1765859540623;
-        Mon, 15 Dec 2025 20:32:20 -0800 (PST)
-Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com. [209.85.208.52])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b7cfa5142efsm1548753666b.38.2025.12.15.20.32.19
-        for <audit@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 15 Dec 2025 20:32:19 -0800 (PST)
-Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-64162c04f90so7894464a12.0
-        for <audit@vger.kernel.org>; Mon, 15 Dec 2025 20:32:19 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCVhQ5r68S+EITTu7ud1GS3HPa3mqVKf7A4i5wTcr9oWrNpeKh385hKTEryz6wHhlNXhQ8WosQ==@vger.kernel.org
-X-Received: by 2002:a17:907:7e8d:b0:b7a:2ba7:18c0 with SMTP id
- a640c23a62f3a-b7d23d13db8mr1509432666b.61.1765859539518; Mon, 15 Dec 2025
- 20:32:19 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="KkyHTRR7"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=PyZUMQbKsz3hNPzX0ob+jNGLPe0VdOlESaTZlf2s0q0=; b=KkyHTRR7KIs2XrELB1q/tng+P1
+	gvLrsk28fC+Ckbu9HgocDwPxJUL8H4q/I7ATLath8vN3MWA+Y2l9iKP9fx1nfcnA+/6BQI5WjNU8P
+	blD8m0C2lfvCUHbaX9elJlFKNfVHbblIqPBnqVYwaxev/BSnOnoq4c2r5V/KN2KCXQFsHDybgcCjW
+	HY94J59iutJXiIeyLZZQk2deS0cNlg+2x0SGd17Oi2e/vc2LhiTVX+VA/M5HQ/5Sdj8yHTciwDNjF
+	/m42/jcY6w80EaqLdx3boJH1oYMZw5JV7CydPZ7bw0T3y7KUb6RsCdIizVit850A84qy4t4Iq//qy
+	ZT04zjPw==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.99 #2 (Red Hat Linux))
+	id 1vVNWc-00000000UhW-1AVD;
+	Tue, 16 Dec 2025 05:23:06 +0000
+Date: Tue, 16 Dec 2025 05:23:06 +0000
+From: Al Viro <viro@zeniv.linux.org.uk>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: linux-fsdevel@vger.kernel.org, brauner@kernel.org, jack@suse.cz,
+	mjguzik@gmail.com, paul@paul-moore.com, axboe@kernel.dk,
+	audit@vger.kernel.org, io-uring@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH v3 00/59] struct filename work
+Message-ID: <20251216052306.GO1712166@ZenIV>
+References: <20251216035518.4037331-1-viro@zeniv.linux.org.uk>
+ <CAHk-=wi4j0+zDZPTr4-fyEE4qzHwNdVOwCSuPoJ4w0fpDZcDRQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251216035518.4037331-1-viro@zeniv.linux.org.uk>
-In-Reply-To: <20251216035518.4037331-1-viro@zeniv.linux.org.uk>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Tue, 16 Dec 2025 16:32:03 +1200
-X-Gmail-Original-Message-ID: <CAHk-=wi4j0+zDZPTr4-fyEE4qzHwNdVOwCSuPoJ4w0fpDZcDRQ@mail.gmail.com>
-X-Gm-Features: AQt7F2rYyucJ8k8M5suIcIYwHZryFGRojM10TYRYQXZevxtnA0xqMtui8-ALNA8
-Message-ID: <CAHk-=wi4j0+zDZPTr4-fyEE4qzHwNdVOwCSuPoJ4w0fpDZcDRQ@mail.gmail.com>
-Subject: Re: [RFC PATCH v3 00/59] struct filename work
-To: Al Viro <viro@zeniv.linux.org.uk>
-Cc: linux-fsdevel@vger.kernel.org, brauner@kernel.org, jack@suse.cz, 
-	mjguzik@gmail.com, paul@paul-moore.com, axboe@kernel.dk, 
-	audit@vger.kernel.org, io-uring@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wi4j0+zDZPTr4-fyEE4qzHwNdVOwCSuPoJ4w0fpDZcDRQ@mail.gmail.com>
+Sender: Al Viro <viro@ftp.linux.org.uk>
 
-So I like the whole series, but..
+On Tue, Dec 16, 2025 at 04:32:03PM +1200, Linus Torvalds wrote:
+> So I like the whole series, but..
+> 
+> On Tue, 16 Dec 2025 at 15:56, Al Viro <viro@zeniv.linux.org.uk> wrote:
+> >
+> >   struct filename ->refcnt doesn't need to be atomic
+> 
+> Does ->refcnt need to exist _at_all_ if audit isn't enabled?
+> 
+> Are there any other users of it? Maybe I missed some?
+> 
+> Because I'm wondering if we could just encapsulate the thing entirely
+> in some #ifdef CONFIG_AUDIT check.
+> 
+> Now, I think absolutely everybody does enable audit, so it's not
+> because I'd try to save one word of memory and a few tests, it's more
+> of a "could we make it very explicit that all that code is purely
+> about the audit case"?
 
-On Tue, 16 Dec 2025 at 15:56, Al Viro <viro@zeniv.linux.org.uk> wrote:
->
->   struct filename ->refcnt doesn't need to be atomic
+Umm...  Not exactly.  I mean, yes, at the moment we never increment the
+refcount outside of kernel/auditsc.c, so it'll always be 1 if that thing
+is disabled.
 
-Does ->refcnt need to exist _at_all_ if audit isn't enabled?
+But if you mean to store it on caller's stack, that's another kettle of
+fish - anything async with io_uring won't be able to do that, even we
+ignore the stack footprint issues.  In configs without audit we end up
+	1) allocating it and copying the pathname from userland on
+request submission; pointer is stashed into request.
+	2) picking it in processing thread and doing the operation
+there By that point submitted might have not just left the kernel,
+but overwritten the pathname contents in userland.
+	3) either stashing it back into request or freeing it.
 
-Are there any other users of it? Maybe I missed some?
+With audit (2) might become "... and have an extra ref stashed in audit
+context" with (3) becoming "either stashing it back into request, if no
+extra ref has appeared, or making a copy, stashing it back into request
+and dropping the reference on the original"
 
-Because I'm wondering if we could just encapsulate the thing entirely
-in some #ifdef CONFIG_AUDIT check.
+So refcount may be audit-only thing, at least at the moment, but the
+need to outlive the syscall where getname() had been called is very much
+not audit-only.
 
-Now, I think absolutely everybody does enable audit, so it's not
-because I'd try to save one word of memory and a few tests, it's more
-of a "could we make it very explicit that all that code is purely
-about the audit case"?
-
-                    Linus
+And stack footprint is not trivial either, unless you limit embedded
+case to something very short - even an extra hundred bytes (or two,
+e.g. in case of rename()) is not something I'd be entirely comfortable
+grabbing for pathname-related syscalls.
