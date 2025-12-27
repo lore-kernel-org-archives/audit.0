@@ -1,97 +1,81 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from beta.bencteux.fr (114.ip-51-178-41.eu [51.178.41.114])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC1B62522A7
-	for <audit@vger.kernel.org>; Wed, 17 Dec 2025 22:03:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B91F1F03D2;
+	Sat, 27 Dec 2025 08:54:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=51.178.41.114
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766008995; cv=none; b=UM6QFJUb2PXS+U6wHj8D7twQxRNyP+dFUIrrnrQnag1yJy3VqoRZLzyNRqnE1ZZnDbTZXgNyT1ZLTM1hEv7bH+uTmT84wIXvtR9bX7WvrV4p+howhfN2karJff5dfcLC3urZpZr/brd1J92/nfeRorgu1fKb9fdKUnIWLrt0kO8=
+	t=1766825659; cv=none; b=bSxnob8VKIbWFd2wc87VHvEx3PrPJ1xEtQae7GOWnEN7hj6pzb+nFajH/blNmdMLBHPSRKTDb5oVn60yd/dCqrqKKOyVGDICkb52db4nNso8lC/HUNm8aD1Q4Ji581w6aS24x7AG2KjPl1KigcquRwwObU8nMFqkvYXD5BzVUOI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766008995; c=relaxed/simple;
-	bh=lFWlzRjftaee3q/5YDBVJ+Nguk9c76wRd/f+/PuMdmY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 In-Reply-To:Content-Type:Content-Disposition; b=Xb0j7WyLv0yJ1mDAi3F/0O2YChgebp3jhzfBNsndwbmDX6BBjTUaWDLsTI2sL2dMSoUv5Xy9yfRohyLGJZqLQ+/DfCIcd0Qe6aVK/xTMwqfRRwY02bXOKA7VIM9sbNl2kQT+q5Vp2mI2/EYfqX7IqI8sSvhQDuHPiQ2n4Eu5Q5M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Ygvkb4N7; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1766825659; c=relaxed/simple;
+	bh=+9mTbzxuuqHXr9/0roe1mte5dAfC211wO4T81D4RxhU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=OhY9vidEPxv4IzBmPnm3jNG2xoyMGsy7TmlazlTbppNlmtrZBJEpn59CxVwHnUJAjRjz7tk6EPNNkHX0bIS2wIsNfO9aCrLOyZBlY8CqfZtLW7EBxyukjdZFd4vwbueXveYOlDh63pGAdGhs5BK0wytYlFKJMHQK4i8nAfJsPe8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bencteux.fr; spf=pass smtp.mailfrom=bencteux.fr; dkim=pass (1024-bit key) header.d=bencteux.fr header.i=@bencteux.fr header.b=oTn1HtyJ; arc=none smtp.client-ip=51.178.41.114
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bencteux.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bencteux.fr
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Ygvkb4N7"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1766008992;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=pkhsudaR5WD/qdcFGwkGBMJwFGZtk3+8LY8HIXteJB8=;
-	b=Ygvkb4N7UBr4xMTfZUVwD7znQXTKjAdrXfjVgTSEJXaNI0gECilsCL/RSTZRLxo/2Me/Hi
-	A/fZRwZiqh6X8ZJb7nV1pnA/AMyjr7Wxmvhmo0vYqSWnVIn/7v/gUEwSkNob1YCxFbuy3J
-	BvQai+t8AW7VjW6ufg2Yz3ymZ9olNxI=
-Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-451-go3JovIiMbGOef9xasXODw-1; Wed,
- 17 Dec 2025 17:03:11 -0500
-X-MC-Unique: go3JovIiMbGOef9xasXODw-1
-X-Mimecast-MFC-AGG-ID: go3JovIiMbGOef9xasXODw_1766008990
-Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id B3C4018002F9;
-	Wed, 17 Dec 2025 22:03:10 +0000 (UTC)
-Received: from madcap2.tricolour.ca (unknown [10.22.74.6])
-	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id AAB191800576;
-	Wed, 17 Dec 2025 22:03:09 +0000 (UTC)
-Date: Wed, 17 Dec 2025 17:03:07 -0500
-From: Richard Guy Briggs <rgb@redhat.com>
-To: Paul Moore <paul@paul-moore.com>
-Cc: audit@vger.kernel.org
-Subject: Re: [PATCH] tests/netfilter_pkt: allow for a greater number of
- netfilter fields
-Message-ID: <aUMom2SYZVVplJ5t@madcap2.tricolour.ca>
-References: <20251216160059.58230-1-paul@paul-moore.com>
- <CAHC9VhT3OW86ALFRBeyJsLPE+ZzTrfG_NGwKhnZ-+hKMZCqC5Q@mail.gmail.com>
+	dkim=pass (1024-bit key) header.d=bencteux.fr header.i=@bencteux.fr header.b="oTn1HtyJ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=bencteux.fr; s=mail;
+	t=1766825380; bh=+9mTbzxuuqHXr9/0roe1mte5dAfC211wO4T81D4RxhU=;
+	h=From:To:Cc:Subject:Date:From;
+	b=oTn1HtyJ0zinyYQoeVhPju5zWsyLgkOpTPa+kntnWnRdoqcXkYi3SR2ysOiG8o535
+	 zP3BW6IabIoaINY7S49ySS9HLNTse5wZaqetXSveYdmtgTevnsZjTxwQ83+s8wZgqv
+	 FBW1TzFBr2//q9MLmk7b2jGA3r5D/cuiun3dbPWU=
+Received: from localhost (88-178-48-87.subs.proxad.net [88.178.48.87])
+	by beta.bencteux.fr (Postfix) with ESMTPSA id 1F3484022B;
+	Sat, 27 Dec 2025 09:49:40 +0100 (CET)
+From: Jeffrey Bencteux <jeff@bencteux.fr>
+To: audit@vger.kernel.org,
+	paul@paul-moore.com,
+	eparis@redhat.com
+Cc: linux-kernel@vger.kernel.org
+Subject: [PATCH] audit: add missing syscalls to read class
+Date: Sat, 27 Dec 2025 09:39:24 +0100
+Message-ID: <20251227083924.6549-1-jeff@bencteux.fr>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <CAHC9VhT3OW86ALFRBeyJsLPE+ZzTrfG_NGwKhnZ-+hKMZCqC5Q@mail.gmail.com>
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: Q0gMBDmY5_0xKK6RRC3887f80n3-cLSr06SODRUJHE8_1766008990
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
 
-On 2025-12-16 11:12, Paul Moore wrote:
-> On Tue, Dec 16, 2025 at 11:01 AM Paul Moore <paul@paul-moore.com> wrote:
-> > Current in-development kernels include source and destination port
-> > fields in the NETFILTER_PKT record, adjust the test so that both
-> > old and new formats are supported.
-> >
-> > Future work could include verification of these additional fields,
-> > but put this quick fix in place now.
-> >
-> > Signed-off-by: Paul Moore <paul@paul-moore.com>
-> > ---
-> >  tests/netfilter_pkt/test | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> Merged.
+The "at" variant of getxattr() and listxattr() are missing from the
+audit read class. Calling getxattrat() or listxattrat() on a file to
+read its extended attributes will bypass audit rules such as:
 
-Thank you.
+-w /tmp/test -p rwa -k test_rwa
 
-> paul-moore.com
+The current patch adds missing syscalls to the audit read class.
 
-- RGB
+Signed-off-by: Jeffrey Bencteux <jeff@bencteux.fr>
+---
+ include/asm-generic/audit_read.h | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
---
-Richard Guy Briggs <rgb@redhat.com>
-Sr. S/W Engineer, Kernel Security, Base Operating Systems
-Remote, Ottawa, Red Hat Canada
-Upstream IRC: SunRaycer
-Voice: +1.613.860 2354 SMS: +1.613.518.6570
+diff --git a/include/asm-generic/audit_read.h b/include/asm-generic/audit_read.h
+index 7bb7b5a83ae2..fb9991f53fb6 100644
+--- a/include/asm-generic/audit_read.h
++++ b/include/asm-generic/audit_read.h
+@@ -4,9 +4,15 @@ __NR_readlink,
+ #endif
+ __NR_quotactl,
+ __NR_listxattr,
++#ifdef __NR_listxattrat
++__NR_listxattrat,
++#endif
+ __NR_llistxattr,
+ __NR_flistxattr,
+ __NR_getxattr,
++#ifdef __NR_getxattrat
++__NR_getxattrat,
++#endif
+ __NR_lgetxattr,
+ __NR_fgetxattr,
+ #ifdef __NR_readlinkat
+
+base-commit: 15b0c43aa621fb77b32c46eb642eaf25557e9fdb
+-- 
+2.52.0
 
