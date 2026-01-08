@@ -1,33 +1,33 @@
 Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45B99329E43;
-	Thu,  8 Jan 2026 07:36:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9709632A3F2;
+	Thu,  8 Jan 2026 07:36:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767857816; cv=none; b=SIe3ELAF7oIyQayTOKLhEi6Ib7HVm8iSHHJiguMg2zvKobls+x1QajHypPtjXtI+2i46O2tz3dx+oE+5SEKJ9VxaNB4jbm15g6lGGPcPrN90/QNPyzn0eFMnZ+9u6xUnv6oXJ3s6sMyXLR5EdE8dkxv/AkuT0hotVx2M29KfAFk=
+	t=1767857817; cv=none; b=d1NZogdd7+iYYwLR3KAXkqVt6xfYwSUmo3JRrb1+dtP2HEK4zpNqLDyLzl4fzRbNCJHIyZlQJWfvMcn1fD90GpU3nQXHggK+6tz/L74mtDO9DhdXq3eudKLMjVQtXS8Sh/PJk77zMFHjuRvSNWY0pIwLPEP+laYuf7ShWl+d4z0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767857816; c=relaxed/simple;
-	bh=Ydled4U6L1X7V26SQt7n9puQ7dfK0LX63LBtB+WlC0I=;
+	s=arc-20240116; t=1767857817; c=relaxed/simple;
+	bh=WRriJN466GNrPVDup+aZWVv/Wp3+fkgE/IoVZ5UfeDU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=R7Z+x77e4p1sfqcHS+niwp6nXNRl9B2M4TPqK3JK0n2jQXKhrwTMpF2aS4l+/JFI3+VomyzH75rIeRTPISJUHahqSr6i2w8+9eQJqU/bZtV4CxG7FIy1WyCIFmxUeCVKJc8m/M/u07CFBAR/11QyNoVlDjff0VxX74BhxyX+uyw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=Le6EBqcw; arc=none smtp.client-ip=62.89.141.173
+	 MIME-Version; b=L4ePkVt6lNi1czudqbdBKSJNgErExHesHdqKraVUKAhkMAkleES7rhRe8zifg3z/3lZ5MjUnxg4rJnjv21KA+rSyZF/+h7etbpHgNK1faVzMtKX9lWq6cuXhc7PDOFSSBLVnCqIoVQBpwxcEJ127Phk8XL/3DcebCTI4pWMDxlk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=ufTx/oHg; arc=none smtp.client-ip=62.89.141.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="Le6EBqcw"
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="ufTx/oHg"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=linux.org.uk; s=zeniv-20220401; h=Sender:Content-Transfer-Encoding:
 	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
 	Reply-To:Content-Type:Content-ID:Content-Description;
-	bh=sd2Rgca4jMZ7f1mAJaupLk+3fuY1coBUzS+dbbv0xtA=; b=Le6EBqcwHAfqnlwwJyguPos+y8
-	/St5BqWcms7r9VcHPM2BguyNzGSa03qRCOF1wO9fcSPZ/cn2c/Ph9egBk9LA7EyoZRoCjD9PMBEL8
-	9etIzFWOZ4As7QBDDFe+dqNA3ia6Z+9aM03gkr4a68HleKgPC0SNal418WhJ2WshcxyQqLjWkyMXm
-	nNACqSzhAQkb9lPSpIZv88h4Wi3OmSOJS4lZaROZiePL44X7fEWvXaXM0TDsCfiMTvnxL1lOdIQZX
-	yGEIPO8fOWAi8z1IKJM1vZAK0+zCBoDf/r7KmDtKpOaGpoK/gD4OHyrrRVCgW/nVaaD1vXkumb/HS
-	+Js418qw==;
+	bh=ozC9vkaM+z/rcpUfiwPLiYxS2TFpYNOL05SazZBN1Ps=; b=ufTx/oHgVLiZ4qK9L168IAQy38
+	2UFakTLf+kObTwCBKRn+ZKoegkIU1FjE2RKzB43vLjVkS9fYKWCkTDDWMeLXp3ENzg0CV1QbExDQp
+	MeSZ4WgIJ1Lu7i5on2MY1nHDLInS+ux8iFgYAG9FFD9R712+VnFM8rcmPIMZNL94RyLzItlcr9467
+	PCjS+RPC5Yia126kkIdzldLIT2RwyITC8oeUwYago4DpCYFtdIuw+Zr4ZpvFFCEFcp3xSc5P1QrVO
+	qvwH0AriYkdjkLaeyh6w2l89C+rMZF8ydUQT1wVybJie8t2g7FIukJFqU96ZiwCYFZJumcxsrzCeC
+	puHQD/Hg==;
 Received: from viro by zeniv.linux.org.uk with local (Exim 4.99 #2 (Red Hat Linux))
-	id 1vdkau-00000001mlY-0ZDb;
+	id 1vdkau-00000001mm6-1y5X;
 	Thu, 08 Jan 2026 07:38:08 +0000
 From: Al Viro <viro@zeniv.linux.org.uk>
 To: linux-fsdevel@vger.kernel.org
@@ -40,9 +40,9 @@ Cc: torvalds@linux-foundation.org,
 	audit@vger.kernel.org,
 	io-uring@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v4 24/59] ksmbd_vfs_path_lookup(): vfs_path_parent_lookup() accepts ERR_PTR() as name
-Date: Thu,  8 Jan 2026 07:37:28 +0000
-Message-ID: <20260108073803.425343-25-viro@zeniv.linux.org.uk>
+Subject: [PATCH v4 26/59] do_filp_open(): DTRT when getting ERR_PTR() as pathname
+Date: Thu,  8 Jan 2026 07:37:30 +0000
+Message-ID: <20260108073803.425343-27-viro@zeniv.linux.org.uk>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260108073803.425343-1-viro@zeniv.linux.org.uk>
 References: <20260108073803.425343-1-viro@zeniv.linux.org.uk>
@@ -55,27 +55,30 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: Al Viro <viro@ftp.linux.org.uk>
 
-no need to check in the caller
+The rest of the set_nameidata() callers treat IS_ERR(pathname) as
+"bail out immediately with PTR_ERR(pathname) as error".  Makes
+life simpler for callers; do_filp_open() is the only exception
+and its callers would also benefit from such calling conventions
+change.
 
 Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
 ---
- fs/smb/server/vfs.c | 3 ---
- 1 file changed, 3 deletions(-)
+ fs/namei.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/fs/smb/server/vfs.c b/fs/smb/server/vfs.c
-index f891344bd76b..a97226116840 100644
---- a/fs/smb/server/vfs.c
-+++ b/fs/smb/server/vfs.c
-@@ -67,9 +67,6 @@ static int ksmbd_vfs_path_lookup(struct ksmbd_share_config *share_conf,
- 	}
+diff --git a/fs/namei.c b/fs/namei.c
+index 8f26e91de906..c8410dc6c0c6 100644
+--- a/fs/namei.c
++++ b/fs/namei.c
+@@ -4862,6 +4862,8 @@ struct file *do_filp_open(int dfd, struct filename *pathname,
+ 	int flags = op->lookup_flags;
+ 	struct file *filp;
  
- 	filename = getname_kernel(pathname);
--	if (IS_ERR(filename))
--		return PTR_ERR(filename);
--
- 	err = vfs_path_parent_lookup(filename, flags,
- 				     path, &last, &type,
- 				     root_share_path);
++	if (IS_ERR(pathname))
++		return ERR_CAST(pathname);
+ 	set_nameidata(&nd, dfd, pathname, NULL);
+ 	filp = path_openat(&nd, op, flags | LOOKUP_RCU);
+ 	if (unlikely(filp == ERR_PTR(-ECHILD)))
 -- 
 2.47.3
 
