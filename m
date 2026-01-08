@@ -1,34 +1,34 @@
 Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0161B33BBD4;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A2A833C530;
 	Thu,  8 Jan 2026 07:36:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767857819; cv=none; b=SowtQfm+43WDfknPLboLG5n74l/IsUJMsDiTbnyAZr0ySNhlPz6/xA4wT4bVATCzLTps//VZVbnpV+dykYfw5PTo/fvViS2rJOy7E8tqUI60y9XFaOVPJ55FTmw7Qv5D13vQ7dFkneFWhtIn9p1Z2Nov15bN5zIlD+UVjM41X2k=
+	t=1767857820; cv=none; b=MjTwrys9tAtzxzFqemz3tL3nELSYNnE/pLTIAKfN8QyRxnX0ekV74fwSUdMGKYj9SSstl+vMo1FH/9ihIuxi0irU+wfVqYM5AvzgwcPE0nbpd030TpnUJpVAKuwhcaVclzj2NVa8sTTjvl3qn695C8W1kIl3qR7JdIuRq3/Exqs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767857819; c=relaxed/simple;
-	bh=urAa3ZS6X7nMsa9ZRz2Pqn/hpkIvLTL3N56s9umZyt4=;
+	s=arc-20240116; t=1767857820; c=relaxed/simple;
+	bh=qFWWBZSWrxy2KDGSAaHiqUKXKRDjGyqp+DsZAn7I6ik=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=sJq6PGCRD5wJB9cuFaOSW2UatwXNE1WSVBvb5Fu9D3IyDHSMxdIXTF4fwvc4xH46gKxJjgazrg8YkiYoI8h5LCgS2PiY8SqIlF/IN4xXspfGMzxLzw4l991O+51hiHSM/Pl+sFsn54SFaC8CsOyuGls3LHOQVjJzYsx1RfZVp0w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=EYx527EW; arc=none smtp.client-ip=62.89.141.173
+	 MIME-Version; b=U5aXOOfLhGu0qM189pxYM6j1RJmr5pZZkbvU0If4BTIKrVyjDpAwvCjiZHPr6wMp437sCSjpaQMU/lJuD9rED+CeWMmEciv5wSRVSK+GueQrxrMw38m3D037zaxw4w8PeemkB2MPau5obdeLLXl5m4juAq6hBBx5njDnLeSQb/o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=NzBwocGV; arc=none smtp.client-ip=62.89.141.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="EYx527EW"
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="NzBwocGV"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=linux.org.uk; s=zeniv-20220401; h=Sender:Content-Transfer-Encoding:
 	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
 	Reply-To:Content-Type:Content-ID:Content-Description;
-	bh=5+CNfJBBa99USZB4Xzhgo+c1jKCiUr7CLOmJPPMy31A=; b=EYx527EWbEAbefEoNdISMxGVtB
-	wi0OQbuGL7118gpfZPZNJ3mk7kmml02BmLsROpfqnn61uQNKAjf1p6JCAYh4W0YYh115NwJyvIziv
-	noLJO+QRMOepgRbUoMjBqxsDu/Vx7+9DxpR9VeTvOg8TbE5UPGvaJWoo3bBJQa4ENbjj29qH80PqF
-	tqm0iv0SfI9iFnc63B0ZeQ0HlrRAA3XTFzr9QhkO1NhbxcMLe9HIdZSD5uwdOlS6AlYE11jXJ5iG5
-	CPM16ry6YI6iJMGgXmz385PV41nzwC6IHwos0EUFDvTqpTrhSLaIxWNGarssscuK6PnAa8OxFcblP
-	scRsp0ZA==;
+	bh=r9VUUYclQG2D+jKHTMll9hIsQ83a+DJ6bNwpaQUG0Fw=; b=NzBwocGVy42tugtMKxspFD0eZC
+	SMLSSFffb7eK83op9AMOA5xqjTgxEOW88R22v6VPpkUlI0SWPFZVMpygTzCPv8aifuT7LIP7sKIjt
+	S3sjBUJkkQeltKdjv2l+NfbyXGtuVMkE5OCQI7+pa02vQMNCyNJGIxy0nxq75EMlUp7lOkaazijjD
+	9BdZ/CCo5oSDDc7+0BK/b2t3qXlFo3iNf7ZswmsAqaExQhyP2RTWIZQhbkUOUFdGcMN0Td4i+pKiv
+	acNJt7m8La93Sh3PtnUHZQLvhSKLPahCp+L4U6/IkOMCaNg3PuZ8FvcIOcXatbZc/5nIr8QjPZSEr
+	oI6LyvWA==;
 Received: from viro by zeniv.linux.org.uk with local (Exim 4.99 #2 (Red Hat Linux))
-	id 1vdkax-00000001mqr-2QCD;
-	Thu, 08 Jan 2026 07:38:11 +0000
+	id 1vdkaw-00000001mp8-1xb7;
+	Thu, 08 Jan 2026 07:38:10 +0000
 From: Al Viro <viro@zeniv.linux.org.uk>
 To: linux-fsdevel@vger.kernel.org
 Cc: torvalds@linux-foundation.org,
@@ -40,9 +40,9 @@ Cc: torvalds@linux-foundation.org,
 	audit@vger.kernel.org,
 	io-uring@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v4 40/59] chdir(2): unspaghettify a bit...
-Date: Thu,  8 Jan 2026 07:37:44 +0000
-Message-ID: <20260108073803.425343-41-viro@zeniv.linux.org.uk>
+Subject: [PATCH v4 35/59] do_open_execat(): don't care about LOOKUP_EMPTY
+Date: Thu,  8 Jan 2026 07:37:39 +0000
+Message-ID: <20260108073803.425343-36-viro@zeniv.linux.org.uk>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260108073803.425343-1-viro@zeniv.linux.org.uk>
 References: <20260108073803.425343-1-viro@zeniv.linux.org.uk>
@@ -55,52 +55,26 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: Al Viro <viro@ftp.linux.org.uk>
 
+do_file_open() doesn't.
+
 Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
 ---
- fs/open.c | 27 ++++++++++-----------------
- 1 file changed, 10 insertions(+), 17 deletions(-)
+ fs/exec.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/fs/open.c b/fs/open.c
-index 425c09d83d7f..bcaaf884e436 100644
---- a/fs/open.c
-+++ b/fs/open.c
-@@ -558,26 +558,19 @@ SYSCALL_DEFINE1(chdir, const char __user *, filename)
- 	struct path path;
- 	int error;
- 	unsigned int lookup_flags = LOOKUP_FOLLOW | LOOKUP_DIRECTORY;
--	struct filename *name = getname(filename);
-+	CLASS(filename, name)(filename);
- retry:
- 	error = filename_lookup(AT_FDCWD, name, lookup_flags, &path, NULL);
--	if (error)
--		goto out;
--
--	error = path_permission(&path, MAY_EXEC | MAY_CHDIR);
--	if (error)
--		goto dput_and_out;
--
--	set_fs_pwd(current->fs, &path);
--
--dput_and_out:
--	path_put(&path);
--	if (retry_estale(error, lookup_flags)) {
--		lookup_flags |= LOOKUP_REVAL;
--		goto retry;
-+	if (!error) {
-+		error = path_permission(&path, MAY_EXEC | MAY_CHDIR);
-+		if (!error)
-+			set_fs_pwd(current->fs, &path);
-+		path_put(&path);
-+		if (retry_estale(error, lookup_flags)) {
-+			lookup_flags |= LOOKUP_REVAL;
-+			goto retry;
-+		}
- 	}
--out:
--	putname(name);
- 	return error;
- }
+diff --git a/fs/exec.c b/fs/exec.c
+index 68986dca9b9d..902561a878ff 100644
+--- a/fs/exec.c
++++ b/fs/exec.c
+@@ -777,8 +777,6 @@ static struct file *do_open_execat(int fd, struct filename *name, int flags)
+ 		return ERR_PTR(-EINVAL);
+ 	if (flags & AT_SYMLINK_NOFOLLOW)
+ 		open_exec_flags.lookup_flags &= ~LOOKUP_FOLLOW;
+-	if (flags & AT_EMPTY_PATH)
+-		open_exec_flags.lookup_flags |= LOOKUP_EMPTY;
  
+ 	file = do_file_open(fd, name, &open_exec_flags);
+ 	if (IS_ERR(file))
 -- 
 2.47.3
 
