@@ -1,34 +1,34 @@
 Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13D0A334C3D;
-	Thu,  8 Jan 2026 07:36:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0161B33BBD4;
+	Thu,  8 Jan 2026 07:36:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767857818; cv=none; b=PNWKxyb6a9LlG6r92sfmfarvq9ClaBQsl5jbHrepFjsz8KRAavxkLbNRWkArIXr02jcqerwVKRIa18+BML5s98XpmZvnmfDFMhVSXZBNlYm7NlbkpU1HxcPDyVAh7KfD7JM/+WyudydBvU0aIifTaON+A9DzvZy8mC6gHws0KjQ=
+	t=1767857819; cv=none; b=SowtQfm+43WDfknPLboLG5n74l/IsUJMsDiTbnyAZr0ySNhlPz6/xA4wT4bVATCzLTps//VZVbnpV+dykYfw5PTo/fvViS2rJOy7E8tqUI60y9XFaOVPJ55FTmw7Qv5D13vQ7dFkneFWhtIn9p1Z2Nov15bN5zIlD+UVjM41X2k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767857818; c=relaxed/simple;
-	bh=SyiCZ+BkgTbuNj29/vmF2KqVFwMK6f6m3rzqyVzJ4sQ=;
+	s=arc-20240116; t=1767857819; c=relaxed/simple;
+	bh=urAa3ZS6X7nMsa9ZRz2Pqn/hpkIvLTL3N56s9umZyt4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=cR5W+ihu3hTGCABHzpFnLNB6bMYZOlS5fpeTp4BnF1+xNS8DtF+EoATUSfo56NAF+osuI/WdTObz2KtazoReBHKDpRjKge9aYZVSUNQkKsCJ+9VkiApsqlXR/8dZFtZTPChHiZ9AtnCS1w4CMMdA0SW2STjSFS5IEIoFizG7E44=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=JQdLwO/e; arc=none smtp.client-ip=62.89.141.173
+	 MIME-Version; b=sJq6PGCRD5wJB9cuFaOSW2UatwXNE1WSVBvb5Fu9D3IyDHSMxdIXTF4fwvc4xH46gKxJjgazrg8YkiYoI8h5LCgS2PiY8SqIlF/IN4xXspfGMzxLzw4l991O+51hiHSM/Pl+sFsn54SFaC8CsOyuGls3LHOQVjJzYsx1RfZVp0w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=EYx527EW; arc=none smtp.client-ip=62.89.141.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="JQdLwO/e"
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="EYx527EW"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=linux.org.uk; s=zeniv-20220401; h=Sender:Content-Transfer-Encoding:
 	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
 	Reply-To:Content-Type:Content-ID:Content-Description;
-	bh=JUE8hPERD0FXyjZgOFJkpifcmj2y7nW76IgVSlDIJnk=; b=JQdLwO/eAz0zlyu5thAfVW3EPt
-	rOXFsDV2twyaf+VQFrbnf6U1u/T9BQXGpmC3bIbfGJSBwcbr+zgZJUEOoYJURU3VfxWcLxtlXiXJ4
-	Br8unqqz2pNzHrMfs3Lo4tmJkNqfvWbsZVpqvc2ltDTOjz/BHVQwSoBLDrnE+09NLYBiCcaTaD46X
-	0zWStjF4CQF1roTqYkf+hDgO2a4z3Bd07EEMCyPKii9ppu1H5s74Gu+sWSSPZTfOdLKmKeVtDbFOZ
-	duoJs2gTcfZRD7BLfYmjBClAHEIV+i/FylWqJawD7zChbalbZv+ckGxI2KXmpHqxim84tlT9leQjR
-	/dMjqm7A==;
+	bh=5+CNfJBBa99USZB4Xzhgo+c1jKCiUr7CLOmJPPMy31A=; b=EYx527EWbEAbefEoNdISMxGVtB
+	wi0OQbuGL7118gpfZPZNJ3mk7kmml02BmLsROpfqnn61uQNKAjf1p6JCAYh4W0YYh115NwJyvIziv
+	noLJO+QRMOepgRbUoMjBqxsDu/Vx7+9DxpR9VeTvOg8TbE5UPGvaJWoo3bBJQa4ENbjj29qH80PqF
+	tqm0iv0SfI9iFnc63B0ZeQ0HlrRAA3XTFzr9QhkO1NhbxcMLe9HIdZSD5uwdOlS6AlYE11jXJ5iG5
+	CPM16ry6YI6iJMGgXmz385PV41nzwC6IHwos0EUFDvTqpTrhSLaIxWNGarssscuK6PnAa8OxFcblP
+	scRsp0ZA==;
 Received: from viro by zeniv.linux.org.uk with local (Exim 4.99 #2 (Red Hat Linux))
-	id 1vdkav-00000001mnx-2soF;
-	Thu, 08 Jan 2026 07:38:09 +0000
+	id 1vdkax-00000001mqr-2QCD;
+	Thu, 08 Jan 2026 07:38:11 +0000
 From: Al Viro <viro@zeniv.linux.org.uk>
 To: linux-fsdevel@vger.kernel.org
 Cc: torvalds@linux-foundation.org,
@@ -40,9 +40,9 @@ Cc: torvalds@linux-foundation.org,
 	audit@vger.kernel.org,
 	io-uring@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v4 31/59] simplify the callers of alloc_bprm()
-Date: Thu,  8 Jan 2026 07:37:35 +0000
-Message-ID: <20260108073803.425343-32-viro@zeniv.linux.org.uk>
+Subject: [PATCH v4 40/59] chdir(2): unspaghettify a bit...
+Date: Thu,  8 Jan 2026 07:37:44 +0000
+Message-ID: <20260108073803.425343-41-viro@zeniv.linux.org.uk>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260108073803.425343-1-viro@zeniv.linux.org.uk>
 References: <20260108073803.425343-1-viro@zeniv.linux.org.uk>
@@ -55,63 +55,50 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: Al Viro <viro@ftp.linux.org.uk>
 
-alloc_bprm() starts with do_open_execat() and it will do the right
-thing if given ERR_PTR() for name.  Allows to drop such checks in
-its callers...
-
 Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
 ---
- fs/exec.c | 17 +++--------------
- 1 file changed, 3 insertions(+), 14 deletions(-)
+ fs/open.c | 27 ++++++++++-----------------
+ 1 file changed, 10 insertions(+), 17 deletions(-)
 
-diff --git a/fs/exec.c b/fs/exec.c
-index 5b4110c7522e..1473e8c06a8c 100644
---- a/fs/exec.c
-+++ b/fs/exec.c
-@@ -1782,9 +1782,6 @@ static int do_execveat_common(int fd, struct filename *filename,
- 	struct linux_binprm *bprm;
- 	int retval;
- 
--	if (IS_ERR(filename))
--		return PTR_ERR(filename);
+diff --git a/fs/open.c b/fs/open.c
+index 425c09d83d7f..bcaaf884e436 100644
+--- a/fs/open.c
++++ b/fs/open.c
+@@ -558,26 +558,19 @@ SYSCALL_DEFINE1(chdir, const char __user *, filename)
+ 	struct path path;
+ 	int error;
+ 	unsigned int lookup_flags = LOOKUP_FOLLOW | LOOKUP_DIRECTORY;
+-	struct filename *name = getname(filename);
++	CLASS(filename, name)(filename);
+ retry:
+ 	error = filename_lookup(AT_FDCWD, name, lookup_flags, &path, NULL);
+-	if (error)
+-		goto out;
 -
- 	/*
- 	 * We move the actual failure in case of RLIMIT_NPROC excess from
- 	 * set*uid() to execve() because too many poorly written programs
-@@ -1862,7 +1859,6 @@ static int do_execveat_common(int fd, struct filename *filename,
- int kernel_execve(const char *kernel_filename,
- 		  const char *const *argv, const char *const *envp)
- {
--	struct filename *filename;
- 	struct linux_binprm *bprm;
- 	int fd = AT_FDCWD;
- 	int retval;
-@@ -1871,15 +1867,10 @@ int kernel_execve(const char *kernel_filename,
- 	if (WARN_ON_ONCE(current->flags & PF_KTHREAD))
- 		return -EINVAL;
- 
--	filename = getname_kernel(kernel_filename);
--	if (IS_ERR(filename))
--		return PTR_ERR(filename);
+-	error = path_permission(&path, MAY_EXEC | MAY_CHDIR);
+-	if (error)
+-		goto dput_and_out;
 -
-+	CLASS(filename_kernel, filename)(kernel_filename);
- 	bprm = alloc_bprm(fd, filename, 0);
--	if (IS_ERR(bprm)) {
--		retval = PTR_ERR(bprm);
--		goto out_ret;
--	}
-+	if (IS_ERR(bprm))
-+		return PTR_ERR(bprm);
- 
- 	retval = count_strings_kernel(argv);
- 	if (WARN_ON_ONCE(retval == 0))
-@@ -1913,8 +1904,6 @@ int kernel_execve(const char *kernel_filename,
- 	retval = bprm_execve(bprm);
- out_free:
- 	free_bprm(bprm);
--out_ret:
--	putname(filename);
- 	return retval;
+-	set_fs_pwd(current->fs, &path);
+-
+-dput_and_out:
+-	path_put(&path);
+-	if (retry_estale(error, lookup_flags)) {
+-		lookup_flags |= LOOKUP_REVAL;
+-		goto retry;
++	if (!error) {
++		error = path_permission(&path, MAY_EXEC | MAY_CHDIR);
++		if (!error)
++			set_fs_pwd(current->fs, &path);
++		path_put(&path);
++		if (retry_estale(error, lookup_flags)) {
++			lookup_flags |= LOOKUP_REVAL;
++			goto retry;
++		}
+ 	}
+-out:
+-	putname(name);
+ 	return error;
  }
  
 -- 
