@@ -1,34 +1,34 @@
 Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E16E434252D;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7A97342539;
 	Thu,  8 Jan 2026 07:37:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767857823; cv=none; b=KoVFUwY67UXJw3ZRuD3jgV2XeZ/KJnWfKUaZ2YvkZcui3EIe3QudmhSKStP4wFsQp1QiKkgg6vWkTMqC9xfFseTkItoHvijp0uxdjZokcCF7b3luTs/Ba2Rf0Whwb2s5uv3svIqAORmGSh0TC++eUD4OfLlmJ/pakvhqZMwgoeY=
+	t=1767857824; cv=none; b=LwzGBhl9E5xlLzAau+HwsAh9xZFhPd0rotTNzfer8jCgRmG5IFMz1JfPDWBvxlI/JiYmqVqL0ajtcBFdQlt/tHTC0hy/pvcFCH2FFS2HTfpkczHX4N6EBrdXzJ0Nlq5LiXGXuRZpBCad+6r3eUHmViEhXBq9CyaYApjD08dSnss=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767857823; c=relaxed/simple;
-	bh=RZMRszjUY/fIM2JLm9jks2g6cg0EVOixOwmn11+9ZsU=;
+	s=arc-20240116; t=1767857824; c=relaxed/simple;
+	bh=yoBvx7PMTgvFHImcnFs/b/pKX9fsUsb+NkQDY8xLuIA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=pQkC6bLUY3iR6K6aNDV8x/VXErswGzRHCdT4VA2FmZaGDxiiCz3wzP1TTZRh2NwU1mB6ge1IEWS5EEtEf3wgux9f+GPBu+krivdkJc62ySfAivAyOh/FI43PqHKilYLu5sr2qbY7UOKLXrnaryP/IxqklK3wzxmo3jVKtuhzLBk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=aNKdbbg8; arc=none smtp.client-ip=62.89.141.173
+	 MIME-Version; b=kFVWpqU1+p9Q5/+QYf1S+bJPvkjspdnOaznEtn7lP6N1GQlK7l4gP1yQZzZOGQNkc/+ZCEl1lLk/X2Lwfb0d0czifdwIfRCBE0QgKTuy+ZjmqjLZacPoulvKmxHeLFfdFe16xl4kLicbAA2g6mnxYhe/UDgCdXePDS657gEHBSM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=kPjYk4Ku; arc=none smtp.client-ip=62.89.141.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="aNKdbbg8"
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="kPjYk4Ku"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=linux.org.uk; s=zeniv-20220401; h=Sender:Content-Transfer-Encoding:
 	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
 	Reply-To:Content-Type:Content-ID:Content-Description;
-	bh=2HkCXtuYG81yDH2ptlOKycPDQQLzNXbW/SGw7cqaL7M=; b=aNKdbbg8F69mg+KVqWmYxsUMii
-	OGUdUuFdxW+gfU9rBY40iGTrbghF66bOZnpU57JHPYE3+NsODfVEWCDJbYvEWznEyNVhMghAeLnXb
-	lltqo9DcbD00xcQf6vC/7h+2RmTqmLMkaJtO+AQNx0W6nUsfxDVn9wwBHk0m7b3LzLuS4ozEgEt0n
-	5Dk8sYO/UDe5A4ZJAv4Ys92N/SqANBXb7SyU77RpzsMsKlsaSrN32ZnSM3Esnj3+p6+WxCf196hDm
-	RSQ5tV3t0E9czwAVYL2kbda2E1aVtAjLmZHANVX6L0Gu+Cvd7VXl03qGltUxNbr+h5gDy47egWmUf
-	3lofgYsA==;
+	bh=SSzxc7/Hgm5ux3/KUYvEqBQHfG5T2IKzIwi+kql8s1A=; b=kPjYk4KuYODtLNcxf0QT/cwAzP
+	5bsYDO8tac88+CCUDW1OUs2qujwGChRmHzx/IPKYvbqoOleuSP4d0Mq77BK2n6fxamPEaLVAMlxtw
+	l//6jg7eRDjmfHm3YitUdLr0zHx2kAwBpYq9ROKLl2d8Yn8TNWImqJaItitX+2VtSz9l1pWDWLtIz
+	1dQRoCRBJNyzaPNUItIfbmD9HOB3OwzXpHxjoOMyBdJ/NR5HPvdYcmSBbYPVyb8NJn9D9aUye+cVd
+	UPaBRWpZkf/EVFmgq4lesipghKUZHSlCs9xuHTPDIC2elz0WgZkhQJe9IFhkP2gzIKL59GZ/L8Pxw
+	bu+aIeFg==;
 Received: from viro by zeniv.linux.org.uk with local (Exim 4.99 #2 (Red Hat Linux))
-	id 1vdkb1-00000001mwQ-2RQS;
-	Thu, 08 Jan 2026 07:38:15 +0000
+	id 1vdkb1-00000001mx4-45bB;
+	Thu, 08 Jan 2026 07:38:16 +0000
 From: Al Viro <viro@zeniv.linux.org.uk>
 To: linux-fsdevel@vger.kernel.org
 Cc: torvalds@linux-foundation.org,
@@ -40,9 +40,9 @@ Cc: torvalds@linux-foundation.org,
 	audit@vger.kernel.org,
 	io-uring@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v4 57/59] alpha: switch osf_mount() to strndup_user()
-Date: Thu,  8 Jan 2026 07:38:01 +0000
-Message-ID: <20260108073803.425343-58-viro@zeniv.linux.org.uk>
+Subject: [PATCH v4 59/59] switch init_mkdir() to use of do_mkdirat(), etc.
+Date: Thu,  8 Jan 2026 07:38:03 +0000
+Message-ID: <20260108073803.425343-60-viro@zeniv.linux.org.uk>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260108073803.425343-1-viro@zeniv.linux.org.uk>
 References: <20260108073803.425343-1-viro@zeniv.linux.org.uk>
@@ -55,74 +55,155 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: Al Viro <viro@ftp.linux.org.uk>
 
-... same as native mount(2) is doing for devname argument.  While we
-are at it, fix misspelling ufs_args as cdfs_args in osf_ufs_mount() -
-layouts are identical, so it doesn't change anything, but the current
-variant is confusing for no reason.
+Completely straightforward, the only obstacle is do_mknodat() being
+static.
 
 Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
 ---
- arch/alpha/kernel/osf_sys.c | 34 +++++++++++-----------------------
- 1 file changed, 11 insertions(+), 23 deletions(-)
+ fs/init.c     | 88 ++++-----------------------------------------------
+ fs/internal.h |  1 +
+ fs/namei.c    |  2 +-
+ 3 files changed, 8 insertions(+), 83 deletions(-)
 
-diff --git a/arch/alpha/kernel/osf_sys.c b/arch/alpha/kernel/osf_sys.c
-index a08e8edef1a4..7b6543d2cca3 100644
---- a/arch/alpha/kernel/osf_sys.c
-+++ b/arch/alpha/kernel/osf_sys.c
-@@ -454,42 +454,30 @@ static int
- osf_ufs_mount(const char __user *dirname,
- 	      struct ufs_args __user *args, int flags)
- {
--	int retval;
--	struct cdfs_args tmp;
--	struct filename *devname;
-+	struct ufs_args tmp;
-+	char *devname __free(kfree) = NULL;
+diff --git a/fs/init.c b/fs/init.c
+index e0f5429c0a49..da6500d2ee98 100644
+--- a/fs/init.c
++++ b/fs/init.c
+@@ -140,78 +140,19 @@ int __init init_stat(const char *filename, struct kstat *stat, int flags)
  
--	retval = -EFAULT;
- 	if (copy_from_user(&tmp, args, sizeof(tmp)))
--		goto out;
--	devname = getname(tmp.devname);
--	retval = PTR_ERR(devname);
-+		return -EFAULT;
-+	devname = strndup_user(tmp.devname, PATH_MAX);
- 	if (IS_ERR(devname))
--		goto out;
--	retval = do_mount(devname->name, dirname, "ext2", flags, NULL);
--	putname(devname);
-- out:
--	return retval;
-+		return PTR_ERR(devname);
-+	return do_mount(devname, dirname, "ext2", flags, NULL);
+ int __init init_mknod(const char *filename, umode_t mode, unsigned int dev)
+ {
+-	struct dentry *dentry;
+-	struct path path;
+-	int error;
+-
+-	if (S_ISFIFO(mode) || S_ISSOCK(mode))
+-		dev = 0;
+-	else if (!(S_ISBLK(mode) || S_ISCHR(mode)))
+-		return -EINVAL;
+-
+-	dentry = start_creating_path(AT_FDCWD, filename, &path, 0);
+-	if (IS_ERR(dentry))
+-		return PTR_ERR(dentry);
+-
+-	mode = mode_strip_umask(d_inode(path.dentry), mode);
+-	error = security_path_mknod(&path, dentry, mode, dev);
+-	if (!error)
+-		error = vfs_mknod(mnt_idmap(path.mnt), path.dentry->d_inode,
+-				  dentry, mode, new_decode_dev(dev), NULL);
+-	end_creating_path(&path, dentry);
+-	return error;
++	return do_mknodat(AT_FDCWD, getname_kernel(filename), mode, dev);
  }
  
- static int
- osf_cdfs_mount(const char __user *dirname,
- 	       struct cdfs_args __user *args, int flags)
+ int __init init_link(const char *oldname, const char *newname)
  {
--	int retval;
- 	struct cdfs_args tmp;
--	struct filename *devname;
-+	char *devname __free(kfree) = NULL;
- 
--	retval = -EFAULT;
- 	if (copy_from_user(&tmp, args, sizeof(tmp)))
+-	struct dentry *new_dentry;
+-	struct path old_path, new_path;
+-	struct mnt_idmap *idmap;
+-	int error;
+-
+-	error = kern_path(oldname, 0, &old_path);
+-	if (error)
+-		return error;
+-
+-	new_dentry = start_creating_path(AT_FDCWD, newname, &new_path, 0);
+-	error = PTR_ERR(new_dentry);
+-	if (IS_ERR(new_dentry))
 -		goto out;
--	devname = getname(tmp.devname);
--	retval = PTR_ERR(devname);
-+		return -EFAULT;
-+	devname = strndup_user(tmp.devname, PATH_MAX);
- 	if (IS_ERR(devname))
--		goto out;
--	retval = do_mount(devname->name, dirname, "iso9660", flags, NULL);
--	putname(devname);
-- out:
--	return retval;
-+		return PTR_ERR(devname);
-+	return do_mount(devname, dirname, "iso9660", flags, NULL);
+-
+-	error = -EXDEV;
+-	if (old_path.mnt != new_path.mnt)
+-		goto out_dput;
+-	idmap = mnt_idmap(new_path.mnt);
+-	error = may_linkat(idmap, &old_path);
+-	if (unlikely(error))
+-		goto out_dput;
+-	error = security_path_link(old_path.dentry, &new_path, new_dentry);
+-	if (error)
+-		goto out_dput;
+-	error = vfs_link(old_path.dentry, idmap, new_path.dentry->d_inode,
+-			 new_dentry, NULL);
+-out_dput:
+-	end_creating_path(&new_path, new_dentry);
+-out:
+-	path_put(&old_path);
+-	return error;
++	return do_linkat(AT_FDCWD, getname_kernel(oldname),
++			 AT_FDCWD, getname_kernel(newname), 0);
  }
  
- static int
+ int __init init_symlink(const char *oldname, const char *newname)
+ {
+-	struct dentry *dentry;
+-	struct path path;
+-	int error;
+-
+-	dentry = start_creating_path(AT_FDCWD, newname, &path, 0);
+-	if (IS_ERR(dentry))
+-		return PTR_ERR(dentry);
+-	error = security_path_symlink(&path, dentry, oldname);
+-	if (!error)
+-		error = vfs_symlink(mnt_idmap(path.mnt), path.dentry->d_inode,
+-				    dentry, oldname, NULL);
+-	end_creating_path(&path, dentry);
+-	return error;
++	return do_symlinkat(getname_kernel(oldname), AT_FDCWD,
++			    getname_kernel(newname));
+ }
+ 
+ int __init init_unlink(const char *pathname)
+@@ -221,24 +162,7 @@ int __init init_unlink(const char *pathname)
+ 
+ int __init init_mkdir(const char *pathname, umode_t mode)
+ {
+-	struct dentry *dentry;
+-	struct path path;
+-	int error;
+-
+-	dentry = start_creating_path(AT_FDCWD, pathname, &path,
+-				     LOOKUP_DIRECTORY);
+-	if (IS_ERR(dentry))
+-		return PTR_ERR(dentry);
+-	mode = mode_strip_umask(d_inode(path.dentry), mode);
+-	error = security_path_mkdir(&path, dentry, mode);
+-	if (!error) {
+-		dentry = vfs_mkdir(mnt_idmap(path.mnt), path.dentry->d_inode,
+-				  dentry, mode, NULL);
+-		if (IS_ERR(dentry))
+-			error = PTR_ERR(dentry);
+-	}
+-	end_creating_path(&path, dentry);
+-	return error;
++	return do_mkdirat(AT_FDCWD, getname_kernel(pathname), mode);
+ }
+ 
+ int __init init_rmdir(const char *pathname)
+diff --git a/fs/internal.h b/fs/internal.h
+index 5c3e4eac34f2..4c4d2733c47a 100644
+--- a/fs/internal.h
++++ b/fs/internal.h
+@@ -60,6 +60,7 @@ int may_linkat(struct mnt_idmap *idmap, const struct path *link);
+ int do_renameat2(int olddfd, struct filename *oldname, int newdfd,
+ 		 struct filename *newname, unsigned int flags);
+ int do_mkdirat(int dfd, struct filename *name, umode_t mode);
++int do_mknodat(int dfd, struct filename *name, umode_t mode, unsigned int dev);
+ int do_symlinkat(struct filename *from, int newdfd, struct filename *to);
+ int do_linkat(int olddfd, struct filename *old, int newdfd,
+ 			struct filename *new, int flags);
+diff --git a/fs/namei.c b/fs/namei.c
+index cbddd5d44a12..7418a4e725da 100644
+--- a/fs/namei.c
++++ b/fs/namei.c
+@@ -5038,7 +5038,7 @@ static int may_mknod(umode_t mode)
+ 	}
+ }
+ 
+-static int do_mknodat(int dfd, struct filename *__name, umode_t mode,
++int do_mknodat(int dfd, struct filename *__name, umode_t mode,
+ 		unsigned int dev)
+ {
+ 	CLASS(filename_consume, name)(__name);
 -- 
 2.47.3
 
