@@ -1,35 +1,51 @@
-Received: from Chamillionaire.breakpoint.cc (Chamillionaire.breakpoint.cc [91.216.245.30])
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DAC4363C6D;
-	Wed,  7 Jan 2026 15:26:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.216.245.30
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E5DE318BAB;
+	Thu,  8 Jan 2026 07:36:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767799572; cv=none; b=KdWQUiFk7yglLhADWa7FI2pvIR+eBA+CcRg86olHOX1GBgdvxV7bk66qayzko81NsdQrp/t5ptATtOwb0YuHbt9u5AM6HTQP5hgAR8kwJatlh+UAR4DTJZjMOejqALBAERhkz1DeesFUrVC31RtnNuQeAZHLpKpB2jLjYcf/IK8=
+	t=1767857811; cv=none; b=FWF398sMjoKukhCdcXCyVhax6fk88sbZwbw2/FoXe846DRegwmxk+QQXpZL4R4EJfHEjs41zj4BQ/yyksGRWKZTgtNhrPyYjBEhvlmIWVM+d6p9ucy3yCGKqjEPWXh9vd7kz58M48BlPC1Zy7yh7IpQPTzNo75EOoWF3lP8kY2Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767799572; c=relaxed/simple;
-	bh=4tlw2ZrHL7ioVxXGuUPVlPiwyqnTn0tbuztktX8L+EI=;
+	s=arc-20240116; t=1767857811; c=relaxed/simple;
+	bh=IzrgXOT9z6vkgtrPDIdf13q7qyMmn+4ybA/ta0J+TBo=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Gnmo5h4z6nDrwRCRABu20AeIMn818NwVf65nO/AgUb/dUvVwSYzAlYu39jkOpnE+rznY1k/J0D9CgIL/lVwgfPoGC5U4GffIF8ScVnjeZztvHTa98Cs8hVnmhsruYh/DNsW8Ru7hu0wny3h/iSbZvZr5GUtrdDQG/HZ5jabWv1k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=strlen.de; spf=pass smtp.mailfrom=Chamillionaire.breakpoint.cc; arc=none smtp.client-ip=91.216.245.30
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=strlen.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=Chamillionaire.breakpoint.cc
-Received: by Chamillionaire.breakpoint.cc (Postfix, from userid 1003)
-	id 7AC0D602A9; Wed, 07 Jan 2026 16:26:07 +0100 (CET)
-From: Florian Westphal <fw@strlen.de>
-To: <netfilter-devel@vger.kernel.org>
-Cc: jhs@mojatatu.com,
-	xiyou.wangcong@gmail.com,
-	jiri@resnulli.us,
+	 MIME-Version; b=hDoJoaS4BjVcQzS2IOE5JF2RYHo5aoqAhgtBsTGuciRNUysqh0Rj9O0thbNeIdZN3LA+9e/DAfbYOBkGeq6ahC9/ZLHeiNDCKqSSmqeFQTAGRUn5C0oRPvm8P9lZz0LDbAVdpxkdLCky4PFl0CXInmh2YA41sIhECf0ur1SuTh0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=A+BMRwqt; arc=none smtp.client-ip=62.89.141.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="A+BMRwqt"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=linux.org.uk; s=zeniv-20220401; h=Sender:Content-Transfer-Encoding:
+	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
+	Reply-To:Content-Type:Content-ID:Content-Description;
+	bh=qlZnLmrphR+14Jm/ap5jKQC7QyDfASXXE6J1NbaMqlo=; b=A+BMRwqtnlJ73cmnN9eNs7RJ0o
+	AysIJ6pu/KcP3Hwl2pIUrHE4OaAdIoky/uO5JFZks18Zlgt9uXmEMyXNPwQp0167nKjF80z6g2SvD
+	XwLeaYoAQkUXpjZhpEZ3n4ECsG66QHqzq2ePwQ2ogJtzvDz+tj/rs3vTa91EBT6zm1HAuSxqzE1zi
+	31WRWJAcPqkFKqfXDzYRKM1QC+dFKjmzILgv1MxYhlN6xKC2ICv4pABUgMJzwy4UaOiSXA8ckIgb9
+	0XBwDVImyYdH60TqIrJLnmuh9ReqJGuNaXGNHRbzsWQVsQ+TTeAadpOdFZFKy6DmgUIJpk219jIuj
+	aeUm+mTA==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.99 #2 (Red Hat Linux))
+	id 1vdkar-00000001mgf-0JAP;
+	Thu, 08 Jan 2026 07:38:05 +0000
+From: Al Viro <viro@zeniv.linux.org.uk>
+To: linux-fsdevel@vger.kernel.org
+Cc: torvalds@linux-foundation.org,
+	brauner@kernel.org,
+	jack@suse.cz,
+	mjguzik@gmail.com,
+	paul@paul-moore.com,
+	axboe@kernel.dk,
 	audit@vger.kernel.org,
-	bridge@lists.linux.dev,
-	Florian Westphal <fw@strlen.de>
-Subject: [PATCH nf-next 2/2] netfilter: don't include xt and nftables.h in unrelated subsystems
-Date: Wed,  7 Jan 2026 16:24:09 +0100
-Message-ID: <20260107152548.31769-3-fw@strlen.de>
+	io-uring@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v4 11/59] ntfs: ->d_compare() must not block
+Date: Thu,  8 Jan 2026 07:37:15 +0000
+Message-ID: <20260108073803.425343-12-viro@zeniv.linux.org.uk>
 X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260107152548.31769-1-fw@strlen.de>
-References: <20260107152548.31769-1-fw@strlen.de>
+In-Reply-To: <20260108073803.425343-1-viro@zeniv.linux.org.uk>
+References: <20260108073803.425343-1-viro@zeniv.linux.org.uk>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
@@ -37,121 +53,230 @@ List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Sender: Al Viro <viro@ftp.linux.org.uk>
 
-conntrack, xtables and nftables are distinct subsystems, don't use them
-in other subystems.
+... so don't use __getname() there.  Switch it (and ntfs_d_hash(), while
+we are at it) to kmalloc(PATH_MAX, GFP_NOWAIT).  Yes, ntfs_d_hash()
+almost certainly can do with smaller allocations, but let ntfs folks
+deal with that - keep the allocation size as-is for now.
 
-Signed-off-by: Florian Westphal <fw@strlen.de>
+Stop abusing names_cachep in ntfs, period - various uses of that thing
+in there have nothing to do with pathnames; just use k[mz]alloc() and
+be done with that.  For now let's keep sizes as-in, but AFAICS none of
+the users actually want PATH_MAX.
+
+Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
 ---
- include/linux/audit.h                      | 1 -
- include/net/netfilter/nf_conntrack_tuple.h | 2 +-
- include/net/netfilter/nf_tables.h          | 1 -
- net/bridge/netfilter/nf_conntrack_bridge.c | 3 +--
- net/netfilter/nf_conntrack_h323_main.c     | 1 +
- net/netfilter/nf_synproxy_core.c           | 1 +
- net/netfilter/nf_tables_api.c              | 1 +
- net/netfilter/nft_synproxy.c               | 1 +
- 8 files changed, 6 insertions(+), 5 deletions(-)
+ fs/ntfs3/dir.c    |  5 ++---
+ fs/ntfs3/fsntfs.c |  4 ++--
+ fs/ntfs3/inode.c  | 13 ++++++-------
+ fs/ntfs3/namei.c  | 17 ++++++++---------
+ fs/ntfs3/xattr.c  |  5 ++---
+ 5 files changed, 20 insertions(+), 24 deletions(-)
 
-diff --git a/include/linux/audit.h b/include/linux/audit.h
-index 536f8ee8da81..14df25095e19 100644
---- a/include/linux/audit.h
-+++ b/include/linux/audit.h
-@@ -13,7 +13,6 @@
- #include <linux/ptrace.h>
- #include <linux/audit_arch.h>
- #include <uapi/linux/audit.h>
--#include <uapi/linux/netfilter/nf_tables.h>
- #include <uapi/linux/fanotify.h>
+diff --git a/fs/ntfs3/dir.c b/fs/ntfs3/dir.c
+index b98e95d6b4d9..cf038d713f50 100644
+--- a/fs/ntfs3/dir.c
++++ b/fs/ntfs3/dir.c
+@@ -423,8 +423,7 @@ static int ntfs_readdir(struct file *file, struct dir_context *ctx)
+ 	if (!dir_emit_dots(file, ctx))
+ 		return 0;
  
- #define AUDIT_INO_UNSET ((unsigned long)-1)
-diff --git a/include/net/netfilter/nf_conntrack_tuple.h b/include/net/netfilter/nf_conntrack_tuple.h
-index f7dd950ff250..4d55b7325707 100644
---- a/include/net/netfilter/nf_conntrack_tuple.h
-+++ b/include/net/netfilter/nf_conntrack_tuple.h
-@@ -11,7 +11,7 @@
- #ifndef _NF_CONNTRACK_TUPLE_H
- #define _NF_CONNTRACK_TUPLE_H
+-	/* Allocate PATH_MAX bytes. */
+-	name = __getname();
++	name = kmalloc(PATH_MAX, GFP_KERNEL);
+ 	if (!name)
+ 		return -ENOMEM;
  
--#include <linux/netfilter/x_tables.h>
-+#include <linux/netfilter.h>
- #include <linux/netfilter/nf_conntrack_tuple_common.h>
- #include <linux/list_nulls.h>
+@@ -502,7 +501,7 @@ static int ntfs_readdir(struct file *file, struct dir_context *ctx)
  
-diff --git a/include/net/netfilter/nf_tables.h b/include/net/netfilter/nf_tables.h
-index 0e266c2d0e7f..2597077442e5 100644
---- a/include/net/netfilter/nf_tables.h
-+++ b/include/net/netfilter/nf_tables.h
-@@ -6,7 +6,6 @@
- #include <linux/list.h>
- #include <linux/netfilter.h>
- #include <linux/netfilter/nfnetlink.h>
--#include <linux/netfilter/x_tables.h>
- #include <linux/netfilter/nf_tables.h>
- #include <linux/u64_stats_sync.h>
- #include <linux/rhashtable.h>
-diff --git a/net/bridge/netfilter/nf_conntrack_bridge.c b/net/bridge/netfilter/nf_conntrack_bridge.c
-index 6482de4d8750..3b28b84191be 100644
---- a/net/bridge/netfilter/nf_conntrack_bridge.c
-+++ b/net/bridge/netfilter/nf_conntrack_bridge.c
-@@ -16,8 +16,7 @@
- #include <net/netfilter/nf_conntrack_helper.h>
- #include <net/netfilter/nf_conntrack_bridge.h>
+ out:
  
--#include <linux/netfilter/nf_tables.h>
--#include <net/netfilter/nf_tables.h>
-+#include <linux/netfilter_ipv4.h>
+-	__putname(name);
++	kfree(name);
+ 	put_indx_node(node);
  
- #include "../br_private.h"
+ 	if (err == 1) {
+diff --git a/fs/ntfs3/fsntfs.c b/fs/ntfs3/fsntfs.c
+index 5f138f715835..bd67ba7b5015 100644
+--- a/fs/ntfs3/fsntfs.c
++++ b/fs/ntfs3/fsntfs.c
+@@ -2627,7 +2627,7 @@ int ntfs_set_label(struct ntfs_sb_info *sbi, u8 *label, int len)
+ 	u32 uni_bytes;
+ 	struct ntfs_inode *ni = sbi->volume.ni;
+ 	/* Allocate PATH_MAX bytes. */
+-	struct cpu_str *uni = __getname();
++	struct cpu_str *uni = kmalloc(PATH_MAX, GFP_KERNEL);
  
-diff --git a/net/netfilter/nf_conntrack_h323_main.c b/net/netfilter/nf_conntrack_h323_main.c
-index 14f73872f647..17f1f453d481 100644
---- a/net/netfilter/nf_conntrack_h323_main.c
-+++ b/net/netfilter/nf_conntrack_h323_main.c
-@@ -23,6 +23,7 @@
- #include <linux/skbuff.h>
- #include <net/route.h>
- #include <net/ip6_route.h>
-+#include <linux/netfilter_ipv4.h>
- #include <linux/netfilter_ipv6.h>
+ 	if (!uni)
+ 		return -ENOMEM;
+@@ -2671,6 +2671,6 @@ int ntfs_set_label(struct ntfs_sb_info *sbi, u8 *label, int len)
+ 		err = _ni_write_inode(&ni->vfs_inode, 0);
  
- #include <net/netfilter/nf_conntrack.h>
-diff --git a/net/netfilter/nf_synproxy_core.c b/net/netfilter/nf_synproxy_core.c
-index 3fa3f5dfb264..57f57e2fc80a 100644
---- a/net/netfilter/nf_synproxy_core.c
-+++ b/net/netfilter/nf_synproxy_core.c
-@@ -10,6 +10,7 @@
- #include <net/netns/generic.h>
- #include <linux/proc_fs.h>
+ out:
+-	__putname(uni);
++	kfree(uni);
+ 	return err;
+ }
+diff --git a/fs/ntfs3/inode.c b/fs/ntfs3/inode.c
+index 0a9ac5efeb67..edfb973e4e82 100644
+--- a/fs/ntfs3/inode.c
++++ b/fs/ntfs3/inode.c
+@@ -1281,7 +1281,7 @@ int ntfs_create_inode(struct mnt_idmap *idmap, struct inode *dir,
+ 		fa |= FILE_ATTRIBUTE_READONLY;
  
-+#include <linux/netfilter_ipv4.h>
- #include <linux/netfilter_ipv6.h>
- #include <linux/netfilter/nf_synproxy.h>
+ 	/* Allocate PATH_MAX bytes. */
+-	new_de = kmem_cache_zalloc(names_cachep, GFP_KERNEL);
++	new_de = kzalloc(PATH_MAX, GFP_KERNEL);
+ 	if (!new_de) {
+ 		err = -ENOMEM;
+ 		goto out1;
+@@ -1702,7 +1702,7 @@ int ntfs_create_inode(struct mnt_idmap *idmap, struct inode *dir,
+ 	ntfs_mark_rec_free(sbi, ino, false);
  
-diff --git a/net/netfilter/nf_tables_api.c b/net/netfilter/nf_tables_api.c
-index e76af31f6a61..cb606eeadeed 100644
---- a/net/netfilter/nf_tables_api.c
-+++ b/net/netfilter/nf_tables_api.c
-@@ -14,6 +14,7 @@
- #include <linux/rhashtable.h>
- #include <linux/audit.h>
- #include <linux/netfilter.h>
-+#include <linux/netfilter_ipv4.h>
- #include <linux/netfilter/nfnetlink.h>
- #include <linux/netfilter/nf_tables.h>
- #include <net/netfilter/nf_flow_table.h>
-diff --git a/net/netfilter/nft_synproxy.c b/net/netfilter/nft_synproxy.c
-index 5d3e51825985..84d6c79ad889 100644
---- a/net/netfilter/nft_synproxy.c
-+++ b/net/netfilter/nft_synproxy.c
-@@ -7,6 +7,7 @@
- #include <net/netfilter/nf_conntrack.h>
- #include <net/netfilter/nf_conntrack_synproxy.h>
- #include <net/netfilter/nf_synproxy.h>
-+#include <linux/netfilter_ipv4.h>
- #include <linux/netfilter/nf_tables.h>
- #include <linux/netfilter/nf_synproxy.h>
+ out2:
+-	__putname(new_de);
++	kfree(new_de);
+ 	kfree(rp);
  
+ out1:
+@@ -1723,7 +1723,7 @@ int ntfs_link_inode(struct inode *inode, struct dentry *dentry)
+ 	struct NTFS_DE *de;
+ 
+ 	/* Allocate PATH_MAX bytes. */
+-	de = kmem_cache_zalloc(names_cachep, GFP_KERNEL);
++	de = kzalloc(PATH_MAX, GFP_KERNEL);
+ 	if (!de)
+ 		return -ENOMEM;
+ 
+@@ -1737,7 +1737,7 @@ int ntfs_link_inode(struct inode *inode, struct dentry *dentry)
+ 
+ 	err = ni_add_name(ntfs_i(d_inode(dentry->d_parent)), ni, de);
+ out:
+-	__putname(de);
++	kfree(de);
+ 	return err;
+ }
+ 
+@@ -1760,8 +1760,7 @@ int ntfs_unlink_inode(struct inode *dir, const struct dentry *dentry)
+ 	if (ntfs_is_meta_file(sbi, ni->mi.rno))
+ 		return -EINVAL;
+ 
+-	/* Allocate PATH_MAX bytes. */
+-	de = kmem_cache_zalloc(names_cachep, GFP_KERNEL);
++	de = kzalloc(PATH_MAX, GFP_KERNEL);
+ 	if (!de)
+ 		return -ENOMEM;
+ 
+@@ -1797,7 +1796,7 @@ int ntfs_unlink_inode(struct inode *dir, const struct dentry *dentry)
+ 
+ out:
+ 	ni_unlock(ni);
+-	__putname(de);
++	kfree(de);
+ 	return err;
+ }
+ 
+diff --git a/fs/ntfs3/namei.c b/fs/ntfs3/namei.c
+index 3b24ca02de61..b2af8f695e60 100644
+--- a/fs/ntfs3/namei.c
++++ b/fs/ntfs3/namei.c
+@@ -68,7 +68,7 @@ static struct dentry *ntfs_lookup(struct inode *dir, struct dentry *dentry,
+ 				  u32 flags)
+ {
+ 	struct ntfs_inode *ni = ntfs_i(dir);
+-	struct cpu_str *uni = __getname();
++	struct cpu_str *uni = kmalloc(PATH_MAX, GFP_KERNEL);
+ 	struct inode *inode;
+ 	int err;
+ 
+@@ -85,7 +85,7 @@ static struct dentry *ntfs_lookup(struct inode *dir, struct dentry *dentry,
+ 			inode = dir_search_u(dir, uni, NULL);
+ 			ni_unlock(ni);
+ 		}
+-		__putname(uni);
++		kfree(uni);
+ 	}
+ 
+ 	/*
+@@ -303,8 +303,7 @@ static int ntfs_rename(struct mnt_idmap *idmap, struct inode *dir,
+ 			return err;
+ 	}
+ 
+-	/* Allocate PATH_MAX bytes. */
+-	de = __getname();
++	de = kmalloc(PATH_MAX, GFP_KERNEL);
+ 	if (!de)
+ 		return -ENOMEM;
+ 
+@@ -349,7 +348,7 @@ static int ntfs_rename(struct mnt_idmap *idmap, struct inode *dir,
+ 	ni_unlock(ni);
+ 	ni_unlock(dir_ni);
+ out:
+-	__putname(de);
++	kfree(de);
+ 	return err;
+ }
+ 
+@@ -407,7 +406,7 @@ static int ntfs_d_hash(const struct dentry *dentry, struct qstr *name)
+ 	/*
+ 	 * Try slow way with current upcase table
+ 	 */
+-	uni = kmem_cache_alloc(names_cachep, GFP_NOWAIT);
++	uni = kmalloc(PATH_MAX, GFP_NOWAIT);
+ 	if (!uni)
+ 		return -ENOMEM;
+ 
+@@ -429,7 +428,7 @@ static int ntfs_d_hash(const struct dentry *dentry, struct qstr *name)
+ 	err = 0;
+ 
+ out:
+-	kmem_cache_free(names_cachep, uni);
++	kfree(uni);
+ 	return err;
+ }
+ 
+@@ -468,7 +467,7 @@ static int ntfs_d_compare(const struct dentry *dentry, unsigned int len1,
+ 	 * Try slow way with current upcase table
+ 	 */
+ 	sbi = dentry->d_sb->s_fs_info;
+-	uni1 = __getname();
++	uni1 = kmalloc(PATH_MAX, GFP_NOWAIT);
+ 	if (!uni1)
+ 		return -ENOMEM;
+ 
+@@ -498,7 +497,7 @@ static int ntfs_d_compare(const struct dentry *dentry, unsigned int len1,
+ 	ret = !ntfs_cmp_names_cpu(uni1, uni2, sbi->upcase, false) ? 0 : 1;
+ 
+ out:
+-	__putname(uni1);
++	kfree(uni1);
+ 	return ret;
+ }
+ 
+diff --git a/fs/ntfs3/xattr.c b/fs/ntfs3/xattr.c
+index c93df55e98d0..f3bb2c41c000 100644
+--- a/fs/ntfs3/xattr.c
++++ b/fs/ntfs3/xattr.c
+@@ -556,8 +556,7 @@ struct posix_acl *ntfs_get_acl(struct mnt_idmap *idmap, struct dentry *dentry,
+ 	if (unlikely(is_bad_ni(ni)))
+ 		return ERR_PTR(-EINVAL);
+ 
+-	/* Allocate PATH_MAX bytes. */
+-	buf = __getname();
++	buf = kmalloc(PATH_MAX, GFP_KERNEL);
+ 	if (!buf)
+ 		return ERR_PTR(-ENOMEM);
+ 
+@@ -588,7 +587,7 @@ struct posix_acl *ntfs_get_acl(struct mnt_idmap *idmap, struct dentry *dentry,
+ 	if (!IS_ERR(acl))
+ 		set_cached_acl(inode, type, acl);
+ 
+-	__putname(buf);
++	kfree(buf);
+ 
+ 	return acl;
+ }
 -- 
-2.52.0
+2.47.3
 
