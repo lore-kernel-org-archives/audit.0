@@ -1,34 +1,34 @@
 Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 841B531ED76;
-	Thu,  8 Jan 2026 07:36:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AB6D328B6A;
+	Thu,  8 Jan 2026 07:36:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767857818; cv=none; b=nnbYS/8hS09UFNlVppNec8xn8ArpH8zI8wRbGKcIRbgSDPcVYKYIlxEA7N1mak07pIdkngmG9mNoq5u7D9IDnexmQk0QoyUPjYbtMpGKJlssDAvOrheghZLA0Qlbm1K4AFGzJagH6dHQ7lYwYEYQt1wedbFhrw0KTv8KctGAnWs=
+	t=1767857820; cv=none; b=pnkbDkJKUlUq7UuUUKMbRJKBrCE/Qk46QpxUmd/txsxgsZlsb4erq0KA31F9Qa8exZXwLcXtzl+hmpUUaq7UlWgV8QtbVV4EU/ZdSjEAsor/coXNBy+gS0LJqQb062/Zo9L0WdWRs41grdvNgq1e2ke9pC8tTafmyVc0NaxRdKA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767857818; c=relaxed/simple;
-	bh=QmdvDh6ZC+vTUW7I+/3NR1ZSyfxcvYqlL1sBR3JZVe0=;
+	s=arc-20240116; t=1767857820; c=relaxed/simple;
+	bh=Lw6fkolzG2z+rslNz1/IkWVTRMaQxHK9deworNvUlPI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=FIt3LajDFVgMDAVSlu/eZGaSCu3ooN/WE8g/AHco7o3ZqdIkeHfxnSt6qeOvlDLTF6Io6ZkyyTfNM/Aw5mCzjRUE8VgxqedsALROlA6CNsnCOfX091/bROGQKfAJEsRk6wijLWrRbUhNI58G/1zCrC8z+690V5ymM37EdRXWFJ8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=rNbEzKHo; arc=none smtp.client-ip=62.89.141.173
+	 MIME-Version; b=Hua7ECkvvgnjraHx/wF4Eyu4MBX2JykyQ4DaQ+K/zok04ic+snD3EROZeE2iNYO7DFpAeFaedl+Zn/z0OoH0kwqEi6h2S3CiNayNDMYtEtzx1+fV+4Ipezyc90awwy3h0CcyW9/DWlrEmhXjikyNUuh7XLcCvc1b+ObZRlFaXL8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=pjqJFXxr; arc=none smtp.client-ip=62.89.141.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="rNbEzKHo"
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="pjqJFXxr"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=linux.org.uk; s=zeniv-20220401; h=Sender:Content-Transfer-Encoding:
 	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
 	Reply-To:Content-Type:Content-ID:Content-Description;
-	bh=Y/tgOGIFg+4nJnG3/oUX+72381wYKpaNlwOXFe6p+iM=; b=rNbEzKHoED2LBnJuMjeY59GeIC
-	gWoLatI0Wox7thSh7HQKaelv45HzjzSnWcyQJ5bXBv9l63I33jV8xpQmrXH1GzS6vmnUzqxAA7NQ1
-	4eCjN8m5DARYlhw/9P/cuhv+0GNNdmqnbhAxoQGcEsUyj/8jFPodZ9TJmmMAbjhaHSfuDcctmALOW
-	C9RuNxNbKNNPl0ygTJR94D2Kx4dsh7Ra/oczoNtpUic15oOC2SN7wE/EnFAe/4oqs83frWoIAoYau
-	VOaeEMSZFlimKLTA26Y618Z9rRAt70bzWc8JGCJb7BGi0/ipt/fcOqW+JKY3upyJqLkrCg7YwDOV+
-	J0DHUWJw==;
+	bh=XXA+defR+SzZCm3KczoEbpd9A4VhKcPk/m8STTG/ds8=; b=pjqJFXxr3U6maPKBqwZblsmDK2
+	dCDVfMRVThN/71vCW7e28QX2GCoL2IpZYERerXnd8edSnDxXYJVw9XhHlUliAv7XQwCRhWThnFRLz
+	L6Kq7vWgJVgDLX1UJWzudMXCL9JKHARzP7/v6tg65MuDe0bXGvv46WQW+bkhsc0GpO4qeUQ6AEp+7
+	8UEQFOLrkZGK8b0ANSWQejIPyGOUs2pzG5b6GQKJj5J8LWL9Qx84shbTtLeq0VmLDz3hvqgF14p28
+	9uqE7dL94oJJ/YxeTKBCM7zT80/gvPmKWUDOJ1LqXDp3In3GWcxhBZ6hiqRxNd7ibIEgg9DVmBd9G
+	1b9NqXFQ==;
 Received: from viro by zeniv.linux.org.uk with local (Exim 4.99 #2 (Red Hat Linux))
-	id 1vdkar-00000001mhV-2H4I;
-	Thu, 08 Jan 2026 07:38:05 +0000
+	id 1vdkax-00000001mqG-0waR;
+	Thu, 08 Jan 2026 07:38:11 +0000
 From: Al Viro <viro@zeniv.linux.org.uk>
 To: linux-fsdevel@vger.kernel.org
 Cc: torvalds@linux-foundation.org,
@@ -40,9 +40,9 @@ Cc: torvalds@linux-foundation.org,
 	audit@vger.kernel.org,
 	io-uring@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v4 13/59] getname_flags() massage, part 2
-Date: Thu,  8 Jan 2026 07:37:17 +0000
-Message-ID: <20260108073803.425343-14-viro@zeniv.linux.org.uk>
+Subject: [PATCH v4 38/59] fspick(2): use CLASS(filename_flags)
+Date: Thu,  8 Jan 2026 07:37:42 +0000
+Message-ID: <20260108073803.425343-39-viro@zeniv.linux.org.uk>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260108073803.425343-1-viro@zeniv.linux.org.uk>
 References: <20260108073803.425343-1-viro@zeniv.linux.org.uk>
@@ -55,90 +55,31 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: Al Viro <viro@ftp.linux.org.uk>
 
-Take the "long name" case into a helper (getname_long()). In
-case of failure have the caller deal with freeing the original
-struct filename.
+That kills the last place where we mix LOOKUP_EMPTY with lookup
+flags proper.
 
 Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
 ---
- fs/namei.c | 56 ++++++++++++++++++++++++++++--------------------------
- 1 file changed, 29 insertions(+), 27 deletions(-)
+ fs/fsopen.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/fs/namei.c b/fs/namei.c
-index ea7efbddc7f4..471e4db2dbdb 100644
---- a/fs/namei.c
-+++ b/fs/namei.c
-@@ -131,6 +131,32 @@ static inline void initname(struct filename *name)
- 	atomic_set(&name->refcnt, 1);
- }
+diff --git a/fs/fsopen.c b/fs/fsopen.c
+index f645c99204eb..70f4ab183c9e 100644
+--- a/fs/fsopen.c
++++ b/fs/fsopen.c
+@@ -181,9 +181,9 @@ SYSCALL_DEFINE3(fspick, int, dfd, const char __user *, path, unsigned int, flags
+ 		lookup_flags &= ~LOOKUP_FOLLOW;
+ 	if (flags & FSPICK_NO_AUTOMOUNT)
+ 		lookup_flags &= ~LOOKUP_AUTOMOUNT;
+-	if (flags & FSPICK_EMPTY_PATH)
+-		lookup_flags |= LOOKUP_EMPTY;
+-	ret = user_path_at(dfd, path, lookup_flags, &target);
++	CLASS(filename_flags, filename)(path,
++			 (flags & FSPICK_EMPTY_PATH) ? LOOKUP_EMPTY : 0);
++	ret = filename_lookup(dfd, filename, lookup_flags, &target, NULL);
+ 	if (ret < 0)
+ 		goto err;
  
-+static struct filename *getname_long(struct filename *old,
-+				     const char __user *filename)
-+{
-+	int len;
-+	/*
-+	 * size is chosen that way we to guarantee that
-+	 * p->iname[0] is within the same object and that
-+	 * p->name can't be equal to p->iname, no matter what.
-+	 */
-+	const size_t size = offsetof(struct filename, iname[1]);
-+	struct filename *p __free(kfree) = kzalloc(size, GFP_KERNEL);
-+	if (unlikely(!p))
-+		return ERR_PTR(-ENOMEM);
-+
-+	memmove(old, &old->iname, EMBEDDED_NAME_MAX);
-+	p->name = (char *)old;
-+	len = strncpy_from_user((char *)old + EMBEDDED_NAME_MAX,
-+				filename + EMBEDDED_NAME_MAX,
-+				PATH_MAX - EMBEDDED_NAME_MAX);
-+	if (unlikely(len < 0))
-+		return ERR_PTR(len);
-+	if (unlikely(len == PATH_MAX - EMBEDDED_NAME_MAX))
-+		return ERR_PTR(-ENAMETOOLONG);
-+	return no_free_ptr(p);
-+}
-+
- struct filename *
- getname_flags(const char __user *filename, int flags)
- {
-@@ -173,34 +199,10 @@ getname_flags(const char __user *filename, int flags)
- 	 * userland.
- 	 */
- 	if (unlikely(len == EMBEDDED_NAME_MAX)) {
--		const size_t size = offsetof(struct filename, iname[1]);
--		struct filename *p;
--
--		/*
--		 * size is chosen that way we to guarantee that
--		 * result->iname[0] is within the same object and that
--		 * kname can't be equal to result->iname, no matter what.
--		 */
--		p = kzalloc(size, GFP_KERNEL);
--		if (unlikely(!p)) {
--			__putname(result);
--			return ERR_PTR(-ENOMEM);
--		}
--		memmove(result, &result->iname, EMBEDDED_NAME_MAX);
--		kname = (char *)result;
--		p->name = kname;
--		len = strncpy_from_user(kname + EMBEDDED_NAME_MAX,
--					filename + EMBEDDED_NAME_MAX,
--					PATH_MAX - EMBEDDED_NAME_MAX);
--		if (unlikely(len < 0)) {
--			kfree(p);
--			__putname(result);
--			return ERR_PTR(len);
--		}
--		if (unlikely(len == PATH_MAX - EMBEDDED_NAME_MAX)) {
--			kfree(p);
-+		struct filename *p = getname_long(result, filename);
-+		if (IS_ERR(p)) {
- 			__putname(result);
--			return ERR_PTR(-ENAMETOOLONG);
-+			return p;
- 		}
- 		result = p;
- 	}
 -- 
 2.47.3
 
