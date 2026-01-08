@@ -1,34 +1,34 @@
 Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3E5B33BBC6;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0092133BBD1;
 	Thu,  8 Jan 2026 07:36:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767857819; cv=none; b=PVOqfmoLThFe9VWomVNLnK6DLxiDV87TFv+fC6ggJUIm1aVQHM6wgp9JQ+8zzVpSEKX+a/XpAZw1I3RKX2GSysutabKy7h1cRXscU6U0c9VJaQW/TIb7MpMJYaDiUHT62Ly45iuO+NDkVTrjYwYTF2Gw2J1G0nsX/Mv7fwJZQQk=
+	t=1767857819; cv=none; b=Z0Ipg9o0O5ZTgcRnSVaYz1pO78g+7+YoTnvd0av6va4RAWFNO7cghLu6BvBAEMG4C5Nl37nHxQfoWCuZCnfykNtkkVCB+znVP8mvi14NW2gk4/G2UKsOPghUnyHGkPkGhSs/0Alxo33+SaBSJhe1EYWd5qEYr0OYECcwcee4zxY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1767857819; c=relaxed/simple;
-	bh=1T9eJEuB6l9T+/4WSvz0MwkQ6ZS9+2XOjVOn7L1MH44=;
+	bh=ntStfDefI1LSk8YKGruB1ETOnK4upEIT64zjyBPt37E=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=EB6o6l0YiXizzC+VL/LqHfvpq4thXsa8APK+lqgtiRZGrD2RxzB+hHxqGMx2y9U6/cUb+IBGYTj0HuLUKxA/mEOcYd86MrMi81MthWqUdDb73Sm4qgpRLTjBAi6haKg34Im8sGrG0bS0R9if1sb1tA4wlP3LVdSsOxKsrhrax64=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=p0YYE3vp; arc=none smtp.client-ip=62.89.141.173
+	 MIME-Version; b=GTzhjRE3PZlBMW/2sLL0YATjt5LUFntuutLuuCRTDmOYZTIq6gi7y96msuIHzX4wpDmyX/tgiIZE7WcOPd1VjbA8W+FfVeKuO4J4GYpocHhMw5tRju4TX/fxSqrFO1OXNhKmS3OVDwComzONB6Hlg4ux9tE6xIUBTcX2tRQxzEs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=csE62p9B; arc=none smtp.client-ip=62.89.141.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="p0YYE3vp"
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="csE62p9B"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=linux.org.uk; s=zeniv-20220401; h=Sender:Content-Transfer-Encoding:
 	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
 	Reply-To:Content-Type:Content-ID:Content-Description;
-	bh=KpWOI8XMVeq41RdiPMuRug/lWmTpOFPv9An76fDH+Fk=; b=p0YYE3vpRqG1p2Bq/s+8iqSL+s
-	WYyQWit/Ix+IOXG3jRJMaiA0wXcrqQbgfOI1t9Lwlx4IfazsLIQdMP3Gtg+jn4WxCJkHDLW7m987m
-	K7Go/4T2LSqSGRLyvIUWs6xJ5lOIgy4HCfJ8xvtF0hkS1V1PqcmGvHlU0Kf99uSZjRhzE4BV80yIS
-	aktXyKRWQ5RHjgpHobti4P8N7CqXDZfLZpvDxpRUEDhsuzFw8t5DUic55sjFFF4DphIMrq6JHziMU
-	jC62wOTaUXwEm7+XHH5Ahkb0aFcqxFonBwf/ol9g939eV3EOcBdILxUfpn48So3My8Ni1c5jA9iyV
-	+BI8z96g==;
+	bh=qCNNGL7/AcB8NbftVI2+HUXdppTuzbETXECNk4eIw2k=; b=csE62p9BakBwVfZvoBMipvMz+b
+	lqUbpqq1KUku8pfFJJw7Nnacfpa2g2oFjYT6kZHLGmttO7+QrFAq6Lg1/aucYnt87vQ95ESTV6JSp
+	CJYPqNmOXhkrWdfCr77P8qijYeSwVSFqft6cliZt7pFWCF8wsj70OOiseUjMZiKqqbz+JYf/Pw03J
+	q+n2LSVXOAMZLWkYY19xmpqwQiBX7WHlOgXKYyqpo3CXC/8BQ987ojdWUUAqfIcB3ErHyG8oyOTzb
+	MwS2YIK15SX1Fc+20gIqA/7olVaH8f28Qpjs46MXd5NlZJFt1WchnXibTWRB1Va1PCNAS/lsftxi6
+	BH+/pa/A==;
 Received: from viro by zeniv.linux.org.uk with local (Exim 4.99 #2 (Red Hat Linux))
-	id 1vdkav-00000001moK-3eTu;
-	Thu, 08 Jan 2026 07:38:09 +0000
+	id 1vdkax-00000001mpy-0992;
+	Thu, 08 Jan 2026 07:38:11 +0000
 From: Al Viro <viro@zeniv.linux.org.uk>
 To: linux-fsdevel@vger.kernel.org
 Cc: torvalds@linux-foundation.org,
@@ -40,9 +40,9 @@ Cc: torvalds@linux-foundation.org,
 	audit@vger.kernel.org,
 	io-uring@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v4 33/59] file_[gs]etattr(2): switch to CLASS(filename_maybe_null)
-Date: Thu,  8 Jan 2026 07:37:37 +0000
-Message-ID: <20260108073803.425343-34-viro@zeniv.linux.org.uk>
+Subject: [PATCH v4 37/59] name_to_handle_at(): use CLASS(filename_uflags)
+Date: Thu,  8 Jan 2026 07:37:41 +0000
+Message-ID: <20260108073803.425343-38-viro@zeniv.linux.org.uk>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260108073803.425343-1-viro@zeniv.linux.org.uk>
 References: <20260108073803.425343-1-viro@zeniv.linux.org.uk>
@@ -57,47 +57,25 @@ Sender: Al Viro <viro@ftp.linux.org.uk>
 
 Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
 ---
- fs/file_attr.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ fs/fhandle.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/fs/file_attr.c b/fs/file_attr.c
-index f44ce46e1411..42721427245a 100644
---- a/fs/file_attr.c
-+++ b/fs/file_attr.c
-@@ -374,7 +374,6 @@ SYSCALL_DEFINE5(file_getattr, int, dfd, const char __user *, filename,
- 		unsigned int, at_flags)
- {
- 	struct path filepath __free(path_put) = {};
--	struct filename *name __free(putname) = NULL;
- 	unsigned int lookup_flags = 0;
- 	struct file_attr fattr;
- 	struct file_kattr fa;
-@@ -395,7 +394,7 @@ SYSCALL_DEFINE5(file_getattr, int, dfd, const char __user *, filename,
- 	if (usize < FILE_ATTR_SIZE_VER0)
- 		return -EINVAL;
+diff --git a/fs/fhandle.c b/fs/fhandle.c
+index 3de1547ec9d4..e15bcf4b0b23 100644
+--- a/fs/fhandle.c
++++ b/fs/fhandle.c
+@@ -157,9 +157,8 @@ SYSCALL_DEFINE5(name_to_handle_at, int, dfd, const char __user *, name,
+ 		fh_flags |= EXPORT_FH_CONNECTABLE;
  
--	name = getname_maybe_null(filename, at_flags);
-+	CLASS(filename_maybe_null, name)(filename, at_flags);
- 	if (!name && dfd >= 0) {
- 		CLASS(fd, f)(dfd);
- 		if (fd_empty(f))
-@@ -428,7 +427,6 @@ SYSCALL_DEFINE5(file_setattr, int, dfd, const char __user *, filename,
- 		unsigned int, at_flags)
- {
- 	struct path filepath __free(path_put) = {};
--	struct filename *name __free(putname) = NULL;
- 	unsigned int lookup_flags = 0;
- 	struct file_attr fattr;
- 	struct file_kattr fa;
-@@ -458,7 +456,7 @@ SYSCALL_DEFINE5(file_setattr, int, dfd, const char __user *, filename,
- 	if (error)
- 		return error;
- 
--	name = getname_maybe_null(filename, at_flags);
-+	CLASS(filename_maybe_null, name)(filename, at_flags);
- 	if (!name && dfd >= 0) {
- 		CLASS(fd, f)(dfd);
- 		if (fd_empty(f))
+ 	lookup_flags = (flag & AT_SYMLINK_FOLLOW) ? LOOKUP_FOLLOW : 0;
+-	if (flag & AT_EMPTY_PATH)
+-		lookup_flags |= LOOKUP_EMPTY;
+-	err = user_path_at(dfd, name, lookup_flags, &path);
++	CLASS(filename_uflags, filename)(name, flag);
++	err = filename_lookup(dfd, filename, lookup_flags, &path, NULL);
+ 	if (!err) {
+ 		err = do_sys_name_to_handle(&path, handle, mnt_id,
+ 					    flag & AT_HANDLE_MNT_ID_UNIQUE,
 -- 
 2.47.3
 
