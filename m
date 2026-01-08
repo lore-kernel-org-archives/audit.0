@@ -1,34 +1,34 @@
 Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95AF6322C73;
-	Thu,  8 Jan 2026 07:36:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8276D3009EA;
+	Thu,  8 Jan 2026 07:36:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767857814; cv=none; b=uN74emOq4n6VZmGF8chkXuXUNHqK/TlNGyj2dmiPl7JjGsRFUqOhI934VP778MO/C0RC3OBb0LRWzJu23pVxTlrlzzyhLYfViiThMyau+fFsq31dvpu6h/T7ZPi4D120OoLngqpYCFgK9rBAaZlPCUDDqewOTsAffv+XN6Yp46I=
+	t=1767857812; cv=none; b=oiULkc8lz+tAVY4tseethdDZOWQUpzXaC0apLkSrRQx6LNJTxCzRxCtPzNWQwblooBAsTT5/PxiVQ+gox91tHZLPNHuEjwyXquFdw/XSIPWutJgV41JRJDaEuL2vtY2VxsQzCG/YsPYopFSgwXJCE20LBvsqPYZZs7ojVQouogQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767857814; c=relaxed/simple;
-	bh=F9Ac51sayJ3ZUx8voNJfIEbzwWMQM6cAMJSzRwkhDxA=;
+	s=arc-20240116; t=1767857812; c=relaxed/simple;
+	bh=aacmgBkIekWcKT1nYvHuUWkKevrQq3dWCTP/f16lQvY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=UznGott4TnqjXhJPzcrGsZ4KEKKi+Wj460VOvfXg+uiYulW/mzh7V6LMthRgvgIzvwv950ieS9jD0oDmTiUSCDqOc/+B4ou7pHgqdqH0vADlEUxhr2clPyCbe8M1cFn5QclWzDtV1lLDmSN1OqwCU7Ri39WliR94g6IyZgTtvrI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=r1/6tcBq; arc=none smtp.client-ip=62.89.141.173
+	 MIME-Version; b=X0l+AcLMy84W9iET18n/D9ZTeRL/rWBoY7Ax9RPrxdGkXlLlVY3D9gtIfMYtdG+7TDluKMOkepUPuGboWKnreHvJA8xrH+7wUtItDTr/McvMzHUMGFEuGaBjuwmGBXlHH8Q/Cl7jP8oHJ0HXR621S+/NtH57rH2ybxFwRJBLg4w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=eVbC3rfh; arc=none smtp.client-ip=62.89.141.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="r1/6tcBq"
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="eVbC3rfh"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=linux.org.uk; s=zeniv-20220401; h=Sender:Content-Transfer-Encoding:
 	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
 	Reply-To:Content-Type:Content-ID:Content-Description;
-	bh=4+7lHyvfxwviiKYkc+HLIxJ+YC5af7rIWX4pEtm/rr4=; b=r1/6tcBqrDyiHKEarhjjQZLaw4
-	KagvvqyybGRa8WBROKoCjJ6PSI7DO5kBs0GmZqPtAfrk8lsjCU9jyhQ0i6CP+VF671e1PQy6YiwOH
-	hNv1I8Nxq3r7XVuYKRx10MPqnleUJbTLatnZpZgjTJrsYLq4gUS35/mSJmLVmIs45Lrzg/Z5Hn+Yj
-	eKZOwAzf9ZJ98ZdHpQJbegBLxqMrPDnlUymMJlt9nMwlvT2vLleOZXEy5phpN8+BmJYTE542X2deh
-	+3x8ugdhajaRkOk0ZibW3QPaPnqxQ1d7m+Sayz9/7lgciG4epl/uxUshlMs8Dyl2n4N/i9DW2dXUn
-	6pE2Ftlw==;
+	bh=F3fmLDfzzCSFX0fX01qQzZyvJwhOF7I5P+jzcyU8rOk=; b=eVbC3rfhhSMSp5hiAGmtYMW32W
+	/CwPQeXZxT48jFZL0oA1H36B3324pzmjp7u+ngUvtNl4XXDHvoMgGMtU2BAeUI0wqHBg872E21Y5n
+	zUSn2o5Wm+LSIgQgBFV2oRATIC9UMX2ceuakIGztdvOL30GS/GGjOR+2dseFwfO9LjETGDss+tSMZ
+	I/f4HZ7A0qE46hp0LX6rfc3e3i8PhwnuaS6TNLiDqMaa7E7VYvqbBcKHv2jR10aYAWNAGdXNFfoZA
+	DVZZpwMrICAzPRZ2Q+vfruxqEWXBpowZ54VlkP77SEyBgE0AYtMgfrKncyyAEXArkdyaVilj+Dw1d
+	cECwoEfg==;
 Received: from viro by zeniv.linux.org.uk with local (Exim 4.99 #2 (Red Hat Linux))
-	id 1vdkas-00000001mim-1YK7;
-	Thu, 08 Jan 2026 07:38:06 +0000
+	id 1vdkap-00000001mem-3PmX;
+	Thu, 08 Jan 2026 07:38:03 +0000
 From: Al Viro <viro@zeniv.linux.org.uk>
 To: linux-fsdevel@vger.kernel.org
 Cc: torvalds@linux-foundation.org,
@@ -40,9 +40,9 @@ Cc: torvalds@linux-foundation.org,
 	audit@vger.kernel.org,
 	io-uring@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v4 14/59] struct filename: use names_cachep only for getname() and friends
-Date: Thu,  8 Jan 2026 07:37:18 +0000
-Message-ID: <20260108073803.425343-15-viro@zeniv.linux.org.uk>
+Subject: [PATCH v4 01/59] do_faccessat(): import pathname only once
+Date: Thu,  8 Jan 2026 07:37:05 +0000
+Message-ID: <20260108073803.425343-2-viro@zeniv.linux.org.uk>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260108073803.425343-1-viro@zeniv.linux.org.uk>
 References: <20260108073803.425343-1-viro@zeniv.linux.org.uk>
@@ -55,196 +55,64 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: Al Viro <viro@ftp.linux.org.uk>
 
-        Instances of struct filename come from names_cachep (via
-__getname()).  That is done by getname_flags() and getname_kernel()
-and these two are the main callers of __getname().  However, there are
-other callers that simply want to allocate PATH_MAX bytes for uses that
-have nothing to do with struct filename.
+Convert the user_path_at() call inside a retry loop into getname_flags() +
+filename_lookup() + putname() and leave only filename_lookup() inside
+the loop.
 
-	We want saner allocation rules for long pathnames, so that struct
-filename would *always* come from names_cachep, with the out-of-line
-pathname getting kmalloc'ed.  For that we need to be able to change the
-size of objects allocated by getname_flags()/getname_kernel().
+Since we have the default logics for use of LOOKUP_EMPTY (passed iff
+AT_EMPTY_PATH is present in flags), just use getname_uflags() and
+don't bother with setting LOOKUP_EMPTY in lookup_flags - getname_uflags()
+will pass the right thing to getname_flags() and filename_lookup()
+doesn't care about LOOKUP_EMPTY at all.
 
-	That requires the rest of __getname() users to stop using
-names_cachep; we could explicitly switch all of those to kmalloc(),
-but that would cause quite a bit of noise.  So the plan is to switch
-getname_...() to new helpers and turn __getname() into a wrapper for
-kmalloc().  Remaining __getname() users could be converted to explicit
-kmalloc() at leisure, hopefully along with figuring out what size do
-they really want - PATH_MAX is an overkill for some of them, used out
-of laziness ("we have a convenient helper that does 4K allocations and
-that's large enough, let's use it").
-
-	As a side benefit, names_cachep is no longer used outside
-of fs/namei.c, so we can move it there and be done with that.
+The things could be further simplified by use of cleanup.h stuff, but
+let's not clutter the patch with that.
 
 Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
 ---
- fs/dcache.c        |  8 +-------
- fs/internal.h      |  2 ++
- fs/namei.c         | 37 ++++++++++++++++++++++++++++---------
- include/linux/fs.h |  6 ++----
- 4 files changed, 33 insertions(+), 20 deletions(-)
+ fs/open.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/fs/dcache.c b/fs/dcache.c
-index dc2fff4811d1..cf865c12cdf9 100644
---- a/fs/dcache.c
-+++ b/fs/dcache.c
-@@ -3290,10 +3290,6 @@ static void __init dcache_init(void)
- 	runtime_const_init(ptr, dentry_hashtable);
- }
+diff --git a/fs/open.c b/fs/open.c
+index f328622061c5..f3bacc583ef0 100644
+--- a/fs/open.c
++++ b/fs/open.c
+@@ -468,6 +468,7 @@ static int do_faccessat(int dfd, const char __user *filename, int mode, int flag
+ 	int res;
+ 	unsigned int lookup_flags = LOOKUP_FOLLOW;
+ 	const struct cred *old_cred = NULL;
++	struct filename *name;
  
--/* SLAB cache for __getname() consumers */
--struct kmem_cache *names_cachep __ro_after_init;
--EXPORT_SYMBOL(names_cachep);
--
- void __init vfs_caches_init_early(void)
- {
- 	int i;
-@@ -3307,9 +3303,7 @@ void __init vfs_caches_init_early(void)
+ 	if (mode & ~S_IRWXO)	/* where's F_OK, X_OK, W_OK, R_OK? */
+ 		return -EINVAL;
+@@ -477,8 +478,6 @@ static int do_faccessat(int dfd, const char __user *filename, int mode, int flag
  
- void __init vfs_caches_init(void)
- {
--	names_cachep = kmem_cache_create_usercopy("names_cache", PATH_MAX, 0,
--			SLAB_HWCACHE_ALIGN|SLAB_PANIC, 0, PATH_MAX, NULL);
--
-+	filename_init();
- 	dcache_init();
- 	inode_init();
- 	files_init();
-diff --git a/fs/internal.h b/fs/internal.h
-index ab638d41ab81..e44146117a42 100644
---- a/fs/internal.h
-+++ b/fs/internal.h
-@@ -71,6 +71,8 @@ struct dentry *start_dirop(struct dentry *parent, struct qstr *name,
- 			   unsigned int lookup_flags);
- int lookup_noperm_common(struct qstr *qname, struct dentry *base);
+ 	if (flags & AT_SYMLINK_NOFOLLOW)
+ 		lookup_flags &= ~LOOKUP_FOLLOW;
+-	if (flags & AT_EMPTY_PATH)
+-		lookup_flags |= LOOKUP_EMPTY;
  
-+void __init filename_init(void);
-+
- /*
-  * namespace.c
-  */
-diff --git a/fs/namei.c b/fs/namei.c
-index 471e4db2dbdb..468e3db62f53 100644
---- a/fs/namei.c
-+++ b/fs/namei.c
-@@ -125,6 +125,25 @@
- 
- #define EMBEDDED_NAME_MAX	(PATH_MAX - offsetof(struct filename, iname))
- 
-+/* SLAB cache for struct filename instances */
-+static struct kmem_cache *names_cachep __ro_after_init;
-+
-+void __init filename_init(void)
-+{
-+	names_cachep = kmem_cache_create_usercopy("names_cache", PATH_MAX, 0,
-+			SLAB_HWCACHE_ALIGN|SLAB_PANIC, 0, PATH_MAX, NULL);
-+}
-+
-+static inline struct filename *alloc_filename(void)
-+{
-+	return kmem_cache_alloc(names_cachep, GFP_KERNEL);
-+}
-+
-+static inline void free_filename(struct filename *p)
-+{
-+	kmem_cache_free(names_cachep, p);
-+}
-+
- static inline void initname(struct filename *name)
- {
- 	name->aname = NULL;
-@@ -164,7 +183,7 @@ getname_flags(const char __user *filename, int flags)
- 	char *kname;
- 	int len;
- 
--	result = __getname();
-+	result = alloc_filename();
- 	if (unlikely(!result))
- 		return ERR_PTR(-ENOMEM);
- 
-@@ -181,13 +200,13 @@ getname_flags(const char __user *filename, int flags)
- 	 */
- 	if (unlikely(len <= 0)) {
- 		if (unlikely(len < 0)) {
--			__putname(result);
-+			free_filename(result);
- 			return ERR_PTR(len);
- 		}
- 
- 		/* The empty path is special. */
- 		if (!(flags & LOOKUP_EMPTY)) {
--			__putname(result);
-+			free_filename(result);
- 			return ERR_PTR(-ENOENT);
- 		}
- 	}
-@@ -201,7 +220,7 @@ getname_flags(const char __user *filename, int flags)
- 	if (unlikely(len == EMBEDDED_NAME_MAX)) {
- 		struct filename *p = getname_long(result, filename);
- 		if (IS_ERR(p)) {
--			__putname(result);
-+			free_filename(result);
- 			return p;
- 		}
- 		result = p;
-@@ -242,7 +261,7 @@ struct filename *getname_kernel(const char * filename)
- 	struct filename *result;
- 	int len = strlen(filename) + 1;
- 
--	result = __getname();
-+	result = alloc_filename();
- 	if (unlikely(!result))
- 		return ERR_PTR(-ENOMEM);
- 
-@@ -254,13 +273,13 @@ struct filename *getname_kernel(const char * filename)
- 
- 		tmp = kmalloc(size, GFP_KERNEL);
- 		if (unlikely(!tmp)) {
--			__putname(result);
-+			free_filename(result);
- 			return ERR_PTR(-ENOMEM);
- 		}
- 		tmp->name = (char *)result;
- 		result = tmp;
- 	} else {
--		__putname(result);
-+		free_filename(result);
- 		return ERR_PTR(-ENAMETOOLONG);
- 	}
- 	memcpy((char *)result->name, filename, len);
-@@ -287,10 +306,10 @@ void putname(struct filename *name)
+ 	if (access_need_override_creds(flags)) {
+ 		old_cred = access_override_creds();
+@@ -486,8 +485,9 @@ static int do_faccessat(int dfd, const char __user *filename, int mode, int flag
+ 			return -ENOMEM;
  	}
  
- 	if (unlikely(name->name != name->iname)) {
--		__putname(name->name);
-+		free_filename((struct filename *)name->name);
- 		kfree(name);
- 	} else
--		__putname(name);
-+		free_filename(name);
- }
- EXPORT_SYMBOL(putname);
++	name = getname_uflags(filename, flags);
+ retry:
+-	res = user_path_at(dfd, filename, lookup_flags, &path);
++	res = filename_lookup(dfd, name, lookup_flags, &path, NULL);
+ 	if (res)
+ 		goto out;
  
-diff --git a/include/linux/fs.h b/include/linux/fs.h
-index 2244c54d3bfa..e906f157905c 100644
---- a/include/linux/fs.h
-+++ b/include/linux/fs.h
-@@ -2533,10 +2533,8 @@ static inline int finish_open_simple(struct file *file, int error)
- extern void __init vfs_caches_init_early(void);
- extern void __init vfs_caches_init(void);
+@@ -527,6 +527,7 @@ static int do_faccessat(int dfd, const char __user *filename, int mode, int flag
+ 		goto retry;
+ 	}
+ out:
++	putname(name);
+ 	if (old_cred)
+ 		put_cred(revert_creds(old_cred));
  
--extern struct kmem_cache *names_cachep;
--
--#define __getname()		kmem_cache_alloc(names_cachep, GFP_KERNEL)
--#define __putname(name)		kmem_cache_free(names_cachep, (void *)(name))
-+#define __getname()		kmalloc(PATH_MAX, GFP_KERNEL)
-+#define __putname(name)		kfree(name)
- 
- void emergency_thaw_all(void);
- extern int sync_filesystem(struct super_block *);
 -- 
 2.47.3
 
