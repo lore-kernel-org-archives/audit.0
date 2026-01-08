@@ -1,34 +1,34 @@
 Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3E53329373;
-	Thu,  8 Jan 2026 07:36:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3408D32694A;
+	Thu,  8 Jan 2026 07:36:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767857817; cv=none; b=WKWBUJUQ4IdU5LDMpy9ssosYO9udBE2ozM84hrefk+ydpC67goCVs3EEG8b/H/z9CE0vNx6GPrmI7If90+gd/4lq5uyavQwWTwIvJnJa9ChSc6WhkBti3cJXBnOmC+vj6uTVTp3q0ER9wj/75tiuRy/2VMHl2pLsEHoM6glAJV8=
+	t=1767857818; cv=none; b=ciRvZ1zuonmWaVCP7f2w3k8nNepaLVsfTCvO9GRMbg3aDsAvmHkbDLhI4bRBQyVrVrQUM7pUyUBPq8wBLdLuJlEpQ3LdCEylzGDqlIcEhY3ltkMOvCjQb9MiRnFN2/muivJMTjzebMyqXhcKRbxhdmMiPVocicWGhrKHLtC4258=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767857817; c=relaxed/simple;
-	bh=LCPa6AlgG23FvtWfrcMyRr7CiG/dZNLzjUcN90F5Liw=;
+	s=arc-20240116; t=1767857818; c=relaxed/simple;
+	bh=wuiiTj2gHGbhqKFHp0+2ykKm5YAOGcMAqs2NXJoAroA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=jHNIzPWBgC61OwfqpUlWO6+yjWawQjmMuno9BUj+n7bnB8rBNqp9TNveEqaDgUFRhAyI7PlQAwMPQ12Kzgo7g3jjOn6bTpuVjjkIqfobXJtc0fg42DDHFaak3tZkBwxM2cuQ6+G4GlbTCBGZDx73X0diZ03X+GN0Q0TdW5yCMFM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=nerlYMSQ; arc=none smtp.client-ip=62.89.141.173
+	 MIME-Version; b=jHsRTw5IsdCAbQ84gMZ7VlO6IS0n72xuBsvjCzNMoF+hzyqsJjbCyj6GNN8/zHpzmc6rPx3lYvrGi7yFZ3MNFBhCtdkWaATs5wuHGHvNHc/sK3S9pBuBMPS5IBi8dHUtL9bs/I4vZ5Kdf9PAQ1hJZu4rblPtpIwWv8uYp3ShxLc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=gF57Iqs/; arc=none smtp.client-ip=62.89.141.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="nerlYMSQ"
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="gF57Iqs/"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=linux.org.uk; s=zeniv-20220401; h=Sender:Content-Transfer-Encoding:
 	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
 	Reply-To:Content-Type:Content-ID:Content-Description;
-	bh=LcWiOTSlwXumgo7zmkdTY0JfE+7QCpe/Zf4NxR/r0b4=; b=nerlYMSQ9FXW542YSkrdRW7A4I
-	KCwDiVw3KzcbXtoP0PXwCfRMWmT30aZQrKnG04YLw5T840jPYLOhEU7mhWFfRfvZdicy1ievS+f7h
-	Bp2DYvgKVqETUT29/0AlJ0GUsh1Jiqe1zFRvJzeJQY0dfM/4EvOk7AMrSQMrHWPWgilGk9ywn0+MH
-	tiHuqds2Rxd1jwNvWbE2cwkvEniHt7LbHE9NQMB2ftQ0a1SSKgbGjyIAEXWt6+xSW/l0jUH0LZBMB
-	4GgJpcOkz5SzGtVWYuydWb5m8ow4WKuW3VLuP/O7nfRDHMDKXL4sDenpD8/O612PBAmswZeFklcvn
-	YB4vtE4Q==;
+	bh=ba/co7KFgEinr4WiBkpTr42dNi6tPXfJUwGTV27Gjfk=; b=gF57Iqs/gZloDf8ToDSHKs//lf
+	G1WoOSaE62kzEYxnJxOv4QXerwPxyU3vq5Ks+hjPE/r1J+egDWHMZAK+BAX5YnExZXyyTKcZ2Pk0w
+	wgTCsr7oyvAQnMKRsj1o0fyb+z5ZMVPJ6Z5Vl9Ayit+4bhyIJaallqznDAqx4YBJfmsk5eY+UsDG6
+	QUPCFvCMG6eOrQysGjYCQdAfWprMB90f0Lnu+YE4//CGAoORDppL8N8wls8T0pcdpMoiFr/WTw1AO
+	ANFbptdupnAy+0IcO9Hou6Z97/c0ZjKHRYtY7EXcEDDQ0xOnjv6PKAU4dBUxyQ04XEjx5bvsS+OSm
+	R7qDrdZA==;
 Received: from viro by zeniv.linux.org.uk with local (Exim 4.99 #2 (Red Hat Linux))
-	id 1vdkat-00000001mkX-2XWX;
-	Thu, 08 Jan 2026 07:38:07 +0000
+	id 1vdkas-00000001mj2-28p8;
+	Thu, 08 Jan 2026 07:38:06 +0000
 From: Al Viro <viro@zeniv.linux.org.uk>
 To: linux-fsdevel@vger.kernel.org
 Cc: torvalds@linux-foundation.org,
@@ -40,9 +40,9 @@ Cc: torvalds@linux-foundation.org,
 	audit@vger.kernel.org,
 	io-uring@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v4 20/59] struct filename ->refcnt doesn't need to be atomic
-Date: Thu,  8 Jan 2026 07:37:24 +0000
-Message-ID: <20260108073803.425343-21-viro@zeniv.linux.org.uk>
+Subject: [PATCH v4 15/59] struct filename: saner handling of long names
+Date: Thu,  8 Jan 2026 07:37:19 +0000
+Message-ID: <20260108073803.425343-16-viro@zeniv.linux.org.uk>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260108073803.425343-1-viro@zeniv.linux.org.uk>
 References: <20260108073803.425343-1-viro@zeniv.linux.org.uk>
@@ -55,122 +55,208 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: Al Viro <viro@ftp.linux.org.uk>
 
-... or visible outside of audit, really.  Note that references
-held in delayed_filename always have refcount 1, and from the
-moment of complete_getname() or equivalent point in getname...()
-there won't be any references to struct filename instance left
-in places visible to other threads.
+Always allocate struct filename from names_cachep, long name or short;
+short names would be embedded into struct filename.  Longer ones do
+not cannibalize the original struct filename - put them into kmalloc'ed
+buffers (PATH_MAX-sized for import from userland, strlen() + 1 - for
+ones originating kernel-side, where we know the length beforehand).
 
-Acked-by: Paul Moore <paul@paul-moore.com>
+Cutoff length for short names is chosen so that struct filename would be
+192 bytes long - that's both a multiple of 64 and large enough to cover
+the majority of real-world uses.
+
+Simplifies logics in getname()/putname() and friends.
+
 Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
 ---
- fs/namei.c         | 12 ++++++------
- include/linux/fs.h |  8 +-------
- kernel/auditsc.c   |  6 +++---
- 3 files changed, 10 insertions(+), 16 deletions(-)
+ fs/namei.c         | 87 ++++++++++++++++++----------------------------
+ include/linux/fs.h | 10 ++++--
+ 2 files changed, 41 insertions(+), 56 deletions(-)
 
 diff --git a/fs/namei.c b/fs/namei.c
-index 4de9697bfbee..8f26e91de906 100644
+index 468e3db62f53..9053aeee05d5 100644
 --- a/fs/namei.c
 +++ b/fs/namei.c
-@@ -150,7 +150,7 @@ static inline void free_filename(struct filename *p)
- static inline void initname(struct filename *name)
+@@ -123,15 +123,14 @@
+  * PATH_MAX includes the nul terminator --RR.
+  */
+ 
+-#define EMBEDDED_NAME_MAX	(PATH_MAX - offsetof(struct filename, iname))
+-
+ /* SLAB cache for struct filename instances */
+ static struct kmem_cache *names_cachep __ro_after_init;
+ 
+ void __init filename_init(void)
  {
- 	name->aname = NULL;
--	atomic_set(&name->refcnt, 1);
-+	name->refcnt = 1;
+-	names_cachep = kmem_cache_create_usercopy("names_cache", PATH_MAX, 0,
+-			SLAB_HWCACHE_ALIGN|SLAB_PANIC, 0, PATH_MAX, NULL);
++	names_cachep = kmem_cache_create_usercopy("names_cache", sizeof(struct filename), 0,
++			SLAB_HWCACHE_ALIGN|SLAB_PANIC, offsetof(struct filename, iname),
++						EMBEDDED_NAME_MAX, NULL);
  }
  
- static int getname_long(struct filename *name, const char __user *filename)
-@@ -292,13 +292,13 @@ void putname(struct filename *name)
- 	if (IS_ERR_OR_NULL(name))
- 		return;
+ static inline struct filename *alloc_filename(void)
+@@ -150,30 +149,23 @@ static inline void initname(struct filename *name)
+ 	atomic_set(&name->refcnt, 1);
+ }
  
--	refcnt = atomic_read(&name->refcnt);
-+	refcnt = name->refcnt;
- 	if (unlikely(refcnt != 1)) {
- 		if (WARN_ON_ONCE(!refcnt))
+-static struct filename *getname_long(struct filename *old,
+-				     const char __user *filename)
++static int getname_long(struct filename *name, const char __user *filename)
+ {
+ 	int len;
+-	/*
+-	 * size is chosen that way we to guarantee that
+-	 * p->iname[0] is within the same object and that
+-	 * p->name can't be equal to p->iname, no matter what.
+-	 */
+-	const size_t size = offsetof(struct filename, iname[1]);
+-	struct filename *p __free(kfree) = kzalloc(size, GFP_KERNEL);
++	char *p __free(kfree) = kmalloc(PATH_MAX, GFP_KERNEL);
+ 	if (unlikely(!p))
+-		return ERR_PTR(-ENOMEM);
++		return -ENOMEM;
+ 
+-	memmove(old, &old->iname, EMBEDDED_NAME_MAX);
+-	p->name = (char *)old;
+-	len = strncpy_from_user((char *)old + EMBEDDED_NAME_MAX,
++	memcpy(p, &name->iname, EMBEDDED_NAME_MAX);
++	len = strncpy_from_user(p + EMBEDDED_NAME_MAX,
+ 				filename + EMBEDDED_NAME_MAX,
+ 				PATH_MAX - EMBEDDED_NAME_MAX);
+ 	if (unlikely(len < 0))
+-		return ERR_PTR(len);
++		return len;
+ 	if (unlikely(len == PATH_MAX - EMBEDDED_NAME_MAX))
+-		return ERR_PTR(-ENAMETOOLONG);
+-	return no_free_ptr(p);
++		return -ENAMETOOLONG;
++	name->name = no_free_ptr(p);
++	return 0;
+ }
+ 
+ struct filename *
+@@ -199,16 +191,9 @@ getname_flags(const char __user *filename, int flags)
+ 	 * Handle both empty path and copy failure in one go.
+ 	 */
+ 	if (unlikely(len <= 0)) {
+-		if (unlikely(len < 0)) {
+-			free_filename(result);
+-			return ERR_PTR(len);
+-		}
+-
+ 		/* The empty path is special. */
+-		if (!(flags & LOOKUP_EMPTY)) {
+-			free_filename(result);
+-			return ERR_PTR(-ENOENT);
+-		}
++		if (!len && !(flags & LOOKUP_EMPTY))
++			len = -ENOENT;
+ 	}
+ 
+ 	/*
+@@ -217,14 +202,13 @@ getname_flags(const char __user *filename, int flags)
+ 	 * names_cache allocation for the pathname, and re-do the copy from
+ 	 * userland.
+ 	 */
+-	if (unlikely(len == EMBEDDED_NAME_MAX)) {
+-		struct filename *p = getname_long(result, filename);
+-		if (IS_ERR(p)) {
+-			free_filename(result);
+-			return p;
+-		}
+-		result = p;
++	if (unlikely(len == EMBEDDED_NAME_MAX))
++		len = getname_long(result, filename);
++	if (unlikely(len < 0)) {
++		free_filename(result);
++		return ERR_PTR(len);
+ 	}
++
+ 	initname(result);
+ 	audit_getname(result);
+ 	return result;
+@@ -260,29 +244,26 @@ struct filename *getname_kernel(const char * filename)
+ {
+ 	struct filename *result;
+ 	int len = strlen(filename) + 1;
++	char *p;
++
++	if (unlikely(len > PATH_MAX))
++		return ERR_PTR(-ENAMETOOLONG);
+ 
+ 	result = alloc_filename();
+ 	if (unlikely(!result))
+ 		return ERR_PTR(-ENOMEM);
+ 
+ 	if (len <= EMBEDDED_NAME_MAX) {
+-		result->name = (char *)result->iname;
+-	} else if (len <= PATH_MAX) {
+-		const size_t size = offsetof(struct filename, iname[1]);
+-		struct filename *tmp;
+-
+-		tmp = kmalloc(size, GFP_KERNEL);
+-		if (unlikely(!tmp)) {
++		p = (char *)result->iname;
++		memcpy(p, filename, len);
++	} else {
++		p = kmemdup(filename, len, GFP_KERNEL);
++		if (unlikely(!p)) {
+ 			free_filename(result);
+ 			return ERR_PTR(-ENOMEM);
+ 		}
+-		tmp->name = (char *)result;
+-		result = tmp;
+-	} else {
+-		free_filename(result);
+-		return ERR_PTR(-ENAMETOOLONG);
+ 	}
+-	memcpy((char *)result->name, filename, len);
++	result->name = p;
+ 	initname(result);
+ 	audit_getname(result);
+ 	return result;
+@@ -305,11 +286,9 @@ void putname(struct filename *name)
  			return;
- 
--		if (!atomic_dec_and_test(&name->refcnt))
--			return;
-+		name->refcnt--;
-+		return;
  	}
  
- 	if (unlikely(name->name != name->iname))
-@@ -328,12 +328,12 @@ int delayed_getname_uflags(struct delayed_filename *v, const char __user *string
- 
- int putname_to_delayed(struct delayed_filename *v, struct filename *name)
- {
--	if (likely(atomic_read(&name->refcnt) == 1)) {
-+	if (likely(name->refcnt == 1)) {
- 		v->__incomplete_filename = name;
- 		return 0;
- 	}
-+	name->refcnt--;
- 	v->__incomplete_filename = do_getname_kernel(name->name, true);
--	putname(name);
- 	return PTR_ERR_OR_ZERO(v->__incomplete_filename);
+-	if (unlikely(name->name != name->iname)) {
+-		free_filename((struct filename *)name->name);
+-		kfree(name);
+-	} else
+-		free_filename(name);
++	if (unlikely(name->name != name->iname))
++		kfree(name->name);
++	free_filename(name);
  }
+ EXPORT_SYMBOL(putname);
  
 diff --git a/include/linux/fs.h b/include/linux/fs.h
-index 9fe91db9c053..6aaaf57e90d8 100644
+index e906f157905c..a74ffcbe8407 100644
 --- a/include/linux/fs.h
 +++ b/include/linux/fs.h
-@@ -2412,7 +2412,7 @@ struct audit_names;
+@@ -2409,13 +2409,19 @@ extern struct kobject *fs_kobj;
  
- struct __filename_head {
+ /* fs/open.c */
+ struct audit_names;
+-struct filename {
++
++struct __filename_head {
  	const char		*name;	/* pointer to actual string */
--	atomic_t		refcnt;
-+	int			refcnt;
+ 	atomic_t		refcnt;
  	struct audit_names	*aname;
+-	const char		iname[];
++};
++#define EMBEDDED_NAME_MAX	192 - sizeof(struct __filename_head)
++struct filename {
++	struct __filename_head;
++	const char		iname[EMBEDDED_NAME_MAX];
  };
- #define EMBEDDED_NAME_MAX	192 - sizeof(struct __filename_head)
-@@ -2527,12 +2527,6 @@ void dismiss_delayed_filename(struct delayed_filename *);
- int putname_to_delayed(struct delayed_filename *, struct filename *);
- struct filename *complete_getname(struct delayed_filename *);
+ static_assert(offsetof(struct filename, iname) % sizeof(long) == 0);
++static_assert(sizeof(struct filename) % 64 == 0);
  
--static inline struct filename *refname(struct filename *name)
--{
--	atomic_inc(&name->refcnt);
--	return name;
--}
--
- DEFINE_CLASS(filename, struct filename *, putname(_T), getname(p), const char __user *p)
- EXTEND_CLASS(filename, _kernel, getname_kernel(p), const char *p)
- EXTEND_CLASS(filename, _flags, getname_flags(p, f), const char __user *p, unsigned int f)
-diff --git a/kernel/auditsc.c b/kernel/auditsc.c
-index 67d8da927381..86a44b162a87 100644
---- a/kernel/auditsc.c
-+++ b/kernel/auditsc.c
-@@ -2191,7 +2191,7 @@ void __audit_getname(struct filename *name)
- 	n->name = name;
- 	n->name_len = AUDIT_NAME_FULL;
- 	name->aname = n;
--	refname(name);
-+	name->refcnt++;
- }
- 
- static inline int audit_copy_fcaps(struct audit_names *name,
-@@ -2323,7 +2323,7 @@ void __audit_inode(struct filename *name, const struct dentry *dentry,
- 		return;
- 	if (name) {
- 		n->name = name;
--		refname(name);
-+		name->refcnt++;
- 	}
- 
- out:
-@@ -2445,7 +2445,7 @@ void __audit_inode_child(struct inode *parent,
- 		if (found_parent) {
- 			found_child->name = found_parent->name;
- 			found_child->name_len = AUDIT_NAME_FULL;
--			refname(found_child->name);
-+			found_child->name->refcnt++;
- 		}
- 	}
- 
+ static inline struct mnt_idmap *file_mnt_idmap(const struct file *file)
+ {
 -- 
 2.47.3
 
