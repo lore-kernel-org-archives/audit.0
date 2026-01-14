@@ -1,34 +1,34 @@
 Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 067D82E11B0;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98FB91DD877;
 	Wed, 14 Jan 2026 04:31:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768365113; cv=none; b=tZ75f+w3xfefzZsBOE/i4rvh93iClsHMtZyMjU/dEo0EqsLdZeTQDGf9sIIqfO1UTaxA0EAb/VsU6OIfUsRWtCliQLNpVjdj1jtXZO0u7EyIFm03/f5oMQz33uivV/Doc5Si0dA57OCyEvVcmYcZ3RERO77rySNkbkL0UWJp8xA=
+	t=1768365113; cv=none; b=Rk8nfmyp+sX5KJ1u1a5YE7IN+uD+430guHtoJMTWDa0GpNDiqeh2rqFSFuQ1ejAGQ5ujxIH+E+GkHKJDevNKnoPHCndEY20mzagnbf3y0WbImmfB2/X11N7L4Cl9oYfnh48nVRGBerwI5AiHdrIiFex08RxqZOpssbBhGJE0Owc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1768365113; c=relaxed/simple;
-	bh=dKazOTpP98uEsD5tvT0eCFSPEKi73Z7M/OFRDrSl8h4=;
+	bh=yfzVKOGC6J1mfQAkrJGAOfs9h1A24vTRVEs1IwTgzSw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=UMUDINPUGTMXskWYsMd1Bu3byoMne8YH6+GjMoXyibNx+g17mf5Oq8QniBZxUX+LjtUan1kvK1O/X/HTje7iaNp5fDNz9B7skXCu+znkUXGnHtBZJSXIs9xEJzjZV/LkTFvHbfiVpLjYVVUBI8UzvfKibf+mw2savn9AezYTV+c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=YR+W8c9t; arc=none smtp.client-ip=62.89.141.173
+	 MIME-Version; b=c7XHb5yG6WoO/SFUegU6UgHvcdzuYOuhKLwJWh3CYFU66/S8rZy86Ejny9lk7qyu7Uf6gs1NOkR+PkdOsLoAh/KE8FIyvdQobWgbhDGpmAC0LkIoClg/Kd/QD+tRqHXnyaV/mh6ecZh1IysRvtqXYssq3Uaw2NfJTbbIccuHo6E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=esNL/zwR; arc=none smtp.client-ip=62.89.141.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="YR+W8c9t"
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="esNL/zwR"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=linux.org.uk; s=zeniv-20220401; h=Sender:Content-Transfer-Encoding:
 	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
 	Reply-To:Content-Type:Content-ID:Content-Description;
-	bh=/taDnA0SgX1kjdBTGSIJQ+UnMnEm3NgXYjqO+SzjTkM=; b=YR+W8c9tc6JQbqqzjO+//SsLtE
-	XTkVKnKd+lTyw4TSxKN4L287M8hDod3y6DqeqgFfgbcWCVc+I0pfdXaBNky6k5U15NZHpbzZA493Q
-	/EsXwxR4NJG5S104VAMqKKYajwyv8/yemEuJXLOo06lXIlWHarOqoHZfw4WtTVJWYL50mO96oHfwZ
-	1Ssyk9ZcoBXV/x2KygFTLlXvldeAzZtHPHhWWaxaLneFbaG8RfMcQqDIfJZsSuDCdNI4ZHuxEbCo6
-	eYxiUKZDI0ah4+d+1LxaN/rJGQ51ff2ggPqDkgBWxcVib7u/lEBM4mcoSB7TsI8+0BM2KRcvn29Vf
-	Oo0XReIg==;
+	bh=glqNvFd2WCWs9BPH2ZT1TzGGKLgx5BNyq9RljQnkTIg=; b=esNL/zwRFaIc6HXCD9ivssxvLX
+	OFZXOop3QmRIelnyfyzk+/EBiloD5R0xQZjfc2rNesa/5qiqjnQ7NPNo10ZdL9efAWy2jZmINWzCk
+	/Vjwp9DJvTFBk8JLvqrjIlqsZErcChBVsdKUqtdKY3TWAyScjTdIIGr+0IuM6BgunUGtvb/tNhm/q
+	oAfz62ZjXK3liPbvIbbiTzH4y09Y71/wAGbrvZpEbXCj2xBe0JErPm9rT1KM/zfzuS1MgFRkbEmJo
+	0ArxqTpQ9XZIzQsS1NZu7xajqWtdcvHiow2kfxj5DuXcCfXC2sluAEaD5d3ClmE3dsyHKgymbAqzu
+	E9pltGXA==;
 Received: from viro by zeniv.linux.org.uk with local (Exim 4.99 #2 (Red Hat Linux))
-	id 1vfsZG-0000000GIoQ-2sj4;
-	Wed, 14 Jan 2026 04:33:14 +0000
+	id 1vfsZG-0000000GIoZ-4BOQ;
+	Wed, 14 Jan 2026 04:33:15 +0000
 From: Al Viro <viro@zeniv.linux.org.uk>
 To: linux-fsdevel@vger.kernel.org
 Cc: Linus Torvalds <torvalds@linux-foundation.org>,
@@ -40,9 +40,9 @@ Cc: Linus Torvalds <torvalds@linux-foundation.org>,
 	audit@vger.kernel.org,
 	io-uring@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v5 34/68] simplify the callers of do_open_execat()
-Date: Wed, 14 Jan 2026 04:32:36 +0000
-Message-ID: <20260114043310.3885463-35-viro@zeniv.linux.org.uk>
+Subject: [PATCH v5 37/68] do_execveat_common(): don't consume filename reference
+Date: Wed, 14 Jan 2026 04:32:39 +0000
+Message-ID: <20260114043310.3885463-38-viro@zeniv.linux.org.uk>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260114043310.3885463-1-viro@zeniv.linux.org.uk>
 References: <20260114043310.3885463-1-viro@zeniv.linux.org.uk>
@@ -55,32 +55,92 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: Al Viro <viro@ftp.linux.org.uk>
 
+... and convert its callers to CLASS(filename...)
+
 Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
 ---
- fs/exec.c | 10 ++--------
- 1 file changed, 2 insertions(+), 8 deletions(-)
+ fs/exec.c | 27 ++++++++++++---------------
+ 1 file changed, 12 insertions(+), 15 deletions(-)
 
 diff --git a/fs/exec.c b/fs/exec.c
-index b7d8081d12ea..5b4110c7522e 100644
+index 5d15c0440c3d..9e799af13602 100644
 --- a/fs/exec.c
 +++ b/fs/exec.c
-@@ -815,14 +815,8 @@ static struct file *do_open_execat(int fd, struct filename *name, int flags)
-  */
- struct file *open_exec(const char *name)
- {
--	struct filename *filename = getname_kernel(name);
--	struct file *f = ERR_CAST(filename);
--
--	if (!IS_ERR(filename)) {
--		f = do_open_execat(AT_FDCWD, filename, 0);
--		putname(filename);
+@@ -1789,20 +1789,16 @@ static int do_execveat_common(int fd, struct filename *filename,
+ 	 * whether NPROC limit is still exceeded.
+ 	 */
+ 	if ((current->flags & PF_NPROC_EXCEEDED) &&
+-	    is_rlimit_overlimit(current_ucounts(), UCOUNT_RLIMIT_NPROC, rlimit(RLIMIT_NPROC))) {
+-		retval = -EAGAIN;
+-		goto out_ret;
 -	}
--	return f;
-+	CLASS(filename_kernel, filename)(name);
-+	return do_open_execat(AT_FDCWD, filename, 0);
- }
- EXPORT_SYMBOL(open_exec);
++	    is_rlimit_overlimit(current_ucounts(), UCOUNT_RLIMIT_NPROC, rlimit(RLIMIT_NPROC)))
++		return -EAGAIN;
  
+ 	/* We're below the limit (still or again), so we don't want to make
+ 	 * further execve() calls fail. */
+ 	current->flags &= ~PF_NPROC_EXCEEDED;
+ 
+ 	bprm = alloc_bprm(fd, filename, flags);
+-	if (IS_ERR(bprm)) {
+-		retval = PTR_ERR(bprm);
+-		goto out_ret;
+-	}
++	if (IS_ERR(bprm))
++		return PTR_ERR(bprm);
+ 
+ 	retval = count(argv, MAX_ARG_STRINGS);
+ 	if (retval < 0)
+@@ -1850,9 +1846,6 @@ static int do_execveat_common(int fd, struct filename *filename,
+ 	retval = bprm_execve(bprm);
+ out_free:
+ 	free_bprm(bprm);
+-
+-out_ret:
+-	putname(filename);
+ 	return retval;
+ }
+ 
+@@ -1941,7 +1934,8 @@ SYSCALL_DEFINE3(execve,
+ 		const char __user *const __user *, argv,
+ 		const char __user *const __user *, envp)
+ {
+-	return do_execveat_common(AT_FDCWD, getname(filename),
++	CLASS(filename, name)(filename);
++	return do_execveat_common(AT_FDCWD, name,
+ 				  native_arg(argv), native_arg(envp), 0);
+ }
+ 
+@@ -1951,7 +1945,8 @@ SYSCALL_DEFINE5(execveat,
+ 		const char __user *const __user *, envp,
+ 		int, flags)
+ {
+-	return do_execveat_common(fd, getname_uflags(filename, flags),
++	CLASS(filename_uflags, name)(filename, flags);
++	return do_execveat_common(fd, name,
+ 				  native_arg(argv), native_arg(envp), flags);
+ }
+ 
+@@ -1966,7 +1961,8 @@ COMPAT_SYSCALL_DEFINE3(execve, const char __user *, filename,
+ 	const compat_uptr_t __user *, argv,
+ 	const compat_uptr_t __user *, envp)
+ {
+-	return do_execveat_common(AT_FDCWD, getname(filename),
++	CLASS(filename, name)(filename);
++	return do_execveat_common(AT_FDCWD, name,
+ 				  compat_arg(argv), compat_arg(envp), 0);
+ }
+ 
+@@ -1976,7 +1972,8 @@ COMPAT_SYSCALL_DEFINE5(execveat, int, fd,
+ 		       const compat_uptr_t __user *, envp,
+ 		       int,  flags)
+ {
+-	return do_execveat_common(fd, getname_uflags(filename, flags),
++	CLASS(filename_uflags, name)(filename, flags);
++	return do_execveat_common(fd, name,
+ 				  compat_arg(argv), compat_arg(envp), flags);
+ }
+ #endif
 -- 
 2.47.3
 
