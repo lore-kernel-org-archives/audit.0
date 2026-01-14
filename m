@@ -1,34 +1,34 @@
 Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32A8C2C3271;
-	Wed, 14 Jan 2026 04:31:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B15FB303C83;
+	Wed, 14 Jan 2026 04:31:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768365117; cv=none; b=bZkfjlSU4ICdxNUJczfI0YYcubVgvFbGMCHWn6XCOShetVX/Umq25gayYVO/eEKzQqHIMmQfI15bXukSJZoQEe/5is+J/r3eZYin6Yg/XuGPK1yABoJ9+YBd2jSFrczphzknYR4qF4D5kf4nc+1Zm1htLkVLFh4OXlZnOb87bx8=
+	t=1768365117; cv=none; b=ef7VelBVBglLXiD02KG0kPoBRPekKyjQxVqcZp5JwNynHAsCYxllva15ATCLWmqesLsCU3HlZejhNlJrD9kxhR/YMkAuLhFL8tvf693tB6fc48MShbbOWjvq9ma+ZK58vKFUvMKF89WbAecCPc8RrpXkT4nWvQI8UtV6dOGFy8k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1768365117; c=relaxed/simple;
-	bh=JNyL/TkYANPwxDw7dlyv46R3RBrMV8xyuHfsJyK8y0Y=;
+	bh=oyKBfs/wj+3AFANKikryvf2/aOkh/ktfJ9g7Txd0zkM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=nHxeipwoa317iHhcPw9/wWRTwxUpSeda/VKmBJtuab0yBBUu1aVj0B3XDXQMv7gqldhmqjONLXAH0aM0zPfPwRlCblVP8XgxpTvcFBdpOG6HcWKAXwHpz0aSHOS9giVhjOmkdGtMkNiCyPLHPt+mjE4Q43Yag4DV8ogrTz2SFs0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=vWd3xDPe; arc=none smtp.client-ip=62.89.141.173
+	 MIME-Version; b=iqIacfbUzx+/WUR+UKxtPQeVx2N4ZqT9n2k14zxjOxrBc/kElWELy9ZhUUSZW2sqphR+V2WmXkpHtm+nvscN/pW//nR+YLpxIuiP18oZwZ+ecbCTgOUrZyv3EOnnxmyjChZNxHHPb9oKHS6pYWqz9FRRl9j/zzChxyNvHSwhqg0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=LLNFfxai; arc=none smtp.client-ip=62.89.141.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="vWd3xDPe"
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="LLNFfxai"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=linux.org.uk; s=zeniv-20220401; h=Sender:Content-Transfer-Encoding:
 	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
 	Reply-To:Content-Type:Content-ID:Content-Description;
-	bh=KOMlKW8pfcycdT4Ipg1Qdr7EnS+wAoBtH9cW6rO73XY=; b=vWd3xDPePPFmjSk2dllWO5ezb5
-	1XDp4vYarggMGW0ppjMXoUxsZnN+m2NnWo8Oe7ndfvzsZboBjxQi8o4fDGQLmBAJ603GbSsXp1GWi
-	iTvO1iiClBikFD5KWNCuakAgHsbkSQ9cK6gm4jJW3xUz1XVy6LigcW6iudctKOpH+Ti6wARyxVPze
-	4JylUD9qyJlQTT0fffBQEcXZcqpCU3P0lJifjzYSTC55/S5eG47btjq8yCU8Iec+DqwTuhh4fHtOS
-	mdCjPvaU97QCi+3Uu1Ub1qhJMZ7UAoJPh6zQ/FsDGesX3fVD+U0eqxdwAhqatm/5xF97cD6aF45DE
-	19TGewMA==;
+	bh=MIN8O3p6p0pbv2G0caQzyJS0UvmyEXVx3gIFuoTDNSc=; b=LLNFfxai+CFP263vVi0kOaJQsW
+	pmbRSiWJ+IDUrqJn8oi4koG+LGHr6Vvyvh9ix9YXQRXuuD7c+efw1k6uyxmvkTeEyjpoPAlMSUlTR
+	GIfeYO5MLG2QOCDUHiYCqwOf50jKJtsdVN4Jf2ewqVeNeYYlXH12XHyenh8egFhUp80pG/uOvA70V
+	LV0SiJjz+u9KE0iAKcxH2da0MeodbRg1RHdv/xymvMg5Ar2R6g9EPkor8kBWuMNhYXUp0HxI7k/o4
+	eVxNPX1GoA/vpt/ykP3Xa0jSdPB1S3NmtJTkzojo7zZUgI4uwKihWrp2cGLpyFPDFHyWhhI9ZA5eh
+	vWtR+fCA==;
 Received: from viro by zeniv.linux.org.uk with local (Exim 4.99 #2 (Red Hat Linux))
-	id 1vfsZI-0000000GIrg-267z;
-	Wed, 14 Jan 2026 04:33:16 +0000
+	id 1vfsZL-0000000GIxQ-3uX3;
+	Wed, 14 Jan 2026 04:33:20 +0000
 From: Al Viro <viro@zeniv.linux.org.uk>
 To: linux-fsdevel@vger.kernel.org
 Cc: Linus Torvalds <torvalds@linux-foundation.org>,
@@ -40,9 +40,9 @@ Cc: Linus Torvalds <torvalds@linux-foundation.org>,
 	audit@vger.kernel.org,
 	io-uring@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v5 42/68] non-consuming variant of do_mkdirat()
-Date: Wed, 14 Jan 2026 04:32:44 +0000
-Message-ID: <20260114043310.3885463-43-viro@zeniv.linux.org.uk>
+Subject: [PATCH v5 54/68] do_sys_truncate(): switch to CLASS(filename)
+Date: Wed, 14 Jan 2026 04:32:56 +0000
+Message-ID: <20260114043310.3885463-55-viro@zeniv.linux.org.uk>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260114043310.3885463-1-viro@zeniv.linux.org.uk>
 References: <20260114043310.3885463-1-viro@zeniv.linux.org.uk>
@@ -55,122 +55,50 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: Al Viro <viro@ftp.linux.org.uk>
 
-similar to previous commit; replacement is filename_mkdirat()
+Note that failures from filename_lookup() are final - ESTALE returned
+by it means that retry had been done by filename_lookup() and it failed
+there.
 
 Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
 ---
- Documentation/filesystems/porting.rst |  2 +-
- fs/init.c                             |  3 ++-
- fs/internal.h                         |  2 +-
- fs/namei.c                            | 13 ++++++-------
- io_uring/fs.c                         |  3 ++-
- 5 files changed, 12 insertions(+), 11 deletions(-)
+ fs/open.c | 12 +++++-------
+ 1 file changed, 5 insertions(+), 7 deletions(-)
 
-diff --git a/Documentation/filesystems/porting.rst b/Documentation/filesystems/porting.rst
-index c44c351bc297..ace0607fe39c 100644
---- a/Documentation/filesystems/porting.rst
-+++ b/Documentation/filesystems/porting.rst
-@@ -1339,6 +1339,6 @@ in-tree filesystems have done).
- 
- **mandatory**
- 
--do_{link,symlink,renameat2}() are gone; filename_...() counterparts
-+do_{mkdir,link,symlink,renameat2}() are gone; filename_...() counterparts
- replace those.  The difference is that the former used to consume
- filename references; the latter do not.
-diff --git a/fs/init.c b/fs/init.c
-index a54ef750ffe3..9a550ba4802f 100644
---- a/fs/init.c
-+++ b/fs/init.c
-@@ -164,7 +164,8 @@ int __init init_unlink(const char *pathname)
- 
- int __init init_mkdir(const char *pathname, umode_t mode)
+diff --git a/fs/open.c b/fs/open.c
+index bcaaf884e436..34d9b1ecc141 100644
+--- a/fs/open.c
++++ b/fs/open.c
+@@ -129,25 +129,23 @@ EXPORT_SYMBOL_GPL(vfs_truncate);
+ int do_sys_truncate(const char __user *pathname, loff_t length)
  {
--	return do_mkdirat(AT_FDCWD, getname_kernel(pathname), mode);
-+	CLASS(filename_kernel, name)(pathname);
-+	return filename_mkdirat(AT_FDCWD, name, mode);
- }
- 
- int __init init_rmdir(const char *pathname)
-diff --git a/fs/internal.h b/fs/internal.h
-index 4a63b89c02d7..03638008d84a 100644
---- a/fs/internal.h
-+++ b/fs/internal.h
-@@ -59,7 +59,7 @@ int do_unlinkat(int dfd, struct filename *name);
- int may_linkat(struct mnt_idmap *idmap, const struct path *link);
- int filename_renameat2(int olddfd, struct filename *oldname, int newdfd,
- 		 struct filename *newname, unsigned int flags);
--int do_mkdirat(int dfd, struct filename *name, umode_t mode);
-+int filename_mkdirat(int dfd, struct filename *name, umode_t mode);
- int do_mknodat(int dfd, struct filename *name, umode_t mode, unsigned int dev);
- int filename_symlinkat(struct filename *from, int newdfd, struct filename *to);
- int filename_linkat(int olddfd, struct filename *old, int newdfd,
-diff --git a/fs/namei.c b/fs/namei.c
-index c88ad27f66c7..21a2dbd8b9e6 100644
---- a/fs/namei.c
-+++ b/fs/namei.c
-@@ -5207,7 +5207,7 @@ struct dentry *vfs_mkdir(struct mnt_idmap *idmap, struct inode *dir,
- }
- EXPORT_SYMBOL(vfs_mkdir);
- 
--int do_mkdirat(int dfd, struct filename *name, umode_t mode)
-+int filename_mkdirat(int dfd, struct filename *name, umode_t mode)
- {
- 	struct dentry *dentry;
+ 	unsigned int lookup_flags = LOOKUP_FOLLOW;
+-	struct filename *name;
  	struct path path;
-@@ -5217,9 +5217,8 @@ int do_mkdirat(int dfd, struct filename *name, umode_t mode)
+ 	int error;
  
+ 	if (length < 0)	/* sorry, but loff_t says... */
+ 		return -EINVAL;
+ 
+-	name = getname(pathname);
++	CLASS(filename, name)(pathname);
  retry:
- 	dentry = filename_create(dfd, name, &path, lookup_flags);
--	error = PTR_ERR(dentry);
- 	if (IS_ERR(dentry))
--		goto out_putname;
-+		return PTR_ERR(dentry);
- 
- 	error = security_path_mkdir(&path, dentry,
- 			mode_strip_umask(path.dentry->d_inode, mode));
-@@ -5239,19 +5238,19 @@ int do_mkdirat(int dfd, struct filename *name, umode_t mode)
- 		lookup_flags |= LOOKUP_REVAL;
- 		goto retry;
+ 	error = filename_lookup(AT_FDCWD, name, lookup_flags, &path, NULL);
+ 	if (!error) {
+ 		error = vfs_truncate(&path, length);
+ 		path_put(&path);
++		if (retry_estale(error, lookup_flags)) {
++			lookup_flags |= LOOKUP_REVAL;
++			goto retry;
++		}
  	}
--out_putname:
+-	if (retry_estale(error, lookup_flags)) {
+-		lookup_flags |= LOOKUP_REVAL;
+-		goto retry;
+-	}
 -	putname(name);
  	return error;
  }
  
- SYSCALL_DEFINE3(mkdirat, int, dfd, const char __user *, pathname, umode_t, mode)
- {
--	return do_mkdirat(dfd, getname(pathname), mode);
-+	CLASS(filename, name)(pathname);
-+	return filename_mkdirat(dfd, name, mode);
- }
- 
- SYSCALL_DEFINE2(mkdir, const char __user *, pathname, umode_t, mode)
- {
--	return do_mkdirat(AT_FDCWD, getname(pathname), mode);
-+	CLASS(filename, name)(pathname);
-+	return filename_mkdirat(AT_FDCWD, name, mode);
- }
- 
- /**
-diff --git a/io_uring/fs.c b/io_uring/fs.c
-index cd4d88d37795..40541b539e0d 100644
---- a/io_uring/fs.c
-+++ b/io_uring/fs.c
-@@ -182,11 +182,12 @@ int io_mkdirat_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
- int io_mkdirat(struct io_kiocb *req, unsigned int issue_flags)
- {
- 	struct io_mkdir *mkd = io_kiocb_to_cmd(req, struct io_mkdir);
-+	CLASS(filename_complete_delayed, name)(&mkd->filename);
- 	int ret;
- 
- 	WARN_ON_ONCE(issue_flags & IO_URING_F_NONBLOCK);
- 
--	ret = do_mkdirat(mkd->dfd, complete_getname(&mkd->filename), mkd->mode);
-+	ret = filename_mkdirat(mkd->dfd, name, mkd->mode);
- 
- 	req->flags &= ~REQ_F_NEED_CLEANUP;
- 	io_req_set_res(req, ret, 0);
 -- 
 2.47.3
 
