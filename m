@@ -1,34 +1,34 @@
 Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F009A2E0925;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E82562DCF6C;
 	Wed, 14 Jan 2026 04:31:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768365111; cv=none; b=QjUyjx5fL+yWE4rejgSB1M8hrL5x2N2+GTYM9e/Qf+S9zqpAhN1eOzlLaxtIGEO9yvFz9ccSzpGwWDMRVRPZUMdb6xUm2hW3D+/xXelCs2xwYlQ0uG4qj0enFDSoa+rS83jhMM5jznujhdvDGsxgSp3eMZQ09XmRqFu49efTjio=
+	t=1768365112; cv=none; b=hNMTHAYECuRf2SvF86cQRdsj+KPYpHHJzMCHZIY2n0Mvl4rKKhSmMArAwIsdIFDk8C8eo6/HfXdPXjPntKURTN77Rz2JOUYZgF+DP8DdYi73zMbuDK045fUAR0+be4cndQj+dspql8KNP0jluo1YWQfrxjfMdE5ZN3zD5Hf1u/E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768365111; c=relaxed/simple;
-	bh=R4BsGEh9vRT+BWogUYDjPeXxE9IBI/2X8eig9G6UMZw=;
+	s=arc-20240116; t=1768365112; c=relaxed/simple;
+	bh=aacmgBkIekWcKT1nYvHuUWkKevrQq3dWCTP/f16lQvY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=bvDnzkcysEa4Pwqyc0AbAxcS9q/hVdIda7nfIGr4gsKMh9fgA7eCjusF3v4vV+KQxBNUu4mx+xGWKdy7oywBjkgdxPlz2Du3xY6J0s31q2mG8U1Oid0KYFyFFWhDEXE7VqmUQAkHDJkqFrFYY9fEuZ9hZWNr6ZkbD5YBzWL6U+0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=VFyCCnM6; arc=none smtp.client-ip=62.89.141.173
+	 MIME-Version; b=dMMWRw/gVaXq05JvypA+09Zsr29tyxSqCFNfmkGACYuFRQBBVBgiUQVXU21NLN2kE7WP+S3p+R3qr8CKIJkKEJxxHXwOXY6V7ArlrCnYtBsWewNCzy3HkkF0+bHhLQXYX7nyuRa4KQc3a7ICToUTReP5YXqNi+7uqzCtmw5SgLU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=ceNaE1sS; arc=none smtp.client-ip=62.89.141.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="VFyCCnM6"
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="ceNaE1sS"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=linux.org.uk; s=zeniv-20220401; h=Sender:Content-Transfer-Encoding:
 	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
 	Reply-To:Content-Type:Content-ID:Content-Description;
-	bh=it1twp1kX+r0juotLWglqQevDLHy0Ifx1JDSAtZd98I=; b=VFyCCnM6ICp7S5eHjWCwecFiJL
-	TBqa7RXugzN3lg/fOdmSNwE0pmn+2MobLicLTcQB3HaSuNO9kysb2PQ8O1XfdaDSe5qBWJPKzAtyq
-	YwDqr0yhHjpzwvpawwdLpsf044V476T7ohzQfwJBUTtb1yBZLmtndgy9ljHUoqGOrCpRVh6oJSwRx
-	rjJD4sw9nMgJMiJpuDSYChdU+J4KVvjpH533OQAfRg6rBnmmo5Nlrc/4PBXDr7Qs9Ke0lMvYqLYdf
-	0nwutecw522t7eT1n+0UUrtyrdyd/huWJo3InlyaxumP2kxny0bY53W8KvdFbn0NSKaVREv4kYHBQ
-	gV0QsL9Q==;
+	bh=F3fmLDfzzCSFX0fX01qQzZyvJwhOF7I5P+jzcyU8rOk=; b=ceNaE1sS/zgPYbDGwQH4S6r0bD
+	WC+quE5EMv+dfUrAgY3h1aCIHMUDrm/scyKauOzy+GGkK9WRJ3Vu+2CC3UvH0dnpDoFryRKcng4Tn
+	WfMLHoAWac31HtMheTdR3/NPHQ/PczBciz4S7KwRS1IBcwcB0jvJ0BjewvRb9jVQNPMX+sQCAK+6o
+	bDTvL9amooLrCIinOvmPpNocVMwgO8KE5ObMnr7krjECOn10UDU7Ln0OAE7kMgnIVqlMybcxVNmFS
+	0dplpXw+NyLJb1mI/2gF6jS1eDzfZy3LLbq15Ff5E223iMtMyuWTVKbdv1fOFrZaJzhnPVIpIvFxt
+	6GxNjUZA==;
 Received: from viro by zeniv.linux.org.uk with local (Exim 4.99 #2 (Red Hat Linux))
-	id 1vfsZG-0000000GIoW-3fa1;
-	Wed, 14 Jan 2026 04:33:14 +0000
+	id 1vfsZD-0000000GInA-15Op;
+	Wed, 14 Jan 2026 04:33:11 +0000
 From: Al Viro <viro@zeniv.linux.org.uk>
 To: linux-fsdevel@vger.kernel.org
 Cc: Linus Torvalds <torvalds@linux-foundation.org>,
@@ -40,9 +40,9 @@ Cc: Linus Torvalds <torvalds@linux-foundation.org>,
 	audit@vger.kernel.org,
 	io-uring@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v5 36/68] execve: fold {compat_,}do_execve{,at}() into their sole callers
-Date: Wed, 14 Jan 2026 04:32:38 +0000
-Message-ID: <20260114043310.3885463-37-viro@zeniv.linux.org.uk>
+Subject: [PATCH v5 06/68] do_faccessat(): import pathname only once
+Date: Wed, 14 Jan 2026 04:32:08 +0000
+Message-ID: <20260114043310.3885463-7-viro@zeniv.linux.org.uk>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260114043310.3885463-1-viro@zeniv.linux.org.uk>
 References: <20260114043310.3885463-1-viro@zeniv.linux.org.uk>
@@ -55,139 +55,63 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: Al Viro <viro@ftp.linux.org.uk>
 
-All of them are wrappers for do_execveat_common() and each has
-exactly one caller.  The only difference is in the way they are
-constructing argv/envp arguments for do_execveat_common() and
-that's easy to do with less boilerplate.
+Convert the user_path_at() call inside a retry loop into getname_flags() +
+filename_lookup() + putname() and leave only filename_lookup() inside
+the loop.
+
+Since we have the default logics for use of LOOKUP_EMPTY (passed iff
+AT_EMPTY_PATH is present in flags), just use getname_uflags() and
+don't bother with setting LOOKUP_EMPTY in lookup_flags - getname_uflags()
+will pass the right thing to getname_flags() and filename_lookup()
+doesn't care about LOOKUP_EMPTY at all.
+
+The things could be further simplified by use of cleanup.h stuff, but
+let's not clutter the patch with that.
 
 Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
 ---
- fs/exec.c | 80 +++++++++++++------------------------------------------
- 1 file changed, 19 insertions(+), 61 deletions(-)
+ fs/open.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/fs/exec.c b/fs/exec.c
-index 1473e8c06a8c..5d15c0440c3d 100644
---- a/fs/exec.c
-+++ b/fs/exec.c
-@@ -1907,59 +1907,6 @@ int kernel_execve(const char *kernel_filename,
- 	return retval;
- }
+diff --git a/fs/open.c b/fs/open.c
+index f328622061c5..f3bacc583ef0 100644
+--- a/fs/open.c
++++ b/fs/open.c
+@@ -468,6 +468,7 @@ static int do_faccessat(int dfd, const char __user *filename, int mode, int flag
+ 	int res;
+ 	unsigned int lookup_flags = LOOKUP_FOLLOW;
+ 	const struct cred *old_cred = NULL;
++	struct filename *name;
  
--static int do_execve(struct filename *filename,
--	const char __user *const __user *__argv,
--	const char __user *const __user *__envp)
--{
--	struct user_arg_ptr argv = { .ptr.native = __argv };
--	struct user_arg_ptr envp = { .ptr.native = __envp };
--	return do_execveat_common(AT_FDCWD, filename, argv, envp, 0);
--}
--
--static int do_execveat(int fd, struct filename *filename,
--		const char __user *const __user *__argv,
--		const char __user *const __user *__envp,
--		int flags)
--{
--	struct user_arg_ptr argv = { .ptr.native = __argv };
--	struct user_arg_ptr envp = { .ptr.native = __envp };
--
--	return do_execveat_common(fd, filename, argv, envp, flags);
--}
--
--#ifdef CONFIG_COMPAT
--static int compat_do_execve(struct filename *filename,
--	const compat_uptr_t __user *__argv,
--	const compat_uptr_t __user *__envp)
--{
--	struct user_arg_ptr argv = {
--		.is_compat = true,
--		.ptr.compat = __argv,
--	};
--	struct user_arg_ptr envp = {
--		.is_compat = true,
--		.ptr.compat = __envp,
--	};
--	return do_execveat_common(AT_FDCWD, filename, argv, envp, 0);
--}
--
--static int compat_do_execveat(int fd, struct filename *filename,
--			      const compat_uptr_t __user *__argv,
--			      const compat_uptr_t __user *__envp,
--			      int flags)
--{
--	struct user_arg_ptr argv = {
--		.is_compat = true,
--		.ptr.compat = __argv,
--	};
--	struct user_arg_ptr envp = {
--		.is_compat = true,
--		.ptr.compat = __envp,
--	};
--	return do_execveat_common(fd, filename, argv, envp, flags);
--}
--#endif
--
- void set_binfmt(struct linux_binfmt *new)
- {
- 	struct mm_struct *mm = current->mm;
-@@ -1984,12 +1931,18 @@ void set_dumpable(struct mm_struct *mm, int value)
- 	__mm_flags_set_mask_dumpable(mm, value);
- }
+ 	if (mode & ~S_IRWXO)	/* where's F_OK, X_OK, W_OK, R_OK? */
+ 		return -EINVAL;
+@@ -477,8 +478,6 @@ static int do_faccessat(int dfd, const char __user *filename, int mode, int flag
  
-+static inline struct user_arg_ptr native_arg(const char __user *const __user *p)
-+{
-+	return (struct user_arg_ptr){.ptr.native = p};
-+}
-+
- SYSCALL_DEFINE3(execve,
- 		const char __user *, filename,
- 		const char __user *const __user *, argv,
- 		const char __user *const __user *, envp)
- {
--	return do_execve(getname(filename), argv, envp);
-+	return do_execveat_common(AT_FDCWD, getname(filename),
-+				  native_arg(argv), native_arg(envp), 0);
- }
+ 	if (flags & AT_SYMLINK_NOFOLLOW)
+ 		lookup_flags &= ~LOOKUP_FOLLOW;
+-	if (flags & AT_EMPTY_PATH)
+-		lookup_flags |= LOOKUP_EMPTY;
  
- SYSCALL_DEFINE5(execveat,
-@@ -1998,17 +1951,23 @@ SYSCALL_DEFINE5(execveat,
- 		const char __user *const __user *, envp,
- 		int, flags)
- {
--	return do_execveat(fd,
--			   getname_uflags(filename, flags),
--			   argv, envp, flags);
-+	return do_execveat_common(fd, getname_uflags(filename, flags),
-+				  native_arg(argv), native_arg(envp), flags);
- }
+ 	if (access_need_override_creds(flags)) {
+ 		old_cred = access_override_creds();
+@@ -486,8 +485,9 @@ static int do_faccessat(int dfd, const char __user *filename, int mode, int flag
+ 			return -ENOMEM;
+ 	}
  
- #ifdef CONFIG_COMPAT
-+
-+static inline struct user_arg_ptr compat_arg(const compat_uptr_t __user *p)
-+{
-+	return (struct user_arg_ptr){.is_compat = true, .ptr.compat = p};
-+}
-+
- COMPAT_SYSCALL_DEFINE3(execve, const char __user *, filename,
- 	const compat_uptr_t __user *, argv,
- 	const compat_uptr_t __user *, envp)
- {
--	return compat_do_execve(getname(filename), argv, envp);
-+	return do_execveat_common(AT_FDCWD, getname(filename),
-+				  compat_arg(argv), compat_arg(envp), 0);
- }
++	name = getname_uflags(filename, flags);
+ retry:
+-	res = user_path_at(dfd, filename, lookup_flags, &path);
++	res = filename_lookup(dfd, name, lookup_flags, &path, NULL);
+ 	if (res)
+ 		goto out;
  
- COMPAT_SYSCALL_DEFINE5(execveat, int, fd,
-@@ -2017,9 +1976,8 @@ COMPAT_SYSCALL_DEFINE5(execveat, int, fd,
- 		       const compat_uptr_t __user *, envp,
- 		       int,  flags)
- {
--	return compat_do_execveat(fd,
--				  getname_uflags(filename, flags),
--				  argv, envp, flags);
-+	return do_execveat_common(fd, getname_uflags(filename, flags),
-+				  compat_arg(argv), compat_arg(envp), flags);
- }
- #endif
+@@ -527,6 +527,7 @@ static int do_faccessat(int dfd, const char __user *filename, int mode, int flag
+ 		goto retry;
+ 	}
+ out:
++	putname(name);
+ 	if (old_cred)
+ 		put_cred(revert_creds(old_cred));
  
 -- 
 2.47.3
