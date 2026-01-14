@@ -1,34 +1,34 @@
 Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 996AA2E2679;
-	Wed, 14 Jan 2026 04:31:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99E4F2857CC;
+	Wed, 14 Jan 2026 04:31:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768365115; cv=none; b=bEB5u1U2A8dsDHzzmTVJJa+c8Gs4HoUqzJPICbsghqA2egU/RVWsphSawPZjQA4fTBFFoVlviQlSEEQshLHJ7yDI686qQ6la9D7FP7TdmrD766rhoILbEvqMEw8HTVj+OleChnd4Qm+SFq0OrgMrkyrWoxhaSUfbYYlpXoJpy48=
+	t=1768365114; cv=none; b=cl0ELShPdb9ztrO4ApOn4L1byKWV6zc/sVpVNTtHvXol9uGI1ZQcfM+PG4ofvF5CgOEmQHxCemlbIi2mpiW+3fiAIUKFZ5V58SX7LrJwqcI4ZiAGxbYvA/hJICjCRw1M8oi2r6SB5JVF9nwELfBO45V/N3GiutwEyRJAOyXKZ50=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768365115; c=relaxed/simple;
-	bh=SbI3DRdTxhpxp15wz9oepv4ryqxg+FnvrVgZUV3jt3I=;
+	s=arc-20240116; t=1768365114; c=relaxed/simple;
+	bh=wyl2OwewftmSzA2GDeE7hJpAYHdBh4Z9OpsDMrLqY5M=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Nj0z5tVD0y7SlnDe4w5ziL9f+VQjelU2atCRyj2UnEL80s0ck8lHCNombJ+8U0hlLbdBfHPu/hhKaAP03BABHv+fQZxx1FfKW8zhdah1PJBhd24NvPHh9nvPkp1x0yrRdmMthn6OiuREY6Qza+wq7CqqoCfdyIF3L35+FLly+ds=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=W4JcMz6P; arc=none smtp.client-ip=62.89.141.173
+	 MIME-Version; b=NVU5yDObrwdSTwd97ZPBiQ+fkngQxpfuAOFWfnrhVDaUtgEW401Ol3ukjIs1W6W+3CfWPqeAp455Cn0qn0Brfy4/0pCECsEBiGuv+EM1VogUHAbarr2zrAvZB1qlHQfsLlbvrYdYUZ5JtMoVkXVqIDhsqwN03GzAoOUhJ36rAmo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=AMW+vAzX; arc=none smtp.client-ip=62.89.141.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="W4JcMz6P"
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="AMW+vAzX"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=linux.org.uk; s=zeniv-20220401; h=Sender:Content-Transfer-Encoding:
 	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
 	Reply-To:Content-Type:Content-ID:Content-Description;
-	bh=gKzl0eKKcMD290wUxRb/9R5rQSbJcVDAzIuQbkXBR/U=; b=W4JcMz6P9w1G6UB4sewIlRSfok
-	mFdBfbs+tqyd3Q971h8pngPlHB3jzvrHGYTao0tWwcW9rPPRUlhxcK4LrDe6wOYuWQrARc6gf0ub0
-	eshvB7EBXlRfRpWhfSrNttM74TPz7rcEZMTdDUUiWQ34iWTK7YAvULvays5aUfsScns/l4CLR4yok
-	C7WcIv2rBvF/3K6NmzB9CZWJ3mcohBncHSkPVeXeCkNRJoAYBgREkuKNN/KQieXP9XQAKYhhBqmXZ
-	0aeaDe5iNVNOfBmALoUmTQUyWX7Zu0+I7XO8a5Mz4Gk5YLuLIwjCU2YaxR21nBx/t900pPoofrbUn
-	oNkTsFJA==;
+	bh=8t9Yib6JJzwfWRyoSOX6RtjnhtOU3jM57OI5Cs+WPdk=; b=AMW+vAzX7YsaDU7sVIaXb7nGrS
+	HYr249VOST23QoBmkeG2eIexjkd3x2KGetxgrmUCSzf9+zHqOhrWUntrn8vF5J4gtUNk7BhjW9f3U
+	ub0YoQfFFntcFaMNIPrMGXXeWyczHSTAvdCa2m8sNOAmFwDhNM6w4g+5/05vQix30E0ZVGZg1H8JR
+	2I/ywPvS6XP2XaIB67Ke5vcFldH+x4kJaJk4ASH2XwPNmXQi/Y+PsI0JRvvCd9Q371hvQCvCtQFzT
+	8S5oL3LHXLIbCW0KkvE2I+790mWF9G/TGXN3JVWnlJS+3f6jjpUbbQFfCjoyUAwLYgW3XltrOXSPA
+	tMbbIBlw==;
 Received: from viro by zeniv.linux.org.uk with local (Exim 4.99 #2 (Red Hat Linux))
-	id 1vfsZE-0000000GInX-17p7;
-	Wed, 14 Jan 2026 04:33:12 +0000
+	id 1vfsZH-0000000GIpm-0x4N;
+	Wed, 14 Jan 2026 04:33:15 +0000
 From: Al Viro <viro@zeniv.linux.org.uk>
 To: linux-fsdevel@vger.kernel.org
 Cc: Linus Torvalds <torvalds@linux-foundation.org>,
@@ -40,9 +40,9 @@ Cc: Linus Torvalds <torvalds@linux-foundation.org>,
 	audit@vger.kernel.org,
 	io-uring@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v5 15/68] get rid of audit_reusename()
-Date: Wed, 14 Jan 2026 04:32:17 +0000
-Message-ID: <20260114043310.3885463-16-viro@zeniv.linux.org.uk>
+Subject: [PATCH v5 38/68] switch {alloc,free}_bprm() to CLASS()
+Date: Wed, 14 Jan 2026 04:32:40 +0000
+Message-ID: <20260114043310.3885463-39-viro@zeniv.linux.org.uk>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260114043310.3885463-1-viro@zeniv.linux.org.uk>
 References: <20260114043310.3885463-1-viro@zeniv.linux.org.uk>
@@ -55,160 +55,161 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: Al Viro <viro@ftp.linux.org.uk>
 
-Originally we tried to avoid multiple insertions into audit names array
-during retry loop by a cute hack - memorize the userland pointer and
-if there already is a match, just grab an extra reference to it.
+All linux_binprm instances come from alloc_bprm() and are unconditionally
+destroyed by free_bprm() in the end of the same scope.  IOW, CLASS()
+machinery is a decent fit for those.
 
-Cute as it had been, it had problems - two identical pointers had
-audit aux entries merged, two identical strings did not.  Having
-different behaviour for syscalls that differ only by addresses of
-otherwise identical string arguments is obviously wrong - if nothing
-else, compiler can decide to merge identical string literals.
-
-Besides, this hack does nothing for non-audited processes - they get
-a fresh copy for retry.  It's not time-critical, but having behaviour
-subtly differ that way is bogus.
-
-These days we have very few places that import filename more than once
-(9 functions total) and it's easy to massage them so we get rid of all
-re-imports.  With that done, we don't need audit_reusename() anymore.
-There's no need to memorize userland pointer either.
-
-Acked-by: Paul Moore <paul@paul-moore.com>
 Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
 ---
- fs/namei.c            | 11 +++--------
- include/linux/audit.h | 11 -----------
- include/linux/fs.h    |  1 -
- kernel/auditsc.c      | 23 -----------------------
- 4 files changed, 3 insertions(+), 43 deletions(-)
+ fs/exec.c | 48 +++++++++++++++++++++---------------------------
+ 1 file changed, 21 insertions(+), 27 deletions(-)
 
-diff --git a/fs/namei.c b/fs/namei.c
-index 4595b355b3ce..3ba712032f55 100644
---- a/fs/namei.c
-+++ b/fs/namei.c
-@@ -125,9 +125,8 @@
+diff --git a/fs/exec.c b/fs/exec.c
+index 9e799af13602..5dd8ff61f27a 100644
+--- a/fs/exec.c
++++ b/fs/exec.c
+@@ -1465,6 +1465,9 @@ static struct linux_binprm *alloc_bprm(int fd, struct filename *filename, int fl
+ 	return ERR_PTR(retval);
+ }
  
- #define EMBEDDED_NAME_MAX	(PATH_MAX - offsetof(struct filename, iname))
- 
--static inline void initname(struct filename *name, const char __user *uptr)
-+static inline void initname(struct filename *name)
++DEFINE_CLASS(bprm, struct linux_binprm *, if (!IS_ERR(_T)) free_bprm(_T),
++	alloc_bprm(fd, name, flags), int fd, struct filename *name, int flags)
++
+ int bprm_change_interp(const char *interp, struct linux_binprm *bprm)
  {
--	name->uptr = uptr;
- 	name->aname = NULL;
- 	atomic_set(&name->refcnt, 1);
- }
-@@ -139,10 +138,6 @@ getname_flags(const char __user *filename, int flags)
- 	char *kname;
- 	int len;
+ 	/* If a binfmt changed the interp, free it first. */
+@@ -1779,7 +1782,6 @@ static int do_execveat_common(int fd, struct filename *filename,
+ 			      struct user_arg_ptr envp,
+ 			      int flags)
+ {
+-	struct linux_binprm *bprm;
+ 	int retval;
  
--	result = audit_reusename(filename);
--	if (result)
--		return result;
--
- 	result = __getname();
- 	if (unlikely(!result))
- 		return ERR_PTR(-ENOMEM);
-@@ -210,7 +205,7 @@ getname_flags(const char __user *filename, int flags)
- 			return ERR_PTR(-ENAMETOOLONG);
- 		}
+ 	/*
+@@ -1796,36 +1798,36 @@ static int do_execveat_common(int fd, struct filename *filename,
+ 	 * further execve() calls fail. */
+ 	current->flags &= ~PF_NPROC_EXCEEDED;
+ 
+-	bprm = alloc_bprm(fd, filename, flags);
++	CLASS(bprm, bprm)(fd, filename, flags);
+ 	if (IS_ERR(bprm))
+ 		return PTR_ERR(bprm);
+ 
+ 	retval = count(argv, MAX_ARG_STRINGS);
+ 	if (retval < 0)
+-		goto out_free;
++		return retval;
+ 	bprm->argc = retval;
+ 
+ 	retval = count(envp, MAX_ARG_STRINGS);
+ 	if (retval < 0)
+-		goto out_free;
++		return retval;
+ 	bprm->envc = retval;
+ 
+ 	retval = bprm_stack_limits(bprm);
+ 	if (retval < 0)
+-		goto out_free;
++		return retval;
+ 
+ 	retval = copy_string_kernel(bprm->filename, bprm);
+ 	if (retval < 0)
+-		goto out_free;
++		return retval;
+ 	bprm->exec = bprm->p;
+ 
+ 	retval = copy_strings(bprm->envc, envp, bprm);
+ 	if (retval < 0)
+-		goto out_free;
++		return retval;
+ 
+ 	retval = copy_strings(bprm->argc, argv, bprm);
+ 	if (retval < 0)
+-		goto out_free;
++		return retval;
+ 
+ 	/*
+ 	 * When argv is empty, add an empty string ("") as argv[0] to
+@@ -1836,24 +1838,19 @@ static int do_execveat_common(int fd, struct filename *filename,
+ 	if (bprm->argc == 0) {
+ 		retval = copy_string_kernel("", bprm);
+ 		if (retval < 0)
+-			goto out_free;
++			return retval;
+ 		bprm->argc = 1;
+ 
+ 		pr_warn_once("process '%s' launched '%s' with NULL argv: empty string added\n",
+ 			     current->comm, bprm->filename);
  	}
--	initname(result, filename);
-+	initname(result);
- 	audit_getname(result);
- 	return result;
- }
-@@ -268,7 +263,7 @@ struct filename *getname_kernel(const char * filename)
- 		return ERR_PTR(-ENAMETOOLONG);
- 	}
- 	memcpy((char *)result->name, filename, len);
--	initname(result, NULL);
-+	initname(result);
- 	audit_getname(result);
- 	return result;
- }
-diff --git a/include/linux/audit.h b/include/linux/audit.h
-index 536f8ee8da81..d936a604d056 100644
---- a/include/linux/audit.h
-+++ b/include/linux/audit.h
-@@ -316,7 +316,6 @@ extern void __audit_uring_exit(int success, long code);
- extern void __audit_syscall_entry(int major, unsigned long a0, unsigned long a1,
- 				  unsigned long a2, unsigned long a3);
- extern void __audit_syscall_exit(int ret_success, long ret_value);
--extern struct filename *__audit_reusename(const __user char *uptr);
- extern void __audit_getname(struct filename *name);
- extern void __audit_inode(struct filename *name, const struct dentry *dentry,
- 				unsigned int flags);
-@@ -380,12 +379,6 @@ static inline void audit_syscall_exit(void *pt_regs)
- 		__audit_syscall_exit(success, return_code);
- 	}
- }
--static inline struct filename *audit_reusename(const __user char *name)
--{
--	if (unlikely(!audit_dummy_context()))
--		return __audit_reusename(name);
--	return NULL;
--}
- static inline void audit_getname(struct filename *name)
- {
- 	if (unlikely(!audit_dummy_context()))
-@@ -624,10 +617,6 @@ static inline struct audit_context *audit_context(void)
- {
- 	return NULL;
- }
--static inline struct filename *audit_reusename(const __user char *name)
--{
--	return NULL;
--}
- static inline void audit_getname(struct filename *name)
- { }
- static inline void audit_inode(struct filename *name,
-diff --git a/include/linux/fs.h b/include/linux/fs.h
-index d49b969ab432..abe9c95c4874 100644
---- a/include/linux/fs.h
-+++ b/include/linux/fs.h
-@@ -2411,7 +2411,6 @@ extern struct kobject *fs_kobj;
- struct audit_names;
- struct filename {
- 	const char		*name;	/* pointer to actual string */
--	const __user char	*uptr;	/* original userland pointer */
- 	atomic_t		refcnt;
- 	struct audit_names	*aname;
- 	const char		iname[];
-diff --git a/kernel/auditsc.c b/kernel/auditsc.c
-index dd0563a8e0be..67d8da927381 100644
---- a/kernel/auditsc.c
-+++ b/kernel/auditsc.c
-@@ -2169,29 +2169,6 @@ static struct audit_names *audit_alloc_name(struct audit_context *context,
- 	return aname;
+ 
+-	retval = bprm_execve(bprm);
+-out_free:
+-	free_bprm(bprm);
+-	return retval;
++	return bprm_execve(bprm);
  }
  
--/**
-- * __audit_reusename - fill out filename with info from existing entry
-- * @uptr: userland ptr to pathname
-- *
-- * Search the audit_names list for the current audit context. If there is an
-- * existing entry with a matching "uptr" then return the filename
-- * associated with that audit_name. If not, return NULL.
-- */
--struct filename *
--__audit_reusename(const __user char *uptr)
--{
--	struct audit_context *context = audit_context();
--	struct audit_names *n;
--
--	list_for_each_entry(n, &context->names_list, list) {
--		if (!n->name)
--			continue;
--		if (n->name->uptr == uptr)
--			return refname(n->name);
--	}
--	return NULL;
--}
--
- /**
-  * __audit_getname - add a name to the list
-  * @name: name to add
+ int kernel_execve(const char *kernel_filename,
+ 		  const char *const *argv, const char *const *envp)
+ {
+-	struct linux_binprm *bprm;
+-	int fd = AT_FDCWD;
+ 	int retval;
+ 
+ 	/* It is non-sense for kernel threads to call execve */
+@@ -1861,43 +1858,40 @@ int kernel_execve(const char *kernel_filename,
+ 		return -EINVAL;
+ 
+ 	CLASS(filename_kernel, filename)(kernel_filename);
+-	bprm = alloc_bprm(fd, filename, 0);
++	CLASS(bprm, bprm)(AT_FDCWD, filename, 0);
+ 	if (IS_ERR(bprm))
+ 		return PTR_ERR(bprm);
+ 
+ 	retval = count_strings_kernel(argv);
+ 	if (WARN_ON_ONCE(retval == 0))
+-		retval = -EINVAL;
++		return -EINVAL;
+ 	if (retval < 0)
+-		goto out_free;
++		return retval;
+ 	bprm->argc = retval;
+ 
+ 	retval = count_strings_kernel(envp);
+ 	if (retval < 0)
+-		goto out_free;
++		return retval;
+ 	bprm->envc = retval;
+ 
+ 	retval = bprm_stack_limits(bprm);
+ 	if (retval < 0)
+-		goto out_free;
++		return retval;
+ 
+ 	retval = copy_string_kernel(bprm->filename, bprm);
+ 	if (retval < 0)
+-		goto out_free;
++		return retval;
+ 	bprm->exec = bprm->p;
+ 
+ 	retval = copy_strings_kernel(bprm->envc, envp, bprm);
+ 	if (retval < 0)
+-		goto out_free;
++		return retval;
+ 
+ 	retval = copy_strings_kernel(bprm->argc, argv, bprm);
+ 	if (retval < 0)
+-		goto out_free;
++		return retval;
+ 
+-	retval = bprm_execve(bprm);
+-out_free:
+-	free_bprm(bprm);
+-	return retval;
++	return bprm_execve(bprm);
+ }
+ 
+ void set_binfmt(struct linux_binfmt *new)
 -- 
 2.47.3
 
