@@ -1,34 +1,34 @@
 Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE8202E9ECA;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F21A82D73A6;
 	Wed, 14 Jan 2026 04:31:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768365118; cv=none; b=EaE2UhTveGkmWcRbI78wviaP5b5gdNpUNbkeWa/5nbL3mpnf6RMKebcgqmx+CathV63qHrScIVCgAsJLjr1F+Vn/YHo4zogDe8OSwMnL+32uOuKz9kz5YAfiX2ZQ/SX+Qeo2zhK233szUkj6SpQ+wrUvT5Ospw3s3n+49VbcFUQ=
+	t=1768365117; cv=none; b=qB3hb9elJZT0XhRNulg77JxblYh6N/r+bhzCxP1rPLah+2a1CMp2fZRdIfXJWW/byYuGrOire9spMZyY6l+dz6FcjBVKaQ5/5YZbLeKQn8HYzSeeufJVtvaodUU+J0R0RoTW7kEAiyG6gqCKVXQzuewKB8Rr1X48U02FfPXX+yM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768365118; c=relaxed/simple;
-	bh=JGIE1Xn73bLwFlYFa1TfmbrgYmGn/Qjf/OmTPOTQAHk=;
+	s=arc-20240116; t=1768365117; c=relaxed/simple;
+	bh=II4Jd1KayzSu2stxBC7ry6BC6NM93imrG4s5Ru4XzRk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=S/oucq4lF7cbxefsGPu5W8k/zhVUVDSmL5eRLq6SiQWwIPaSykiL+aAUmaHZ+0U78hLt6ah9HkfwFnbUtdha/CpjnOy56Wl1R8e5Cwfg7aBKr5iEhf8PnMIBNqMCFx0u7SIAAuvVMQJhP9hJB+NrXDEa5WvluasT64G9tsdbMes=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=dBP1edPb; arc=none smtp.client-ip=62.89.141.173
+	 MIME-Version; b=l0CpH1etsIs+ttHfHgGuXXpEmsFoFfGxNf4Vw9dzx073eDqV3oQX597GhTG1kA7m6i1w0+E8rJbTAL5uM3UoUm+nv3F8llQxWP+I7VUy4doVsFNnV+koUW5WWmecKXXuWYhGTY1YrY0C5qCOg9BsKUVSNojuFRID6wiXrvhhygA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=ZXIEwLqM; arc=none smtp.client-ip=62.89.141.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="dBP1edPb"
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="ZXIEwLqM"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=linux.org.uk; s=zeniv-20220401; h=Sender:Content-Transfer-Encoding:
 	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
 	Reply-To:Content-Type:Content-ID:Content-Description;
-	bh=w+ofnS0NH5sbZoyF6cXcsB14QEggir0J8dBphBaxor8=; b=dBP1edPbZtJmAyoFq/2obna7dP
-	leWUifReRB+aEsaQlG8yfZoRSK/6myvFJFh+nakW/e7BLpfjTazQjve+jRsXGEgfBerbPCduvWIVO
-	0yBgfxdJR50ojXoYSaGoVzT3U3s9Ir2iH+T0jQR/KOYynEjOExbuhjKX7KGQwKPc1klSKjmU8MMwY
-	krUpOC2nYVn+BjkwaU30zDFtNu5LPHxPOdgJa9r3fs+yAz+jcMEbZp0bkFHXV0oCZIzjNFkxU7cJg
-	FNKbitKXPC8zeCCfBT7UpkhtYdVqps8XWF/x/txMtU3igeToizpCI7EIi84cWM1guSPXlwdNREOvg
-	1OTHTVww==;
+	bh=NWFscm8Ml2vJyvKBphRWn8KIV03jpnxcc61yG5p5SAY=; b=ZXIEwLqMKdy6sb2gEW8WyByLTK
+	ZEEwvOwNNdinopg3GjsvsjGTcCSfubVxyxFbstC41gP8DX3QpMtvrkO1xuh5RiZXS0UZr0BeyPDKg
+	CxJQETWQKzwWcCWpG8NhCPkCPg6H/eODv2lCxon4rp6uh6OzsTpWJ9mqkbsqRJwqIiV8S1WzRJGdJ
+	38sSYGSIHjkiMYrGo801YlDACaM50Izxk5D+I8EZEPaPFB+JWkY/PCqXhEfkq7+hlMpaJEtvKA9t7
+	WJFjHH0CPvp/BILRU9gVNQxH3SerKTjYSL2ISzl9WQxrfZMuvrTHn0GdseFjb02iqBUpxLTcBjMej
+	C5z5Uvyg==;
 Received: from viro by zeniv.linux.org.uk with local (Exim 4.99 #2 (Red Hat Linux))
-	id 1vfsZK-0000000GIuu-1JcP;
-	Wed, 14 Jan 2026 04:33:18 +0000
+	id 1vfsZF-0000000GInn-19Wu;
+	Wed, 14 Jan 2026 04:33:13 +0000
 From: Al Viro <viro@zeniv.linux.org.uk>
 To: linux-fsdevel@vger.kernel.org
 Cc: Linus Torvalds <torvalds@linux-foundation.org>,
@@ -40,9 +40,9 @@ Cc: Linus Torvalds <torvalds@linux-foundation.org>,
 	audit@vger.kernel.org,
 	io-uring@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v5 48/68] vfs_open_tree(): use CLASS(filename_uflags)
-Date: Wed, 14 Jan 2026 04:32:50 +0000
-Message-ID: <20260114043310.3885463-49-viro@zeniv.linux.org.uk>
+Subject: [PATCH v5 22/68] switch __getname_maybe_null() to CLASS(filename_flags)
+Date: Wed, 14 Jan 2026 04:32:24 +0000
+Message-ID: <20260114043310.3885463-23-viro@zeniv.linux.org.uk>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260114043310.3885463-1-viro@zeniv.linux.org.uk>
 References: <20260114043310.3885463-1-viro@zeniv.linux.org.uk>
@@ -57,29 +57,39 @@ Sender: Al Viro <viro@ftp.linux.org.uk>
 
 Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
 ---
- fs/namespace.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ fs/namei.c | 12 +++++-------
+ 1 file changed, 5 insertions(+), 7 deletions(-)
 
-diff --git a/fs/namespace.c b/fs/namespace.c
-index d632180f9b1a..888df8ee43bc 100644
---- a/fs/namespace.c
-+++ b/fs/namespace.c
-@@ -3082,13 +3082,12 @@ static struct file *vfs_open_tree(int dfd, const char __user *filename, unsigned
- 		lookup_flags &= ~LOOKUP_AUTOMOUNT;
- 	if (flags & AT_SYMLINK_NOFOLLOW)
- 		lookup_flags &= ~LOOKUP_FOLLOW;
--	if (flags & AT_EMPTY_PATH)
--		lookup_flags |= LOOKUP_EMPTY;
+diff --git a/fs/namei.c b/fs/namei.c
+index 06d60808b0ff..f1a2161bd691 100644
+--- a/fs/namei.c
++++ b/fs/namei.c
+@@ -227,7 +227,6 @@ struct filename *getname_uflags(const char __user *filename, int uflags)
  
- 	if (detached && !may_mount())
- 		return ERR_PTR(-EPERM);
+ struct filename *__getname_maybe_null(const char __user *pathname)
+ {
+-	struct filename *name;
+ 	char c;
  
--	ret = user_path_at(dfd, filename, lookup_flags, &path);
-+	CLASS(filename_uflags, name)(filename, flags);
-+	ret = filename_lookup(dfd, name, lookup_flags, &path, NULL);
- 	if (unlikely(ret))
- 		return ERR_PTR(ret);
+ 	/* try to save on allocations; loss on um, though */
+@@ -236,12 +235,11 @@ struct filename *__getname_maybe_null(const char __user *pathname)
+ 	if (!c)
+ 		return NULL;
  
+-	name = getname_flags(pathname, LOOKUP_EMPTY);
+-	if (!IS_ERR(name) && !(name->name[0])) {
+-		putname(name);
+-		name = NULL;
+-	}
+-	return name;
++	CLASS(filename_flags, name)(pathname, LOOKUP_EMPTY);
++	/* empty pathname translates to NULL */
++	if (!IS_ERR(name) && !(name->name[0]))
++		return NULL;
++	return no_free_ptr(name);
+ }
+ 
+ struct filename *getname_kernel(const char * filename)
 -- 
 2.47.3
 
