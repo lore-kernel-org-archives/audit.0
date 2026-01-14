@@ -1,92 +1,86 @@
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A361722B5A5;
-	Wed, 14 Jan 2026 14:34:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B35C3A0B2E;
+	Wed, 14 Jan 2026 16:00:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768401272; cv=none; b=lldvE1sCGhjB98DbqKDgLcwijzOJw8NyOGCma7vdlOO+0ZOa3W824lfnwaWWhudgwLBQl6J0VE8DcubnoIyu1aD3HFVlJGOPiFahak9AhtVFaVOgRYSOzqQjuuXWogXD4Vtp+p95/sTCoITXwnDf+i/qM7ieHNHMaIHkTkivjH8=
+	t=1768406453; cv=none; b=BLyxPfIIwxnbOe8SJOfPlfmX42r/6siOEk6LBMDNRVcLqPZVDLKWXJBYFdxURVusDaxOxhW+xnFvtoBSFQ3zAimAUUKZ+Ku2LYb2LGQrMgNFB4PjljYbVEk41xlkKbkbHNJXaaASc9idxKDSHAAP2odRFyLl5RCDOOrlqQYEJjQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768401272; c=relaxed/simple;
-	bh=ZQCFuaMuCZ3Fu7pNmusE4ZOKXKRidmsWIk+RMzHZ0b0=;
+	s=arc-20240116; t=1768406453; c=relaxed/simple;
+	bh=SWwn1uBvvEbF5VZfqj8XM5G1nX7YWWVCpN2c72ulevc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Su8UQ0gTUoPMMRqre8y75zRwvbjGclAbeT7tqeLF7d3MqlX5vIWna9QajuT+ZGzvyxH7khz4WmmWhqZIy1Oa2ODWzS9IP8OhB1AKOLQCFIETy8qZFYXR0aaRpS/frtxkf1zPZkrEuIme/Zr1tyCwmiH7x8bffvu3BxxzteecZ84=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=f3bGrPVr; arc=none smtp.client-ip=62.89.141.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
+	 Content-Type:Content-Disposition:In-Reply-To; b=Iy3A2qZndbZZEWq8xs9IjMXiYg915RSYylQe/XsPvtMqxt595fz2JvVizm+JiWH84uhny02oZijEK2t97Q3mT4JaitGSOdF2tad1G6ZeJeI91JhosAQ5+2/28yU3k/yvWtdhkDwa6XpKl9pfVsgA6b13wF2VQLG2lC+nOHBWAgs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nQ3bwKwB; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="f3bGrPVr"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=JxQTzize1ybaWGG7/nlCFJTtSbJaJEnLC2I8YdrbeGg=; b=f3bGrPVrmYamelS0/7LRAc7CXk
-	v28l1qrBt9urctNj/Np9fcuZ3dA1gdP/pOTbWAKzlF7Xv+E+N61qE9Hg1b60SW4kfKTi+88KGAyJy
-	Fsd1NuOpb3EYmYdSlS0CKZV4UkUgg5ogKMVZWEjHRrDGR66ZYlZVqJuEo0Bl4fj9l0H6xfE0XJoCo
-	T7bYZtyPIguza0GYdpzPbbivC6U+4gWAhQPVz+T03QW43e2+FyHlDGWzEW3cfGYn/JgM6dAC3UmZc
-	5/j1XgUddqn6oeqGGv1esdPCOUB1UwCJFyHBPqxj9PHHzpUYXbmovM3Lp/gYGOcjNgBhZBnxV3XyU
-	jeNBWzUA==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.99 #2 (Red Hat Linux))
-	id 1vg1yV-0000000HZwl-30yI;
-	Wed, 14 Jan 2026 14:35:55 +0000
-Date: Wed, 14 Jan 2026 14:35:55 +0000
-From: Al Viro <viro@zeniv.linux.org.uk>
-To: David Laight <david.laight.linux@gmail.com>
-Cc: linux-fsdevel@vger.kernel.org,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
-	Mateusz Guzik <mjguzik@gmail.com>, Paul Moore <paul@paul-moore.com>,
-	Jens Axboe <axboe@kernel.dk>, audit@vger.kernel.org,
-	io-uring@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 68/68] sysfs(2): fs_index() argument is _not_ a
- pathname
-Message-ID: <20260114143555.GV3634291@ZenIV>
-References: <20260114043310.3885463-1-viro@zeniv.linux.org.uk>
- <20260114043310.3885463-69-viro@zeniv.linux.org.uk>
- <20260114104155.708180fc@pumpkin>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nQ3bwKwB"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DAC9CC4CEF7;
+	Wed, 14 Jan 2026 16:00:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1768406453;
+	bh=SWwn1uBvvEbF5VZfqj8XM5G1nX7YWWVCpN2c72ulevc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=nQ3bwKwBdfeJYMr6e1jBoF3kct68djGmXYlmFIpBb2Sr9gXV8A0Om+jivFiD8yx8O
+	 IsLEbRhvS4IY03gJIRua5u27QAuAyL4XuY3xfnwQAQE5yjirZGX1YJFpXn6eXnrd8c
+	 pRVrCDfroLj+HI8YiXnwi64UwMIYgfuI1X7wVD226TBFdYgPZuacm7NGT3utGJ0+pR
+	 fqvwHp5DXdjYvmkiuN5+GCfCGdmIfoNlhqPPwJkYfHTtyjaygViTgBlm3Co96dAL9G
+	 iWHlyGRPF3b3zz9RbChPRQjFKQ9W2DMZq0nwammgkzQv+vfeJ4I+EXhmdpnBv+N0Z2
+	 8kH9/uS9Ilczg==
+Date: Wed, 14 Jan 2026 17:00:48 +0100
+From: Christian Brauner <brauner@kernel.org>
+To: Al Viro <viro@zeniv.linux.org.uk>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, 
+	linux-fsdevel@vger.kernel.org, jack@suse.cz, mjguzik@gmail.com, paul@paul-moore.com, 
+	axboe@kernel.dk, audit@vger.kernel.org, io-uring@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 0/8] experimental struct filename followups
+Message-ID: <20260114-wildschwein-halbieren-bf41844e3f38@brauner>
+References: <20260108074201.435280-1-viro@zeniv.linux.org.uk>
+ <20260112-manifest-benimm-be85417d4f06@brauner>
+ <20260114021547.GR3634291@ZenIV>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20260114104155.708180fc@pumpkin>
-Sender: Al Viro <viro@ftp.linux.org.uk>
+In-Reply-To: <20260114021547.GR3634291@ZenIV>
 
-On Wed, Jan 14, 2026 at 10:41:55AM +0000, David Laight wrote:
-> On Wed, 14 Jan 2026 04:33:10 +0000
-> Al Viro <viro@zeniv.linux.org.uk> wrote:
-> 
-> > ... it's a filesystem type name.
+On Wed, Jan 14, 2026 at 02:15:47AM +0000, Al Viro wrote:
+> On Mon, Jan 12, 2026 at 11:00:10AM +0100, Christian Brauner wrote:
+> > On Thu, Jan 08, 2026 at 07:41:53AM +0000, Al Viro wrote:
+> > > This series switches the filename-consuming primitives to variants
+> > > that leave dropping the reference(s) to caller.  These days it's
+> > > fairly painless, and results look simpler wrt lifetime rules:
+> > > 	* with 3 exceptions, all instances have constructors and destructors
+> > > happen in the same scope (via CLASS(filename...), at that)
+> > > 	* CLASS(filename_consume) has no users left, could be dropped.
+> > > 	* exceptions are:
+> > > 		* audit dropping the references it stashed in audit_names
+> > > 		* fsconfig(2) creating and dropping references in two subcommands
+> > > 		* fs_lookup_param() playing silly buggers.
+> > > 	  That's it.
+> > > If we go that way, this will certainly get reordered back into the main series
+> > > and have several commits in there ripped apart and folded into these ones.
+> > > E.g. no sense to convert do_renameat2() et.al. to filename_consume, only to
+> > > have that followed by the first 6 commits here, etc.
+> > > 
+> > > For now I've put those into #experimental.filename, on top of #work.filename.
+> > > Comments would be very welcome...
 > > 
-> > Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
-> > ---
-> >  fs/filesystems.c | 9 +++------
-> >  1 file changed, 3 insertions(+), 6 deletions(-)
-> > 
-> > diff --git a/fs/filesystems.c b/fs/filesystems.c
-> > index 95e5256821a5..0c7d2b7ac26c 100644
-> > --- a/fs/filesystems.c
-> > +++ b/fs/filesystems.c
-> > @@ -132,24 +132,21 @@ EXPORT_SYMBOL(unregister_filesystem);
-> >  static int fs_index(const char __user * __name)
-> >  {
-> >  	struct file_system_type * tmp;
-> > -	struct filename *name;
-> > +	char *name __free(kfree) = strndup_user(__name, PATH_MAX);
-> >  	int err, index;
-> >  
-> > -	name = getname(__name);
-> > -	err = PTR_ERR(name);
-> >  	if (IS_ERR(name))
-> > -		return err;
-> > +		return PTR_ERR(name);
+> > Yeah, that looks nice. I like this a lot more than having calleee
+> > consume it.
+> > Reviewed-by: Christian Brauner <brauner@kernel.org>
 > 
-> Doesn't that end up calling kfree(name) and the check in kfree() doesn't
-> seem to exclude error values.
+> FWIW, I've folded that into #work.filename and reordered the things to a somewhat
+> saner shape.  Will post the updated series shortly.
+> 
+> Open questions:
+> 
+> 	* Exports.  Currently we have getname_kernel() and putname()
+> exported, while the rest of importers is not.  There is exactly one
 
-include/linux/slab.h:523:DEFINE_FREE(kfree, void *, if (!IS_ERR_OR_NULL(_T)) kfree(_T))
-
-kfree() the function won't be even called in that case...
+Tbh, I don't find that too bad. It would be elegant if we could wipe
+that completely but I don't think that this is a big deal...
