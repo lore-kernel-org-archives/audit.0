@@ -1,34 +1,34 @@
 Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2B8B30ACFF;
-	Wed, 14 Jan 2026 04:31:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC9BC2D94A0;
+	Wed, 14 Jan 2026 04:31:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768365117; cv=none; b=DJ2FlcMreRtEZKTt3bClr6hBzEXZYr9mNZ2Ic34JFLXdCWiwSlI52BMu4+OEQqRlK7WXw6x5U/TU81f7OY3PToKQP50qjivPtYWrL6HZIGyxlyiKOa6XHwcYEZutkUIqP1E8XKHXN8OP+kkRlEoSwvuhGIKQBxtDS6MNfouhOqg=
+	t=1768365118; cv=none; b=MRlorpbI1JHdwj3hW0K1ra3jRzT/RELrfh7eY9rXZgU4fWiMh9nCLA1QenlEYxKcWjtu5SxZt+glBWg3RkruN3IA9Iy5uAqjd9B7p91ACv+Mil/M4oen9/1d+0e0sPW81R6m0CtoO11extRkSrNfIvlOqtm3hs+vvEUPQoCW87U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768365117; c=relaxed/simple;
-	bh=ntStfDefI1LSk8YKGruB1ETOnK4upEIT64zjyBPt37E=;
+	s=arc-20240116; t=1768365118; c=relaxed/simple;
+	bh=2VlP+6+MBKxgN1IclcGfQgfePCUJ8rHRKFNxyM5IFBk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=bnmZKpgmqpuPnrgGOqU1SsU/quGkSI/7npGKLaEPrihEI7fFdkBkiHFiVmijiKQAjT0hMYdupysdwD6YV6M8Xkwxi/Pmx18FERnspuALpaTW74L3PdPWuy2fuM6VDMw1vEvOwwMXwGjmYNCZITwEU4xpPdDqknJlv3KknMUKxKo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=RLXRx9v/; arc=none smtp.client-ip=62.89.141.173
+	 MIME-Version; b=ob7RO1zbh48hpp5rlqP0LHSk6412X6qkeFj4lGDCx9E61UL5flbWX8g9czCU8KMvrTWgFJ8z9WhNCEu0vmhdGK0Iar70SDVjK5g713DamwAVCzS6Vw2Ad5VskRnvWi4HXcrhhrcacPox962yae7yhxPNn3ngYjNp0lhZqfi7jcI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=O+4URxOr; arc=none smtp.client-ip=62.89.141.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="RLXRx9v/"
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="O+4URxOr"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=linux.org.uk; s=zeniv-20220401; h=Sender:Content-Transfer-Encoding:
 	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
 	Reply-To:Content-Type:Content-ID:Content-Description;
-	bh=qCNNGL7/AcB8NbftVI2+HUXdppTuzbETXECNk4eIw2k=; b=RLXRx9v/uGWkFOwyu/GhtIXT88
-	czqDMQ70ZjGDDs1aYJY+OGOeksI1VdaXlF8d36saAO7nGgin2aj/A86HozZIuafF81qiK1LF+D4fY
-	CB2Gyf2ibj5GYNLH+9wIB+dJcn0AEUwXafwHug7I5TwDpORSZbnhg8JSsamU0AaaRXH7lObEu2e0U
-	h0mt9AxKAwHPfLtxqjgw5EsuNG/L0nJpK4i0vT9kD9U0bRDy4gJCz+ocUhosLjUolG+7DDMcKVMTB
-	LZIa8Tb5UAoZrV6lrlNwwLmYB/UdgWBLd+tvUlmNpv2c7MM0My5b/x4YrK+GZuS5EN2bDqL/5pqMJ
-	RU1bhjFQ==;
+	bh=kwEcrMngjLvIom2pOPUPNRKbOgmBlUmQNcYUZgCeoow=; b=O+4URxOr5Gw6nUvw0x/mlrFrWm
+	XbiZ+3MDYQm6/eQGPx/vhpySVjF93m4sQ2Pyc1qa8CwwOyCrUOVUWRcYZXnW2nLnCsfyh9sL8SS93
+	yQXpnF/izfEZzmTcP9vrvJHQR6xtUkh1EMoVXEk3N2ACeJymH60LQ6YERQUlkJwQ0JbYESO4i7M5A
+	Wpe8y9Z0OOvAUJtBWfEBs16/mEqq608r21PNfGIEuUXPal2PRcI5KfpKO5NyYczJ0hqAJkhz339YW
+	BL5lKmJEbuAblzeQfsdvZLdUE0RU6+Epf+Y0O618C/4qi12DUYWGFTTvoNDEbndiJ9zDN3IiOlm/d
+	H902vmww==;
 Received: from viro by zeniv.linux.org.uk with local (Exim 4.99 #2 (Red Hat Linux))
-	id 1vfsZK-0000000GIvD-2h8V;
-	Wed, 14 Jan 2026 04:33:18 +0000
+	id 1vfsZF-0000000GInl-0hi2;
+	Wed, 14 Jan 2026 04:33:13 +0000
 From: Al Viro <viro@zeniv.linux.org.uk>
 To: linux-fsdevel@vger.kernel.org
 Cc: Linus Torvalds <torvalds@linux-foundation.org>,
@@ -40,9 +40,9 @@ Cc: Linus Torvalds <torvalds@linux-foundation.org>,
 	audit@vger.kernel.org,
 	io-uring@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v5 49/68] name_to_handle_at(): use CLASS(filename_uflags)
-Date: Wed, 14 Jan 2026 04:32:51 +0000
-Message-ID: <20260114043310.3885463-50-viro@zeniv.linux.org.uk>
+Subject: [PATCH v5 21/68] fs: hide names_cache behind runtime const machinery
+Date: Wed, 14 Jan 2026 04:32:23 +0000
+Message-ID: <20260114043310.3885463-22-viro@zeniv.linux.org.uk>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260114043310.3885463-1-viro@zeniv.linux.org.uk>
 References: <20260114043310.3885463-1-viro@zeniv.linux.org.uk>
@@ -55,27 +55,76 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: Al Viro <viro@ftp.linux.org.uk>
 
+From: Mateusz Guzik <mjguzik@gmail.com>
+
+s/names_cachep/names_cache/ for consistency with dentry cache.
+
+Signed-off-by: Mateusz Guzik <mjguzik@gmail.com>
 Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
 ---
- fs/fhandle.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ fs/namei.c                        | 16 ++++++++++------
+ include/asm-generic/vmlinux.lds.h |  3 ++-
+ 2 files changed, 12 insertions(+), 7 deletions(-)
 
-diff --git a/fs/fhandle.c b/fs/fhandle.c
-index 3de1547ec9d4..e15bcf4b0b23 100644
---- a/fs/fhandle.c
-+++ b/fs/fhandle.c
-@@ -157,9 +157,8 @@ SYSCALL_DEFINE5(name_to_handle_at, int, dfd, const char __user *, name,
- 		fh_flags |= EXPORT_FH_CONNECTABLE;
+diff --git a/fs/namei.c b/fs/namei.c
+index 57043b81fe27..06d60808b0ff 100644
+--- a/fs/namei.c
++++ b/fs/namei.c
+@@ -41,6 +41,8 @@
+ #include <linux/init_task.h>
+ #include <linux/uaccess.h>
  
- 	lookup_flags = (flag & AT_SYMLINK_FOLLOW) ? LOOKUP_FOLLOW : 0;
--	if (flag & AT_EMPTY_PATH)
--		lookup_flags |= LOOKUP_EMPTY;
--	err = user_path_at(dfd, name, lookup_flags, &path);
-+	CLASS(filename_uflags, filename)(name, flag);
-+	err = filename_lookup(dfd, filename, lookup_flags, &path, NULL);
- 	if (!err) {
- 		err = do_sys_name_to_handle(&path, handle, mnt_id,
- 					    flag & AT_HANDLE_MNT_ID_UNIQUE,
++#include <asm/runtime-const.h>
++
+ #include "internal.h"
+ #include "mount.h"
+ 
+@@ -124,23 +126,25 @@
+  */
+ 
+ /* SLAB cache for struct filename instances */
+-static struct kmem_cache *names_cachep __ro_after_init;
++static struct kmem_cache *__names_cache __ro_after_init;
++#define names_cache	runtime_const_ptr(__names_cache)
+ 
+ void __init filename_init(void)
+ {
+-	names_cachep = kmem_cache_create_usercopy("names_cache", sizeof(struct filename), 0,
+-			SLAB_HWCACHE_ALIGN|SLAB_PANIC, offsetof(struct filename, iname),
+-						EMBEDDED_NAME_MAX, NULL);
++	__names_cache = kmem_cache_create_usercopy("names_cache", sizeof(struct filename), 0,
++			 SLAB_HWCACHE_ALIGN|SLAB_PANIC, offsetof(struct filename, iname),
++			 EMBEDDED_NAME_MAX, NULL);
++	runtime_const_init(ptr, __names_cache);
+ }
+ 
+ static inline struct filename *alloc_filename(void)
+ {
+-	return kmem_cache_alloc(names_cachep, GFP_KERNEL);
++	return kmem_cache_alloc(names_cache, GFP_KERNEL);
+ }
+ 
+ static inline void free_filename(struct filename *p)
+ {
+-	kmem_cache_free(names_cachep, p);
++	kmem_cache_free(names_cache, p);
+ }
+ 
+ static inline void initname(struct filename *name)
+diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
+index 8ca130af301f..eeb070f330bd 100644
+--- a/include/asm-generic/vmlinux.lds.h
++++ b/include/asm-generic/vmlinux.lds.h
+@@ -972,7 +972,8 @@
+ #define RUNTIME_CONST_VARIABLES						\
+ 		RUNTIME_CONST(shift, d_hash_shift)			\
+ 		RUNTIME_CONST(ptr, dentry_hashtable)			\
+-		RUNTIME_CONST(ptr, __dentry_cache)
++		RUNTIME_CONST(ptr, __dentry_cache)			\
++		RUNTIME_CONST(ptr, __names_cache)
+ 
+ /* Alignment must be consistent with (kunit_suite *) in include/kunit/test.h */
+ #define KUNIT_TABLE()							\
 -- 
 2.47.3
 
