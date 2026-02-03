@@ -1,132 +1,267 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7004632E73D
-	for <audit@vger.kernel.org>; Wed, 21 Jan 2026 15:09:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 035F628750C
+	for <audit@vger.kernel.org>; Tue,  3 Feb 2026 19:44:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769008176; cv=none; b=VGxAQmN83/QZhNVhwvzsLIrPYIr1pgzzheizWZuArEtGdVKyPPHAle14k++Wlsl7K1YsBKki94Uvxqu99Z/Gyt3oBgW1uuwhqbXDDGYdRp2d5SNN4EVXsRHwasfQCI1jglIXAxmw37ovhV8Rh7XD8sUmAkFhS0l2ohrZOvmoyf4=
+	t=1770147887; cv=none; b=Rcp6Vs6d/XGAGOWKeSPFlNJAxcVaxRsoqLWapFF3QOaTJUGeQ1SfsNcFHZ8xy3Krjjjn5andSOD/We9u9IC7tPWSQQGPAaCHAreCe+rU1FB5psgqQSgrD0ozdOheaM0qn7OXulsHZmXZ/lubDUmqnb0uIipElKrvd14Ajcb+7yo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769008176; c=relaxed/simple;
-	bh=28sXgVNf0Wht5rKNeRqvJBtP0GkBUYCm5WU0V/hUUwA=;
-	h=From:Message-ID:Date:MIME-Version:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=Nz+m+g1bgyzJtiUlMsdaXBB1JBVjHyCeBQZ+eZ2nGgVDnWQQEtE6PJjiObhQOc8YZQqUtTls3CYVK6FksHB2dUMjXqfff/RtMJhIsO7SmBfAwuiBNxOI4Oq2HdNumfI8wU4tPp2IyssXL2iXnhu+jr/iw4Sf/2zy4oxouVp57pA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=D+eAdxH3; arc=none smtp.client-ip=170.10.133.124
+	s=arc-20240116; t=1770147887; c=relaxed/simple;
+	bh=tZ28kcNd3CWIYNARgvxeIvdBE7Jb3hFrkE9h1EX8+yE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=bSoCo4p3We50JCxfM7ymLnNkm/oLACThO1Sw5EqdJjOGQWMr8T6BLuJ1rwL9hza19+8lPVMsCbiucKGYE+o3C8tZlZpObYuJTaPihzkQerQr/2lbQk6XSk89Ca1LCCaYM9LivrU31GhXFXGpterXWBOOTYqKiSmiJAjhcveRnos=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=HZQs9F/t; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="D+eAdxH3"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="HZQs9F/t"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1769008173;
+	s=mimecast20190719; t=1770147885;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=uY+pt3bmrvrb1Hk1eTt5XNY/+OLl0+7wKbN4hRmyI3I=;
-	b=D+eAdxH3xzeL/ssPWpweSMBFNpDYqx+MBuv34x1WV7Kpni4gjtSPsczTFTIa6UwTPtOMvJ
-	8pJS28tcD9Cie0P2CoAIhrB3FyD/4Ouil4nzsWY6WbsweZ/pq/JKQo87r63eoCyLMZOxaE
-	LXmr3siRJuFWO9TI4VxO2rWrpiiK2bA=
-Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
- [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-614-adcq1XstOt-XQZMg52FnAQ-1; Wed, 21 Jan 2026 10:09:32 -0500
-X-MC-Unique: adcq1XstOt-XQZMg52FnAQ-1
-X-Mimecast-MFC-AGG-ID: adcq1XstOt-XQZMg52FnAQ_1769008171
-Received: by mail-qt1-f198.google.com with SMTP id d75a77b69052e-50299d2e742so268124681cf.1
-        for <audit@vger.kernel.org>; Wed, 21 Jan 2026 07:09:32 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769008171; x=1769612971;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:user-agent:mime-version:date:message-id:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=uY+pt3bmrvrb1Hk1eTt5XNY/+OLl0+7wKbN4hRmyI3I=;
-        b=VdWAC8tdBszyGufhh8ccbgu0DLbTZCvmvRo16SGOf1LBTV8jqQm5BgFys581nnjxAW
-         UJ0NY7xF/m+HmisQgefAHwZUqhNWk22y6DRsWgzLAJ5K/2AbkyVvktXdFgCYJYS3aGOI
-         XotL3TdthvChE+fiaOmK6lmjPBh6HRBrLWEFCg/lRqdj4nsnqkywiPOo8DKOD/f8ZbgH
-         nMQSJjkbyXRDrDpyntQIiMNkm6jQLOcxFqaluaXOXo+PeDHhz9iA3r3eg7gdMqrBIEyT
-         HPmgHzaCAmxTFs6D1OhPIM1jEr5p98Oz8VG6Wps57rjU4yZxHKy1zkP4QJay+ErWUrRN
-         2asA==
-X-Forwarded-Encrypted: i=1; AJvYcCWoqFzypiTDikAtj5PrMC+s0a4dWXQZsqILKQmHXeTbO8yPX3M7LayJindGI0WB6phz6jEJmA==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxfvy8kg0SoiXS0fEpRnsoMnAQN2tOhhtnFq2wiaJRQord/1tAs
-	dJkD2YzA0K92p7VIeBVsl/42NSgFKdeEps4P9So/uiaNYHs2i/Hi1fPuqJObpg3gPyykx8w1Y/V
-	ZterWGd/HJ0ymXR1gQEK+BQO75qmynCFQ6LOJVuK7zEcWnAwYJ23eOVPo
-X-Gm-Gg: AZuq6aKbHyC62msEfq5VGg+yLBspMsMumvAU78NQ2cLMCqJAvsOk5FP50N/eXZwqhUG
-	aL7H+cyOJ+kXq8s0pyiwFIeti6ZBcrgsS/2V9us6V1KMa08lpvflsM5otQeZoh5+RA7JMJwFFjf
-	QhuGTmqvmjDOtT9Rr/NJmVxUmzTqREk59lot/33CGBsLJLXNua4AgbjA/xA3KRBoJcFWf1FiLW+
-	N+WKJAsezApzQ5PFMFj2OsiWEGW0g0Sx+a5gXy+pZAT+2e5TQf1bHR16G/lvLQp+nwbAfZBVC3t
-	BZyUXTzNZEUTlI3kw4mgsEqV1JHAFbrKC158v5+EMo8i/smbuhQSfTvV3pBKDbWK07805fMFTOv
-	rDmSAVlSG5TJWvrXL43WtllpyX+iCRbz2fYdjYSyf+8pp3aAoKjxLS3iy
-X-Received: by 2002:a05:622a:4c8:b0:4f1:d85c:d7c3 with SMTP id d75a77b69052e-502a1f777b1mr265101501cf.66.1769008171501;
-        Wed, 21 Jan 2026 07:09:31 -0800 (PST)
-X-Received: by 2002:a05:622a:4c8:b0:4f1:d85c:d7c3 with SMTP id d75a77b69052e-502a1f777b1mr265100951cf.66.1769008171129;
-        Wed, 21 Jan 2026 07:09:31 -0800 (PST)
-Received: from ?IPV6:2601:188:c102:b180:1f8b:71d0:77b1:1f6e? ([2601:188:c102:b180:1f8b:71d0:77b1:1f6e])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-502a1d9f2a1sm117028691cf.10.2026.01.21.07.09.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 21 Jan 2026 07:09:30 -0800 (PST)
-From: Waiman Long <llong@redhat.com>
-X-Google-Original-From: Waiman Long <longman@redhat.com>
-Message-ID: <204e011a-582f-474a-980c-27c30620b8d7@redhat.com>
-Date: Wed, 21 Jan 2026 10:09:29 -0500
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=Yfzzs+1dbo1+eEbCWDiVIGjOqU63Vf6bm27r39E62mA=;
+	b=HZQs9F/tIVvxXwvGf7+B/+UQSme8GAtV9sU3Jw4LePgvsJlIj6Rr5iy6iV6lwnUNmF82U0
+	jqfibbF319l6fL74bGNNnpLLwXmJnH7fV5v+Vrp5DW7nX1fq3nRWOX4TaZTrYMt7dq+OIz
+	1YqPtwEwbulsoDbtrSYjzVC9dTlN2hc=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-155-pF134hgBPJ-M83QHR3jU2A-1; Tue,
+ 03 Feb 2026 14:44:41 -0500
+X-MC-Unique: pF134hgBPJ-M83QHR3jU2A-1
+X-Mimecast-MFC-AGG-ID: pF134hgBPJ-M83QHR3jU2A_1770147880
+Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id A3F81180034F;
+	Tue,  3 Feb 2026 19:44:40 +0000 (UTC)
+Received: from llong-thinkpadp16vgen1.westford.csb (unknown [10.22.65.151])
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 8E37519560B4;
+	Tue,  3 Feb 2026 19:44:38 +0000 (UTC)
+From: Waiman Long <longman@redhat.com>
+To: Paul Moore <paul@paul-moore.com>,
+	Eric Paris <eparis@redhat.com>,
+	Christian Brauner <brauner@kernel.org>,
+	Al Viro <viro@zeniv.linux.org.uk>
+Cc: linux-kernel@vger.kernel.org,
+	audit@vger.kernel.org,
+	Richard Guy Briggs <rgb@redhat.com>,
+	Ricardo Robaina <rrobaina@redhat.com>,
+	Waiman Long <longman@redhat.com>
+Subject: [PATCH v2] audit: Avoid excessive dput/dget in audit_context setup and reset paths
+Date: Tue,  3 Feb 2026 14:44:33 -0500
+Message-ID: <20260203194433.1738162-1-longman@redhat.com>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] audit: Quit audit_free_names() early if name list
- empty
-To: Al Viro <viro@zeniv.linux.org.uk>, Waiman Long <llong@redhat.com>
-Cc: Paul Moore <paul@paul-moore.com>, Eric Paris <eparis@redhat.com>,
- Christian Brauner <brauner@kernel.org>, linux-kernel@vger.kernel.org,
- audit@vger.kernel.org, Richard Guy Briggs <rgb@redhat.com>,
- Ricardo Robaina <rrobaina@redhat.com>
-References: <20260121023509.410423-1-longman@redhat.com>
- <20260121031105.GB3183987@ZenIV>
- <84955de9-823f-4b3d-9107-f7d4aee38b88@redhat.com>
- <20260121052623.GC3183987@ZenIV>
-In-Reply-To: <20260121052623.GC3183987@ZenIV>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: hwvOW5v6wYPLPhuIQasFYTYtbvllHmPetM9UU81NYUM_1769008171
-X-Mimecast-Originator: redhat.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
 
-On 1/21/26 12:26 AM, Al Viro wrote:
-> On Tue, Jan 20, 2026 at 11:08:45PM -0500, Waiman Long wrote:
->> On 1/20/26 10:11 PM, Al Viro wrote:
->>> On Tue, Jan 20, 2026 at 09:35:08PM -0500, Waiman Long wrote:
->>>> Optimize audit_free_names() by quitting early if the name list is empty.
->>>> This eliminates the need to acquire and release the fs_struct spinlock
->>>> in path_put().
->>> Why would path_put() go anywhere need fs_struct spinlock???
->>>
->> path_put() is defined in include/linux/fs_struct.h. It calls
->> read_seq{un}lock_excl(&fs->seq) which, in turn, acquires the releases the
->> spinlock underneath the seqlock_t.
-> Really?  Which kernel would that be?  On mainline we have
->
-> ; git grep -n -w path_put include/linux/fs_struct.h
-> ; $ git grep -C 6 'void path_put\>' fs/namei.c
-> fs/namei.c-/**
-> fs/namei.c- * path_put - put a reference to a path
-> fs/namei.c- * @path: path to put the reference to
-> fs/namei.c- *
-> fs/namei.c- * Given a path decrement the reference count to the dentry and the vfsmount.
-> fs/namei.c- */
-> fs/namei.c:void path_put(const struct path *path)
-> fs/namei.c-{
-> fs/namei.c-     dput(path->dentry);
-> fs/namei.c-     mntput(path->mnt);
-> fs/namei.c-}
-> fs/namei.c-EXPORT_SYMBOL(path_put);
-> fs/namei.c-
-> ;
->
-Sorry, my mistake. I mixed it up with get_fs_pwd(). Will fix the patch.
+It is found that on large SMP systems with a large number of CPUs and
+auditing enabled, workloads that generate a massive amount of syscalls
+(like open/close) in parallel on the same working directory can cause
+significant spinlock contention of the lockref.lock of the working
+directory's dentry.
 
-Cheers,
-Longman
+One possible way to reduce such spinlock contention scenario is to
+keep the pwd references in audit_free_names() and reuse it in the next
+audit_alloc_name() call if there is no change in working directory.
+
+A new pwd_reset field is added to audit_context to indicate, if set,
+that the pwd has been reset but still hold mount and dentry references.
+A new fs_pwd_equal() helper is added to fs_struct.h to check if the
+fs->pwd has been changed. When audit_alloc_name() is called with the
+context->pwd still valid and the fs->pwd hasn't been changed, it can
+return without calling get_fs_pwd().
+
+By adding test code to count the number of effective audit_free_names()
+and audit_alloc_name() calls and the number of relevant path_put() and
+path_get() calls after rebooting a patched kernel with auditing enabled
+on a 2-socket 96-CPU system, there were about 30k path_get()/path_put()
+out of a total of about 1 million audit_free_names()/audit_alloc_name()
+calls. It is about 3% of those before the patch for this particular case.
+
+After resetting the counters and running a parallel kernel build,
+the new figures were about 202k path_get()/path_put() out of about 56M
+audit_free_names()/audit_alloc_name(). That is about 0.4%.
+
+As auditing is increasingly used in production systems due to various
+legal and commercial compliance requirements, it is important that we
+should try to minimize performance overhead when auditing is enabled.
+
+Signed-off-by: Waiman Long <longman@redhat.com>
+---
+
+ [v2] Merge 2 patches together & defer the path_put() call in
+      audit_alloc_name() to workqueue to prevent might_sleep() in atomic
+      context problem.
+
+ include/linux/fs_struct.h | 11 ++++++++
+ kernel/audit.h            |  7 +++++
+ kernel/auditsc.c          | 56 +++++++++++++++++++++++++++++++++++----
+ 3 files changed, 69 insertions(+), 5 deletions(-)
+
+diff --git a/include/linux/fs_struct.h b/include/linux/fs_struct.h
+index 0070764b790a..3a3dda8adc11 100644
+--- a/include/linux/fs_struct.h
++++ b/include/linux/fs_struct.h
+@@ -40,6 +40,17 @@ static inline void get_fs_pwd(struct fs_struct *fs, struct path *pwd)
+ 	read_sequnlock_excl(&fs->seq);
+ }
+ 
++/* Return true if fs->pwd matches the given pwd */
++static inline bool fs_pwd_equal(struct fs_struct *fs, struct path *pwd)
++{
++	bool match;
++
++	read_seqlock_excl(&fs->seq);
++	match = (fs->pwd.dentry == pwd->dentry) && (fs->pwd.mnt == pwd->mnt);
++	read_sequnlock_excl(&fs->seq);
++	return match;
++}
++
+ extern bool current_chrooted(void);
+ 
+ static inline int current_umask(void)
+diff --git a/kernel/audit.h b/kernel/audit.h
+index 7c401729e21b..03f3539b10e7 100644
+--- a/kernel/audit.h
++++ b/kernel/audit.h
+@@ -133,6 +133,13 @@ struct audit_context {
+ 	int		    name_count; /* total records in names_list */
+ 	struct list_head    names_list;	/* struct audit_names->list anchor */
+ 	char		    *filterkey;	/* key for rule that triggered record */
++	/*
++	 * pwd_reset is set if audit_free_names() has been called from
++	 * audit_reset_context() to reset pwd, but pwd is still holding dentry
++	 * and mount references to be used in later audit action without
++	 * the need to reacqure the references again.
++	 */
++	int		    pwd_reset;
+ 	struct path	    pwd;
+ 	struct audit_aux_data *aux;
+ 	struct audit_aux_data *aux_pids;
+diff --git a/kernel/auditsc.c b/kernel/auditsc.c
+index dd0563a8e0be..e2e8bdb06185 100644
+--- a/kernel/auditsc.c
++++ b/kernel/auditsc.c
+@@ -123,6 +123,11 @@ struct audit_nfcfgop_tab {
+ 	const char		*s;
+ };
+ 
++struct audit_pwd_put {
++	struct work_struct	work;
++	struct path		pwd;
++};
++
+ static const struct audit_nfcfgop_tab audit_nfcfgs[] = {
+ 	{ AUDIT_XT_OP_REGISTER,			"xt_register"		   },
+ 	{ AUDIT_XT_OP_REPLACE,			"xt_replace"		   },
+@@ -931,6 +936,9 @@ static inline void audit_free_names(struct audit_context *context)
+ {
+ 	struct audit_names *n, *next;
+ 
++	if (list_empty(&context->names_list))
++		return;	/* audit_alloc_name() has not been called */
++
+ 	list_for_each_entry_safe(n, next, &context->names_list, list) {
+ 		list_del(&n->list);
+ 		if (n->name)
+@@ -939,9 +947,7 @@ static inline void audit_free_names(struct audit_context *context)
+ 			kfree(n);
+ 	}
+ 	context->name_count = 0;
+-	path_put(&context->pwd);
+-	context->pwd.dentry = NULL;
+-	context->pwd.mnt = NULL;
++	context->pwd_reset = true;
+ }
+ 
+ static inline void audit_free_aux(struct audit_context *context)
+@@ -1088,6 +1094,8 @@ static inline void audit_free_context(struct audit_context *context)
+ 	audit_reset_context(context);
+ 	audit_proctitle_free(context);
+ 	free_tree_refs(context);
++	if (context->pwd_reset)
++		path_put(&context->pwd);
+ 	kfree(context->filterkey);
+ 	kfree(context);
+ }
+@@ -1519,7 +1527,8 @@ static void audit_log_name(struct audit_context *context, struct audit_names *n,
+ 			/* name was specified as a relative path and the
+ 			 * directory component is the cwd
+ 			 */
+-			if (context->pwd.dentry && context->pwd.mnt)
++			if (context->pwd.dentry && context->pwd.mnt &&
++			    !context->pwd_reset)
+ 				audit_log_d_path(ab, " name=", &context->pwd);
+ 			else
+ 				audit_log_format(ab, " name=(null)");
+@@ -1767,7 +1776,7 @@ static void audit_log_exit(void)
+ 				  context->target_comm))
+ 		call_panic = 1;
+ 
+-	if (context->pwd.dentry && context->pwd.mnt) {
++	if (context->pwd.dentry && context->pwd.mnt && !context->pwd_reset) {
+ 		ab = audit_log_start(context, GFP_KERNEL, AUDIT_CWD);
+ 		if (ab) {
+ 			audit_log_d_path(ab, "cwd=", &context->pwd);
+@@ -2144,6 +2153,19 @@ static void handle_path(const struct dentry *dentry)
+ 	rcu_read_unlock();
+ }
+ 
++static void audit_pwd_put_workfn(struct work_struct *work)
++{
++	struct audit_pwd_put *pp = container_of(work, struct audit_pwd_put, work);
++
++	path_put(&pp->pwd);
++	/*
++	 * The audit_pwd_put structure can be safely freed here without UAF
++	 * as all the workqueue related data have been copied out and processed
++	 * before this function is called.
++	 */
++	kfree(pp);
++}
++
+ static struct audit_names *audit_alloc_name(struct audit_context *context,
+ 						unsigned char type)
+ {
+@@ -2164,6 +2186,30 @@ static struct audit_names *audit_alloc_name(struct audit_context *context,
+ 	list_add_tail(&aname->list, &context->names_list);
+ 
+ 	context->name_count++;
++	if (context->pwd_reset) {
++		struct audit_pwd_put *pp;
++
++		context->pwd_reset = false;
++		if (likely(fs_pwd_equal(current->fs, &context->pwd)))
++			return aname;
++
++		/*
++		 * Defer the path_put() call of the old pwd to workqueue as
++		 * we may be in an atomic context that cannot call path_put()
++		 * directly because of might_sleep().
++		 */
++		pp = kmalloc(sizeof(*pp), GFP_NOFS);
++		if (!pp) {
++			if (aname->should_free)
++				kfree(aname);
++			return NULL;
++		}
++		INIT_WORK(&pp->work, audit_pwd_put_workfn);
++		pp->pwd = context->pwd;
++		schedule_work(&pp->work);
++		context->pwd.dentry = NULL;
++		context->pwd.mnt = NULL;
++	}
+ 	if (!context->pwd.dentry)
+ 		get_fs_pwd(current->fs, &context->pwd);
+ 	return aname;
+-- 
+2.52.0
 
