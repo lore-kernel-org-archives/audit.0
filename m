@@ -1,141 +1,141 @@
-Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 747D6314A84
-	for <audit@vger.kernel.org>; Wed,  4 Feb 2026 04:10:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFAB934C981
+	for <audit@vger.kernel.org>; Wed,  4 Feb 2026 04:21:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770178239; cv=none; b=iHJjNwjStkpu4uQMQl2AR6eSa9aZaVUE17fRiUWupP6D7OP6lPLcS4CM3shJQ3p9rIqBzu/tPe3izpOehpzQGKvDdZdEHyn8Ii/CDbgDHwb1ccBbIXY08TqNHdRKs7VcUw+df+VrgZkjv5OPgWYxIi856XX2/X4KeagEXVwKwd0=
+	t=1770178889; cv=none; b=gn/RcZsopwPab0DDft/+Et5JurS9UJ2I7pniAVy4GLuEi3UbKnhYG0WhEYA9PKhP3enAgVKIyRQMLwL0FeAY8zzNcEILqtrlrlIb+YRJA4XuRlDnV0SpPnUe/Jx0Ernb8g0JOAkde8wZZMYcu4qKZsos8KosTGpljIrVTszHpW8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770178239; c=relaxed/simple;
-	bh=NGBYbg7UkfwWA9S5rny5UeTYoAabz+VUvilCJzQcNqw=;
-	h=Date:Message-ID:From:To:Cc:Subject; b=ptkqi0vG3ESwpswdcnqxT2Q8xgc5xzQZBWZSQRkuzqsQrieIuIA2YFqlFm0QmDou3H0pe4uzmPDf3Lx39XrJOXhOajrWzfgAp55OZaFZUjMW2r80dcxFR2R11BkQvXfKbp0+kMC2/zx5VTvbWXQ5e0l0wVZyBKw65hZcgjtGpBA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=fjmthoG3; arc=none smtp.client-ip=209.85.160.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+	s=arc-20240116; t=1770178889; c=relaxed/simple;
+	bh=PzQQ3B/+w7hS3/ALA88P5mujhAE3S+HZezzvrGHmRME=;
+	h=From:Message-ID:Date:MIME-Version:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=Q9plNoU9HwS1HE3iun4oPCq1EF59yztHLNXREm1JeZGZBKJ+SNoXONncszi77RJJy4xAUIpN55l2Jfp6nvVRwaJflBCYNc+bW6UEMC6mRzow685GXUCqjU0/hXua2B2AAhXCoAbeuapf0vWSAtknozofk1dT6Mg8aiUDEZ+r8EY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=RbYrLIIl; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="fjmthoG3"
-Received: by mail-qt1-f179.google.com with SMTP id d75a77b69052e-503347e8715so74917991cf.2
-        for <audit@vger.kernel.org>; Tue, 03 Feb 2026 20:10:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1770178235; x=1770783035; darn=vger.kernel.org;
-        h=subject:cc:to:from:message-id:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=l7y0HD6pGn4U56GU3JSwAc1F4bSA91jQpSfjKPdrAoA=;
-        b=fjmthoG3QLRFiOBYYv40Pq1LPDVotfGYvroA2ijzhKZeD2VIP3wm8ucPM40smXExXz
-         Y23g/DPX9O0yJiqOQcxtdRaD7OYAfJN3TVdT3JSozibZabggZwNn1I3ATgrI7yQhC5pa
-         7lxPtKfKz4a/bsRZs8oRP/DF0UKqr6tZLss1qFVLFpHoLBLZlZjpLK9uWo2d/e1X8L20
-         I9NX4JpIIIEvIDLxpZwg6Et0Z7gntSYRrYMerqazl8YI0UFrR71LQ+p7b6V1Val8CCLL
-         KJ91Lz4n3gqHfT7rkjZxPt962/5CPTboqbRGgC5U9PhdTSuwi2ObsMr081Z53dfGk4T8
-         uTRg==
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="RbYrLIIl"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1770178886;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=wcBbuF5wJvFTL0tuao0MoCA5GeDjlAU8Fd2jJuLQGU8=;
+	b=RbYrLIIlNzwg+hbUOZH+diAt41r1NcK1Ts3IAEDiBGu5OXwLRmscQBPzi81GZvkn7LWZpF
+	/o10+04MNMR5OaFR0Ph2zWTvGq6AGcjO2r1+xT8koIZK1g1vZNwkrZdjcf6tYOYBXTmn0p
+	BlNzsAw70ufyXzJXj5fi6+sIW9G+pvQ=
+Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
+ [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-482-TfaaSlyHMZCeGDv31oo4eg-1; Tue, 03 Feb 2026 23:21:25 -0500
+X-MC-Unique: TfaaSlyHMZCeGDv31oo4eg-1
+X-Mimecast-MFC-AGG-ID: TfaaSlyHMZCeGDv31oo4eg_1770178885
+Received: by mail-qt1-f198.google.com with SMTP id d75a77b69052e-50335bd75bdso74654551cf.0
+        for <audit@vger.kernel.org>; Tue, 03 Feb 2026 20:21:25 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770178235; x=1770783035;
-        h=subject:cc:to:from:message-id:date:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=l7y0HD6pGn4U56GU3JSwAc1F4bSA91jQpSfjKPdrAoA=;
-        b=D739KHpONe2FSbmd9QZqDQtuVjFwT+Fgr35ZzysjqqJNSrN1/aZeU6jEi0kIFeA2cY
-         xGzQIIaAYlcKk/CfGjnR+aRX889QAtzVhFhy2ZFI8USaEnFcfYka3KJO7i4iWnE8w04q
-         xMrO6Ob8HgntPVTAyTAs89lTjm3Va4edv4a5waOArKVw+8en/lvNIEcYbZB4Rz2Y1KKw
-         4seJSpOpku11IaxcesdQ95AV83VzRZ0y//LFjkfVbFWeiuUTfsfaIWnSpLkBdFUJdOJJ
-         7MJFmghHfTazbGp+r4arYxpGVjIwWG8P2GXwvR34igVK4vKWRmrlXRyP77TcQmmy+jMJ
-         ob2A==
-X-Gm-Message-State: AOJu0Ywf1g4RmYJoKYfskf+JyHZagZeaKYjhvSfrQHGWZ7brWsu6JH7S
-	W56KbFMGBWF60ZWAVe7EsRs9Yjjk2d4Gx5yOUZl8TCfQnvggwzZ0ePsWMFUcbzvf7vChMX+o+QJ
-	Njrv2Fw==
-X-Gm-Gg: AZuq6aLj1iAJ5whvipR7KjxN9aIg6/0lgnmHxPaz5iL562QhI3mll3UVoMo8TLcdda0
-	dVPN3BZQ7WsirJH6t5wM0+AUzonXFrs8tGXzF/abVuDzvh3mN6ta4z4VvIGJtC4UTSkTnjAV8GK
-	1zNurjqRcX30MCC4L4ldpP4T8ANpWrEmID3MQdH2rRZLzmOYWi03mLQxWwQaKvvyVDs+n51hatB
-	t50kMgCjerl6nUNfyXlP/us7BhfszXMZLycesOCBlIU/0B9lN6IjbMC3n7TgPzmgaO5fO7+IwmC
-	M66Ndl/zdfdc8JARYE44JVdMHmu3casGXFCGIFGEOARCB/0/+rEIbH+cOwSZoBlLRNwzBLllAg0
-	M70r7VUnoUE3YmltasyXdc+Lit/sP9OlYDZlAJzQ6OwwU5WgZWazlh3H7IH5LQMrI38jY8u/tUG
-	9YrW5RFrNdNbyRDKJweIaCNS5Q9WG6w1J+JfCJ9bABSHqEd7CVclNq7xpe
-X-Received: by 2002:ac8:598f:0:b0:4f1:de1c:dfa8 with SMTP id d75a77b69052e-5061c0deafbmr23497271cf.19.1770178234725;
-        Tue, 03 Feb 2026 20:10:34 -0800 (PST)
-Received: from localhost (pool-71-126-255-178.bstnma.fios.verizon.net. [71.126.255.178])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-5061c1f9470sm9076441cf.24.2026.02.03.20.10.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Feb 2026 20:10:33 -0800 (PST)
-Date: Tue, 03 Feb 2026 23:10:33 -0500
-Message-ID: <4d8d54dd3db528deba7eddf05201b1df@paul-moore.com>
-From: Paul Moore <paul@paul-moore.com>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: audit@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] audit/audit-pr-20260203
+        d=1e100.net; s=20230601; t=1770178885; x=1770783685;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:user-agent:mime-version:date:message-id:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=wcBbuF5wJvFTL0tuao0MoCA5GeDjlAU8Fd2jJuLQGU8=;
+        b=QhzZ+0Q01zom/5yj+Z0uQl4o7UhxB5gl3NPmbqMvQkzHmHP0g/Sld9uiysH5Eyyn0O
+         sxaGoJ7uuFnZBqltfsgyzLqIiNUlLNqtwwHMZIGxUf4NFIF9rjLptM5tG5l9OPHEYGtf
+         sOEcu/+7LWObGHcl4iRCPXQ8VB5y8yEHx9ZJXTcad9PvTr074KTxPccAnz2d/LfpZUvU
+         /SEu4uiXUIwZWQdWvKNjTUB4h/b0mh0p106RLncKD85EL4+sgbAzWFSqrjGK0UoqrW0i
+         WFbdmTyhHRPLfrvX95ASbe6NxyWXNB6XU7ykgZtySRc3CCCcHYhsp+x3HMxA8KK800Is
+         XUUw==
+X-Forwarded-Encrypted: i=1; AJvYcCUf4dELlhkLNfXxWzLxsbl7emHnormc7cjmLRsPKI7n7qz5CIEMMwu3nL8QTMrSISknEv1dOg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwLOdpkGwhpVAIMaQWJjxMzcWrwJXIbYDVzQFEERunkxqjzL4+a
+	SkZGkkeOoU5T8nC5fKX67EMCRcHr/+Y3Qwv3aAzGYk/HA7fc80fLUW7FccIlLNiPW6RJx5cHLNe
+	ocJ6hZGDveI55lN2LlSs4VmKWfG9u7g1fFOFwOLiRWOerRa0fephN1CM0
+X-Gm-Gg: AZuq6aKd5Jyg2vNBi9wqni2OtS2Se+uBQEcGGBML4SoF0Enuv1JyqkGj2gZphZTUY0v
+	j+Y9mfkst94dMHLfFGeBY9gk7BRsJd6ycJVIYqJ+LVjmNwFbBO8K8YKFO+/3NUqVnt+XBStPpYM
+	B1XS1GPaT7ZlGWI7vQMgp0wJV7QskOHhjrcw7tGeZXSmk/tKyPv93+AP17CMzc8iGUqY2ne2X61
+	nTskiauhZH/7Ch0uh4aVvwsrgAHe6sOhnOJmtXDp3Hgp6ge3VRCP3Y7xCVeM/PZzrGi1Yqtnz7E
+	bsQ+t+rovFtTb2LiVITVZxMfsaILCN/deX956weZCPCB7pUylP4L5udHYUcp3wgyIoP9KTK5Lmz
+	AjdTc6cfOmrKUlUvzSIv0jb+G63nZTsJkywDIqKIa7Aid+FCxHwpd8qBb
+X-Received: by 2002:a05:620a:31f3:b0:8ca:3854:8110 with SMTP id af79cd13be357-8ca38549dafmr1977885a.72.1770178884833;
+        Tue, 03 Feb 2026 20:21:24 -0800 (PST)
+X-Received: by 2002:a05:620a:31f3:b0:8ca:3854:8110 with SMTP id af79cd13be357-8ca38549dafmr1976685a.72.1770178884482;
+        Tue, 03 Feb 2026 20:21:24 -0800 (PST)
+Received: from ?IPV6:2601:188:c102:b180:1f8b:71d0:77b1:1f6e? ([2601:188:c102:b180:1f8b:71d0:77b1:1f6e])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-8ca2fd5382csm108055685a.50.2026.02.03.20.21.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 03 Feb 2026 20:21:23 -0800 (PST)
+From: Waiman Long <llong@redhat.com>
+X-Google-Original-From: Waiman Long <longman@redhat.com>
+Message-ID: <6661f966-5235-49ca-bf1f-d1ae2ae32f0d@redhat.com>
+Date: Tue, 3 Feb 2026 23:21:23 -0500
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] audit: Avoid excessive dput/dget in audit_context
+ setup and reset paths
+To: Al Viro <viro@zeniv.linux.org.uk>, Waiman Long <llong@redhat.com>
+Cc: Paul Moore <paul@paul-moore.com>, Eric Paris <eparis@redhat.com>,
+ Christian Brauner <brauner@kernel.org>, linux-kernel@vger.kernel.org,
+ audit@vger.kernel.org, Richard Guy Briggs <rgb@redhat.com>,
+ Ricardo Robaina <rrobaina@redhat.com>
+References: <20260203194433.1738162-1-longman@redhat.com>
+ <20260203200505.GH3183987@ZenIV>
+ <590a36e6-8d11-411a-8fcd-d93eef96f0e9@redhat.com>
+ <20260203215002.GI3183987@ZenIV> <20260203232634.GJ3183987@ZenIV>
+In-Reply-To: <20260203232634.GJ3183987@ZenIV>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: 26CoIIXjSJEIfB0xAL5P9QPeqMjbcvRH7fWIABFGkG0_1770178885
+X-Mimecast-Originator: redhat.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Linus,
+On 2/3/26 6:26 PM, Al Viro wrote:
+> On Tue, Feb 03, 2026 at 09:50:02PM +0000, Al Viro wrote:
+>> On Tue, Feb 03, 2026 at 03:32:04PM -0500, Waiman Long wrote:
+>>
+>>> That is actually a concern that I have at the back of my mind. I can modify
+>>> the patch to cache only the dentry and do get/put the mount every time which
+>>> is much cheaper as it is a percpu counter.  In that way, a chdir(2) followed
+>>> by a umount(2) shouldn't cause a -EBUSY. Right?
+>> Quite - it will just retain a reference to dentry, with filesystem shutdown
+>> being very unhappy about somebody retaining references to objects on the
+>> filesystem about to be taken out...
+> Sarcasm aside, I wonder if we could do the following trick:
+> 	* a new primitive for "grab or borrow pwd", similar to what fdget()
+> does for struct file.  If current->fs is shared, do what we do now and return
+> true; otherwise just copy the contents of current->fs->pwd return false.
+> 	* paired primitive that would take a boolean + struct path * and
+> do path_put() if boolean is true.
+> 	* syscalls that might alter ->fs, ->fs->pwd or add extra references to
+> ->fs would start with grabbing an extra ref on entry and drop it in the end;
+> that would make that primitive safe to use there.
+> 	* audit using that thing and storing the result along with the copy
+> of pwd; on the way out it would use the "put unless borrowed" primitive.
+>
+> Might or might not be useful - hard to tell without knowing the job mix of those
+> audit-afflicted production systems.
+>
+> I'll try to put something along those lines together...
 
-This is a bit early, but due to some personal scheduling I'd rather send
-this to you now, and you always mention you prefer to get pull requests
-early (perhaps not this early?) so here is hoping this is a win-win.
+Interesting. So are you thinking about a reference on the pwd inside the 
+fs_struct? I am thinking about instead of getting a reference to 
+pwd.dentry and pwd.mnt, we can just get a reference to the pwd itself. 
+We have to grab the fs lock in get_fs_pwd() anyway. This spinlock 
+doesn't show up as being contended in the customer bug report as each 
+process can has its own fs_struct instead of many processing sharing the 
+same working directory.
 
-Here are the highlights for the audit changes queued for the Linux v7.0
-merge window:
+In the case of audit, fs->pwd is copied out at the beginning of the 
+open* system call and then put back at the end of that system call. So 
+it should last a pretty short time, i.e. the reference will be released 
+shortly. However, that will make the set_fs_pwd() call a bit tricky to 
+implement, but I think it is still doable.
 
-- Improve the NETFILTER_PKT audit records
+Cheers,
+Longman
 
-Add source and destination ports to the NETFILTER_PKT audit records while
-also consolidating a lot of the code into a new, singular
-audit_log_nf_skb() function.  This new approach to structuring the
-NETFILTER_PKT record generation should elimiate some unnecessary overhead
-when audit is not built into the kernel.
-
-- Update the audit syscall classifier code
-
-Add the listxattrat(), getxattrat(), and fchmodat2() syscall to the
-audit code which classifies syscalls into categories of operations, e.g.
-"read" or "change attributes".
-
-- Move the syscall classifier declarations into audit_arch.h
-
-Shuffle around some header file declarations to resolve some sparse
-warnings.
-
-Paul
-
---
-The following changes since commit 8f0b4cce4481fb22653697cced8d0d04027cb1e8:
-
-  Linux 6.19-rc1 (2025-12-14 16:05:07 +1200)
-
-are available in the Git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/audit.git
-    tags/audit-pr-20260203
-
-for you to fetch changes up to 76489955c6d4a065ca69dc88faf7a50a59b66f35:
-
-  audit: move the compat_xxx_class[] extern declarations to audit_arch.h
-    (2026-01-09 16:37:59 -0500)
-
-----------------------------------------------------------------
-audit/stable-7.0 PR 20260203
-----------------------------------------------------------------
-
-Ben Dooks (1):
-      audit: move the compat_xxx_class[] extern declarations to
-         audit_arch.h
-
-Jeffrey Bencteux (2):
-      audit: add fchmodat2() to change attributes class
-      audit: add missing syscalls to read class
-
-Ricardo Robaina (2):
-      audit: add audit_log_nf_skb helper function
-      audit: include source and destination ports to NETFILTER_PKT
-
- include/asm-generic/audit_change_attr.h |    3 
- include/asm-generic/audit_read.h        |    6 
- include/linux/audit.h                   |   14 +-
- include/linux/audit_arch.h              |    7 +
- kernel/audit.c                          |  159 ++++++++++++++++++++++++
- net/netfilter/nft_log.c                 |   58 --------
- net/netfilter/xt_AUDIT.c                |   58 --------
- 7 files changed, 185 insertions(+), 120 deletions(-)
-
---
-paul-moore.com
