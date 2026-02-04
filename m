@@ -1,86 +1,141 @@
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 265C72BD5BD;
-	Tue,  3 Feb 2026 23:24:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 747D6314A84
+	for <audit@vger.kernel.org>; Wed,  4 Feb 2026 04:10:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770161079; cv=none; b=lJp/HsMHpAEi4YcdElQ+6zbMEog1HCIYRE3H5S7mHFSS29YTEMijwHCje32YeA9trK7G1GrO073tbvgrk2rTVQafc5LSOygbs5/k5LmY9+zdDUv4JnJJ1SeBcpUTyRtu1ImT1B3TghdadLipXjHLmO9tyx/2ThqDYG1DhhQanDI=
+	t=1770178239; cv=none; b=iHJjNwjStkpu4uQMQl2AR6eSa9aZaVUE17fRiUWupP6D7OP6lPLcS4CM3shJQ3p9rIqBzu/tPe3izpOehpzQGKvDdZdEHyn8Ii/CDbgDHwb1ccBbIXY08TqNHdRKs7VcUw+df+VrgZkjv5OPgWYxIi856XX2/X4KeagEXVwKwd0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770161079; c=relaxed/simple;
-	bh=8a9FK/P0wXppVfhH1g1y2pJc+MYG+reHV8wqFunbDEM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Y5BtVdplGpHQni87ZA+9mIRWYBzBhcPAjbF9qVSIXZqp+n7t//2vy6lXn3MtpGqtS2UClnTCxF7+OIJITaYZWye/TrLnoSslOonhd/XZAqSDFWZLtZTim1btvKw5DunIiCteX39Z15XPlLRsTUtbRGNvXVEanhiT23ChxmQ0d/M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=ETTk3rFs; arc=none smtp.client-ip=62.89.141.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
+	s=arc-20240116; t=1770178239; c=relaxed/simple;
+	bh=NGBYbg7UkfwWA9S5rny5UeTYoAabz+VUvilCJzQcNqw=;
+	h=Date:Message-ID:From:To:Cc:Subject; b=ptkqi0vG3ESwpswdcnqxT2Q8xgc5xzQZBWZSQRkuzqsQrieIuIA2YFqlFm0QmDou3H0pe4uzmPDf3Lx39XrJOXhOajrWzfgAp55OZaFZUjMW2r80dcxFR2R11BkQvXfKbp0+kMC2/zx5VTvbWXQ5e0l0wVZyBKw65hZcgjtGpBA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=fjmthoG3; arc=none smtp.client-ip=209.85.160.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="ETTk3rFs"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:
-	Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
-	Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description;
-	bh=+cwZylvg0T3iDQtfKqjvPKA4sXaqyusrXvmAoCVT3is=; b=ETTk3rFsi5MfAAjp1ONS1K7khf
-	x/5Ol0IX+aFkCGUawNfDGQVAnM0kpY3NgwAN/hQJ9EBZk64HFVM1gyNppW6+Egj16klC6PYmWZEcY
-	CV6QZe++qHeI7FhipE3Q2CzRAGujiS+VD1syZWNsQNgVqqmd2yrClXy9lDjyLX2sLeBKl8ddTeqf1
-	o855n8eHcPaECg2fmtoqvUymeGQlgBMHZBN6VK75Dws7NhIjnn9ozsseBmKLEX90SvhpF4Ij3zx9e
-	8N1gsgpvgPGUXvMItbK99Y0xdM6VNftJRgtaIL1pj1mHwuFJTh+CsVBSnQmi5aT5aj2Ndh6ud6E9X
-	2WlfKxsQ==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.99.1 #2 (Red Hat Linux))
-	id 1vnPn0-00000001XTw-3jJf;
-	Tue, 03 Feb 2026 23:26:35 +0000
-Date: Tue, 3 Feb 2026 23:26:34 +0000
-From: Al Viro <viro@zeniv.linux.org.uk>
-To: Waiman Long <llong@redhat.com>
-Cc: Paul Moore <paul@paul-moore.com>, Eric Paris <eparis@redhat.com>,
-	Christian Brauner <brauner@kernel.org>,
-	linux-kernel@vger.kernel.org, audit@vger.kernel.org,
-	Richard Guy Briggs <rgb@redhat.com>,
-	Ricardo Robaina <rrobaina@redhat.com>
-Subject: Re: [PATCH v2] audit: Avoid excessive dput/dget in audit_context
- setup and reset paths
-Message-ID: <20260203232634.GJ3183987@ZenIV>
-References: <20260203194433.1738162-1-longman@redhat.com>
- <20260203200505.GH3183987@ZenIV>
- <590a36e6-8d11-411a-8fcd-d93eef96f0e9@redhat.com>
- <20260203215002.GI3183987@ZenIV>
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="fjmthoG3"
+Received: by mail-qt1-f179.google.com with SMTP id d75a77b69052e-503347e8715so74917991cf.2
+        for <audit@vger.kernel.org>; Tue, 03 Feb 2026 20:10:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1770178235; x=1770783035; darn=vger.kernel.org;
+        h=subject:cc:to:from:message-id:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=l7y0HD6pGn4U56GU3JSwAc1F4bSA91jQpSfjKPdrAoA=;
+        b=fjmthoG3QLRFiOBYYv40Pq1LPDVotfGYvroA2ijzhKZeD2VIP3wm8ucPM40smXExXz
+         Y23g/DPX9O0yJiqOQcxtdRaD7OYAfJN3TVdT3JSozibZabggZwNn1I3ATgrI7yQhC5pa
+         7lxPtKfKz4a/bsRZs8oRP/DF0UKqr6tZLss1qFVLFpHoLBLZlZjpLK9uWo2d/e1X8L20
+         I9NX4JpIIIEvIDLxpZwg6Et0Z7gntSYRrYMerqazl8YI0UFrR71LQ+p7b6V1Val8CCLL
+         KJ91Lz4n3gqHfT7rkjZxPt962/5CPTboqbRGgC5U9PhdTSuwi2ObsMr081Z53dfGk4T8
+         uTRg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770178235; x=1770783035;
+        h=subject:cc:to:from:message-id:date:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=l7y0HD6pGn4U56GU3JSwAc1F4bSA91jQpSfjKPdrAoA=;
+        b=D739KHpONe2FSbmd9QZqDQtuVjFwT+Fgr35ZzysjqqJNSrN1/aZeU6jEi0kIFeA2cY
+         xGzQIIaAYlcKk/CfGjnR+aRX889QAtzVhFhy2ZFI8USaEnFcfYka3KJO7i4iWnE8w04q
+         xMrO6Ob8HgntPVTAyTAs89lTjm3Va4edv4a5waOArKVw+8en/lvNIEcYbZB4Rz2Y1KKw
+         4seJSpOpku11IaxcesdQ95AV83VzRZ0y//LFjkfVbFWeiuUTfsfaIWnSpLkBdFUJdOJJ
+         7MJFmghHfTazbGp+r4arYxpGVjIwWG8P2GXwvR34igVK4vKWRmrlXRyP77TcQmmy+jMJ
+         ob2A==
+X-Gm-Message-State: AOJu0Ywf1g4RmYJoKYfskf+JyHZagZeaKYjhvSfrQHGWZ7brWsu6JH7S
+	W56KbFMGBWF60ZWAVe7EsRs9Yjjk2d4Gx5yOUZl8TCfQnvggwzZ0ePsWMFUcbzvf7vChMX+o+QJ
+	Njrv2Fw==
+X-Gm-Gg: AZuq6aLj1iAJ5whvipR7KjxN9aIg6/0lgnmHxPaz5iL562QhI3mll3UVoMo8TLcdda0
+	dVPN3BZQ7WsirJH6t5wM0+AUzonXFrs8tGXzF/abVuDzvh3mN6ta4z4VvIGJtC4UTSkTnjAV8GK
+	1zNurjqRcX30MCC4L4ldpP4T8ANpWrEmID3MQdH2rRZLzmOYWi03mLQxWwQaKvvyVDs+n51hatB
+	t50kMgCjerl6nUNfyXlP/us7BhfszXMZLycesOCBlIU/0B9lN6IjbMC3n7TgPzmgaO5fO7+IwmC
+	M66Ndl/zdfdc8JARYE44JVdMHmu3casGXFCGIFGEOARCB/0/+rEIbH+cOwSZoBlLRNwzBLllAg0
+	M70r7VUnoUE3YmltasyXdc+Lit/sP9OlYDZlAJzQ6OwwU5WgZWazlh3H7IH5LQMrI38jY8u/tUG
+	9YrW5RFrNdNbyRDKJweIaCNS5Q9WG6w1J+JfCJ9bABSHqEd7CVclNq7xpe
+X-Received: by 2002:ac8:598f:0:b0:4f1:de1c:dfa8 with SMTP id d75a77b69052e-5061c0deafbmr23497271cf.19.1770178234725;
+        Tue, 03 Feb 2026 20:10:34 -0800 (PST)
+Received: from localhost (pool-71-126-255-178.bstnma.fios.verizon.net. [71.126.255.178])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-5061c1f9470sm9076441cf.24.2026.02.03.20.10.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 Feb 2026 20:10:33 -0800 (PST)
+Date: Tue, 03 Feb 2026 23:10:33 -0500
+Message-ID: <4d8d54dd3db528deba7eddf05201b1df@paul-moore.com>
+From: Paul Moore <paul@paul-moore.com>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: audit@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] audit/audit-pr-20260203
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260203215002.GI3183987@ZenIV>
-Sender: Al Viro <viro@ftp.linux.org.uk>
 
-On Tue, Feb 03, 2026 at 09:50:02PM +0000, Al Viro wrote:
-> On Tue, Feb 03, 2026 at 03:32:04PM -0500, Waiman Long wrote:
-> 
-> > That is actually a concern that I have at the back of my mind. I can modify
-> > the patch to cache only the dentry and do get/put the mount every time which
-> > is much cheaper as it is a percpu counter.  In that way, a chdir(2) followed
-> > by a umount(2) shouldn't cause a -EBUSY. Right?
-> 
-> Quite - it will just retain a reference to dentry, with filesystem shutdown
-> being very unhappy about somebody retaining references to objects on the
-> filesystem about to be taken out...
+Linus,
 
-Sarcasm aside, I wonder if we could do the following trick:
-	* a new primitive for "grab or borrow pwd", similar to what fdget() 
-does for struct file.  If current->fs is shared, do what we do now and return
-true; otherwise just copy the contents of current->fs->pwd return false.
-	* paired primitive that would take a boolean + struct path * and
-do path_put() if boolean is true.
-	* syscalls that might alter ->fs, ->fs->pwd or add extra references to
-->fs would start with grabbing an extra ref on entry and drop it in the end;
-that would make that primitive safe to use there.
-	* audit using that thing and storing the result along with the copy
-of pwd; on the way out it would use the "put unless borrowed" primitive.
+This is a bit early, but due to some personal scheduling I'd rather send
+this to you now, and you always mention you prefer to get pull requests
+early (perhaps not this early?) so here is hoping this is a win-win.
 
-Might or might not be useful - hard to tell without knowing the job mix of those
-audit-afflicted production systems.
+Here are the highlights for the audit changes queued for the Linux v7.0
+merge window:
 
-I'll try to put something along those lines together...
+- Improve the NETFILTER_PKT audit records
+
+Add source and destination ports to the NETFILTER_PKT audit records while
+also consolidating a lot of the code into a new, singular
+audit_log_nf_skb() function.  This new approach to structuring the
+NETFILTER_PKT record generation should elimiate some unnecessary overhead
+when audit is not built into the kernel.
+
+- Update the audit syscall classifier code
+
+Add the listxattrat(), getxattrat(), and fchmodat2() syscall to the
+audit code which classifies syscalls into categories of operations, e.g.
+"read" or "change attributes".
+
+- Move the syscall classifier declarations into audit_arch.h
+
+Shuffle around some header file declarations to resolve some sparse
+warnings.
+
+Paul
+
+--
+The following changes since commit 8f0b4cce4481fb22653697cced8d0d04027cb1e8:
+
+  Linux 6.19-rc1 (2025-12-14 16:05:07 +1200)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/audit.git
+    tags/audit-pr-20260203
+
+for you to fetch changes up to 76489955c6d4a065ca69dc88faf7a50a59b66f35:
+
+  audit: move the compat_xxx_class[] extern declarations to audit_arch.h
+    (2026-01-09 16:37:59 -0500)
+
+----------------------------------------------------------------
+audit/stable-7.0 PR 20260203
+----------------------------------------------------------------
+
+Ben Dooks (1):
+      audit: move the compat_xxx_class[] extern declarations to
+         audit_arch.h
+
+Jeffrey Bencteux (2):
+      audit: add fchmodat2() to change attributes class
+      audit: add missing syscalls to read class
+
+Ricardo Robaina (2):
+      audit: add audit_log_nf_skb helper function
+      audit: include source and destination ports to NETFILTER_PKT
+
+ include/asm-generic/audit_change_attr.h |    3 
+ include/asm-generic/audit_read.h        |    6 
+ include/linux/audit.h                   |   14 +-
+ include/linux/audit_arch.h              |    7 +
+ kernel/audit.c                          |  159 ++++++++++++++++++++++++
+ net/netfilter/nft_log.c                 |   58 --------
+ net/netfilter/xt_AUDIT.c                |   58 --------
+ 7 files changed, 185 insertions(+), 120 deletions(-)
+
+--
+paul-moore.com
