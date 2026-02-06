@@ -1,35 +1,35 @@
 Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5F8133B6E0;
-	Fri,  6 Feb 2026 07:11:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82B9B329E76;
+	Fri,  6 Feb 2026 08:13:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770361901; cv=none; b=K/T26PrsRzndDNNnu/O29gLmWLuoHVWTRO5d7BwQWCVm+AjkRkQxAJSyk8o8qje/adfaJEgHQUXfEayQX49GQrMEG5oo0/au+tx2xBwkJ2UTmdVMtmWBED/0nCFyTLbLp6/P5rpBVpGy79URQqDGYDNHnlKQRPwTBWi9+vJq9kQ=
+	t=1770365598; cv=none; b=HWmtoMokTasbHco8DOOhLE22yM2pvFukBTGrsjm2NPy35KYC9DqwTd5BBz/3pbfRdFpD+/PcQGE96euoEpSW378W0bGCxaPjXNzcSjRNug9z1uxPPiSHFvsMc50sjuogiLy4GbEIZpAdj6IYyGpdjchivdTCaII3KepI0gyc6Bs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770361901; c=relaxed/simple;
-	bh=ESHxK46Pp195Pbj5nCBSxf5dTCvDcKVwFKYUPZcQje0=;
+	s=arc-20240116; t=1770365598; c=relaxed/simple;
+	bh=QXraXYJ1WOJf/BOkkCK5e/CSWUaO1sFl/O3grFVb+UY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=B5HsUsfEPB1S9DvsAXVBPMLX9ETlPldYyfuRS1E0XH+bQAJpF+xPjQs2GuYz7cbqQakAawuTEJWOqBK1GXQosUm3L4zdZoaPlcFlbMEV4PCwxG2aFNRAkccKOi2SG4uzSXLHS4uLyofHjEOB9ji+UCwa6Fk5l0t/Rqs+iLORD70=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=LFCo4OBG; arc=none smtp.client-ip=62.89.141.173
+	 Content-Type:Content-Disposition:In-Reply-To; b=qMnJ5ISxBbo/3AnIcCc/as48izB0uKFHcfbgwUkXWoIPM4Zj9Pk25Zll87pIumXcoSI31PTtK4u3h7/g982S8TnKqZsTKOObAkef77vYQhgQpFVTn7nHe9utSzGmixnHluZwb4IP7kZWbyxM5aa/ZjtLWFimnkT57vO239t0OY0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=jfyaB09g; arc=none smtp.client-ip=62.89.141.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="LFCo4OBG"
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="jfyaB09g"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=B1rzOEriOO79igMc9s7879b8agxoEU+Vd19O62sMBiI=; b=LFCo4OBGw0xFjd7VU2ovEX0j8s
-	VZ+IYG31tLYrOy1VwDUQqq3yvp3KHT9X9QrSftOU2qLE4S5aBxiUdIUlkuAj6kF1RbL6nbTip53dD
-	yFr+8EF1yHADTbgzL+wSBvXCZtrhir3IevPZrXN4ci9sj0YM6OMljmwG551Dr9l8esqUdhpptTkj3
-	iCbTEgEoGCPPP2NCpVwDTxV2gxl7og+GAbwWAs9mXMihJ3EnwdPOBYI9VFRnoBzhzXCn20FdhRpvp
-	rSd3xZpS4rHmFP210moNQMAxHW66pj2qUJU5phPp36pxQoiPPgjQ8e7EM1RsV1i9EYJnsqZJhn9+B
-	z1a6wnpg==;
+	d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:
+	Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
+	Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description;
+	bh=tOFgNLj9BeKyp82ViD9mWSoSssHOp6N0lXjehKkov7I=; b=jfyaB09gcTLQ9XQyWLllTqQ4t6
+	pY1p05FD9i/vHupfUHTDbl/IkxRZ1taSne4ugIv2hlZbiIV5Xd7UmCRqOGvywMJ5URXeC9YVdtFoo
+	VnQ7xR6PouOVuT48TyCbClGPADnmziIxnbTjqedNJXLKXkNMn+OlFwoHjxutZCEI+QXTE2d+s8Fkg
+	iWYBOk9cXLPC4807WkPkScTjiNlYJFImotGgbDEDw0sPvNkyxlwn9t9pfqA/N4qEz69AcIMDAWHUq
+	7J6p6Udp74Y4i3M8RkLLE2CaDLX8LUGYX2+FuRa15eUpXkHCXxFJn8W1uJIteyPLi40WYBOoESHMo
+	Rc7sf/Nw==;
 Received: from viro by zeniv.linux.org.uk with local (Exim 4.99.1 #2 (Red Hat Linux))
-	id 1voG2B-0000000CTVW-1gNl;
-	Fri, 06 Feb 2026 07:13:43 +0000
-Date: Fri, 6 Feb 2026 07:13:43 +0000
+	id 1voGzm-0000000DReC-3d7p;
+	Fri, 06 Feb 2026 08:15:19 +0000
+Date: Fri, 6 Feb 2026 08:15:18 +0000
 From: Al Viro <viro@zeniv.linux.org.uk>
 To: Waiman Long <llong@redhat.com>
 Cc: Paul Moore <paul@paul-moore.com>, Eric Paris <eparis@redhat.com>,
@@ -39,34 +39,54 @@ Cc: Paul Moore <paul@paul-moore.com>, Eric Paris <eparis@redhat.com>,
 	Ricardo Robaina <rrobaina@redhat.com>
 Subject: Re: [PATCH v2] audit: Avoid excessive dput/dget in audit_context
  setup and reset paths
-Message-ID: <20260206071343.GY3183987@ZenIV>
-References: <6661f966-5235-49ca-bf1f-d1ae2ae32f0d@redhat.com>
+Message-ID: <20260206081518.GZ3183987@ZenIV>
+References: <590a36e6-8d11-411a-8fcd-d93eef96f0e9@redhat.com>
+ <20260203215002.GI3183987@ZenIV>
+ <20260203232634.GJ3183987@ZenIV>
+ <6661f966-5235-49ca-bf1f-d1ae2ae32f0d@redhat.com>
  <20260204062614.GK3183987@ZenIV>
  <46d5c480-87d0-4f6a-bcc2-6c936c87e216@redhat.com>
  <20260204201815.GP3183987@ZenIV>
  <cbaab46e-715d-4d06-80af-320caec7feb7@redhat.com>
  <50054d23-0a89-41ec-b28b-b1ed77d93b00@redhat.com>
  <20260205235351.GU3183987@ZenIV>
- <8a456257-6f7e-4d0a-b38d-3c2aefee76bb@redhat.com>
- <3a5f84fc-5c4e-4ce1-b2dd-6e07b109ce78@redhat.com>
- <20260206052218.GV3183987@ZenIV>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20260206052218.GV3183987@ZenIV>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260205235351.GU3183987@ZenIV>
 Sender: Al Viro <viro@ftp.linux.org.uk>
 
-On Fri, Feb 06, 2026 at 05:22:18AM +0000, Al Viro wrote:
+On Thu, Feb 05, 2026 at 11:53:51PM +0000, Al Viro wrote:
+> On Wed, Feb 04, 2026 at 11:45:17PM -0500, Waiman Long wrote:
+> 
+> > @@ -70,6 +74,8 @@ void chroot_fs_refs(const struct path *old_root, const
+> > struct>
+> >                                 count++;
+> >                                 path_get(new_root);
+> >                         }
+> > +                       count += fs->pwd_xrefs;
+> > +                       fs->pwd_xrefs = 0;
+> >                         write_sequnlock(&fs->seq);
+> 
+> Nope - you only need that for threads that have ->pwd equal to old_root.
+> Incidentally, I'd forgotten about that sucker - it kills the idea of
+> fdget-like tricks dead, more's the pity.  Third-party modification of
+> task->fs->pwd (under task->lock and task->fs->seq), possible even with
+> task->fs->users == 1.
+> 
+> FWIW, I'm going through the fs_struct uses at the moment; will post
+> whatever I get when I go down (or earlier, in the unlikely case it doesn't
+> spill to tomorrow morning), will keep posting incremental followups
+> until the documentation is done.  I'm sick and tired of half-finished
+> docs - let's see if I can push through that one this way ;-/
+> 
 
-> callers.  There are 3 of those:
-
-4, actually - prepare_nsset() has
-        nsset->nsproxy = create_new_namespaces(0, me, current_user_ns(), me->fs);
-again, without CLONE_NEWNS, so won't get to that loop in copy_mnt_ns()
-
-(que the obvious references to Cardinal Ximenez...)
+All right, I'm going down - it's 3am here; the current notes are at
+http://ftp.linux.org.uk/people/viro/fs_struct, will update when I get
+up tomorrow^Wtoday.
