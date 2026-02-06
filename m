@@ -1,35 +1,35 @@
 Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CF652E175F;
-	Fri,  6 Feb 2026 20:27:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08B0330E858;
+	Fri,  6 Feb 2026 20:36:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770409651; cv=none; b=Jlj/zbo9IMQUrXU3seRgqjX5+I2DYJwdGIlM7cJCpDF5dJUqiidStawegrycy7Unyn2yfcP3Kh2K3Lw3vbCLDdQCpQBtjwoDSkcAJhnQB19Q8ryFHZ3tMWCQglLQhqWRdXCK4e9OQkqGLPVgpZqof5kNpvloQ7mU7UvktUkhrPQ=
+	t=1770410194; cv=none; b=fAAinehudrt8Y6UMg4tzws9htOocO7HPRORGs4CvLKmpydXOXhVViWMSGYn4kK9EY8iY0hNAPesJjxPiGvc/K3KZv8cCcq0cmDtFNg6Bqz1Rb6uFW0h8quOjL6JSSNNL/eCtMrkvXIJFSNqfWIoC/JhHE3Et2hs68uQPqZ78ljM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770409651; c=relaxed/simple;
-	bh=jMmgldSoHqjJizzPBOppw3d0hY7ooQnAGTS1EJOY7x4=;
+	s=arc-20240116; t=1770410194; c=relaxed/simple;
+	bh=jxMGW6dWt9VsQwmCWVJZr9i4dS98eWp6ookQUIIQoVs=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dhgBNJzcVmcyvSGwv5S+Q2We1lVWEqBYozhdsMVp4LZmqw7wQjC8NRc43JZwh3mqtDoEUPfYtfW6ZJSCTGfmwNMcrQoGpL3h2BfTljc0yQkc/I69L51iRCLDdIZSt+VBWfSeUf9idal59yReRzUWpEiiVZVgQsunIo7HFO6Qjqw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=LO5rgoiT; arc=none smtp.client-ip=62.89.141.173
+	 Content-Type:Content-Disposition:In-Reply-To; b=dMYNWnil8DX2i6JbfJAO5AG5/pdnrUScWxO85OfESKUhryxn2CrwDeRdWpENcHfkH0jTo6FKfkQRBPp/t+Q9sNoZ1Nm+QQeIDikvySBZQ9RO3ARdByuvTfGoFyZQOoGy4tHv3aQT3L96yVMyBxhm87YOZpTpQbk/Nmc45fsmg9c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=XI9K1gu/; arc=none smtp.client-ip=62.89.141.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="LO5rgoiT"
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="XI9K1gu/"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:
-	Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
-	Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description;
-	bh=8qSEX9Ts8AI2jxhTJ7GPMKjsWPL7fz/teYTp9DY/eog=; b=LO5rgoiTU6BRj8k/OnbTaUYmyU
-	gLRkegIMYLjWFhgx1kvu6e1ccHM1zfhQxace1gSuhFANCIi9jHy8YGMaIRyoHi2Usgm7V4Kg1ATh2
-	vAMcwGSr1HQ36dmXd0MTdHPex4LK2kGjRPyWBet0pl6RTKu7pvTT0ks1yHGtPLizN11Z3y0v9UkBj
-	y/qJxL4ExzeIhYM6uj+Fps9SujS1Yf5u4SGKf+mA96b/tbnbOdAmdYgKQoqsgG8TzVjqfE/Gs+sJu
-	5J9wKNQEbqcTQu8Ma9u6zYw3kbaWxRnvDEpoVscKNsFmtwhQ3G4tYe4XIhf7EuRSgZT+PVT7f98gM
-	y8fs5LOg==;
+	d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=X/JiXKWB8lllbl/AEGTE18JPgYzTXTg7NTaUiOuM90U=; b=XI9K1gu/qsKWaxWlZ7ZlsJhAMO
+	L2CMjbGxVIwRKpl3mpQcZSIIpP8DtOefmzPaWFnB3YQfeN5Z5Wb5FedNqNdiCMC3bsHycSCBs2bnp
+	y+fOnjIs/QzN10aJEVc+rxoSpq21FXNQ+tiGG2sgKPQo5arvCXehmRVsZuv7bzUc64guxvoyBE7Mg
+	V4Gp7jCmNsTsiA3rLIj7pM58dqoUemosg7djKI7M8EUCT3JLwsR9niXEu8oW5BS+cw3GkR42hjImO
+	nufWKuOUTVTD3MI/XTR5i/t9bZPGeQD6ja+qXmH2IWTjT5eF54xauxCWr8RmLx1AC8m5KJ95IxMdA
+	7TfmUiOg==;
 Received: from viro by zeniv.linux.org.uk with local (Exim 4.99.1 #2 (Red Hat Linux))
-	id 1voSSL-00000001dxP-1cbW;
-	Fri, 06 Feb 2026 20:29:33 +0000
-Date: Fri, 6 Feb 2026 20:29:33 +0000
+	id 1voSb8-00000001eeS-1LJT;
+	Fri, 06 Feb 2026 20:38:38 +0000
+Date: Fri, 6 Feb 2026 20:38:38 +0000
 From: Al Viro <viro@zeniv.linux.org.uk>
 To: Waiman Long <llong@redhat.com>
 Cc: Paul Moore <paul@paul-moore.com>, Eric Paris <eparis@redhat.com>,
@@ -39,9 +39,8 @@ Cc: Paul Moore <paul@paul-moore.com>, Eric Paris <eparis@redhat.com>,
 	Ricardo Robaina <rrobaina@redhat.com>
 Subject: Re: [PATCH v2] audit: Avoid excessive dput/dget in audit_context
  setup and reset paths
-Message-ID: <20260206202933.GA3183987@ZenIV>
-References: <20260204062614.GK3183987@ZenIV>
- <46d5c480-87d0-4f6a-bcc2-6c936c87e216@redhat.com>
+Message-ID: <20260206203838.GB3183987@ZenIV>
+References: <46d5c480-87d0-4f6a-bcc2-6c936c87e216@redhat.com>
  <20260204201815.GP3183987@ZenIV>
  <cbaab46e-715d-4d06-80af-320caec7feb7@redhat.com>
  <50054d23-0a89-41ec-b28b-b1ed77d93b00@redhat.com>
@@ -50,72 +49,28 @@ References: <20260204062614.GK3183987@ZenIV>
  <3a5f84fc-5c4e-4ce1-b2dd-6e07b109ce78@redhat.com>
  <20260206052218.GV3183987@ZenIV>
  <9bc83901-3819-4cf1-a1ba-cc2f52f53504@redhat.com>
+ <5cb07c57-9dca-4086-af88-f866f765c7fb@redhat.com>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <9bc83901-3819-4cf1-a1ba-cc2f52f53504@redhat.com>
+In-Reply-To: <5cb07c57-9dca-4086-af88-f866f765c7fb@redhat.com>
 Sender: Al Viro <viro@ftp.linux.org.uk>
 
-On Fri, Feb 06, 2026 at 02:16:13PM -0500, Waiman Long wrote:
+On Fri, Feb 06, 2026 at 03:04:53PM -0500, Waiman Long wrote:
 
-> > In all cases when we get to that point, new_fs is always a freshly
-> > created private copy of current->fs, not reachable from anywhere
-> > other than stack frames of the callers, but the proof is not pretty.
-> > copy_mnt_ns() is called only by create_new_namespaces() and it gets to
-> > copying anything if and only if CLONE_NEWNS is in the flags.  So far,
-> > so good.  The call in create_new_namespaces() is
-> > 	new_nsp->mnt_ns = copy_mnt_ns(flags, tsk->nsproxy->mnt_ns, user_ns, new_fs);
-> 
-> Thanks for the detailed explanation. After further investigation as to while
-> the pwd_refs is set, I found out the code path leading to this situation is
-> the unshare syscall.
-> 
-> __x64_sys_unshare()
->  => ksys_unshare()
->   => unshare_fs(unshare_flags, &new_fs)
->   => unshare_nsproxy_namespaces(unshare_flags, &new_nsproxy,
->                                          new_cred, new_fs);
->    => create_new_namespaces(unshare_flags, current, user_ns,
->                                          new_fs ? new_fs : current->fs);
-> 
-> Here, CLONE_FS isn't set in unshare_flags. So new_fs is NULL and
-> current->fs is passed down to create_new_namespaces(). That is why
-> pwd_refs can be set in this case. So it looks like the comment in
-> copy_mnt_ns() saying that the fs_struct is private is no longer true,
-> at least in this case. So changing fs_struct without taking the lock
-> can lead to unexpected result.
+> I guess if private means fs->users == 1, the condition could still be true.
 
-CLONE_FS is the red herring here (it will be set earlier in ksys_unshare()
-if CLONE_NEWNS is there).  I really hate that how convoluted that is,
-though.
+Yes.  And then there's an oh-so-lovely wart wrt. chroot_fs_refs() and
+exclusion for it.  See another reply re unspeakable[*] elegance of the
+proof of correctness for that stuff ;-/
 
-Look: the case where we might get passed current->fs down there is real.
-It can happen in one and only one situation - CLONE_NEWNS in unshare(2)
-arguments *and* current->fs->users being 1.
+Annoyed much more than usual,
+				Al
 
-It wouldn't suffice, since there's chroot_fs_refs() that doesn't give
-a rat's arse for task->fs being ours - it goes and replaces every
-->fs->pwd or ->fs->root that happens to point to old_root.
-
-It's still not a real race, though - both chroot_fs_refs() and that area
-in copy_mnt_ns() are serialized on namespace_sem.
-
-And yes, it's obscenely byzantine.  It gets even worse when you consider
-the fact that pivot_root(2) does not break only because the refcount
-drops in chroot_fs_refs() are guaranteed not to reach 0 - the caller is
-holding its own references to old_root.{mnt,dentry} and *thar* does not
-get dropped until we drop namespace_sem.
-
-IOW, that shit is actually safe, but man, has its correctness grown fucking
-convoluted...
-
-Grabbing fs->seq in copy_mnt_ns() wouldn't make the things better, though -
-it seriously relies upon the same exclusion with chroot_fs_refs() for
-correctness; unless you are willing to hold it over the entire walk through
-the mount tree, the proof of correctness doesn't get any simpler.
+[*] there are some limits to what I'm willing to say on a family-friendly
+maillist...
