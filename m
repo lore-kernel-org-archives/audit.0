@@ -1,254 +1,121 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38595309DAF
-	for <audit@vger.kernel.org>; Fri,  6 Feb 2026 20:19:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CF652E175F;
+	Fri,  6 Feb 2026 20:27:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770409197; cv=none; b=pYXer+srxZvFQEAcgdXo8BJ5fc8YUv7Ll4u0QKjXOHudT6ja/lnk0E7V4vZGylDxruM0zHxaE5DOlNkuyJZAc2JLrBsRzaHrV0gYsML1ktMyGHAwyJQtYkgG3azf+almDRzQYseVbqWy5dBw9PoGx0Dg8uhVCgxiYQ2PeiG+8cY=
+	t=1770409651; cv=none; b=Jlj/zbo9IMQUrXU3seRgqjX5+I2DYJwdGIlM7cJCpDF5dJUqiidStawegrycy7Unyn2yfcP3Kh2K3Lw3vbCLDdQCpQBtjwoDSkcAJhnQB19Q8ryFHZ3tMWCQglLQhqWRdXCK4e9OQkqGLPVgpZqof5kNpvloQ7mU7UvktUkhrPQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770409197; c=relaxed/simple;
-	bh=ng6gjZ0DePID1lkh09vgkFm01Myj9k1ts6uATmiTuAU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:content-type; b=JtNtJ/3eBuXGH18RYBQzvr2C2fwOQG1QxxDtTFYpMQaI8ZPL7dYb5kL5mz8iXHpS2HokwYofP8ZKqLi3G85QvbLnWAOTWkZxJrcS34OMap2vQKY2+CiAwHyYeNeYwpayEhjrdmPPDrJvq99C8J7qeSMCSJBPFfSRPRFr2cMFzk0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=aweSOWl9; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1770409651; c=relaxed/simple;
+	bh=jMmgldSoHqjJizzPBOppw3d0hY7ooQnAGTS1EJOY7x4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=dhgBNJzcVmcyvSGwv5S+Q2We1lVWEqBYozhdsMVp4LZmqw7wQjC8NRc43JZwh3mqtDoEUPfYtfW6ZJSCTGfmwNMcrQoGpL3h2BfTljc0yQkc/I69L51iRCLDdIZSt+VBWfSeUf9idal59yReRzUWpEiiVZVgQsunIo7HFO6Qjqw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=LO5rgoiT; arc=none smtp.client-ip=62.89.141.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="aweSOWl9"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1770409196;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=tAE6K9oLnwYPMZ5Ztrl3XEhiFJoO2b5I2HRpuxoJ+xg=;
-	b=aweSOWl9EktRzg46IrPT+atbpzK8Z407jVPJJl7hVdBkxZIm/Nkw6rWnPPIOuEKsKHjenM
-	wwokaPtiWTiV3H4SuvnPx89hWbPxT6iCqoC6EBRgi0iYq+7mGWdzxhQGJfX/3MkTHVNjQW
-	rcnCguPX/+N9ddIZTzMgFXM5tvPoSYg=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-222-LJ7t7xfMOl64n7euSntAdw-1; Fri,
- 06 Feb 2026 15:19:51 -0500
-X-MC-Unique: LJ7t7xfMOl64n7euSntAdw-1
-X-Mimecast-MFC-AGG-ID: LJ7t7xfMOl64n7euSntAdw_1770409190
-Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id CB51818004BB;
-	Fri,  6 Feb 2026 20:19:49 +0000 (UTC)
-Received: from llong-thinkpadp16vgen1.westford.csb (unknown [10.22.90.86])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 3075218003F5;
-	Fri,  6 Feb 2026 20:19:48 +0000 (UTC)
-From: Waiman Long <longman@redhat.com>
-To: Paul Moore <paul@paul-moore.com>,
-	Eric Paris <eparis@redhat.com>,
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="LO5rgoiT"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:
+	Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
+	Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description;
+	bh=8qSEX9Ts8AI2jxhTJ7GPMKjsWPL7fz/teYTp9DY/eog=; b=LO5rgoiTU6BRj8k/OnbTaUYmyU
+	gLRkegIMYLjWFhgx1kvu6e1ccHM1zfhQxace1gSuhFANCIi9jHy8YGMaIRyoHi2Usgm7V4Kg1ATh2
+	vAMcwGSr1HQ36dmXd0MTdHPex4LK2kGjRPyWBet0pl6RTKu7pvTT0ks1yHGtPLizN11Z3y0v9UkBj
+	y/qJxL4ExzeIhYM6uj+Fps9SujS1Yf5u4SGKf+mA96b/tbnbOdAmdYgKQoqsgG8TzVjqfE/Gs+sJu
+	5J9wKNQEbqcTQu8Ma9u6zYw3kbaWxRnvDEpoVscKNsFmtwhQ3G4tYe4XIhf7EuRSgZT+PVT7f98gM
+	y8fs5LOg==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.99.1 #2 (Red Hat Linux))
+	id 1voSSL-00000001dxP-1cbW;
+	Fri, 06 Feb 2026 20:29:33 +0000
+Date: Fri, 6 Feb 2026 20:29:33 +0000
+From: Al Viro <viro@zeniv.linux.org.uk>
+To: Waiman Long <llong@redhat.com>
+Cc: Paul Moore <paul@paul-moore.com>, Eric Paris <eparis@redhat.com>,
 	Christian Brauner <brauner@kernel.org>,
-	Al Viro <viro@zeniv.linux.org.uk>
-Cc: linux-kernel@vger.kernel.org,
-	audit@vger.kernel.org,
+	linux-kernel@vger.kernel.org, audit@vger.kernel.org,
 	Richard Guy Briggs <rgb@redhat.com>,
-	Ricardo Robaina <rrobaina@redhat.com>,
-	Waiman Long <longman@redhat.com>
-Subject: [PATCH v3 1/2] fs: Add a pool of extra fs->pwd references to fs_struct
-Date: Fri,  6 Feb 2026 15:19:16 -0500
-Message-ID: <20260206201918.1988344-2-longman@redhat.com>
-In-Reply-To: <20260206201918.1988344-1-longman@redhat.com>
-References: <20260206201918.1988344-1-longman@redhat.com>
+	Ricardo Robaina <rrobaina@redhat.com>
+Subject: Re: [PATCH v2] audit: Avoid excessive dput/dget in audit_context
+ setup and reset paths
+Message-ID: <20260206202933.GA3183987@ZenIV>
+References: <20260204062614.GK3183987@ZenIV>
+ <46d5c480-87d0-4f6a-bcc2-6c936c87e216@redhat.com>
+ <20260204201815.GP3183987@ZenIV>
+ <cbaab46e-715d-4d06-80af-320caec7feb7@redhat.com>
+ <50054d23-0a89-41ec-b28b-b1ed77d93b00@redhat.com>
+ <20260205235351.GU3183987@ZenIV>
+ <8a456257-6f7e-4d0a-b38d-3c2aefee76bb@redhat.com>
+ <3a5f84fc-5c4e-4ce1-b2dd-6e07b109ce78@redhat.com>
+ <20260206052218.GV3183987@ZenIV>
+ <9bc83901-3819-4cf1-a1ba-cc2f52f53504@redhat.com>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
-X-Mimecast-MFC-PROC-ID: CBduMCnH2OXwdGJOSuhH_gCVtITUuM-a5REyUHwUizE_1770409190
-X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-content-type: text/plain; charset="US-ASCII"; x-default=true
+In-Reply-To: <9bc83901-3819-4cf1-a1ba-cc2f52f53504@redhat.com>
+Sender: Al Viro <viro@ftp.linux.org.uk>
 
-When the audit subsystem is enabled, it can do a lot of get_fs_pwd()
-calls to get references to fs->pwd and then releasing those references
-back with path_put() later. That may cause a lot of spinlock contention
-on a single pwd's dentry lock because of the constant changes to the
-reference count when there are many processes on the same working
-directory actively doing open/close system calls. This can cause
-noticeable performance regresssion when compared with the case where
-the audit subsystem is turned off especially on systems with a lot of
-CPUs which is becoming more common these days.
+On Fri, Feb 06, 2026 at 02:16:13PM -0500, Waiman Long wrote:
 
-A simple and elegant solution to avoid this kind of performance
-regression is to add a common pool of extra fs->pwd references inside
-the fs_struct. When a caller needs a pwd reference, it can borrow one
-from pool, if available, to avoid an explicit path_get(). When it is
-time to release the reference, it can put it back into the common pool
-if fs->pwd isn't changed before without doing a path_put(). We still
-need to acquire the fs's spinlock, but fs_struct is more distributed
-and it is less common to have many tasks sharing a single fs_struct.
+> > In all cases when we get to that point, new_fs is always a freshly
+> > created private copy of current->fs, not reachable from anywhere
+> > other than stack frames of the callers, but the proof is not pretty.
+> > copy_mnt_ns() is called only by create_new_namespaces() and it gets to
+> > copying anything if and only if CLONE_NEWNS is in the flags.  So far,
+> > so good.  The call in create_new_namespaces() is
+> > 	new_nsp->mnt_ns = copy_mnt_ns(flags, tsk->nsproxy->mnt_ns, user_ns, new_fs);
+> 
+> Thanks for the detailed explanation. After further investigation as to while
+> the pwd_refs is set, I found out the code path leading to this situation is
+> the unshare syscall.
+> 
+> __x64_sys_unshare()
+>  => ksys_unshare()
+>   => unshare_fs(unshare_flags, &new_fs)
+>   => unshare_nsproxy_namespaces(unshare_flags, &new_nsproxy,
+>                                          new_cred, new_fs);
+>    => create_new_namespaces(unshare_flags, current, user_ns,
+>                                          new_fs ? new_fs : current->fs);
+> 
+> Here, CLONE_FS isn't set in unshare_flags. So new_fs is NULL and
+> current->fs is passed down to create_new_namespaces(). That is why
+> pwd_refs can be set in this case. So it looks like the comment in
+> copy_mnt_ns() saying that the fs_struct is private is no longer true,
+> at least in this case. So changing fs_struct without taking the lock
+> can lead to unexpected result.
 
-A new set of get_fs_pwd_pool/put_fs_pwd_pool() APIs are introduced
-with this patch to enable other subsystems to acquire and release
-a pwd reference from the common pool without doing unnecessary
-path_get/path_put().
+CLONE_FS is the red herring here (it will be set earlier in ksys_unshare()
+if CLONE_NEWNS is there).  I really hate that how convoluted that is,
+though.
 
-Besides fs/fs_struct.c, the copy_mnt_ns() function of fs/namespace.c is
-also modified to properly handle the extra pwd references, if available.
+Look: the case where we might get passed current->fs down there is real.
+It can happen in one and only one situation - CLONE_NEWNS in unshare(2)
+arguments *and* current->fs->users being 1.
 
-Signed-off-by: Waiman Long <longman@redhat.com>
----
- fs/fs_struct.c            | 26 +++++++++++++++++++++-----
- fs/namespace.c            |  8 ++++++++
- include/linux/fs_struct.h | 30 +++++++++++++++++++++++++++++-
- 3 files changed, 58 insertions(+), 6 deletions(-)
+It wouldn't suffice, since there's chroot_fs_refs() that doesn't give
+a rat's arse for task->fs being ours - it goes and replaces every
+->fs->pwd or ->fs->root that happens to point to old_root.
 
-diff --git a/fs/fs_struct.c b/fs/fs_struct.c
-index b8c46c5a38a0..621fe1677913 100644
---- a/fs/fs_struct.c
-+++ b/fs/fs_struct.c
-@@ -32,15 +32,19 @@ void set_fs_root(struct fs_struct *fs, const struct path *path)
- void set_fs_pwd(struct fs_struct *fs, const struct path *path)
- {
- 	struct path old_pwd;
-+	int count;
- 
- 	path_get(path);
- 	write_seqlock(&fs->seq);
- 	old_pwd = fs->pwd;
- 	fs->pwd = *path;
-+	count = fs->pwd_refs + 1;
-+	fs->pwd_refs = 0;
- 	write_sequnlock(&fs->seq);
- 
- 	if (old_pwd.dentry)
--		path_put(&old_pwd);
-+		while (count--)
-+			path_put(&old_pwd);
- }
- 
- static inline int replace_path(struct path *p, const struct path *old, const struct path *new)
-@@ -62,10 +66,15 @@ void chroot_fs_refs(const struct path *old_root, const struct path *new_root)
- 		task_lock(p);
- 		fs = p->fs;
- 		if (fs) {
--			int hits = 0;
-+			int hits;
-+
- 			write_seqlock(&fs->seq);
-+			hits = replace_path(&fs->pwd, old_root, new_root);
-+			if (hits && fs->pwd_refs) {
-+				count += fs->pwd_refs;
-+				fs->pwd_refs = 0;
-+			}
- 			hits += replace_path(&fs->root, old_root, new_root);
--			hits += replace_path(&fs->pwd, old_root, new_root);
- 			while (hits--) {
- 				count++;
- 				path_get(new_root);
-@@ -81,8 +90,11 @@ void chroot_fs_refs(const struct path *old_root, const struct path *new_root)
- 
- void free_fs_struct(struct fs_struct *fs)
- {
-+	int count = fs->pwd_refs + 1;
-+
- 	path_put(&fs->root);
--	path_put(&fs->pwd);
-+	while (count--)
-+		path_put(&fs->pwd);
- 	kmem_cache_free(fs_cachep, fs);
- }
- 
-@@ -110,6 +122,7 @@ struct fs_struct *copy_fs_struct(struct fs_struct *old)
- 	if (fs) {
- 		fs->users = 1;
- 		fs->in_exec = 0;
-+		fs->pwd_refs = 0;
- 		seqlock_init(&fs->seq);
- 		fs->umask = old->umask;
- 
-@@ -117,7 +130,10 @@ struct fs_struct *copy_fs_struct(struct fs_struct *old)
- 		fs->root = old->root;
- 		path_get(&fs->root);
- 		fs->pwd = old->pwd;
--		path_get(&fs->pwd);
-+		if (old->pwd_refs)
-+			old->pwd_refs--;
-+		else
-+			path_get(&fs->pwd);
- 		read_sequnlock_excl(&old->seq);
- 	}
- 	return fs;
-diff --git a/fs/namespace.c b/fs/namespace.c
-index c58674a20cad..a2323ba84d76 100644
---- a/fs/namespace.c
-+++ b/fs/namespace.c
-@@ -4135,6 +4135,14 @@ struct mnt_namespace *copy_mnt_ns(u64 flags, struct mnt_namespace *ns,
- 	 * as belonging to new namespace.  We have already acquired a private
- 	 * fs_struct, so tsk->fs->lock is not needed.
- 	 */
-+	if (new_fs)
-+		WARN_ON_ONCE(new_fs->users != 1);
-+
-+	/* Release the extra pwd references of new_fs, if present. */
-+	while (new_fs && new_fs->pwd_refs) {
-+		path_put(&new_fs->pwd);
-+		new_fs->pwd_refs--;
-+	}
- 	p = old;
- 	q = new;
- 	while (p) {
-diff --git a/include/linux/fs_struct.h b/include/linux/fs_struct.h
-index 0070764b790a..093648e65c20 100644
---- a/include/linux/fs_struct.h
-+++ b/include/linux/fs_struct.h
-@@ -8,10 +8,11 @@
- #include <linux/seqlock.h>
- 
- struct fs_struct {
--	int users;
- 	seqlock_t seq;
-+	int users;
- 	int umask;
- 	int in_exec;
-+	int pwd_refs;	/* A pool of extra pwd references */
- 	struct path root, pwd;
- } __randomize_layout;
- 
-@@ -40,6 +41,33 @@ static inline void get_fs_pwd(struct fs_struct *fs, struct path *pwd)
- 	read_sequnlock_excl(&fs->seq);
- }
- 
-+/* Acquire a pwd reference from the pwd_refs pool, if available */
-+static inline void get_fs_pwd_pool(struct fs_struct *fs, struct path *pwd)
-+{
-+	read_seqlock_excl(&fs->seq);
-+	*pwd = fs->pwd;
-+	if (fs->pwd_refs)
-+		fs->pwd_refs--;
-+	else
-+		path_get(pwd);
-+	read_sequnlock_excl(&fs->seq);
-+}
-+
-+/* Release a pwd reference back to the pwd_refs pool, if appropriate */
-+static inline void put_fs_pwd_pool(struct fs_struct *fs, struct path *pwd)
-+{
-+	bool put = false;
-+
-+	read_seqlock_excl(&fs->seq);
-+	if ((fs->pwd.dentry == pwd->dentry) && (fs->pwd.mnt == pwd->mnt))
-+		fs->pwd_refs++;
-+	else
-+		put = true;
-+	read_sequnlock_excl(&fs->seq);
-+	if (put)
-+		path_put(pwd);
-+}
-+
- extern bool current_chrooted(void);
- 
- static inline int current_umask(void)
--- 
-2.52.0
+It's still not a real race, though - both chroot_fs_refs() and that area
+in copy_mnt_ns() are serialized on namespace_sem.
 
+And yes, it's obscenely byzantine.  It gets even worse when you consider
+the fact that pivot_root(2) does not break only because the refcount
+drops in chroot_fs_refs() are guaranteed not to reach 0 - the caller is
+holding its own references to old_root.{mnt,dentry} and *thar* does not
+get dropped until we drop namespace_sem.
+
+IOW, that shit is actually safe, but man, has its correctness grown fucking
+convoluted...
+
+Grabbing fs->seq in copy_mnt_ns() wouldn't make the things better, though -
+it seriously relies upon the same exclusion with chroot_fs_refs() for
+correctness; unless you are willing to hold it over the entire walk through
+the mount tree, the proof of correctness doesn't get any simpler.
