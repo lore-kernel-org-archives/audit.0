@@ -1,164 +1,152 @@
-Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E909836AB7C
-	for <audit@vger.kernel.org>; Tue, 17 Feb 2026 13:44:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C26312F5A06
+	for <audit@vger.kernel.org>; Thu, 19 Feb 2026 22:14:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.179
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771335861; cv=pass; b=hOFKVIAd1X/eTQeawH6igsjtLzZ6si7VWcZoFakamRBQn2Jd3h4ze9VksePFepBYZuAO9xoY92QGhgTrP574t1s+j9mZfM0uiIXwQJtT80wspqvyRzhVa/M6O5C0KGhkjwMX56AygEGZ49fyfcQPTvQxHfS/BbNEKehQZ01A6Vc=
+	t=1771539275; cv=pass; b=bOcwlhyIMN/0IYM6SwcKpXCti+rkbG5aOl0bc8Au0WlwoAUc7M5xJT98m0FInAObpdQW3BRAzgR6XyxnLox0sV7mI7VUW9CQ4VIa+g8ulKUiFpnGmwj5cVsg4xYE8tWzvQVfYzdsJf3y7yaFdWhlgrq0gaR3d+TAlt22AYUzHLI=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771335861; c=relaxed/simple;
-	bh=uIwgs6+KfVm6ezT+rIUnq56Ei9MBoA09jVtLFpXkKDM=;
+	s=arc-20240116; t=1771539275; c=relaxed/simple;
+	bh=JpGwHvT/3hhwHza/ym7K4teVN7Fl9ZYoYYQm9v2aG84=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Cdol1mXG7KcKDNyxB+23b6kbCD6ttniWhHe3g5MIRZNfIzJuUMYCIdOEIiGjGwu3A8mfVoImUT7IYviaB18JHJjwCMaBx8PMTFyIx1Xo/UQ3DUH2jQokTjLR+S1RcshQZKiet9/21QN6CovGfhCcyXHz64PYfinQ57e+LdXEnSM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kvWxClvQ; arc=pass smtp.client-ip=209.85.218.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 To:Cc:Content-Type; b=fWDE9+Jx/BgnWuNYR+3aLbM4WCj9elF//xn3SJ8PLvX+BUJJhIy2XJqBhHo07YGOSO88EwbjDefZYZ+9LT5riSceUowBqs4RnwTw63D67k0vfGrAEtBmhSpPdudHxD299pFE6hxBr5W6gwynKQERRgH0Peh6ZZCyCSHc1ncTK2g=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=gBWwAYZ0; arc=pass smtp.client-ip=209.85.214.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kvWxClvQ"
-Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-b8fb3c4bbc4so569624366b.2
-        for <audit@vger.kernel.org>; Tue, 17 Feb 2026 05:44:19 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1771335858; cv=none;
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="gBWwAYZ0"
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-2a8a7269547so13957235ad.0
+        for <audit@vger.kernel.org>; Thu, 19 Feb 2026 14:14:33 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1771539273; cv=none;
         d=google.com; s=arc-20240605;
-        b=gEWCT37X0hJLcRMJypscYSTH00Yq2ZiQYQ3W7SbkhpQ7PG9kpTbATEnm7WkQjZ6VCM
-         DYtR7ou6SSuswgcAsoqZn5+Ni/yjmC+vBXVOiK9vaCqhVEt5wNSplX3YzgP9Mc+et7aT
-         xII4/DGXGWaFXazqTnE+L7DrW1ULYh+O0lR3YP/2k7M8gZXWg/xBdm4IODV7dmuIh1jJ
-         Np4aEY+lZobaKhsWAorGzseJpm9agygyBfS7cc4R90BRlPKfW2KG/xTUbGXApdeFic4z
-         sq1y9pbLFB81IkuShBsbrlpS60FtUU+fUQYMnq3M30I/XJBBiS+GKKV2fXbWme6jvdH4
-         Trzw==
+        b=F2i2i5hIJ9F+SADaEMxIumHBJb0yB49slZPIKbPRorJcqx61/c6gzMq8sjGeRiZ8ws
+         hDuDKt3sEYWjz8y481WGlnwYyL+3su4jBF1knsjP2D8zjETduMM/XRmXGeJ6Lvyo3yW0
+         PLjDKSJI+7eijmddp+6Q01ePvpcjv6lVphyvWqFfrkUrUZ9U38x6RNKt4DL+SFht/KAd
+         rfeBOcGYxEHB87GDyAOZ5MUO2FZdSP8vnOqn1NxTLHgAv6f/XHIOpVCVV0rklS1gY6pn
+         vCkfcGCw7/9UiVWRyQKzGovsKiwpzfz1nmJgP1zc2f35p38kWmO2BRhyQu0ykXnQfT1r
+         mPJQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=NG7tJlsrCf47QZDECjNynyzE6rS3FfREc+SHd+1cJDg=;
-        fh=xW+1UT9AXVPQ7NFvK0gKFYgAOZDSzzzfzjSe/f+JKbY=;
-        b=YB94mhFV4VaE911aEuscWbrgMJX3ZFV4nPAuqbmldK3e6yHsv06hf2zSxE9XT9p+pn
-         SidwedJnylJScESMbwgAQ3kwwHdAeKUatjMSvOxZCLzM67Mv18eQSicxm6sy7Xp2HKQq
-         Vio0fW71c7W0DpY5RzLBggGa2EpWKl3LtzDHj67aGVqWDt92YSaEzFr9DHI54Ku2KXxQ
-         KsrojrQwSg91oae1QPJoSrty9asvoaByu6Av7Qh/UtCHcHs0k9S8ku51FPv3VgIIP3tH
-         0y+fyzGOiJeqWArzCyTWxOv0Qo9ShTKC2xIQDruOnr+SPw111HgevRWoXaO5vTr6J27d
-         lf5Q==;
+        bh=uuWksm/z64CkDA8wVi+HNFlxh1fV4OvGcIJUKwatE7Q=;
+        fh=tOlJCInf3pImKYTkUCl9mAJxaD0YIg5bIhQNCjmqfKs=;
+        b=A6pSngWVZD9EMK5MXkj4XaQMt3bEjYxVGLu/gsTklpJ+I8usMSkrXuf2gtnyozWqrv
+         yHO0UxTbJyPgDXnFszZ1y65o0Scw8WZUxN2WOHwShf69i7c6DUGgN8xdzeIKu0/rfEu+
+         E6D3/peYcBLLf1J4qURKkg/Ypn1cVdiYeNbaYaqqc2IEWsq9yVdNbaNFyT5omX7WMTT/
+         pr10tMZ43d27Pp2pNrFQinZDP8C8npVO544X6TeBsYFu8pRlubL0Kkgc2BjPsHq1GuxS
+         BcUhB4yrSJcbO85fCpemT59zOrp19APZEt0fgmHIrj7wN+DCeKtBP+iVUZ5ZoKWug8bA
+         xLsg==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1771335858; x=1771940658; darn=vger.kernel.org;
+        d=paul-moore.com; s=google; t=1771539273; x=1772144073; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=NG7tJlsrCf47QZDECjNynyzE6rS3FfREc+SHd+1cJDg=;
-        b=kvWxClvQnXozJ0XJJeTrfMMB+SzFBlaJ/A/4b2iUtxcS5t1jK/mTwU8CMUl0RZXf5h
-         aKQyGizW13wQbKmYXv/QilYPTluNfljtSTCQJtwhz8j/EZaD+b184Q2Ru9GkSCozBSZi
-         brCCWVOJP2kSvKrbVvae9BIXqrKKhZneusCj3vwL0anPyU5s44PaxDrNYltl/B1kYAif
-         tmh07m3+d9kHi5PEF/Wfug+QHnU7tcPhIcczwhcv+zybE0g2BWeWlBXNtJvLsXuaZNPZ
-         FPc8fPv/2qYpaf+jXaiho3qnYvHDePlaKyzYDbdFC6ELpZVU8+QmEHS0bK3xuBv3+kOe
-         utXQ==
+        bh=uuWksm/z64CkDA8wVi+HNFlxh1fV4OvGcIJUKwatE7Q=;
+        b=gBWwAYZ0NP5c3k5eI5W515q4ZiQjAQP1NluNSOYuZqTBbJALLybWKFllVjM/OETrOx
+         w0jq0m/2fgHr3miMYFt8V3LK5p8OLlEs0zzgO56uNNSYFo+tthN50AgUzXBApG3DK/2D
+         F6hU7WKMiEaTyo+HvjkU1VJvO/Yn6CQYTeogqhOkE/GpJ4kAOzYx6hwwGOtmS7+vKxB3
+         PNU9OH9ERxX45GFrHebMN1ga+tnJivwoBeWRGHTogINlY7X6UijK36d4OzhOuWMvlsew
+         F3GLTc4q7soZtQOZ6uR+jF+bbYOxCOaLTTpHeFOCf6hNfYGZhkEKCnuPoQdMFViwaTun
+         pyeQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771335858; x=1771940658;
+        d=1e100.net; s=20230601; t=1771539273; x=1772144073;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=NG7tJlsrCf47QZDECjNynyzE6rS3FfREc+SHd+1cJDg=;
-        b=UG05ob87Pkfyv0Hk5fbChVmQWX1ep5mpdMj/sBqhoRRMuWe45hQduW+lvT4bbxYDBP
-         8Q3/ecIOxCJuqUZu+pnWDL7+Jdz7tnr1piIORZoKKVIXmybWCKU8uUuvDmjD6DOV+95a
-         6xLFHA2wNCkFnOaBZc5Fk7T3JcLVGRmcmDWgE/qW998IlrJLo1H+Ba6bvzYhOkAcnq+w
-         pI72od6Gdy4byeUUvy3vZgWf+BJLafXAmYNMivIXUz7fownq1uN+NKlHzuLNfVNrg7ps
-         LSUcJxrhdipzhKsxws9S6vkNtCAMd6b59tqbpeizV7B3UKZ87Y73yEQzJm4krcSsOe26
-         9qtw==
-X-Forwarded-Encrypted: i=1; AJvYcCVJESq7HzFRJjE7R2qCJTNjcQ0A6o12TwbUuQU62ajLJp7t0pDtbcJjjXxND9XP6WTDQlaF2Q==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyELQfWRFrob7O20yEw5uISQ+xtwsEpqtXu09E38O+Ng0UwASgU
-	DUVvzkJPfyX5A7tMYRkfwUO5tO4RZ24iGv3dclrpiK6343SX128rPcn6JMtHgI5f9vW6hqlBv1N
-	t4CkEiR7/wTnB1OEbSXA2KxZspMtTxgI=
-X-Gm-Gg: AZuq6aI4zKcNJ7neDUZhaq3sdFJnsQVxjmaGN2qkWBm8VO/xHjvbxscFm/9mZuo/++8
-	AV+ee1lwB6DJy/DgtaUM4TU526j4SNu40b7LNuvzoxFDFkvqEg9ZDThDeU+Zo6ifioMyFe9lcuV
-	4iXlnhsKfK8T5VeuWj1aQxvDY6KIZgmXBYnTKDwvYFlKTVnNXqNF4qWYuU3UGytAEclcSNGWRaG
-	g6aX2oipXD9DTOe8zkQNiW55lMFLWXHt8oeM2YyfvLCn1EIQqCKpEzrwZIqNwYJZvTrRA5Vgs8j
-	iaOuGI8AQvxoDlY1LDJSuhTNMi9nrPGDQYq4SJw=
-X-Received: by 2002:a17:906:209a:b0:b8f:c4be:f1f3 with SMTP id
- a640c23a62f3a-b8fc4bef454mr306018266b.59.1771335858045; Tue, 17 Feb 2026
- 05:44:18 -0800 (PST)
+        bh=uuWksm/z64CkDA8wVi+HNFlxh1fV4OvGcIJUKwatE7Q=;
+        b=a1wrOBVLaRTQqXlnoz280Y8RTozj/aX6ipEa0l+bEN4m+psUy/4yT0QzRX19SvtdzX
+         o3PKXuzjmxoj//Aumen9Wkl8tllVQoDrHyv9mJhJyxmYghiNoeYxpf5yMJE4YRiclL4l
+         p9kaI0h1+cMDSJoQRPGBvYVmPznyy/CfvgCJEMJMtmw/PgwbyWcnCFOGJZ9zf5LdqZ/h
+         RMh2HVjLg0c9Oee58CHp9OSnIOHVgOm4ow3ESjwoUYkZuWdU+/ljLb/W7ZoE8utirDvr
+         ACMfe5CjdSLe4jP/lJVwjPNuzacS0KLaiKSJs9eslqo1wvhRPdLj059Af8R54Ue4DqBI
+         Wu+A==
+X-Forwarded-Encrypted: i=1; AJvYcCVStf+ferlSEaIOAkpvxN71PksR8vok42HiWyhuSvuWcvxsMEyaU/XVJH9ITuWWT0ybvmDq9Q==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxkg3WJXhFR/VisYndomb1Fvu5Q8IL9NsUAnjJi3MzrZJmD4ISh
+	tf4w4NIb0cmSV4jfr5YnPU7QDk91DKQGApMKPgbv6RqBRWi+XyfL6zFfUoKkyQHQBPkrsEYXXSA
+	yojGJSB4uDDG2CNpc/IGteNzKLOCZzbj+PDfM7t+D
+X-Gm-Gg: AZuq6aJLRN7LbubluLZDSGRhv3K0w0KbzUFCF5VMokkDon3wE9oqcyVThK8+Cjrhdl/
+	duAmyAN5lqYkdYJ869EHHPyDYkPbSMqtQGo8PwxPPNxS8rYh6qKrreKma06XzRmQzj017ln1Tqo
+	GqeGg+9Qa0odZe0SMBT8kwfr6Ysu7LYfLLtBIYqVmxblWVIdm/RpbTxWN9QDzempuIsHAGe+mca
+	hUo691jm9CeFaWgeqHhxu4DwFaqV823h9uvu4hp/7uAHKFbzgA/a1zli/lbBG5AzMm43GygZmWV
+	C6k4Z1k=
+X-Received: by 2002:a17:902:d545:b0:2aa:eaa7:2a9 with SMTP id
+ d9443c01a7336-2ab4cf4f959mr206906725ad.8.1771539273002; Thu, 19 Feb 2026
+ 14:14:33 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <590a36e6-8d11-411a-8fcd-d93eef96f0e9@redhat.com>
- <20260203215002.GI3183987@ZenIV> <20260203232634.GJ3183987@ZenIV>
- <6661f966-5235-49ca-bf1f-d1ae2ae32f0d@redhat.com> <20260204062614.GK3183987@ZenIV>
- <46d5c480-87d0-4f6a-bcc2-6c936c87e216@redhat.com> <20260204201815.GP3183987@ZenIV>
- <cbaab46e-715d-4d06-80af-320caec7feb7@redhat.com> <20260205052202.GQ3183987@ZenIV>
- <CAGudoHFz1QZdYTp=PbAF+v-3-EZhwL0PQz+Zv0nNTG0WCSAdAw@mail.gmail.com> <20260217-fortsetzen-razzia-11771992d348@brauner>
-In-Reply-To: <20260217-fortsetzen-razzia-11771992d348@brauner>
-From: Mateusz Guzik <mjguzik@gmail.com>
-Date: Tue, 17 Feb 2026 14:44:05 +0100
-X-Gm-Features: AaiRm528gKxjugErWLP1yyOWwCCWyW6AjV2fIZk4wj6m71h8TN_j8eXtz9RPnKs
-Message-ID: <CAGudoHG5uGU7p67dK5tj_NJ3F9_+moRWGCu=VFR+8MFP1O3mEA@mail.gmail.com>
-Subject: Re: [PATCH v2] audit: Avoid excessive dput/dget in audit_context
- setup and reset paths
-To: Christian Brauner <brauner@kernel.org>
-Cc: Al Viro <viro@zeniv.linux.org.uk>, Waiman Long <llong@redhat.com>, 
-	Paul Moore <paul@paul-moore.com>, Eric Paris <eparis@redhat.com>, linux-kernel@vger.kernel.org, 
-	audit@vger.kernel.org, Richard Guy Briggs <rgb@redhat.com>, 
-	Ricardo Robaina <rrobaina@redhat.com>
+References: <20260206201918.1988344-1-longman@redhat.com> <20260212180820.2418869-3-longman@redhat.com>
+In-Reply-To: <20260212180820.2418869-3-longman@redhat.com>
+From: Paul Moore <paul@paul-moore.com>
+Date: Thu, 19 Feb 2026 17:14:21 -0500
+X-Gm-Features: AaiRm51RDgNBu0z7rNLTqXSyUOVNwxPkgUEsGNbLDaPD_6KPUkH0zhu8FG_KoSI
+Message-ID: <CAHC9VhQXK__Qbyr3TXF5gjQEhRROkOtva3nPZhp7YUy2orgj8Q@mail.gmail.com>
+Subject: Re: [RESEND PATCH v3 2/2] audit: Use the new {get,put}_fs_pwd_pool()
+ APIs to get/put pwd references
+To: Waiman Long <longman@redhat.com>
+Cc: Eric Paris <eparis@redhat.com>, Christian Brauner <brauner@kernel.org>, 
+	Al Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>, linux-kernel@vger.kernel.org, 
+	linux-fsdevel@vger.kernel.org, audit@vger.kernel.org, 
+	Richard Guy Briggs <rgb@redhat.com>, Ricardo Robaina <rrobaina@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Feb 17, 2026 at 2:33=E2=80=AFPM Christian Brauner <brauner@kernel.o=
-rg> wrote:
+On Thu, Feb 12, 2026 at 1:09=E2=80=AFPM Waiman Long <longman@redhat.com> wr=
+ote:
 >
-> On Thu, Feb 05, 2026 at 06:53:34PM +0100, Mateusz Guzik wrote:
-> > On Thu, Feb 5, 2026 at 6:20=E2=80=AFAM Al Viro <viro@zeniv.linux.org.uk=
-> wrote:
-> > > Mateusz: *is* there a measurable effect?  Because if there isn't, I'm
-> > > very tempted to simply revert that thing.  "Churn of adding fs_struct=
-.h
-> > > as needed" is not the problem - try "exposing the object internals to
-> > > far larger subset of the kernel".  We had interesting bugs with weird
-> > > shit deciding to poke in there, locking and refcounting be damned.
-> >
-> > This one I did not bother benchmarking as it is an obvious change --
-> > read a var directly instead of going through a func call.
-> >
-> > If this is causing trouble then it definitely needs to be reverted,
-> > but any woes only speak to the mess in the header files.
+> When the audit subsystem is enabled, it can do a lot of get_fs_pwd()
+> calls to get references to fs->pwd and then releasing those references
+> back with path_put() later. That may cause a lot of spinlock contention
+> on a single pwd's dentry lock because of the constant changes to the
+> reference count when there are many processes on the same working
+> directory actively doing open/close system calls. This can cause
+> noticeable performance regresssion when compared with the case where
+> the audit subsystem is turned off especially on systems with a lot of
+> CPUs which is becoming more common these days.
 >
-> Any reason this isn't just stealing the cred.h trick?
+> To avoid this kind of performance regression, use the new
+> get_fs_pwd_pool() and put_fs_pwd_pool() APIs to acquire and release a
+> fs->pwd reference. This should greatly reduce the number of path_get()
+> and path_put() calls that are needed.
 >
-> diff --git a/include/linux/fs_struct.h b/include/linux/fs_struct.h
-> index 0070764b790a..e8b8d073f9e0 100644
-> --- a/include/linux/fs_struct.h
-> +++ b/include/linux/fs_struct.h
-> @@ -2,11 +2,12 @@
->  #ifndef _LINUX_FS_STRUCT_H
->  #define _LINUX_FS_STRUCT_H
+> After installing a test kernel with auditing enabled and counters
+> added to track the get_fs_pwd_pool() and put_fs_pwd_pool() calls on
+> a 2-socket 96-core test system and running a parallel kernel build,
+> the counter values for this particular test run were shown below.
 >
-> -#include <linux/sched.h>
->  #include <linux/path.h>
->  #include <linux/spinlock.h>
->  #include <linux/seqlock.h>
+>   fs_get_path=3D307,903
+>   fs_get_pool=3D56,583,192
+>   fs_put_path=3D6,209
+>   fs_put_pool=3D56,885,147
 >
-> +struct task_struct;
-> +
->  struct fs_struct {
->         int users;
->         seqlock_t seq;
-> @@ -42,9 +43,6 @@ static inline void get_fs_pwd(struct fs_struct *fs, str=
-uct path *pwd)
+> Of the about 57M calls to get_fs_pwd_pool() and put_fs_pwd_pool(), the
+> majority of them are just updating the pwd_refs counters. Only less than
+> 1% of those calls require an actual path_get() and path_put() calls. The
+> difference between fs_get_path and fs_put_path represents the extra pwd
+> references that were still stored in various active task->fs's when the
+> counter values were retrieved.
 >
->  extern bool current_chrooted(void);
+> It can be seen that the number of path_get() and path_put() calls are
+> reduced by quite a lot.
 >
-> -static inline int current_umask(void)
-> -{
-> -       return current->fs->umask;
-> -}
-> +#define current_umask() (current->fs->umask)
->
->  #endif /* _LINUX_FS_STRUCT_H */
->
+> Signed-off-by: Waiman Long <longman@redhat.com>
+> ---
+>  kernel/auditsc.c | 7 +++++--
+>  1 file changed, 5 insertions(+), 2 deletions(-)
 
-This depends on the users having task_struct already provided, which
-sooner or later will give someone a build breakage when they work on a
-new patch, but perhaps that's just a minor inconvenience and is not
-worth worrying about.
+Apologies on the delay in responding, I had limited network access and
+it looked like you and Al had this under control.  Regardless, the
+audit part of this patchset looks fine to me, my ACK is below if Al
+wants to take this, otherwise I can merge the patchset via the audit
+tree if Al ACKs it.
 
-That said, if the above is no considered a factor, I'm definitely not
-going to protest.
+Acked-by: Paul Moore <paul@paul-moore.com>
+
+--=20
+paul-moore.com
