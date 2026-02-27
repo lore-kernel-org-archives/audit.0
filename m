@@ -1,110 +1,265 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90CB6364947
-	for <audit@vger.kernel.org>; Thu, 26 Feb 2026 18:13:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BF0F346E6E
+	for <audit@vger.kernel.org>; Fri, 27 Feb 2026 16:37:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772129632; cv=none; b=OSOlAj7W0Od4mamD3l5Wpr4zcvW5Hx9+p4dLbUd/ImZ6JifHDvcHqxdZjuiXcQMsL84Cjh0+pmVId6kloFJM34YutfYXUWxuWyUF+Rd2/KANQEH62UCQpohcxif1lPy0ark3taMyGk3MKl5HwBeXk81fofaNv5JqAcPpSMrUPFQ=
+	t=1772210256; cv=none; b=bztx6ilZhBpMllJPv6BO5JjGuf5STKwzTjE4MMJYpLDI5AhC8vMElyQ7D1AWfTfeibpbZsu4WaJwiiE+CrJNayiyaKlLoR4KJ1oBHD/O/sMBSTUovslAJInKl0eDGEnpqz2NlrJMBSS2KBXzjaS9N5GH2Xsyv71FtJtgvNdu9Bk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772129632; c=relaxed/simple;
-	bh=TKtyPv/fUkMLoB48HfHVIQzQqfQau+NU52aJHmhZk1M=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:content-type; b=AFGcjynuYcdQr92HfuauqQHbSAdTT3/tlGcABrMEk9HA44BebfIKT76yspmo/CuvydBNa9JnbFCEhBVdtmi/3gi7Hubp1bpO5hhlfKhhewCX+qrNTPMX5n+mnv41H+KQlWkyGPMC8HhhMfDk6WVJReKrHT3NQqH3zyOq5txWdVI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Lqrtq+gd; arc=none smtp.client-ip=170.10.129.124
+	s=arc-20240116; t=1772210256; c=relaxed/simple;
+	bh=e5ysBFNMbNxY60WeAWlNpd0ZhnlLodMtdIb7nfgVCwY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 In-Reply-To:Content-Type:Content-Disposition; b=ehaVw9EucvVsQkoMSFHDK3k0G11sevT4kdmtZOA1n8qvWKybNmQvPS8eE7FOszjIbQbKbNwmgzM7I/+F+qe6ebyazR6tl1x+s2yUOy3e93otI5KF1YYUUftRuu6f4wgvlk7Plxp2zsbb1m5XNj9dfPK/4wYDLLzbki6L8xcblUk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=AEoXMZKl; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Lqrtq+gd"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="AEoXMZKl"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1772129630;
+	s=mimecast20190719; t=1772210253;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=8/TyEfe76Y6Kiy4VsURDps2mRDuc/UO2jHi1HRNucPI=;
-	b=Lqrtq+gdIioyaiEP40IFoZhJSX+4qkxp8IMI8yFbs257yhBwUxfB57A/YWclDbp3lO4z1i
-	iQy9Jvx0gFfF9oQxoyIN1ogOAT13D5Uw+3plvA3BKwf4ViFjAflJP9n97XGK3LVLk5Cyj4
-	6KXoa0m8q1jPuhqT6PqWho8XVm+2OUk=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+	 in-reply-to:in-reply-to:references:references;
+	bh=JrlNyJ+u3cgPYdFrV0DC5PUJHWdcykuVUVbNcP3TcUg=;
+	b=AEoXMZKlft3Zm7ZgRVDso+Kv9DhVdZ4C2pOVIWmwHMBSA+8jqzxm2lFgJSssAFBHYZTT96
+	HUqa9YqOVWgbhhCxoFYD1tfZ7YNkZmohOgOIuyoFAnrBcOAEQ68Bv8FxzVpoSz8K+omvNf
+	aQpJOPCcW3NAmq0Ze3uOd7rmnF06+cI=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-213-VwNu4PR_O7yVNexRbgIGeA-1; Thu,
- 26 Feb 2026 13:13:47 -0500
-X-MC-Unique: VwNu4PR_O7yVNexRbgIGeA-1
-X-Mimecast-MFC-AGG-ID: VwNu4PR_O7yVNexRbgIGeA_1772129626
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-692-8b0djP8AMnKbnqgtOkeIIw-1; Fri,
+ 27 Feb 2026 11:37:30 -0500
+X-MC-Unique: 8b0djP8AMnKbnqgtOkeIIw-1
+X-Mimecast-MFC-AGG-ID: 8b0djP8AMnKbnqgtOkeIIw_1772210249
 Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 2699E1956063;
-	Thu, 26 Feb 2026 18:13:46 +0000 (UTC)
-Received: from wsxc.redhat.com (unknown [10.96.134.51])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 41ED71956056;
-	Thu, 26 Feb 2026 18:13:42 +0000 (UTC)
-From: Ricardo Robaina <rrobaina@redhat.com>
-To: audit@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: paul@paul-moore.com,
-	eparis@redhat.com,
-	Ricardo Robaina <rrobaina@redhat.com>
-Subject: [PATCH] audit: remove redundant initialization of static variables to 0
-Date: Thu, 26 Feb 2026 15:13:38 -0300
-Message-ID: <20260226181338.2526777-1-rrobaina@redhat.com>
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id C3ADE1800267;
+	Fri, 27 Feb 2026 16:37:28 +0000 (UTC)
+Received: from madcap2.tricolour.ca (unknown [10.22.58.4])
+	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 6757F1956053;
+	Fri, 27 Feb 2026 16:37:22 +0000 (UTC)
+Date: Fri, 27 Feb 2026 11:37:18 -0500
+From: Richard Guy Briggs <rgb@redhat.com>
+To: Waiman Long <longman@redhat.com>
+Cc: Paul Moore <paul@paul-moore.com>, Eric Paris <eparis@redhat.com>,
+	Christian Brauner <brauner@kernel.org>,
+	Al Viro <viro@zeniv.linux.org.uk>, linux-kernel@vger.kernel.org,
+	audit@vger.kernel.org, Ricardo Robaina <rrobaina@redhat.com>
+Subject: Re: [PATCH v3 1/2] fs: Add a pool of extra fs->pwd references to
+ fs_struct
+Message-ID: <aaHIPoPomC4PRImW@madcap2.tricolour.ca>
+References: <20260206201918.1988344-1-longman@redhat.com>
+ <20260206201918.1988344-2-longman@redhat.com>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+In-Reply-To: <20260206201918.1988344-2-longman@redhat.com>
 X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
-X-Mimecast-MFC-PROC-ID: SlXYdgNfO4pMUbqm5PhWpi0B12WLjBtOFmV3M8Gchw0_1772129626
+X-Mimecast-MFC-PROC-ID: KE_-62jwCtlZMQJr_B_hy9OUwRFXQJlBUQRrhbmNgL8_1772210249
 X-Mimecast-Originator: redhat.com
-Content-Transfer-Encoding: 8bit
-content-type: text/plain; charset="US-ASCII"; x-default=true
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Static variables are automatically initialized to 0 by the compiler.
-Remove the redundant explicit assignments in kernel/audit.c to clean
-up the code, align with standard kernel coding style, and fix the
-following checkpatch.pl errors:
+On 2026-02-06 15:19, Waiman Long wrote:
+> When the audit subsystem is enabled, it can do a lot of get_fs_pwd()
+> calls to get references to fs->pwd and then releasing those references
+> back with path_put() later. That may cause a lot of spinlock contention
+> on a single pwd's dentry lock because of the constant changes to the
+> reference count when there are many processes on the same working
+> directory actively doing open/close system calls. This can cause
+> noticeable performance regresssion when compared with the case where
+> the audit subsystem is turned off especially on systems with a lot of
+> CPUs which is becoming more common these days.
+> 
+> A simple and elegant solution to avoid this kind of performance
+> regression is to add a common pool of extra fs->pwd references inside
+> the fs_struct. When a caller needs a pwd reference, it can borrow one
+> from pool, if available, to avoid an explicit path_get(). When it is
+> time to release the reference, it can put it back into the common pool
+> if fs->pwd isn't changed before without doing a path_put(). We still
+> need to acquire the fs's spinlock, but fs_struct is more distributed
+> and it is less common to have many tasks sharing a single fs_struct.
+> 
+> A new set of get_fs_pwd_pool/put_fs_pwd_pool() APIs are introduced
+> with this patch to enable other subsystems to acquire and release
+> a pwd reference from the common pool without doing unnecessary
+> path_get/path_put().
+> 
+> Besides fs/fs_struct.c, the copy_mnt_ns() function of fs/namespace.c is
+> also modified to properly handle the extra pwd references, if available.
+> 
+> Signed-off-by: Waiman Long <longman@redhat.com>
 
- ./scripts/checkpatch.pl kernel/audit.c | grep -A2 ERROR:
- ERROR: do not initialise statics to 0
- +	static unsigned long	last_check = 0;
- --
- ERROR: do not initialise statics to 0
- +	static int		messages   = 0;
- --
- ERROR: do not initialise statics to 0
- +	static unsigned long	last_msg = 0;
+Reviewed-by: Richard Guy Briggs <rgb@redhat.com>
 
-Signed-off-by: Ricardo Robaina <rrobaina@redhat.com>
----
- kernel/audit.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+> ---
+>  fs/fs_struct.c            | 26 +++++++++++++++++++++-----
+>  fs/namespace.c            |  8 ++++++++
+>  include/linux/fs_struct.h | 30 +++++++++++++++++++++++++++++-
+>  3 files changed, 58 insertions(+), 6 deletions(-)
+> 
+> diff --git a/fs/fs_struct.c b/fs/fs_struct.c
+> index b8c46c5a38a0..621fe1677913 100644
+> --- a/fs/fs_struct.c
+> +++ b/fs/fs_struct.c
+> @@ -32,15 +32,19 @@ void set_fs_root(struct fs_struct *fs, const struct path *path)
+>  void set_fs_pwd(struct fs_struct *fs, const struct path *path)
+>  {
+>  	struct path old_pwd;
+> +	int count;
+>  
+>  	path_get(path);
+>  	write_seqlock(&fs->seq);
+>  	old_pwd = fs->pwd;
+>  	fs->pwd = *path;
+> +	count = fs->pwd_refs + 1;
+> +	fs->pwd_refs = 0;
+>  	write_sequnlock(&fs->seq);
+>  
+>  	if (old_pwd.dentry)
+> -		path_put(&old_pwd);
+> +		while (count--)
+> +			path_put(&old_pwd);
+>  }
+>  
+>  static inline int replace_path(struct path *p, const struct path *old, const struct path *new)
+> @@ -62,10 +66,15 @@ void chroot_fs_refs(const struct path *old_root, const struct path *new_root)
+>  		task_lock(p);
+>  		fs = p->fs;
+>  		if (fs) {
+> -			int hits = 0;
+> +			int hits;
+> +
+>  			write_seqlock(&fs->seq);
+> +			hits = replace_path(&fs->pwd, old_root, new_root);
+> +			if (hits && fs->pwd_refs) {
+> +				count += fs->pwd_refs;
+> +				fs->pwd_refs = 0;
+> +			}
+>  			hits += replace_path(&fs->root, old_root, new_root);
+> -			hits += replace_path(&fs->pwd, old_root, new_root);
+>  			while (hits--) {
+>  				count++;
+>  				path_get(new_root);
+> @@ -81,8 +90,11 @@ void chroot_fs_refs(const struct path *old_root, const struct path *new_root)
+>  
+>  void free_fs_struct(struct fs_struct *fs)
+>  {
+> +	int count = fs->pwd_refs + 1;
+> +
+>  	path_put(&fs->root);
+> -	path_put(&fs->pwd);
+> +	while (count--)
+> +		path_put(&fs->pwd);
+>  	kmem_cache_free(fs_cachep, fs);
+>  }
+>  
+> @@ -110,6 +122,7 @@ struct fs_struct *copy_fs_struct(struct fs_struct *old)
+>  	if (fs) {
+>  		fs->users = 1;
+>  		fs->in_exec = 0;
+> +		fs->pwd_refs = 0;
+>  		seqlock_init(&fs->seq);
+>  		fs->umask = old->umask;
+>  
+> @@ -117,7 +130,10 @@ struct fs_struct *copy_fs_struct(struct fs_struct *old)
+>  		fs->root = old->root;
+>  		path_get(&fs->root);
+>  		fs->pwd = old->pwd;
+> -		path_get(&fs->pwd);
+> +		if (old->pwd_refs)
+> +			old->pwd_refs--;
+> +		else
+> +			path_get(&fs->pwd);
+>  		read_sequnlock_excl(&old->seq);
+>  	}
+>  	return fs;
+> diff --git a/fs/namespace.c b/fs/namespace.c
+> index c58674a20cad..a2323ba84d76 100644
+> --- a/fs/namespace.c
+> +++ b/fs/namespace.c
+> @@ -4135,6 +4135,14 @@ struct mnt_namespace *copy_mnt_ns(u64 flags, struct mnt_namespace *ns,
+>  	 * as belonging to new namespace.  We have already acquired a private
+>  	 * fs_struct, so tsk->fs->lock is not needed.
+>  	 */
+> +	if (new_fs)
+> +		WARN_ON_ONCE(new_fs->users != 1);
+> +
+> +	/* Release the extra pwd references of new_fs, if present. */
+> +	while (new_fs && new_fs->pwd_refs) {
+> +		path_put(&new_fs->pwd);
+> +		new_fs->pwd_refs--;
+> +	}
+>  	p = old;
+>  	q = new;
+>  	while (p) {
+> diff --git a/include/linux/fs_struct.h b/include/linux/fs_struct.h
+> index 0070764b790a..093648e65c20 100644
+> --- a/include/linux/fs_struct.h
+> +++ b/include/linux/fs_struct.h
+> @@ -8,10 +8,11 @@
+>  #include <linux/seqlock.h>
+>  
+>  struct fs_struct {
+> -	int users;
+>  	seqlock_t seq;
+> +	int users;
+>  	int umask;
+>  	int in_exec;
+> +	int pwd_refs;	/* A pool of extra pwd references */
+>  	struct path root, pwd;
+>  } __randomize_layout;
+>  
+> @@ -40,6 +41,33 @@ static inline void get_fs_pwd(struct fs_struct *fs, struct path *pwd)
+>  	read_sequnlock_excl(&fs->seq);
+>  }
+>  
+> +/* Acquire a pwd reference from the pwd_refs pool, if available */
+> +static inline void get_fs_pwd_pool(struct fs_struct *fs, struct path *pwd)
+> +{
+> +	read_seqlock_excl(&fs->seq);
+> +	*pwd = fs->pwd;
+> +	if (fs->pwd_refs)
+> +		fs->pwd_refs--;
+> +	else
+> +		path_get(pwd);
+> +	read_sequnlock_excl(&fs->seq);
+> +}
+> +
+> +/* Release a pwd reference back to the pwd_refs pool, if appropriate */
+> +static inline void put_fs_pwd_pool(struct fs_struct *fs, struct path *pwd)
+> +{
+> +	bool put = false;
+> +
+> +	read_seqlock_excl(&fs->seq);
+> +	if ((fs->pwd.dentry == pwd->dentry) && (fs->pwd.mnt == pwd->mnt))
+> +		fs->pwd_refs++;
+> +	else
+> +		put = true;
+> +	read_sequnlock_excl(&fs->seq);
+> +	if (put)
+> +		path_put(pwd);
+> +}
+> +
+>  extern bool current_chrooted(void);
+>  
+>  static inline int current_umask(void)
+> -- 
+> 2.52.0
+> 
 
-diff --git a/kernel/audit.c b/kernel/audit.c
-index 5a0216056524..08793e71b975 100644
---- a/kernel/audit.c
-+++ b/kernel/audit.c
-@@ -355,8 +355,8 @@ void audit_panic(const char *message)
- 
- static inline int audit_rate_check(void)
- {
--	static unsigned long	last_check = 0;
--	static int		messages   = 0;
-+	static unsigned long	last_check;
-+	static int		messages;
- 	static DEFINE_SPINLOCK(lock);
- 	unsigned long		flags;
- 	unsigned long		now;
-@@ -391,7 +391,7 @@ static inline int audit_rate_check(void)
- */
- void audit_log_lost(const char *message)
- {
--	static unsigned long	last_msg = 0;
-+	static unsigned long	last_msg;
- 	static DEFINE_SPINLOCK(lock);
- 	unsigned long		flags;
- 	unsigned long		now;
--- 
-2.53.0
+- RGB
+
+--
+Richard Guy Briggs <rgb@redhat.com>
+Sr. S/W Engineer, Kernel Security, Base Operating Systems
+Remote, Ottawa, Red Hat Canada
+Upstream IRC: SunRaycer
+Voice: +1.613.860 2354 SMS: +1.613.518.6570
 
