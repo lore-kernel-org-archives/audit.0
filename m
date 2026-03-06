@@ -1,106 +1,202 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B08B51FC7
-	for <audit@vger.kernel.org>; Fri,  6 Mar 2026 00:53:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772758406; cv=none; b=W5Nuq1ShWTmGyZLqu0ylANtOKYmNt0JbgbvpAzHxrU18TBdF9YxhC/be/5ou3Zy8j5WJB14pcarwmpxIoXnJ+IDQHne7t+zJY1NMI2r6axfsVfXpDjgOrsiCi0vlmAbqem4IOHy2/x57QHxSwuPdeT2xbGJ1uuWw91/q2QkH+8I=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772758406; c=relaxed/simple;
-	bh=q+1OHkZxuaWPjZLatNGpXSxU4+CbbXGnHjb3Ye+yGiI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=dmhAjkZR6McQvPoTC5bz4SdAx3DpSRGWz0lyurEE4Pw+5V/Zj2FYLZtHWeB+pU0kHXtJH7YY6Ru+GaaeJTkV/r0MruDJCMDHOMoA0M2WNtEp8AAaIOcp9kcSEji4aaWQYbrQK1mHcUTzLgtbiBi/AF81V41cJkL22Y7LhTOaH/4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=bpyL1Aba; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EA8A36B055
+	for <audit@vger.kernel.org>; Fri,  6 Mar 2026 03:09:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.216.43
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772766569; cv=pass; b=nauwPVIksizt47rw1cSEivCrQ67S8d15CT2UUqzSa55qNxyXeRr7Ew6fPA9bX2CjEZUw1tVfLcC091WQk2RB9LgzXLNexKZ/OwU3fWaUFF10cW6NrA5G9E+XjkM4GIF106527qFrkm41pa/YLxt6gqMDH1dJLcIcZ+0t29uhxF4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772766569; c=relaxed/simple;
+	bh=bviOEAiclB40zHgWtMns3qOTI6tH10B4GOXwr6aNFqE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=NObUJn+H+iwKdadKmQKVRPn5QqyboyZwBoayThy/v9u6mNxwsBEaybWF7XgZyRYQOwrLdDg7vn7Gx4UoUsYSJQaltMQGqXF4UQ1NMQoCnmDYyQjnOW6K6L6lpBIoUWdsxscnU8FOhcbD28Hntl/+XfOjqlPrNs/bPIuNqRHV9KE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=dAwPI33N; arc=pass smtp.client-ip=209.85.216.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="bpyL1Aba"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1772758403;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=My480qFBpGNx50hRnNAsXaFyKvXvDH1yGohElc/bFek=;
-	b=bpyL1AbaKaZpKyRUjHB4kYI8rCc65vUr5dAZCeMKXqFX+Di+c8GY+ql0v6ZHtxqw0zKraU
-	l3Ry0e3zc3W3vDZZu3Y7wrHKvXuoZb2eP5tBca7e4SVcR6pHHWNajIfjNRa+WOnvaXB2bp
-	K62Pl5TmOi6F9CNhqze1plNZwVzfd0o=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-484-qrluC5POMC-PjA9ucEVRag-1; Thu,
- 05 Mar 2026 19:53:20 -0500
-X-MC-Unique: qrluC5POMC-PjA9ucEVRag-1
-X-Mimecast-MFC-AGG-ID: qrluC5POMC-PjA9ucEVRag_1772758399
-Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id E78C919560B7;
-	Fri,  6 Mar 2026 00:53:18 +0000 (UTC)
-Received: from [10.22.88.171] (unknown [10.22.88.171])
-	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id CB0301800762;
-	Fri,  6 Mar 2026 00:53:16 +0000 (UTC)
-Message-ID: <886ceaf1-16dd-4403-bfaf-5164a598a20d@redhat.com>
-Date: Thu, 5 Mar 2026 19:53:15 -0500
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="dAwPI33N"
+Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-35994d84c6dso2071695a91.2
+        for <audit@vger.kernel.org>; Thu, 05 Mar 2026 19:09:25 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1772766565; cv=none;
+        d=google.com; s=arc-20240605;
+        b=Nx5v4ZXQTXx6OfAgnTWGuPDx5e152pWyPhFH8wBFrNt5W5iWhDcaDJ6EU+e7hZub3p
+         zROh2z0+LGxjCzbQt+N9UF91pMbzEPjsM/B30EKYdNyZ9WWUtHvcKxp31Ht8OcKRiRLB
+         gqKwZqmvADzicsGFPHZ9QFWbGVrqIGh9qesjou5E9y12a3xscQ4LqceRG1Q46ofVsxrr
+         yG+ix0en3iQAyCfwcBt8jehItMcX59xa3nz42CeKqFjUqvkB5vsvotU2yej0ZCl0ne/U
+         x5X1NvKrjSgi2pmo8cibZJXj0az42+L/dkIqA1eCpeG/dy1bqPSZKyf/UTH+y2XROWIT
+         l+MQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=a2wyFmqtgQuSSxu/y1lHXpYQVnaUEjD/9HUkzSu97q4=;
+        fh=2vXIX6JSgrchuAPJomrx6KaTlx5m8JywDlvpT0rKoP0=;
+        b=c24NKmFMnmWW3R2k9+rPlIt7C8A1kRd1MLUrXZRWkVgRWZVBGFyC645lqhwoOngsZq
+         4Z0k2NZhi33YKfXEzxCFTS7HPGkadr/OaHJlpkXBQUb3r57xpR6QanuknWHdx1WqJtrw
+         BQ9JM7WnkAJ+Mkd55sTMLFtOin267HFAkfunEbmExLnX0dKAVP9B1peYOOlnYgW5XNx2
+         F9imDjuy5omGngorFBaItKaFBHy5yrX2CB8+C/5l3VcwvlClmBLUHmbGtTAqgQbcQ4fZ
+         n9NRKjDWLZ+q/aktgRJvuWZBcTWWrHibnIKssMPazeLtFRjx1U+5EUuICiFhJXMZ0IzO
+         nEeg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1772766565; x=1773371365; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=a2wyFmqtgQuSSxu/y1lHXpYQVnaUEjD/9HUkzSu97q4=;
+        b=dAwPI33NE0I1N7/Ob8GYMBqsbwtzcp+gp2GDnYiH04YPQzdL4RUvdUR0iBjC13xcQv
+         aMlFvamolK9EzpBi4IgqFSnNpby7fEcumrjWtlKePL62YAyLDCmP7hU8YhE4e5dTV4im
+         bxKYh3oOr1YE19tfvZlpSAD+OmVZB0B+qCCPL7+9ujo1/bE5Vg3GerBiI72kjcw8sVjb
+         lkjdL/w3VuY7xlT09hsIXHjJpUJEi/Ru/lQnfTbU8FKYq4PXRFBSV8fwkeEqIgfI8cIW
+         ZF0zTRPVDBbS2bScfd71WgeyHuBjROxPuT+4Rc9LFHrrJ3RGMuKypOfKDAdxE+j0N1PI
+         Ht5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772766565; x=1773371365;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=a2wyFmqtgQuSSxu/y1lHXpYQVnaUEjD/9HUkzSu97q4=;
+        b=UvNdeGxxJCeT1A3uIYf3qzhIRKfuwC0YaCJWvkIn4iDy6Ekwa370jS+EvS9zySoEXN
+         0mMw1XRwqLTR1F56GLn2Hh1JvpTRk42mrzCFsFjk21cafssp648qVOt/hyicSEBu7ZxA
+         kvplzifS+jzL+KM5u+STNioTlYLDOMNMXNB3r10YAsiyQ7AKbCKVJFI1hSkw2a2lV6ze
+         i29UKC6rOtE4bVn7cDoLWY/KOtZBha5L/UjPmsaFTHe2S7OpF3igf7wTobYayms2N/l1
+         nx8AJsWqtCuLrqqi4zKfSSj3IqupIDlDouAoCtr8hNN27Q374t1cFOlRQiDnlxRb2AVC
+         ZKNA==
+X-Forwarded-Encrypted: i=1; AJvYcCWO3UuHdn6vnapJXDOo1ufJcPl1ZDMHnrzlpKEdCKIoOGVD6Nv8thTd5IYhkbeo5XVIABFpDA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwVdNpOsyqLlAEAV1fW32GWerpT+/IWGG6V18ObYAOokKH2JKUT
+	u194BdGyI0ZQuoHWPEpkHv1EIe6RhsxyCJgRbDXpfPITF+tkm0/lpPZ4KkK0B3rWKSg3R+mJcO7
+	1HW6cR0TUltxlFBcN5AsoOP0jBUzQOer73skjB1vB
+X-Gm-Gg: ATEYQzyuLIyeODDtH+nIDzwTHBiHw8K03qAOda0I6bwc80zYNkj6DFhgc7NtRLUN33t
+	deYqzRLgt+cvcxGBFXMAn/djFEp0qXhHDPIwbjhCP3SOOilPPS50cQdv2aUcvIAIFI2DjInnM//
+	JSYpwMvKCVoZXJAd0GIIKTgN4tlOHgLn65oT7xlzTD+8nOn/BsBYIkcYz99qzs1aD6gvau6eCl2
+	8/9A09pz+tReiPdHMFVF4SJQacZ5/i+cRVM3VTzHluHiWKOKa+VAUwg0pba93reWk77Jfi34zgl
+	/MFGu8s=
+X-Received: by 2002:a17:90b:390a:b0:34c:35ce:3c5f with SMTP id
+ 98e67ed59e1d1-359be28da81mr585228a91.5.1772766564424; Thu, 05 Mar 2026
+ 19:09:24 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 0/2] fs, audit: Avoid excessive dput/dget in
- audit_context setup and reset paths
-To: Christian Brauner <brauner@kernel.org>
-Cc: Paul Moore <paul@paul-moore.com>, Eric Paris <eparis@redhat.com>,
- Al Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
- linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
- audit@vger.kernel.org, Richard Guy Briggs <rgb@redhat.com>,
- Ricardo Robaina <rrobaina@redhat.com>
-References: <20260228182757.90528-1-longman@redhat.com>
- <20260305-vorlieben-gefesselt-1673d7845270@brauner>
-From: Waiman Long <longman@redhat.com>
-In-Reply-To: <20260305-vorlieben-gefesselt-1673d7845270@brauner>
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
-X-Mimecast-MFC-PROC-ID: sdaLCSGRvAZcTxOp524Sn7DaLWniMzYz9AyrPDDgXPs_1772758399
-X-Mimecast-Originator: redhat.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20260304-iino-u64-v3-0-2257ad83d372@kernel.org> <20260304-iino-u64-v3-2-2257ad83d372@kernel.org>
+In-Reply-To: <20260304-iino-u64-v3-2-2257ad83d372@kernel.org>
+From: Paul Moore <paul@paul-moore.com>
+Date: Thu, 5 Mar 2026 22:09:12 -0500
+X-Gm-Features: AaiRm51A9fGFpauPslQfX6LBJuSyutri4HG-shh7wAOHtGm4QDzvXC5jtThE_pI
+Message-ID: <CAHC9VhQix8opxrX--w-pw5vEAiLaYX=kPhnm4x+dEFEwHiVnfQ@mail.gmail.com>
+Subject: Re: [PATCH v3 02/12] audit: widen ino fields to u64
+To: Jeff Layton <jlayton@kernel.org>
+Cc: Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
+	Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>, 
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Dan Williams <dan.j.williams@intel.com>, 
+	Eric Biggers <ebiggers@kernel.org>, "Theodore Y. Ts'o" <tytso@mit.edu>, Muchun Song <muchun.song@linux.dev>, 
+	Oscar Salvador <osalvador@suse.de>, David Hildenbrand <david@kernel.org>, 
+	David Howells <dhowells@redhat.com>, Paulo Alcantara <pc@manguebit.org>, 
+	Andreas Dilger <adilger.kernel@dilger.ca>, Jan Kara <jack@suse.com>, 
+	Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>, 
+	Trond Myklebust <trondmy@kernel.org>, Anna Schumaker <anna@kernel.org>, 
+	Chuck Lever <chuck.lever@oracle.com>, NeilBrown <neil@brown.name>, 
+	Olga Kornievskaia <okorniev@redhat.com>, Dai Ngo <Dai.Ngo@oracle.com>, Tom Talpey <tom@talpey.com>, 
+	Steve French <sfrench@samba.org>, Ronnie Sahlberg <ronniesahlberg@gmail.com>, 
+	Shyam Prasad N <sprasad@microsoft.com>, Bharath SM <bharathsm@microsoft.com>, 
+	Alexander Aring <alex.aring@gmail.com>, Ryusuke Konishi <konishi.ryusuke@gmail.com>, 
+	Viacheslav Dubeyko <slava@dubeyko.com>, Eric Van Hensbergen <ericvh@kernel.org>, 
+	Latchesar Ionkov <lucho@ionkov.net>, Dominique Martinet <asmadeus@codewreck.org>, 
+	Christian Schoenebeck <linux_oss@crudebyte.com>, David Sterba <dsterba@suse.com>, 
+	Marc Dionne <marc.dionne@auristor.com>, Ian Kent <raven@themaw.net>, 
+	Luis de Bethencourt <luisbg@kernel.org>, Salah Triki <salah.triki@gmail.com>, 
+	"Tigran A. Aivazian" <aivazian.tigran@gmail.com>, Ilya Dryomov <idryomov@gmail.com>, 
+	Alex Markuze <amarkuze@redhat.com>, Jan Harkes <jaharkes@cs.cmu.edu>, coda@cs.cmu.edu, 
+	Nicolas Pitre <nico@fluxnic.net>, Tyler Hicks <code@tyhicks.com>, Amir Goldstein <amir73il@gmail.com>, 
+	Christoph Hellwig <hch@infradead.org>, 
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, Yangtao Li <frank.li@vivo.com>, 
+	Mikulas Patocka <mikulas@artax.karlin.mff.cuni.cz>, David Woodhouse <dwmw2@infradead.org>, 
+	Richard Weinberger <richard@nod.at>, Dave Kleikamp <shaggy@kernel.org>, 
+	Konstantin Komarov <almaz.alexandrovich@paragon-software.com>, Mark Fasheh <mark@fasheh.com>, 
+	Joel Becker <jlbec@evilplan.org>, Joseph Qi <joseph.qi@linux.alibaba.com>, 
+	Mike Marshall <hubcap@omnibond.com>, Martin Brandenburg <martin@omnibond.com>, 
+	Miklos Szeredi <miklos@szeredi.hu>, Anders Larsen <al@alarsen.net>, 
+	Zhihao Cheng <chengzhihao1@huawei.com>, Damien Le Moal <dlemoal@kernel.org>, 
+	Naohiro Aota <naohiro.aota@wdc.com>, Johannes Thumshirn <jth@kernel.org>, 
+	John Johansen <john.johansen@canonical.com>, James Morris <jmorris@namei.org>, 
+	"Serge E. Hallyn" <serge@hallyn.com>, Mimi Zohar <zohar@linux.ibm.com>, 
+	Roberto Sassu <roberto.sassu@huawei.com>, Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, 
+	Eric Snowberg <eric.snowberg@oracle.com>, Fan Wu <wufan@kernel.org>, 
+	Stephen Smalley <stephen.smalley.work@gmail.com>, Ondrej Mosnacek <omosnace@redhat.com>, 
+	Casey Schaufler <casey@schaufler-ca.com>, Alex Deucher <alexander.deucher@amd.com>, 
+	=?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
+	Sumit Semwal <sumit.semwal@linaro.org>, Eric Dumazet <edumazet@google.com>, 
+	Kuniyuki Iwashima <kuniyu@google.com>, Paolo Abeni <pabeni@redhat.com>, 
+	Willem de Bruijn <willemb@google.com>, "David S. Miller" <davem@davemloft.net>, 
+	Jakub Kicinski <kuba@kernel.org>, Simon Horman <horms@kernel.org>, Oleg Nesterov <oleg@redhat.com>, 
+	Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
+	James Clark <james.clark@linaro.org>, "Darrick J. Wong" <djwong@kernel.org>, 
+	Martin Schiller <ms@dev.tdt.de>, Eric Paris <eparis@redhat.com>, Joerg Reuter <jreuter@yaina.de>, 
+	Marcel Holtmann <marcel@holtmann.org>, Johan Hedberg <johan.hedberg@gmail.com>, 
+	Luiz Augusto von Dentz <luiz.dentz@gmail.com>, Oliver Hartkopp <socketcan@hartkopp.net>, 
+	Marc Kleine-Budde <mkl@pengutronix.de>, David Ahern <dsahern@kernel.org>, 
+	Neal Cardwell <ncardwell@google.com>, Steffen Klassert <steffen.klassert@secunet.com>, 
+	Herbert Xu <herbert@gondor.apana.org.au>, Remi Denis-Courmont <courmisch@gmail.com>, 
+	Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>, Xin Long <lucien.xin@gmail.com>, 
+	Magnus Karlsson <magnus.karlsson@intel.com>, 
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>, Stanislav Fomichev <sdf@fomichev.me>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Jesper Dangaard Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>, 
+	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org, nvdimm@lists.linux.dev, 
+	fsverity@lists.linux.dev, linux-mm@kvack.org, netfs@lists.linux.dev, 
+	linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net, 
+	linux-nfs@vger.kernel.org, linux-cifs@vger.kernel.org, 
+	samba-technical@lists.samba.org, linux-nilfs@vger.kernel.org, 
+	v9fs@lists.linux.dev, linux-afs@lists.infradead.org, autofs@vger.kernel.org, 
+	ceph-devel@vger.kernel.org, codalist@coda.cs.cmu.edu, 
+	ecryptfs@vger.kernel.org, linux-mtd@lists.infradead.org, 
+	jfs-discussion@lists.sourceforge.net, ntfs3@lists.linux.dev, 
+	ocfs2-devel@lists.linux.dev, devel@lists.orangefs.org, 
+	linux-unionfs@vger.kernel.org, apparmor@lists.ubuntu.com, 
+	linux-security-module@vger.kernel.org, linux-integrity@vger.kernel.org, 
+	selinux@vger.kernel.org, amd-gfx@lists.freedesktop.org, 
+	dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org, 
+	linaro-mm-sig@lists.linaro.org, netdev@vger.kernel.org, 
+	linux-perf-users@vger.kernel.org, linux-fscrypt@vger.kernel.org, 
+	linux-xfs@vger.kernel.org, linux-hams@vger.kernel.org, 
+	linux-x25@vger.kernel.org, audit@vger.kernel.org, 
+	linux-bluetooth@vger.kernel.org, linux-can@vger.kernel.org, 
+	linux-sctp@vger.kernel.org, bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 3/5/26 4:46 PM, Christian Brauner wrote:
-> On Sat, Feb 28, 2026 at 01:27:55PM -0500, Waiman Long wrote:
->>   v4:
->>    - Add ack and review tags
->>    - Simplify put_fs_pwd_pool() in patch 1 as suggested by Paul Moore
->>
->>   v3:
->>    - https://lore.kernel.org/lkml/20260206201918.1988344-1-longman@redhat.com/
->>
->> When the audit subsystem is enabled, it can do a lot of get_fs_pwd()
->> calls to get references to fs->pwd and then releasing those references
->> back with path_put() later. That may cause a lot of spinlock contention
->> on a single pwd's dentry lock because of the constant changes to the
->> reference count when there are many processes on the same working
->> directory actively doing open/close system calls. This can cause
->> noticeable performance regresssion when compared with the case where
->> the audit subsystem is turned off especially on systems with a lot of
->> CPUs which is becoming more common these days.
->>
->> This patch series aim to avoid this type of performance regression caused
->> by audit by adding a new set of fs_struct helpers to reduce unncessary
->> path_get() and path_put() calls and the audit code is modified to use
->> these new helpers.
-> Tbh, the open-coding everywhere is really not very tasteful and makes me
-> not want to do this at all. Ideally we'd have a better mechanism that
-> avoids all this new spaghetti in various codepaths.
+On Wed, Mar 4, 2026 at 10:33=E2=80=AFAM Jeff Layton <jlayton@kernel.org> wr=
+ote:
 >
-> In it's current form I don't find it palatable. I added a few cleanups
-> on top that make it at least somewhat ok.
+> inode->i_ino is being widened from unsigned long to u64. The audit
+> subsystem uses unsigned long ino in struct fields, function parameters,
+> and local variables that store inode numbers from arbitrary filesystems.
+> On 32-bit platforms this truncates inode numbers that exceed 32 bits,
+> which will cause incorrect audit log entries and broken watch/mark
+> comparisons.
+>
+> Widen all audit ino fields, parameters, and locals to u64, and update
+> the inode format string from %lu to %llu to match.
+>
+> Signed-off-by: Jeff Layton <jlayton@kernel.org>
+> ---
+>  include/linux/audit.h   |  2 +-
+>  kernel/audit.h          | 13 ++++++-------
+>  kernel/audit_fsnotify.c |  4 ++--
+>  kernel/audit_watch.c    | 12 ++++++------
+>  kernel/auditsc.c        |  4 ++--
+>  5 files changed, 17 insertions(+), 18 deletions(-)
 
-Thanks for the cleanup patches. They all look good to me.
+Acked-by: Paul Moore <paul@paul-moore.com>
 
-Reviewed-by: Waiman Long <longman@redhat.com>
-
+--=20
+paul-moore.com
