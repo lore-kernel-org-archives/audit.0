@@ -1,294 +1,150 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FFF030B52C;
-	Tue, 10 Mar 2026 15:08:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773155297; cv=none; b=Kezv/I4iKKz5H1d3phS6etUzS9gJXAIY2zt4g0dvGPzLMFNZJENycbAcGmd+XiGlyCQ4Q3eAWt/oJ1fWmVs4Qg7IxqrEyBGFIdnEl4+/L3cMsNnRYEpEN2hrw9oXaa4PO8gMC57VQiZe7Kgwy8QRa8eLYrickqXjf9vrIO5AuDo=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773155297; c=relaxed/simple;
-	bh=qqYMWrM29fKZ0bq5/e1TqlgdXppZ9irTHMV+0rGa9XY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=P/AY/AYkAjdAISjSUiwQtEO3uqvGhVry3Tbu2N+D42Bg//7QX68K3xjX3xYD8sTPeGZh12wRQUCutlrVVLsg1hUdksAnfsfTzBQHUSRJBPZ2EcqQQXF5JISV1aTsrFki0u4OAWQ2l6e1+O5aav2xAb33VMw7iGHqRyhk8tLPHsk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=o5FS6g8L; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FC94239E63
+	for <audit@vger.kernel.org>; Tue, 10 Mar 2026 19:19:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.216.47
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773170373; cv=pass; b=uWz4aqqQo1EZPBJ6PVVVU0Uc/o+vI6UX3hGuOfVv9vZL7zZ2m0pFA8NqYyA/qjhkpLyf2elaEePpPDupHaVZ/ivSh3XNmuUjvrCFVLIMyN4LFsIZxBSprI55HOAeCmCojnGEzaT5Et7WNkSAiYhtRKXIhbUI/M/88jTbWA93kBg=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773170373; c=relaxed/simple;
+	bh=xjkcSNQCQn/Kf6yUVnGVm/L7Q6zp2zQuck405QLyILk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=fZ82uKO10Cfv/jV/FHBW9hZlaIUvJrK0NUMhw1KiLqsCbkxUiqA7efOT7pAExEEeLYeSZKOwQntBSPdDn02rv2WpWgW13jrygm33oRUIie3aBUG70oEsj17KvP6CjWVWoWWDdLSiTtzmxc28OaSaR+PajUJQmlTPCsLEeRZnaUI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=CUDXdF8L; arc=pass smtp.client-ip=209.85.216.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="o5FS6g8L"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C413FC19423;
-	Tue, 10 Mar 2026 15:08:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773155296;
-	bh=qqYMWrM29fKZ0bq5/e1TqlgdXppZ9irTHMV+0rGa9XY=;
-	h=From:To:Cc:Subject:Date:From;
-	b=o5FS6g8LyNefMnJSHguOW5tuLdFfRIHKBXcEjdN+EA0QLHFNwalNQCBE79sgbBBmR
-	 qfKMp2ApyllMLf/owAh4L0Oh1HpdcTGyCaYY7UxCUJe4zYek4LSRCRNResNE2POgQQ
-	 PyakZH4flOttFCzVH8kkNJuBzDu98G51Y+ksD82jF1BgtAoMouN/S6lZyxafxQQtDu
-	 iLAva3urM8ppBZOmq/7W8Fcv8GCzd4anslAHHuvbJCyRX9gxrD7aalkKqrjkVsbnT+
-	 Ze51iPAKyYoga9AViSgK74ZUNyUsI/Uht49nFD/dC0Gd7ul3Tu75HJ2CI5+cExgvzZ
-	 bPJz0AR1GxRAQ==
-From: "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>
-To: Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Paul Moore <paul@paul-moore.com>,
-	Eric Paris <eparis@redhat.com>,
-	Venkat Rao Bagalkote <venkat88@linux.ibm.com>
-Cc: Christophe Leroy <christophe.leroy@csgroup.eu>,
-	linux-kernel@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org,
-	audit@vger.kernel.org,
-	Thomas Weissschuh <thomas.weissschuh@linutronix.de>,
-	=?UTF-8?q?C=C3=A9dric=20Le=20Goater?= <clg@kaod.org>
-Subject: [PATCH v3] powerpc/audit: Convert powerpc to AUDIT_ARCH_COMPAT_GENERIC
-Date: Tue, 10 Mar 2026 16:08:07 +0100
-Message-ID: <261b1be5b8dc526b83d73e8281e682a73536ea28.1773155031.git.chleroy@kernel.org>
-X-Mailer: git-send-email 2.49.0
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="CUDXdF8L"
+Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-3598df39444so6276970a91.2
+        for <audit@vger.kernel.org>; Tue, 10 Mar 2026 12:19:32 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1773170372; cv=none;
+        d=google.com; s=arc-20240605;
+        b=RR6EZJpumaEZM7Z457ZGQYtJ8dcdtiLFkFQjIeYsGFiLCpwwWx5Mgur++7555PckH/
+         hs+1nI/7LlA9v0ArdEPu2V5ZMn7H9gSxg7htyMBBNBW8NSBCzkqCp0BhIIyeby4ZJxtT
+         6GHPs7JE4sK20f2P7um23wa17JjEGIedBtgVdsYD4E4HhkTYmTT8D4lYIl8XpwesLu1a
+         wWTpQ5B+wc7pvF4dcbl0mH+G7KyktjSwu0PP5WiYts7TO4rDaU9l2TfCskJwphAQ44pL
+         B0mayZLfSwBUOBSXdY0MAW4gli/dlhtNF1X3gD0Cfuk/PhPxllrygi7pD1VyEllwy/d3
+         VRcQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=U6VxqmfQaZseJJ7vR2X1vkl0eCDrvXHEkhTypy0Kl1g=;
+        fh=96LMm8YveidslPMv7BwLxRS4IrqVTCapoHQHkWYyhu4=;
+        b=EIYtfSFWnIxekwOQ3Vvc+CENohvDmVZRpoOuuLLq+sELbJkaeciS7V2FeV1tlWtVDh
+         7vMWaTgw9PUIEFAIA/vPRBSFBnaOGbqTsYMKhqcJJb0CTOpkkas59gUWorc9ChTBedRS
+         xXGG34/Af3XNop/UE/d2npt32JSp0Xt6j9Hgpng8yek1CQ9zDX7nx5sOckX1qdILeXFb
+         1OULufDk0b5Nh8KMDKlG3HPNfxdZvWRoLTlOs7FR49LLmgF/BygTGt3T8VF0hcYe7bUE
+         11++BylULiYh5AiRbTDwBuxpQ9k+oPNF3yHKDhLL599UvausaDZ9kTaofbnof8tik7jO
+         K6hw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1773170372; x=1773775172; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=U6VxqmfQaZseJJ7vR2X1vkl0eCDrvXHEkhTypy0Kl1g=;
+        b=CUDXdF8LllpcvPfLNjdrzFMqSD8a78ZIe8SSXyqcHX8LXI/PvwyjVm3XuLfleAJlG9
+         lOfTqNoWEKcJuItuRTL3gQOgRlo5EZx1wdY9Ld72/vHtWndomj7scBayai7dbWT0tV+a
+         FWzRO35z6zseTQs9bYW47aPLhiEVP2TV6gvbCjl4ofLklCFbegBKZlsP1xXu6bL0rurA
+         UzAvLdZgsNN6946vcLMU2gGOIu4W/ago/yJV+ZLPDIRqG2e9DczWim8GK1Skzridezyu
+         NzQS5hO1jr2wEGxbf/d8aHa7jKoG2ke/NkMs4HIRDxg322hZU9zgevDIxRPqI0RTtgcR
+         7KxQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1773170372; x=1773775172;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=U6VxqmfQaZseJJ7vR2X1vkl0eCDrvXHEkhTypy0Kl1g=;
+        b=G246+4dKMThiAk++pNNdip0NetydKzYTV4e0rIwbPj5T/F7/ANKCm53QxacKOg1Edp
+         fWf0O3EVqAt2AHut5WfyBb4r9skp4XHAiv5/4GTnlyMKL8iYQC/Puz9stspmhOERmrun
+         gyeoxqYlxbCfdIVPdrmninX0e9hKx2+Gg7lhtNQNpldpl4HIaqOLEx2vBMNnDBHzKpfx
+         MwcQBV43ZGZd18PlxCC3zLKrv6Y9ohqxsyRAYlhUpo91q+4bjNccaEc2PArV9Y7f+WwV
+         fk4nVqRkzIMMFxlYtaMB/VRiGk7nXPc18XO8VCKOt5UuEtxjjivRhbpruq1Mmgj7rh8D
+         Dm6A==
+X-Forwarded-Encrypted: i=1; AJvYcCXKLmlS142hnyrz09tVDb+60aajhrlrNDogDgeg0UJwM6VZ2rsMrYDW3EGO69/VhEY8JpxsnA==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz2B8T7clyxK30+Gr97khTgnEyL4Z2rtUej9V16hCM2mAmJV5FX
+	VaKJ4XtbWHkv8nDXX22qdG6hpVBka8azCvFTN7QueKubb10226TrZQASBP2RRRPtLEUo1jXgFLq
+	OVwREcLod4f47oXvtv9ZKO4TnOF79GLhM5SekhRsh
+X-Gm-Gg: ATEYQzyt4Bgz7PhTXQSkc/Kw9Mo5EY43Z/Zsvs9vxeSiJ8de7fUf3IVGVI2BqEjmPBU
+	CiqC1bc4o/o9gW2y8HrtXGmUTJyYFMGJLZsZSA3SsKMvmIwaXM9MV1NZs9csMLgRVIc6/V59axR
+	kIchXkJ26Lk7EKJI4FDlkhA8CYrDJmFf7wmYzRCEoEHw7nVP5RcqkwKkg8QsTxx+pRQ1EAlqxzQ
+	SjOcKHZX9nhkjRYCqTC+VeQ+AjnscxAgYC0jiUwu5Cs6InOdLWrT6rNVD+EaZj+6had4CR0wqjK
+	9x4jgAQ=
+X-Received: by 2002:a17:90b:3506:b0:359:87ff:f352 with SMTP id
+ 98e67ed59e1d1-35a01202655mr59010a91.8.1773170371992; Tue, 10 Mar 2026
+ 12:19:31 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=6632; i=chleroy@kernel.org; h=from:subject:message-id; bh=U0nKvdJf3YL3PNU5hi1XIC6LU4/nhFywRBRqUPF+Rik=; b=owGbwMvMwCV2d0KB2p7V54MZT6slMWRuML4xq0m8YsZ0Y0mZ1wt4/p6RVUsTV9SZ8d/1UHRPo VVoVIFZRykLgxgXg6yYIsvx/9y7ZnR9Sc2fuksfZg4rE8gQBi5OAZhI8Q5GhifdSz0Xal+Mfxhz ZtVb2yzXdK+1P7Y/q7aZecsquW/GrZUM/4xTNNVb7qT98+P+4G7lUDUny3PmEacEcb4bwU0yZ1y W8wMA
-X-Developer-Key: i=chleroy@kernel.org; a=openpgp; fpr=10FFE6F8B390DE17ACC2632368A92FEB01B8DD78
-Content-Transfer-Encoding: 8bit
+References: <261b1be5b8dc526b83d73e8281e682a73536ea28.1773155031.git.chleroy@kernel.org>
+In-Reply-To: <261b1be5b8dc526b83d73e8281e682a73536ea28.1773155031.git.chleroy@kernel.org>
+From: Paul Moore <paul@paul-moore.com>
+Date: Tue, 10 Mar 2026 15:19:19 -0400
+X-Gm-Features: AaiRm53eSE5v3aP0W_oG_AsIWqYfzaIoe1cP2U70PYN3EqAi5OekgDYF-nWk5uw
+Message-ID: <CAHC9VhTyOuuPs1uovodM9M_8zZeJnVXs9xrWSdPhZcjXUb=mvA@mail.gmail.com>
+Subject: Re: [PATCH v3] powerpc/audit: Convert powerpc to AUDIT_ARCH_COMPAT_GENERIC
+To: "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>
+Cc: Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
+	Madhavan Srinivasan <maddy@linux.ibm.com>, Eric Paris <eparis@redhat.com>, 
+	Venkat Rao Bagalkote <venkat88@linux.ibm.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
+	linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
+	audit@vger.kernel.org, Thomas Weissschuh <thomas.weissschuh@linutronix.de>, 
+	=?UTF-8?Q?C=C3=A9dric_Le_Goater?= <clg@kaod.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Christophe Leroy <christophe.leroy@csgroup.eu>
+On Tue, Mar 10, 2026 at 11:08=E2=80=AFAM Christophe Leroy (CS GROUP)
+<chleroy@kernel.org> wrote:
+>
+> From: Christophe Leroy <christophe.leroy@csgroup.eu>
+>
+> Commit e65e1fc2d24b ("[PATCH] syscall class hookup for all normal
+> targets") added generic support for AUDIT but that didn't include
+> support for bi-arch like powerpc.
+>
+> Commit 4b58841149dc ("audit: Add generic compat syscall support")
+> added generic support for bi-arch.
+>
+> Convert powerpc to that bi-arch generic audit support.
+>
+> With this change generated text is similar.
+>
+> Thomas has confirmed that the previously failing filter_exclude/test
+> is now successful both without and with this patch, see [1]
+>
+> [1] https://lore.kernel.org/all/20260306115350-ef265661-6d6b-4043-9bd0-8e=
+6b437d0d67@linutronix.de/
+>
+> Link: https://github.com/linuxppc/issues/issues/412
+> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+> Reviewed-by: C=C3=A9dric Le Goater <clg@kaod.org>
+> ---
+> Venkat, a test result with https://github.com/linux-audit/audit-testsuite=
+ would be appreciated.
 
-Commit e65e1fc2d24b ("[PATCH] syscall class hookup for all normal
-targets") added generic support for AUDIT but that didn't include
-support for bi-arch like powerpc.
+Yes, I'd like to see confirmation that the audit test suite runs clean
+on ppc systems with this patch applied, and unfortunately without a
+ppc system I have no way to test this myself.
 
-Commit 4b58841149dc ("audit: Add generic compat syscall support")
-added generic support for bi-arch.
+> v3: Rebased on v7.0-rc1
+>
+> v2: https://lore.kernel.org/all/a4b3951d1191d4183d92a07a6097566bde60d00a.=
+1629812058.git.christophe.leroy@csgroup.eu/
+> ---
+>  arch/powerpc/Kconfig                |  5 +-
+>  arch/powerpc/include/asm/unistd32.h |  7 +++
+>  arch/powerpc/kernel/Makefile        |  3 -
+>  arch/powerpc/kernel/audit.c         | 87 -----------------------------
+>  arch/powerpc/kernel/compat_audit.c  | 49 ----------------
+>  5 files changed, 8 insertions(+), 143 deletions(-)
+>  create mode 100644 arch/powerpc/include/asm/unistd32.h
+>  delete mode 100644 arch/powerpc/kernel/audit.c
+>  delete mode 100644 arch/powerpc/kernel/compat_audit.c
 
-Convert powerpc to that bi-arch generic audit support.
-
-With this change generated text is similar.
-
-Thomas has confirmed that the previously failing filter_exclude/test
-is now successful both without and with this patch, see [1]
-
-[1] https://lore.kernel.org/all/20260306115350-ef265661-6d6b-4043-9bd0-8e6b437d0d67@linutronix.de/
-
-Link: https://github.com/linuxppc/issues/issues/412
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-Reviewed-by: Cédric Le Goater <clg@kaod.org>
----
-Venkat, a test result with https://github.com/linux-audit/audit-testsuite would be appreciated.
-
-v3: Rebased on v7.0-rc1
-
-v2: https://lore.kernel.org/all/a4b3951d1191d4183d92a07a6097566bde60d00a.1629812058.git.christophe.leroy@csgroup.eu/
----
- arch/powerpc/Kconfig                |  5 +-
- arch/powerpc/include/asm/unistd32.h |  7 +++
- arch/powerpc/kernel/Makefile        |  3 -
- arch/powerpc/kernel/audit.c         | 87 -----------------------------
- arch/powerpc/kernel/compat_audit.c  | 49 ----------------
- 5 files changed, 8 insertions(+), 143 deletions(-)
- create mode 100644 arch/powerpc/include/asm/unistd32.h
- delete mode 100644 arch/powerpc/kernel/audit.c
- delete mode 100644 arch/powerpc/kernel/compat_audit.c
-
-diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
-index 10240cb80904..4bb8cfa37d79 100644
---- a/arch/powerpc/Kconfig
-+++ b/arch/powerpc/Kconfig
-@@ -188,6 +188,7 @@ config PPC
- 	select ARCH_WANT_OPTIMIZE_DAX_VMEMMAP	if PPC_RADIX_MMU
- 	select ARCH_WANTS_MODULES_DATA_IN_VMALLOC	if PPC_BOOK3S_32 || PPC_8xx
- 	select ARCH_WEAK_RELEASE_ACQUIRE
-+	select AUDIT_ARCH_COMPAT_GENERIC
- 	select BINFMT_ELF
- 	select BUILDTIME_TABLE_SORT
- 	select CLONE_BACKWARDS
-@@ -370,10 +371,6 @@ config GENERIC_TBSYNC
- 	bool
- 	default y if PPC32 && SMP
- 
--config AUDIT_ARCH
--	bool
--	default y
--
- config GENERIC_BUG
- 	bool
- 	default y
-diff --git a/arch/powerpc/include/asm/unistd32.h b/arch/powerpc/include/asm/unistd32.h
-new file mode 100644
-index 000000000000..07689897d206
---- /dev/null
-+++ b/arch/powerpc/include/asm/unistd32.h
-@@ -0,0 +1,7 @@
-+/* SPDX-License-Identifier: GPL-2.0-or-later */
-+#ifndef _ASM_POWERPC_UNISTD32_H_
-+#define _ASM_POWERPC_UNISTD32_H_
-+
-+#include <asm/unistd_32.h>
-+
-+#endif /* _ASM_POWERPC_UNISTD32_H_ */
-diff --git a/arch/powerpc/kernel/Makefile b/arch/powerpc/kernel/Makefile
-index 2f0a2e69c607..7bf6b16b2d93 100644
---- a/arch/powerpc/kernel/Makefile
-+++ b/arch/powerpc/kernel/Makefile
-@@ -149,9 +149,6 @@ obj-$(CONFIG_PCI)		+= pci_$(BITS).o $(pci64-y) \
- 				   pci-common.o pci_of_scan.o
- obj-$(CONFIG_PCI_MSI)		+= msi.o
- 
--obj-$(CONFIG_AUDIT)		+= audit.o
--obj64-$(CONFIG_AUDIT)		+= compat_audit.o
--
- obj-y				+= trace/
- 
- ifneq ($(CONFIG_PPC_INDIRECT_PIO),y)
-diff --git a/arch/powerpc/kernel/audit.c b/arch/powerpc/kernel/audit.c
-deleted file mode 100644
-index 92298d6a3a37..000000000000
---- a/arch/powerpc/kernel/audit.c
-+++ /dev/null
-@@ -1,87 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0
--#include <linux/init.h>
--#include <linux/types.h>
--#include <linux/audit.h>
--#include <asm/unistd.h>
--
--#include "audit_32.h"
--
--static unsigned dir_class[] = {
--#include <asm-generic/audit_dir_write.h>
--~0U
--};
--
--static unsigned read_class[] = {
--#include <asm-generic/audit_read.h>
--~0U
--};
--
--static unsigned write_class[] = {
--#include <asm-generic/audit_write.h>
--~0U
--};
--
--static unsigned chattr_class[] = {
--#include <asm-generic/audit_change_attr.h>
--~0U
--};
--
--static unsigned signal_class[] = {
--#include <asm-generic/audit_signal.h>
--~0U
--};
--
--int audit_classify_arch(int arch)
--{
--#ifdef CONFIG_PPC64
--	if (arch == AUDIT_ARCH_PPC)
--		return 1;
--#endif
--	return 0;
--}
--
--int audit_classify_syscall(int abi, unsigned syscall)
--{
--#ifdef CONFIG_PPC64
--	if (abi == AUDIT_ARCH_PPC)
--		return ppc32_classify_syscall(syscall);
--#endif
--	switch(syscall) {
--	case __NR_open:
--		return AUDITSC_OPEN;
--	case __NR_openat:
--		return AUDITSC_OPENAT;
--	case __NR_socketcall:
--		return AUDITSC_SOCKETCALL;
--	case __NR_execve:
--		return AUDITSC_EXECVE;
--	case __NR_openat2:
--		return AUDITSC_OPENAT2;
--	default:
--		return AUDITSC_NATIVE;
--	}
--}
--
--static int __init audit_classes_init(void)
--{
--#ifdef CONFIG_PPC64
--	extern __u32 ppc32_dir_class[];
--	extern __u32 ppc32_write_class[];
--	extern __u32 ppc32_read_class[];
--	extern __u32 ppc32_chattr_class[];
--	extern __u32 ppc32_signal_class[];
--	audit_register_class(AUDIT_CLASS_WRITE_32, ppc32_write_class);
--	audit_register_class(AUDIT_CLASS_READ_32, ppc32_read_class);
--	audit_register_class(AUDIT_CLASS_DIR_WRITE_32, ppc32_dir_class);
--	audit_register_class(AUDIT_CLASS_CHATTR_32, ppc32_chattr_class);
--	audit_register_class(AUDIT_CLASS_SIGNAL_32, ppc32_signal_class);
--#endif
--	audit_register_class(AUDIT_CLASS_WRITE, write_class);
--	audit_register_class(AUDIT_CLASS_READ, read_class);
--	audit_register_class(AUDIT_CLASS_DIR_WRITE, dir_class);
--	audit_register_class(AUDIT_CLASS_CHATTR, chattr_class);
--	audit_register_class(AUDIT_CLASS_SIGNAL, signal_class);
--	return 0;
--}
--
--__initcall(audit_classes_init);
-diff --git a/arch/powerpc/kernel/compat_audit.c b/arch/powerpc/kernel/compat_audit.c
-deleted file mode 100644
-index 57b38c592b9f..000000000000
---- a/arch/powerpc/kernel/compat_audit.c
-+++ /dev/null
-@@ -1,49 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0
--#undef __powerpc64__
--#include <linux/audit_arch.h>
--#include <asm/unistd.h>
--
--#include "audit_32.h"
--
--unsigned ppc32_dir_class[] = {
--#include <asm-generic/audit_dir_write.h>
--~0U
--};
--
--unsigned ppc32_chattr_class[] = {
--#include <asm-generic/audit_change_attr.h>
--~0U
--};
--
--unsigned ppc32_write_class[] = {
--#include <asm-generic/audit_write.h>
--~0U
--};
--
--unsigned ppc32_read_class[] = {
--#include <asm-generic/audit_read.h>
--~0U
--};
--
--unsigned ppc32_signal_class[] = {
--#include <asm-generic/audit_signal.h>
--~0U
--};
--
--int ppc32_classify_syscall(unsigned syscall)
--{
--	switch(syscall) {
--	case __NR_open:
--		return AUDITSC_OPEN;
--	case __NR_openat:
--		return AUDITSC_OPENAT;
--	case __NR_socketcall:
--		return AUDITSC_SOCKETCALL;
--	case __NR_execve:
--		return AUDITSC_EXECVE;
--	case __NR_openat2:
--		return AUDITSC_OPENAT2;
--	default:
--		return AUDITSC_COMPAT;
--	}
--}
--- 
-2.49.0
-
+--=20
+paul-moore.com
