@@ -1,150 +1,105 @@
-Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
+Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FC94239E63
-	for <audit@vger.kernel.org>; Tue, 10 Mar 2026 19:19:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.216.47
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773170373; cv=pass; b=uWz4aqqQo1EZPBJ6PVVVU0Uc/o+vI6UX3hGuOfVv9vZL7zZ2m0pFA8NqYyA/qjhkpLyf2elaEePpPDupHaVZ/ivSh3XNmuUjvrCFVLIMyN4LFsIZxBSprI55HOAeCmCojnGEzaT5Et7WNkSAiYhtRKXIhbUI/M/88jTbWA93kBg=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773170373; c=relaxed/simple;
-	bh=xjkcSNQCQn/Kf6yUVnGVm/L7Q6zp2zQuck405QLyILk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=fZ82uKO10Cfv/jV/FHBW9hZlaIUvJrK0NUMhw1KiLqsCbkxUiqA7efOT7pAExEEeLYeSZKOwQntBSPdDn02rv2WpWgW13jrygm33oRUIie3aBUG70oEsj17KvP6CjWVWoWWDdLSiTtzmxc28OaSaR+PajUJQmlTPCsLEeRZnaUI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=CUDXdF8L; arc=pass smtp.client-ip=209.85.216.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C85FD34A784
+	for <audit@vger.kernel.org>; Tue, 10 Mar 2026 19:22:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.172
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773170564; cv=none; b=hwqryyioaFpkyGN+8K9gqcPjjxdWx8hwVhjG9rL7uYR5jt8eKRWqqyaimRuwH08Qqf+ZhgDc34RxRcMS5QHRiU2Nz7ib7GSESWJs3LZhhapYEYxUnsBj2B4nRlY5xMxeEi3cd/MmPbJgKd0ztoTOhMYgNmv4yKr4mUA+QpdA4YI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773170564; c=relaxed/simple;
+	bh=2X0JXluk460/BnzKu+STGhWj8xvDcmWnGO58GKgYU4c=;
+	h=Date:Message-ID:MIME-Version:Content-Type:From:To:Cc:Subject:
+	 References:In-Reply-To; b=d9soz+NgvdoaKzBcpkliw7YSNUkIJ9mGJvrGTY+ynPWv/1sPDE2PjvdOTj28E78ZZ//hw7Arr/tcGJa+1Ejyfm4nlVrgbTfUat1E16ufwr4v4Xm5GuzzAIia8/s62nTxMxUTMUfKWzdZnU+Wg1oOlgl1lhvhz41QXQggroQymTE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=OzfW7yAX; arc=none smtp.client-ip=209.85.160.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="CUDXdF8L"
-Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-3598df39444so6276970a91.2
-        for <audit@vger.kernel.org>; Tue, 10 Mar 2026 12:19:32 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1773170372; cv=none;
-        d=google.com; s=arc-20240605;
-        b=RR6EZJpumaEZM7Z457ZGQYtJ8dcdtiLFkFQjIeYsGFiLCpwwWx5Mgur++7555PckH/
-         hs+1nI/7LlA9v0ArdEPu2V5ZMn7H9gSxg7htyMBBNBW8NSBCzkqCp0BhIIyeby4ZJxtT
-         6GHPs7JE4sK20f2P7um23wa17JjEGIedBtgVdsYD4E4HhkTYmTT8D4lYIl8XpwesLu1a
-         wWTpQ5B+wc7pvF4dcbl0mH+G7KyktjSwu0PP5WiYts7TO4rDaU9l2TfCskJwphAQ44pL
-         B0mayZLfSwBUOBSXdY0MAW4gli/dlhtNF1X3gD0Cfuk/PhPxllrygi7pD1VyEllwy/d3
-         VRcQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=U6VxqmfQaZseJJ7vR2X1vkl0eCDrvXHEkhTypy0Kl1g=;
-        fh=96LMm8YveidslPMv7BwLxRS4IrqVTCapoHQHkWYyhu4=;
-        b=EIYtfSFWnIxekwOQ3Vvc+CENohvDmVZRpoOuuLLq+sELbJkaeciS7V2FeV1tlWtVDh
-         7vMWaTgw9PUIEFAIA/vPRBSFBnaOGbqTsYMKhqcJJb0CTOpkkas59gUWorc9ChTBedRS
-         xXGG34/Af3XNop/UE/d2npt32JSp0Xt6j9Hgpng8yek1CQ9zDX7nx5sOckX1qdILeXFb
-         1OULufDk0b5Nh8KMDKlG3HPNfxdZvWRoLTlOs7FR49LLmgF/BygTGt3T8VF0hcYe7bUE
-         11++BylULiYh5AiRbTDwBuxpQ9k+oPNF3yHKDhLL599UvausaDZ9kTaofbnof8tik7jO
-         K6hw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="OzfW7yAX"
+Received: by mail-qt1-f172.google.com with SMTP id d75a77b69052e-50905b779dfso40166241cf.3
+        for <audit@vger.kernel.org>; Tue, 10 Mar 2026 12:22:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1773170372; x=1773775172; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=U6VxqmfQaZseJJ7vR2X1vkl0eCDrvXHEkhTypy0Kl1g=;
-        b=CUDXdF8LllpcvPfLNjdrzFMqSD8a78ZIe8SSXyqcHX8LXI/PvwyjVm3XuLfleAJlG9
-         lOfTqNoWEKcJuItuRTL3gQOgRlo5EZx1wdY9Ld72/vHtWndomj7scBayai7dbWT0tV+a
-         FWzRO35z6zseTQs9bYW47aPLhiEVP2TV6gvbCjl4ofLklCFbegBKZlsP1xXu6bL0rurA
-         UzAvLdZgsNN6946vcLMU2gGOIu4W/ago/yJV+ZLPDIRqG2e9DczWim8GK1Skzridezyu
-         NzQS5hO1jr2wEGxbf/d8aHa7jKoG2ke/NkMs4HIRDxg322hZU9zgevDIxRPqI0RTtgcR
-         7KxQ==
+        d=paul-moore.com; s=google; t=1773170563; x=1773775363; darn=vger.kernel.org;
+        h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
+         :mime-version:message-id:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=aV7hXCLQCflyUrdLM8cprfjVR2mNmzi/mjO0qXwCdXc=;
+        b=OzfW7yAXtfvHxL94OM+4L81dUyr+dBSvMXs0Gikx7L5T0YCyf0/JCV01g4jTb4z0VK
+         YRFH0N2CGEv5vvG+8kN4UZ1KOiTeuZZKrtdkzp3lsMz1oqLZYQphkqBZthu0L6Qzs0l7
+         ZPjusBuo75EJ+mxei/VKZQCEcIG851RSpPiru+lwQ15qMYemD5BiZtY4aN9tDrKB+tHJ
+         +zNohkq80ZYT6BPN2PmuDRA4pKgAoukf5eXrojutRKI6hYLzc8cPBPKu8wH5IyOSLzbx
+         qzbNVRD8C8VeFUbGMbF5Sd9JBZ3sTtUD5oCnKQC2q5YQcKcfkhfk8wgqoa3Q8QMnQ8dJ
+         yP7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773170372; x=1773775172;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=U6VxqmfQaZseJJ7vR2X1vkl0eCDrvXHEkhTypy0Kl1g=;
-        b=G246+4dKMThiAk++pNNdip0NetydKzYTV4e0rIwbPj5T/F7/ANKCm53QxacKOg1Edp
-         fWf0O3EVqAt2AHut5WfyBb4r9skp4XHAiv5/4GTnlyMKL8iYQC/Puz9stspmhOERmrun
-         gyeoxqYlxbCfdIVPdrmninX0e9hKx2+Gg7lhtNQNpldpl4HIaqOLEx2vBMNnDBHzKpfx
-         MwcQBV43ZGZd18PlxCC3zLKrv6Y9ohqxsyRAYlhUpo91q+4bjNccaEc2PArV9Y7f+WwV
-         fk4nVqRkzIMMFxlYtaMB/VRiGk7nXPc18XO8VCKOt5UuEtxjjivRhbpruq1Mmgj7rh8D
-         Dm6A==
-X-Forwarded-Encrypted: i=1; AJvYcCXKLmlS142hnyrz09tVDb+60aajhrlrNDogDgeg0UJwM6VZ2rsMrYDW3EGO69/VhEY8JpxsnA==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz2B8T7clyxK30+Gr97khTgnEyL4Z2rtUej9V16hCM2mAmJV5FX
-	VaKJ4XtbWHkv8nDXX22qdG6hpVBka8azCvFTN7QueKubb10226TrZQASBP2RRRPtLEUo1jXgFLq
-	OVwREcLod4f47oXvtv9ZKO4TnOF79GLhM5SekhRsh
-X-Gm-Gg: ATEYQzyt4Bgz7PhTXQSkc/Kw9Mo5EY43Z/Zsvs9vxeSiJ8de7fUf3IVGVI2BqEjmPBU
-	CiqC1bc4o/o9gW2y8HrtXGmUTJyYFMGJLZsZSA3SsKMvmIwaXM9MV1NZs9csMLgRVIc6/V59axR
-	kIchXkJ26Lk7EKJI4FDlkhA8CYrDJmFf7wmYzRCEoEHw7nVP5RcqkwKkg8QsTxx+pRQ1EAlqxzQ
-	SjOcKHZX9nhkjRYCqTC+VeQ+AjnscxAgYC0jiUwu5Cs6InOdLWrT6rNVD+EaZj+6had4CR0wqjK
-	9x4jgAQ=
-X-Received: by 2002:a17:90b:3506:b0:359:87ff:f352 with SMTP id
- 98e67ed59e1d1-35a01202655mr59010a91.8.1773170371992; Tue, 10 Mar 2026
- 12:19:31 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1773170563; x=1773775363;
+        h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
+         :mime-version:message-id:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=aV7hXCLQCflyUrdLM8cprfjVR2mNmzi/mjO0qXwCdXc=;
+        b=UDgblW5FF7B1tMqyXazolv98TP/0th1C1WURMwztO8jZg2hs2nKNoxF6Nk6eN83M+X
+         ACyO1MFIg7Xiw3ZL3pd80Zl694eyBNNDMPyuSqMumIMo1G+Jp4MeZca3VZNG7Z9d9KnY
+         PIbI4gY/I0Aa4jCgHFy/E2C+9WAeck8weNhgHuQVvLBc/tZsa/5oBl5a1OnyjgQ8xoxG
+         RU31TmcsyCuPUVGiIcAIfJWY20P5/iA8ok46fs+/i7Fx1RkvRgaS/VON2xgrUQHgRvaJ
+         lrJTG0w16BlTOTjYGYR6xT+9Ef5xFlf7ec+c2fixfzh2GTxw8RMyjCse2F3xJHm05TVD
+         qwyg==
+X-Forwarded-Encrypted: i=1; AJvYcCVu0m1UjceAB2TvdTHDGJ+yocxw4sEWML2GUnKb5eqeLmw7R/l8cwsk9JQSQMCoBLqZoPJ7GQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz+/wpdoZP3dxz5M5dSwGGJ6twO21yyI/VoIz3mMTptxYda3LND
+	abCirljXz+Mi8Mzmqep2eV1orw3qwPZq1jpNKVHH6FU7LKvt7N3LtE3Hk/7ArmhT2A==
+X-Gm-Gg: ATEYQzxAmr1QA8MQszxkGDjIucvMqQUOi4cyjyZwp1bAao8L4IG9isSlVnk/+nEUoMT
+	0ox2q+ASOGw6D0Z9/iCBkLr3unnSiIwnKDB6SySgKV9KtUbWpq7NjqLPTicCfT0DsiKQ6rEdIAE
+	nQjwhzsJP8yoOaycxZfmX6D1PANpnM8p3Wfdp8IuJpPcwjhFcqVckYGTN62xj5VQJkJsCb3ScDh
+	oPF7r9G6aQkJsFeQlsLc0Il2HYVaV4byjLmUW97Kpl/tl77B6y2hNCzA5YRevfLWS8TpQvsnk5W
+	Dbtb9bO/JY8qcPr7qX1Bdkw2rws//Py0alFRy+qvTHt8TzNX4ZxobwbcDhueTUrTmUuytgN5llA
+	dI+F6s6083wE8jU9mnHwuIJM29Esz+62HVJ9ZYIiwgPqeFAZVTnWOpmEree6SYBVl6wA54eVBWz
+	bW8ngU8lkiFOqFewzhDvIgV5nuYTYXmDRX6mgVNrg/m9pQdg8e01TZGmZA/wXEok6H2FRE
+X-Received: by 2002:ac8:59c8:0:b0:509:1c90:e192 with SMTP id d75a77b69052e-5091c90ea59mr96495091cf.66.1773170562824;
+        Tue, 10 Mar 2026 12:22:42 -0700 (PDT)
+Received: from localhost (pool-71-126-255-178.bstnma.fios.verizon.net. [71.126.255.178])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-5093862bbc9sm1796501cf.5.2026.03.10.12.22.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 Mar 2026 12:22:42 -0700 (PDT)
+Date: Tue, 10 Mar 2026 15:22:40 -0400
+Message-ID: <7e02e707baecb7c94db329d5d03c1c15@paul-moore.com>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <261b1be5b8dc526b83d73e8281e682a73536ea28.1773155031.git.chleroy@kernel.org>
-In-Reply-To: <261b1be5b8dc526b83d73e8281e682a73536ea28.1773155031.git.chleroy@kernel.org>
+MIME-Version: 1.0 
+Content-Type: text/plain; charset=UTF-8 
+Content-Transfer-Encoding: 8bit 
+X-Mailer: pstg-pwork:20260310_1520/pstg-lib:20260310_1519/pstg-pwork:20260310_1520
 From: Paul Moore <paul@paul-moore.com>
-Date: Tue, 10 Mar 2026 15:19:19 -0400
-X-Gm-Features: AaiRm53eSE5v3aP0W_oG_AsIWqYfzaIoe1cP2U70PYN3EqAi5OekgDYF-nWk5uw
-Message-ID: <CAHC9VhTyOuuPs1uovodM9M_8zZeJnVXs9xrWSdPhZcjXUb=mvA@mail.gmail.com>
-Subject: Re: [PATCH v3] powerpc/audit: Convert powerpc to AUDIT_ARCH_COMPAT_GENERIC
-To: "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>
-Cc: Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
-	Madhavan Srinivasan <maddy@linux.ibm.com>, Eric Paris <eparis@redhat.com>, 
-	Venkat Rao Bagalkote <venkat88@linux.ibm.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
-	linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
-	audit@vger.kernel.org, Thomas Weissschuh <thomas.weissschuh@linutronix.de>, 
-	=?UTF-8?Q?C=C3=A9dric_Le_Goater?= <clg@kaod.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+To: Ricardo Robaina <rrobaina@redhat.com>, audit@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: eparis@redhat.com, Ricardo Robaina <rrobaina@redhat.com>, Steve Grubb <sgrubb@redhat.com>
+Subject: Re: [PATCH v2] audit: handle unknown status requests in  audit_receive_msg
+References: <20260309130533.158095-1-rrobaina@redhat.com>
+In-Reply-To: <20260309130533.158095-1-rrobaina@redhat.com>
 
-On Tue, Mar 10, 2026 at 11:08=E2=80=AFAM Christophe Leroy (CS GROUP)
-<chleroy@kernel.org> wrote:
->
-> From: Christophe Leroy <christophe.leroy@csgroup.eu>
->
-> Commit e65e1fc2d24b ("[PATCH] syscall class hookup for all normal
-> targets") added generic support for AUDIT but that didn't include
-> support for bi-arch like powerpc.
->
-> Commit 4b58841149dc ("audit: Add generic compat syscall support")
-> added generic support for bi-arch.
->
-> Convert powerpc to that bi-arch generic audit support.
->
-> With this change generated text is similar.
->
-> Thomas has confirmed that the previously failing filter_exclude/test
-> is now successful both without and with this patch, see [1]
->
-> [1] https://lore.kernel.org/all/20260306115350-ef265661-6d6b-4043-9bd0-8e=
-6b437d0d67@linutronix.de/
->
-> Link: https://github.com/linuxppc/issues/issues/412
-> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-> Reviewed-by: C=C3=A9dric Le Goater <clg@kaod.org>
+On Mar  9, 2026 Ricardo Robaina <rrobaina@redhat.com> wrote:
+> 
+> Currently, audit_receive_msg() ignores unknown status bits in AUDIT_SET
+> requests, incorrectly returning success to newer user space tools
+> querying unsupported features. This breaks forward compatibility.
+> 
+> Fix this by defining AUDIT_STATUS_ALL and returning -EINVAL if any
+> unrecognized bits are set (s.mask & ~AUDIT_STATUS_ALL).
+> This ensures invalid requests are safely rejected, allowing user space
+> to reliably test for and gracefully handle feature detection on older
+> kernels.
+> 
+> Suggested-by: Steve Grubb <sgrubb@redhat.com>
+> Signed-off-by: Ricardo Robaina <rrobaina@redhat.com>
 > ---
-> Venkat, a test result with https://github.com/linux-audit/audit-testsuite=
- would be appreciated.
+> v1 -> v2:
+>  - Moved AUDIT_STATUS_ALL from include/uapi/linux/audit.h to 
+>    include/linux/audit.h.
+> 
+>  include/linux/audit.h | 9 +++++++++
+>  kernel/audit.c        | 2 ++
+>  2 files changed, 11 insertions(+)
 
-Yes, I'd like to see confirmation that the audit test suite runs clean
-on ppc systems with this patch applied, and unfortunately without a
-ppc system I have no way to test this myself.
+Merged into audit/dev, thanks.
 
-> v3: Rebased on v7.0-rc1
->
-> v2: https://lore.kernel.org/all/a4b3951d1191d4183d92a07a6097566bde60d00a.=
-1629812058.git.christophe.leroy@csgroup.eu/
-> ---
->  arch/powerpc/Kconfig                |  5 +-
->  arch/powerpc/include/asm/unistd32.h |  7 +++
->  arch/powerpc/kernel/Makefile        |  3 -
->  arch/powerpc/kernel/audit.c         | 87 -----------------------------
->  arch/powerpc/kernel/compat_audit.c  | 49 ----------------
->  5 files changed, 8 insertions(+), 143 deletions(-)
->  create mode 100644 arch/powerpc/include/asm/unistd32.h
->  delete mode 100644 arch/powerpc/kernel/audit.c
->  delete mode 100644 arch/powerpc/kernel/compat_audit.c
-
---=20
+--
 paul-moore.com
