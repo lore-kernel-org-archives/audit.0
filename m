@@ -1,105 +1,118 @@
-Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C85FD34A784
-	for <audit@vger.kernel.org>; Tue, 10 Mar 2026 19:22:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4ACF350A3A
+	for <audit@vger.kernel.org>; Tue, 10 Mar 2026 19:25:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773170564; cv=none; b=hwqryyioaFpkyGN+8K9gqcPjjxdWx8hwVhjG9rL7uYR5jt8eKRWqqyaimRuwH08Qqf+ZhgDc34RxRcMS5QHRiU2Nz7ib7GSESWJs3LZhhapYEYxUnsBj2B4nRlY5xMxeEi3cd/MmPbJgKd0ztoTOhMYgNmv4yKr4mUA+QpdA4YI=
+	t=1773170705; cv=none; b=EVMh3sx2+I8n3+WRHBQLB5SGNWUfYUd+r3UnI6M8mZB3eJcH9j+9nBdxO7poG7f7L/I6iNUlxZ7gkgSRcJGcBkGaJBR2O66fWnzmnvUvWhAGKCd8usD3QSXBBpSA3xWCzKmjQNVTZFRUh81UbuwE2Y3yreCZPF0hOZK3vBO8x2U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773170564; c=relaxed/simple;
-	bh=2X0JXluk460/BnzKu+STGhWj8xvDcmWnGO58GKgYU4c=;
-	h=Date:Message-ID:MIME-Version:Content-Type:From:To:Cc:Subject:
-	 References:In-Reply-To; b=d9soz+NgvdoaKzBcpkliw7YSNUkIJ9mGJvrGTY+ynPWv/1sPDE2PjvdOTj28E78ZZ//hw7Arr/tcGJa+1Ejyfm4nlVrgbTfUat1E16ufwr4v4Xm5GuzzAIia8/s62nTxMxUTMUfKWzdZnU+Wg1oOlgl1lhvhz41QXQggroQymTE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=OzfW7yAX; arc=none smtp.client-ip=209.85.160.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+	s=arc-20240116; t=1773170705; c=relaxed/simple;
+	bh=isqto//eT7kuNMSwK/zpsf/g/J2I3ulyzlZ9kDJl2nM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=IjF4MPEBErE936FegcWmUd8m1VBjtahZn/ko/lUTGppeZ5QKzkTeViG+7EVGi+3aFjxwNJFWQ/mzrn5qSbkspt2A2j7EUrbSM6L78COJlYgDLLEM3QAWuL9OMkQkGorbxYybAq2nGBDvRzOb3ksXRqqyllu7LfgS/VxSHyxfFBE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=MWPwDLeT; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="OzfW7yAX"
-Received: by mail-qt1-f172.google.com with SMTP id d75a77b69052e-50905b779dfso40166241cf.3
-        for <audit@vger.kernel.org>; Tue, 10 Mar 2026 12:22:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1773170563; x=1773775363; darn=vger.kernel.org;
-        h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
-         :mime-version:message-id:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=aV7hXCLQCflyUrdLM8cprfjVR2mNmzi/mjO0qXwCdXc=;
-        b=OzfW7yAXtfvHxL94OM+4L81dUyr+dBSvMXs0Gikx7L5T0YCyf0/JCV01g4jTb4z0VK
-         YRFH0N2CGEv5vvG+8kN4UZ1KOiTeuZZKrtdkzp3lsMz1oqLZYQphkqBZthu0L6Qzs0l7
-         ZPjusBuo75EJ+mxei/VKZQCEcIG851RSpPiru+lwQ15qMYemD5BiZtY4aN9tDrKB+tHJ
-         +zNohkq80ZYT6BPN2PmuDRA4pKgAoukf5eXrojutRKI6hYLzc8cPBPKu8wH5IyOSLzbx
-         qzbNVRD8C8VeFUbGMbF5Sd9JBZ3sTtUD5oCnKQC2q5YQcKcfkhfk8wgqoa3Q8QMnQ8dJ
-         yP7w==
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="MWPwDLeT"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1773170703;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=gzs0Gj9KFXKBBfkbW0fr/mUDW3TamTxxkb4puzXZyKY=;
+	b=MWPwDLeTqoEIThSVkYMin6+baT6TPY8bRtXNQlWVfaORq8D2FCWPqlxtAuEfWdrNH78GkD
+	4l6pz9POVFkW2X7ZAqn+Mr4YrkVZaGdOzBfmEaJgf4Y0pkD4XNuNtl3l0YNxs1RZQB+qaI
+	PDcs/O7IqL22JcFW4AE2+hOuuGAaXv0=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-331-_Tr7VQdYMgWUVYS3dJdORA-1; Tue, 10 Mar 2026 15:24:59 -0400
+X-MC-Unique: _Tr7VQdYMgWUVYS3dJdORA-1
+X-Mimecast-MFC-AGG-ID: _Tr7VQdYMgWUVYS3dJdORA_1773170698
+Received: by mail-ed1-f72.google.com with SMTP id 4fb4d7f45d1cf-662a61be7a5so1961324a12.3
+        for <audit@vger.kernel.org>; Tue, 10 Mar 2026 12:24:59 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773170563; x=1773775363;
-        h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
-         :mime-version:message-id:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=aV7hXCLQCflyUrdLM8cprfjVR2mNmzi/mjO0qXwCdXc=;
-        b=UDgblW5FF7B1tMqyXazolv98TP/0th1C1WURMwztO8jZg2hs2nKNoxF6Nk6eN83M+X
-         ACyO1MFIg7Xiw3ZL3pd80Zl694eyBNNDMPyuSqMumIMo1G+Jp4MeZca3VZNG7Z9d9KnY
-         PIbI4gY/I0Aa4jCgHFy/E2C+9WAeck8weNhgHuQVvLBc/tZsa/5oBl5a1OnyjgQ8xoxG
-         RU31TmcsyCuPUVGiIcAIfJWY20P5/iA8ok46fs+/i7Fx1RkvRgaS/VON2xgrUQHgRvaJ
-         lrJTG0w16BlTOTjYGYR6xT+9Ef5xFlf7ec+c2fixfzh2GTxw8RMyjCse2F3xJHm05TVD
-         qwyg==
-X-Forwarded-Encrypted: i=1; AJvYcCVu0m1UjceAB2TvdTHDGJ+yocxw4sEWML2GUnKb5eqeLmw7R/l8cwsk9JQSQMCoBLqZoPJ7GQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz+/wpdoZP3dxz5M5dSwGGJ6twO21yyI/VoIz3mMTptxYda3LND
-	abCirljXz+Mi8Mzmqep2eV1orw3qwPZq1jpNKVHH6FU7LKvt7N3LtE3Hk/7ArmhT2A==
-X-Gm-Gg: ATEYQzxAmr1QA8MQszxkGDjIucvMqQUOi4cyjyZwp1bAao8L4IG9isSlVnk/+nEUoMT
-	0ox2q+ASOGw6D0Z9/iCBkLr3unnSiIwnKDB6SySgKV9KtUbWpq7NjqLPTicCfT0DsiKQ6rEdIAE
-	nQjwhzsJP8yoOaycxZfmX6D1PANpnM8p3Wfdp8IuJpPcwjhFcqVckYGTN62xj5VQJkJsCb3ScDh
-	oPF7r9G6aQkJsFeQlsLc0Il2HYVaV4byjLmUW97Kpl/tl77B6y2hNCzA5YRevfLWS8TpQvsnk5W
-	Dbtb9bO/JY8qcPr7qX1Bdkw2rws//Py0alFRy+qvTHt8TzNX4ZxobwbcDhueTUrTmUuytgN5llA
-	dI+F6s6083wE8jU9mnHwuIJM29Esz+62HVJ9ZYIiwgPqeFAZVTnWOpmEree6SYBVl6wA54eVBWz
-	bW8ngU8lkiFOqFewzhDvIgV5nuYTYXmDRX6mgVNrg/m9pQdg8e01TZGmZA/wXEok6H2FRE
-X-Received: by 2002:ac8:59c8:0:b0:509:1c90:e192 with SMTP id d75a77b69052e-5091c90ea59mr96495091cf.66.1773170562824;
-        Tue, 10 Mar 2026 12:22:42 -0700 (PDT)
-Received: from localhost (pool-71-126-255-178.bstnma.fios.verizon.net. [71.126.255.178])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-5093862bbc9sm1796501cf.5.2026.03.10.12.22.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Mar 2026 12:22:42 -0700 (PDT)
-Date: Tue, 10 Mar 2026 15:22:40 -0400
-Message-ID: <7e02e707baecb7c94db329d5d03c1c15@paul-moore.com>
+        d=1e100.net; s=20230601; t=1773170698; x=1773775498;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=gzs0Gj9KFXKBBfkbW0fr/mUDW3TamTxxkb4puzXZyKY=;
+        b=T0oP451c2sDVuiJ420QY2ufw+67vQnN16hHYwRm/l/nvqHWzROtBJofpxR2C2rDnye
+         xS8RlLdcYXH3BjGaP+QnFkSkAFBvsobpePv468UQ/0rM/Vt4S7IdvV/Ik+1Ul6KFKpyq
+         sQv5pg76xCwL1sCx2r3jknVgHd4prl3+lPBRMG5igxtYaUe5uIygwcpZMGAYjiYMaCmv
+         kWia1fskSYqcJM/OgZNWjpyXSUdCRslb340gKjm7w5JAaHKXORpgPS4Bd/PyuCErG7Xv
+         niU1ryEy3UoUNA+Ep16JtLsXzrZ6ReegzDnAw475i8mX84jkuK9zJLENR+6tMRiNEzPu
+         IhDA==
+X-Gm-Message-State: AOJu0YwXLJRBpbTqFAsk9YoV60XKrA3k6zgpE/LcDGyMoShzs8q0Mie4
+	4JUMhjaix+0jCGGA+LXKRWISxPoPHgqi7RvPsY0g6jrLiBBwvcRRH0R6h/opcpzoN+2hsifW6tC
+	/CyWctNmT1rmaPYzaCca4vPKDV4eC+jjNKrq6tYQj6MjD2EydGwTmUhM2i9QlN+9tOoX6BLTeDn
+	B5vjUddEvSoaXJMefGYfTvaeftYjhkdKo=
+X-Gm-Gg: ATEYQzxlbi+Gpg8J4BRv6hGom23vYrq42Ffh1K99+ExwACGyiIf7o/9a0GBXml0rzlz
+	Hx469Ea9GXpcHav+2xIJIUS0ymfR22QBlxtuhMwdYQ+vMXMvqWIXMXXhBzC7cYbSXVm/OIk4pBd
+	oJ8KN4H6WBsmiCYsO1JiysLOMdFiM2OYZJ7PGPNI0ZEDg2vWAkaonlPyKywAnn8VumYYM9HolRq
+	AcqgR9dezXhWB/1ervT/VZ8LnlgsiyXLWOVf2tciRD0jqfNyRn75PcagmNxfRQHKERYia62DwAX
+	boing3Ptojn93EONpgY9xWw=
+X-Received: by 2002:a17:906:9f84:b0:b8f:a5c8:f83 with SMTP id a640c23a62f3a-b942dbaa164mr844547566b.23.1773170698090;
+        Tue, 10 Mar 2026 12:24:58 -0700 (PDT)
+X-Received: by 2002:a17:906:9f84:b0:b8f:a5c8:f83 with SMTP id
+ a640c23a62f3a-b942dbaa164mr844546166b.23.1773170697691; Tue, 10 Mar 2026
+ 12:24:57 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 
-Content-Type: text/plain; charset=UTF-8 
-Content-Transfer-Encoding: 8bit 
-X-Mailer: pstg-pwork:20260310_1520/pstg-lib:20260310_1519/pstg-pwork:20260310_1520
-From: Paul Moore <paul@paul-moore.com>
-To: Ricardo Robaina <rrobaina@redhat.com>, audit@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc: eparis@redhat.com, Ricardo Robaina <rrobaina@redhat.com>, Steve Grubb <sgrubb@redhat.com>
-Subject: Re: [PATCH v2] audit: handle unknown status requests in  audit_receive_msg
-References: <20260309130533.158095-1-rrobaina@redhat.com>
-In-Reply-To: <20260309130533.158095-1-rrobaina@redhat.com>
+MIME-Version: 1.0
+References: <20260309130533.158095-1-rrobaina@redhat.com> <7e02e707baecb7c94db329d5d03c1c15@paul-moore.com>
+In-Reply-To: <7e02e707baecb7c94db329d5d03c1c15@paul-moore.com>
+From: Ricardo Robaina <rrobaina@redhat.com>
+Date: Tue, 10 Mar 2026 16:24:46 -0300
+X-Gm-Features: AaiRm53iedKs1QjjpOy2o-_L1h1LH00Wtkg_jP8jOY_eiWlPyLtooi8XB6QPGeo
+Message-ID: <CAABTaaDdpzxwx9SDTivA=MvdeiZX0A5brC6qQffJiEDUYMX+XQ@mail.gmail.com>
+Subject: Re: [PATCH v2] audit: handle unknown status requests in audit_receive_msg
+To: Paul Moore <paul@paul-moore.com>
+Cc: audit@vger.kernel.org, linux-kernel@vger.kernel.org, eparis@redhat.com, 
+	Steve Grubb <sgrubb@redhat.com>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: F4Ba4dsd-AJCbAzPa7-C78D83Gt-7_XV9PZaeuwNUnA_1773170698
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mar  9, 2026 Ricardo Robaina <rrobaina@redhat.com> wrote:
-> 
-> Currently, audit_receive_msg() ignores unknown status bits in AUDIT_SET
-> requests, incorrectly returning success to newer user space tools
-> querying unsupported features. This breaks forward compatibility.
-> 
-> Fix this by defining AUDIT_STATUS_ALL and returning -EINVAL if any
-> unrecognized bits are set (s.mask & ~AUDIT_STATUS_ALL).
-> This ensures invalid requests are safely rejected, allowing user space
-> to reliably test for and gracefully handle feature detection on older
-> kernels.
-> 
-> Suggested-by: Steve Grubb <sgrubb@redhat.com>
-> Signed-off-by: Ricardo Robaina <rrobaina@redhat.com>
-> ---
-> v1 -> v2:
->  - Moved AUDIT_STATUS_ALL from include/uapi/linux/audit.h to 
->    include/linux/audit.h.
-> 
->  include/linux/audit.h | 9 +++++++++
->  kernel/audit.c        | 2 ++
->  2 files changed, 11 insertions(+)
+On Tue, Mar 10, 2026 at 4:22=E2=80=AFPM Paul Moore <paul@paul-moore.com> wr=
+ote:
+>
+> On Mar  9, 2026 Ricardo Robaina <rrobaina@redhat.com> wrote:
+> >
+> > Currently, audit_receive_msg() ignores unknown status bits in AUDIT_SET
+> > requests, incorrectly returning success to newer user space tools
+> > querying unsupported features. This breaks forward compatibility.
+> >
+> > Fix this by defining AUDIT_STATUS_ALL and returning -EINVAL if any
+> > unrecognized bits are set (s.mask & ~AUDIT_STATUS_ALL).
+> > This ensures invalid requests are safely rejected, allowing user space
+> > to reliably test for and gracefully handle feature detection on older
+> > kernels.
+> >
+> > Suggested-by: Steve Grubb <sgrubb@redhat.com>
+> > Signed-off-by: Ricardo Robaina <rrobaina@redhat.com>
+> > ---
+> > v1 -> v2:
+> >  - Moved AUDIT_STATUS_ALL from include/uapi/linux/audit.h to
+> >    include/linux/audit.h.
+> >
+> >  include/linux/audit.h | 9 +++++++++
+> >  kernel/audit.c        | 2 ++
+> >  2 files changed, 11 insertions(+)
+>
+> Merged into audit/dev, thanks.
+>
+> --
+> paul-moore.com
+>
 
-Merged into audit/dev, thanks.
+Thanks, Paul!
 
---
-paul-moore.com
