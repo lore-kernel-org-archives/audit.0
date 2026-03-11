@@ -1,119 +1,212 @@
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+Received: from mail-oa1-f46.google.com (mail-oa1-f46.google.com [209.85.160.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 861F63D1714
-	for <audit@vger.kernel.org>; Wed, 11 Mar 2026 10:47:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2A6F1E4AF
+	for <audit@vger.kernel.org>; Wed, 11 Mar 2026 21:31:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773226062; cv=none; b=ICzpWG1LNGkBky6HggbaPayDAd8D9mwqsIxOq7paEV8AlZH1Ut+w/CQ/05YuwfFhquVa6mS+/wSIbrjLi7CFCGCmEpDFhD/Gzw3txt9Vuq9kv/w8bhAXCoEvXQIva+uSRZj8kreIXmskokZkL720onHm7tyaeAu9/j8OQaknalI=
+	t=1773264685; cv=none; b=c0O/S7gpWYpn/8HwqNx5b3S/9BQFOT9U0lPmTU5uHJncxacTwwywTr03Yxz3gLiVzCpFXZoq+0azIvQ8GK+Yvb5/QgHMWesHYALQ2N9A48DCjDmbZsJ4COyvK/O9fraMHXdW6YW1yH7NTPCGW5jQmyPpOEYeDXRgept1phtiBJc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773226062; c=relaxed/simple;
-	bh=zRCIOZXGAulewyBbqGE0TlQlTPqeFeIDTbPGyy24MV0=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=M/Kvey38hxllltljXfUMcc0Q0tWF+/5PyKrN9phktKQxGWnHkG3ATtbdm6KS0CpsAme7GrSDTLiT9fBCVdIL57ALELxUEsO1pj0IgxmWrCUGRlRMNdO7Et2C3DSFDYEl0Y2ARDIs2wdfyOtsmkSOaIdm1vxK5oWecDvWPZ648R4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=l+NfnaGG; arc=none smtp.client-ip=209.85.128.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1773264685; c=relaxed/simple;
+	bh=c83sDHtMZGgmWT39aIisxMkV8QZsjptaj9QxOf0Cuwg=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=e2BoBkgJJVkUZUPRO+Ud6mMImURcfv5Rb0AcpdAytaOyJTt8aEEI7eNKMicBnIJVnmRqqqILWvmoSkZSZt9OJ9sqLSyw5JN/BQsZ1aUW98Z1tvSg8XRp0njL7GrvihGAVPjk7pVPS0TLdTqYOfGE2Z431d/C5LU3gjwkXX9CYWE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=RrwUEm0z; arc=none smtp.client-ip=209.85.160.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="l+NfnaGG"
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-485409ab264so6052235e9.1
-        for <audit@vger.kernel.org>; Wed, 11 Mar 2026 03:47:40 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="RrwUEm0z"
+Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-40438e0cba6so245392fac.1
+        for <audit@vger.kernel.org>; Wed, 11 Mar 2026 14:31:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773226059; x=1773830859; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=us9WYwCiTBLLsk5cVeG22xmuXfkRkjPu0Kbcd1njBZs=;
-        b=l+NfnaGGhGE/Qag8NAZKtowOcVY2wLQCbEgf8MnpvieTQKfxTgLXG7gVpu41GQE3Cp
-         lhcuSJ3ojhuoA+XvMW4ZK8DqWwguSBIQJdzHM+m0gGn1i58Im+PG8aw4GSSmMwNkHayu
-         W9J2Et5BO3MOuAYEpSQbP4o8f9J9gsDj/OANzpqDRda1qkC6GXeo6tLR1/FbLVhhy7Cf
-         MUxhHc5jx0lvSaHnxQ6WahuluHX1XzGqARVN8PyVe1PrQbU+agAKtUfEmOiyxhtTA+gY
-         BR6kn5ugraDiB91Rov4L/mant481Z758KVbs1s66hkgz+KSI4U1uv3Da1yI4gGWMgZ4d
-         Uvjg==
+        d=cloudflare.com; s=google09082023; t=1773264683; x=1773869483; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=lT7OY2GNLRRTQ6yGPrWNzwOwj8gZsZvwkTPkyqlRx3M=;
+        b=RrwUEm0zlX76Y4puZsOOpjHCew5NbqPdFe6kLaxHJ9mJrehQi97DVp66KjKq5+fqIr
+         AESzaBKIjhNLiqMVd0vwjbY7Fz4/zZJJ/x0ctTjr5mfDoleWslEQH0SyDJoRNzzGLoMC
+         48Gml41tTC2svXh0BgoWOQjA9elqZsco6jasZSrNISnt3eYtT59DyXbifIOF2gYtfa5p
+         z0PoKVjnD20C5cm/NeTWqAXY1oG5P9Vy8333QD15tLbBBQsrfSxxCu2+jdAhxUG9kOLY
+         kRiNO5SV979EliJWMRrCGndV7GFpI611XIV1vvRar3/tUloR5i4mkh4166SfPpCRbvH/
+         bpwQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773226059; x=1773830859;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=us9WYwCiTBLLsk5cVeG22xmuXfkRkjPu0Kbcd1njBZs=;
-        b=P/pvgTD/SDMXdbmTkz0p0EmU0dCaPuIRFsHLBqjS0hP3sA+DE4/FMyitt6kNN2srMr
-         U4uOIKpQmkAuIb8Ga+hV6NsjDliOyUVgqvXYrW7+a3mk0leqjXFNwoZy2KiE8yePomTh
-         elru/p99wpO4cWyCcMxAcDdcpNfIAa2PL4ceftN5095EJW9L3f9TDnMRNJ5z6ogW8a9+
-         XTCZ6HpiRGxU/ujnaFFsZ49s/FZuI3ZyEvs7LF6EDjh6m60Q3pVcGS/dtxL//y+I3SB9
-         ojGyWPHXJNK8nw5A1ZiR3zX1iBnqyLHkNGdd8Xb2qa/DuqqRJ5Lii9YZpDvynHzj/YGu
-         QjCg==
-X-Forwarded-Encrypted: i=1; AJvYcCW78wzx9UZIhueSjuFOExZ6LZNwmTnFo6HUprrV4sQEZxBnhqM7enBnRay2s11hidwGKhP/AQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwaKm92SH1LJ9WmsHludy2YYUVNdx/WUpFCVaO7vAn1pSsuNWgp
-	hIHzzd1nd/LKo5yPiehHMKOe1fVN6N8R2BpbHjayQdoMnmzmAyZBdpSP
-X-Gm-Gg: ATEYQzwqUyv5tUeefO9XUuY/kvNgO97cjDtexIi+AYaijpiI4kxOypIHIOzhIOvUgV1
-	pAe/p+7RR1xb3NZepLBaxAyk3N0gHimNMs6G3ynZnh5yQeJKtf7LqzCp6G8t4OFGKoWxdHSliyB
-	3oWcCAc2KSpoK4pbz5ozLc3+F9z0If2T0ngZXjzaRdCfgk78xDdIB6pcktSLJ8I+4Z9F29DeEy1
-	BJJby+sf4U0jv4VJbuj43powD2Dx2VOWgZjnsVJqIevScO2TsfFgQlhClEDnjAFbvhmxeZ3KKkc
-	1GjTYHgF6pms6TmGY1Hqf+s7ViE5rtNq+MR77RqxAaGZfS/JPqfi+gMeH9tbhKlEPz0Zr3BNhbj
-	Pt8nBUw09Z/ENgBU7UD3ZJj0U4IRIUMcryPGKOKdb3JOQfkyGV4go0Tglf/iSgZ1rzv1ifw19gO
-	C9zy3+8otY+8cDiwQf9R9CbKvaiqnuBZrwJcATp2JcxZQPeN67fNXhRaBpQ7tAOWvJS6pwejZkx
-	Lc=
-X-Received: by 2002:a05:600c:5298:b0:479:13e9:3d64 with SMTP id 5b1f17b1804b1-4854b291dc2mr30148705e9.15.1773226058755;
-        Wed, 11 Mar 2026 03:47:38 -0700 (PDT)
-Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-439f820a2f1sm5725154f8f.30.2026.03.11.03.47.37
+        d=1e100.net; s=20230601; t=1773264683; x=1773869483;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lT7OY2GNLRRTQ6yGPrWNzwOwj8gZsZvwkTPkyqlRx3M=;
+        b=CiEjupIBaoRLgybk3KQRxF3Qgna9cN1U/trr4VjQP1YibcQC0COvDhr1EJoTBWzF8V
+         lAKO9EsepvV1MgVfOLSIG4oLlyT/5Tzp1vJeAGML793hngSptLXYkP8rh0yg/TMGQODm
+         i7pXNJgFk/LPvYoZhsNcCCleG4YMPI6wQSOw0k6vrgFZeHjmrPwxYe75OrmMYHWrSxTX
+         AccEGftsKcx82g0vGpSin8fnvukOnZ2lhhPoLGPMFes2QDw9cNGYsfDbum37NC4Zl0Mn
+         gkB7AjnZGuutzKUXlBUCyrBW5YhW9MEtBduYPdiNuyCYZ1PGeeXs51x9cz42iE10Bc20
+         Ja/A==
+X-Forwarded-Encrypted: i=1; AJvYcCXf44gfCbjvrjS0gDuMjLk2jjEDKXIa2f3SqCh1pF5i/EZ5p7+aDqSXbzpw7v9inKK6aO3Jeg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxRl0wcQYLPKG5ZLMiUwHDj3yB0mZKu9nSKeUz74x4sCuXV/ADv
+	oXU93b+GPE/QkvwuMD6fnlja2E2iT8Ms6PTitI3YJCNtj9ayRXpdnuAxcWHgEvDQk1E=
+X-Gm-Gg: ATEYQzyPQA/cBD4TFC5SOWoxuj41m0EibduNtozG08EaoAFi2xvpjwJlLJS8moNn8ET
+	ZWOIVaA84jehAM8X1/FYvQrqm7PTFE61OQLbNhHDPUKDAYY1T+IEHL05x31O9s6Bpmtcqnj3msY
+	qnZg6CmduVNg648i6EfpyOPqGR4VbQWSH6ine9n5/JC005q9bpNGkVtZVHILVpRL5bRW5wK22eh
+	PAbWcNM54/J/Bat99NW7n3VXwAmiBt5bX+lcFWmLzBg7q6seYgVb0O1BbK8FhuauGyTgB0Bycib
+	Je3CR+YhUOZCwaP3YxGugRVRUrV88ZZejaJRbVo4gyuyjCJ92fiZhlO85m784/4+OZtQ30JP9vG
+	2ohmbmWLqzDaanQ5CXFv4iEmzwl4VUT2fNMZOyDDVwYhDuH3Ml/eKLopvcFqXn9+aqjlgWLpBfu
+	zSAosRXkA=
+X-Received: by 2002:a05:6871:c8e8:b0:417:4d3:1751 with SMTP id 586e51a60fabf-4177cbc0afemr2554702fac.51.1773264682724;
+        Wed, 11 Mar 2026 14:31:22 -0700 (PDT)
+Received: from [127.0.1.1] ([2a09:bac5:947d:4e6::7d:82])
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-4177e1fb90csm3530413fac.4.2026.03.11.14.31.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Mar 2026 03:47:38 -0700 (PDT)
-Date: Wed, 11 Mar 2026 10:47:36 +0000
-From: David Laight <david.laight.linux@gmail.com>
-To: Christian Brauner <brauner@kernel.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>,
- linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
- linux-nfs@vger.kernel.org, bpf@vger.kernel.org, kunit-dev@googlegroups.com,
- linux-doc@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- netfs@lists.linux.dev, io-uring@vger.kernel.org, audit@vger.kernel.org,
- rcu@vger.kernel.org, kvm@vger.kernel.org, virtualization@lists.linux.dev,
- netdev@vger.kernel.org, linux-mm@kvack.org,
- linux-security-module@vger.kernel.org, Christian Loehle
- <christian.loehle@arm.com>, linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] kthread: remove kthread_exit()
-Message-ID: <20260311104736.51b53405@pumpkin>
-In-Reply-To: <20260310-work-kernel-exit-v2-1-30711759d87b@kernel.org>
-References: <20260310-work-kernel-exit-v2-0-30711759d87b@kernel.org>
-	<20260310-work-kernel-exit-v2-1-30711759d87b@kernel.org>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
+        Wed, 11 Mar 2026 14:31:22 -0700 (PDT)
+From: Frederick Lawler <fred@cloudflare.com>
+Subject: [PATCH RFC bpf-next 0/4] audit: Expose audit subsystem to BPF LSM
+ programs via BPF kfuncs
+Date: Wed, 11 Mar 2026 16:31:16 -0500
+Message-Id: <20260311-bpf-auditd-send-message-v1-0-10a62db5c92f@cloudflare.com>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIACTfsWkC/x2MQQqDMBAAvxL23IVoqw1eCz6gV/GwNmvdg1GyK
+ oL498YeB2bmAOUorFCZAyJvojKFBNnNwGeg8GUUnxhym5c2swV2c4+0elk8KgePI6tS0h7k3N2
+ WT6LOQarnyL3s/3MD7/plrjDwvkB7nj+1WrsudwAAAA==
+X-Change-ID: 20260105-bpf-auditd-send-message-4a883067aab8
+To: Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>, 
+ "Serge E. Hallyn" <serge@hallyn.com>, Eric Paris <eparis@redhat.com>, 
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+ Andrii Nakryiko <andrii@kernel.org>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, 
+ Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, 
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+ Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+ =?utf-8?q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>, 
+ =?utf-8?q?G=C3=BCnther_Noack?= <gnoack@google.com>
+Cc: linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org, 
+ audit@vger.kernel.org, bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ kernel-team@cloudflare.com, Frederick Lawler <fred@cloudflare.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4248; i=fred@cloudflare.com;
+ h=from:subject:message-id; bh=c83sDHtMZGgmWT39aIisxMkV8QZsjptaj9QxOf0Cuwg=;
+ b=owEBbQKS/ZANAwAKAasltHYDktNtAcsmYgBpsd8n9jExOwY7o7vGO2DRL/PAuhexDPVJt7YTU
+ J9BUtH+/MCJAjMEAAEKAB0WIQTLNBqMVmu1PHvjOe2rJbR2A5LTbQUCabHfJwAKCRCrJbR2A5LT
+ bSiQEACPtWTnlmslusEnuOQDnGDS4N1FtR7aFG6hDI7yVEwaImE6tXGY+mSrd1YI1Zx+ZOhgdff
+ 5GWPT8Y2SdW9MCXBYuKAueFZWHxjvvYuKimRdPhmZ1IeIoNVsUEgY6+V3o1md+ZCF8v04xyjFAV
+ kQdPCLhT2v0AgnDm1pIfVg/RqqreoZU6f4brM2tfC0S2dHy8HPP455izuXCzz4Zp8dgbwifdvSs
+ 0f4v4E4KqMbDISxrrgKjEUiZoyaUOoP5LAtSiW7asJQp7+2qBtFRuQnSkXlkQGWSJf3lckuzFlc
+ Ifd1x7TvTyT+98QJ33TdXN5JFeI5TKtO8UUG5PjikHSJ5MvGk+a/UWj0QlJQp+7yYUDhxfTIjZp
+ iKdsmll/RLcBA3RvNLN40ttiowey43rAvkQEG7DfcUgRwyPIIwH5Lf+/u5XndHACqcXtSqYXFGU
+ 61gMi3RKoQJxP/BXomczV/l5dz7r0G6NwOPE7XBG1Iq7I9wG24weoA5S1gnAiR2queukCYJgJHv
+ eQ0co8fwRCrpcZYd7IqaKVjTxRJJH9r9AiiyBgLOxRmBUX4G9h09WE3xXYQKlsyhQ5NsIPxUt+J
+ 8Yryhoc2ZQasaMZh/uA7CyVK8ZAcHS8pa2VPEaTLLpPQjAEyBF8VBocT55GvBVcZ0ayioCL8B/s
+ MloN+OPwk/6rXpg==
+X-Developer-Key: i=fred@cloudflare.com; a=openpgp;
+ fpr=CB341A8C566BB53C7BE339EDAB25B4760392D36D
 
-On Tue, 10 Mar 2026 15:56:09 +0100
-Christian Brauner <brauner@kernel.org> wrote:
+The motivation behind the change is to give BPF LSM developers the
+ability to report accesses via the audit subsystem much like how LSMs
+operate today.
 
-> In 28aaa9c39945 ("kthread: consolidate kthread exit paths to prevent use-after-free")
-> we folded kthread_exit() into do_exit() when we fixed a nasty UAF bug.
-> We left kthread_exit() around as an alias to do_exit(). Remove it
-> completely.
-...
-> -#define module_put_and_kthread_exit(code) kthread_exit(code)
-> +#define module_put_and_kthread_exit(code) do_exit(code)
+Series:
 
-I'm intrigued...
-How does that actually know to do the module_put()?
-(I know it does one - otherwise my driver wouldn't unload.)
+Patch 1: Introduces bpf_audit_*() kfuncs
+Patch 2: Enables bpf_audit_*() kfuns
+Patch 3: Prepares audit helpers used for testing
+Patch 4: Adds self tests
 
-The corresponding try_module_get(THIS_MODULE) is done before the
-kthread_run() (and has to be 'put' if that fails).
-So there is an explicit 'get' but an implicit 'put'.
+Documentation will be added when this becomes a versioned series.
 
-While a loadable module that creates a kthread usually needs to give
-the kthread a reference to its module and then have that reference
-released as the kthread exits, I can imagine cases where that isn't true.
-(Or broken code that just hopes the module won't be unloaded just
-as the kthread exits.)
+Key features:
 
-It actually makes me think that module_put_and_exit() ought to have
-a 'module' parameter.
-Or, perhaps, kthread_create() should have the module parameter and
-hold a reference to that module until it exits.
+1. Audit logs include type=AUDIT_BPF_LSM_ACCESS, BPF program ID, and comm
+that triggered the hook by default
 
-	David
+We wanted audit log consumers to be able to track who and what created
+the entry. prog-id=%d is already used for BPF LOAD/UNLOAD logs, thus
+is reused here for this distinction. Though, it may be better to use
+the tag instead to capture which _specific_ version of the program
+made the log, since prog-id can be reused.
+
+2. Leverages BPF KF_AQUIRE/KF_RELEASE semantics to force use of
+  bpf_audit_log_end().
+
+One side effect of this decision is that the BPF documentation states
+that these flags allow the pointer to struct bpf_audit_context to be 
+stored in a map, and then exchanged through bpf_kptr_xchg(). However,
+there's prior work with net/netfilter/nf_conntrack_bpf.c such that the
+struct is not exposed as a kptr to support that functionality nor is
+that supplying a dtor function. The verifier will not allow this use case
+due to not exposing the __kptr. Ideally, we don't want the pointer to
+be exchanged anyway because the reporting program can become ambiguous.
+I am sure there are other edge cases WRT to keeping the audit buffer in a
+strange state too that I cannot think of at this moment.
+
+3. All bpf_audit_log_*() functions are destructive
+
+The audit subsystem allows for AUDIT_FAIL_PANIC to be set when the
+subsystem can detect that missing events. Further, some call paths may
+invoke a BUG_ON(). Therefore all the functions are marked destructive.
+
+4. Functions are callable once per bpf_audit_context
+
+The rationale for this was to prevent abuse. Logs with repeated fields
+are not helpful, and may not be handled by user space audit coherently.
+
+This is in the same vein as not providing a audit_format() wrapper.
+
+Similarly, some functions such as bpf_audit_log_path() and
+bpf_audit_log_file() report the same information, thus can be
+interchangeable in use.
+
+5. API wraps security/lsm_audit.c
+
+lsm_audit.c functions are multiplexed and not handled by BPF verifier
+very well, thus the wrapped functions are isolated to their sole
+purpose for use within hooks.
+
+Key considerations:
+
+1. Audit field ordering
+
+AFAIK, user space audit is particular about what fields are
+present and their order. This patch series does not address ordering.
+
+My assumption is that the first three fields: type, prog-id, pid, comm
+are well known, and user space can make an assumption that other
+fields after those can appear in any order.
+
+If that is not acceptable, I would propose that we leverage the struct
+common_audit_data type order to be the order--much like how the type is
+used for log_once() functionality.
+
+I am open to other ideas.
+
+Signed-off-by: Frederick Lawler <fred@cloudflare.com>
+---
+Frederick Lawler (4):
+      audit: Implement bpf_audit_log_*() wrappers
+      audit/security: Enable audit BPF kfuncs
+      selftests/bpf: Add audit helpers for BPF tests
+      selftests/bpf: Add lsm_audit_kfuncs tests
+
+ include/linux/lsm_audit.h                          |   1 +
+ include/uapi/linux/audit.h                         |   1 +
+ security/Makefile                                  |   2 +
+ security/lsm_audit_kfuncs.c                        | 306 +++++++++++
+ tools/testing/selftests/bpf/Makefile               |   3 +-
+ tools/testing/selftests/bpf/audit_helpers.c        | 281 ++++++++++
+ tools/testing/selftests/bpf/audit_helpers.h        |  55 ++
+ .../selftests/bpf/prog_tests/lsm_audit_kfuncs.c    | 598 +++++++++++++++++++++
+ .../selftests/bpf/progs/test_lsm_audit_kfuncs.c    | 263 +++++++++
+ 9 files changed, 1509 insertions(+), 1 deletion(-)
+---
+base-commit: ca0f39a369c5f927c3d004e63a5a778b08a9df94
+change-id: 20260105-bpf-auditd-send-message-4a883067aab8
+
+Best regards,
+-- 
+Frederick Lawler <fred@cloudflare.com>
+
