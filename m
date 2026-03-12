@@ -1,146 +1,128 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B316736495B;
-	Wed, 11 Mar 2026 22:08:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E9D833D503
+	for <audit@vger.kernel.org>; Thu, 12 Mar 2026 21:01:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773266899; cv=none; b=PVSte4hFntb8d/5zClivXoFP+mOZv5kawyGcZZ4ZKUNlDIWnZSk2pDGnUvwIhWDl00Be6KpGQMmmrMwqdVIcM1kP+ZRxHRmoxgRAqKMKxYRQAVLObzCBQn+44qOpVxAlugJhfmVnV12KZB1aXvrwEzHaal3vAD4goQpFs+P5Uqo=
+	t=1773349290; cv=none; b=HF+hvXj4cdvmsqbQNxVSyB8JXs6n3K06ueTxoZM+VWPZIUZLIR+L9ww/KVcHxPcJx9vBjJGZN62cX4msdYvZPQGnP0zHIhDydaiCEceaN6qMX4t8MVESJjkL9cd4biul062LsO7Wc4jf9gSLKZ8GeNqBv6kOnB9Dy4li311BldQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773266899; c=relaxed/simple;
-	bh=7MinZtbTOnSEroZFGxvPjQMjUpkX71RK8irsfC1OcsI=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=nw+DmXJ7gCW6C+169F96YsG5NmZif+RrgGp1rCCdLG+hQDerOx4bcN1acAHpyy3tifPtcuYvki90LQb1oCf3i9IesOz9nK5/Zxndb5hpXtKSLqbVRaAt4iU/eu+aEQNjja4lU5aNHcn7PUcaNT7faUHbl5UxeXCwTMO/IUx02wM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XRUEpgI3; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1773349290; c=relaxed/simple;
+	bh=2m0TEEdToE0XfmBlxsTZbLjAe5WXrhF8lZof/Tgjw3A=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:Content-Type; b=Pm2G5hHc95X27izl0CVFy4AbsbyrYkA90rnfQSG+xCwbl2XI+8XBpnbQu4QyJN0AKe7TZwoha+8JRGZS/pZlncQDEx1wbLA9s91Aw+ynsSZgAcJ2pZ6Ct7PylS83Wml8xwnXQGFjtEp17mqjv+evfSm4sExARzZWGyS/HVwLB3U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YY71qaVz; arc=none smtp.client-ip=209.85.221.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XRUEpgI3"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1114C4CEF7;
-	Wed, 11 Mar 2026 22:08:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773266899;
-	bh=7MinZtbTOnSEroZFGxvPjQMjUpkX71RK8irsfC1OcsI=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=XRUEpgI3OPcXoBcHD4j6uu0bANlDWCD4rOaew4yJNklK3JIWA0ntp55NyT8d9Zyko
-	 yq6ZLHPJoaiuN3bNX/k5gNVLg5Q1sjBkHwNxQyJEWMBEkMQLtuGszRGojliqYzMs/O
-	 0/CCOMIrAbcbr3TOHULNSohzITJU7DLawUHYHmyLLKtqJt7nHR0hdQRz+ljjSr5ci7
-	 4JUjWtW4Mzo3cHqkL6miz/2XWI+6VeU+i77vjeeg3n7OgmT6Ia0Yv6jwbA7Jh5RvnX
-	 vFmJ20DOph3ga1VSbt3iZb2lHqUn/QsX5XZq8txdJAunfJ7iRpW9mQqQSgjTA8Wx68
-	 IiMueA4lBaIQw==
-Content-Type: multipart/mixed; boundary="===============6615031658577929282=="
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YY71qaVz"
+Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-439b8a3f2bcso1154001f8f.3
+        for <audit@vger.kernel.org>; Thu, 12 Mar 2026 14:01:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1773349287; x=1773954087; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:from:content-language
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2m0TEEdToE0XfmBlxsTZbLjAe5WXrhF8lZof/Tgjw3A=;
+        b=YY71qaVz1Ikyg9nyE+j1p1xLFMUF5CX40C8Bf188Ai9o06NH1OgjglwAuHI2HJ+eKH
+         cgUQTg3UCGPWHn6Ym13OoQSfrw6T7X63TKLmYHMTloW0BiwVdvJSLQhjbUck9lxUyLP7
+         UFUSwjwQR0xVM3cBqtNYHTi4p+B7wIqArdCNnVzmSMpyEDPebMK97BMSK4yN5rNyIXbr
+         b0RRaJ37cFRjXohQwk5c1VxZ7NkLH5Eof1Edhs0Yz8Q7nKZvLg5BYLRw36mwE0qmJjyJ
+         +ZOP37kdvywkqMehhmOdS1qVkJ86cNcRoIQ0ueVoKfPalsjn0Ui353RAKySLh0JWg+h5
+         LiZA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1773349287; x=1773954087;
+        h=content-transfer-encoding:cc:to:subject:from:content-language
+         :user-agent:mime-version:date:message-id:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=2m0TEEdToE0XfmBlxsTZbLjAe5WXrhF8lZof/Tgjw3A=;
+        b=SxqLwbTNcvJmVOcPTkf04WwINUntZ6s9DBk+AhlkQrZ/i2l2CLUmOwNAMIdX45vvQo
+         kFBkycQyoL7t6VL28cfoSXnf2W58hPSqdi8MxlFThNX6/liH+y3KksxXL92b8btrFJ8z
+         WApQpdtqOOxef2quytkOtpSlHUxzqikq/xAIgzGvgI7NW+8NoZeoJYjs74Eo0mD96Vo4
+         rc/7cg6w5ZSHoIiCTlYsQ7G+z5uIylR4s7LadqnbH2ejCaltv2yTk6cdFyT5pyZGBeGm
+         kA87eikXH5+Om7TUkIQwCgxGSD5JvtBctGmF7fql7gniqUoKnBa4IWZeK/g7HdImhSjc
+         IRbQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVSJa8tU2w1PWU4BimX6zmd8IAhIYIVwCfX7Sxs/B50XCfsorOcgisZc0RdLVraeLCloH5rrA==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx/5O1vRynUqOCD0vSLzLOHxy8oP7d6PW2aKVQuDd68wDasyxC6
+	1SwjtJ5hMI8jyhWeHU+jl3Rd2Qj8OtnYShX/u3KRTCdtF4PFO/icl5ox
+X-Gm-Gg: ATEYQzymd6IozRHLiHBC/tQqdr1z7jSLRsE2SNlRE48lBvpSYsVjvfLR91l/xSomPyG
+	KT/mBfaBLl4byBy1KkcwxHz7Xz1kMUuWBWabXfhRq/S8oVBUa9+bq7GOk0KjFh5omeE2TiIU0a3
+	2rYsXiJkRwvYNmkdIsOUqgsKOQj20QIs/5wfIMjgNKSX7W2WIruGOwB5Q+EYyqk4tC6VnfF8tmJ
+	F+/TVgwRdmKTpnHIwrV5NDXYAEADpv7xdAeMt3e77FKp9NaxRLKjn5OmzfgfOx5izA3gbbk9+pg
+	TCTwGSL1d6ppa4T/IOxkwbYVp32Ju8DmFLXOeYP10BUPXZurh9YNcDOwaVkSAJUuPPrrEf/C5vH
+	R8Yn4k1v1TMe7/X7WygNUyhKD6Wgmr9cKf2j8jLa0yDM8nycWxP4095/cz1GGmau6MiVZ8uWAhy
+	9F7YMGBOWE/W3SFSdpTRNSv+lClpMgJHLD3rpNYYQkPhDdmb0YTwk6mdAvuLFp5eCQQIxQ9cuOu
+	68TtF7KM4FYvxyNKlE=
+X-Received: by 2002:a05:6000:220e:b0:439:b541:a088 with SMTP id ffacd0b85a97d-43a04dc8654mr1897210f8f.54.1773349287324;
+        Thu, 12 Mar 2026 14:01:27 -0700 (PDT)
+Received: from [192.168.1.14] (mm-214-205-122-178.mgts.dynamic.pppoe.byfly.by. [178.122.205.214])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-439fe22f3a4sm11813928f8f.38.2026.03.12.14.01.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 12 Mar 2026 14:01:26 -0700 (PDT)
+Message-ID: <660c10e6-f8b5-46e2-a424-e3e052992b3a@gmail.com>
+Date: Fri, 13 Mar 2026 00:01:25 +0300
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <69cbf119c9c3fb5ebcfca4a19d3cfa8ef6acb2bc1e9b0c9b20cce726266b303c@mail.kernel.org>
-In-Reply-To: <20260311-bpf-auditd-send-message-v1-1-10a62db5c92f@cloudflare.com>
-References: <20260311-bpf-auditd-send-message-v1-1-10a62db5c92f@cloudflare.com>
-Subject: Re: [PATCH RFC bpf-next 1/4] audit: Implement bpf_audit_log_*() wrappers
-From: bot+bpf-ci@kernel.org
-To: fred@cloudflare.com,paul@paul-moore.com,jmorris@namei.org,serge@hallyn.com,eparis@redhat.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,song@kernel.org,yonghong.song@linux.dev,john.fastabend@gmail.com,kpsingh@kernel.org,sdf@fomichev.me,haoluo@google.com,jolsa@kernel.org,shuah@kernel.org,mic@digikod.net,gnoack@google.com
-Cc: linux-kernel@vger.kernel.org,linux-security-module@vger.kernel.org,audit@vger.kernel.org,bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,kernel-team@cloudflare.com,fred@cloudflare.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Wed, 11 Mar 2026 22:08:18 +0000 (UTC)
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
+From: Roman Bakshansky <bakshansky.lists@gmail.com>
+Subject: [RFC] Modernizing Linux authentication logs (lastlog, btmp, utmp,
+ wtmp) with SQLite
+To: linux-api@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org, audit@vger.kernel.org,
+ libc-alpha@sourceware.org
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
---===============6615031658577929282==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Hi all,
 
-> diff --git a/security/lsm_audit_kfuncs.c b/security/lsm_audit_kfuncs.c
-> --- /dev/null
-> +++ b/security/lsm_audit_kfuncs.c
+I'd like to share a draft RFC proposing a complete overhaul of the legacy
+binary logs used for authentication auditing in Linux: lastlog, btmp, utmp,
+and wtmp.
 
-[ ... ]
+These files, designed decades ago, are running into fundamental limitations:
 
-> +__bpf_kfunc
-> +struct bpf_audit_context *bpf_audit_log_start(struct bpf_prog_aux *aux)
-> +{
-> +	char comm[sizeof(current->comm)];
-> +	struct bpf_audit_context *ac;
-> +
-> +	ac = bpf_mem_cache_alloc(&bpf_audit_context_ma);
-> +	if (!ac)
-> +		return NULL;
-> +
-> +	memset(ac, 0, sizeof(*ac));
-> +	ac->ab = audit_log_start(audit_context(),
-> +				 (aux->might_sleep) ? GFP_KERNEL : GFP_ATOMIC,
-> +				 AUDIT_BPF_LSM_ACCESS);
-> +	if (!ac->ab) {
-> +		bpf_mem_cache_free(&bpf_audit_context_ma, ac);
-> +		return NULL;
-> +	}
-> +
-> +	audit_log_format(ac->ab, "prog-id=%d", aux->id);
+- Y2038 problem - they use 32-bit timestamps (time_t in lastlog,
+   tv_sec in utmpx). Even on 64-bit systems the fields remain 32-bit
+   due to ABI constraints, so all Linux systems are affected.
+- No extensibility - any new field (e.g., container ID, service name,
+   source IP) requires changing fixed structures, breaking all existing
+   tools that read them.
+- Poor query performance - tools like last, lastb, who have to
+   scan whole files linearly; with millions of records this becomes
+   painfully slow.
+- No atomicity - partial writes during a crash can corrupt logs.
+- Concurrency bottlenecks - multiple writers (sshd, login, etc.)
+   contend for the same file with coarse locking.
 
-aux->id is u32 -- should this be %u?
+To address this once and for all, the RFC proposes replacing these logs
+with dedicated shared libraries that use SQLite as the storage backend:
 
-> +
-> +	/* Audit may not have a filter configured for syscalls. Include
-> +	 * potentionally redundant pid & comm information
+- liblastlog2 - last login time
+- libbtmp2    - failed login attempts
+- libutmp2    - current sessions
+- libwtmp2    - login/logout history
 
-Minor typo: "potentionally" -> "potentially".
+SQLite brings:
+- 64-bit time -> Y2038 solved forever.
+- Indexes -> O(log N) queries instead of full scans.
+- Extensible schema -> new fields can be added without breaking old tools.
+- ACID and WAL mode -> atomic writes and concurrent access.
+- Portability - runs on any Linux system, no systemd dependency.
 
-> +	 */
+The full RFC, including preliminary database schemas and API drafts,
+is available in the discussion repository:
 
-[ ... ]
+     https://github.com/bakshansky/linux-auth-logs
 
-> +__bpf_kfunc int bpf_audit_log_net_sock(struct bpf_audit_context *ac, int netif,
-> +				       const struct socket *sock)
-> +{
-> +	struct lsm_network_audit net = { .sk = sock->sk, .netif = netif };
-> +	struct common_audit_data ad;
-> +
-> +	ad.type = LSM_AUDIT_DATA_NET;
-> +	ad.u.net = &net;
-> +	return __audit_log_lsm_data(ac, &ad);
-> +}
-> +
-> +__bpf_kfunc int
-> +bpf_audit_log_net_sockaddr(struct bpf_audit_context *ac, int netif,
-> +			   const struct sockaddr *saddr__nullable,
-> +			   const struct sockaddr *daddr__nullable, int addrlen)
-> +{
-> +	struct lsm_network_audit net;
-                                    ^^^
+I'm looking for feedback on the overall direction, the proposed
+interfaces, and the open questions listed in the document (e.g.,
+library naming, database location, fallback options for embedded
+systems). Please use GitHub Issues for comments, or reply to this
+thread - I'll monitor both.
 
-Unlike bpf_audit_log_net_sock() above which uses a designated
-initializer that zero-fills the struct, this declaration leaves
-net uninitialized.
+Thanks for your time and input!
 
-In particular, net.sk is never assigned anywhere in this function.
-When audit_log_lsm_data() handles LSM_AUDIT_DATA_NET, it does:
-
-    if (a->u.net->sk) {
-        const struct sock *sk = a->u.net->sk;
-        switch (sk->sk_family) {
-
-Since net.sk contains stack garbage, this will likely dereference
-an invalid pointer and crash.
-
-Additionally, when only one of saddr__nullable or daddr__nullable
-is provided, the corresponding sport/dport and address fields for
-the missing side remain uninitialized, and audit_log_lsm_data()
-unconditionally prints both sides:
-
-    print_ipv4_addr(ab, a->u.net->v4info.saddr, a->u.net->sport, ...);
-    print_ipv4_addr(ab, a->u.net->v4info.daddr, a->u.net->dport, ...);
-
-Would initializing with something like
-struct lsm_network_audit net = { .netif = netif }; address both
-issues?
-
-> +	struct common_audit_data ad;
-> +
-> +	net.netif = netif;
-
-[ ... ]
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/22976062351
---===============6615031658577929282==--
