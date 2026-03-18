@@ -1,66 +1,68 @@
-Received: from mail-ot1-f44.google.com (mail-ot1-f44.google.com [209.85.210.44])
+Received: from mail-ot1-f45.google.com (mail-ot1-f45.google.com [209.85.210.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A49A3101DB
-	for <audit@vger.kernel.org>; Wed, 18 Mar 2026 17:34:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C03A9291C10
+	for <audit@vger.kernel.org>; Wed, 18 Mar 2026 17:49:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773855265; cv=none; b=CSKu5/TnJKmo+iHpZdj7ASJyp3JnPBYBp5mOibMMHdAFk9X0XFW9lcbcmVAa3cXPEblPw/d9E4wqg51MuaneSgsQsVjdScr7Eldy5iK344h0MCuuE3xJ3+RZf2BLqFfhSkBDNKJjm51/lebCicmjUyjq4RnCi6YH4PyJV9DKvxc=
+	t=1773856194; cv=none; b=GS6GmvyVwmJ6ZGhYjFbFee4fRJWf146GBWuIcmeo1ZtLfuACwS9f/NLPQVWmu8rc1UMq1RvPb01gU3wGHAf/3AF/l801G8BfuX+XVS6C8v7Yxk0kqjtK1rxcWtQBOg9Z9poiAuG3wINj9a3uCkYvJ+s0OGeeqe1lyk1Annndr3k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773855265; c=relaxed/simple;
-	bh=FZxvRu+85EWsxqRmuAs5TjqTbVp8lAzOjEKZsLeBTXM=;
+	s=arc-20240116; t=1773856194; c=relaxed/simple;
+	bh=HGCegGKd/wL01yykR6BtOd16uHaQDYMxuA7939bT0Ac=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BP9CwbKEmZBsGELCA6DK0R9yL9yLPb5pbuc6b0c310ehIZZmmAJnjDs0KCrwDdayDeEczJwP60lFLHFLdUQCvDPAzWWahqWqIzhvoLapeoQmu0Me+Dq0a/cWyL2hePxMkF5HIYs88HG17mLLMS0L9BrhgrpvHsSN3RfkR7DS4AI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=ZIQ8Y8q2; arc=none smtp.client-ip=209.85.210.44
+	 Content-Type:Content-Disposition:In-Reply-To; b=fZQBY9XqsfyXZljLOUsZi0iisdsekyUpF2Pqur79lHqAXqjMMdZW6xovmb0RsNBZWKxOS5grK8CIVsSkmLF6iCmxpZsMqXmt1yGzMsKjhqhBxPxpiRXC2tIP+j5YjVNVmUTUsFHzdccBdHUdv6oDA0EmagDe1Y5qyjh61LJeW2c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=CUvwReGQ; arc=none smtp.client-ip=209.85.210.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="ZIQ8Y8q2"
-Received: by mail-ot1-f44.google.com with SMTP id 46e09a7af769-7d73ccee442so107585a34.1
-        for <audit@vger.kernel.org>; Wed, 18 Mar 2026 10:34:21 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="CUvwReGQ"
+Received: by mail-ot1-f45.google.com with SMTP id 46e09a7af769-7d751ef36ccso82204a34.0
+        for <audit@vger.kernel.org>; Wed, 18 Mar 2026 10:49:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1773855261; x=1774460061; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=eWeEa0ZafBH05FmgYmVQzG8J+24xX/BkM77vv1zD8SU=;
-        b=ZIQ8Y8q2up0WQADu+jzFDuMldHGgfqAA3c3j4H3T5Lcxfe4ftsyHELNmFik8FV8e8z
-         w1PLCvdfsEBJkEn9+5kO8ZW+eXOSQZD5rk6PLm+FEZYiu/nCEUpj2T/jmT60Dg/g1CIs
-         CrYOXi04XdvU2IBMEMVyxYjZNz1IMc6tE+G7rfzA6axZlhdnQWS6kgAp1mWQOmY+56i3
-         80Fmpv18cqRt8rAfjsHpSReittFy2zgwKQl8goe6sbUWMxzRopoUWXbESr+9XoJlvnJG
-         vgjo5oNJbpCubomqywdW8+KH14/Vri90Kw7Qu1EqhcZzuIKvEjXPcjOKGJ95WXD2AJvn
-         bXhQ==
+        d=cloudflare.com; s=google09082023; t=1773856192; x=1774460992; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=DwZzEUBvZTlA64oHuhM8Cu6PFpv3s+PziJS94hKbClM=;
+        b=CUvwReGQONVpYZsnOprkScrRcNCgbCu+nCgzLBt1zlng+nXeh8HWMFnX0FiDkfdFAt
+         zMPzDSRqAez68f4L5nKycu9km5fvjHTyzdYEDFKWpTg1KbQ2tsf19LNoiKnfue0l3cZ8
+         rdSel2wcFNrvEARgczNTw7Mu6f0gUz7w55BPqz/4TRBDzZSKlGwGEX0wlDQuc/D2TGeU
+         1+RqrKZGMyoSweO2/HpG/QDicGASfKopbkS6YkyyjBPAJjhhyWNJ2laSY0jLa/kZdQeb
+         Zf28KP6sGPtixBR5yWg2aV0Dp6/06Ap6yUePYsYyb63SwSbkebWRHdAW2mBWrD+fF8MA
+         xLTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773855261; x=1774460061;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=eWeEa0ZafBH05FmgYmVQzG8J+24xX/BkM77vv1zD8SU=;
-        b=Vy8LWQfByp0Vbuxjv8Ekg1Qv+ecxUyLgQ0YOeT1o1Kr4+6BSPVnjQiv+s7ZtH8JjHe
-         o6rvJKE5ajbC6pb5TFfzBXxvhqNKDdjg2+hes9nksCoUhhhVL/lNzj5c93RU9mK71PGz
-         of9B3Nch1yAUP9j+u6ZEqyYIxFXh8T0wRuIRK/bcqnnd6nTD/0jm5iSuAenG2aWhvsQ0
-         GK8MbiU6TXAM2Ygwgb4LjrchGCl4NyEeKbsMM/idv5/+Fw3pqcX2imzH3FhQBSslnM8E
-         dqYmNcc8yFYzxhgrJu3goRUwdvuFMR3LmNIcsntUwsby591B5a+99GIOtxsrJn2t021d
-         d+HQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUaj2EoJmyN/9uA7pak8rGr6OSABUZcPoivJOOypQ0usrKprt542YZ/WkSmZHR80viMeX54rQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzugGXS8YwE9JZORhWaOrVW6TcZU2qD1abUcpRMixYVp1El8VPO
-	MBlQbFTDhWV+33T4X3IOMc7V4QlkuwWKLY9Q/d9XT/RJm4PvK0T+2l1aQCZ+5ufBzs4=
-X-Gm-Gg: ATEYQzwBZYVkyWqvv7Mu4R1lYkUKgcsh8d/nGGgnIoRbHAqXw9LDHv0ccBvu2nN6J/D
-	FnsESEf3ajQmBeh1fMvbvtLQBjMQv4TivHuGvvghlUlrsa9o0IciojC151aqoZAw92wlCaVxy4S
-	mdxLu4hWxM5IAn07dxcPXDH+R1trwEGvVMpAX0kwQhmB1D6UkDbJiO95EoWAoZ0ZQQDK3B9L1KA
-	PVbZ67EK9ywD2wxZCun33EwRCwp3Npq6uDhbopZrd5dHW4qXc7hUfeDSUlWORaWBz2I9bXIEPPk
-	rmcGyyWSEkZyLT9MZS3pCdc6u93HGBr/kuIQQEk1E3kQdW5e2mGKxRHL236MRez/fxbTL6SuxK+
-	GSOH3WObTQxl7Xe9giDeTnIYX7Hb/Fqt9Hyv4rqvkwon9zq5wk3qjtPVDU/k6R9E+4WdEUDLYGT
-	eiOGg6
-X-Received: by 2002:a05:6830:64c8:b0:7d7:4d85:eb05 with SMTP id 46e09a7af769-7d7ca775284mr2522284a34.22.1773855260727;
-        Wed, 18 Mar 2026 10:34:20 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1773856192; x=1774460992;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=DwZzEUBvZTlA64oHuhM8Cu6PFpv3s+PziJS94hKbClM=;
+        b=kFu3nH5e5OopNXGWqGivjPWQRy3GrjQttNgxsW3S9LB6oTtUqlQrvEXdOCNkL7ljw0
+         Gh7PV/YFuiPI2yxJTFl58fXqvsbMsUIWrSz+IR05koqvBBIUWft/2ItaLLANKjAJF82l
+         AnRtAbeCZeY9XVsDAPf5ujFq0HAMwwaaXdjOOTf3t+eex0JYTebBZ70Yr8dtUEWU6NSS
+         G7bCTuQUvIISf8zs1lkSAv8fIEADCw61xuml7K3QVPYEl7aymKbH1KYgpA8MbzWVYrPS
+         Wk2HQCZmSaO4PPb3woe31qHRfaCLqJ3gC5+GfDg3QwC6QNNwsvcG+IIV3Os8X+X12AV1
+         IhbQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVegGJb796cKjLpOJPlWMa64HY+9q5M1VFAQ22HHI5l3Zyc9cZlfKtA3Yq2q5zlP/bDI+TLKw==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy4Sxfl6pZz780MeRZVjnsVs0dO2ODslaD61a89G2TBHqi4m3cD
+	9C3qam6rxQhugWtXO+LC3MZDI3Ykls4dnPKsl9zMx+4gRkAtk8j5mlCKTCw0Y+VZf/I=
+X-Gm-Gg: ATEYQzxIgCUmtMOHR9Ee+VJbPHDV0q/i1DYVIouJbcpQZLAW9xH/W9GQguk6mbECFcb
+	Ejkbm+iPSsGgAhDy3jxI0XGKcBFWkxG4GuN6grf1babmC/cPCfZXSgcI5FobrxK4szrKtT2tWb1
+	I73/npYqYw0tf8dgYxcDRiAZO43ElOU0Ib9wXcZ+hTba/8iOuZWune0Zl/Qw4qveZzq4YLUpJPB
+	yrFfflTC/ja0keT2X2q7KiaCJmlZFkkqQy64Eq3gFCk49TNhGJUaUNEs/w6+SRi+31OFp/Zj9ns
+	LLzVTIvi3c2X2i9K2XK1F8OoXcNqoDdRCxDsiPTUlnylQl1KcrurMz8kSjfoGthsasDuSteZEdh
+	Yf8a6FJi0TooKCf84a3agKcCUv9dXfcRTQlBUrg9BSY/fJlBn1hpwuqNcTVXN0V8WyircWVrFRD
+	34LgUq
+X-Received: by 2002:a05:6830:82bd:b0:7d7:d216:2b26 with SMTP id 46e09a7af769-7d7d2163d29mr1417083a34.4.1773856191557;
+        Wed, 18 Mar 2026 10:49:51 -0700 (PDT)
 Received: from CMGLRV3 ([2a09:bac5:947d:1b37::2b6:4e])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7d7c9950ef9sm2751073a34.2.2026.03.18.10.34.19
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7d7c9b3696asm2632316a34.16.2026.03.18.10.49.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Mar 2026 10:34:20 -0700 (PDT)
-Date: Wed, 18 Mar 2026 12:34:17 -0500
+        Wed, 18 Mar 2026 10:49:51 -0700 (PDT)
+Date: Wed, 18 Mar 2026 12:49:48 -0500
 From: Frederick Lawler <fred@cloudflare.com>
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
 	"Serge E. Hallyn" <serge@hallyn.com>,
 	Eric Paris <eparis@redhat.com>, Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
@@ -74,80 +76,60 @@ Cc: Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
 	Shuah Khan <shuah@kernel.org>,
 	=?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
 	=?iso-8859-1?Q?G=FCnther?= Noack <gnoack@google.com>,
-	linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org,
-	audit@vger.kernel.org, bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, kernel-team@cloudflare.com
+	LKML <linux-kernel@vger.kernel.org>,
+	LSM List <linux-security-module@vger.kernel.org>,
+	audit@vger.kernel.org, bpf <bpf@vger.kernel.org>,
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
+	kernel-team <kernel-team@cloudflare.com>
 Subject: Re: [PATCH RFC bpf-next 0/4] audit: Expose audit subsystem to BPF
  LSM programs via BPF kfuncs
-Message-ID: <abriGVbtYY1zhupD@CMGLRV3>
+Message-ID: <abrlvEjQKUdAOcw5@CMGLRV3>
 References: <20260311-bpf-auditd-send-message-v1-0-10a62db5c92f@cloudflare.com>
  <CAP01T77VyW=5SHDvM3HXPNHaxRdzs8H__MOh2zx1dQ6STeAUtg@mail.gmail.com>
+ <CAADnVQJCJaLjGCwjCX9VtT615c4kn7v5bxviUmGFVj=uTtUHMg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CAP01T77VyW=5SHDvM3HXPNHaxRdzs8H__MOh2zx1dQ6STeAUtg@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAADnVQJCJaLjGCwjCX9VtT615c4kn7v5bxviUmGFVj=uTtUHMg@mail.gmail.com>
 
-Hi Kumar,
+Hi Alexei,
 
-On Tue, Mar 17, 2026 at 03:43:36AM +0100, Kumar Kartikeya Dwivedi wrote:
-> On Wed, 11 Mar 2026 at 22:31, Frederick Lawler <fred@cloudflare.com> wrote:
-> > 3. All bpf_audit_log_*() functions are destructive
+On Tue, Mar 17, 2026 at 06:15:59PM -0700, Alexei Starovoitov wrote:
+> On Mon, Mar 16, 2026 at 7:44 PM Kumar Kartikeya Dwivedi
+> <memxor@gmail.com> wrote:
 > >
-> > The audit subsystem allows for AUDIT_FAIL_PANIC to be set when the
-> > subsystem can detect that missing events. Further, some call paths may
-> > invoke a BUG_ON(). Therefore all the functions are marked destructive.
+> > On Wed, 11 Mar 2026 at 22:31, Frederick Lawler <fred@cloudflare.com> wrote:
+> > >
+> > > The motivation behind the change is to give BPF LSM developers the
+> > > ability to report accesses via the audit subsystem much like how LSMs
+> > > operate today.
 > 
-> I think the first part makes sense (i.e., the policy simply configured
-> the system to panic on failure).
-> However, in the second case, if the program is somehow able to trigger
-> BUG_ON() relied upon for internal invariants, it would be considered
-> broken.
-> I tried grepping through and didn't find anything that would cause
-> this, hence the whole thing about BUG_ON() in the cover letter only
-> adds to confusion.
-> Please drop it or describe cases which you were concerned about.
-> 
+> Sure, but bpf lsm-s don't need to follow such conventions.
+> audit is nothing but a message passing from kernel to user space
+> and done in a very inefficient way by wrapping strings into skb/netlink.
+> bpf progs can do this message passing already via various ways:
+> perfbuf, ringbuf, streams.
+> Teach your user space to consume one of them.
 
-bpf_audit_log_cause()
- -> audit_log_untrustedstring()
-   -> audit_log_n_untrustedstring()
-     -> audit_log_n_hex()
+Audit provides additional functionality by keeping messages close to the
+syscall, and in-line with other messages for that syscall. Aside from
+that, BPF is arguably too flexible. I'm sure it's already understood,
+but the idea here is to reduce bespoke logging implementations and reduce
+attack surface for violation reporting. Audit is already provided by the
+kernel and a well leveraged pipeline.
 
-Was the primary call chain I was referring to, and yes this relies on
-internal invariant of the SKB existing. I can remove from cover.
+WRT to performance characteristics, would you rather see this
+implementation leverage those maps in a way to reduce that, background
+workers, or something else? This is something we've considered, but left out
+of RFC to collect more opinion on perf considerations.
 
-> >
-> > 4. Functions are callable once per bpf_audit_context
-> >
-> > The rationale for this was to prevent abuse. Logs with repeated fields
-> > are not helpful, and may not be handled by user space audit coherently.
-> >
-> 
-> This rationale feels weak. What abuse are we talking about?
-> The LSM program is already written by a trusted entity.
-> 
-
-I learned through off-list discussions that there's "undocumented" or
-"unspoken" rules of log formatting and how auditd expects logs. Without
-knowing exactly what these rules are, I can't provide any stronger
-arguments other than to reduce duplication of fields in messages, or
-exclude wrappers that supply unverified data.
-
-WRT to unverified data, the socket wrappers accepting a netinf int.
-In that case, the variable is at least verified via lookup to
-report the interface in which it belongs. I left out wrapping
-LSM_AUDIT_DATA_ANONINODE due to the passing of arbitrary string,
-LSM_AUDIT_DATA_IPC arbitrary int. Others like for infiniband,
-lockdown, nlmsgtype, were left out due to specificity, and not general
-purpose usage.
-
-Some of the rationale behind this is _not_ trusting BPF LSM authors as
-much due to BPF LSM flexibility and accommodating user space audit.
+Thanks for bring this up. I forgot to include that in the RFC cover, sorry.
 
 Best,
 Fred
