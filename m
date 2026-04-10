@@ -1,140 +1,119 @@
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+Received: from mail-qk1-f181.google.com (mail-qk1-f181.google.com [209.85.222.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20FD53C7E17
-	for <audit@vger.kernel.org>; Fri, 10 Apr 2026 21:34:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.180
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775856863; cv=pass; b=LgzF605LCppq32Z+HUgODNPQDuujacMuSHK9aY551dVImPsIImThmccgB863oKf17zHaPosMlsVnDbqebY52A749S2xi98rzD+xadkP6BKlgNocyK+DbcnMUo8zVBGjGEEaHla0E39kOWyPCChuvl0KZ8YM3W2AQvj2PTSLgs/c=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775856863; c=relaxed/simple;
-	bh=rCHPpW4pBeY/hAAE1d4CFC1ovoB82ibufrzuUJVdmeI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=fmvPBEbgaKSrHLiQxWpLRSwyz3+8D9w3uIf4NMekXWY6szTJVB2KCZNT4LzPwaduvtiiClBgtla1cB9w38Bn8TZJJl1QgstKBlw6TdGcpfBjOGsZJdv7hplEmhbAz5/7F/lstwLI1Odz8ks12ZjlltN3Z6uweIJSqGKJGTuUaJQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=eyOpyGyo; arc=pass smtp.client-ip=209.85.214.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D62D731326B
+	for <audit@vger.kernel.org>; Fri, 10 Apr 2026 23:26:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.181
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775863582; cv=none; b=VA7Yi9dBRcAC6yz/CA6zkLKUkT8FX9llc4NdN9oxdj7Rjp0q8Wv+qrzy3oNbe97+6R9+zOkbqKIkjPah043qarrYLaVOw64NRMs04O/Qe4iBqUtUP25z9gBuYbH6Y1Bk9yi8ORsr1yUknFATZxfiyN+Ikrl6r7p+p1p+d808BYc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775863582; c=relaxed/simple;
+	bh=KA7uUOnhRww9b4GyvkYPCc05eBfyeVHZOYeTqjsjtf8=;
+	h=Date:Message-ID:From:To:Cc:Subject; b=SCcV8Gb9Q/ePlFYHrYVP7H6gjVaC/HUWKxg51fFddlWWQt1w7JCDY0+p89WeMRvN6B7CIjYRpiVNCCtovaN66ZcKtXBpw9r3lLkOvIbfe2WaJdZr6Fua5BdkL7eX3Z00hVZ9+46pb0709RcYo8EI9blodAO352vpC5BgPYA2Vik=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=a3OI1ZAJ; arc=none smtp.client-ip=209.85.222.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="eyOpyGyo"
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2b2589c26e3so23498325ad.1
-        for <audit@vger.kernel.org>; Fri, 10 Apr 2026 14:34:21 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1775856860; cv=none;
-        d=google.com; s=arc-20240605;
-        b=QpN9HXgts0M0T/mjmNaDXhpmP7egJbLLZep96P1sNPNdHMGoVvbvsufo2DAy8CnH79
-         axQxljF7bpmPpGLC5xX/dsHLFUoY+86y6ZmeNT9gGJ9rZV+hB9MxSN57DSobDC00YhYW
-         F4ZA2umznZrjbcBCfQeZhdfdfpkP9C0stVlUzCzB87Tx3daMnYHXf1pqhHUTYx+iyvH6
-         hsNVFHJ+r8mEDVBk3TmqtJ8WMR0fZOcs/sYW0tLngewLYKp0WPufUMpI8pAS0YN/oLLZ
-         6I2Oc2/fMpPGDDzibgyJhjxlz+fHs4FBseF90XSZpxscJ9jbhunQfpx9b2NQZE9tbETn
-         xBBg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=ZBTz/n2iK2krJfXXDUHECjvOs2cMh613gVJ0BbHB8uk=;
-        fh=9YiDhQQuGtXudNzVj0W9t/0r91nNppahqdMj9yS/MS0=;
-        b=V5JMJLf29Op3g05ujL/t2kaqo2AMmXAoeOtzowRYfhX3CoSNzJ6Zty64AZjCRRLyJG
-         59CyMfV9BKqGx3FbeznxBBs7bRnk9drTJUWn/RQ1xIRgDpmw+BzNCQFwFjzFpRhYVII4
-         tp0qYidl5o1o5OxEIz4pJvfw0JY+O83U3lvz/PogYyr5bP+m7tzQQBMBRRxnnslWpedr
-         FszQrfiQZOuQJAraF0yCz9CI8kmZmomlCcmMqG/MLOTBZKViOEnLfrMVngZH+5Wtfduo
-         845UFpusnnOu9tHoek/if8H5aORFOIAqYAdbnbPM6rkAz2htXz+tmqvsIuAFniVzRVz1
-         7OvA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="a3OI1ZAJ"
+Received: by mail-qk1-f181.google.com with SMTP id af79cd13be357-8d424af6282so287377685a.0
+        for <audit@vger.kernel.org>; Fri, 10 Apr 2026 16:26:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1775856860; x=1776461660; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=paul-moore.com; s=google; t=1775863580; x=1776468380; darn=vger.kernel.org;
+        h=subject:cc:to:from:message-id:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ZBTz/n2iK2krJfXXDUHECjvOs2cMh613gVJ0BbHB8uk=;
-        b=eyOpyGyoyukdyJyJpCXSQkUepLCQZIdPO4K9caz2tugZmJ2qOFJzsEYdW/jMnNPZau
-         MapgeBkVxOdm+fSoicx7IyvpL6IzcswMkRdod39ShKuYqnQZQAWbF0mfNJycdmvYe8tS
-         sP+MuSOgEW9H8JO3y1H9rNk80JFA1kK1vdtmYf52rLdNr3upjZ1Ddjp1e5dANh/cJ6ME
-         9OeHa8AMi401p5rchc+IfWS6qtLdN868owj36YPFQV4a94R3Lp1yh/u8apqehDD/clNm
-         XDYcj1he6YPf4CJtGFhlXfPchpR6kONyahVrlG+xBZXhMRRN4fWCzKUF0Sqc/1f2O/5p
-         TVYg==
+        bh=2tuuWDfVqo3HnwaiRO7L8wSSM192dD/oFR/YejEl62Q=;
+        b=a3OI1ZAJyWemcJ1/0PmcAun4ixME1Z0WFva6RblBDZiMnFd4r+s9Qq1Wi2q1ZpA46g
+         z2ya5zB1+Dp5h/pp7TCWQXMcLtDasskpQlbRPdCsAPp8bkO2QdAE8XUUfrqsrQYjHY51
+         8iQQJsUcmzvnxl/xgjit4XQkSqtaERuShq/OFWoGRQxBJ48E44zsxmD+GjmyVcQFFtx8
+         C/QvNg29CU18nvsSmzeAIeBfIdvvMScBDwO+HXmWobH1ox844LGDKaMVVA6v+5tfu/20
+         aE3bS41WfIoKvqVXTgWpSSZAfpb5hNIcR6mGwTIeIzKaIZy+e7UKkjPylRQnGXu4iiUR
+         Xhfg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775856860; x=1776461660;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+        d=1e100.net; s=20251104; t=1775863580; x=1776468380;
+        h=subject:cc:to:from:message-id:date:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=ZBTz/n2iK2krJfXXDUHECjvOs2cMh613gVJ0BbHB8uk=;
-        b=laT8aJ+8d+gGm0CVkghChXbf2tPJNhzUhlK7ShFPmLQMYFEkrdpztGqKJJmnB6Bm8f
-         al30EFIT/WN4M7/wuza8QNoKTPk1G5KzJa/czenL+ZqUksPkyTJkRoctCRHdD3M8zNur
-         31bWm2kFiTZOQJhr5rJfBU3zjgc5ZtWt+sKlQIXxwRqfdm//XRLgqxMCa4Mhk6KRI0Li
-         3dkRXOWOwsX9s3Mo19nabYL8E5qIE+GX1Yi1fDfG37kT+mHJZjSS9x6JFIaD+WbAMgtR
-         oMLq1Zc+l3mDsHpxKQRZpFrHEB5MF54oAdsNJGIWmL16tbbblHY+jA8Fzb7KxMpx6dV0
-         ZygA==
-X-Gm-Message-State: AOJu0YxtFZEdwlzXyyUgdi4Sojmwkw6MO+Yk108aI1akqAfq8SviNe+p
-	m1U8oT8lsCZMAdNrQ+nKAy4bE3lFrmFuyDUt34UjyC05VzDtfqiPJQc+N2ToKWLTXjCPbBLIKR7
-	cp3MXo7IRzvFOzhE6Y+WxVu/4WTJ96VzbhaeI4W2k
-X-Gm-Gg: AeBDiesNtxEGaW0CvNJG/GxzhIHU/CTHiTY/DCBbwhYQYTo4rmSTZrKu8sDTBVCbbgl
-	lPfz4Onttq0Vez2eZS/c0MhvgddJuBvn28XY2BIF5/pTc6To3EH5plbSUl3c7Avk2OeD/5wMLuS
-	u8nce6duws2RsC1zE+m9DKniObldHFK6nAuX51OX9GNKa4dyJRAlyZHqIo0IxScU0kyxQPRvOZL
-	8CLaSDtqbJFahD+xcD6vSDreJy3pto6PvMdgkLq49tuMCxk5cjNKX9REWUzafcTGeBv0HRlwCTw
-	5yNWgJKNgYNFcKr7hg==
-X-Received: by 2002:a17:902:7884:b0:2b0:643b:41c9 with SMTP id
- d9443c01a7336-2b2d595c808mr33693815ad.9.1775856860535; Fri, 10 Apr 2026
- 14:34:20 -0700 (PDT)
+        bh=2tuuWDfVqo3HnwaiRO7L8wSSM192dD/oFR/YejEl62Q=;
+        b=ZB69RTP9p+wtKSZSeY2cthfHG0nabwcI9wE7Qrbj/rBstkRkh5wCZAGLwNwDqMJZRm
+         qBfrDQbcAWElahYbP/NCzLO1bTWdhXcLtFshtBGc/e5LpLUI9FBlFIbqbouk/Bolg5GS
+         YlLT/axPViVlOZWdKuHcaNprJHH3GhAAXmX4FaBKzxhmWxn+x9KtXoArd4HheyKyRgKW
+         n7fGFqRX7CE0EMnLi1YxbwBA8WEuQVN92GOYHFgU5tL75kLwvD32OvsD+uctvz/plJ67
+         gkfVvj69GGo1iwvTiLIyxCc7dOSPXC9pDxp0iUQR7UnF4ekLmNvI/EY8J66YWKNCe+A1
+         8OXw==
+X-Gm-Message-State: AOJu0Yy+5fCbUA9XOkiD9E5sshq55/PkhbhvqEaiBLkwRku6rCr+drDj
+	1XD84WhdtESk2XDUgRMY6D2t3vkFQqMhrss7KZlOrWuUkWGjlkYtdYzuf2zYpVS3Hg==
+X-Gm-Gg: AeBDieuLWR4sBmngCTsQsB1QzuMc/2193Ao7xM/cakhXYddcqq3jj75nXvT6to6O0JY
+	F4kG5csdNk+sjvB2duh47Oo7jo+GzD5m82/XA7b/hLQjf2TaHtxrw1Jj+FmofYnY5hZd+Q0QbZK
+	DD6p5P0AGIgi5ZbTidGCsEVKNx2a6qZgd0ZoxmgcxNr405Baz8OKtSzanxjMJh+OF67AsU7lpxb
+	WlEqOC/6ZqblzRanrYNjbmM5UpGy7NxuSconrZqu7pSwoTr8Z8b9cB6XcyRohyeFOSI3BUfspm5
+	/tYSzvwYeXFkou2Nt23O1Jfy4VR+aBvsrleo/3/bjGV3THYPaKizhjA0oFOKzrcUQdv03/XrVlE
+	RlnQ/vCP25RIdZ9fX5SnQzIO0mojPyVAkaWc3CDnCEkavceiNinkbHShiT0cBa6yDCQLO9Lezvv
+	cd55CxjIG2IobHlyP1SSK80QpVjpD6Ynu+vB0yDm4QZywCGQXptkHUkSqhXJFcE5B2gayS
+X-Received: by 2002:a05:620a:294c:b0:8d0:162:31b with SMTP id af79cd13be357-8ddcf2b18cemr727439985a.32.1775863579812;
+        Fri, 10 Apr 2026 16:26:19 -0700 (PDT)
+Received: from localhost (pool-71-126-255-178.bstnma.fios.verizon.net. [71.126.255.178])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-8ddb6469c60sm330001085a.14.2026.04.10.16.26.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Apr 2026 16:26:19 -0700 (PDT)
+Date: Fri, 10 Apr 2026 19:26:18 -0400
+Message-ID: <dea7bb546d49cbb8f342e016235ba4c3@paul-moore.com>
+From: Paul Moore <paul@paul-moore.com>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: audit@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] audit/audit-pr-20260410
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20260323150700.614139-1-rrobaina@redhat.com>
-In-Reply-To: <20260323150700.614139-1-rrobaina@redhat.com>
-From: Paul Moore <paul@paul-moore.com>
-Date: Fri, 10 Apr 2026 17:34:08 -0400
-X-Gm-Features: AQROBzAZQv4zxN6peGHpsUPkTNxJJ_eYPo4HdttdLtzvW3raZ0Fqmbb9CU1A2Gw
-Message-ID: <CAHC9VhQTGfuOYev_UNzwSqUoYX-y+RYyMZgWWG2eGzM62eVm9A@mail.gmail.com>
-Subject: Re: [PATCH] audit: add backlog high water mark metric
-To: Ricardo Robaina <rrobaina@redhat.com>
-Cc: audit@vger.kernel.org, linux-kernel@vger.kernel.org, eparis@redhat.com, 
-	sgrubb@redhat.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Mon, Mar 23, 2026 at 11:07=E2=80=AFAM Ricardo Robaina <rrobaina@redhat.c=
-om> wrote:
->
-> Currently, determining the optimal `audit_backlog_limit` relies on
-> instantaneous polling of the queue size. This misses transient
-> micro-bursts, making it difficult for system administrators to know
-> if their queue is adequately sized or if they are at risk of
-> dropping events.
->
-> This patch introduces `backlog_max_depth`, a high-water mark metric
-> that tracks the maximum number of buffers in the audit queue since
-> the system was booted or the metric was last reset. To minimize
-> performance overhead in the fast-path, the metric is updated using
-> a lockless cmpxchg loop in `__audit_log_end()`.
->
-> Userspace can read-and-clear this metric by sending an `AUDIT_SET`
-> message with the `AUDIT_STATUS_BACKLOG_MAX_DEPTH` mask. To support
-> periodic telemetry polling (e.g., statsd, Prometheus), the reset
-> operation atomically returns the snapshot of the high-water mark
-> right before zeroing it, ensuring no peaks are lost between polls.
->
-> Link: https://github.com/linux-audit/audit-kernel/issues/63
-> Suggested-by: Steve Grubb <sgrubb@redhat.com>
-> Signed-off-by: Ricardo Robaina <rrobaina@redhat.com>
-> ---
->  include/linux/audit.h      |  3 ++-
->  include/uapi/linux/audit.h |  2 ++
->  kernel/audit.c             | 32 ++++++++++++++++++++++++++++++++
->  3 files changed, 36 insertions(+), 1 deletion(-)
+Linus,
 
-I sat on this for a bit because I wanted to think on it for a while.
-While I agree audit could benefit from better statistics around
-queue/backlog status, I'm not sure a single "max" value alone is worth
-a bit in the audit_status bitmask.  My concern is that the max queue
-length only provides a single snapshot of what the queue looked like,
-it doesn't give any indication of the average queue length over a span
-of time.  Some audit users are willing to live with occasional drops,
-and the max size doesn't help them arrive at a good balance.
+We've only got a few audit patches for the v7.1 merge window, the
+highlights are below:
 
-As for the users who can't tolerate any audit record drops?  They
-shouldn't be running with a backlog limit anyway so the maximum queue
-value will be of limit use.
+- Improved handling of unknown status requests from userspace
 
---=20
+The current kernel code ignores unknown/unused request bits sent from
+userspace and returns an error code based on the results of the request(s)
+it does understand.  The patch from Ricardo fixes this so that unknown
+requests return an -EINVAL to userspace, making compatibility a bit
+easier moving forward.
+
+- A number of small style and formatting cleanups
+
+Paul
+
+--
+The following changes since commit 6de23f81a5e08be8fbf5e8d7e9febc72a5b5f27f:
+
+  Linux 7.0-rc1 (2026-02-22 13:18:59 -0800)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/audit.git
+    tags/audit-pr-20260410
+
+for you to fetch changes up to 360160f75592bdc85edba8fe78fb20d90924c7e8:
+
+  audit: handle unknown status requests in audit_receive_msg()
+    (2026-03-10 15:22:43 -0400)
+
+----------------------------------------------------------------
+audit/stable-7.1 PR 20260410
+----------------------------------------------------------------
+
+Ricardo Robaina (4):
+      audit: fix whitespace alignment in include/uapi/linux/audit.h
+      audit: remove redundant initialization of static variables to 0
+      audit: fix coding style issues
+      audit: handle unknown status requests in audit_receive_msg()
+
+ include/linux/audit.h      |    9 +++++++++
+ include/uapi/linux/audit.h |    8 ++++----
+ kernel/audit.c             |    8 +++++---
+ kernel/auditfilter.c       |    3 +--
+ lib/audit.c                |    2 +-
+ 5 files changed, 20 insertions(+), 10 deletions(-)
+
+--
 paul-moore.com
