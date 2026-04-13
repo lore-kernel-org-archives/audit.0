@@ -1,119 +1,113 @@
-Received: from mail-qk1-f181.google.com (mail-qk1-f181.google.com [209.85.222.181])
+Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D62D731326B
-	for <audit@vger.kernel.org>; Fri, 10 Apr 2026 23:26:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5671E38E5E1
+	for <audit@vger.kernel.org>; Mon, 13 Apr 2026 22:13:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775863582; cv=none; b=VA7Yi9dBRcAC6yz/CA6zkLKUkT8FX9llc4NdN9oxdj7Rjp0q8Wv+qrzy3oNbe97+6R9+zOkbqKIkjPah043qarrYLaVOw64NRMs04O/Qe4iBqUtUP25z9gBuYbH6Y1Bk9yi8ORsr1yUknFATZxfiyN+Ikrl6r7p+p1p+d808BYc=
+	t=1776118390; cv=none; b=UJ6v3ZwqkCsDqQNifflX5nVVTpgWdLj2q+VOL9I+Rj+0RA4T7XbxJA8lB3mn9YzmF6Te4Z6VBAoTX6ASpb4mw5FY/CHh/tpAwQQ9LBuaSE6ZEr0LKxNIyNdtYSEdLWiROt3R6XZokLNNnwloRRasuEFFlcFADQsXcllvaX+8+Ug=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775863582; c=relaxed/simple;
-	bh=KA7uUOnhRww9b4GyvkYPCc05eBfyeVHZOYeTqjsjtf8=;
-	h=Date:Message-ID:From:To:Cc:Subject; b=SCcV8Gb9Q/ePlFYHrYVP7H6gjVaC/HUWKxg51fFddlWWQt1w7JCDY0+p89WeMRvN6B7CIjYRpiVNCCtovaN66ZcKtXBpw9r3lLkOvIbfe2WaJdZr6Fua5BdkL7eX3Z00hVZ9+46pb0709RcYo8EI9blodAO352vpC5BgPYA2Vik=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=a3OI1ZAJ; arc=none smtp.client-ip=209.85.222.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+	s=arc-20240116; t=1776118390; c=relaxed/simple;
+	bh=mzSETmPlB3/o3Z/vnqCDwq26ZuYicrt2MOHS0C4VMJw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=VizX5zoKLBsK8XpTQA/q0msOe0w1rxnaSY6iSuxhUk4YOje5tR4ZFcC+38Wt39SA4b8kC/Fs6l/25/hU+vlLYVnRYlTN4g2R6o9ceru83SeePXqJqUSSU8Y4TIBxxva7WVzSUOTkv7KDIP7zyLgnLsseXiGS3GS7ZUCG0Ua3hrQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=YsnMJ9j1; arc=none smtp.client-ip=209.85.218.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="a3OI1ZAJ"
-Received: by mail-qk1-f181.google.com with SMTP id af79cd13be357-8d424af6282so287377685a.0
-        for <audit@vger.kernel.org>; Fri, 10 Apr 2026 16:26:20 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="YsnMJ9j1"
+Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-b936331786dso569057966b.3
+        for <audit@vger.kernel.org>; Mon, 13 Apr 2026 15:13:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1775863580; x=1776468380; darn=vger.kernel.org;
-        h=subject:cc:to:from:message-id:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2tuuWDfVqo3HnwaiRO7L8wSSM192dD/oFR/YejEl62Q=;
-        b=a3OI1ZAJyWemcJ1/0PmcAun4ixME1Z0WFva6RblBDZiMnFd4r+s9Qq1Wi2q1ZpA46g
-         z2ya5zB1+Dp5h/pp7TCWQXMcLtDasskpQlbRPdCsAPp8bkO2QdAE8XUUfrqsrQYjHY51
-         8iQQJsUcmzvnxl/xgjit4XQkSqtaERuShq/OFWoGRQxBJ48E44zsxmD+GjmyVcQFFtx8
-         C/QvNg29CU18nvsSmzeAIeBfIdvvMScBDwO+HXmWobH1ox844LGDKaMVVA6v+5tfu/20
-         aE3bS41WfIoKvqVXTgWpSSZAfpb5hNIcR6mGwTIeIzKaIZy+e7UKkjPylRQnGXu4iiUR
-         Xhfg==
+        d=linux-foundation.org; s=google; t=1776118387; x=1776723187; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=MIVqdVMRO1TGBX25sA3Ic6pDeH5wiL9H+6o50VCf3KQ=;
+        b=YsnMJ9j1WLIE4+KLxMSXLUXLrZCqOwRrlvUuL2s3naiZyODTPhgcfnasjI2CeuhB7e
+         diqwGjqHRzebOG4Gtz4L7+QInkj6F6AOTPWiOVn7sJZ/jCnpTeA/DqqjW8s7//gz4dM9
+         GBxBkMJiNsZ23yPkA45WVPtOicyrYl8umFpL8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775863580; x=1776468380;
-        h=subject:cc:to:from:message-id:date:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=2tuuWDfVqo3HnwaiRO7L8wSSM192dD/oFR/YejEl62Q=;
-        b=ZB69RTP9p+wtKSZSeY2cthfHG0nabwcI9wE7Qrbj/rBstkRkh5wCZAGLwNwDqMJZRm
-         qBfrDQbcAWElahYbP/NCzLO1bTWdhXcLtFshtBGc/e5LpLUI9FBlFIbqbouk/Bolg5GS
-         YlLT/axPViVlOZWdKuHcaNprJHH3GhAAXmX4FaBKzxhmWxn+x9KtXoArd4HheyKyRgKW
-         n7fGFqRX7CE0EMnLi1YxbwBA8WEuQVN92GOYHFgU5tL75kLwvD32OvsD+uctvz/plJ67
-         gkfVvj69GGo1iwvTiLIyxCc7dOSPXC9pDxp0iUQR7UnF4ekLmNvI/EY8J66YWKNCe+A1
-         8OXw==
-X-Gm-Message-State: AOJu0Yy+5fCbUA9XOkiD9E5sshq55/PkhbhvqEaiBLkwRku6rCr+drDj
-	1XD84WhdtESk2XDUgRMY6D2t3vkFQqMhrss7KZlOrWuUkWGjlkYtdYzuf2zYpVS3Hg==
-X-Gm-Gg: AeBDieuLWR4sBmngCTsQsB1QzuMc/2193Ao7xM/cakhXYddcqq3jj75nXvT6to6O0JY
-	F4kG5csdNk+sjvB2duh47Oo7jo+GzD5m82/XA7b/hLQjf2TaHtxrw1Jj+FmofYnY5hZd+Q0QbZK
-	DD6p5P0AGIgi5ZbTidGCsEVKNx2a6qZgd0ZoxmgcxNr405Baz8OKtSzanxjMJh+OF67AsU7lpxb
-	WlEqOC/6ZqblzRanrYNjbmM5UpGy7NxuSconrZqu7pSwoTr8Z8b9cB6XcyRohyeFOSI3BUfspm5
-	/tYSzvwYeXFkou2Nt23O1Jfy4VR+aBvsrleo/3/bjGV3THYPaKizhjA0oFOKzrcUQdv03/XrVlE
-	RlnQ/vCP25RIdZ9fX5SnQzIO0mojPyVAkaWc3CDnCEkavceiNinkbHShiT0cBa6yDCQLO9Lezvv
-	cd55CxjIG2IobHlyP1SSK80QpVjpD6Ynu+vB0yDm4QZywCGQXptkHUkSqhXJFcE5B2gayS
-X-Received: by 2002:a05:620a:294c:b0:8d0:162:31b with SMTP id af79cd13be357-8ddcf2b18cemr727439985a.32.1775863579812;
-        Fri, 10 Apr 2026 16:26:19 -0700 (PDT)
-Received: from localhost (pool-71-126-255-178.bstnma.fios.verizon.net. [71.126.255.178])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-8ddb6469c60sm330001085a.14.2026.04.10.16.26.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Apr 2026 16:26:19 -0700 (PDT)
-Date: Fri, 10 Apr 2026 19:26:18 -0400
-Message-ID: <dea7bb546d49cbb8f342e016235ba4c3@paul-moore.com>
-From: Paul Moore <paul@paul-moore.com>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: audit@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] audit/audit-pr-20260410
+        d=1e100.net; s=20251104; t=1776118387; x=1776723187;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=MIVqdVMRO1TGBX25sA3Ic6pDeH5wiL9H+6o50VCf3KQ=;
+        b=M6QELEzqTDFGCQFAb69e87y+kDl1KETs2MhkpHD1TPDU5oYbO3BjcUB97YFj+jHdKS
+         Z/ykrRPXpmnqLL/BWCoz12wuj/CPPKBekv7DtygTxBOaY5e7N0FatwkAox/pGBg3ZhJq
+         S49tblHYWisO+6Dzb+j99qJjKtF7C3WnECKNpX5/cpU0A5BBnS/SkSZChWb3Tviu+ySd
+         n55RBfXe17tioYx/7wZ3e5VXy6pYO8BH19uPE9pvBg4i4XEsBVNqi7GHeeGAoi3iwu2q
+         zQbKgOUMkr77P6U9Ivqln5Yqk4YjmfxEk/bJcq48Is/MiNcrZ2aa1AQMbUYm2WmEt/J4
+         wosw==
+X-Gm-Message-State: AOJu0YxDXK0FNQ9kjp0gDhxZaPArw574oD3R6lGyaJq4JObrTAYUIYfq
+	NwOPOac4uk7Qz8cuFK4Ob3tGW/Hg/1wnOs9bz6MPLqoswKhw2jhbBx0lWVWxwp7YEhyV7BZJhQ/
+	b2y24BBk=
+X-Gm-Gg: AeBDietN376Rg0l9qLqteCfnW0Sj73ZgmpoT4aWpbCBUaGaBntYLV5Zts8cyHwlS6Vj
+	6K+W4GVVKQ/6CSqQmBzthu/ZzSlBIQHeKWyBldn9FhoDi6FTnRV6jv9uYqsu0NMSgw8jijXZc5/
+	hXnRbAb8wy1z31sjM6wMyfrTXW95v58HX7Np2SsTzbomcUp1zyfXNLlRJU/6W+IW+BAl/n6BcqU
+	yLrPt3YYhIr5qbEH5qJAZXC9SFPNzll4/xJpH7uA/Vubo62Q5PoID68GnlZ3lYHP8OYNKBAEYLs
+	zApeCE0kYOs0csKBsyDl5amH2Bw9p0wkfOeRpNmGOTS70IoxME9jNGJ1PVh94Mt7t2YmSWPEGQV
+	oQ+tpQKEOwBg9S/+pD9wPPqVIHO/tdDQEjkAscR/g0RqU5sdDiCFWtYdPYuq7sJdMDhZMUVFZXk
+	DAkLl2U62VmMJoJHpFb7M2pHPvae7Ju7KKWIDIB1zcZ7JMxC4Oyz1vAdZ2lBiVUGxvr9A7MOlk
+X-Received: by 2002:a17:907:8e11:b0:b9c:b9c3:3ead with SMTP id a640c23a62f3a-b9d727d6016mr834327366b.43.1776118387257;
+        Mon, 13 Apr 2026 15:13:07 -0700 (PDT)
+Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com. [209.85.208.43])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b9d6e7c8a13sm344425566b.53.2026.04.13.15.13.06
+        for <audit@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Apr 2026 15:13:06 -0700 (PDT)
+Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-6715594a4c2so1893444a12.1
+        for <audit@vger.kernel.org>; Mon, 13 Apr 2026 15:13:06 -0700 (PDT)
+X-Received: by 2002:a05:6402:505c:b0:66b:b6e2:66e1 with SMTP id
+ 4fb4d7f45d1cf-6707a47e6a3mr5418416a12.18.1776118386318; Mon, 13 Apr 2026
+ 15:13:06 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+References: <dea7bb546d49cbb8f342e016235ba4c3@paul-moore.com>
+In-Reply-To: <dea7bb546d49cbb8f342e016235ba4c3@paul-moore.com>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Mon, 13 Apr 2026 15:12:49 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wjCBBHUL=9K1iMrXFDPmfT5Wsu2oXDaADLG7j160OikhA@mail.gmail.com>
+X-Gm-Features: AQROBzC3Q1qQXWrjDvUH8H78O140BdYwUpHruuGfixEkpcUeLjE4A-3DuBofrBo
+Message-ID: <CAHk-=wjCBBHUL=9K1iMrXFDPmfT5Wsu2oXDaADLG7j160OikhA@mail.gmail.com>
+Subject: Re: [GIT PULL] audit/audit-pr-20260410
+To: Paul Moore <paul@paul-moore.com>
+Cc: audit@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-Linus,
+On Fri, 10 Apr 2026 at 16:26, Paul Moore <paul@paul-moore.com> wrote:
+>
+> We've only got a few audit patches for the v7.1 merge window, the
+> highlights are below:
 
-We've only got a few audit patches for the v7.1 merge window, the
-highlights are below:
+Pulled. However, can I ask you to take a look at my reply to one of
+the vfs pulls, which was actually triggered by audit overhead?
 
-- Improved handling of unknown status requests from userspace
+It's entirely unrelated to this particular audit pull, but maybe you
+have comments? See
 
-The current kernel code ignores unknown/unused request bits sent from
-userspace and returns an error code based on the results of the request(s)
-it does understand.  The patch from Ricardo fixes this so that unknown
-requests return an -EINVAL to userspace, making compatibility a bit
-easier moving forward.
+    https://lore.kernel.org/all/CAHk-=wiW53j3vmc1Y58-E_8jUBJtjgAVxDRt+r-w3WPQN+Zm5w@mail.gmail.com/
 
-- A number of small style and formatting cleanups
+and it's really all about that current "get_fs_pwd()" in
+audit_alloc_name(), and the cache contention it causes when lots of
+processes share the same pwd and you get everybody just updating the
+path refcounts.
 
-Paul
+Would it be reasonable to do something along the lines I suggest,
+where instead of getting that fairly "global" path refcount, instead
+get a reference (with some way to do a copy-on-write break on it) to
+'struct fs_struct' instead? No, we don't have that infrastructure (but
+it doesn't seem _hugely_ complicated - famous last words), and yes, in
+a heavily threaded app you'd still have potentially lots of threads
+sharing a 'struct fs_struct', but at least that thing is local to the
+process, so it's not shared beyond that.
 
---
-The following changes since commit 6de23f81a5e08be8fbf5e8d7e9febc72a5b5f27f:
+And no, I don't expect that you'd actually start being interested in
+the current root in auditing, but from a bigger VFS perspective, root
+and pwd really are just two instances of the exact same thing and I
+despise that spull that makes them different at a VFS level.
 
-  Linux 7.0-rc1 (2026-02-22 13:18:59 -0800)
-
-are available in the Git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/audit.git
-    tags/audit-pr-20260410
-
-for you to fetch changes up to 360160f75592bdc85edba8fe78fb20d90924c7e8:
-
-  audit: handle unknown status requests in audit_receive_msg()
-    (2026-03-10 15:22:43 -0400)
-
-----------------------------------------------------------------
-audit/stable-7.1 PR 20260410
-----------------------------------------------------------------
-
-Ricardo Robaina (4):
-      audit: fix whitespace alignment in include/uapi/linux/audit.h
-      audit: remove redundant initialization of static variables to 0
-      audit: fix coding style issues
-      audit: handle unknown status requests in audit_receive_msg()
-
- include/linux/audit.h      |    9 +++++++++
- include/uapi/linux/audit.h |    8 ++++----
- kernel/audit.c             |    8 +++++---
- kernel/auditfilter.c       |    3 +--
- lib/audit.c                |    2 +-
- 5 files changed, 20 insertions(+), 10 deletions(-)
-
---
-paul-moore.com
+                  Linus
