@@ -1,80 +1,80 @@
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
+Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 913942E11BC
-	for <audit@vger.kernel.org>; Wed, 15 Apr 2026 15:19:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.216.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6DCD318B9C
+	for <audit@vger.kernel.org>; Wed, 15 Apr 2026 15:22:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.42
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776266378; cv=pass; b=S3FDvMiGgPK9UtVgIF76F+FOLzkuza90r8WgYQ+LDDVnzR7NQdZ9LIPWxgu4n0qDvRx7PGTd+ToPZjfYNx+8Fp2gbo2ta1eXev7oxyX//zKOvGK6akqIgtrUDqv+3PD0woTEJDEaplkJHGDD5PAK52narR6v6TvLm3v+TQ7mbGU=
+	t=1776266534; cv=pass; b=Nf6u8ez+OYgJZ6Mlj3he2NnjR7gCowY/zSTZvtxp5glqM5ZFp1pC/0fhlVGlRHADdauuiccU1mnkV0mYOWgMMJPRd/7tiQyOmKBUgUUW5Ib2sEuM/rNZmt1xIy4QlXJsqruXC/5D26phFUMevM5Vztmz/sYWT0In6kp+OUN5X7E=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776266378; c=relaxed/simple;
-	bh=7KrMP4lRGQ7qKMe9fVsmrNjhAVvnL/c0u6hJgjV04F8=;
+	s=arc-20240116; t=1776266534; c=relaxed/simple;
+	bh=8aDBoYAH42BIAcbyyDh4WwAfg+/Qio584QqbIfuM5ys=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=jS5paqGRe0W1GnvqexHWvCn9BKcFWnfUpY7s3mZc7eM9Jjtxb4aFZ3fL74JymEqyO21FaVV/DV58NmcPWCe1YNqw2KlfArnxGendhVWcIgbwiBotEH3d387HrWqW9vTvGpqyfiweHxkToStMuhCImOphcrXV1LnORXtYsFZfZjg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=gRZR0fmd; arc=pass smtp.client-ip=209.85.216.43
+	 To:Cc:Content-Type; b=qpfdpmqOcOYINdUgJ4NqT04wB3HXsr5cqFi0q7M/2iO7hiDZ2YIxZJawkz37+iOTcjFtvMTW/u2PVZqnKXmet5vATWIWcTDse5EJzXUuYl5k7aUACxxmzcYyWp/YKTuIpu3iutk9szRVIohppkpjjI/D/AdPVKlmOEb/ZLnFwwM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=f9CLET3g; arc=pass smtp.client-ip=209.85.208.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="gRZR0fmd"
-Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-35fb16e56efso2465521a91.2
-        for <audit@vger.kernel.org>; Wed, 15 Apr 2026 08:19:37 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1776266377; cv=none;
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="f9CLET3g"
+Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-671c5eb7fb0so2888959a12.3
+        for <audit@vger.kernel.org>; Wed, 15 Apr 2026 08:22:12 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1776266531; cv=none;
         d=google.com; s=arc-20240605;
-        b=SKQ+9Mbvy3QoCO2HJEgUUl5NrjoMnfhjZYiFT725kG6w1o4Mx3EyBO7ZoMuyEhIYdr
-         9WUzO5ezKOI9OLJtOSvBtmy9DBb8CyjT4b1JIAGLjIItMQtIZPmT1n2vHb2eQvdFXvaa
-         abqdxLefhAQTj/XxehFUaOqDxdYxMEmL8J+ivBHKYd4nIy3VAXRH5znqTnkMt2GtbNaG
-         4eY/ciD7v2G+oyU4yGd8GxYua2PSbcyEgzDSx83TCPk520H3ajr236Xba6Q5fjTJu3kg
-         M31z00wyO5DF/1hyx34ZS50DcHXSphMC8/WTW4qwFYEgIsL796jE8vV8rGj+cBUWQ4aQ
-         2DAQ==
+        b=KL5aKqAqNltj0JjlF1bfJBU1Po/9q5fDzKlKIbtf0cngwyoIPZcLc6WNPlLQDgLa5e
+         EiLdfptsmtfBddzHyt4w5ipuaUGvfdV8Yp91v2KKAfivRbFuAr2apFZ/n/4SxCht45Vj
+         RV+sLvYMVMeYKFATgB+eDeU3Od+F8uQNXHpEeuePnz42+bFZknGsU1GAzUY+0SRa27tf
+         +129TSQUFg++BJ8O3y6RtRf2QigfLKYyJYyfQZ+OmGhWBqfbMMdt1MGjY4+zTLC/WC0+
+         cIXoKhPzkVLPLE2cV+/YxrWigFkCrGZ8rdr7O/Cilf7s99ebqyoNFx5MDRUNYW6yxxLT
+         a1ng==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=7KrMP4lRGQ7qKMe9fVsmrNjhAVvnL/c0u6hJgjV04F8=;
-        fh=yXNJP4QXyPSjn87lYBCEaZorLbSPCZBX71k2IXwbtis=;
-        b=kL2tVcQUefnOSYo+Krvhaqr9byR/iEcFaqjq1ksfloPi+SwB1eM/eixGpqqQ7lMOcj
-         cw3F7zBuNrhchpHpeWyDkisPTpqMKzREnmyTbvu0WSbj/9vJUZvs1P9a66dKhnIv2NBl
-         6CBxvxiIRrbWxfPSocwNxeRPEY5OFKyf653nUx32rkRa6jLjobk56QfXO+gGc7/tn4pC
-         Y8q0z4fDXIHioqLt7eVPxeOCcTHzeb8ndCEz4p3laLaPsHng2mq4MHLRuYfg8QSF9XLR
-         2SS+DJRQ3azJLTxummVzAHhOygR2u0bauA35y9n2QkuYt2hftBZnWFYOh6gA0PCl0VGm
-         zLXg==;
+        bh=drIUTElkxzV26yN/xpd8LbcC+ezO+yQ40iDvw1Giv6w=;
+        fh=cR1rO8v4h+48qBJVR6HibPQosUZwG4fZVraTx4EcR4Q=;
+        b=fSVOhtN5m8f29+H6ue8HVUlAaHUMN8GKWeuUi0vJQ5AbU2Wh8TK2CL0+bqAmmQAgnY
+         9eZLtfu0q9u3361Wflxiu7pXkAeCCSOQOWUIrEIcgYPz8n3AZakhBbt+dpBEgGnUxrF4
+         +/W7jv04zzJe6neCbv47MfnQx2c/efuDRyhbc8aazvcpBDFlzxVcTXPkeZWb3VFJGRO+
+         1IUPpPlqKhH7k/cwY3f4flhJEUDEQ7guz5iBX3tjLZNMw/6NMtHC4/OHNMFWBua4wnkp
+         umw3KFN4/qcQzVkU5+SNiKNt+msl97z4Y9ZNfXTpQOhs0JAB80mb2LA2DiLVLV62ZiPv
+         U9SA==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1776266377; x=1776871177; darn=vger.kernel.org;
+        d=paul-moore.com; s=google; t=1776266531; x=1776871331; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=7KrMP4lRGQ7qKMe9fVsmrNjhAVvnL/c0u6hJgjV04F8=;
-        b=gRZR0fmdq+Tgcoo3C6Pn49qZDeFEg5rN61lHK9z8GPiQXvnSGYW1ZMjz56R+k/4okz
-         cQmnWRGFAjqlzFRPHLtwRxo4XXWQ6y811uIbd14BeLOyerw5I98nL3n8sk/7wf/BHuXI
-         CSM0BUvBzxf44E+71JL/rdS4gUCnk/YNghUtNE1+3MB4y8tfs4g2YUU+6usWHyZ2MjFr
-         NYHWF18pBkQAMluH1GmOuyUGJO1wmLH8CeVXtVPyF0Purfkg7SN5uIe3tgkYbMKIHfUN
-         C6jd/SbtdoMhkUa3mgr056G7iZMaC4uJymEjvKFlg9NqZ949/vOmau6yYdHLxeXL4yW+
-         PMzQ==
+        bh=drIUTElkxzV26yN/xpd8LbcC+ezO+yQ40iDvw1Giv6w=;
+        b=f9CLET3gk7GXSqjxMev9vqlen31jhV44TTD33T3VvTT5Qz+hr4Nffc75MOkILtuGY9
+         i8/aP86wsM7PcaHf2dyw616g/VI3ieLn+U//dXJi4/1/Gh1ZCCpKQ8ssXvfnMfcKIkT7
+         94fW+qYwJ2J+rYgl0oFMLfrx5P/UDFAb/uGgiQa0EEP8zrHk3K/FvaJOqUOy1MDXyncA
+         OLhwEAlsxtA+RMDqs3Ra780Zopz9mn+19zSV3AgASL7qsD0lQ/sLB18W4Wxa3ddDJEFb
+         DlFDlcOO6mylYN3BjIhjGN4jHsKrbHJpJqQwAuwtOqUx1ZTVp9J8crqkc1xXQDsPmy85
+         6iRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776266377; x=1776871177;
+        d=1e100.net; s=20251104; t=1776266531; x=1776871331;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=7KrMP4lRGQ7qKMe9fVsmrNjhAVvnL/c0u6hJgjV04F8=;
-        b=H48Xf0WWb3QJCFhr8DssxNQQxH46KN7b8N72z9VooqEec6LfuYbSJsfHYOZA6qg5fx
-         sMJ1aeb2zWiBEQmfmDhw6JR/mPYF1YORxVEHEpmsL2XbsRIrU94KtItj8Sf+hpuRc8vH
-         jnbfISevAKJG7yK/y4i1BbrLykLkCkICMLe4n+cqB+4hMREHZ3usmjfBkP4wnvDSf3C5
-         CXuG1EBWsGh2HcNtBPkMg1r428NVFCtucCrJQ12+ErpkKEhp4nLhtjUwi6mtlRedBz8n
-         cUW1P46GCL3duE+0zmUNizZhVdYmVkQdixUCV4xa1TK76zLKO0/R0o2Bea61qAeYFvep
-         YCzg==
-X-Forwarded-Encrypted: i=1; AFNElJ+cHayrZQDFPZpTBdDE87hiQyP78ma8rVbiTPZ2CYGkYwFP59oW1g786E+LKRsPyw0dy03y0A==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxS4kkFkUgYJHS4RmE1zRVwC+cqknIeMO4dQD5fGnPPD8LmtF7e
-	eqHFVHNR2XkQ5aFVflYidOwUM6+sJFRMoNYaWJhqilT4bz98gRR6i1TPUMJTko0E+UK2/F2iy1F
-	Y070+IE0m3RvqJ81TP/HlpI6HOm6d0NpNb8eQUwWv
-X-Gm-Gg: AeBDieugJrEyuhxu5AZvIsM3vbIbqYdnmbY6Ut1nlr7Tu9grbOIzdvOG/IC5O3QdL3E
-	632nnt6y0VowF7h37LQSGpwPzOPsoRkGAu3G2gNV2LniPlybGtHwMJcehiJLYKvivvd64otx9Cj
-	ixtFy95Li4SwjLRgtTgmUK4led4Jot8F+bjBuzoY99M5SB3Y2PobqK0wzz4e+xkr9dkwOLAyM4W
-	RhOVr+M/U8ccPReoplv4rccQGBmeUaPSP5OGhifF4PwvfAwLPTOJhceIRL2TmvNgDmVi16P4eZv
-	RpdmLRk=
-X-Received: by 2002:a17:90b:3b46:b0:35b:8d89:7199 with SMTP id
- 98e67ed59e1d1-35e42853381mr23062281a91.15.1776266376930; Wed, 15 Apr 2026
- 08:19:36 -0700 (PDT)
+        bh=drIUTElkxzV26yN/xpd8LbcC+ezO+yQ40iDvw1Giv6w=;
+        b=rx2rGwD3NbuiO0KdYUx9lyXAeOLaIneirnRQqfKxYtPcWHgD+VFz5vlwts9AgE6XSj
+         DXZpfEccYhQIZuIieU7XPtcK8A2jXkLYwMoSfO9qkPJ6q6h8DPxPIZSVazRg74oL8yDV
+         XRbW/6CbmmAoxhC43/oPSOHKZC4gsIt0HC1uu4G/JBBZ1ei7aLICsYajDYg/xtg6gE8O
+         F/Gw9rW0m8pGs7YiaF+pAxDLGrHxx5H0iYJIm+POdW24MDLaBFSyWwLQKmS9pBH95nx7
+         z+mudfPTDHAg5CaPTG/pOSpi7l+XQQgOFrSj0mOwnGMRX9/n8e9NQB7+p1Rdlbj6g/06
+         0VNg==
+X-Forwarded-Encrypted: i=1; AFNElJ/b0ycKx3D8r2Y9En7L0Py0eLygQd2LwTBBDxVStuVJgVktir8rL1X7caRyNnPW0Sfg4v/N7Q==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx5M0ZhboVq5FpbpjP3P5aV2KAgDi58cq7mG3VVZ2is0jh4gFTb
+	Za962Lh6l4y7xlX3PcLDdsci9ANY9C9sZF9p/4teYjGaBHU6aATpBltQVqT+KVcNG25OjC7w9HY
+	0ZN3vFjwau4Yq4cMXSjGCjPQtMFS6G1PB/RBGH6ks
+X-Gm-Gg: AeBDiesdLef6KxZksnFr7PE7u4JHIccQq1UdOLS5Gm8AQHDgHZgC+MigqhOk533u/if
+	lCX4NBSfUj5KPJDmITLZbDGBMnu73gl/2dcMZekcGjjDghooX+haCqdWfmGHLwkTGg2za09Z9Q+
+	sLtNufeMd/B010hDaECpmWkSpEMSraE+cw4PgZ87iEuJ+HLfBej5SsCDIv9+9co2BfnYyHxMVuV
+	WKYfOB1pPRsH0R6H/PC3T0dDP93MEChWndUe55zZcgYv6RAx2PQMGQVwjq+65sPEYGmg6bVjnkl
+	5z0UfHcDiBqm+C/xGA==
+X-Received: by 2002:a05:6402:42ce:b0:66e:44c:dd3f with SMTP id
+ 4fb4d7f45d1cf-670786a3249mr10991924a12.2.1776266530823; Wed, 15 Apr 2026
+ 08:22:10 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
@@ -82,12 +82,12 @@ List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <20260323150700.614139-1-rrobaina@redhat.com> <CAHC9VhQTGfuOYev_UNzwSqUoYX-y+RYyMZgWWG2eGzM62eVm9A@mail.gmail.com>
- <2213475.9o76ZdvQCi@x2>
-In-Reply-To: <2213475.9o76ZdvQCi@x2>
+ <2213475.9o76ZdvQCi@x2> <CAHC9VhSVhN8YW_p4NOS4ptRDjimP9sg5bcg3dH24sDoaTefUUw@mail.gmail.com>
+In-Reply-To: <CAHC9VhSVhN8YW_p4NOS4ptRDjimP9sg5bcg3dH24sDoaTefUUw@mail.gmail.com>
 From: Paul Moore <paul@paul-moore.com>
-Date: Wed, 15 Apr 2026 11:19:23 -0400
-X-Gm-Features: AQROBzCTVU3TuzuxyybirmVqIK3_TyIOi4OwyXlWIoncpOuJIQNmiRedfB8JVZE
-Message-ID: <CAHC9VhSVhN8YW_p4NOS4ptRDjimP9sg5bcg3dH24sDoaTefUUw@mail.gmail.com>
+Date: Wed, 15 Apr 2026 11:21:52 -0400
+X-Gm-Features: AQROBzCCxun8_y0sHjqjjAZ6z6cN_otVubOFu6pXs7_Zk3mCAZehZiAgWdNYYbA
+Message-ID: <CAHC9VhTN+vjkSSjtfFegC9cEAcGAonYY9sNk_84_nJwLay1wwg@mail.gmail.com>
 Subject: Re: [PATCH] audit: add backlog high water mark metric
 To: Steve Grubb <sgrubb@redhat.com>
 Cc: Ricardo Robaina <rrobaina@redhat.com>, audit@vger.kernel.org, 
@@ -95,23 +95,32 @@ Cc: Ricardo Robaina <rrobaina@redhat.com>, audit@vger.kernel.org,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Apr 14, 2026 at 11:45=E2=80=AFPM Steve Grubb <sgrubb@redhat.com> wr=
-ote:
-> On Friday, April 10, 2026 5:34:08=E2=80=AFPM Eastern Daylight Time Paul M=
-oore wrote:
-> > On Mon, Mar 23, 2026 at 11:07=E2=80=AFAM Ricardo Robaina <rrobaina@redh=
-at.com>
-> wrote:
+On Wed, Apr 15, 2026 at 11:19=E2=80=AFAM Paul Moore <paul@paul-moore.com> w=
+rote:
+> On Tue, Apr 14, 2026 at 11:45=E2=80=AFPM Steve Grubb <sgrubb@redhat.com> =
+wrote:
+> > On Friday, April 10, 2026 5:34:08=E2=80=AFPM Eastern Daylight Time Paul=
+ Moore wrote:
+> > > On Mon, Mar 23, 2026 at 11:07=E2=80=AFAM Ricardo Robaina <rrobaina@re=
+dhat.com>
+> > wrote:
+> >
 >
+> ...
+>
+> > ... compliance-driven systems that must use a finite backlog limit for =
+memory safety but cannot tolerate dropped events ...
+>
+> You must pick one of those two requirements, or at the very least
+> prioritize them; it is simply impossible to both limit the backlog
+> queue and require zero dropped events.
 
-...
+To be perfectly honest, it's also impossible to require zero dropped
+events.  Even in the most extreme configurations where the admin
+decides to panic the system, that only happens once the system reaches
+the point where it is dropping events.  We try *really* hard to not
+drop events, but it is always going to be a possibility.
 
-> ... compliance-driven systems that must use a finite backlog limit for me=
-mory safety but cannot tolerate dropped events ...
-
-You must pick one of those two requirements, or at the very least
-prioritize them; it is simply impossible to both limit the backlog
-queue and require zero dropped events.
 
 --=20
 paul-moore.com
