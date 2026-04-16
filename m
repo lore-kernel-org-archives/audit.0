@@ -1,80 +1,80 @@
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3F52349B02
-	for <audit@vger.kernel.org>; Thu, 16 Apr 2026 20:51:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE05138E11A
+	for <audit@vger.kernel.org>; Thu, 16 Apr 2026 20:58:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.178
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776372711; cv=pass; b=qZrEkeWiOTJxAL7VPGZc9RcDRpzAmIP52gB4u3NZZ37iUhRnDVouSh5BiXADphVhjPYVTNeyUUe4h9iuJnPEQ75R/P3+OvdeVMyG8qQNs5OJ31/r4WZhDvK5c3h5CMdKBRGJqxXzIylVCvhQJOoX0J6NYQL94H9epKi0dze/xuw=
+	t=1776373113; cv=pass; b=W9bEW4BVWaKJw5H1lyoM2LLjJlNMR99q0i8wRK4iYHoVmUhNM48PvrGmI35Cf2sN09wj1rgZYQ2b+AelYBq5C2XzZ3lKpV62YHxa1PBSGnX4asZSdbEvDFBmt0aTxQ5dSU2avZSDigXxFQN2AUu9kXxf4v0s86yhla+3SxZ76x0=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776372711; c=relaxed/simple;
-	bh=bEp0nYeDoDo1Up/vVf0KGJLNYSq31PcCZGt4vapUOAE=;
+	s=arc-20240116; t=1776373113; c=relaxed/simple;
+	bh=gXlr/JSfD0502yKyc9t5QAc45mn9H9itpZhHpMpt4rk=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=RSnC7dcW+2CWDl3y6clwYfdTxVPMHOzW03AJSwZEsBw+k0ocXy8etpNvDQXQPBJmupNyLVNFkfZfrxR6KXASKvyqpO11A8onuOLzMfv+5Jj+ge5C/7dePuO8dsswGqchSPWJhxNDCAwWq4jdiqa71i7sUUCg4Qp3a3eJofvjtEc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=U69oQzYH; arc=pass smtp.client-ip=209.85.214.180
+	 To:Cc:Content-Type; b=IClJFDkN2xEF3nrk0U+55dE3UV/9anaGlZcQzyoz9BQDxbjy3SBh+rsI3jJDjMNOlzj8YoZkpM3wetuV7c0CbUzdqrgi2Q6CkC7HHRT5hIy/QKwHspUQi20IFukdB3K/Y0HD9CrKWOpGLxy5KdQNb335vwp9R8tSDojqTkObJZM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=LAqmll3y; arc=pass smtp.client-ip=209.85.210.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="U69oQzYH"
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2b24fcc2b5dso57286345ad.1
-        for <audit@vger.kernel.org>; Thu, 16 Apr 2026 13:51:49 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1776372709; cv=none;
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="LAqmll3y"
+Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-82f4c3619b0so6969b3a.2
+        for <audit@vger.kernel.org>; Thu, 16 Apr 2026 13:58:31 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1776373111; cv=none;
         d=google.com; s=arc-20240605;
-        b=WYiMj9jVpXAD2NGOOtkp6fiOtDV25K+5rn/Gs6GFo79rHVZj5pCXwZZdTQpHDoNivt
-         CGX5jzLg3CMP4xYEIeAIis23tHcC5XauNxfvlI9lepQqKecePRbibBw3dslmFrFmhmEA
-         ykdzmJNnERfzVpX1mIzQK4Yf2jVGj6R4Dwd9cfF6Mi9ID73VH6kiRDePpZG4YkD6AnKd
-         vcmsFPBUDSTcXoFHruUg3EkpGKFMUb0R2oEmvfUi8x0K/GBzecggGlI69dy4AtT3L5ti
-         Xfy7zxYbvG0zuJw5BMFwLVR3HbUhcuNYt6wwzV3AyautQSqQwoc3fKaWRwil2pBPTOz1
-         36IQ==
+        b=BmeBQI6jWYQH+VyfzLtuYyeH8RvVc+tG8MznKArLBmSue0dfnfQ1gEp1Qh4UMeefOn
+         OIZ8Y4zDF4rYCKtcg1YsOPLVw/XElRxbj8alNPzZ04D0lIDtactyaKt7JsexeDXWv8/G
+         hTntmIzqBlUFz0TQz1z8cMO9loq+7x6VM+5W7yeqGmnoKGFpYT1aR7xmCg8NjL5ArqZp
+         ZBAgTdXCHvg9FeTA0meHUYusJdG5PC5NrLabI9m26Aliy6lOSL5EJ0z2NhhWxI/eV8vn
+         wmVbBH6LH6XSbxZi05Hc/LulKyeFpLJy+C3A+9FO7IMkeSsII1Vh+WK0+C3iwd5GEB/i
+         fwng==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=eV96XbOoszvJ0jXq5rWAiBNPNSt/MpnljkiIEflLnuE=;
-        fh=CkkjgkOq+hY8En+ca+w8BfkBgfO/VmTeVhIMdiUrVG8=;
-        b=T0p+WqU0h+y4nBj9nwAEunsrd9qh8AW095BxVaUl9KqoMEyRdl576gz93nPlpxI9Yx
-         uLf5fPr6i+rqUYXQZWZ0VLh75CqWCg9qzA7RX5w0ZK9nk0655p9jwljgJWQRtt0ZIiFK
-         mNZ48WWkVACi3zCb3YvbUl2MLdyAdZkq6Oi6PAoCiC13uGAbKFriTVqH0UmWveiWEpj6
-         WKL3VFFWpOaqzNAp9JZ4kGzb6lPs3Rkqw2S1+0xhnOQhlTu2OaPZs4mIzc7tFPLfYM+f
-         y+6qOY8RamkCcxedXzuXbT+UF3bYF4IORydNODOtulvJz43rqyFI6okotRntHm6fNK+N
-         KwFg==;
+        bh=YoiXcIHKFCiYT+GWlO+LrWCsep6cNUVXCWnCv6V1MRw=;
+        fh=z0oE4su7tC3IUC5Qh24XCQCVPdVgyn/df7jVQri7BaQ=;
+        b=AlidMZEyCSngbdc9noUI4W32vkuHHEXtupSGkZ0d3jPgGN+a1dgKhSuFcoBQJAexdE
+         /9SSL3QArMFZ/DYY4558+XMXnDHv7nK1C0/skFilqOOuQRakCAOWRfbhBfGYWjhBESQy
+         OkkJQ6VY8AmcfA+42+eEn0WVso5bwVC/sVtzv8/zoZLvwrIpTzmSUYCvUOPaj4TgLkP/
+         XOtJyKrB9qOCVUuO5m2BjZeoQwFiO+u0MqYsPz+5UdfhDMTnXYbjA9sTbsAOPV1zTqVP
+         KP7D4O22y5QYWOBmaNal+ODnnks2NbE+NiwiFMq1OyCxbGI+nommileE7WdfFqps1DZd
+         siQg==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1776372709; x=1776977509; darn=vger.kernel.org;
+        d=paul-moore.com; s=google; t=1776373111; x=1776977911; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=eV96XbOoszvJ0jXq5rWAiBNPNSt/MpnljkiIEflLnuE=;
-        b=U69oQzYHxv49oFxLqxr+fnSOfsBujlw/n7u+6n8s/KWp5pjGaDTtttRQJOiLIZxxKX
-         zjUvMkYWyBCDJQGBljQJFJjM9A2htlPbhO180yg9wnxY27DU01I0DYOjKlAMMGz9kI1O
-         I9AMB6xVEflpZ2zgDkRimxTAE/3uPM7p+l1xz/YwPyHTeV6wLCos+mUVy6WiExAG3gdt
-         aDhJ6VYfZsWsIiaTqPBV8i3kNyzogMTRuKYx8Cdgea3Z4D73Zd8E8/IHnhiAfy2G8fFO
-         MCHqKn/kgYQcjwL42rCXMLvhQ/6jdapASFTaRBG5W6LuqcRctTZB7EQKcReD1Eb8IlOK
-         bV6g==
+        bh=YoiXcIHKFCiYT+GWlO+LrWCsep6cNUVXCWnCv6V1MRw=;
+        b=LAqmll3yg0SLsLf8BPPxNm7G/Rc81aoyDMSb6NRsuzVv2wB0BZxMxdYVXBbc5cxTnd
+         wAEGmJjioOd0RbvP9x1gm7t3oYZGiWYDiHDRM5OyXKU2wMotAC/HLqf7RG7MChj+oezP
+         3esfI/ZD0IqstPx43q3kvAPgUf3BQPCHKP+5F79T9ut4jALBEq2vssmombIuzFCV5o2J
+         1JmbDRuBcHtzG6xFSlaCQE1iDy6sbCuaWKOoHNwGgNTHP6DZ623F/cckzla0134z6zDF
+         LCQ/YKtxXAfwYZBYItPyl/7Y3V7m4a1NLoUqQYjNgzQsU3NKk4coqS6H6JO5X1VLDlN4
+         zNNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776372709; x=1776977509;
+        d=1e100.net; s=20251104; t=1776373111; x=1776977911;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=eV96XbOoszvJ0jXq5rWAiBNPNSt/MpnljkiIEflLnuE=;
-        b=meIRf2gx5+aEjK1w8wIjMg9DcmHXdGjVaEaFc8BnqXKOn+wy5XIuv5GZ1sLVX9W3LO
-         nr+vkdTKvxBE+946ENO6dtL7JEEYChfX+h9DZLQXw+jClDVp8HwpQiBgfo4eiXrrGe5Z
-         Wcx45KHc46EMKmiRqUTFMX0AoYVphgdQDRH5ZlZlPEH/ggjzH7iV4rYKYHN8kJkEdG7I
-         YPmZV4Ek2qdEqFRLZipfFYtek/bH2NJJapVrhtVVcqK5PBAOrtV+xgW4wADUovSqR3Lw
-         uJA3l+PWqnUR5J1Dwu0zlPhzMMnXxO/wS77mrkp/8i+UWY4PBRPy9KtaXyVDqSbUimjF
-         M8sA==
-X-Forwarded-Encrypted: i=1; AFNElJ8k/S05pykmukkxw7D+cZqBvXbW/7MEHFipTK4OEP7ARKpBvLbrfXVGlTD/X26ft632GIxM6g==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzBUcx+RP0IhbaXP16qsMjOlbBSrMs/XhQS56be3GebwxkGtZ2P
-	w+e7D7JmfVJopV0X2f4+fKqS3t/IwFwIE0P37G3nAI4AVX7phb/G7hhkY/75EDpAZaQ0mplSgk7
-	ECIAhVlHE7P8/w/K6+BiHv6I4Pln92zDcngAs/8bX
-X-Gm-Gg: AeBDieuUp7ILYLA4ZrRUUv/9Ldda9C9NGaQy4Miy6txlwJUAfcod4H4TspYVziAxAFN
-	E2aa4wvvyE5TGPB2gYu+ce0KKP08kZ9n0vmnrJ7VHimR9Y8GVu9lxM/1iPKOC89isIF04Om/F0F
-	Z0jrmUVCmptcP5w9Mcx7Is8GCw7D0qYrqWnKunol8tEF5/ilOiN+4il/lRCpr61QJmrTrDXH5NS
-	KVe1yxnLW1IM5lrWyb7EazSTTa0mP4Ymaa7IiLcrGrrDekKTmT4WKWiOZSrDTIImJkBahK+ciRT
-	hpxo+fr1q92HFUOOTw==
-X-Received: by 2002:a17:902:f0d5:b0:2b0:5968:a6d5 with SMTP id
- d9443c01a7336-2b5f8dbe46dmr3308875ad.18.1776372709203; Thu, 16 Apr 2026
- 13:51:49 -0700 (PDT)
+        bh=YoiXcIHKFCiYT+GWlO+LrWCsep6cNUVXCWnCv6V1MRw=;
+        b=m2ChgGiXqttWEkpBCF/Yja+V6ito6x2nH+JybsC/KnnwayKDot67XZe60Wm/OcEq74
+         GhNHcOj355USGCECpadVYN8I/WqskVs26SfshN2nWXgDzl+rhMZQAeUDS+sxm8KEfoT3
+         kgVYweZ6zyOlDPWQAoGNfBAeD/Oidd5wmxITRNjQ3LxfOS1jRIgcpqoVezQm7JLsjpf7
+         J/plLVoDSOB+BLomi077eRm9jRXtAvOmnf2JP91AYLSbrKiLEZhodKYKtI6M2UKu2z1d
+         reSoGERJJNPxMA1vDfyxwLMtvljWCOFsBWWKn8e43UfSUj8wfhYlrAySovbwTkVBp9y4
+         T+Tw==
+X-Forwarded-Encrypted: i=1; AFNElJ9W0YYP6IfSEVJRSevAyjMms49ksbo5WSWSUD8eRpLk+jiC48/6V1jHgtaIeioDDP3nKfhMOw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxqVUaVnRrrLFMl9zM4k2uk1Fe6yJTZPf2TlEoMkwuG/LFSak3j
+	OlT+kinUgySzF7u3HTwOeYxRmzDxYhKUr5g2JqX2v0AGvXag5LvQE5K0D8OD2H985xXn6mrtT3d
+	s61b+Qil4kp3me34EJr+KFGZbdcDHWl9ZmYngOPJm
+X-Gm-Gg: AeBDiesBcsSGqU78/FkXY2emdz8vdTCLSGDjuKTcbhxz+C0UpZXHhs7ra75A5it2Fs2
+	M8MkD6S7roFc+Cvzf+COkorHUQt0T7yIjIJvuvBiKV3v3TZ0BQOqaKFzAAcuxm1oUeUJPYjaG+W
+	RBAA8vsHLkK8NNl7RyVyDcFtQvVI9UUy6lXkvnFVukKt8Wy3KcF6/hyumcVP/ZNIjkJ3oAHwZbT
+	vAIDZHBu/OD3/lyIs2sF8wF0M2LAhi/Du2y7PmG928+E2GByrPQhE+Gh/iKXg69NKpoFbLipAXB
+	c5vsrchjIoenNGb+qg==
+X-Received: by 2002:a05:6a00:a586:b0:82c:66f2:1226 with SMTP id
+ d2e1a72fcca58-82f888e5debmr841629b3a.38.1776373111405; Thu, 16 Apr 2026
+ 13:58:31 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
@@ -82,12 +82,13 @@ List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <20260323150700.614139-1-rrobaina@redhat.com> <CAHC9VhSVhN8YW_p4NOS4ptRDjimP9sg5bcg3dH24sDoaTefUUw@mail.gmail.com>
- <CAHC9VhTN+vjkSSjtfFegC9cEAcGAonYY9sNk_84_nJwLay1wwg@mail.gmail.com> <2620823.XAFRqVoOGU@x2>
-In-Reply-To: <2620823.XAFRqVoOGU@x2>
+ <CAHC9VhTN+vjkSSjtfFegC9cEAcGAonYY9sNk_84_nJwLay1wwg@mail.gmail.com>
+ <2620823.XAFRqVoOGU@x2> <CAHC9VhSK9wsK1kDwfGGVNzRqGb6RW-_eJkcoe0uHY839OnF7Mw@mail.gmail.com>
+In-Reply-To: <CAHC9VhSK9wsK1kDwfGGVNzRqGb6RW-_eJkcoe0uHY839OnF7Mw@mail.gmail.com>
 From: Paul Moore <paul@paul-moore.com>
-Date: Thu, 16 Apr 2026 16:51:36 -0400
-X-Gm-Features: AQROBzC_OCYKCdBWzHX_ljo2GquvKnl--5Wfm6vgRIHsBiMIkiBncIdEPgBomDY
-Message-ID: <CAHC9VhSK9wsK1kDwfGGVNzRqGb6RW-_eJkcoe0uHY839OnF7Mw@mail.gmail.com>
+Date: Thu, 16 Apr 2026 16:58:18 -0400
+X-Gm-Features: AQROBzAuk609xBDWIshUwZ1BpaVNELgYDU6VDJlDHCcL1giyoNIb8qo4352hLzk
+Message-ID: <CAHC9VhTPPJmq9ezyi=KB+E+UfoTZA69QMfk79xGjG66pZx73XA@mail.gmail.com>
 Subject: Re: [PATCH] audit: add backlog high water mark metric
 To: Steve Grubb <sgrubb@redhat.com>
 Cc: Ricardo Robaina <rrobaina@redhat.com>, audit@vger.kernel.org, 
@@ -95,53 +96,65 @@ Cc: Ricardo Robaina <rrobaina@redhat.com>, audit@vger.kernel.org,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Apr 16, 2026 at 4:33=E2=80=AFPM Steve Grubb <sgrubb@redhat.com> wro=
-te:
-> On Wednesday, April 15, 2026 11:21:52=E2=80=AFAM Eastern Daylight Time Pa=
-ul Moore
-> wrote:
-> > On Wed, Apr 15, 2026 at 11:19=E2=80=AFAM Paul Moore <paul@paul-moore.co=
-m> wrote:
-> > > On Tue, Apr 14, 2026 at 11:45=E2=80=AFPM Steve Grubb <sgrubb@redhat.c=
-om> wrote:
-> > > > On Friday, April 10, 2026 5:34:08=E2=80=AFPM Eastern Daylight Time =
+On Thu, Apr 16, 2026 at 4:51=E2=80=AFPM Paul Moore <paul@paul-moore.com> wr=
+ote:
+> On Thu, Apr 16, 2026 at 4:33=E2=80=AFPM Steve Grubb <sgrubb@redhat.com> w=
+rote:
+> > On Wednesday, April 15, 2026 11:21:52=E2=80=AFAM Eastern Daylight Time =
 Paul Moore
-> wrote:
-> > > > > On Mon, Mar 23, 2026 at 11:07=E2=80=AFAM Ricardo Robaina
-> > > > > <rrobaina@redhat.com>
+> > wrote:
+> > > On Wed, Apr 15, 2026 at 11:19=E2=80=AFAM Paul Moore <paul@paul-moore.=
+com> wrote:
+> > > > On Tue, Apr 14, 2026 at 11:45=E2=80=AFPM Steve Grubb <sgrubb@redhat=
+.com> wrote:
+> > > > > On Friday, April 10, 2026 5:34:08=E2=80=AFPM Eastern Daylight Tim=
+e Paul Moore
+> > wrote:
+> > > > > > On Mon, Mar 23, 2026 at 11:07=E2=80=AFAM Ricardo Robaina
+> > > > > > <rrobaina@redhat.com>
+> > > > >
+> > > > > wrote:
+> > > > ...
 > > > >
-> > > > wrote:
-> > > ...
+> > > > > ... compliance-driven systems that must use a finite backlog limi=
+t for
+> > > > > memory safety but cannot tolerate dropped events ...>
+> > > > You must pick one of those two requirements, or at the very least
+> > > > prioritize them; it is simply impossible to both limit the backlog
+> > > > queue and require zero dropped events.
 > > >
-> > > > ... compliance-driven systems that must use a finite backlog limit =
-for
-> > > > memory safety but cannot tolerate dropped events ...>
-> > > You must pick one of those two requirements, or at the very least
-> > > prioritize them; it is simply impossible to both limit the backlog
-> > > queue and require zero dropped events.
+> > > To be perfectly honest, it's also impossible to require zero dropped
+> > > events.  Even in the most extreme configurations where the admin
+> > > decides to panic the system, that only happens once the system reache=
+s
+> > > the point where it is dropping events.  We try *really* hard to not
+> > > drop events, but it is always going to be a possibility.
 > >
-> > To be perfectly honest, it's also impossible to require zero dropped
-> > events.  Even in the most extreme configurations where the admin
-> > decides to panic the system, that only happens once the system reaches
-> > the point where it is dropping events.  We try *really* hard to not
-> > drop events, but it is always going to be a possibility.
+> > You're helping make the point.  Those administrators have decided relia=
+ble
+> > auditing is more important than system availability.
 >
-> You're helping make the point.  Those administrators have decided reliabl=
-e
-> auditing is more important than system availability.
+> Users prioritizing reliable auditing over system availability should
+> not run with a backlog limit.  It's that simple.
 
-Users prioritizing reliable auditing over system availability should
-not run with a backlog limit.  It's that simple.
+To clarify this further, even on systems without a backlog limit and a
+panic-on-loss configuration, there is still a possibility that the
+system could lose an event when it hits the edge before it panics.  A
+maximum backlog stat won't help here.  Even if you had a way to
+capture the backlog size before the system took itself out, the size
+is flirting with the maximum resource limits of the system, it would
+be silly to use that as a configured backlog limit, you would still
+want to leave the limit at 0/disabled.
 
-Regardless, I'm still not convinced this maximum backlog stat alone
-will solve any meaningful problems.  If your audit log is predictable
-enough that this metric has value, it should be possible to either
-capture the backlog size during periods of high audit load or simply
-run the system through that load and verify it doesn't crash and go to
-hell.  If your audit log isn't predictable, capturing a maximum
-backlog size doesn't really mean anything since it is still a snapshot
-of one instance of the system and there is always the possibility of
-the system exceeding it.
+> Regardless, I'm still not convinced this maximum backlog stat alone
+> will solve any meaningful problems.  If your audit log is predictable
+> enough that this metric has value, it should be possible to either
+> capture the backlog size during periods of high audit load or simply
+> run the system through that load and verify it doesn't crash and go to
+> hell.  If your audit log isn't predictable, capturing a maximum
+> backlog size doesn't really mean anything since it is still a snapshot
+> of one instance of the system and there is always the possibility of
+> the system exceeding it.
 
 --=20
 paul-moore.com
