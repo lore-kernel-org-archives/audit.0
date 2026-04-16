@@ -1,132 +1,113 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3102432BF24
-	for <audit@vger.kernel.org>; Wed, 15 Apr 2026 18:22:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83C633612D5
+	for <audit@vger.kernel.org>; Thu, 16 Apr 2026 20:33:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776277370; cv=none; b=sohA632naUvsHrrOtxOPSR0iWTSGmIMzJN7b1n5guKvXQjkfIq6/jk1Q7qUlVn+asUe/i9jVw9N/8qngSS7ah9mxSw4SOh4+JhWlUkcHX4jIlyrAu2F19ZJER6SmBLsrV8qDq2MZ2d/q9UfBu2QZ5d89Iybb+iGJ9Eqhn5BMi6I=
+	t=1776371632; cv=none; b=i0kLUdaUpiwXx4qzY6ErO0zo7VpSUVf64Auu5Z4BKAmzYVS5tDgBntqKmfWyIulREJtVzntxTt7Q3zRjFYYznB5sJwlKbZid21imy0+y75lPx3kuhbFLAVQPl4d266kqTIRxRnyiYFmZDZMo3Jd4YIAjyh7J+0iaDXeTGLjmqJQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776277370; c=relaxed/simple;
-	bh=9UQxRFX+zk9oLyJrcpNXGNppAUHeYE1/jhVVN4dQIeI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 In-Reply-To:Content-Type:Content-Disposition; b=isp16YnByUNh/Ry4slgslvKZyTy5R8Q6F42PO3n/U7FAv85+N3UgJIhngrQQvB/SY2o3udTPzijBxAzKZ9GdJ5b1ayVpfzBsGyO/CwzJCkZFJRO2OTtl0rqaIGfWMf9uWQuD791YwwX2mnTqk0ReAbLI24+aSjotxQFb0b21m4w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=V2PclzL5; arc=none smtp.client-ip=170.10.129.124
+	s=arc-20240116; t=1776371632; c=relaxed/simple;
+	bh=tE6GE/me2jD3TAtNdDyLYJzZbg16wiqVPn0/Th0rqbE=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=h9ci12Be3Zhyioh5kso7PAbOrhPpeVwQ7FdUyJ06DLjYmTwN8aEyDd51zeU74QuJYx/eQ/2b/k6KXfNszpKR8+XqUcnxWxySoSiQTgIIpVvdRzqRvCRvruE31vgvFS2bYyFl/MSxeW8fylovK7wK6BdsqLKdQ0g0zolPkVNT6ME=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=fOKl6CnU; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="V2PclzL5"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="fOKl6CnU"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1776277368;
+	s=mimecast20190719; t=1776371629;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=iV8KAQV0njHyHYRqHjYxlGtxa+oGeeRWr3oSFsYbpYY=;
-	b=V2PclzL5Uzh2/a4q2XldMYLoI6ZJ1TO7c5LpX1qXXy1v7e2nDv9FAnaogtCOIMAeNX6LAs
-	Jpru/hNgRgkcLYoYMzVudqsEVdDeyEfbPyBLU2gZE26E78YQI0pVAxYge0umtaksJKGqjd
-	t7YfquIc4qZ0fxlUHZZVdQs3d41ukQQ=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+	bh=ZWrUsdbVzZ/ojlrwHQmxnA3t0dos47yqLAWWqKAJGFI=;
+	b=fOKl6CnUYElicAuVeLtrCeVirFyAllyjX+x1IyesFcVtam+3cOQO9k/1fIFEW+NC3NXUdN
+	9CP2ajBQ4cdGjcCzFV3LgUhQqadoDFrsYtjC3kU0w6Z6DC7o/bXQaJLdZGh1bgM2eTliqQ
+	DwcLUjL8R22N/coCVVHPM4KGKfVSrck=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-645-xT3dFDPzM0ejzmvxHcgKWw-1; Wed,
- 15 Apr 2026 14:22:44 -0400
-X-MC-Unique: xT3dFDPzM0ejzmvxHcgKWw-1
-X-Mimecast-MFC-AGG-ID: xT3dFDPzM0ejzmvxHcgKWw_1776277364
-Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-628-1qJctB2oMMK58ANMPCZc3A-1; Thu,
+ 16 Apr 2026 16:33:46 -0400
+X-MC-Unique: 1qJctB2oMMK58ANMPCZc3A-1
+X-Mimecast-MFC-AGG-ID: 1qJctB2oMMK58ANMPCZc3A_1776371625
+Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 2C0601977015;
-	Wed, 15 Apr 2026 18:22:35 +0000 (UTC)
-Received: from madcap2.tricolour.ca (unknown [10.22.76.10])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 66E891955F25;
-	Wed, 15 Apr 2026 18:22:32 +0000 (UTC)
-Date: Wed, 15 Apr 2026 14:22:28 -0400
-From: Richard Guy Briggs <rgb@redhat.com>
-To: Ricardo Robaina <rrobaina@redhat.com>
-Cc: audit@vger.kernel.org, linux-kernel@vger.kernel.org,
-	paul@paul-moore.com, eparis@redhat.com, longman@redhat.com
-Subject: Re: [PATCH 2/2] audit: fix removal of dangling executable rules
-Message-ID: <ad/XZJ9WtvfMIo0i@madcap2.tricolour.ca>
-References: <cover.1776176104.git.rrobaina@redhat.com>
- <c5fd6163fd285fca25460ce821f95b15383f920a.1776176104.git.rrobaina@redhat.com>
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 24DDB1800367;
+	Thu, 16 Apr 2026 20:33:45 +0000 (UTC)
+Received: from x2.localnet (unknown [10.22.65.66])
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 21572180047F;
+	Thu, 16 Apr 2026 20:33:43 +0000 (UTC)
+From: Steve Grubb <sgrubb@redhat.com>
+To: Paul Moore <paul@paul-moore.com>
+Cc: Ricardo Robaina <rrobaina@redhat.com>, audit@vger.kernel.org,
+ linux-kernel@vger.kernel.org, eparis@redhat.com
+Subject: Re: [PATCH] audit: add backlog high water mark metric
+Date: Thu, 16 Apr 2026 16:33:42 -0400
+Message-ID: <2620823.XAFRqVoOGU@x2>
+Organization: Red Hat
+In-Reply-To: <CAHC9VhTN+vjkSSjtfFegC9cEAcGAonYY9sNk_84_nJwLay1wwg@mail.gmail.com>
+References: <20260323150700.614139-1-rrobaina@redhat.com>
+ <CAHC9VhSVhN8YW_p4NOS4ptRDjimP9sg5bcg3dH24sDoaTefUUw@mail.gmail.com>
+ <CAHC9VhTN+vjkSSjtfFegC9cEAcGAonYY9sNk_84_nJwLay1wwg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <c5fd6163fd285fca25460ce821f95b15383f920a.1776176104.git.rrobaina@redhat.com>
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
-X-Mimecast-MFC-PROC-ID: K94Z69VDGIvWR-qhMzVKaKlDQBu7S00LqWTwZw9H5P8_1776277364
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
+X-Mimecast-MFC-PROC-ID: EL_FZ_U6aLZAzseHGopSh1mAMUfMoXCHlWLCbCAQVVM_1776371625
 X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
 
-On 2026-04-14 17:00, Ricardo Robaina wrote:
-> When an audited executable is deleted from the disk, its dentry
-> becomes negative. Any later attempt to delete the associated audit
-> rule will lead to audit_alloc_mark() encountering this negative
-> dentry and immediately aborting, returning -ENOENT.
-> 
-> This early abort prevents the subsystem from allocating the temporary
-> fsnotify mark needed to construct the search key, meaning the kernel
-> cannot find the existing rule in its own lists to delete it. This
-> leaves a dangling rule in memory, resulting in the following error
-> while attempting to delete the rule:
-> 
->  # ./audit-dupe-exe-deadlock.sh
->  No rules
->  Error deleting rule (No such file or directory)
->  There was an error while processing parameters
-> 
->  # auditctl -l
->  -a always,exit -S all -F exe=/tmp/file -F path=/tmp/file -F key=dr
-> 
->  # auditctl -D
->  Error deleting rule (No such file or directory)
->  There was an error while processing parameters
-> 
-> This patch fixes this issue by removing the d_really_is_negative()
-> check. By doing so, a dummy mark can be successfully generated for
-> the deleted path, which allows the audit subsystem to properly match
-> and flush the dangling rule.
-> 
-> Fixes: 76a53de6f7ff ("VFS/audit: introduce kern_path_parent() for audit")
-> Acked-by: Waiman Long <longman@redhat.com>
-> Signed-off-by: Ricardo Robaina <rrobaina@redhat.com>
+On Wednesday, April 15, 2026 11:21:52=E2=80=AFAM Eastern Daylight Time Paul=
+ Moore=20
+wrote:
+> On Wed, Apr 15, 2026 at 11:19=E2=80=AFAM Paul Moore <paul@paul-moore.com>=
+ wrote:
+> > On Tue, Apr 14, 2026 at 11:45=E2=80=AFPM Steve Grubb <sgrubb@redhat.com=
+> wrote:
+> > > On Friday, April 10, 2026 5:34:08=E2=80=AFPM Eastern Daylight Time Pa=
+ul Moore=20
+wrote:
+> > > > On Mon, Mar 23, 2026 at 11:07=E2=80=AFAM Ricardo Robaina
+> > > > <rrobaina@redhat.com>
+> > >=20
+> > > wrote:
+> > ...
+> >=20
+> > > ... compliance-driven systems that must use a finite backlog limit fo=
+r
+> > > memory safety but cannot tolerate dropped events ...>=20
+> > You must pick one of those two requirements, or at the very least
+> > prioritize them; it is simply impossible to both limit the backlog
+> > queue and require zero dropped events.
+>=20
+> To be perfectly honest, it's also impossible to require zero dropped
+> events.  Even in the most extreme configurations where the admin
+> decides to panic the system, that only happens once the system reaches
+> the point where it is dropping events.  We try *really* hard to not
+> drop events, but it is always going to be a possibility.
 
-Acked-by: Richard Guy Briggs <rgb@redhat.com>
+You're helping make the point.  Those administrators have decided reliable=
+=20
+auditing is more important than system availability. backlog_max_depth give=
+s=20
+them the one thing they currently lack: advance warning. If the high-water=
+=20
+mark is consistently approaching the backlog limit, they have actionable=20
+information to raise the limit, reduce audit rule coverage, or address the=
+=20
+underlying load - before the system goes down. These are exactly the users=
+=20
+who would benefit the most from this metric.
 
-> ---
->  kernel/audit_fsnotify.c | 4 ----
->  1 file changed, 4 deletions(-)
-> 
-> diff --git a/kernel/audit_fsnotify.c b/kernel/audit_fsnotify.c
-> index eee589bca86e..703a110cebd4 100644
-> --- a/kernel/audit_fsnotify.c
-> +++ b/kernel/audit_fsnotify.c
-> @@ -86,10 +86,6 @@ struct audit_fsnotify_mark *audit_alloc_mark(struct audit_krule *krule, char *pa
->  		dentry = kern_path_parent(pathname, &path);
->  		if (IS_ERR(dentry))
->  			return ERR_CAST(dentry); /* returning an error */
-> -		if (d_really_is_negative(dentry)) {
-> -			audit_mark = ERR_PTR(-ENOENT);
-> -			goto out;
-> -		}
->  	}
->  
->  	audit_mark = kzalloc_obj(*audit_mark);
-> -- 
-> 2.53.0
-> 
+-Steve
 
-- RGB
-
---
-Richard Guy Briggs <rgb@redhat.com>
-Sr. S/W Engineer, Kernel Security, Base Operating Systems
-Remote, Ottawa, Red Hat Canada
-Upstream IRC: SunRaycer
-Voice: +1.613.860 2354 SMS: +1.613.518.6570
 
