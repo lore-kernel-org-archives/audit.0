@@ -1,172 +1,195 @@
-Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E6E52DC782
-	for <audit@vger.kernel.org>; Wed, 22 Apr 2026 18:50:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BCF9449EBB
+	for <audit@vger.kernel.org>; Mon, 11 May 2026 18:43:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776883846; cv=none; b=BZQRBn9hgiKApVjfCNdW1QPZNH1OGnFeSIbUoxmE3rQj+rDZ69kJYXJNiTPlq1gF+J+bc7oGAp+QQdebmjeHfjVzXvqfR1+qH5EootF+/MLOCzGzSiWCP0wKEDbwa37VmOG/a8MdgUiw0uTD0CPpsAjRSutr9aMIImgROZ3QtbA=
+	t=1778525036; cv=none; b=SIezA6HxFDNGX6vAvSKxPd9sLSGyEqL5dFRQ8iLxvEmvSf1M7QnftRGxPi4kwSvd8r04fTcHGaunovjNsy8S7lnk+wBkCGGRbJjO3SRxRMNPK8EEKpWkGWnkjuxgVf8EddAJrXC64QHoOOvQCDO4MEsBiE7fsedH6r69I0IWgkU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776883846; c=relaxed/simple;
-	bh=ic2g+3H1Bjt8Eoenl8C/wnTWLiAcZvj+NJ4io3SQ8Y4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=igQg6O1aD7/nHLiQ2YdxEkiW4rkUIQeM2082FDQHnk8FrduR2cN1ZJLyGSPRyw7KRLSQiZJysztQNF5tnqTjZbhDveAA3BgRfpLjTwM6kSg2kbnVMJO9j/E3C78D6r+pNKIkEE+NcZemjYU5L/pdZre3yEAg7uhDM3r3evHezzY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=IwYpqDKm; arc=none smtp.client-ip=209.85.128.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
+	s=arc-20240116; t=1778525036; c=relaxed/simple;
+	bh=uHbYBiaVX6StCVS3mjmgpdx/r0kZ5jpDITVdz4K5N0U=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:content-type; b=t/bVB3+FfQvmiHTTJZA9Cpsuw/TLFTAs6ca+BGniKni2xyl/OLCbyVRs5Fqkt38vf9VUwTStdZRfXPpXmDGnU9uFY7iwoIZm6GiBgmMZpWEIJGBafqkQLJgzCUOy621/6t5tlAinEC8aPvoxXp8TOcb1kqzSisNnptFICaoegDY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=bZZcMPZG; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="IwYpqDKm"
-Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-79495b1aaa7so58465827b3.1
-        for <audit@vger.kernel.org>; Wed, 22 Apr 2026 11:50:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1776883844; x=1777488644; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=NfY2mNb6T4MB2zH44et65lOJxNFCx009tFohO2VhSnE=;
-        b=IwYpqDKmG67OEyUOuXSHQ8a+NIVvM+dBOrf9IsGH8Xq9K1F8tZmqXgBJ7KSutUqzYO
-         udOwG8n8aojk9T2SE/41dxAjH6sGzozgUceMQpC96Nv9hqmga+lhf7CUSBzDfWDvaPCU
-         hkGwGhB5FUM2WUNpot9gmd76sJg5kk9XlOSe5vqitiGFYf0X1kyTlsa9TwGIDgzjGg/5
-         9xv/psJozsTIEy9d4CxiygIDjYbcha+oPXr2+icOmdRJg1vr5pa3tGnuAzC2jYhKVTTC
-         fdMfL9fjuGfSHeTU98grv5fkO+Ntc9LwHB1eNOJM9w9F5Ey05ELuFDj8HRJ9B0cUWzSH
-         pkqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776883844; x=1777488644;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NfY2mNb6T4MB2zH44et65lOJxNFCx009tFohO2VhSnE=;
-        b=G3fiJzQAfUnEAa24Zjq648VQDmSnzpIL4mHcfyWu3aypG6hoUKDPX8uaQd7W5/Kcqz
-         oxieoiTJmOGtsJy+QPCo4DiVYWdWskmgSgTvXJA9tssxde1Mhh68wYYpEEVqpNwJikvh
-         jUbVHMI1be/Luo7KjpmdQ7mLoB3Mh/04P82pWq/gtABFzxaDPwwc/Gezw6LjDqr+Unhz
-         0u372U3jloR3UsQMi0Nse7UAf68axZ/2YISuejQU4HFy+RhJ2c0ZSopq6k06xSNsmsS4
-         UY6NPaEk+LX9psiGwjeYbk8oJrS+2wA+g6oeLBN9BIyA5ROg1VQ1ReDI2Ltv5rzVkOpA
-         J+lg==
-X-Forwarded-Encrypted: i=1; AFNElJ9gZG8WXOe6sYZ7KMcpOoY6IAre0b6xoohv/JllMriteVHRXFGYSWG94dj+GpM63QXM5x0JQA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxYVCZQJ48Vv0Kqq2qqVtZss+frqCpXFJblyw2YD2OJuzaNlDSH
-	hM/RiNDmS8u05l2CP97TSKM8gRKNLke2UsbtgT5+bw+VrWI+um8xlucal1SZSB+nS7Y=
-X-Gm-Gg: AeBDieu6CWmceXyDS+2xwbpcqno3hZ4P2a/72eG0HkIEyefBjsjzEXvtBqqgeiiBqay
-	ih2wxHnWY4EMMiMzHJwvqTufvAaZj/Wp2dNRM3IvH9+W5oo3YaDOQjD3y5jxJJBMolkzWVhAoi1
-	NeKc5iIh6cVXntMgevt/v0XPxORC7ylUns1L9WlsZ4aQ5zUqKtNJk6CjK2YOWFKOR9giO0v4Ap3
-	rVWTAv2ss9Z95zuxyuSfRopMk1eZb07swvyQisiY8uB0Lc1Y4tqkQ2/HMWuMbUo1/Ony1IsSAcy
-	lg/zFAuDuN2b9BtItbadsyjFf0nNxK3aLvqvzIbvgcacV5j4sTKIBqtICwFuOdn2zvX7AL4FMPH
-	PryC5nhXdnDQYZivih0KYdPITIH/DZpKTz1w7zhvyhelC7uxJdEabkqM7GJJ7sUE3WQxl9f+wpw
-	TLVnLs64e9LK9/
-X-Received: by 2002:a05:690c:7283:b0:79b:e24e:e2f8 with SMTP id 00721157ae682-7b9eccb6dfemr246497157b3.0.1776883844180;
-        Wed, 22 Apr 2026 11:50:44 -0700 (PDT)
-Received: from CMGLRV3 ([2a09:bac6:947f:3af::5e:42])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-7b9ee89abbfsm71419907b3.10.2026.04.22.11.50.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Apr 2026 11:50:43 -0700 (PDT)
-Date: Wed, 22 Apr 2026 13:50:40 -0500
-From: Frederick Lawler <fred@cloudflare.com>
-To: Paul Moore <paul@paul-moore.com>
-Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	James Morris <jmorris@namei.org>,
-	"Serge E. Hallyn" <serge@hallyn.com>,
-	Eric Paris <eparis@redhat.com>, Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	=?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
-	=?iso-8859-1?Q?G=FCnther?= Noack <gnoack@google.com>,
-	LKML <linux-kernel@vger.kernel.org>,
-	LSM List <linux-security-module@vger.kernel.org>,
-	audit@vger.kernel.org, bpf <bpf@vger.kernel.org>,
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
-	kernel-team <kernel-team@cloudflare.com>
-Subject: Re: [PATCH RFC bpf-next 0/4] audit: Expose audit subsystem to BPF
- LSM programs via BPF kfuncs
-Message-ID: <aekYgEylSTDBcWK1@CMGLRV3>
-References: <20260311-bpf-auditd-send-message-v1-0-10a62db5c92f@cloudflare.com>
- <aefnIw1Tx_2r5nkS@CMGLRV3>
- <CAADnVQJQxa+fHM9X8COc60ZMcxF0DMhWbtArg_gPynpbbg55TQ@mail.gmail.com>
- <CAHC9VhSo-M1wK2s2P0B+2F0pJqNguW7Kj-g63anp1xCMSBLa6Q@mail.gmail.com>
- <CAADnVQL33TOWFmxcWod3BCgmMXSQ=cEp6NCcxgQaJL0C7+Z9zA@mail.gmail.com>
- <CAHC9VhSKvC+p5j5Pe1YKB-=vRkRA81K3kp97Q6-H5K+kvYa0AQ@mail.gmail.com>
- <CAADnVQJBOk8w89kj95M3GH-eFdC7njZt=zMEU=skB-DTb3k-bw@mail.gmail.com>
- <CAHC9VhT0poHt_9P407tr3ihfMGJYH0d9=PKxW0sk7gYF8fD5Lg@mail.gmail.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="bZZcMPZG"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1778525034;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=KVNlHnyH6Pi2wnbn/0P75oyyCBRiJQi88SIInmQq+gA=;
+	b=bZZcMPZGoff0Vk0jICn2f21WHxF7N4fm4uTgbedvJ9f2IXYcgvotQorrk2WRGog9PNuBjE
+	8XZdlmAjWnbiXWmsDJFClz2g/TrDquOGQ3UTvR9GGqyMC26kzGdAerQy+tA84x1bY8/xg3
+	nCq9A0LOIe1xfHHtMSNZUi9DOyaoCh0=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-517-LUXBaevYOlu4Gt4qEaKMjQ-1; Mon,
+ 11 May 2026 14:43:50 -0400
+X-MC-Unique: LUXBaevYOlu4Gt4qEaKMjQ-1
+X-Mimecast-MFC-AGG-ID: LUXBaevYOlu4Gt4qEaKMjQ_1778525029
+Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 8FA991800371;
+	Mon, 11 May 2026 18:43:49 +0000 (UTC)
+Received: from wsxc.redhat.com (unknown [10.96.134.165])
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 03EA518004A3;
+	Mon, 11 May 2026 18:43:45 +0000 (UTC)
+From: Ricardo Robaina <rrobaina@redhat.com>
+To: audit@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	netdev@vger.kernel.org
+Cc: paul@paul-moore.com,
+	eparis@redhat.com,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	horms@kernel.org,
+	Ricardo Robaina <rrobaina@redhat.com>,
+	Steve Grubb <sgrubb@redhat.com>
+Subject: [PATCH] netlink, audit: prevent false ENOBUFS on timeout expiry
+Date: Mon, 11 May 2026 15:43:38 -0300
+Message-ID: <20260511184338.392420-1-rrobaina@redhat.com>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
+X-Mimecast-MFC-PROC-ID: 3KbWu9FiRMGjEe3jmbwcQuT1FynzRGvEmXxULUV1k9c_1778525029
+X-Mimecast-Originator: redhat.com
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHC9VhT0poHt_9P407tr3ihfMGJYH0d9=PKxW0sk7gYF8fD5Lg@mail.gmail.com>
+content-type: text/plain; charset="US-ASCII"; x-default=true
 
-Hi Alexei & Paul,
+When auditd is bottlenecked (e.g., by slow disk I/O), kauditd blocks on
+the netlink socket. If the wait timeout fully expires (timeo == 0),
+netlink mistakenly interprets the zeroed timeout as a non-blocking
+request. It then triggers netlink_overrun that drops the event,
+completely bypassing the audit subsystem's internal retry queue, and
+falsely returns ENOBUFS to user-space, resulting in the following error:
 
-Thanks for the comments. I did not mean for the talk announcement to
-end in this state.
+ auditd[]: Error receiving audit netlink packet (No buffer space available)
 
-I understood the RFC was NACK'd, but I thought having a talk at LSS
-could open up for some additional discussion around what can be done
-with audit to make it more BPF friendly. I apologize.
+Convert the `nonblock` argument in netlink_unicast() into a `flags`
+bitmask and introduce NETLINK_UNICAST_TIMED. When a caller specifies
+this flag and exhausts its timeout budget, netlink intercepts the
+zeroed timeo state. Instead of defaulting to an overrun condition, it
+safely frees the skb and returns -EAGAIN, allowing the audit subsystem
+to gracefully enqueue the pending event into its internal backlog.
 
-My assumption is that the committee would've denied the talk if there
-wasn't _some_ interest here. And still intend to give it unless
-committee decides to revoke it, because there is always opportunity
-to improve subsystems.
+Suggested-by: Steve Grubb <sgrubb@redhat.com>
+Signed-off-by: Ricardo Robaina <rrobaina@redhat.com>
+---
+ include/linux/netlink.h  |  5 ++++-
+ kernel/audit.c           |  8 ++++----
+ net/netlink/af_netlink.c | 17 +++++++++++++++--
+ 3 files changed, 23 insertions(+), 7 deletions(-)
 
-On Wed, Apr 22, 2026 at 10:33:27AM -0400, Paul Moore wrote:
-> On Tue, Apr 21, 2026 at 7:08 PM Alexei Starovoitov
-> > Every time somebody adds a kfunc it breaks safety, because
-> > people don't read or don't understand Documentation/bpf/kfuncs.rst.
-> > kfuncs are not export_symbol.
-> > Object ownership model needs to be thought through.
-> > Calling context needs to be analyzed and so on.
-> > Just because something "works for me" it doesn't mean
-> > that it's safe.
+diff --git a/include/linux/netlink.h b/include/linux/netlink.h
+index 882e9c1b6c1d..1888c8ee416a 100644
+--- a/include/linux/netlink.h
++++ b/include/linux/netlink.h
+@@ -226,7 +226,10 @@ void netlink_ack(struct sk_buff *in_skb, struct nlmsghdr *nlh, int err,
+ int netlink_has_listeners(struct sock *sk, unsigned int group);
+ bool netlink_strict_get_check(struct sk_buff *skb);
+ 
+-int netlink_unicast(struct sock *ssk, struct sk_buff *skb, __u32 portid, int nonblock);
++/* Internal flags for netlink_unicast (do not overlap with MSG_* flags) */
++#define NETLINK_UNICAST_TIMED 0x80000
++
++int netlink_unicast(struct sock *ssk, struct sk_buff *skb, __u32 portid, int flags);
+ int netlink_broadcast(struct sock *ssk, struct sk_buff *skb, __u32 portid,
+ 		      __u32 group, gfp_t allocation);
+ 
+diff --git a/kernel/audit.c b/kernel/audit.c
+index e1d489bc2dff..005bfd9dc7a4 100644
+--- a/kernel/audit.c
++++ b/kernel/audit.c
+@@ -753,7 +753,7 @@ static int auditd_send_unicast_skb(struct sk_buff *skb)
+ 	portid = ac->portid;
+ 	rcu_read_unlock();
+ 
+-	rc = netlink_unicast(sk, skb, portid, 0);
++	rc = netlink_unicast(sk, skb, portid, NETLINK_UNICAST_TIMED);
+ 	put_net(net);
+ 	if (rc < 0)
+ 		goto err;
+@@ -811,7 +811,7 @@ static int kauditd_send_queue(struct sock *sk, u32 portid,
+ retry:
+ 		/* grab an extra skb reference in case of error */
+ 		skb_get(skb);
+-		rc = netlink_unicast(sk, skb, portid, 0);
++		rc = netlink_unicast(sk, skb, portid, NETLINK_UNICAST_TIMED);
+ 		if (rc < 0) {
+ 			/* send failed - try a few times unless fatal error */
+ 			if (++failed >= retry_limit ||
+@@ -967,7 +967,7 @@ int audit_send_list_thread(void *_dest)
+ 	audit_ctl_unlock();
+ 
+ 	while ((skb = __skb_dequeue(&dest->q)) != NULL)
+-		netlink_unicast(sk, skb, dest->portid, 0);
++		netlink_unicast(sk, skb, dest->portid, NETLINK_UNICAST_TIMED);
+ 
+ 	put_net(dest->net);
+ 	kfree(dest);
+@@ -1020,7 +1020,7 @@ static int audit_send_reply_thread(void *arg)
+ 
+ 	/* Ignore failure. It'll only happen if the sender goes away,
+ 	   because our timeout is set to infinite. */
+-	netlink_unicast(audit_get_sk(reply->net), reply->skb, reply->portid, 0);
++	netlink_unicast(audit_get_sk(reply->net), reply->skb, reply->portid, NETLINK_UNICAST_TIMED);
+ 	reply->skb = NULL;
+ 	audit_free_reply(reply);
+ 	return 0;
+diff --git a/net/netlink/af_netlink.c b/net/netlink/af_netlink.c
+index 2aeb0680807d..acaa96695981 100644
+--- a/net/netlink/af_netlink.c
++++ b/net/netlink/af_netlink.c
+@@ -1325,14 +1325,17 @@ static int netlink_unicast_kernel(struct sock *sk, struct sk_buff *skb,
+ }
+ 
+ int netlink_unicast(struct sock *ssk, struct sk_buff *skb,
+-		    u32 portid, int nonblock)
++		    u32 portid, int flags)
+ {
+ 	struct sock *sk;
+ 	int err;
+ 	long timeo;
++	int nonblock;
+ 
+ 	skb = netlink_trim(skb, gfp_any());
+ 
++	/* Extract blocking mode: strip internal flags, preserve MSG_DONTWAIT */
++	nonblock = flags & ~NETLINK_UNICAST_TIMED;
+ 	timeo = sock_sndtimeo(ssk, nonblock);
+ retry:
+ 	sk = netlink_getsockbyportid(ssk, portid);
+@@ -1351,8 +1354,18 @@ int netlink_unicast(struct sock *ssk, struct sk_buff *skb,
+ 	}
+ 
+ 	err = netlink_attachskb(sk, skb, &timeo, ssk);
+-	if (err == 1)
++	if (err == 1) {
++		/* timeo may have been zeroed by schedule_timeout inside
++		 * netlink_attachskb. If the caller is a timed-blocking sender
++		 * (not genuinely nonblocking), don't re-enter with timeo=0 as
++		 * that would misfire netlink_overrun on the next iteration.
++		 */
++		if (!timeo && (flags & NETLINK_UNICAST_TIMED)) {
++			kfree_skb(skb);
++			return -EAGAIN;
++		}
+ 		goto retry;
++	}
+ 	if (err)
+ 		return err;
+ 
+-- 
+2.53.0
 
-I interpreted this comment as more broadly applied to patch
-submissions in general, and not this patch series itself (necessarily).
-
-I do think that "... it breaks saftey ... kfuncs are not export_symbol"
-is what the crux here is. I argue that that Documentation/bpf/kfuncs.rst
-should be improved if this is a common trap that I and others fall in.
-
-As I understood kfuncs, the point is to move away from BPF helpers so
-that subsystems can have a export_symbol of sorts.
-
-To quote:
-
-	BPF Kernel Functions or more commonly known as kfuncs are functions
-	in the Linux kernel which are exposed for use by BPF programs
-	Unlike normal BPF helpers, kfuncs do not have a stable interface
-	and can change from one kernel release to another.
-	...
-
-As Paul mentioned, there are examples of the export_symbols use case, and
-even one whose sole purpose is to crash the kernel: crash_kexec()[1]
-And to be clear, I don't think that is a bad or uneeded patch. I just find it
-interesting and unexpected that it was applied.
-
-Maybe this series is the straw that breaks the camel's back?
-
-> 
-> Unfortunately that isn't the review you provided Fred in this thread.
-> There were no comments about object ownership, calling context,
-> safety, etc., only a dismissive comment telling Fred to use something
-> else for logging.  If you want to provide proper feedback, something
-> along the lines of Kumar's constructive review, I think Fred would
-> welcome that.
-> 
-
-Agreed. I can work with addressing calling context and object ownership
-concerns. I thought I addressed these, but I'd like to know if there's
-something I didn't consider.
-
-Best,
-Fred
-
-[1]: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=133790596406ce2658f0864eb7eac64987c2b12f
