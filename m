@@ -1,195 +1,127 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BCF9449EBB
-	for <audit@vger.kernel.org>; Mon, 11 May 2026 18:43:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A750383986
+	for <audit@vger.kernel.org>; Tue, 12 May 2026 13:28:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778525036; cv=none; b=SIezA6HxFDNGX6vAvSKxPd9sLSGyEqL5dFRQ8iLxvEmvSf1M7QnftRGxPi4kwSvd8r04fTcHGaunovjNsy8S7lnk+wBkCGGRbJjO3SRxRMNPK8EEKpWkGWnkjuxgVf8EddAJrXC64QHoOOvQCDO4MEsBiE7fsedH6r69I0IWgkU=
+	t=1778592530; cv=none; b=VOoL78HlYbjNKgEIvmn0maMGcw7oxpVqzELVQ0N80Mr8pLUycnHSenU6+AcgZyNgAMJEq3oQwQG9A31+2eLZdIw9f5fgFwNRkT/qgknSOwDXxh9tLuqJuLhded3c8qkVFpx8q9/vp91S0CBdPrZaGJBYqzpW/ycZEChyQ2L8bjM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778525036; c=relaxed/simple;
-	bh=uHbYBiaVX6StCVS3mjmgpdx/r0kZ5jpDITVdz4K5N0U=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:content-type; b=t/bVB3+FfQvmiHTTJZA9Cpsuw/TLFTAs6ca+BGniKni2xyl/OLCbyVRs5Fqkt38vf9VUwTStdZRfXPpXmDGnU9uFY7iwoIZm6GiBgmMZpWEIJGBafqkQLJgzCUOy621/6t5tlAinEC8aPvoxXp8TOcb1kqzSisNnptFICaoegDY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=bZZcMPZG; arc=none smtp.client-ip=170.10.129.124
+	s=arc-20240116; t=1778592530; c=relaxed/simple;
+	bh=wV05HjV39evQntHLn5vEg/D3uJKZymKcIup65dVA9Hc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:content-type; b=r+NrUTbSWVK0rBP5wunpIil1Yj3SiI99W+D78wnxYynHh2dHngA03z/B0diyUFVyakTQFyokB8VZOa5K4oVRMW0ADfY/GM5NkHzSA/8l/HZe3mbuPWdS3wtp8n4GG0sUH7np2qEE94N5TRgBdHyffvsKG5Z94GVVFsvI3Wbw4Eg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=gcNyvYts; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="bZZcMPZG"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="gcNyvYts"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1778525034;
+	s=mimecast20190719; t=1778592528;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding;
-	bh=KVNlHnyH6Pi2wnbn/0P75oyyCBRiJQi88SIInmQq+gA=;
-	b=bZZcMPZGoff0Vk0jICn2f21WHxF7N4fm4uTgbedvJ9f2IXYcgvotQorrk2WRGog9PNuBjE
-	8XZdlmAjWnbiXWmsDJFClz2g/TrDquOGQ3UTvR9GGqyMC26kzGdAerQy+tA84x1bY8/xg3
-	nCq9A0LOIe1xfHHtMSNZUi9DOyaoCh0=
-Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-517-LUXBaevYOlu4Gt4qEaKMjQ-1; Mon,
- 11 May 2026 14:43:50 -0400
-X-MC-Unique: LUXBaevYOlu4Gt4qEaKMjQ-1
-X-Mimecast-MFC-AGG-ID: LUXBaevYOlu4Gt4qEaKMjQ_1778525029
-Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 8FA991800371;
-	Mon, 11 May 2026 18:43:49 +0000 (UTC)
-Received: from wsxc.redhat.com (unknown [10.96.134.165])
-	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 03EA518004A3;
-	Mon, 11 May 2026 18:43:45 +0000 (UTC)
-From: Ricardo Robaina <rrobaina@redhat.com>
+	bh=G5qbU9ydLa2q0Fon5A8FvE5NNe2p30zXRxlDNHlo9Pc=;
+	b=gcNyvYtsN6YhymMPFkjuxFYsZwgQLRfhEQklzERaawv+ABKKOcXRE7pbXYGbxKFc84WbUt
+	hYeHDLe+ItHSYtEj9E5kkcj2rS7IEZrdYimdykSLxzqPOdMJtayLiJetI8Jhgxj5ObBk1/
+	gToFsCoR5JMQlXfczm6muJXmLwTTM2E=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-227-kF_Pkk8dN-6qVNvz8FmZ9A-1; Tue, 12 May 2026 09:28:47 -0400
+X-MC-Unique: kF_Pkk8dN-6qVNvz8FmZ9A-1
+X-Mimecast-MFC-AGG-ID: kF_Pkk8dN-6qVNvz8FmZ9A_1778592526
+Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-44696b11265so6336308f8f.0
+        for <audit@vger.kernel.org>; Tue, 12 May 2026 06:28:47 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778592526; x=1779197326;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=G5qbU9ydLa2q0Fon5A8FvE5NNe2p30zXRxlDNHlo9Pc=;
+        b=CkLuCzlDwM5yPLaMCscco/15uE7T9fCSgeL6I25TJ2IbpamDdP6DCdBuMneK3udPAD
+         t77M45rmUA8+Lc/3VG8CmP0ERneJBc3rLBIrextHCJ/r/CGfaPdUHPCKq6oWRl0wh4yS
+         Einc3pkxpHzr4pkkYQP9NLYc3IjE32hsd6mQjaQwmR2MfAt+4MpqkPBfReKGp2saXpKG
+         dfLnJXST3RUxYqmrBPEK2dVjMzSqOnOxZGI0Wbini5tFC85NfzmfiWhMUEQ5hV3i3AI0
+         4sTc7ZeV3WTK7FwkPEmhllXgwiW1AUYpZyfWGmmgJIsQmA7YzTHwu4CHL89/fUqfJM74
+         PNzA==
+X-Gm-Message-State: AOJu0Yzz2bYhxy5hx6Z1lIdHMjS9j5EwCeoUD/V6Xpoxio/MgRlR1nUg
+	KfvRBZ0L9C05i6o/T7NiO7MEpu1E+iRwf2t0oPl3keCdzqO0mAXj9p05PW6BVPYjLJui1RaG0vQ
+	NzRhA1pmUNyXy1T5/DUyXRPgyPgjYwZkcf2FzJcQwVIcheUGsDdqgypBk/6Z0DxcFMneNY+8erC
+	Z5yEqsnVqNYlAocrvcDHDW3hl/10M8hxTgToNem6P1uxM=
+X-Gm-Gg: Acq92OHcydI0d0VyNkIFXwpCrr0H2GfrtQWSEV9IyJdV8HCv0z55LZkJwNim+kYu3Ns
+	kxj+tvXM2IX3zZ8LhroYZSMHcdFWFIMSg2mUY4ei/IcD02Sf4J1S19ZpFOiLzcy2VTavl6/wHOJ
+	0IyHwOCrvfin3CbhUKl3JX5Bi4gAR6/9zchQi54GiMYCemUCbW0tBUZF8Y6tajvgqhboUCNomJZ
+	ErIM5IpvGQ0RptcAcGmGQFfdxjENnv5im7K+el8QCkQUkvkANossfNUaeamb7yNA9IYgXAyQafM
+	eaBpE5M0Bxy4LkmjWoY+RXYmz/mEYYUXGVXWFNnuA0p2JrAEZzrguubKyY9/MVF3/AHkTohMH2c
+	DgMr7pjjP24hQEr3TBDGw6GQjpmNaiS9lR9gHC5X3UCQj0s5yrKS/K9Rc9gYF5KFa+WlyNzNOm+
+	Q=
+X-Received: by 2002:a05:6000:144f:b0:43c:f1a5:56f6 with SMTP id ffacd0b85a97d-45b1547c783mr4431996f8f.43.1778592525977;
+        Tue, 12 May 2026 06:28:45 -0700 (PDT)
+X-Received: by 2002:a05:6000:144f:b0:43c:f1a5:56f6 with SMTP id ffacd0b85a97d-45b1547c783mr4431948f8f.43.1778592525548;
+        Tue, 12 May 2026 06:28:45 -0700 (PDT)
+Received: from localhost (bl15-153-58.dsl.telepac.pt. [188.80.153.58])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4548bb51d40sm31816958f8f.0.2026.05.12.06.28.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 May 2026 06:28:45 -0700 (PDT)
+From: Sergio Correia <scorreia@redhat.com>
 To: audit@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	netdev@vger.kernel.org
+	linux-kernel@vger.kernel.org
 Cc: paul@paul-moore.com,
 	eparis@redhat.com,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	horms@kernel.org,
-	Ricardo Robaina <rrobaina@redhat.com>,
-	Steve Grubb <sgrubb@redhat.com>
-Subject: [PATCH] netlink, audit: prevent false ENOBUFS on timeout expiry
-Date: Mon, 11 May 2026 15:43:38 -0300
-Message-ID: <20260511184338.392420-1-rrobaina@redhat.com>
+	sergeh@kernel.org,
+	jmorris@namei.org,
+	rrobaina@redhat.com,
+	Sergio Correia <scorreia@redhat.com>
+Subject: [PATCH] audit: fix incorrect inheritable capability in CAPSET records
+Date: Tue, 12 May 2026 14:28:33 +0100
+Message-ID: <20260512132833.1304542-1-scorreia@redhat.com>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
-X-Mimecast-MFC-PROC-ID: 3KbWu9FiRMGjEe3jmbwcQuT1FynzRGvEmXxULUV1k9c_1778525029
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: lXBA1TvMi6lh5-MwYdpR12UxqSViTn7_EJWcvFHpRVc_1778592526
 X-Mimecast-Originator: redhat.com
 Content-Transfer-Encoding: 8bit
 content-type: text/plain; charset="US-ASCII"; x-default=true
 
-When auditd is bottlenecked (e.g., by slow disk I/O), kauditd blocks on
-the netlink socket. If the wait timeout fully expires (timeo == 0),
-netlink mistakenly interprets the zeroed timeout as a non-blocking
-request. It then triggers netlink_overrun that drops the event,
-completely bypassing the audit subsystem's internal retry queue, and
-falsely returns ENOBUFS to user-space, resulting in the following error:
+__audit_log_capset() records the effective capability set into the
+inheritable field due to a copy-paste error. Every CAPSET audit
+record therefore reports cap_pi (process inheritable) with the value
+of cap_effective instead of cap_inheritable.
 
- auditd[]: Error receiving audit netlink packet (No buffer space available)
+This silently corrupts audit data used for compliance and forensic
+analysis: an attacker who modifies inheritable capabilities to
+prepare for a privilege-escalating exec would have the change masked
+in the audit trail.
 
-Convert the `nonblock` argument in netlink_unicast() into a `flags`
-bitmask and introduce NETLINK_UNICAST_TIMED. When a caller specifies
-this flag and exhausts its timeout budget, netlink intercepts the
-zeroed timeo state. Instead of defaulting to an overrun condition, it
-safely frees the skb and returns -EAGAIN, allowing the audit subsystem
-to gracefully enqueue the pending event into its internal backlog.
+The bug has been present since the original introduction of CAPSET
+audit records in 2008.
 
-Suggested-by: Steve Grubb <sgrubb@redhat.com>
-Signed-off-by: Ricardo Robaina <rrobaina@redhat.com>
+Fixes: e68b75a027bb ("When the capset syscall is used it is not possible for audit to record the actual capbilities being added/removed.  This patch adds a new record type which emits the target pid and the eff, inh, and perm cap sets.")
+Reviewed-by: Ricardo Robaina <rrobaina@redhat.com>
+Assisted-by: Claude:claude-opus-4-6
+Signed-off-by: Sergio Correia <scorreia@redhat.com>
 ---
- include/linux/netlink.h  |  5 ++++-
- kernel/audit.c           |  8 ++++----
- net/netlink/af_netlink.c | 17 +++++++++++++++--
- 3 files changed, 23 insertions(+), 7 deletions(-)
+ kernel/auditsc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/include/linux/netlink.h b/include/linux/netlink.h
-index 882e9c1b6c1d..1888c8ee416a 100644
---- a/include/linux/netlink.h
-+++ b/include/linux/netlink.h
-@@ -226,7 +226,10 @@ void netlink_ack(struct sk_buff *in_skb, struct nlmsghdr *nlh, int err,
- int netlink_has_listeners(struct sock *sk, unsigned int group);
- bool netlink_strict_get_check(struct sk_buff *skb);
+diff --git a/kernel/auditsc.c b/kernel/auditsc.c
+index ab54fccba215..abdf8da3be93 100644
+--- a/kernel/auditsc.c
++++ b/kernel/auditsc.c
+@@ -2786,7 +2786,7 @@ void __audit_log_capset(const struct cred *new, const struct cred *old)
  
--int netlink_unicast(struct sock *ssk, struct sk_buff *skb, __u32 portid, int nonblock);
-+/* Internal flags for netlink_unicast (do not overlap with MSG_* flags) */
-+#define NETLINK_UNICAST_TIMED 0x80000
-+
-+int netlink_unicast(struct sock *ssk, struct sk_buff *skb, __u32 portid, int flags);
- int netlink_broadcast(struct sock *ssk, struct sk_buff *skb, __u32 portid,
- 		      __u32 group, gfp_t allocation);
- 
-diff --git a/kernel/audit.c b/kernel/audit.c
-index e1d489bc2dff..005bfd9dc7a4 100644
---- a/kernel/audit.c
-+++ b/kernel/audit.c
-@@ -753,7 +753,7 @@ static int auditd_send_unicast_skb(struct sk_buff *skb)
- 	portid = ac->portid;
- 	rcu_read_unlock();
- 
--	rc = netlink_unicast(sk, skb, portid, 0);
-+	rc = netlink_unicast(sk, skb, portid, NETLINK_UNICAST_TIMED);
- 	put_net(net);
- 	if (rc < 0)
- 		goto err;
-@@ -811,7 +811,7 @@ static int kauditd_send_queue(struct sock *sk, u32 portid,
- retry:
- 		/* grab an extra skb reference in case of error */
- 		skb_get(skb);
--		rc = netlink_unicast(sk, skb, portid, 0);
-+		rc = netlink_unicast(sk, skb, portid, NETLINK_UNICAST_TIMED);
- 		if (rc < 0) {
- 			/* send failed - try a few times unless fatal error */
- 			if (++failed >= retry_limit ||
-@@ -967,7 +967,7 @@ int audit_send_list_thread(void *_dest)
- 	audit_ctl_unlock();
- 
- 	while ((skb = __skb_dequeue(&dest->q)) != NULL)
--		netlink_unicast(sk, skb, dest->portid, 0);
-+		netlink_unicast(sk, skb, dest->portid, NETLINK_UNICAST_TIMED);
- 
- 	put_net(dest->net);
- 	kfree(dest);
-@@ -1020,7 +1020,7 @@ static int audit_send_reply_thread(void *arg)
- 
- 	/* Ignore failure. It'll only happen if the sender goes away,
- 	   because our timeout is set to infinite. */
--	netlink_unicast(audit_get_sk(reply->net), reply->skb, reply->portid, 0);
-+	netlink_unicast(audit_get_sk(reply->net), reply->skb, reply->portid, NETLINK_UNICAST_TIMED);
- 	reply->skb = NULL;
- 	audit_free_reply(reply);
- 	return 0;
-diff --git a/net/netlink/af_netlink.c b/net/netlink/af_netlink.c
-index 2aeb0680807d..acaa96695981 100644
---- a/net/netlink/af_netlink.c
-+++ b/net/netlink/af_netlink.c
-@@ -1325,14 +1325,17 @@ static int netlink_unicast_kernel(struct sock *sk, struct sk_buff *skb,
- }
- 
- int netlink_unicast(struct sock *ssk, struct sk_buff *skb,
--		    u32 portid, int nonblock)
-+		    u32 portid, int flags)
- {
- 	struct sock *sk;
- 	int err;
- 	long timeo;
-+	int nonblock;
- 
- 	skb = netlink_trim(skb, gfp_any());
- 
-+	/* Extract blocking mode: strip internal flags, preserve MSG_DONTWAIT */
-+	nonblock = flags & ~NETLINK_UNICAST_TIMED;
- 	timeo = sock_sndtimeo(ssk, nonblock);
- retry:
- 	sk = netlink_getsockbyportid(ssk, portid);
-@@ -1351,8 +1354,18 @@ int netlink_unicast(struct sock *ssk, struct sk_buff *skb,
- 	}
- 
- 	err = netlink_attachskb(sk, skb, &timeo, ssk);
--	if (err == 1)
-+	if (err == 1) {
-+		/* timeo may have been zeroed by schedule_timeout inside
-+		 * netlink_attachskb. If the caller is a timed-blocking sender
-+		 * (not genuinely nonblocking), don't re-enter with timeo=0 as
-+		 * that would misfire netlink_overrun on the next iteration.
-+		 */
-+		if (!timeo && (flags & NETLINK_UNICAST_TIMED)) {
-+			kfree_skb(skb);
-+			return -EAGAIN;
-+		}
- 		goto retry;
-+	}
- 	if (err)
- 		return err;
- 
+ 	context->capset.pid = task_tgid_nr(current);
+ 	context->capset.cap.effective   = new->cap_effective;
+-	context->capset.cap.inheritable = new->cap_effective;
++	context->capset.cap.inheritable = new->cap_inheritable;
+ 	context->capset.cap.permitted   = new->cap_permitted;
+ 	context->capset.cap.ambient     = new->cap_ambient;
+ 	context->type = AUDIT_CAPSET;
 -- 
-2.53.0
+2.54.0
 
