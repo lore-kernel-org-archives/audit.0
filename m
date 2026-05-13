@@ -1,185 +1,116 @@
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 648133A6B78;
-	Wed, 13 May 2026 05:42:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36474280018
+	for <audit@vger.kernel.org>; Wed, 13 May 2026 13:08:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778650947; cv=none; b=fsv6h+Gl+2KJmJY+4XGdUfkTH8okZDqTl4SQkacnBBb7Trcb/FU5LrtxYCTiz1MOkAy1Ftc2rrsiBVia0EhFbRvTkpe/JcJqqCtR/zH/4K97kvVOclPqyWc3EnbsDRh8+FauvVTh7oyj6k2Y6YmMvMxGWEtQU1lP/IS0pXTLRKs=
+	t=1778677738; cv=none; b=QYkQqgrtb1le6N+VK9VGRgAg9e8z+ByFJL+wjJ3M8dvqQF4Q2jsCv5eGUYnmYsIGl926Gg4KBSkV8sP66rD2hVIzRN0WdGgx/moEeWrhXJ9p8GRuN2oVhjPgq1El4up/CVOpA1xOkI3hnkVTvTa2+Z0/sRWG4txgpSz2JvRvXO4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778650947; c=relaxed/simple;
-	bh=jUSOxx/gevkVRwG17gumcFAhzAo1bxIxmLuSOasFtrQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Y5b/HeiWAufac5om3+VWpRI7s8hZAJlHsiTf/T6bzApCRoI6yEba3WhFYdxhyIjtA2fDM7/3rlK+ffXbHo7A73uvT8AbuUl9z1bLXH6Yj8oEIxyX2GXpwAPdQ3M64QZlDdSZIZ+WUwaRvpKWSqxkUas1QI2QQeJvlcJkM36QQJo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=eW35pEXU; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1778677738; c=relaxed/simple;
+	bh=CziVjmmpWOJL9teb/NgjnK52j5fN7O0SUD+zzjOT3Bo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:content-type; b=WFalJgDMr4xhfeJvd8yUkAXQQj6tqA77geT0wspNuHCZ6/YzQ04lGHMmQEi56lrW8GTWQhRVXVoukMPSFlhP+zuAZ1tIFyp04bXRPDkTvaLWBRrkQbzptlf+nlivovbocEDmO/K/nITvQtW0Ut6bJAelFxaeHGQlsgsDkvq8Shw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=inmv7UKV; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="eW35pEXU"
-Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 64D1h6oG3179743;
-	Wed, 13 May 2026 05:41:59 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=xuq5Lt
-	ljQdLyoPY0FCPpzNs5AFTl1JLRU0TOa/TpHJU=; b=eW35pEXUkTCuoW3PKeC0V4
-	4l+VwBBic2vsKReVFYbadXMHaFZJ2dxd5qjxfGtAvYUmj+5ifsFsqv03SEViIzQg
-	bemffswkjLW5HsJlzmNnqU4D63EWxWTjOGD89tGfZV0BD8+I39TfXRgw0shzsR7h
-	yX4+vyhwZqw6yW8AY+njLYcDfe6nrptk6q9SSTe7LkzReb1WzRef5T9TF237wJcd
-	6n37gjy5O99jnRh2kTMGmhwGE7w/GtskxW7xUdexEQRAbxaAlp1FYloYRyEH6Pq0
-	EhbjAbhYz2QjZJpPp+Bh/1HOezr3xxN01VCtsWyarIgjgtj0FZf+TYJnZud0renQ
-	==
-Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4e3nv6nxnx-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 13 May 2026 05:41:58 +0000 (GMT)
-Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma12.dal12v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 64D5dZsg016960;
-	Wed, 13 May 2026 05:41:57 GMT
-Received: from smtprelay06.dal12v.mail.ibm.com ([172.16.1.8])
-	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 4e3nfgecwu-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 13 May 2026 05:41:57 +0000 (GMT)
-Received: from smtpav01.dal12v.mail.ibm.com (smtpav01.dal12v.mail.ibm.com [10.241.53.100])
-	by smtprelay06.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 64D5fuF329950532
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 13 May 2026 05:41:56 GMT
-Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 8A2BF58058;
-	Wed, 13 May 2026 05:41:56 +0000 (GMT)
-Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 2FF7D58057;
-	Wed, 13 May 2026 05:41:51 +0000 (GMT)
-Received: from [9.123.2.213] (unknown [9.123.2.213])
-	by smtpav01.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Wed, 13 May 2026 05:41:50 +0000 (GMT)
-Message-ID: <09e72f42-e180-4e2b-b379-92b755792a2c@linux.ibm.com>
-Date: Wed, 13 May 2026 11:11:49 +0530
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="inmv7UKV"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1778677736;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=dwog4+kBzFchlLFOSm4JLyZbbRXhurwsOUlD9WLqcHw=;
+	b=inmv7UKVsuqBVQmpmLSDPstzdIMJlpefaHf4DU5Ni/iDp9aaKCYOuqBHZmeYWGIUEtP5lN
+	gm1nxx9i0buB6MXwtPZC2WdPOV3OOab6cW2GPy3fpCe+fyzrvaHEZ8nmFBVcQKV/qWA/cb
+	QuoHAWM4CKuRotXN2I89K+0KlB1ENoM=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-326-vcxpttZeP--FYSu6K_5rfQ-1; Wed,
+ 13 May 2026 09:08:51 -0400
+X-MC-Unique: vcxpttZeP--FYSu6K_5rfQ-1
+X-Mimecast-MFC-AGG-ID: vcxpttZeP--FYSu6K_5rfQ_1778677729
+Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id A02B018005BA;
+	Wed, 13 May 2026 13:08:49 +0000 (UTC)
+Received: from wsxc.redhat.com (unknown [10.96.134.76])
+	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 8EC1B1955D84;
+	Wed, 13 May 2026 13:08:47 +0000 (UTC)
+From: Ricardo Robaina <rrobaina@redhat.com>
+To: audit@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: paul@paul-moore.com,
+	eparis@redhat.com,
+	Ricardo Robaina <rrobaina@redhat.com>
+Subject: [PATCH] audit: fix potential integer overflow in audit_log_n_hex()
+Date: Wed, 13 May 2026 10:08:43 -0300
+Message-ID: <20260513130843.790380-1-rrobaina@redhat.com>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3] powerpc/audit: Convert powerpc to
- AUDIT_ARCH_COMPAT_GENERIC
-To: Harsh Prateek Bora <harshpb@linux.ibm.com>,
-        Paul Moore <paul@paul-moore.com>,
-        "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
-        Venkat Rao Bagalkote <venkat88@linux.ibm.com>
-Cc: Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin
- <npiggin@gmail.com>, Eric Paris <eparis@redhat.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        audit@vger.kernel.org,
-        Thomas Weissschuh <thomas.weissschuh@linutronix.de>,
-        =?UTF-8?Q?C=C3=A9dric_Le_Goater?= <clg@kaod.org>,
-        ritesh.list@gmail.com
-References: <261b1be5b8dc526b83d73e8281e682a73536ea28.1773155031.git.chleroy@kernel.org>
- <CAHC9VhTyOuuPs1uovodM9M_8zZeJnVXs9xrWSdPhZcjXUb=mvA@mail.gmail.com>
- <fce0a701-ee58-4cb2-b34b-8aec26aaab5d@linux.ibm.com>
-Content-Language: en-US
-From: Madhavan Srinivasan <maddy@linux.ibm.com>
-In-Reply-To: <fce0a701-ee58-4cb2-b34b-8aec26aaab5d@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
+X-Mimecast-MFC-PROC-ID: GUpMpokQjeAYEFgila48tEdrDUGJ7RLnXEpJdKfCKzc_1778677729
+X-Mimecast-Originator: redhat.com
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Reinject: loops=2 maxloops=12
-X-Authority-Analysis: v=2.4 cv=Us1T8ewB c=1 sm=1 tr=0 ts=6a040f26 cx=c_pps
- a=bLidbwmWQ0KltjZqbj+ezA==:117 a=bLidbwmWQ0KltjZqbj+ezA==:17
- a=IkcTkHD0fZMA:10 a=NGcC8JguVDcA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=RnoormkPH1_aCDwRdu11:22 a=Y2IxJ9c9Rs8Kov3niI8_:22 a=VwQbUJbxAAAA:8
- a=NEAV23lmAAAA:8 a=1UX6Do5GAAAA:8 a=aow-egSQAAAA:8 a=U9SjFSZQ4YHa6oGgTWoA:9
- a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10 a=Et2XPkok5AAZYJIKzHr1:22
- a=gFNbaldVC-z-bsjSTzMo:22
-X-Proofpoint-GUID: uPkV2bk2g3EF9lFjnjbKhq59e6Nnuiid
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTEzMDA1NCBTYWx0ZWRfX6W1Ko2CSd/96
- P5y3UOVboC/cf4CJS1ogv4tqDnIdlcgQeKdqF003TOuORnULKnUdpWDmqgSGeKzgM7kE1jBxHxK
- z4cv5/SMGmWdFLyEeNJfXj3x3mZpEaCdqZSobbWBsTvLBUzx2LQW3WPjuZwsY+5ebwYsv+6DZma
- 6jMobCfaU0aqImmYueRRt1TGfmWz3YXJO/us8kwO17IgMlqTLAiyofyxOV3aA3YperIKWDe3GpW
- vRvS/O0mJ9/Q+VSH781kGkd/P0QMYAFFolLthELkSsYXGdJNGctc3FHA/XrAZSC5U7mOFu1rDpr
- 4k1EpvtX65fp3/IsxnNf0eZQw4jovdJ/I1gHhePF7SY3lQxyr9E9WGIZcK/lYB0SdxnQY2Pfr+d
- w3xY2X7YRtSiAjmmbjEmbe1zCuvl1psvr7Ae1jOQnqbhvsbRovcXB7idZKdZQHN2sJfWdeot3W+
- 7ZJg+LpnNEPeTn3dHMA==
-X-Proofpoint-ORIG-GUID: dl-Rp2Qq6poBOLRUzMiY-CJkCkQAyW6e
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-05-11_05,2026-05-08_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- phishscore=0 priorityscore=1501 impostorscore=0 lowpriorityscore=0
- bulkscore=0 suspectscore=0 spamscore=0 malwarescore=0 clxscore=1015
- adultscore=0 classifier=typeunknown authscore=0 authtc= authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2605050000
- definitions=main-2605130054
+content-type: text/plain; charset="US-ASCII"; x-default=true
 
+The function audit_log_n_hex() calculates new_len as len << 1 to
+account for hex encoding, where each byte becomes two characters.
+However, when len is passed as size_t but new_len was declared as
+int, this could lead to integer overflow for large values of len.
 
-On 5/13/26 10:05 AM, Harsh Prateek Bora wrote:
-> + Ritesh
->
-> Hi Venkat,
->
-> On 11/03/26 12:49 am, Paul Moore wrote:
->> On Tue, Mar 10, 2026 at 11:08 AM Christophe Leroy (CS GROUP)
->> <chleroy@kernel.org> wrote:
->>>
->>> From: Christophe Leroy <christophe.leroy@csgroup.eu>
->>>
->>> Commit e65e1fc2d24b ("[PATCH] syscall class hookup for all normal
->>> targets") added generic support for AUDIT but that didn't include
->>> support for bi-arch like powerpc.
->>>
->>> Commit 4b58841149dc ("audit: Add generic compat syscall support")
->>> added generic support for bi-arch.
->>>
->>> Convert powerpc to that bi-arch generic audit support.
->>>
->>> With this change generated text is similar.
->>>
->>> Thomas has confirmed that the previously failing filter_exclude/test
->>> is now successful both without and with this patch, see [1]
->>>
->>> [1] 
->>> https://lore.kernel.org/all/20260306115350-ef265661-6d6b-4043-9bd0-8e6b437d0d67@linutronix.de/
->>>
->>> Link: https://github.com/linuxppc/issues/issues/412
->>> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
->>> Reviewed-by: Cédric Le Goater <clg@kaod.org>
->>> ---
->>> Venkat, a test result with 
->>> https://github.com/linux-audit/audit-testsuite would be appreciated.
->>
->> Yes, I'd like to see confirmation that the audit test suite runs clean
->> on ppc systems with this patch applied, and unfortunately without a
->> ppc system I have no way to test this myself.
->
-My bad, this is a miss from my end.
-Venkat is already on this and will update the results here.
+Additionally, the bit shift operation itself could overflow if len
+exceeds SIZE_MAX / 2, leading to incorrect buffer size calculations
+and potential memory corruption.
 
-Maddy
+Fix this by changing new_len and loop counter i from int to size_t
+to match the len parameter type, preventing signed/unsigned mismatches,
+and by adding an overflow check before the bit shift operation that
+calculates len << 1.
 
+Fixes: 168b7173959f ("AUDIT: Clean up logging of untrusted strings")
+Signed-off-by: Ricardo Robaina <rrobaina@redhat.com>
+---
+ kernel/audit.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-> Is it possible to include this test suite in the IBM CI ?
->
-> Thanks
-> Harsh
->>
->>> v3: Rebased on v7.0-rc1
->>>
->>> v2: 
->>> https://lore.kernel.org/all/a4b3951d1191d4183d92a07a6097566bde60d00a.1629812058.git.christophe.leroy@csgroup.eu/
->>> ---
->>>   arch/powerpc/Kconfig                |  5 +-
->>>   arch/powerpc/include/asm/unistd32.h |  7 +++
->>>   arch/powerpc/kernel/Makefile        |  3 -
->>>   arch/powerpc/kernel/audit.c         | 87 
->>> -----------------------------
->>>   arch/powerpc/kernel/compat_audit.c  | 49 ----------------
->>>   5 files changed, 8 insertions(+), 143 deletions(-)
->>>   create mode 100644 arch/powerpc/include/asm/unistd32.h
->>>   delete mode 100644 arch/powerpc/kernel/audit.c
->>>   delete mode 100644 arch/powerpc/kernel/compat_audit.c
->>
->
->
+diff --git a/kernel/audit.c b/kernel/audit.c
+index e1d489bc2dff..32ac50996451 100644
+--- a/kernel/audit.c
++++ b/kernel/audit.c
+@@ -2076,7 +2076,8 @@ void audit_log_format(struct audit_buffer *ab, const char *fmt, ...)
+ void audit_log_n_hex(struct audit_buffer *ab, const unsigned char *buf,
+ 		size_t len)
+ {
+-	int i, avail, new_len;
++	int avail;
++	size_t i, new_len;
+ 	unsigned char *ptr;
+ 	struct sk_buff *skb;
+ 
+@@ -2084,9 +2085,14 @@ void audit_log_n_hex(struct audit_buffer *ab, const unsigned char *buf,
+ 		return;
+ 
+ 	BUG_ON(!ab->skb);
++
++	/* prevent new_len overflow */
++	if (len > SIZE_MAX / 2)
++		return;
++
+ 	skb = ab->skb;
+ 	avail = skb_tailroom(skb);
+-	new_len = len<<1;
++	new_len = len << 1;
+ 	if (new_len >= avail) {
+ 		/* Round the buffer request up to the next multiple */
+ 		new_len = AUDIT_BUFSIZ*(((new_len-avail)/AUDIT_BUFSIZ) + 1);
+-- 
+2.53.0
+
