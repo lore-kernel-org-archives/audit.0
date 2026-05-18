@@ -1,63 +1,105 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92E0D33EB10;
-	Thu, 14 May 2026 16:41:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 765BE3EEAC8;
+	Mon, 18 May 2026 11:04:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778776865; cv=none; b=qyHg/3r0G5DvTESlh1c00UWoT1UcP2QSiy33WYByAL/fvXWpbPYt8LycXWMbgwQ6FkBgCn0CsDINntiiTDoBVaAOI+LINSDFQj+cmOiVXqAvJwUvBMDbfbm8t2yBJdm2wUqDAxqWaECGAiOy2S4qef49IX7vdZMVnruYyd+YswQ=
+	t=1779102248; cv=none; b=OQgsiayhvdiqrnNSPy/vn8w7mn3cgdFj2mPFr6UOUqn2kdSEVZ0kFEaqdAFQr0L6nfhJtRWpaHKqWyI0xeT+2CGnt0UBxozvodgufZM8EnL+eKXhY5juBm29yDExZYUVZvYYn/gtZCWOB8N2I26NY6uIn8NMsy4/GuArR2MvhdM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778776865; c=relaxed/simple;
-	bh=RXizr9ZJI8VDzy/hik44P+acPmtOO+n1UTTxwQCoaXE=;
-	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=feoTAndfehPxS5lwy2ogD0f893ypr5QzjQj5HbJEBSgwXP4G49YtyUFC2dei3z+HapVDPGyJzBsNQqgWVRNA1T9Laxe5TWGdZP/pQhNAJeYtzi/MQ77asxVwUNC75ivPL495ubZCbb7R9/iXvVB3VVQiEjyHiew5KbWqu5DztsA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=O1CKBqQR; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1779102248; c=relaxed/simple;
+	bh=juE+V3ORpgCuEqh5KlQKobjNDQy2f+8eekBvvYfnF/w=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=ACTF+/oHWGumOT8B7DgfxOdU6cfQY7f8oIf6xoKusg1J6uHGJ8enuLicD9lv5xD0e5tEeK7G3jvuXGt0wubDWuePvwqJidFoXweq40ypgkQtQaulNyQe+9PVoknZTKzWVuwkUCE4CKgtA+vkQmEou+U4SLNjRKGfYotGDHePJig=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rV0Wl3IZ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="O1CKBqQR"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 796F7C2BCB3;
-	Thu, 14 May 2026 16:41:05 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rV0Wl3IZ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09E0CC2BCC6;
+	Mon, 18 May 2026 11:04:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778776865;
-	bh=RXizr9ZJI8VDzy/hik44P+acPmtOO+n1UTTxwQCoaXE=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-	b=O1CKBqQRd8goSe33qTe6dsekorRxH7yuPWIwLoT5NJm+Wh6r+Xi1y/nCgiZtxCUQw
-	 yluy+DMUEVQAJsniSdAUtzNNST6iUxR59dea7cz0+YxuxeHyuGrkHDjR5l3eufUdcs
-	 hDvLdx6JkqbNjIRjf7wQJzx9GGLvGapTDbjqOObNqr1VrsnjFZsjiNxiGaQLVpa10u
-	 XIY94gbMUoYUml1XH5Wu9WhHK6gXhBVk+AErrsefCgCi3iZ0KDgmxDYcaO4z9AOgFu
-	 YxM5x8HKcL5s0vlhRLiJ/arObpirjx+6iuDREREIkGBBXIp50FvZe+9zIFTbb2usBx
-	 EhKhJGjpiu/3w==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 7DB9339D6579;
-	Thu, 14 May 2026 16:40:11 +0000 (UTC)
-Subject: Re: [GIT PULL] audit/audit-pr-20260513
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <e4ad001116590340ea21e657830d31cf@paul-moore.com>
-References: <e4ad001116590340ea21e657830d31cf@paul-moore.com>
-X-PR-Tracked-List-Id: <audit.vger.kernel.org>
-X-PR-Tracked-Message-Id: <e4ad001116590340ea21e657830d31cf@paul-moore.com>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/audit.git tags/audit-pr-20260513
-X-PR-Tracked-Commit-Id: f9e1c1324b4d98d591a6f7568fdebf5cf456dfc2
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: eb5441518fba295bd97b59dc54914f89dfaa107d
-Message-Id: <177877681059.7067.1665203212411249208.pr-tracker-bot@kernel.org>
-Date: Thu, 14 May 2026 16:40:10 +0000
-To: Paul Moore <paul@paul-moore.com>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, audit@vger.kernel.org, linux-kernel@vger.kernel.org
+	s=k20201202; t=1779102248;
+	bh=juE+V3ORpgCuEqh5KlQKobjNDQy2f+8eekBvvYfnF/w=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=rV0Wl3IZQ/cRKjkYBqvcmZPoKs1O9Bdbhc2q7+uCRzvph7RnjhLxz0pi3kGigFbGJ
+	 EqT4a7FMEJMAGbjGi6SjfHNytBVK18m7wNpdW6GEfeSpBk0D708MLd1YcsgnFolhha
+	 UZgEk2gF/+q6/GUXKPCIp0/tqDFThjt5H+5EV+/o/x9RMkOWxPH9F998E9OfxFkiAz
+	 0Vv68fg4idojKgWaiFyWIe6H8J2OSETSFjcFj29DqcBlYJXm9Xh/q/dG824qUJt5Gx
+	 LZ7C90p+mZmdHp7LN3qVMGLmZ75ziH6OFZRQ2AH3EpN27ZaB8ZIqA9keEoHUtdiA4x
+	 uEgLb7isKzbjA==
+From: Simon Horman <horms@kernel.org>
+To: rrobaina@redhat.com
+Cc: 'Simon Horman' <horms@kernel.org>,
+	audit@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	netdev@vger.kernel.org,
+	paul@paul-moore.com,
+	eparis@redhat.com,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	sgrubb@redhat.com
+Subject: Re: [PATCH v2] netlink, audit: prevent false ENOBUFS on timeout expiry
+Date: Mon, 18 May 2026 12:03:45 +0100
+Message-ID: <20260518110345.497489-1-horms@kernel.org>
+X-Mailer: git-send-email 2.54.0
+In-Reply-To: <20260513172443.1128496-1-rrobaina@redhat.com>
+References: <20260513172443.1128496-1-rrobaina@redhat.com>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-The pull request you sent on Wed, 13 May 2026 18:53:42 -0400:
+From: 'Simon Horman' <horms@kernel.org>
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/audit.git tags/audit-pr-20260513
+This is an AI-generated review of your patch. The human sending this
+email has considered the AI review valid, or at least plausible.
+Full review at: https://sashiko.dev
+---
+netlink, audit: prevent false ENOBUFS on timeout expiry
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/eb5441518fba295bd97b59dc54914f89dfaa107d
+This commit modifies netlink_unicast() to return -EAGAIN when a blocking
+sender's timeout expires. This bypasses the netlink_overrun() call to
+allow the audit subsystem to gracefully enqueue the pending event into its
+internal backlog without falsely returning ENOBUFS to user-space.
 
-Thank you!
+> diff --git a/net/netlink/af_netlink.c b/net/netlink/af_netlink.c
+> --- a/net/netlink/af_netlink.c
+> +++ b/net/netlink/af_netlink.c
+> @@ -1351,8 +1351,18 @@ int netlink_unicast(struct sock *ssk, struct sk_buff *skb,
+>  	}
+>  
+>  	err = netlink_attachskb(sk, skb, &timeo, ssk);
+> -	if (err == 1)
+> +	if (err == 1) {
+> +		/* timeo may have been zeroed by schedule_timeout inside
+> +		 * netlink_attachskb. If the caller is a timed-blocking sender
+> +		 * (not genuinely nonblocking), don't re-enter with timeo=0 as
+> +		 * that would misfire netlink_overrun on the next iteration.
+> +		 */
+> +		if (timeo == 0 && !nonblock) {
+> +			kfree_skb(skb);
+> +			return -EAGAIN;
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Could this regression cause silent packet drops in non-audit subsystems?
+
+While this change prevents false ENOBUFS for the audit subsystem, other
+subsystems like InfiniBand's IWPM use rdma_nl_unicast_wait(), which sets
+nonblock=0 and operates on a kernel socket with a timeout.
+
+If the timeout expires because the receiving user-space daemon is
+bottlenecked, this new path will free the skb and return -EAGAIN without
+ever invoking netlink_overrun().
+
+Without netlink_overrun(), the receiver's socket error is never set to
+ENOBUFS. Would this prevent user-space from being notified of the dropped
+message, leading to permanent state desynchronization between the kernel
+and user-space?
+
+> +		}
+>  		goto retry;
+> +	}
+>  	if (err)
+>  		return err;
