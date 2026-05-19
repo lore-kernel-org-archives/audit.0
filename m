@@ -1,47 +1,41 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 765BE3EEAC8;
-	Mon, 18 May 2026 11:04:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2687C248886;
+	Tue, 19 May 2026 00:35:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779102248; cv=none; b=OQgsiayhvdiqrnNSPy/vn8w7mn3cgdFj2mPFr6UOUqn2kdSEVZ0kFEaqdAFQr0L6nfhJtRWpaHKqWyI0xeT+2CGnt0UBxozvodgufZM8EnL+eKXhY5juBm29yDExZYUVZvYYn/gtZCWOB8N2I26NY6uIn8NMsy4/GuArR2MvhdM=
+	t=1779150909; cv=none; b=DGWu7z20CtNvvutsk+9Xq0arJOLTNZtXNC6ub8a740dukLcB90Rb1LMPr5L8Jx+7MaVqpPVx4Du8Udq6Sy/6Rzj6k6bxcY/Vc1n4cEwIG8gOgdPesRP4P+68v+vguhQdyY79+J/5fOPvJX48WUrn3H9IIb1tbiQmls5IebRJ+mM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779102248; c=relaxed/simple;
-	bh=juE+V3ORpgCuEqh5KlQKobjNDQy2f+8eekBvvYfnF/w=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ACTF+/oHWGumOT8B7DgfxOdU6cfQY7f8oIf6xoKusg1J6uHGJ8enuLicD9lv5xD0e5tEeK7G3jvuXGt0wubDWuePvwqJidFoXweq40ypgkQtQaulNyQe+9PVoknZTKzWVuwkUCE4CKgtA+vkQmEou+U4SLNjRKGfYotGDHePJig=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rV0Wl3IZ; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1779150909; c=relaxed/simple;
+	bh=bcUAzun7DuQa2FpfbLLFAcM6nRlL97zheKTEUXqRsAQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=SevAc+pPRw1dsZzbTSvh3kogdZIivhU8tzU2Dy2OCPmqvy0zWtIc0RR3aavj1QTIEgT686YxQZA/nBHnYfD3sE+SwFdgHnt2SM9+SA/yubqY2cJAO/fcrswcvFgDKBoDRP6ahLSc8gVNrRiE1BYttGAljIUq0wZ8eEusFxCoudQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LiAB3Jxy; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rV0Wl3IZ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09E0CC2BCC6;
-	Mon, 18 May 2026 11:04:05 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LiAB3Jxy"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49251C2BCB7;
+	Tue, 19 May 2026 00:35:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1779102248;
-	bh=juE+V3ORpgCuEqh5KlQKobjNDQy2f+8eekBvvYfnF/w=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=rV0Wl3IZQ/cRKjkYBqvcmZPoKs1O9Bdbhc2q7+uCRzvph7RnjhLxz0pi3kGigFbGJ
-	 EqT4a7FMEJMAGbjGi6SjfHNytBVK18m7wNpdW6GEfeSpBk0D708MLd1YcsgnFolhha
-	 UZgEk2gF/+q6/GUXKPCIp0/tqDFThjt5H+5EV+/o/x9RMkOWxPH9F998E9OfxFkiAz
-	 0Vv68fg4idojKgWaiFyWIe6H8J2OSETSFjcFj29DqcBlYJXm9Xh/q/dG824qUJt5Gx
-	 LZ7C90p+mZmdHp7LN3qVMGLmZ75ziH6OFZRQ2AH3EpN27ZaB8ZIqA9keEoHUtdiA4x
-	 uEgLb7isKzbjA==
-From: Simon Horman <horms@kernel.org>
-To: rrobaina@redhat.com
-Cc: 'Simon Horman' <horms@kernel.org>,
-	audit@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	netdev@vger.kernel.org,
-	paul@paul-moore.com,
-	eparis@redhat.com,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	sgrubb@redhat.com
-Subject: Re: [PATCH v2] netlink, audit: prevent false ENOBUFS on timeout expiry
-Date: Mon, 18 May 2026 12:03:45 +0100
-Message-ID: <20260518110345.497489-1-horms@kernel.org>
-X-Mailer: git-send-email 2.54.0
+	s=k20201202; t=1779150908;
+	bh=bcUAzun7DuQa2FpfbLLFAcM6nRlL97zheKTEUXqRsAQ=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=LiAB3Jxyo1+A0tOUzJeHpOdwErFpWhiv97/kgCDbjQ23i9lVOb5Bxofn/WMMnWeSJ
+	 0dINgQnRghqhsLgkXrCAX2IPwR8QFpXCfAENLKP4jepPjnvWvnRWJiJ5DJcNRJb5zk
+	 X8yQKYoC+e3eAv2KAQqTcsi5DFJ6AtEuMn6hbzzBFHdfA3RvqEx6ER3uOUEdLH37Rz
+	 ANTPH20Qj62bQjUc6ydc4NZzUsuPMibY1mL3ne7/CSZMe1BsiIrjE2iQMEPPh048KA
+	 KgJIT4muXwN0Y7PxUdnXxHDTlmUvse23DV0VZeBDL+GosmPERCl86q1MhzqTsF/QoT
+	 IdjFUmp2FOAOA==
+Date: Mon, 18 May 2026 17:35:07 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Ricardo Robaina <rrobaina@redhat.com>
+Cc: audit@vger.kernel.org, linux-kernel@vger.kernel.org,
+ netdev@vger.kernel.org, paul@paul-moore.com, eparis@redhat.com,
+ edumazet@google.com, pabeni@redhat.com, horms@kernel.org, Steve Grubb
+ <sgrubb@redhat.com>
+Subject: Re: [PATCH v2] netlink, audit: prevent false ENOBUFS on timeout
+ expiry
+Message-ID: <20260518173507.2f2529c9@kernel.org>
 In-Reply-To: <20260513172443.1128496-1-rrobaina@redhat.com>
 References: <20260513172443.1128496-1-rrobaina@redhat.com>
 Precedence: bulk
@@ -50,56 +44,33 @@ List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-From: 'Simon Horman' <horms@kernel.org>
+On Wed, 13 May 2026 14:24:43 -0300 Ricardo Robaina wrote:
+> When auditd is bottlenecked (e.g., by slow disk I/O), kauditd blocks on
+> the netlink socket.
 
-This is an AI-generated review of your patch. The human sending this
-email has considered the AI review valid, or at least plausible.
-Full review at: https://sashiko.dev
----
-netlink, audit: prevent false ENOBUFS on timeout expiry
+Holding socket lock during slow IO sounds very wrong. One could say -
+that's abuse of the socket lock?
 
-This commit modifies netlink_unicast() to return -EAGAIN when a blocking
-sender's timeout expires. This bypasses the netlink_overrun() call to
-allow the audit subsystem to gracefully enqueue the pending event into its
-internal backlog without falsely returning ENOBUFS to user-space.
+> If the wait timeout fully expires (timeo == 0),
+> netlink mistakenly interprets the zeroed timeout as a non-blocking
+> request. It then triggers netlink_overrun that drops the event,
+> completely bypassing the audit subsystem's internal retry queue, and
+> falsely returns ENOBUFS to user-space, resulting in the following error:
+> 
+>  auditd[]: Error receiving audit netlink packet (No buffer space available)
+> 
+> Fix this by detecting when a blocking sender's timeout has expired
+> (timeo == 0 && !nonblock) in netlink_unicast(). In this case, instead
+> of retrying with timeo=0 (which would incorrectly trigger netlink_overrun
+> on the next iteration), safely free the skb and return -EAGAIN, allowing
+> the audit subsystem to gracefully enqueue the pending event into its
+> internal backlog.
 
-> diff --git a/net/netlink/af_netlink.c b/net/netlink/af_netlink.c
-> --- a/net/netlink/af_netlink.c
-> +++ b/net/netlink/af_netlink.c
-> @@ -1351,8 +1351,18 @@ int netlink_unicast(struct sock *ssk, struct sk_buff *skb,
->  	}
->  
->  	err = netlink_attachskb(sk, skb, &timeo, ssk);
-> -	if (err == 1)
-> +	if (err == 1) {
-> +		/* timeo may have been zeroed by schedule_timeout inside
-> +		 * netlink_attachskb. If the caller is a timed-blocking sender
-> +		 * (not genuinely nonblocking), don't re-enter with timeo=0 as
-> +		 * that would misfire netlink_overrun on the next iteration.
-> +		 */
-> +		if (timeo == 0 && !nonblock) {
-> +			kfree_skb(skb);
-> +			return -EAGAIN;
+The socket _is_ the queue, normally.
 
-Could this regression cause silent packet drops in non-audit subsystems?
-
-While this change prevents false ENOBUFS for the audit subsystem, other
-subsystems like InfiniBand's IWPM use rdma_nl_unicast_wait(), which sets
-nonblock=0 and operates on a kernel socket with a timeout.
-
-If the timeout expires because the receiving user-space daemon is
-bottlenecked, this new path will free the skb and return -EAGAIN without
-ever invoking netlink_overrun().
-
-Without netlink_overrun(), the receiver's socket error is never set to
-ENOBUFS. Would this prevent user-space from being notified of the dropped
-message, leading to permanent state desynchronization between the kernel
-and user-space?
-
-> +		}
->  		goto retry;
-> +	}
->  	if (err)
->  		return err;
+Please explore fixing this in audit?
+-- 
+pw-bot: cr
