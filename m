@@ -1,65 +1,65 @@
-Received: from mail-qk1-f196.google.com (mail-qk1-f196.google.com [209.85.222.196])
+Received: from mail-qv1-f65.google.com (mail-qv1-f65.google.com [209.85.219.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74FC03C2B8F
-	for <audit@vger.kernel.org>; Tue, 26 May 2026 21:23:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.196
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 654543C4540
+	for <audit@vger.kernel.org>; Tue, 26 May 2026 23:00:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.65
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779830582; cv=none; b=XQggnAfMzzQRyvBWBZsu4PBBjesuzN14E98/whmSU0PgrrPQioqzHyuycxgpq0GNhp9TtUg8d1VVZqeo3JyPJ+tPQq+AcfoLebtha1c8XT8LCGJ2a1jZ8qFYQzXQqaZ0tJGLphW5X0BHz+y8uoqaGhLODYa6xLj1Pzj41ueKbzk=
+	t=1779836415; cv=none; b=T854COIAKFTZjMZTPnJQPXQPsAzjr/wPZ/OQDvB8ZhX2kHNzKDonyDXntR6o2B9H8biGfmJcSRXb2KZkska7oyeYPwkL9d4V2vG42+K0v7Cyc9af4bol46BQU5UEREH+Rv6HjKlMUK7CDdPfxOgbLC2tXf/kGqJGvwroKubadzo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779830582; c=relaxed/simple;
-	bh=ZQn5yrrrHMJBfs9zAiUN+wgCx+jYUncrSk1sFBZZj18=;
+	s=arc-20240116; t=1779836415; c=relaxed/simple;
+	bh=+uRbzz5AyCUsDbRrb/GU6Uhn7FLl3Jx5tCu0ePg5V3o=;
 	h=Date:Message-ID:MIME-Version:Content-Type:From:To:Cc:Subject:
-	 References:In-Reply-To; b=rOljeO/G7vPsP31HeYm2iH4/AuWPmFwShPlC3J1GWI8peGbZZTlk2ia40QmBaYt3lTS28DHk+FXphap0etcOyIq5kr5eheO6fqvCo08QLsZQ0I3WuD5aMmV+bhfxjo795Z0dsCdje8cLyoFpjXJ5PqOjEWVFPzYoSBAUBiPBg2o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=WmcOD9kI; arc=none smtp.client-ip=209.85.222.196
+	 References:In-Reply-To; b=daF+FWd/mFVkqA+/JjDDjQXXn7lJJbCu5Hu8cDmv1o0Js+P17X6PNurhvkLI6sLwjQ+i9knrXJQ1ZTeJMMXdTxmSt35JnhWeIS2Oq544HJ4ptS2D5gVFs/Xgg77zFcBtdy/0wAQP5qyEstD/ae2pUll52E/2h7kzzXysd5I6Kbs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=YsKcPujs; arc=none smtp.client-ip=209.85.219.65
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="WmcOD9kI"
-Received: by mail-qk1-f196.google.com with SMTP id af79cd13be357-911dfc86903so1286198685a.3
-        for <audit@vger.kernel.org>; Tue, 26 May 2026 14:23:01 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="YsKcPujs"
+Received: by mail-qv1-f65.google.com with SMTP id 6a1803df08f44-8cc0ef7c306so84299106d6.3
+        for <audit@vger.kernel.org>; Tue, 26 May 2026 16:00:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1779830580; x=1780435380; darn=vger.kernel.org;
+        d=paul-moore.com; s=google; t=1779836413; x=1780441213; darn=vger.kernel.org;
         h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
          :mime-version:message-id:date:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=6R+wfiQiZ3WfbCe6np5TQJtFiWfh5o9MPwGS1FSU+/Q=;
-        b=WmcOD9kIO+lZY+Lhj32Mzt4pTp0ciQLhbH9938h4gJBGBaFUqXVgYLV7MOX7u3240/
-         z1op8Ij8hFFr/1tEhJrdKIMr+mCug8/kYkqMgG4pcPkwqpV7s/taQ3069e3d4ZhT0+Ks
-         +ZFPi73Y8aGCMw5zi/bgDtNNDnzriwmXP5NyaunAE2QtAqPZ78hMjT70WDRN6uqRmg9T
-         IJWAX5YRK4+TpmxmINVo/ugbG2xo/U+gn85pDkhhcCOJogpvKcLkYPbg8iSWadpScSxo
-         vHUzs6ZskhUUOVtqJ41IaCl87qsQWXtHbse3oM8NmKOUANH5ZnN6uz7ExmCWaIgf49QW
-         CyXg==
+        bh=gdBVsMe5ZBVw60rKHtMu0pWGx97YtPHOG8LV2Ijiw5s=;
+        b=YsKcPujsDUPMy/zC40CvmmPG6HYQD5IZq1kej5tJua/BD7JLIy+tZk4kQ8PZcV6WAx
+         dSwVdaK592H3lMREU0iJe3BtnTQlrqGTTVk6plIpHTlXbVP3HY8UBb0e/um6VCIn151e
+         RshXbkCrXZvMN+mc7f3t4w534rlGWjND0NI3/22bLzZqY7B5LAMgojZSYiDl7twwpeVX
+         MAkywi8hz7YDaXH/pOEliWhobCo4Rgk3W+/sdi25lm4nF5HNpL8XZdO2rnxBoELycIUm
+         /A2nHIKzWbpkQ2auWkjDDacSi+jPFsY51CScBuVCvnGb5QZhzCGQM0KkJdaoJGaR8Hcp
+         gIvw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779830580; x=1780435380;
+        d=1e100.net; s=20251104; t=1779836413; x=1780441213;
         h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
          :mime-version:message-id:date:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=6R+wfiQiZ3WfbCe6np5TQJtFiWfh5o9MPwGS1FSU+/Q=;
-        b=Vx4Is3Wc0zmNPIexZFCJpc9au04WtzALYl+p8i/YAqBRd8MIn9zqGG9GTd2b0544mG
-         kjGtAjw5Zo8i3QKKDiAmSK9HrGqTHyZirpwqbISu2blrxmtYIcQwOB+SHWkK7wtjpNCo
-         H6/FEatfS2U2u4PXLCjoXgkVQqzVDROzobe+6Aa382QyRf9WiSmEutme8XldKEAtLSHD
-         uMXprgX/rSUmx+uR3DSMeTSZ7kxJo3DpOHX/g8/Q9SxyOYk891ykE3uPXhYhGQ5TjXug
-         AwRirXhU2k8I8q9XybHMdOgf+8vRjSzJ93AN4MV8gWqNAaXsIqHotucvnjPYvsMDlEsS
-         nUYw==
-X-Forwarded-Encrypted: i=1; AFNElJ+i8tIgitBw4+la0INOLS3PWCVu28we1cKxiU6EsEQ9KWbuAhmQxdqHezeE2ekfkcn/SLnN1Q==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz5qdUdscsU3XAb0t2RhFiw/NnUPBPCHKHe3Cvj+aju2UdJnxJZ
-	Ti3sVIfusqabOXdw37cKKW5UiR2miPHhVva7mJ6QDyS5rUq+SYlaArVxBJ5tanOcqA==
-X-Gm-Gg: Acq92OE9MO3OVJ+oJ2mCFYqw7UMDxzxbDKt9h5vrpU4CR73yv1RHenn+Y+PYmCiTazX
-	v4n8W8z6zzhnQHrwkL/tGFGnuk3E8nnyD2bVrM23i5okUs8QSitGR1W1//apXwOeKdG9Mdp3D8l
-	JrFEqg8NRGdoRuxtfLxRoRyGLfYncm1Yu+V0Xa7m7Zit7dxWYEfyI08N4BpcZQtw0GGWapYYGZH
-	uFFYpxIhyjijvBVhISx7qtYjTbkjyGitUrFsLwV/X6pycG0n5z47f2MgALHhwFsFwmy7xfd1TPn
-	Vu2i49Y5L4N8szn/14gbUU+hPAynHPPbhVQRnJQGhhyxqPmVoVJmvAS1W+vGPHiEa8svenl94g4
-	NcThsp7vkZ+fXxpq59fhdFOrzwPz2pbhSPp/p1G7OGAaZvjbAcs2NRkF6I1z4ZqbOaMgE4qC1Mv
-	WtYs3Ndcz5dcfgN5OFPcddnOJG3s3JDqY9vA7V444VgK9630Q7aU6qhWZiEC99aCOxggOI
-X-Received: by 2002:a05:620a:690f:b0:8cf:d804:456a with SMTP id af79cd13be357-914b49186d0mr2753139585a.20.1779830580263;
-        Tue, 26 May 2026 14:23:00 -0700 (PDT)
+        bh=gdBVsMe5ZBVw60rKHtMu0pWGx97YtPHOG8LV2Ijiw5s=;
+        b=CaKZz7+mfcZ6JAE9ACKpve62BQJy8hbYoYODBJcnmxKZswxELNrG55tkiT3Fg0sSJt
+         KW1pa8rswBTwV34hJFLxBpYVVxgPcPH73a7kdvvVghPmCfm3jLVcGrPBcwvV/TvMEmAT
+         naztv+k1egJ2sxQk10OjHwBkuwuiyr82mXPbI3upDRF0GH4RnQopdFOiVRr6xX/JNIND
+         BWggWchMradi+HF2dH1ko2qWfHA68jgcv+m8zKOE9wTQooaWiXe6lQsLbaj2KYO+8jrU
+         57EmN7jLDSO3bN2utK0/Enq5isG++UCp9REqKzF/k0MDZpNJQkCYXaQOHMT6KURW1uTb
+         A2Ig==
+X-Forwarded-Encrypted: i=1; AFNElJ8pvqDimEejWpJQ3rMQ9hJ/aFpIzEU0JP9+4eoX388k9xQEXBlqo5Sl8WUe2EPA4qw1bkgmhw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxkGG16zAWwzdg5ltjhivrKHMpiOdiJ3UtkNRFc0w/3YvDVy+Ha
+	W3QAfwVhcMKNv1AaEXAjOyzrBfYwEOhGdtWx9y6H1SP0t902hPKr5dJiDWNC1E/Tzw==
+X-Gm-Gg: Acq92OEz9zc3ZAZxHsSjgpCh79FRlsvrQ/FNmv0eEK7WPuctckKdochZKTQ5TlnSkhn
+	ErHg/nweFf3Zd2xk4dydvJ9YPZGIVE+I52uE//vvSA2sVXU6TeHdDnylWCX5Ewzi9yWkhHlU6Vz
+	kLjYvkF/JbSDxsznr8NWkoNs6AvfY9DA44dVCkJqYnwdhnLSYUmzcTqhWEYdynxxLISDa5TiZFm
+	C72PedUrU3VCyyy9MYK68yhypBSMxYJVJ1In/Hzefp0RxSMc9q6sK32CL5IF18HUgBWGJ4WvV2+
+	PaDnnof6CVOpdQU/OK90lPjr8b99SVGUFAjacdUGGiUHEXZNXrfS8cB0EBs0qa+xrQh21wZj6wC
+	WmpPnbNNACSmNuJaz6F3xh4nuUgSLzjluYfy4I3lanPzbDB6PjO9O1DPCXj/KBsJOHm0XQYpvOT
+	tU6hI4aMXyP0+AP/kzaxBlKHaOay5oxB+YSAdjl+NcT/iGKLX59aLCZ+s9IDC/8O76ncDU
+X-Received: by 2002:a05:6214:300e:b0:8ca:164c:a861 with SMTP id 6a1803df08f44-8cc7b4ec38emr372431136d6.2.1779836413238;
+        Tue, 26 May 2026 16:00:13 -0700 (PDT)
 Received: from localhost (pool-71-126-255-178.bstnma.fios.verizon.net. [71.126.255.178])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-914f86e8e1esm314289385a.7.2026.05.26.14.22.58
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8cc80dcd81esm153058876d6.9.2026.05.26.16.00.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 May 2026 14:22:59 -0700 (PDT)
-Date: Tue, 26 May 2026 17:22:58 -0400
-Message-ID: <c94ce54e232d50dcfc7cef9ada654ed7@paul-moore.com>
+        Tue, 26 May 2026 16:00:12 -0700 (PDT)
+Date: Tue, 26 May 2026 19:00:11 -0400
+Message-ID: <18f1ccfd1e80b91948e3445775be31a6@paul-moore.com>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
@@ -71,66 +71,54 @@ Content-Transfer-Encoding: 8bit
 X-Mailer: pstg-pwork:20260526_1654/pstg-lib:20260526_1539/pstg-pwork:20260526_1654
 From: Paul Moore <paul@paul-moore.com>
 To: Ricardo Robaina <rrobaina@redhat.com>, audit@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc: eparis@redhat.com, Ricardo Robaina <rrobaina@redhat.com>
-Subject: Re: [PATCH] audit: fix potential integer overflow in audit_log_n_hex()
-References: <20260513130843.790380-1-rrobaina@redhat.com>
-In-Reply-To: <20260513130843.790380-1-rrobaina@redhat.com>
+Cc: eparis@redhat.com, rgb@redhat.com, longman@redhat.com, Ricardo Robaina <rrobaina@redhat.com>
+Subject: Re: [PATCH v2 1/2] audit: fix removal of dangling executable rules
+References: <7f0a259c6e6b5a1da6578fb83b531276425aa030.1778704210.git.rrobaina@redhat.com>
+In-Reply-To: <7f0a259c6e6b5a1da6578fb83b531276425aa030.1778704210.git.rrobaina@redhat.com>
 
 On May 13, 2026 Ricardo Robaina <rrobaina@redhat.com> wrote:
 > 
-> The function audit_log_n_hex() calculates new_len as len << 1 to
-> account for hex encoding, where each byte becomes two characters.
-> However, when len is passed as size_t but new_len was declared as
-> int, this could lead to integer overflow for large values of len.
+> When an audited executable is deleted from the disk, its dentry
+> becomes negative. Any later attempt to delete the associated audit
+> rule will lead to audit_alloc_mark() encountering this negative
+> dentry and immediately aborting, returning -ENOENT.
 > 
-> Additionally, the bit shift operation itself could overflow if len
-> exceeds SIZE_MAX / 2, leading to incorrect buffer size calculations
-> and potential memory corruption.
+> This early abort prevents the subsystem from allocating the temporary
+> fsnotify mark needed to construct the search key, meaning the kernel
+> cannot find the existing rule in its own lists to delete it. This
+> leaves a dangling rule in memory, resulting in the following error
+> while attempting to delete the rule:
 > 
-> Fix this by changing new_len and loop counter i from int to size_t
-> to match the len parameter type, preventing signed/unsigned mismatches,
-> and by adding an overflow check before the bit shift operation that
-> calculates len << 1.
+>  # ./audit-dupe-exe-deadlock.sh
+>  No rules
+>  Error deleting rule (No such file or directory)
+>  There was an error while processing parameters
 > 
-> Fixes: 168b7173959f ("AUDIT: Clean up logging of untrusted strings")
+>  # auditctl -l
+>  -a always,exit -S all -F exe=/tmp/file -F path=/tmp/file -F key=dr
+> 
+>  # auditctl -D
+>  Error deleting rule (No such file or directory)
+>  There was an error while processing parameters
+> 
+> This patch fixes this issue by removing the d_really_is_negative()
+> check. By doing so, a dummy mark can be successfully generated for
+> the deleted path, which allows the audit subsystem to properly match
+> and flush the dangling rule.
+> 
+> Fixes: 76a53de6f7ff ("VFS/audit: introduce kern_path_parent() for audit")
+> Acked-by: Waiman Long <longman@redhat.com>
+> Acked-by: Richard Guy Briggs <rgb@redhat.com>
 > Signed-off-by: Ricardo Robaina <rrobaina@redhat.com>
 > ---
->  kernel/audit.c | 10 ++++++++--
->  1 file changed, 8 insertions(+), 2 deletions(-)
+> Changes in v2:
+> - New patch order: now patch 1/2 (was 2/2 in v1) per maintainer feedback
 > 
-> diff --git a/kernel/audit.c b/kernel/audit.c
-> index e1d489bc2dff..32ac50996451 100644
-> --- a/kernel/audit.c
-> +++ b/kernel/audit.c
-> @@ -2076,7 +2076,8 @@ void audit_log_format(struct audit_buffer *ab, const char *fmt, ...)
->  void audit_log_n_hex(struct audit_buffer *ab, const unsigned char *buf,
->  		size_t len)
->  {
-> -	int i, avail, new_len;
-> +	int avail;
-> +	size_t i, new_len;
->  	unsigned char *ptr;
->  	struct sk_buff *skb;
->  
-> @@ -2084,9 +2085,14 @@ void audit_log_n_hex(struct audit_buffer *ab, const unsigned char *buf,
->  		return;
->  
->  	BUG_ON(!ab->skb);
-> +
-> +	/* prevent new_len overflow */
-> +	if (len > SIZE_MAX / 2)
-> +		return;
-> +
->  	skb = ab->skb;
->  	avail = skb_tailroom(skb);
-> -	new_len = len<<1;
-> +	new_len = len << 1;
->  	if (new_len >= avail) {
->  		/* Round the buffer request up to the next multiple */
->  		new_len = AUDIT_BUFSIZ*(((new_len-avail)/AUDIT_BUFSIZ) + 1);
+>  kernel/audit_fsnotify.c | 4 ----
+>  1 file changed, 4 deletions(-)
 
-I might suggest using check_shl_overflow() instead, mostly because it
-helps document a shift that could potentially overflow.
+Annotated for stable, but merged into audit/dev as I want to give this a
+few extra weeks of soak time in linux-next.
 
 --
 paul-moore.com
