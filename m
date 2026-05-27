@@ -1,202 +1,171 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBC73360EE9
-	for <audit@vger.kernel.org>; Wed, 27 May 2026 19:24:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7C9C37648F
+	for <audit@vger.kernel.org>; Wed, 27 May 2026 19:27:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779909867; cv=none; b=XdSvouVj+3Kqd5C53i2zMWFi496UWfDJrI2ckjHxr1RDM6umMwvxWP1e/IcBiDO3zvQRTluyH1r1H+59i7r/8zX51XooCZJUNEjQiFyTV8tER6Yr0VsJHUCt3Skhb0vkS4/hHw2bKJyhkfKn6JPJD4oQ5cmU1I9sShDwGyKZq10=
+	t=1779910023; cv=none; b=nioj/vV6g2S5AUs1sO1b7b6ZyP0mot/GTnLkMV+TPYR3q4HWjNfWtebuLSOAx18t1Dk4z3b/uidRb/9V6ZqcCp+Zz+31FMSEK0uIJJzaV2zASlGTGjm+huPVzlW0UcPoR5wDH+vbmZXbJkkbYNSVt5EQ6unV0HuJwqkmgcMQ044=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779909867; c=relaxed/simple;
-	bh=IE27ud53BUktEXbB6OkdYpXZ30dl4eOxgAfc8ez+tVY=;
+	s=arc-20240116; t=1779910023; c=relaxed/simple;
+	bh=tRyD8S/7RSDfaZDKPuW63Y75gzxAnkDJsrt5x6tXdl0=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=LSHHACLIbnN+ZsYrT1gaJCG1emIr0ftJ7sExNMZostO7duj/bYS2fzHbtQJsk+Hm6+KjOQZhinUDxmAqc9lxQNm/+Jbf5J2/Ao8VbQ5S45wHNzcPxvPTVg5U9leezUgnvV4tkvxtgBC94Gue9yQEiepwvOPMdf5Vl2172leTQEQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=M1xQtI+U; arc=none smtp.client-ip=170.10.129.124
+	 To:Cc:Content-Type; b=DHiIP3IG2wor4XBkqAiiPjF3iOyqZ7a5W4Kgad5SJGUXTPCNqbUXWOH+RaAzF1AnzE064IEe0ubZuPSVGfoFxIOeHWMgHVeb4KzcLVwdghwVED9HuBdAESBEpAltSTLIqR+j+VGu7aMQeIyoZSAJuYy/ZFv3euyYBB5/ZKuChGU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=gcY0Nv87; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="M1xQtI+U"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="gcY0Nv87"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1779909865;
+	s=mimecast20190719; t=1779910020;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=EHhJRP5pVLgcPa4KuNaBBD+P9GhP2r2iVQQYvikzvXw=;
-	b=M1xQtI+U63bAyWHl/bXupGdyN5wtaMRw51CYU8mxi+4WxONEi8A2ygZQiOkOcHKA+Tp8nF
-	XfFuy+tbkoRfIYKlkb4FLm9KgXmxwwPxPiJb9D2gRd7YTO+eBjBthjGk+3AuhPXc88CcmC
-	zTQnM5uvbKef1tDOP5cW4vaj/9mjTeg=
+	bh=eDgC1+ol0lrg6Hw8wi9KK+95vBs3YsLQwxjbK9FkMtQ=;
+	b=gcY0Nv87hZb1UldloeylwUMle8Pvc9SOKvLOldstbb8SQLYFcaVAtlxrhOsBmLOCDGYjsc
+	uTHCXfy3AE/D3AFPv3hrahIUYsojXe/8zvREDwdXahid3xft91XY7/PnULXbu8eW7igwPB
+	Dp+eADtqJRh2QdJsaIVYheIUiOnwYkM=
 Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
  [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-659-62FHv2QsMnqpQGD8t8ptKQ-1; Wed, 27 May 2026 15:24:23 -0400
-X-MC-Unique: 62FHv2QsMnqpQGD8t8ptKQ-1
-X-Mimecast-MFC-AGG-ID: 62FHv2QsMnqpQGD8t8ptKQ_1779909862
-Received: by mail-ej1-f70.google.com with SMTP id a640c23a62f3a-bd52e4acb11so898087166b.3
-        for <audit@vger.kernel.org>; Wed, 27 May 2026 12:24:23 -0700 (PDT)
+ us-mta-544-BIwieAGoN7KApRXpjpfgnA-1; Wed, 27 May 2026 15:26:59 -0400
+X-MC-Unique: BIwieAGoN7KApRXpjpfgnA-1
+X-Mimecast-MFC-AGG-ID: BIwieAGoN7KApRXpjpfgnA_1779910018
+Received: by mail-ej1-f70.google.com with SMTP id a640c23a62f3a-bdaf3ed080dso857320966b.0
+        for <audit@vger.kernel.org>; Wed, 27 May 2026 12:26:59 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779909862; x=1780514662;
+        d=1e100.net; s=20251104; t=1779910018; x=1780514818;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=EHhJRP5pVLgcPa4KuNaBBD+P9GhP2r2iVQQYvikzvXw=;
-        b=X7XWqdA2XE+6jN1xLxUkg03Hpo0AYt8paKr3QeJ9WwL7xb7XUxKtu6Dm5T39p3QvQm
-         t7qsh0vBjKvVLPGR+1/zrwF3H7ENiA69Z4/xIn5C2MWJobSVUDhgWFfByZBSPqr6hqyi
-         +G0eJLKfbQ6eBaeBtck/2ooSpgAtYtvvBH7kOhgbZr+nSDIsvSfLO2qxButzqj6y6SVp
-         JCHxFPdqG+rLR9FgYGeHW82g4NyI1ZBocthU2/QHnszZ6LYkDejHABc5A8nWQz2S1Fo6
-         1rWmTDEtdgd3i+vGIaBcZTDKpZEOfQwxR+hHz5Eda/7OXDEEqRGfqORPdYI2uA1n+exN
-         k0RA==
-X-Forwarded-Encrypted: i=1; AFNElJ8jkYbTzisdw0xajIXNr8c5i5Tw92zLiVbL2BzswY/ee8FDwLz8p5xEHSTfplXMjf5ZKtjKzQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxJ46VcZCd7HWYbibxEZ/+koF5JLEzvNfN3aOPpMFNDGskz+jWr
-	/r87lFS+eSUFU8zE0Xo13krDd0dljTtc5Lemzzs7aFbW3IXuHd/t4D2cP9j2KxzlXvxcL79CBqo
-	wNnuNM+fpKP70qo8PKnc7oBkbD8yNOb+llWOXXA0gsjHRqlWS5VN71KUvPtL2v4PkwgmH4BKUPx
-	Ta+ufnwTcnTjYZe8LFk/TY6Y/lC79r0+4=
-X-Gm-Gg: Acq92OGCPbjq23Gyj1/jbSM9eSH42kik5ucD9phAe2/lyH7535jjHFfB02gGaFzW5UQ
-	mFE28MoZGMjlqNrDnprOGyqWsHrJ7B1Y/h86EJ4N+oNvZDpGIho8qiB2pPeLOSujdgUZQJ1VZmW
-	aSKJ2idlXQb2+dhesFwftP5QULVcVUMQfHyCO78EN3y5JjvfLYw5GuUi1eslU8SBhAlYhu/TmT2
-	AcDoVVVzDVzK3c+Pw28TDTkRQRdb571eZl0O66Q4XX6xFh9ht8xzQfFdaK5CUaRuYFSJeTbnuxp
-	6SQwFruf4fAu6HEgF2xVMLh2FB233Vfsq98=
-X-Received: by 2002:a17:907:a647:b0:bda:24df:21b with SMTP id a640c23a62f3a-bdd251373e1mr1221763466b.5.1779909862381;
-        Wed, 27 May 2026 12:24:22 -0700 (PDT)
-X-Received: by 2002:a17:907:a647:b0:bda:24df:21b with SMTP id
- a640c23a62f3a-bdd251373e1mr1221762166b.5.1779909861978; Wed, 27 May 2026
- 12:24:21 -0700 (PDT)
+        bh=eDgC1+ol0lrg6Hw8wi9KK+95vBs3YsLQwxjbK9FkMtQ=;
+        b=FuPXOX3eSO+JZBQous6iH5TWXTr3Nk2TcaCmSwoeP8PSTAs+8hzpK64bMhBmbNzS7p
+         rcfcBlGr9Ge4YL70qBmFwnECb6EOUjMYcAzoVJbNdKFWlLFxnw7P9/gdk4c3C1sy4TIq
+         Jc7kRNB2OyV3RpWuxwECqAKt6MBTqwhuJmlbJ8+jSF27mE3fMPVgO3BzoUwvMy1K1i+e
+         WLnJStr5jz5oyjw2XC1PJMqsjzwoR+Zchli3Q1axquufNm15TKn9u9RAGl5TegiR/8su
+         JMI4Zhn0SGsI10HiugRtCACdOuc1Ly8NecQ9nFwm2wgsyGh14psMZXGvX+tDLGtD7MAs
+         Sh9Q==
+X-Gm-Message-State: AOJu0YwbZWC8UIip7WhuHZdcL8MLeAMZfuFFsLtGrtufw2fXQ5UrFQ2s
+	3tbzAquCbwlwSFaUcSa6ILMSHOQzjU97AFwNu9h/7kGlls8h2CebyWkq+z60lQxroDBcZFkhMkL
+	MAVrK3UkYCjhxHWWUe6yncjk2H4r8E8T/z+K8tX2JJ1Vq1IBkQAP1xiWmnSUtPvigedl9BrUuv1
+	gRfwKv1mvqV6NmqPn/DpMbEE3zMWgE3v4=
+X-Gm-Gg: Acq92OGaDkK38jnOWOWVxoCyw1UI+rGMJf8LkPzo1THPo1ZvHyZu6ExUldw4wwTouYO
+	UzQJmEwOEtNR4T1u4MxhJn54DmP4QoBQMCwKbtEmM+gf9pGIX1D3/rezHEt7nJx0ZSffId7YKde
+	NV97A0YhYN8N4/K/JX6BZCl24q/ApPy0YwBDmInIDSUh27StS8Ptc7D24r+QacBIaMf+2bmFjOv
+	nYqGUSjJIfYCGsaZRJ70B142NkAKNA5FExSA0DcQTtBinz/qAzoXn9QuJG5p56/f2iyjuH7EKSP
+	cFn6AXAvNlq5d6+PBQrkwupV0zLjMOM6o1M=
+X-Received: by 2002:a17:907:d40f:b0:bd5:7c2:70c9 with SMTP id a640c23a62f3a-bdd281aad31mr1622130866b.47.1779910018054;
+        Wed, 27 May 2026 12:26:58 -0700 (PDT)
+X-Received: by 2002:a17:907:d40f:b0:bd5:7c2:70c9 with SMTP id
+ a640c23a62f3a-bdd281aad31mr1622129366b.47.1779910017620; Wed, 27 May 2026
+ 12:26:57 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260527-audit-update-macro-stubs-v1-1-8cda8dbdae0a@kernel.org>
- <CAABTaaCZD-6_ar-H8iwOka9WgtuqwEt+=umVuc5xsBHwDcnD-Q@mail.gmail.com> <CAHC9VhQfci2gE-eD67DbjL21s7tF+rPWa9bdu0Kk5cfW+gz2Xg@mail.gmail.com>
-In-Reply-To: <CAHC9VhQfci2gE-eD67DbjL21s7tF+rPWa9bdu0Kk5cfW+gz2Xg@mail.gmail.com>
+References: <20260513172443.1128496-1-rrobaina@redhat.com> <20260518110345.497489-1-horms@kernel.org>
+In-Reply-To: <20260518110345.497489-1-horms@kernel.org>
 From: Ricardo Robaina <rrobaina@redhat.com>
-Date: Wed, 27 May 2026 16:24:10 -0300
-X-Gm-Features: AVHnY4KazjW9-E13AaekWdAuAmWJYNciyg2swPIqPIUBpVIkPmxIqJG7Vw-jMEQ
-Message-ID: <CAABTaaDbcuPOxQhE1w0nbq-kK7HEYmkVzs+x1qa0iYsRtsWonQ@mail.gmail.com>
-Subject: Re: [PATCH] audit: Update audit_alloc_mark() and audit_dupe_exe()
- CONFIG_AUDITSYSCALL=n stubs
-To: Paul Moore <paul@paul-moore.com>
-Cc: Nathan Chancellor <nathan@kernel.org>, Eric Paris <eparis@redhat.com>, 
-	Waiman Long <longman@redhat.com>, Richard Guy Briggs <rgb@redhat.com>, audit@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Date: Wed, 27 May 2026 16:26:46 -0300
+X-Gm-Features: AVHnY4K-reI0086BeMjQSycAAft71q3cHtqRbjZQbDcDy0iRCMsusMf0JXZo2uE
+Message-ID: <CAABTaaA-nzvY8Ki1Lx56BOei+ppgBRZ35Bn=zR1jJ77u=V9ZrQ@mail.gmail.com>
+Subject: Re: [PATCH v2] netlink, audit: prevent false ENOBUFS on timeout expiry
+To: Simon Horman <horms@kernel.org>
+Cc: audit@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	netdev@vger.kernel.org, paul@paul-moore.com, eparis@redhat.com, 
+	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, sgrubb@redhat.com
 X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: rJ9_utZE7BFY2dpoHVSO2FIIShJGFlsS0ZJoaleXWhI_1779909862
+X-Mimecast-MFC-PROC-ID: m9VLC2BdG1aeDtn47sY8-BnUk_dweaJQS0G97VwRsSM_1779910018
 X-Mimecast-Originator: redhat.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, May 27, 2026 at 4:13=E2=80=AFPM Paul Moore <paul@paul-moore.com> wr=
-ote:
+On Mon, May 18, 2026 at 8:04=E2=80=AFAM Simon Horman <horms@kernel.org> wro=
+te:
 >
-> On Wed, May 27, 2026 at 2:55=E2=80=AFPM Ricardo Robaina <rrobaina@redhat.=
-com> wrote:
-> > On Wed, May 27, 2026 at 2:52=E2=80=AFPM Nathan Chancellor <nathan@kerne=
-l.org> wrote:
-> > >
-> > > Commit 84470b80b7b0 ("audit: fix recursive locking deadlock in
-> > > audit_dupe_exe()") added a ctx parameter to audit_alloc_mark() and
-> > > audit_dupe_exe() but did not update the macro stubs used when
-> > > CONFIG_AUDITSYSCALL is not enabled, resulting in a build error for th=
-is
-> > > configuration:
-> > >
-> > >   kernel/auditfilter.c: In function 'audit_data_to_entry':
-> > >   kernel/auditfilter.c:592:85: error: macro 'audit_alloc_mark' passed=
- 4 arguments, but takes just 3
-> > >     592 |                         audit_mark =3D audit_alloc_mark(&en=
-try->rule, str, f_val, NULL);
-> > >         |                                                            =
-                         ^
-> > >   In file included from kernel/auditfilter.c:23:
-> > >   kernel/audit.h:327:9: note: macro 'audit_alloc_mark' defined here
-> > >     327 | #define audit_alloc_mark(k, p, l) (ERR_PTR(-EINVAL))
-> > >         |         ^~~~~~~~~~~~~~~~
-> > >   kernel/auditfilter.c:592:38: error: 'audit_alloc_mark' undeclared (=
-first use in this function)
-> > >     592 |                         audit_mark =3D audit_alloc_mark(&en=
-try->rule, str, f_val, NULL);
-> > >         |                                      ^~~~~~~~~~~~~~~~
-> > >   kernel/auditfilter.c:592:38: note: 'audit_alloc_mark' is a function=
--like macro and might be used incorrectly
-> > >   kernel/auditfilter.c:592:38: note: each undeclared identifier is re=
-ported only once for each function it appears in
-> > >   kernel/auditfilter.c: In function 'audit_dupe_rule':
-> > >   kernel/auditfilter.c:879:59: error: macro 'audit_dupe_exe' passed 3=
- arguments, but takes just 2
-> > >     879 |                         err =3D audit_dupe_exe(new, old, ct=
-x);
-> > >         |                                                           ^
-> > >   kernel/audit.h:333:9: note: macro 'audit_dupe_exe' defined here
-> > >     333 | #define audit_dupe_exe(n, o) (-EINVAL)
-> > >         |         ^~~~~~~~~~~~~~
-> > >   kernel/auditfilter.c:879:31: error: 'audit_dupe_exe' undeclared (fi=
-rst use in this function)
-> > >     879 |                         err =3D audit_dupe_exe(new, old, ct=
-x);
-> > >         |                               ^~~~~~~~~~~~~~
-> > >   kernel/auditfilter.c:879:31: note: 'audit_dupe_exe' is a function-l=
-ike macro and might be used incorrectly
-> > >
-> > > Update the macros with the correct number of parameters to resolve th=
-e
-> > > build error.
-> > >
-> > > Cc: stable@vger.kernel.org
-> > > Fixes: 84470b80b7b0 ("audit: fix recursive locking deadlock in audit_=
-dupe_exe()")
-> > > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> > > ---
-> > >  kernel/audit.h | 4 ++--
-> > >  1 file changed, 2 insertions(+), 2 deletions(-)
-> > >
-> > > diff --git a/kernel/audit.h b/kernel/audit.h
-> > > index f1a77aef4533..92d5e723d570 100644
-> > > --- a/kernel/audit.h
-> > > +++ b/kernel/audit.h
-> > > @@ -324,13 +324,13 @@ extern struct list_head *audit_killed_trees(voi=
-d);
-> > >  #define audit_watch_path(w) ""
-> > >  #define audit_watch_compare(w, i, d) 0
-> > >
-> > > -#define audit_alloc_mark(k, p, l) (ERR_PTR(-EINVAL))
-> > > +#define audit_alloc_mark(k, p, l, c) (ERR_PTR(-EINVAL))
-> > >  #define audit_mark_path(m) ""
-> > >  #define audit_remove_mark(m) do { } while (0)
-> > >  #define audit_remove_mark_rule(k) do { } while (0)
-> > >  #define audit_mark_compare(m, i, d) 0
-> > >  #define audit_exe_compare(t, m) (-EINVAL)
-> > > -#define audit_dupe_exe(n, o) (-EINVAL)
-> > > +#define audit_dupe_exe(n, o, c) (-EINVAL)
-> > >
-> > >  #define audit_remove_tree_rule(rule) BUG()
-> > >  #define audit_add_tree_rule(rule) -EINVAL
-> > >
-> > > ---
-> > > base-commit: 82bc8394b1aa74aedb9827da7730cfa6639716fd
-> > > change-id: 20260527-audit-update-macro-stubs-6e4d8e8a826e
-> > >
-> > > Best regards,
-> > > --
-> > > Cheers,
-> > > Nathan
-> > >
+> From: 'Simon Horman' <horms@kernel.org>
+>
+> This is an AI-generated review of your patch. The human sending this
+> email has considered the AI review valid, or at least plausible.
+> Full review at: https://sashiko.dev
+> ---
+> netlink, audit: prevent false ENOBUFS on timeout expiry
+>
+> This commit modifies netlink_unicast() to return -EAGAIN when a blocking
+> sender's timeout expires. This bypasses the netlink_overrun() call to
+> allow the audit subsystem to gracefully enqueue the pending event into it=
+s
+> internal backlog without falsely returning ENOBUFS to user-space.
+>
+> > diff --git a/net/netlink/af_netlink.c b/net/netlink/af_netlink.c
+> > --- a/net/netlink/af_netlink.c
+> > +++ b/net/netlink/af_netlink.c
+> > @@ -1351,8 +1351,18 @@ int netlink_unicast(struct sock *ssk, struct sk_=
+buff *skb,
+> >       }
 > >
-> > Hi Nathan,
-> >
-> > Good catch, I did miss that! Looks good to me, thanks for fixing it.
-> >
-> > Acked-by: Ricardo Robaina <rrobaina@redhat.com>
+> >       err =3D netlink_attachskb(sk, skb, &timeo, ssk);
+> > -     if (err =3D=3D 1)
+> > +     if (err =3D=3D 1) {
+> > +             /* timeo may have been zeroed by schedule_timeout inside
+> > +              * netlink_attachskb. If the caller is a timed-blocking s=
+ender
+> > +              * (not genuinely nonblocking), don't re-enter with timeo=
+=3D0 as
+> > +              * that would misfire netlink_overrun on the next iterati=
+on.
+> > +              */
+> > +             if (timeo =3D=3D 0 && !nonblock) {
+> > +                     kfree_skb(skb);
+> > +                     return -EAGAIN;
 >
-> Thanks Nathan!
+> Could this regression cause silent packet drops in non-audit subsystems?
 >
-> Do either of you mind if I squash these two patches together in the
-> audit tree?  I would preserve Nathan's sign-off line and add a comment
-> at the end of the commit description about the fix provided by Nathan.
+> While this change prevents false ENOBUFS for the audit subsystem, other
+> subsystems like InfiniBand's IWPM use rdma_nl_unicast_wait(), which sets
+> nonblock=3D0 and operates on a kernel socket with a timeout.
 >
-> --
-> paul-moore.com
+> If the timeout expires because the receiving user-space daemon is
+> bottlenecked, this new path will free the skb and return -EAGAIN without
+> ever invoking netlink_overrun().
+>
+> Without netlink_overrun(), the receiver's socket error is never set to
+> ENOBUFS. Would this prevent user-space from being notified of the dropped
+> message, leading to permanent state desynchronization between the kernel
+> and user-space?
+>
+> > +             }
+> >               goto retry;
+> > +     }
+> >       if (err)
+> >               return err;
 >
 
-It's fine by me.
+Hi Simon,
+
+Thanks for reviewing this patch!
+
+You are correct that the timeo =3D=3D 0 && !nonblock heuristic in v2 relies=
+ on
+an implicit assumption about finite sk_sndtimeo. While RDMA/IWPM with
+MAX_SCHEDULE_TIMEOUT would never reach this path in practice, your concern
+correctly identifies that the heuristic is not surgical enough.
+
+I've submitted v3 [1] with an explicit NETLINK_UNICAST_TIMED constant
+(value 2). Callers must explicitly opt into this contract, leaving IWPM and
+all other subsystems completely untouched:
+
+if (timeo =3D=3D 0 && nonblock =3D=3D NETLINK_UNICAST_TIMED)
+
+This ensures zero risk of silent drops or state desynchronization in other
+subsystems. Does this address your concern?
+
+[1] https://lore.kernel.org/audit/20260527192150.949400-1-rrobaina@redhat.c=
+om/T/#u
+
+Best regards,
+Ricardo
 
