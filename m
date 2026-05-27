@@ -1,62 +1,70 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E68783B9D90;
-	Wed, 27 May 2026 21:12:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 017CF3B4EA3;
+	Wed, 27 May 2026 22:00:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779916361; cv=none; b=q7Qe2UyUegzKCHSgcZPzs94K7GQxvcyYqLTrVB1Oqsk3I0B664HvUiH/M7TMTZZhsYrjA8v1v44daMQYskpmRQZLAptP8QL01WoJj2aTAgyq/Cs8cLGc0Gu8RBBJewca6rR+GohIirsdKvIr9U84P/5XQ8FqrqViF3QIPJBap5w=
+	t=1779919255; cv=none; b=IGmMcUbXxP7zaHJIskUcg0h9Wu5VPJEuKnikRYZnZYFoA8CJOi39AuRryS4CEWr+o2RdxraZrMZoFahCsBDh2hMmxOw0w1WK5zNapp1a68ki4oltvgjZcP85x72bp//Yfy6jObO82+lXqwSjqmKBsPQuPBefZROH1oNYQeBct14=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779916361; c=relaxed/simple;
-	bh=nkKhyte+rjfKosy5ia1dttDPtn5N50seXDtahbT5hso=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MoEBgw9SOacGOtSNUIRHhpqSgFNp6pAhRTNkxkZHSoxJ31IUXSzSWV/u0IdbWBlyrL43vDZb7w9Bbe6YEPYy5Ji2QDtnHtACjzTXI+4Hj9VTPJcu3xgGrnXR9coB0V6GmkzzfzDtLACfWZlM8A9vpChCNYstT/e7hAVmM2aRSgI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HpaWUEad; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1779919255; c=relaxed/simple;
+	bh=K+2PBOTkglAW3miJSMhH9wApdWPjmdrMRgBpbNA4E1A=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=q3jVmhCQ1bdYLyFyocfm68D/EJJIwZmEkjZ+D7Rl7FXuIE8ENV6lk08dxT3k9tRrs8FSeExRsEFqdZnGjNjIFT0QT+Dn7oxpnIHoO3eqiTf1SXJqnabjg1gLKxJkGRQMAgE5CFzoiVdLaPOtoPD04yH5ylFpLrcggZvfyLkm2Qg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GMynz8ee; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HpaWUEad"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A039E1F00A3D;
-	Wed, 27 May 2026 21:12:38 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GMynz8ee"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B62A1F000E9;
+	Wed, 27 May 2026 22:00:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779916360;
-	bh=dTSLml51aGchSpHiUx1oCupZhroeQlOU6hlvIIGsMA8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=HpaWUEadp1CFnwzij9BhOuSC6V9eaWff9yKV+4fG9yeJujh265wsAgdK9V1eW5FtJ
-	 4N8AFGkrnQ0fl8vn9HMnfv0V5cHn3c5be8bv352++6QQvyRfdOYGDRiCdHE6ZSB1CL
-	 nSOnvxSWly7FL0xNQz/xx3uCs0nSYcESxsqJiPi9sb7XPqdpMKmBzPJXXiK299Uef8
-	 Nj7OHZwDf7s1SJAgECcaagdXZoTSaQM0qGfiXrHZnts3PB+81Spc4ubIo4xP1uzx1J
-	 PupB5KJEHYnPPCceJT6DCulft6VTcvTpG3eNGzTd4OoDZC1439vmj95Wg1VlpLJP4z
-	 RBiegIQhZ9V7g==
-Date: Wed, 27 May 2026 14:12:35 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Paul Moore <paul@paul-moore.com>
-Cc: Ricardo Robaina <rrobaina@redhat.com>, Eric Paris <eparis@redhat.com>,
-	Waiman Long <longman@redhat.com>,
-	Richard Guy Briggs <rgb@redhat.com>, audit@vger.kernel.org,
-	linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH] audit: Update audit_alloc_mark() and audit_dupe_exe()
- CONFIG_AUDITSYSCALL=n stubs
-Message-ID: <20260527211235.GA3191279@ax162>
-References: <20260527-audit-update-macro-stubs-v1-1-8cda8dbdae0a@kernel.org>
- <CAABTaaCZD-6_ar-H8iwOka9WgtuqwEt+=umVuc5xsBHwDcnD-Q@mail.gmail.com>
- <CAHC9VhQfci2gE-eD67DbjL21s7tF+rPWa9bdu0Kk5cfW+gz2Xg@mail.gmail.com>
+	s=k20260515; t=1779919253;
+	bh=x0pxT4HZIhcs1HqpqHxsIDiMExdPoz+EHtFOvLXYu9g=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=GMynz8eeNUxQboU0DGK57X7n0j/Eh1ZhKqhlSmEYcT5h7nyrPvC/o5aNmKRO72cCm
+	 1AJeyDhqFqVssTE81BqEcsvOI3gXCn40UIjXhp1Nq7rN1x5m5rl8bJ3+eoBUVNRdr8
+	 eEElKDA/hsxq50ecSoWtIr11JirnvufB9aJZPErlilcQdocmnnHl2lvWoXel/ew/Ju
+	 G6eOU+DWZp4Bzbd03th51HcvS+lFd2TNBLjKqeDi6pe9a69XnUcOYFA2BueS+7LK5b
+	 DeAP2QDZ4l/jI1wXyi4LNgEoQWstlYSTcMyxhpuJbU7mpoKsi3I5ChP/dMKYbCa+op
+	 URhuv0fOHIBwg==
+Date: Wed, 27 May 2026 15:00:52 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Ricardo Robaina <rrobaina@redhat.com>
+Cc: audit@vger.kernel.org, linux-kernel@vger.kernel.org,
+ netdev@vger.kernel.org, paul@paul-moore.com, eparis@redhat.com,
+ edumazet@google.com, pabeni@redhat.com, horms@kernel.org, Steve Grubb
+ <sgrubb@redhat.com>
+Subject: Re: [PATCH v3] netlink, audit: prevent false ENOBUFS on timeout
+ expiry
+Message-ID: <20260527150052.68edb415@kernel.org>
+In-Reply-To: <20260527192150.949400-1-rrobaina@redhat.com>
+References: <20260527192150.949400-1-rrobaina@redhat.com>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHC9VhQfci2gE-eD67DbjL21s7tF+rPWa9bdu0Kk5cfW+gz2Xg@mail.gmail.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Wed, May 27, 2026 at 03:13:06PM -0400, Paul Moore wrote:
-> Do either of you mind if I squash these two patches together in the
-> audit tree?  I would preserve Nathan's sign-off line and add a comment
-> at the end of the commit description about the fix provided by Nathan.
+On Wed, 27 May 2026 16:21:50 -0300 Ricardo Robaina wrote:
+> When auditd is bottlenecked (e.g., by slow disk I/O), kauditd blocks
+> on the netlink socket wait queue (nlk->wait). If the wait timeout
+> fully expires (timeo == 0), netlink mistakenly interprets the zeroed
+> timeout as a non-blocking request on its next retry iteration. It
+> then triggers netlink_overrun that drops the event and poisons the
+> socket with ENOBUFS. This bypasses the audit subsystem's internal
+> retry backlog and falsely returns an error to user-space:
+> 
+>  auditd[]: Error receiving audit netlink packet (No buffer space available)
+> 
+> Unlike standard netlink users, the audit subsystem has a hard
+> requirement to never silently drop security records. It uses a short
+> finite socket timeout (sk_sndtimeo = HZ/10) to escape a stalled
+> auditd and safely requeue the message internally. However, once
+> netlink_overrun() executes, the ENOBUFS state is set on the
+> receiving socket, and the audit subsystem has no mechanism to
+> intercept or clear this from the outside.
 
-Sure, I have no qualms with this being squashed with a sufficient note
-that I only provided a compile fix up.
-
--- 
-Cheers,
-Nathan
+This provides no improvement over v2, let's keep discussion on the v2
+thread.
