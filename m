@@ -1,181 +1,203 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66FD73264DE
-	for <audit@vger.kernel.org>; Wed, 27 May 2026 18:55:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779908115; cv=none; b=g2VSTCHjPGlwn4oHvBHIm6etX1iNzPQdOgvLCLRNmrkmhuYs4NjANrgyStvKmqciILYj5uXkb3s+Fn4BJeeJ+PWWc2JVMCA3H7mRD+jBp4c5MADdN1wG66s+NVqeJnvYaDi6fc9Hy5o6tOHouOK+1vLDhC2xbaIwmoZnIVrm1ec=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779908115; c=relaxed/simple;
-	bh=IEvaCbrp90Uf04KX7dpNjuPekj4S8vjDGVIGWaoyKRM=;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC55A36495D
+	for <audit@vger.kernel.org>; Wed, 27 May 2026 19:13:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.176
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779909205; cv=pass; b=qfyZwtIYLV6OoNedA28cGkRGwl86WeliXI9LiSlSvI1vzOMjfxRB2xp5Y1iuXTXJ9CUe/GJApKGHOM438gwX8yHf4AnCwJZXUj5Cc8nupj+sQnZhlk0sh0SiL/IQrhOFKElfbzV/0NzaYwVOVzfM4nvV9zmCozbePZX44CCAA8M=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779909205; c=relaxed/simple;
+	bh=arW85NP4G3Vx1E1uaf3yqqPfSSzR3Kno27p4gRd3hlE=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=eGNED1Yc0WFjhEFmEJ/LjGOEAg1d5UaqSGxtziaEXd/PLpUwLfbH9llkcFw0lU592lrziAfXUBJ04zRiyzx4fuoWLliRP5VqrLhdzFY+6yKO2caxWJq8XTQL8Meiurb8u2bwYSV+CFWVguZk5quU8LtJGzFLZDXz7/Ybk/crDHU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=V86Q/cmQ; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	 To:Cc:Content-Type; b=tBiWc8vCM6Zk6BAxP9hRH9p4RfrbB+MqEniauMvuPZFWETe5oywbYh0EtBAhNDIGNg8cb9PPpccrbQnXa/xZHOpiZTrRxsjOq+FYQExFf+KdCwOUamFxIXZipgsEGcKPX5PZsq7tV03nZfGbCuSa+zvIxLZVEzzrXmiBWHI837k=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=fXNGzB3T; arc=pass smtp.client-ip=209.85.214.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="V86Q/cmQ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1779908113;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=MLY0TfC/baJTb3mL9UQxHNeKvpo2w8hu1Cn5RYQK7KM=;
-	b=V86Q/cmQwAGCfPuXsST2KjmwwttZly5rm671Nd/+B1f7iZFWdmbHwSjd/W3PE3erS1Y50V
-	uHKHypyv52lZkLgi1QM9UBUYswMlATgNf90mD6VagERxVd+cnP5YX+sq3o5qS+L+LTFRSe
-	Ruu4xcuts/e4j6ddWl/Zu4axUK3jlTk=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-9-5NXmUA7uMIWJj50YsQRWAg-1; Wed, 27 May 2026 14:55:09 -0400
-X-MC-Unique: 5NXmUA7uMIWJj50YsQRWAg-1
-X-Mimecast-MFC-AGG-ID: 5NXmUA7uMIWJj50YsQRWAg_1779908108
-Received: by mail-ej1-f69.google.com with SMTP id a640c23a62f3a-bde08e20ce9so30977466b.0
-        for <audit@vger.kernel.org>; Wed, 27 May 2026 11:55:09 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="fXNGzB3T"
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-2babfd18435so54478245ad.1
+        for <audit@vger.kernel.org>; Wed, 27 May 2026 12:13:22 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1779909202; cv=none;
+        d=google.com; s=arc-20240605;
+        b=GOtOr6djOJUom/b5ToICErY7gwKWCIZVnAaL7+ux/fhciPGyXA86AYoj+bcY5RarCQ
+         0+qj9+iGaYcltx3DMYVMwpQV9dqyk140n9W7kZndJ8EZbio+yGo+PuC5H0V0n/AOh8jw
+         9JkUi2fBRD2ObFH8y09azi8ADdYrretkJAwDo3QCGUm/arA3LG6oNwuGhSTLt4kGQGt9
+         zgFGcqB22wU9ABSaAvESEO34VRWTZo+fkxIQ2hfvZ3jKHEphcCllssIhvZuI3L5stVJF
+         N+KizHQ5gSzMcxReQzlcP/UCrc5rcgFwgkMfyQ6Ar5nY+1kEZgfKJlq3k5o6V5sm8Bdh
+         p4dA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=ZBJOcUZKwlryBrLyHrM1pbqAMloKqVU+cfZbZQFpt1E=;
+        fh=Jh2twnUIWRObNHyX+Ef9cs79YkqLFcM1mfpi41rbKDI=;
+        b=hgxjBYhHrb9o6TsvjkcUkq/0z/5DPFPo3JCaEee9hdibHOG9eekz50vXlVsPWSvYtD
+         sW0iWIm+KdLz/qmd2PsaFIWdkdIl6tgusA0/NdalzAY6OmL5XOh9X3rzLFPQYF4MwFM1
+         ArUsLSqaSbrn/tGNWo3EOv9/gR/EOEQuzO8sAxnUjMueBH+cR61Wged5gzGgwA00vdvk
+         k1WmwMCYilg/Bsrp0mcgbDwtGRtkH8NsmtFTcrXYO3kJY325JwpDbKTkg79rzs2aShkZ
+         pLhx4HKQXQFvwOi0Mt1ocsTZ6EO0NDVddCYhPIeqHaVxX6t5wJ1Kq7TBm6NDVrDrMsux
+         t6gQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1779909202; x=1780514002; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ZBJOcUZKwlryBrLyHrM1pbqAMloKqVU+cfZbZQFpt1E=;
+        b=fXNGzB3TFZyq7edBEWR4FNBxN4Pv/CMd8lAJud0CCOx25HDdq3FdeYPDGAbc0ymlOO
+         CavMLnlvTtnFjI6LdUUHHqETuav4Ky3H8LXzFWQ3UTbczoFKQpDI4jWiVF9270o4OxZb
+         ntr8GKU2YGEuUDZ5EgQyE4SlzXv1rMCGNwLU4biQ4WIGyoop8OKq/3vLR+eZlxXmpfRM
+         oVO/djy0y2D/JjWMcqfY7OMSVzj2G7BRuXbO76ucCTGqAmNfy9zGzce7qm5jTQOB+8R6
+         CrjoBgQ+t93qfDuycAV56GpD1pq8GKnLgdV5wOZz87g6mn0Z6TRzkBjPgddEVaU3ut8Z
+         dQ2Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779908108; x=1780512908;
+        d=1e100.net; s=20251104; t=1779909202; x=1780514002;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=MLY0TfC/baJTb3mL9UQxHNeKvpo2w8hu1Cn5RYQK7KM=;
-        b=G/LDj6OGbVlExVrzkoCtc28q61T1d71fb37v4KLDr/BD3nWTRn02Rhx+2YoEbMoIKh
-         fsp/n6biEAadjcWDzM5ZMSY1tPOFXwYvYzQjmNEwMznF8eJYlRE8R0aiZ7owKIyNjxLb
-         JDUaPMM0FL6Xvla2j/hatlBvZnxSBX98YZWYv19VwsIAF031qH1s3HrxzTd+POLPeoNI
-         4CaCDyVFIV2KxOR0+FetXDWSJd/EOCO6e9fvdSk6h5zMk1WhzqPwLWoA5oHoUiA/oM3O
-         hkIgL3oHARl8GsBHYHDU7oI9Qhr2iqHNt4ytIR5PQNovxZW3czaMBp93bEXIKEPy2+9s
-         jgNQ==
-X-Forwarded-Encrypted: i=1; AFNElJ/e2HXT9SgPJVZevXGiQK8QUxeymVjTXKob3cwWBTumkKuZEOnL7lOee8nY8oKOZvoZMEKVDw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzrKjhcU80xeOShphoeBx0HwWAqEtfkfJwmHEd3VKtKUUVTu3La
-	Og85CWAnOQNMgSAfCHQH2eKSr62455+4965Mr0zV64T16xk4W+tVLq49GR109/PJK4ODaQu1f7u
-	9zctg18vPyaSBjWroc8xCTlPLDlJDwm1gqjk4hWQjsovQmuSgh/3nCzBLPdGDzd7yb5Y23cOiQQ
-	B8XTFIVRdZSz1cAjIpqo9r4ggbaMRrE4c=
-X-Gm-Gg: Acq92OHcjBYAnVwKJmtUD73pRIhL1R51GpdI3gJan9aPz+JoFJjNniz6sBGvYq2KIAs
-	csfjRJdvAnLeXmzAW7+kJeKIv+C9rl+RNS9oIi0X/Wc2/A8vtblHGegPZkD0L1InbkHCb+i0onN
-	osuxZsFHj0YS2rsTSkBe9lMY6wUmB9Y3MZCsoar+19d0bbmgezhqslDTvHbxHfAR6s4mnwHRCrB
-	vY7Upke4Udi8w1jUTzcwLXDVu4Me93kfCMdm9wh4FlqkQQrNDYFnC7cgobwqs9sP8tHD7V3/RdM
-	F9biOJ5pgELigCtEYGV2IsMDFvl843o1390=
-X-Received: by 2002:a17:907:8691:b0:bd4:8286:466d with SMTP id a640c23a62f3a-bdbffc5fe5cmr1482315466b.12.1779908108329;
-        Wed, 27 May 2026 11:55:08 -0700 (PDT)
-X-Received: by 2002:a17:907:8691:b0:bd4:8286:466d with SMTP id
- a640c23a62f3a-bdbffc5fe5cmr1482314066b.12.1779908107896; Wed, 27 May 2026
- 11:55:07 -0700 (PDT)
+        bh=ZBJOcUZKwlryBrLyHrM1pbqAMloKqVU+cfZbZQFpt1E=;
+        b=YgjeXcqAXo3934pQpIsU8BmiaMX9UJoeKDAuWDpd+lem2ED+U3HL1+Bmkpkp2/n0iB
+         qa0jxISvk/OyUVzWr379THl1b2xIAZhqZu7MApgxAlL1kUjdVoz83qTNbKRo6br13uaS
+         nISc18tv1xEVfuuPb3vbhXsih7gqWzd79HC3XbXUO8WfS6/UHBDR4ZhVrayaptbXd86s
+         FMZnWsTmiEfYmc2AXUPlWTwGpvQfvand+R7Z6KLE/UWkspsukyMBav+6lGyXXo4OPvsu
+         NKDUl039OcfP9ZLelsN+hXm4tLF7Nej/f8/u4mC/hsONLNC88yDSF6O62KVthtmoTC9y
+         qU8A==
+X-Forwarded-Encrypted: i=1; AFNElJ8TqQRq0tYDrMmdkaBr2jqFjwovTAeloHxMQJ84Q8okp+wkRDKmrv2Ab57mNKA8bddJ2NBiCQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwHIMRNPs59O8VAITMvMKrcDrhnITUp5u29bqke0uD24Zeet757
+	Y5iEKvLNykf/j9rz0RUWkGh3Nm0LIWAWavcqpgPTXvrwVizWAlChYuVAiCl8eykH8t3ZTeiL7RQ
+	1PI7CPvuaV5SrWCpjfmBE7XJcDQAqMkAOko54iNGI
+X-Gm-Gg: Acq92OFmBj6kdI7y5ugXYl/G4KYdebblWqhNW1Ck0Ll0lrabBAFxJkNgEc3EW7DlHCt
+	B0Khj03VxugiaI2tlzh27rumi6qf20eyE+/E/YcBjK2nkbD+QgDPlxy1IZrGZOVeWTCllVvYJxL
+	qX5JOmYnZwd3x0+kzHDzWYYJcUbKneKCFZf1TO3nnVn8TL/rbmTvdR4LyMkhqDSEeQ4uu9JpajZ
+	03Unfw1JbwKdmmEgkgP8Tk59WyGE9fGzzvLhxM6KQjlhj/JSEi8VY5rTzCWScuDMDSfuCIeCXi3
+	rLIXLPg9ONT4Vs3rl6qC06+5YjQO
+X-Received: by 2002:a17:903:244c:b0:2bd:7ff4:ab0b with SMTP id
+ d9443c01a7336-2beb06552bbmr262114595ad.39.1779909202300; Wed, 27 May 2026
+ 12:13:22 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260527-audit-update-macro-stubs-v1-1-8cda8dbdae0a@kernel.org>
-In-Reply-To: <20260527-audit-update-macro-stubs-v1-1-8cda8dbdae0a@kernel.org>
-From: Ricardo Robaina <rrobaina@redhat.com>
-Date: Wed, 27 May 2026 15:54:56 -0300
-X-Gm-Features: AVHnY4IicZ2HhE2_4kzqvnb7fp4tMV1lwHhRqpfVbTWpEPC95OYW7fSY74-mqTE
-Message-ID: <CAABTaaCZD-6_ar-H8iwOka9WgtuqwEt+=umVuc5xsBHwDcnD-Q@mail.gmail.com>
+References: <20260527-audit-update-macro-stubs-v1-1-8cda8dbdae0a@kernel.org> <CAABTaaCZD-6_ar-H8iwOka9WgtuqwEt+=umVuc5xsBHwDcnD-Q@mail.gmail.com>
+In-Reply-To: <CAABTaaCZD-6_ar-H8iwOka9WgtuqwEt+=umVuc5xsBHwDcnD-Q@mail.gmail.com>
+From: Paul Moore <paul@paul-moore.com>
+Date: Wed, 27 May 2026 15:13:06 -0400
+X-Gm-Features: AVHnY4JyDaihz5j2KMbjN9c3bYMT5kulIDfNm6wxP3VCcHavB9S0Ini-jhjCGkY
+Message-ID: <CAHC9VhQfci2gE-eD67DbjL21s7tF+rPWa9bdu0Kk5cfW+gz2Xg@mail.gmail.com>
 Subject: Re: [PATCH] audit: Update audit_alloc_mark() and audit_dupe_exe()
  CONFIG_AUDITSYSCALL=n stubs
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Paul Moore <paul@paul-moore.com>, Eric Paris <eparis@redhat.com>, 
-	Waiman Long <longman@redhat.com>, Richard Guy Briggs <rgb@redhat.com>, audit@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, stable@vger.kernel.org
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: Fgb37uL8bYpTG6HqbPUMfVZvDRcC9C6GQDQp5gsTWc0_1779908108
-X-Mimecast-Originator: redhat.com
+To: Nathan Chancellor <nathan@kernel.org>, Ricardo Robaina <rrobaina@redhat.com>
+Cc: Eric Paris <eparis@redhat.com>, Waiman Long <longman@redhat.com>, 
+	Richard Guy Briggs <rgb@redhat.com>, audit@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	stable@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, May 27, 2026 at 2:52=E2=80=AFPM Nathan Chancellor <nathan@kernel.or=
-g> wrote:
->
-> Commit 84470b80b7b0 ("audit: fix recursive locking deadlock in
-> audit_dupe_exe()") added a ctx parameter to audit_alloc_mark() and
-> audit_dupe_exe() but did not update the macro stubs used when
-> CONFIG_AUDITSYSCALL is not enabled, resulting in a build error for this
-> configuration:
->
->   kernel/auditfilter.c: In function 'audit_data_to_entry':
->   kernel/auditfilter.c:592:85: error: macro 'audit_alloc_mark' passed 4 a=
-rguments, but takes just 3
->     592 |                         audit_mark =3D audit_alloc_mark(&entry-=
->rule, str, f_val, NULL);
->         |                                                                =
-                     ^
->   In file included from kernel/auditfilter.c:23:
->   kernel/audit.h:327:9: note: macro 'audit_alloc_mark' defined here
->     327 | #define audit_alloc_mark(k, p, l) (ERR_PTR(-EINVAL))
->         |         ^~~~~~~~~~~~~~~~
->   kernel/auditfilter.c:592:38: error: 'audit_alloc_mark' undeclared (firs=
+On Wed, May 27, 2026 at 2:55=E2=80=AFPM Ricardo Robaina <rrobaina@redhat.co=
+m> wrote:
+> On Wed, May 27, 2026 at 2:52=E2=80=AFPM Nathan Chancellor <nathan@kernel.=
+org> wrote:
+> >
+> > Commit 84470b80b7b0 ("audit: fix recursive locking deadlock in
+> > audit_dupe_exe()") added a ctx parameter to audit_alloc_mark() and
+> > audit_dupe_exe() but did not update the macro stubs used when
+> > CONFIG_AUDITSYSCALL is not enabled, resulting in a build error for this
+> > configuration:
+> >
+> >   kernel/auditfilter.c: In function 'audit_data_to_entry':
+> >   kernel/auditfilter.c:592:85: error: macro 'audit_alloc_mark' passed 4=
+ arguments, but takes just 3
+> >     592 |                         audit_mark =3D audit_alloc_mark(&entr=
+y->rule, str, f_val, NULL);
+> >         |                                                              =
+                       ^
+> >   In file included from kernel/auditfilter.c:23:
+> >   kernel/audit.h:327:9: note: macro 'audit_alloc_mark' defined here
+> >     327 | #define audit_alloc_mark(k, p, l) (ERR_PTR(-EINVAL))
+> >         |         ^~~~~~~~~~~~~~~~
+> >   kernel/auditfilter.c:592:38: error: 'audit_alloc_mark' undeclared (fi=
+rst use in this function)
+> >     592 |                         audit_mark =3D audit_alloc_mark(&entr=
+y->rule, str, f_val, NULL);
+> >         |                                      ^~~~~~~~~~~~~~~~
+> >   kernel/auditfilter.c:592:38: note: 'audit_alloc_mark' is a function-l=
+ike macro and might be used incorrectly
+> >   kernel/auditfilter.c:592:38: note: each undeclared identifier is repo=
+rted only once for each function it appears in
+> >   kernel/auditfilter.c: In function 'audit_dupe_rule':
+> >   kernel/auditfilter.c:879:59: error: macro 'audit_dupe_exe' passed 3 a=
+rguments, but takes just 2
+> >     879 |                         err =3D audit_dupe_exe(new, old, ctx)=
+;
+> >         |                                                           ^
+> >   kernel/audit.h:333:9: note: macro 'audit_dupe_exe' defined here
+> >     333 | #define audit_dupe_exe(n, o) (-EINVAL)
+> >         |         ^~~~~~~~~~~~~~
+> >   kernel/auditfilter.c:879:31: error: 'audit_dupe_exe' undeclared (firs=
 t use in this function)
->     592 |                         audit_mark =3D audit_alloc_mark(&entry-=
->rule, str, f_val, NULL);
->         |                                      ^~~~~~~~~~~~~~~~
->   kernel/auditfilter.c:592:38: note: 'audit_alloc_mark' is a function-lik=
+> >     879 |                         err =3D audit_dupe_exe(new, old, ctx)=
+;
+> >         |                               ^~~~~~~~~~~~~~
+> >   kernel/auditfilter.c:879:31: note: 'audit_dupe_exe' is a function-lik=
 e macro and might be used incorrectly
->   kernel/auditfilter.c:592:38: note: each undeclared identifier is report=
-ed only once for each function it appears in
->   kernel/auditfilter.c: In function 'audit_dupe_rule':
->   kernel/auditfilter.c:879:59: error: macro 'audit_dupe_exe' passed 3 arg=
-uments, but takes just 2
->     879 |                         err =3D audit_dupe_exe(new, old, ctx);
->         |                                                           ^
->   kernel/audit.h:333:9: note: macro 'audit_dupe_exe' defined here
->     333 | #define audit_dupe_exe(n, o) (-EINVAL)
->         |         ^~~~~~~~~~~~~~
->   kernel/auditfilter.c:879:31: error: 'audit_dupe_exe' undeclared (first =
-use in this function)
->     879 |                         err =3D audit_dupe_exe(new, old, ctx);
->         |                               ^~~~~~~~~~~~~~
->   kernel/auditfilter.c:879:31: note: 'audit_dupe_exe' is a function-like =
-macro and might be used incorrectly
+> >
+> > Update the macros with the correct number of parameters to resolve the
+> > build error.
+> >
+> > Cc: stable@vger.kernel.org
+> > Fixes: 84470b80b7b0 ("audit: fix recursive locking deadlock in audit_du=
+pe_exe()")
+> > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> > ---
+> >  kernel/audit.h | 4 ++--
+> >  1 file changed, 2 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/kernel/audit.h b/kernel/audit.h
+> > index f1a77aef4533..92d5e723d570 100644
+> > --- a/kernel/audit.h
+> > +++ b/kernel/audit.h
+> > @@ -324,13 +324,13 @@ extern struct list_head *audit_killed_trees(void)=
+;
+> >  #define audit_watch_path(w) ""
+> >  #define audit_watch_compare(w, i, d) 0
+> >
+> > -#define audit_alloc_mark(k, p, l) (ERR_PTR(-EINVAL))
+> > +#define audit_alloc_mark(k, p, l, c) (ERR_PTR(-EINVAL))
+> >  #define audit_mark_path(m) ""
+> >  #define audit_remove_mark(m) do { } while (0)
+> >  #define audit_remove_mark_rule(k) do { } while (0)
+> >  #define audit_mark_compare(m, i, d) 0
+> >  #define audit_exe_compare(t, m) (-EINVAL)
+> > -#define audit_dupe_exe(n, o) (-EINVAL)
+> > +#define audit_dupe_exe(n, o, c) (-EINVAL)
+> >
+> >  #define audit_remove_tree_rule(rule) BUG()
+> >  #define audit_add_tree_rule(rule) -EINVAL
+> >
+> > ---
+> > base-commit: 82bc8394b1aa74aedb9827da7730cfa6639716fd
+> > change-id: 20260527-audit-update-macro-stubs-6e4d8e8a826e
+> >
+> > Best regards,
+> > --
+> > Cheers,
+> > Nathan
+> >
 >
-> Update the macros with the correct number of parameters to resolve the
-> build error.
+> Hi Nathan,
 >
-> Cc: stable@vger.kernel.org
-> Fixes: 84470b80b7b0 ("audit: fix recursive locking deadlock in audit_dupe=
-_exe()")
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> ---
->  kernel/audit.h | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+> Good catch, I did miss that! Looks good to me, thanks for fixing it.
 >
-> diff --git a/kernel/audit.h b/kernel/audit.h
-> index f1a77aef4533..92d5e723d570 100644
-> --- a/kernel/audit.h
-> +++ b/kernel/audit.h
-> @@ -324,13 +324,13 @@ extern struct list_head *audit_killed_trees(void);
->  #define audit_watch_path(w) ""
->  #define audit_watch_compare(w, i, d) 0
->
-> -#define audit_alloc_mark(k, p, l) (ERR_PTR(-EINVAL))
-> +#define audit_alloc_mark(k, p, l, c) (ERR_PTR(-EINVAL))
->  #define audit_mark_path(m) ""
->  #define audit_remove_mark(m) do { } while (0)
->  #define audit_remove_mark_rule(k) do { } while (0)
->  #define audit_mark_compare(m, i, d) 0
->  #define audit_exe_compare(t, m) (-EINVAL)
-> -#define audit_dupe_exe(n, o) (-EINVAL)
-> +#define audit_dupe_exe(n, o, c) (-EINVAL)
->
->  #define audit_remove_tree_rule(rule) BUG()
->  #define audit_add_tree_rule(rule) -EINVAL
->
-> ---
-> base-commit: 82bc8394b1aa74aedb9827da7730cfa6639716fd
-> change-id: 20260527-audit-update-macro-stubs-6e4d8e8a826e
->
-> Best regards,
-> --
-> Cheers,
-> Nathan
->
+> Acked-by: Ricardo Robaina <rrobaina@redhat.com>
 
-Hi Nathan,
+Thanks Nathan!
 
-Good catch, I did miss that! Looks good to me, thanks for fixing it.
+Do either of you mind if I squash these two patches together in the
+audit tree?  I would preserve Nathan's sign-off line and add a comment
+at the end of the commit description about the fix provided by Nathan.
 
-Acked-by: Ricardo Robaina <rrobaina@redhat.com>
-
--Ricardo
-
+--=20
+paul-moore.com
