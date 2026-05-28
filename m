@@ -1,217 +1,75 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14CEB340402
-	for <audit@vger.kernel.org>; Thu, 28 May 2026 22:40:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A6BF1DBB3A;
+	Thu, 28 May 2026 23:29:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780008052; cv=none; b=aaJtq4N4yVp4mz63oKQiI6RDpP1gr+1TyAv35fWpXr/KNbta5Z8h+xi0IAUMvKaKWMr78WDvE9XWTNB9GKf0rlcLBjKk1LlKgAlcUT50uuQ85UPGVlfhFTzOkbJ0U8UAM5TvXsCxl8EjQ6rflmzpgLb5wgl8HGXpCNgGvpGGpBA=
+	t=1780010943; cv=none; b=efqxnyaTYs4HlXaX1SikqmvlDKM3MtMFAjX3jaGcLoxbVktr+4S0LFs1gg/mcyiNet6Yonw7KfKRIfuhxU79pQWTauqCJu7CA7vgAEj5vOlm/J0KeZn3Auoo02IZO9nmY93ItVYF7s1D1tkenxksX6mPAuf3zIKm/HkYzh5Gk5c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780008052; c=relaxed/simple;
-	bh=6KesW3CMrcUABmRYSwX04PZdArijMaKZ0j8W/BWLhYY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=UL064ZOivsn8M8aBgrpx7+QLFahhHCldPyYbkgVLuvgZbk3zp7Yz9rvHfteQ8IBMc3YU3cp7qcUQaw139p3Nup6kvnYTAlKY+IqdXtJci0a+dufV92lxo3BHXcv99VdAN/9yyzHGuARUG7EESycu2xrXBRfqWqukUojoOk1/rEc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=h4VFm4ot; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1780010943; c=relaxed/simple;
+	bh=JiC2ZXR5o5RuRvWtBMIhBz8Bt7AysbRI+tZGiWA+qEQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=liptk5FQWAQE+r5ZuzvYng2Ln/freH76SSyMbQilEwSNRTv10KSEqW2Lf5SB8O0DczN9Bvom+F0Ld8yDgT9eTBw0QDXZeb+rd4GYpVTIJ+DK36YGTGXo5TfPHD4wOGzbU31HtVUaiRtMRYTtSQAhZobdVhI4kQS94H4KbjhHzxE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Dn7H1iMc; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="h4VFm4ot"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1780008050;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=8H6Q3plys+X818mKzucy7YVrct1BRKjttnTgzJcVamw=;
-	b=h4VFm4otLN5PKlccc3zchiAkB8txtXfMiR7/MsnrfyMQ2GHlbPBUVb9O2Fp4c/zCkPJ7bg
-	xI4shyzA+RIqYh73m0YYVgY/zzewR7oMYqsuQvg4FKtlEcoFpTbMGt4v4AIo6+3L+HIu5P
-	uwWf5gbcW0JQsrPBpFqvu8ug0YEqdpM=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-404-rLRL0CEONtC1BaI3CmqLhA-1; Thu,
- 28 May 2026 18:40:48 -0400
-X-MC-Unique: rLRL0CEONtC1BaI3CmqLhA-1
-X-Mimecast-MFC-AGG-ID: rLRL0CEONtC1BaI3CmqLhA_1780008047
-Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 340721956046;
-	Thu, 28 May 2026 22:40:47 +0000 (UTC)
-Received: from x2.localnet (unknown [10.22.65.72])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 8A7A319560AB;
-	Thu, 28 May 2026 22:40:45 +0000 (UTC)
-From: Steve Grubb <sgrubb@redhat.com>
-To: Ricardo Robaina <rrobaina@redhat.com>, Jakub Kicinski <kuba@kernel.org>
-Cc: audit@vger.kernel.org, linux-kernel@vger.kernel.org,
- netdev@vger.kernel.org, paul@paul-moore.com, eparis@redhat.com,
- edumazet@google.com, pabeni@redhat.com, horms@kernel.org
-Subject: Re: [PATCH v2] netlink,
- audit: prevent false ENOBUFS on timeout expiry
-Date: Thu, 28 May 2026 18:40:44 -0400
-Message-ID: <2143396.Jadu78ljVU@x2>
-Organization: Red Hat
-In-Reply-To: <20260527152936.001d5d28@kernel.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Dn7H1iMc"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38C891F000E9;
+	Thu, 28 May 2026 23:29:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780010942;
+	bh=TSbbAi6AxwOZw7EN9L734+yNxSco5cVfngQEMKLubdc=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=Dn7H1iMcOsAK3rg/m1++i0NJ2OQbnjlXCfN0qBBgfFapxteFR/xKZYhbyme+bAsSp
+	 2AzFYYeEo4/nchah0qH3YzyY6sJkV6ok6XOzcqiuc1MCp+mp2begLQ+6H/FKX77Qlc
+	 C1CkZWI+D7jFWwjJQ+BwdAN4ie78346lNCjWsV//srxxyKhQV75dkDh0TCd8Lw9ATW
+	 zK1jKI5Lkbkn5rKtbhIVYMKnT5ISIvFkyfq+Vvyhm4IioNXINB5efpuNxXVqgGTLTO
+	 FTzuTNiRUlHpaGOXb+z7H+HvHV6OXSvbuLf80qMWsvV0Jg1MDA3i+6pE+eAICPiW2Z
+	 Mc+a2wP6zm1Pw==
+Date: Thu, 28 May 2026 16:29:01 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Steve Grubb <sgrubb@redhat.com>
+Cc: Ricardo Robaina <rrobaina@redhat.com>, audit@vger.kernel.org,
+ linux-kernel@vger.kernel.org, netdev@vger.kernel.org, paul@paul-moore.com,
+ eparis@redhat.com, edumazet@google.com, pabeni@redhat.com, horms@kernel.org
+Subject: Re: [PATCH v2] netlink, audit: prevent false ENOBUFS on timeout
+ expiry
+Message-ID: <20260528162901.2d68e2e0@kernel.org>
+In-Reply-To: <2143396.Jadu78ljVU@x2>
 References: <20260513172443.1128496-1-rrobaina@redhat.com>
- <CAABTaaC98dqM8U-7xkdW=b=50UKu0SQyBO629LDdphQ9DC=P=g@mail.gmail.com>
- <20260527152936.001d5d28@kernel.org>
+	<CAABTaaC98dqM8U-7xkdW=b=50UKu0SQyBO629LDdphQ9DC=P=g@mail.gmail.com>
+	<20260527152936.001d5d28@kernel.org>
+	<2143396.Jadu78ljVU@x2>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
-X-Mimecast-MFC-PROC-ID: O_cdw3BJlt-wrCfUfeUCLWtvGXN91SevYmk5AM-BzTk_1780008047
-X-Mimecast-Originator: redhat.com
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Wednesday, May 27, 2026 6:29:36=E2=80=AFPM Eastern Daylight Time Jakub K=
-icinski=20
-wrote:
-> On Wed, 27 May 2026 16:29:37 -0300 Ricardo Robaina wrote:
-> > On Mon, May 18, 2026 at 9:35=E2=80=AFPM Jakub Kicinski <kuba@kernel.org=
-> wrote:
-> > > On Wed, 13 May 2026 14:24:43 -0300 Ricardo Robaina wrote:
-> > > > When auditd is bottlenecked (e.g., by slow disk I/O), kauditd block=
-s
-> > > > on
-> > > > the netlink socket.
-> > >=20
-> > > Holding socket lock during slow IO sounds very wrong. One could say -
-> > > that's abuse of the socket lock?
-> > >=20
-> > > > If the wait timeout fully expires (timeo =3D=3D 0),
-> > > > netlink mistakenly interprets the zeroed timeout as a non-blocking
-> > > > request. It then triggers netlink_overrun that drops the event,
-> > > > completely bypassing the audit subsystem's internal retry queue, an=
-d
-> > > >=20
-> > > > falsely returns ENOBUFS to user-space, resulting in the following=
-=20
-error:
-> > > >  auditd[]: Error receiving audit netlink packet (No buffer space
-> > > >  available)
-> > > >=20
-> > > > Fix this by detecting when a blocking sender's timeout has expired
-> > > > (timeo =3D=3D 0 && !nonblock) in netlink_unicast(). In this case, i=
-nstead
-> > > > of retrying with timeo=3D0 (which would incorrectly trigger
-> > > > netlink_overrun
-> > > > on the next iteration), safely free the skb and return -EAGAIN,
-> > > > allowing
-> > > > the audit subsystem to gracefully enqueue the pending event into it=
-s
-> > > > internal backlog.
-> > >=20
-> > > The socket _is_ the queue, normally.
-> > >=20
-> > > Please explore fixing this in audit?
-> > > --
-> > > pw-bot: cr
-> >=20
-> > Hi Jakub,
-> >=20
-> > Thanks for reviewing this patch as well.
-> >=20
-> > First, regarding the lock: kauditd does not hold the socket lock during
-> > slow I/O. The sleep in netlink_attachskb() uses schedule_timeout() on
-> > nlk->wait (a wait queue). No socket lock or mutex is held during the
-> > sleep.
->
-> So you're saying the queue _is_ actually congested?
+On Thu, 28 May 2026 18:40:44 -0400 Steve Grubb wrote:
+> > > (3) A new NETLINK_F_RECV_NO_ENOBUFS socket flag doesn't exist in stable
+> > > kernels where this bug is actively impacting users  
+> > 
+> > Which commit are you referring to? Isn't that flag itself ancient?  
+> 
+> You're right, it is. I see how this flag would fix the pathological behavior 
+> that was reported. But as I have looked at this suggestion, there seems to be 
+> one wrinkle. User space should not need to know that the audit code in the 
+> kernel has this retry mechanism. 
 
-Yes. the socket buffer is genuinely full because auditd can't drain fast=20
-enough.
+It's not about the retry mechanism, at least in my mind - I read 
+your reply as "user space should not know that there was congestion".
+Why? It's not very useful, I get that, but user space can just clear
+the congestion signal and keep going.
 
-> netlink_attachskb() sleeps because there's no space left in the socket's
-> rcvbuf? So the skbs are moved to audit_retry_queue "temporarily" until
-> user space drains its socket and kernel can succeed sending?
->=20
-> Could you confirm this understanding is correct?
+> It seems like the audit subsystem should set the flag on auditd's
+> socket at registration time in auditd_set(). The kernel is the right
+> place for this because it's the kernel that manages the retry/ hold
+> queues and sets the sk_sndtimeo that triggers the overrun path -
+> auditd has no knowledge of these internals.
 
-Yes. kauditd sleeps in netlink_attachskb, the HZ/10 timeout expires, and th=
-e=20
-skb is moved to audit_retry_queue until auditd drains enough for delivery t=
-o=20
-succeed. The record is not lost.
-
-> > Second, regarding an audit-only fix: the symptom manifests as sk->sk_er=
-r
-> > =3D ENOBUFS set inside netlink_overrun() (called from netlink_attachskb
-> > when timeo =3D=3D 0). Audit has no mechanism to prevent or clear this s=
-ocket
-> > state from the outside. Potential workarounds all fail:
-> >=20
-> > (1) Clearing sk_err after the fact is racy and affects other socket ops
->=20
-> Why would you clear the sk_err, it's the reader's responsibility to
-> clear the congestion and the reader is AFAIU a user space process.
-
-The reader is in a fight to clear the congestion. But 1 reader thread vs 32=
-=20
-cores, the reader can get backlogged. It doesn't happen very often, but it=
-=20
-does once in a great while. The reader doesn't want an ENOBUFS and logs tha=
-t=20
-as an exceptional condition when that happens. It wants to rely on the=20
-kernel's backlog mechanism.
-
-> > (2) Avoiding timeouts entirely defeats the anti-deadlock mechanism
->=20
-> What's the anti-deadlock mechanism?
-
-sk_sndtimeo =3D HZ/10, set in audit_net_init(). Without it, kauditd would s=
-leep=20
-indefinitely in netlink_attachskb if auditd is stalled or dead. The timeout=
-=20
-lets kauditd escape and route the skb to its retry queue.
-
-> > (3) A new NETLINK_F_RECV_NO_ENOBUFS socket flag doesn't exist in stable
-> > kernels where this bug is actively impacting users
->=20
-> Which commit are you referring to? Isn't that flag itself ancient?
-
-You're right, it is. I see how this flag would fix the pathological behavio=
-r=20
-that was reported. But as I have looked at this suggestion, there seems to =
-be=20
-one wrinkle. User space should not need to know that the audit code in the=
-=20
-kernel has this retry mechanism. It seems like the audit subsystem should s=
-et=20
-the flag on auditd's socket at registration time in auditd_set(). The kerne=
-l=20
-is the right place for this because it's the kernel that manages the retry/
-hold queues and sets the sk_sndtimeo that triggers the overrun path - audit=
-d=20
-has no knowledge of these internals.
-
-NETLINK_F_RECV_NO_ENOBUFS and nlk_sk are private to net/netlink/af_netlink.=
-h,=20
-so audit.c can't set the flag directly. Should we propose a small exported=
-=20
-helper, netlink_sock_set_no_enobufs(), that mirrors the existing=20
-setsockopt(NETLINK_NO_ENOBUFS) handler? Then the rest of the fix itself liv=
-es=20
-entirely in kernel/audit.c as you suggested.
-
-Something like:
-void netlink_sock_set_no_enobufs(struct sock *sk)
-{
-=09struct netlink_sock *nlk =3D nlk_sk(sk);
-
-=09nlk->flags |=3D NETLINK_F_RECV_NO_ENOBUFS;
-=09clear_bit(NETLINK_S_CONGESTED, &nlk->state);
-=09wake_up_interruptible(&nlk->wait);
-}
-
-and then in audit_set() it calls this as it sets up the connection. Is this=
-=20
-the way you wanted to handle this?
-
--Steve
-
-
+We have to carry this code somewhere, either in user space or in 
+the kernel. I'd prefer not to carry it in the kernel.
