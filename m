@@ -1,138 +1,217 @@
-Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25A1E26E70E
-	for <audit@vger.kernel.org>; Thu, 28 May 2026 15:19:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.169
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779981572; cv=pass; b=tBeeKqElFQMO9eqQyIwN/c5m5GM9jYMFFmCTW5k9kcDauuEvxBC1YFdsn3f33HSwkGOk6WlSET/fOtTk4bGvfvdpKsfbZuiwNj8d3bWZdGYdUf+IuQZF59fxs57ttOPS25aZKOhlhnWdi5SQUxvZbX0W/ksMJt1G3P/5jAXuW3c=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779981572; c=relaxed/simple;
-	bh=6S9TkIeh9d7MOG/y/RYKoCP7qm0FvkE2uz6UMNW6Wl8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=aE/H3zLpwhEnZHNiq3lsmd7/CPyiogMj6eRuGoxdWp1hv0jB4jaKgQZU9qpWpbfIrqMYT/RFZ78yHck9Ar9IoGjLPT012VlKocLp9pftoY2qJ1a+88N3WaZDE6vqZKyMgApAWUnEAiqwTv6CJRZuOOuKAX9YcTGGyp1V0SHubqg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=G1aVkmM9; arc=pass smtp.client-ip=209.85.128.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14CEB340402
+	for <audit@vger.kernel.org>; Thu, 28 May 2026 22:40:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1780008052; cv=none; b=aaJtq4N4yVp4mz63oKQiI6RDpP1gr+1TyAv35fWpXr/KNbta5Z8h+xi0IAUMvKaKWMr78WDvE9XWTNB9GKf0rlcLBjKk1LlKgAlcUT50uuQ85UPGVlfhFTzOkbJ0U8UAM5TvXsCxl8EjQ6rflmzpgLb5wgl8HGXpCNgGvpGGpBA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1780008052; c=relaxed/simple;
+	bh=6KesW3CMrcUABmRYSwX04PZdArijMaKZ0j8W/BWLhYY=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=UL064ZOivsn8M8aBgrpx7+QLFahhHCldPyYbkgVLuvgZbk3zp7Yz9rvHfteQ8IBMc3YU3cp7qcUQaw139p3Nup6kvnYTAlKY+IqdXtJci0a+dufV92lxo3BHXcv99VdAN/9yyzHGuARUG7EESycu2xrXBRfqWqukUojoOk1/rEc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=h4VFm4ot; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="G1aVkmM9"
-Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-7dc78af7371so10880767b3.1
-        for <audit@vger.kernel.org>; Thu, 28 May 2026 08:19:31 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1779981571; cv=none;
-        d=google.com; s=arc-20240605;
-        b=O9Mp2ShAYH+nx/hPPUZpvRUOuRTkKPPDLV9nxLwY8nHfeW4GWupMKotJ2QPETJzCxZ
-         JqZpUWd5P8fBZIt3t1nOyi48UOHypyJooJTPnomCcjulbBjn+t5K7AnD8NK23dHXyEhd
-         +ax7tAN4VWdogMzmY2JiFS0aqpzoHpzxgmwJGTU40Jw0RQq/LBaOHQImRtIaTAXn6qa7
-         2qDc0Log/WCO7uCbk1oVGCSp91YbS68iyZgGMLlootDBVMd+BpIdpTxKnCIsxPpvxQcT
-         m0bcBvL8QEKnPC+ZGCE+B0Gwz1WVRf7wexDlktk7/obFy2FnR8HQDXytNk4UcGlUJzYX
-         er3g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=bNBevCqfk00J2rt3EB2DabDjtH6s2ImxOWmElvURxdM=;
-        fh=kgXISa93y0AL5GO00UpurB/T4lUeJLn5mudh/KSOAms=;
-        b=Hg8Zb3HxSeKCwH+TdEbtlmdESnZRxf/f48wawklxaDACd0ggmGC/Ph6uNX43wkGdOE
-         71lwE4YGFwoiylwWYpqbhI7BDukHrWIhwtyqy4OIaTfUMUhE81citi85F6Tr9LpULQUe
-         6P3iRAFNuIVY0oFdgVxxFmWBtnNkWZqRmD34c/Bx2s73ASZskl/3uae4zE/W04xYrv+4
-         Gkudiz/1VB9F+c2veG3tUEZ0mPJWkV/LxRH2PJg7wll+xqnI63urFfPlTgmXx0LAUvne
-         QVbKKacrXGroTJr5DCZ+Mrndd8LBT7A1XY+nWEXFl1aFbWU2avafrUQ20Mse8JWftvrM
-         s64A==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1779981571; x=1780586371; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bNBevCqfk00J2rt3EB2DabDjtH6s2ImxOWmElvURxdM=;
-        b=G1aVkmM9Kp5T52Pdbhqnz/OGNML0X8APdc4gzhLPwIkHEthCd+9ah2RyM1jmLIWRLz
-         T+F1LTkfu+SVdOu3EwqLE7l9cbBzKBBPpIYqOsoU3e9yXH9qx/VdInN/0sYYUXsTPW2/
-         uL1oRJ6Aj3GGaagLJWvBwLvD1wvsk2xxB61eQi1bkswtb107VIX35OS0gSbnH2/XvFBY
-         10WOvkH9gvJWOhOpUP0/JBtImHVOcSJvgX/5qKP+262LjO9VjQaDT/RKAC0sy2ETOZkw
-         PzOUBx7ErndnUF8ULZrebXHISWfJcUyXoQMlobzjWilC/0te8xY/mCtoUvIenhP3xctL
-         nmhA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779981571; x=1780586371;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=bNBevCqfk00J2rt3EB2DabDjtH6s2ImxOWmElvURxdM=;
-        b=HDa3rdWmbFBdzPdEVRwAZ5oTTz119LKeKeZ7jY7xDz7GoKGgXk74thxvMDMYy/t5Ir
-         OWl8CdL0WvFCbicoxiSnHMsjbGMduJi3GOsYbteZfU9Q0EIydqT8/8zuoXiDZbfmifuc
-         YK+/8GAIIH/mmf5GDFETS34f6KRz3GNHAoBvczunDmQ2BIsmM2n7W7nUjMVVfHmfEXnO
-         27TA9saX3IF1VnrUZNbrAtrsUEGkXwngVUs2qqM+7iOSWFExxs1PE7K1EGN+E5hJqErY
-         TcV5SSlFPTfSQro4R+2OiUH1nhpBj5K3r5Sn2itAtIVyMLd5hp6ugv1BP/18z/wR9SrA
-         xh2Q==
-X-Forwarded-Encrypted: i=1; AFNElJ8H/uhVYQg1IFZMGOwh6/rHgTyWXorkYGaReWUQR30+frhzO6k8/fRCalLVSo4CeO0fZdZUJg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyjsVnKYfcXGP7RP8kCcR5t02gWkzDvQVm81jCScxu8lRFIRgcJ
-	L0L6ZiMfRIi5KOouqa/EEUzvByfDPFxdzSV7K9Of4gd6TUT+e3BgFiyJDp2FirdCXTKFxQ4gdg2
-	eOVnfDboW1NEj6qxsrMRjeBzb4YpQOQxt4TfjLxgJcRXsvpSoRAFpzQ==
-X-Gm-Gg: Acq92OFam0dcm5WLf3JZtr1p3e+AscoPavHxCh/GyYhACg5jNAtyfWIHeJKjjhBf2b+
-	VPuqas8FKZzHwnKUqRtyc8f5edZuuubMkd7F6AZf7jYS7wQ97jd7isEvPBjpPRsbONQJXxEqglZ
-	6XfXX/Cgc52pLpXlJ4+Am3613aAnl6vBQ4MQ1RD4OwYwHQ/DAwXtkNwNSWKeGI+ID2pWE/W48xP
-	Hmspc9AlmELxuUSGGlJTxzUQDzl4Jy8QcZn2YUUC+8pjFgfcCygGpUJ7g/WLSaIsQxDWAZj4fg9
-	ukr3ab++YTxaKr5B8g==
-X-Received: by 2002:a17:903:2bcc:b0:2b2:5099:2f3e with SMTP id
- d9443c01a7336-2beb06ea859mr302897195ad.4.1779981158837; Thu, 28 May 2026
- 08:12:38 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="h4VFm4ot"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1780008050;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=8H6Q3plys+X818mKzucy7YVrct1BRKjttnTgzJcVamw=;
+	b=h4VFm4otLN5PKlccc3zchiAkB8txtXfMiR7/MsnrfyMQ2GHlbPBUVb9O2Fp4c/zCkPJ7bg
+	xI4shyzA+RIqYh73m0YYVgY/zzewR7oMYqsuQvg4FKtlEcoFpTbMGt4v4AIo6+3L+HIu5P
+	uwWf5gbcW0JQsrPBpFqvu8ug0YEqdpM=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-404-rLRL0CEONtC1BaI3CmqLhA-1; Thu,
+ 28 May 2026 18:40:48 -0400
+X-MC-Unique: rLRL0CEONtC1BaI3CmqLhA-1
+X-Mimecast-MFC-AGG-ID: rLRL0CEONtC1BaI3CmqLhA_1780008047
+Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 340721956046;
+	Thu, 28 May 2026 22:40:47 +0000 (UTC)
+Received: from x2.localnet (unknown [10.22.65.72])
+	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 8A7A319560AB;
+	Thu, 28 May 2026 22:40:45 +0000 (UTC)
+From: Steve Grubb <sgrubb@redhat.com>
+To: Ricardo Robaina <rrobaina@redhat.com>, Jakub Kicinski <kuba@kernel.org>
+Cc: audit@vger.kernel.org, linux-kernel@vger.kernel.org,
+ netdev@vger.kernel.org, paul@paul-moore.com, eparis@redhat.com,
+ edumazet@google.com, pabeni@redhat.com, horms@kernel.org
+Subject: Re: [PATCH v2] netlink,
+ audit: prevent false ENOBUFS on timeout expiry
+Date: Thu, 28 May 2026 18:40:44 -0400
+Message-ID: <2143396.Jadu78ljVU@x2>
+Organization: Red Hat
+In-Reply-To: <20260527152936.001d5d28@kernel.org>
+References: <20260513172443.1128496-1-rrobaina@redhat.com>
+ <CAABTaaC98dqM8U-7xkdW=b=50UKu0SQyBO629LDdphQ9DC=P=g@mail.gmail.com>
+ <20260527152936.001d5d28@kernel.org>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <202605281316.GwqEa9Tn-lkp@intel.com>
-In-Reply-To: <202605281316.GwqEa9Tn-lkp@intel.com>
-From: Paul Moore <paul@paul-moore.com>
-Date: Thu, 28 May 2026 11:12:26 -0400
-X-Gm-Features: AVHnY4KGkw7s8GFEZnhSp-WLxdURT-RSXphDvHJcUZTiyxeBb39-HOM0H2amaTc
-Message-ID: <CAHC9VhQkE9cNxakvHSn8wgguDTehYHUpF7ujc+tzUbT1fqgmzQ@mail.gmail.com>
-Subject: Re: [linux-next:master] BUILD REGRESSION e7d700e14934e68f86338c5610cf2ae76798b663
-To: kernel test robot <lkp@intel.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>, 
-	Linux Memory Management List <linux-mm@kvack.org>, audit@vger.kernel.org, 
-	linux-renesas-soc@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
+X-Mimecast-MFC-PROC-ID: O_cdw3BJlt-wrCfUfeUCLWtvGXN91SevYmk5AM-BzTk_1780008047
+X-Mimecast-Originator: redhat.com
 Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
 
-On Thu, May 28, 2026 at 1:09=E2=80=AFAM kernel test robot <lkp@intel.com> w=
-rote:
+On Wednesday, May 27, 2026 6:29:36=E2=80=AFPM Eastern Daylight Time Jakub K=
+icinski=20
+wrote:
+> On Wed, 27 May 2026 16:29:37 -0300 Ricardo Robaina wrote:
+> > On Mon, May 18, 2026 at 9:35=E2=80=AFPM Jakub Kicinski <kuba@kernel.org=
+> wrote:
+> > > On Wed, 13 May 2026 14:24:43 -0300 Ricardo Robaina wrote:
+> > > > When auditd is bottlenecked (e.g., by slow disk I/O), kauditd block=
+s
+> > > > on
+> > > > the netlink socket.
+> > >=20
+> > > Holding socket lock during slow IO sounds very wrong. One could say -
+> > > that's abuse of the socket lock?
+> > >=20
+> > > > If the wait timeout fully expires (timeo =3D=3D 0),
+> > > > netlink mistakenly interprets the zeroed timeout as a non-blocking
+> > > > request. It then triggers netlink_overrun that drops the event,
+> > > > completely bypassing the audit subsystem's internal retry queue, an=
+d
+> > > >=20
+> > > > falsely returns ENOBUFS to user-space, resulting in the following=
+=20
+error:
+> > > >  auditd[]: Error receiving audit netlink packet (No buffer space
+> > > >  available)
+> > > >=20
+> > > > Fix this by detecting when a blocking sender's timeout has expired
+> > > > (timeo =3D=3D 0 && !nonblock) in netlink_unicast(). In this case, i=
+nstead
+> > > > of retrying with timeo=3D0 (which would incorrectly trigger
+> > > > netlink_overrun
+> > > > on the next iteration), safely free the skb and return -EAGAIN,
+> > > > allowing
+> > > > the audit subsystem to gracefully enqueue the pending event into it=
+s
+> > > > internal backlog.
+> > >=20
+> > > The socket _is_ the queue, normally.
+> > >=20
+> > > Please explore fixing this in audit?
+> > > --
+> > > pw-bot: cr
+> >=20
+> > Hi Jakub,
+> >=20
+> > Thanks for reviewing this patch as well.
+> >=20
+> > First, regarding the lock: kauditd does not hold the socket lock during
+> > slow I/O. The sleep in netlink_attachskb() uses schedule_timeout() on
+> > nlk->wait (a wait queue). No socket lock or mutex is held during the
+> > sleep.
 >
-> tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-n=
-ext.git master
-> branch HEAD: e7d700e14934e68f86338c5610cf2ae76798b663  Add linux-next spe=
-cific files for 20260527
->
-> Error/Warning (recently discovered and may have been fixed):
->
->     https://lore.kernel.org/oe-kbuild-all/202605280441.YSawqHBc-lkp@intel=
-.com
->     https://lore.kernel.org/oe-kbuild-all/202605280456.3Hhpgxl0-lkp@intel=
-.com
->
->     kernel/auditfilter.c:592:15: error: incompatible pointer types assign=
-ing to 'struct audit_fsnotify_mark *' from 'int (struct task_struct *)' [-W=
-incompatible-pointer-types]
->     kernel/auditfilter.c:592:17: error: use of undeclared identifier 'aud=
-it_alloc_mark'; did you mean 'audit_alloc'?
->     kernel/auditfilter.c:592:38: error: 'audit_alloc_mark' undeclared (fi=
-rst use in this function); did you mean 'audit_alloc'?
->     kernel/auditfilter.c:592:60: error: too many arguments provided to fu=
-nction-like macro invocation
->     kernel/auditfilter.c:592:85: error: macro 'audit_alloc_mark' passed 4=
- arguments, but takes just 3
->     kernel/auditfilter.c:879:10: error: use of undeclared identifier 'aud=
-it_dupe_exe'; did you mean 'audit_dupe_rule'?
->     kernel/auditfilter.c:879:31: error: 'audit_dupe_exe' undeclared (firs=
-t use in this function); did you mean 'audit_dupe_rule'?
->     kernel/auditfilter.c:879:59: error: macro 'audit_dupe_exe' passed 3 a=
-rguments, but takes just 2
->     kernel/auditfilter.c:879:8: error: incompatible pointer to integer co=
-nversion assigning to 'int' from 'struct audit_entry *(struct audit_krule *=
-, struct audit_watch_ctx *)' [-Wint-conversion]
+> So you're saying the queue _is_ actually congested?
 
-Thanks.  This should already be fixed in the audit tree, if you
-continue to see errors please let me know.
+Yes. the socket buffer is genuinely full because auditd can't drain fast=20
+enough.
 
---=20
-paul-moore.com
+> netlink_attachskb() sleeps because there's no space left in the socket's
+> rcvbuf? So the skbs are moved to audit_retry_queue "temporarily" until
+> user space drains its socket and kernel can succeed sending?
+>=20
+> Could you confirm this understanding is correct?
+
+Yes. kauditd sleeps in netlink_attachskb, the HZ/10 timeout expires, and th=
+e=20
+skb is moved to audit_retry_queue until auditd drains enough for delivery t=
+o=20
+succeed. The record is not lost.
+
+> > Second, regarding an audit-only fix: the symptom manifests as sk->sk_er=
+r
+> > =3D ENOBUFS set inside netlink_overrun() (called from netlink_attachskb
+> > when timeo =3D=3D 0). Audit has no mechanism to prevent or clear this s=
+ocket
+> > state from the outside. Potential workarounds all fail:
+> >=20
+> > (1) Clearing sk_err after the fact is racy and affects other socket ops
+>=20
+> Why would you clear the sk_err, it's the reader's responsibility to
+> clear the congestion and the reader is AFAIU a user space process.
+
+The reader is in a fight to clear the congestion. But 1 reader thread vs 32=
+=20
+cores, the reader can get backlogged. It doesn't happen very often, but it=
+=20
+does once in a great while. The reader doesn't want an ENOBUFS and logs tha=
+t=20
+as an exceptional condition when that happens. It wants to rely on the=20
+kernel's backlog mechanism.
+
+> > (2) Avoiding timeouts entirely defeats the anti-deadlock mechanism
+>=20
+> What's the anti-deadlock mechanism?
+
+sk_sndtimeo =3D HZ/10, set in audit_net_init(). Without it, kauditd would s=
+leep=20
+indefinitely in netlink_attachskb if auditd is stalled or dead. The timeout=
+=20
+lets kauditd escape and route the skb to its retry queue.
+
+> > (3) A new NETLINK_F_RECV_NO_ENOBUFS socket flag doesn't exist in stable
+> > kernels where this bug is actively impacting users
+>=20
+> Which commit are you referring to? Isn't that flag itself ancient?
+
+You're right, it is. I see how this flag would fix the pathological behavio=
+r=20
+that was reported. But as I have looked at this suggestion, there seems to =
+be=20
+one wrinkle. User space should not need to know that the audit code in the=
+=20
+kernel has this retry mechanism. It seems like the audit subsystem should s=
+et=20
+the flag on auditd's socket at registration time in auditd_set(). The kerne=
+l=20
+is the right place for this because it's the kernel that manages the retry/
+hold queues and sets the sk_sndtimeo that triggers the overrun path - audit=
+d=20
+has no knowledge of these internals.
+
+NETLINK_F_RECV_NO_ENOBUFS and nlk_sk are private to net/netlink/af_netlink.=
+h,=20
+so audit.c can't set the flag directly. Should we propose a small exported=
+=20
+helper, netlink_sock_set_no_enobufs(), that mirrors the existing=20
+setsockopt(NETLINK_NO_ENOBUFS) handler? Then the rest of the fix itself liv=
+es=20
+entirely in kernel/audit.c as you suggested.
+
+Something like:
+void netlink_sock_set_no_enobufs(struct sock *sk)
+{
+=09struct netlink_sock *nlk =3D nlk_sk(sk);
+
+=09nlk->flags |=3D NETLINK_F_RECV_NO_ENOBUFS;
+=09clear_bit(NETLINK_S_CONGESTED, &nlk->state);
+=09wake_up_interruptible(&nlk->wait);
+}
+
+and then in audit_set() it calls this as it sets up the connection. Is this=
+=20
+the way you wanted to handle this?
+
+-Steve
+
+
