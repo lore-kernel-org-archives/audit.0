@@ -1,170 +1,108 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from ewsoutbound.kpnmail.nl (ewsoutbound.kpnmail.nl [195.121.94.185])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 343842F1FE4
-	for <audit@vger.kernel.org>; Fri, 12 Jun 2026 14:14:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A38627456
+	for <audit@vger.kernel.org>; Sun, 14 Jun 2026 18:36:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.121.94.185
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781273691; cv=none; b=gubdhv8iTJhMOkyid0GqfmiP3Bhsk0iGhC1kBoYJMzq8ghai6JF8BasZy8KdMoHLt3fbkikpgQqFR6MsQ+dPn4szKE3UWWv5lFVM7HLTHsynZMMsQUiG6tAhI+RIKn3jQCSWzBk+22+lfRHg8/yCVYqKBk9vQVU/Y6O5F4EyrG0=
+	t=1781462173; cv=none; b=H6CFJ5qvCDyxENaF4a/Wcxp5dG6nRx94FKvAShdT4nziYsfh0BPU3aYq+dzr6bzGesCpiznWdY5OChcJZQ3aC7J/ADi4AEza6NSSHaw6R5cCX33Oo+xRdqBGos1dgtJt23oSo3WwZTBC6oUDmZsdAlaYbiMxxJLGclK3jb6fj1g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781273691; c=relaxed/simple;
-	bh=Zebk62J7NRpW3SkTs8pUMwqkT3NgzSOMLPjiXRd9KWc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:content-type; b=KXE4PBrRVSX4Q541xSO4xKOPOpcwLP8ZvcTDw3xnD1bb5y1gvrCwlBH1U/b5tU187tzCXw3QvEoPtNf67uOZHD3+o/R+SS2QK9jE/4Cb1uFRBpCEDnwPn8tF25uY3Jc8WBlXdaQEqkeN8C78SgmDfo9aO1iqwo9jEn1OWS1Ilio=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=W5Cr5MgK; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1781462173; c=relaxed/simple;
+	bh=srTtO34fC5A3pMRmQOx2tJeiMXRixXz7iyia07n4WSc=;
+	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
+	 MIME-Version:Content-Type; b=KTtwJYP8L/eulf18z5OhtYrK8Qr8Hbg6QxJTEa4isvISj7iGofcYReGFRndzXGmqCIoeewQiDiRF9gafex3+ggXiG6dJqrAGs6IusuZWCCnEOJLYvx9RKyKPbTg6imsZ0eHHRAYLH1+NEBRet/SNzs+3XGIPSdbzjaNVU0F+Rsw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xs4all.nl; spf=pass smtp.mailfrom=xs4all.nl; dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b=NF1v9QDk; arc=none smtp.client-ip=195.121.94.185
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xs4all.nl
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xs4all.nl
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="W5Cr5MgK"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1781273688;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=y3MQpKCShTW8JvaRHAcnH0u3oKwnRUmD7ODT7NaGVxs=;
-	b=W5Cr5MgKw8wKPxHqKLG0Xj+MkxBuPthf4RUiJBCyAROGTBUM/01XNbrtfCO1gE6tNSE+cd
-	oOcsVLKQbs3yB1bJG1+PPt2ic4+VxHIyj1oTE+9tPOkJxi8xVo9W2JCYXIcHSXaTY4UfJc
-	4Il+mqbrjsdIiGAc9e1BszKyAHMqVkA=
-Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-265-VTRz5LQ4MK2Xfrq9ZN01EQ-1; Fri,
- 12 Jun 2026 10:14:44 -0400
-X-MC-Unique: VTRz5LQ4MK2Xfrq9ZN01EQ-1
-X-Mimecast-MFC-AGG-ID: VTRz5LQ4MK2Xfrq9ZN01EQ_1781273683
-Received: from mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.95])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 62160195DE10;
-	Fri, 12 Jun 2026 14:14:43 +0000 (UTC)
-Received: from wsxc.redhat.com (unknown [10.96.134.108])
-	by mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 8315C36917;
-	Fri, 12 Jun 2026 14:14:40 +0000 (UTC)
-From: Ricardo Robaina <rrobaina@redhat.com>
-To: audit@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-arch@vger.kernel.org
-Cc: paul@paul-moore.com,
-	eparis@redhat.com,
-	arnd@arndb.de,
-	sgrubb@redhat.com,
-	Ricardo Robaina <rrobaina@redhat.com>
-Subject: [PATCH v2] audit: add missing syscalls to PERM class tables
-Date: Fri, 12 Jun 2026 11:14:36 -0300
-Message-ID: <20260612141436.3137694-1-rrobaina@redhat.com>
+	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="NF1v9QDk"
+X-KPN-MessageId: e9e9c360-681f-11f1-8ff8-005056999439
+Received: from mta.kpnmail.nl (unknown [10.31.161.188])
+	by ewsoutbound.so.kpn.org (Halon) with ESMTPS
+	id e9e9c360-681f-11f1-8ff8-005056999439;
+	Sun, 14 Jun 2026 20:36:10 +0200 (CEST)
+Received: from mtaoutbound.kpnmail.nl (unknown [10.128.135.189])
+	by mta.kpnmail.nl (Halon) with ESMTP
+	id e9e852d5-681f-11f1-8109-00505699693e;
+	Sun, 14 Jun 2026 20:36:10 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=xs4all.nl; s=xs4all01;
+	h=content-type:mime-version:subject:message-id:to:from:date;
+	bh=o1vTMXG5RNs6RhVkl6v7EmwKLLZaB+V89dadl/1ILVA=;
+	b=NF1v9QDkGCrG+GxzRkh61EcCv7RxGYQDsSixsqSPwwwCqZRovvSoThIX0Zyc0zzInawdW4u8U7dFy
+	 J0G6F3WTchCq/6b8EG9rEKQpP43LUlJAALh+7KUJiq5A7rIRgnFUZT2LzC/3q5hpMgzReX09+aZFTU
+	 KydetOgfvn5/Bj7fgIoFap77Dch5v+pW0MOHYn1HPXKUwNo8Oyx5AajpHigix34edjc63al7m3xV83
+	 S+tpSdr6uZ3lLniemKnOjnS/rGT9Eltd6LhU6YME/SNwmmKHi5Hl9S1kohJXSoL9QLLOmjKrVWuQ6A
+	 5/lIkx8H5HW3ikES5RRC9ATq+xdDUdg==
+X-KPN-MID: 33|R7q/6mfgf/8+piFDJsvAgXT9sVq9HhP5ahO0R8O4J+nCzg+0415gPhTGmECj4XR
+ +8T1ij15IyJliW1GBH+TBr+GVVbExS3A3kENcYXwaXhQ=
+X-CMASSUN: 33|dsOgFxkhfqSVawsVadOa1jChXW6wDUEvSSV02EsdJQce61zuzMh93mOaqxvPOHU
+ zN5TOMn4+jEECEJVOnb3t+w==
+X-KPN-VerifiedSender: Yes
+Received: from cpxoxapps-mh01 (cpxoxapps-mh01.personalcloud.so.kpn.org [10.128.135.207])
+	by mtaoutbound.kpnmail.nl (Halon) with ESMTPSA
+	id e9da505c-681f-11f1-94b1-00505699eff2;
+	Sun, 14 Jun 2026 20:36:10 +0200 (CEST)
+Date: Sun, 14 Jun 2026 20:36:10 +0200 (CEST)
+From: Jori Koolstra <jkoolstra@xs4all.nl>
+To: Paul Moore <paul@paul-moore.com>, Eric Paris <eparis@redhat.com>,
+	NeilBrown <neil@brown.name>
+Cc: Al Viro <viro@zeniv.linux.org.uk>, Aleksa Sarai <cyphar@cyphar.com>,
+	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
+	Jeff Layton <jlayton@kernel.org>, Mateusz Guzik <mjguzik@gmail.com>,
+	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+	Charles Mirabile <cmirabil@redhat.com>, audit@vger.kernel.org
+Message-ID: <83236167.1691696.1781462170184@kpc.webmail.kpnmail.nl>
+In-Reply-To: <CAHC9VhSN1j36Mo0tCOD2EQi0w5dXg_2sOcBw9vEqb1wRdsPh5g@mail.gmail.com>
+References: <20260531182045.171711-1-jkoolstra@xs4all.nl>
+ <20260531182045.171711-6-jkoolstra@xs4all.nl>
+ <178028260358.2923901.6788358930458921830@noble.neil.brown.name>
+ <CAHC9VhSN1j36Mo0tCOD2EQi0w5dXg_2sOcBw9vEqb1wRdsPh5g@mail.gmail.com>
+Subject: Re: [RFC PATCH v6 5/9] vfs: lookup_open(): move audit_inode_child()
+ and i_op->create check to before try_break_deleg()
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.6 on 10.30.177.95
-X-Mimecast-MFC-PROC-ID: X7sGolyWAQLBEGlNdAOI34uwtgtoSrpM2wGU79XiNc4_1781273683
-X-Mimecast-Originator: redhat.com
-Content-Transfer-Encoding: 8bit
-content-type: text/plain; charset="US-ASCII"; x-default=true
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Priority: 3
+Importance: Normal
 
-Add missing file metadata syscalls to the audit PERM class tables,
-addressing gaps where certain file operations were not properly
-classified for audit rule matching.
+Hi Paul,
 
-Changes:
-- audit_change_attr.h: Add file_setattr
+> Op 01-06-2026 18:27 CEST schreef Paul Moore <paul@paul-moore.com>:
+>=20
+> =20
+> On Sun, May 31, 2026 at 10:56=E2=80=AFPM NeilBrown <neilb@ownmail.net> wr=
+ote:
+> >
+> > I don't think this is sufficient.
+> > I think (and we should confirm we people who know about auditing) that
+> > the audit call should come before the permission check so that there is
+> > an audit record on failed attempts.  In that case the
+> > audit_inode_child() all needs to be much earlier.
+>=20
+> As you likely already know, audit_inode_child() exists simply to
+> record information about the file/inode access, the audit record is
+> generated later (and can is dependent on other things/config).  For
+> that reason, yes, it's generally a good idea to call
+> audit_inode_child() as soon as we have the file/inode information.
+> Auditors want to know what the user/system attempted to do, even if
+> the operation failed; in some cases the log of the failed operations
+> are more useful than the successful ones.
+>=20
 
-- audit_read.h: Add quotactl_fd, file_getattr, stat, stat64, lstat,
-  lstat64, fstat, fstat64, newfstatat, fstatat64, and statx
+But currently for mkdir(2), mknod(2), open(2) with O_CREAT, we are calling
+audit_inode_child() twice. Once before actual creation (mostly in
+may_create_dentry()), and once afterwards in fsnotify_*(). Is that the
+desired behavior?
 
-- audit_write.h: Add quotactl_fd
+>=20
+> --=20
+> paul-moore.com
 
-Architecture-specific and conditionally-compiled syscalls are guarded
-with #ifdef.
-
-Signed-off-by: Steve Grubb <sgrubb@redhat.com>
-Signed-off-by: Ricardo Robaina <rrobaina@redhat.com>
----
-Changes in v2:
-- Added stat64 family syscalls (stat64, lstat64, fstat64, fstatat64) to
-  audit_read.h for 32-bit architecture support.
-- Dropped timestamp-related syscalls (utime, utimes, utimensat, etc.)
-  due to potential audit log volume increase impact. Those will be
-  addressed in a separate patch after closer investigation.
-
- include/asm-generic/audit_change_attr.h |  3 +++
- include/asm-generic/audit_read.h        | 31 +++++++++++++++++++++++++
- include/asm-generic/audit_write.h       |  3 +++
- 3 files changed, 37 insertions(+)
-
-diff --git a/include/asm-generic/audit_change_attr.h b/include/asm-generic/audit_change_attr.h
-index ddd90bbe40df..94388da3490c 100644
---- a/include/asm-generic/audit_change_attr.h
-+++ b/include/asm-generic/audit_change_attr.h
-@@ -40,3 +40,6 @@ __NR_link,
- #ifdef __NR_linkat
- __NR_linkat,
- #endif
-+#ifdef __NR_file_setattr
-+__NR_file_setattr,
-+#endif
-diff --git a/include/asm-generic/audit_read.h b/include/asm-generic/audit_read.h
-index fb9991f53fb6..d8dc3dd6bf63 100644
---- a/include/asm-generic/audit_read.h
-+++ b/include/asm-generic/audit_read.h
-@@ -3,6 +3,9 @@
- __NR_readlink,
- #endif
- __NR_quotactl,
-+#ifdef __NR_quotactl_fd
-+__NR_quotactl_fd,
-+#endif
- __NR_listxattr,
- #ifdef __NR_listxattrat
- __NR_listxattrat,
-@@ -18,3 +21,31 @@ __NR_fgetxattr,
- #ifdef __NR_readlinkat
- __NR_readlinkat,
- #endif
-+#ifdef __NR_file_getattr
-+__NR_file_getattr,
-+#endif
-+#ifdef __NR_stat
-+__NR_stat,
-+#endif
-+#ifdef __NR_stat64
-+__NR_stat64,
-+#endif
-+#ifdef __NR_lstat
-+__NR_lstat,
-+#endif
-+#ifdef __NR_lstat64
-+__NR_lstat64,
-+#endif
-+#ifdef __NR_fstat
-+__NR_fstat,
-+#endif
-+#ifdef __NR_fstat64
-+__NR_fstat64,
-+#endif
-+#ifdef __NR_newfstatat
-+__NR_newfstatat,
-+#endif
-+#ifdef __NR_fstatat64
-+__NR_fstatat64,
-+#endif
-+__NR_statx,
-diff --git a/include/asm-generic/audit_write.h b/include/asm-generic/audit_write.h
-index f9f1d0ae11d9..378128dc31e3 100644
---- a/include/asm-generic/audit_write.h
-+++ b/include/asm-generic/audit_write.h
-@@ -5,6 +5,9 @@ __NR_acct,
- __NR_swapon,
- #endif
- __NR_quotactl,
-+#ifdef __NR_quotactl_fd
-+__NR_quotactl_fd,
-+#endif
- #ifdef __NR_truncate
- __NR_truncate,
- #endif
--- 
-2.53.0
-
+Best,
+Jori.
