@@ -1,119 +1,130 @@
-Received: from ewsoutbound.kpnmail.nl (ewsoutbound.kpnmail.nl [195.121.94.183])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f194.google.com (mail-qt1-f194.google.com [209.85.160.194])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B19FD319852
-	for <audit@vger.kernel.org>; Mon, 15 Jun 2026 21:43:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.121.94.183
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F5A13C3443
+	for <audit@vger.kernel.org>; Tue, 16 Jun 2026 02:55:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781559794; cv=none; b=MFYHtbgDIVSsqaj6lsE5tpPj+HTUUGZNs5WMraBIe0AYm5CyaXZ3+hf5tez2XlsyKs+sjLf8IFw0Z4o6/mzN/OjtGq0a5Su7OhuROdq4NlH8CXjApnlO3EMLU646cLjP18qd+N2EcWQXDtHgN38R9J5Ci8LzRlJhiMf9wAqc234=
+	t=1781578550; cv=none; b=pLfySrtd/x7jv36XIRzfv8X3oyxaKFPfdCCjcBDyZY9HAfR6msYPey5x/3SDFhQSaHrmJX0dM955OTKdxDrpPpQ+5OPVFgd8hXa+duulIV9bT0aVs9n8wqJzZnyCueIP4Z1+fH1IJfFEQNgH5KrMzCjQdsx4RjrVQAlIznGmkX4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781559794; c=relaxed/simple;
-	bh=Pd5Sl5AzbTXa6b5twhmEGn5bGEIv3/Sb3U2ADM9N3Ow=;
-	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 MIME-Version:Content-Type; b=btuniReh4GmUqxoAkt+L70kfz/nB7qvQZnrbdTuekuAMgP8znVSImgh8K2AZsIn+DQkEwT5bJ9FH5A0IHxUpxlRzN40NSM+fEbNX/v5kHGEgHkaYO3vPToZn3MIHHSb4bBeCNL7Gfzl6g9cWqQD2GTE7F+hOfIwFKdIq//7EfBA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xs4all.nl; spf=pass smtp.mailfrom=xs4all.nl; dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b=asmf0tCX; arc=none smtp.client-ip=195.121.94.183
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xs4all.nl
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xs4all.nl
+	s=arc-20240116; t=1781578550; c=relaxed/simple;
+	bh=3FHJvZpakme4jKs8WzcGg7S3ioGeR3WKAqW1Iwgc/UU=;
+	h=Date:Message-ID:From:To:Cc:Subject; b=b3xIVZwTLUs8cB2BO28bB2C7GJSzv4YTg+Y7jhrsYP0FJk9EbZjJaw6feqLrNYhYULTBWJvKEMYrj3AgaVFCt34CtW9b7SGZppCL4PzNIsGQog+ecVQUd0bYzXhxvvC0fm33eRF4Vwigoc0k+ZLjB6QsrtW7FalNzmBoA0Q+ETA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=aSxS/7ys; arc=none smtp.client-ip=209.85.160.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="asmf0tCX"
-X-KPN-MessageId: 2f143246-6903-11f1-beab-005056992ed3
-Received: from mta.kpnmail.nl (unknown [10.31.161.189])
-	by ewsoutbound.so.kpn.org (Halon) with ESMTPS
-	id 2f143246-6903-11f1-beab-005056992ed3;
-	Mon, 15 Jun 2026 23:43:02 +0200 (CEST)
-Received: from mtaoutbound.kpnmail.nl (unknown [10.128.135.190])
-	by mta.kpnmail.nl (Halon) with ESMTP
-	id 2f132e56-6903-11f1-b5d6-0050569981f5;
-	Mon, 15 Jun 2026 23:43:02 +0200 (CEST)
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="aSxS/7ys"
+Received: by mail-qt1-f194.google.com with SMTP id d75a77b69052e-51790c0a692so48623001cf.2
+        for <audit@vger.kernel.org>; Mon, 15 Jun 2026 19:55:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=xs4all.nl; s=xs4all01;
-	h=content-type:mime-version:subject:message-id:to:from:date;
-	bh=DSCLhqtg8yDsV4guDYrCxhWCyf30kEWOPtpSgHo5VhA=;
-	b=asmf0tCXYjDMEtPq9XoXJcS8wTaJ9YBsbdkZtzsr3IRqS6YZmWKBgVfZv5ymIbROtRHYh/a1qLXeZ
-	 ES1MUtQFY4nHpKo7ANzQ8RnmJYoabkx3voCt6AZneP1Md69zCKGZN27rAFi3koz77P725Rc3KL2ywO
-	 N9yy+gx1I0JH1aMiEFZyfpfF5ccE878z64Kwm1KnAWjTal3Lb7+eD9XFML2LtXISuZGSK0x/+959Oh
-	 Xhg5yl7lszB4y/Af6q2rO6sJffelcNKArt0RF+7lEPSOsHCouQkv8xIBhDbLnEnTS4oblCq9e4rnmq
-	 2GmkeOw0AVRi57Jzjomf/WegooNrJmw==
-X-KPN-MID: 33|t1FEEscCGf3xSeKblJw44ZcyvX0nxy8paq8KRTC2fmfuzqEB/z7WSGga3l/UKMP
- qJuideIvjr5KbqwrHbpaN1gNOsReWKjBcF8icrht+sN4=
-X-CMASSUN: 33|Ge3DvZ22tlCZ/jKrY+INnqi93GZ8Dchw17P/uyFN8anWnHlBdSgqt3WZbW4IElB
- LoHyfWsKk2JoJ42BShfq0uQ==
-X-KPN-VerifiedSender: Yes
-Received: from cpxoxapps-mh03 (cpxoxapps-mh03.personalcloud.so.kpn.org [10.128.135.209])
-	by mtaoutbound.kpnmail.nl (Halon) with ESMTPSA
-	id 2f078835-6903-11f1-b8d7-005056995d6c;
-	Mon, 15 Jun 2026 23:43:02 +0200 (CEST)
-Date: Mon, 15 Jun 2026 23:43:01 +0200 (CEST)
-From: Jori Koolstra <jkoolstra@xs4all.nl>
-To: Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
-	Al Viro <viro@zeniv.linux.org.uk>, NeilBrown <neil@brown.name>,
-	Paul Moore <paul@paul-moore.com>
-Cc: linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-	"audit@vger.kernel.org" <audit@vger.kernel.org>
-Message-ID: <526417482.1849950.1781559782000@kpc.webmail.kpnmail.nl>
-In-Reply-To: <20260614164438.2980769-5-jkoolstra@xs4all.nl>
-References: <20260614164438.2980769-1-jkoolstra@xs4all.nl>
- <20260614164438.2980769-5-jkoolstra@xs4all.nl>
-Subject: Re: [PATCH 04/12] fs/namei.c: lookup_open(): move
- audit_inode_child() up
+        d=paul-moore.com; s=google; t=1781578548; x=1782183348; darn=vger.kernel.org;
+        h=subject:cc:to:from:message-id:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RrEBHC+BEo5PUK5QESqVkHwa8uLQvrvp4i2JuZAotfY=;
+        b=aSxS/7ysL+/AyxFYLICpOCZiuJ/gyKFGFpbMaY/MPAp/YdFgshlpENuFtQNdRICN06
+         seu7eEb1j63uRtDlG+ME4EPrKM1G7EFSNFMgGgBFpIFaO+GLlyBn3Y1WxThDMoHLgFp2
+         kfH/xyViy1syDAkJjZ7iFoKu6lek5WB4H1F0aUcBadSZm+CkjcXA9KSv6J/99uy8mb7e
+         msDNSey/WhW7GaJscQK0Cslj56LxmNRsn3Hd2TKEHCH+LGUrAp9zgW30Jt2sWqJfSYRl
+         BFh7n/aU/u7Tj7aRtSy9zWfcHUPDmRUHh8O5RCCnsZCNVa3zlaGt5IqigvPWE20VP/PV
+         j54g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781578548; x=1782183348;
+        h=subject:cc:to:from:message-id:date:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=RrEBHC+BEo5PUK5QESqVkHwa8uLQvrvp4i2JuZAotfY=;
+        b=OC2KnGwoYwwEi/qUZ9gbqYUXJFrdkOSvrg9kbm4g6GBLzpMw4m4Adv1OFmeLH6M3mg
+         9E9f4irApllGf4BMfL2XaRohQJ1eZUIvhDh639qXdzIKVquybULQS1J4kDYuJvn2zZ1E
+         gBk5Lt5vZtkZBQ7/Z+LoA2a/tgKXzuL/elQrJkKIkYYVIL47A6pUhGeacgVNdub4sdxs
+         NrIyCEzgZAMofoiSfZIikxSFyvNlGGPaYZMGanBnh5nTYloXaMl7IdPgZ9tcABSHzffj
+         smzUI/z96JVPH0fpcNAmoU8arAnTP+FGAnTekzg/WZXI4AsePFBTeYbqdCgDnxecH+AN
+         XrIA==
+X-Gm-Message-State: AOJu0Yyab4zXSWVrpgv/Y4zhE1AQx5DYHCji6Ql7KT05yG0WltpgLL2g
+	HeV1Z4Bf5laP/rHxKgjV6eNtwpHxf7YZM/G8Gf5OlLRlY3LcQpIv/7T0xJrUAGjWgbE5NMgv1yB
+	mBqIKJiJy
+X-Gm-Gg: Acq92OHM83vqilgFQ9SjjASwQcAozP8NjLHhm1qDPTRLhWAphbgmtN5Tzr+JxrU2+xj
+	BrMx1qJZP4FMXxyt3i1mG1J6BCBWklIzdE9FF+ZKPylKOFbUS5M/VttOry5xDP1wyDW7JnrWhyc
+	Ix39XrCbGgoElIjNQHPqWN7Ociso9HHPbTPsMu6pg/ULqV0/E0sQDdtnpUhSAbhrFNDXQrxHJRq
+	XNSIhKgQgbEM3aRP0tripM6FM9jXLzjtMyp5JjFBKjExjSWxxm1dN/qylEXWKt5THzFmkb2EUPs
+	hI1J+LKRyoIPaMasAJSVA9GOZr/UH66k89fuKDvProZjgkX9yno7Dgyw33PifGicxyKuJ/5bCAw
+	pPONdJ8OZEOQsYNElmQ6CaDM+PWENJ5nJtRf9fFr9qeUROFIxbIlsHsI0Ow/0OOmdGXEYziJdHp
+	S9KRPXIPH9GI5hvIbGUf+rTXguqr+T9fV+LcTw8DPBY3zrjli/A2NL0t45kfZWjRFKXUJz
+X-Received: by 2002:a05:620a:8806:b0:915:c917:5584 with SMTP id af79cd13be357-9161bccc2e3mr2501470685a.35.1781578547954;
+        Mon, 15 Jun 2026 19:55:47 -0700 (PDT)
+Received: from localhost (pool-71-126-255-178.bstnma.fios.verizon.net. [71.126.255.178])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-91619f1c5cdsm1325761985a.17.2026.06.15.19.55.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 15 Jun 2026 19:55:47 -0700 (PDT)
+Date: Mon, 15 Jun 2026 22:55:46 -0400
+Message-ID: <ed67171da998240452617bc681ac0e48@paul-moore.com>
+From: Paul Moore <paul@paul-moore.com>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: audit@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] audit/audit-pr-20260615
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Priority: 3
-Importance: Normal
 
+Linus,
 
-> Op 14-06-2026 18:44 CEST schreef Jori Koolstra <jkoolstra@xs4all.nl>:
-> 
->  
-> In the mknod(2) path of calling vfs_create() we call audit_inode_child()
-> before permission checks in may_create_dentry() (but after path-based
-> LSM check). Copy this behaviour to lookup_open() and move
-> audit_inode_child() to may_o_create().
-> 
-> Signed-off-by: Jori Koolstra <jkoolstra@xs4all.nl>
-> ---
->  fs/namei.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/fs/namei.c b/fs/namei.c
-> index 6bf1ded26377..a4a8cdbb48e2 100644
-> --- a/fs/namei.c
-> +++ b/fs/namei.c
-> @@ -4345,6 +4345,8 @@ static int may_o_create(struct mnt_idmap *idmap,
->  	if (error)
->  		return error;
->  
-> +	audit_inode_child(dir->dentry->d_inode, dentry, AUDIT_TYPE_CHILD_CREATE);
-> +
->  	if (!fsuidgid_has_mapping(dir->dentry->d_sb, idmap))
->  		return -EOVERFLOW;
->  
-> @@ -4532,7 +4534,6 @@ static struct dentry *lookup_open(struct nameidata *nd, struct file *file,
->  			goto out_dput;
->  
->  		file->f_mode |= FMODE_CREATED;
-> -		audit_inode_child(dir_inode, dentry, AUDIT_TYPE_CHILD_CREATE);
->  		if (!dir_inode->i_op->create) {
->  			error = -EACCES;
->  			goto out_dput;
-> -- 
-> 2.54.0
+Three audit patches for Linux v7.2, the quick summary is below, but I did
+want to note that you will see a forced push due to a last-minute
+correction to the git metadata that I noticed while writing up this pull
+request; there was no change to the code and the tag is signed as usual.
 
-CC, audit@vger.kernel.org
+- Fix a recursive deadlock when duplicating executable file rules
 
-Went too quick with this one... audit_inode_child() probably shouldn't be called
-if we are in the lookup case. So there isn't really a way to do this exactly
-symmetrical to the vfs_create()/vfs_mkdir() paths.
+Avoid multiple lookups and attempted I_MUTEX_PARENT locks when moving
+watched files by passing the already resolved inodes through the audit
+code.
 
-But certainly the current implementation is also wrong. In the atomic_open case
-audit_inode_child() is called only once (in the final fsnotify call in
-open_last_lookups()), but in the regular ->create case audit_inode_child() is
-called twice.
+- Fix removal of executable watch rules after the file is deleted
 
-What behavior is actually wanted here?
+Prior to this fix we were unable to remove an executable file watch where
+the file had been previously deleted due to a negative dentry check in
+the code that performs the lookup on the file watches.
+
+- Convert our basic "unsigned" type usage to "unsigned int".
+
+Paul
+
+--
+The following changes since commit 254f49634ee16a731174d2ae34bc50bd5f45e731:
+
+  Linux 7.1-rc1 (2026-04-26 14:19:00 -0700)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/audit.git
+    tags/audit-pr-20260615
+
+for you to fetch changes up to 81905b5acbe77284734438df3fbec1158e6429a3:
+
+  audit: fix recursive locking deadlock in audit_dupe_exe()
+    (2026-05-27 19:15:34 -0400)
+
+----------------------------------------------------------------
+audit/stable-7.2 PR 20260615
+----------------------------------------------------------------
+
+Ricardo Robaina (3):
+      audit: use 'unsigned int' instead of 'unsigned'
+      audit: fix removal of dangling executable rules
+      audit: fix recursive locking deadlock in audit_dupe_exe()
+
+ include/linux/audit.h      |    4 ++--
+ include/linux/audit_arch.h |   12 ++++++------
+ kernel/audit.c             |    2 +-
+ kernel/audit.h             |   19 +++++++++++++------
+ kernel/audit_fsnotify.c    |   34 ++++++++++++++++++++++------------
+ kernel/audit_tree.c        |    2 +-
+ kernel/audit_watch.c       |   25 +++++++++++++++++--------
+ kernel/auditfilter.c       |   17 +++++++++--------
+ kernel/auditsc.c           |    2 +-
+ lib/compat_audit.c         |   12 ++++++------
+ 10 files changed, 78 insertions(+), 51 deletions(-)
+
+--
+paul-moore.com
