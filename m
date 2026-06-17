@@ -1,38 +1,39 @@
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.2])
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.4])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82BDC35292A;
-	Wed, 17 Jun 2026 12:15:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.2
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98AB4399CED;
+	Wed, 17 Jun 2026 13:01:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781698542; cv=none; b=FGEoQ30VZagNp1FQ8GAu6/vFR4nhx/5bx83bZpS6AidbL8jtUAstmVnpwyZGqHkd9HZfZk6aekgsKxcCX4Ih4608A6SYZQDoY8JNa38ezhUnrd4K0g2mS2y+07WCTybn9TjItbi0SRw07pSokQKYdIZomJbcKBZ0OcBs1urPvqc=
+	t=1781701276; cv=none; b=Wf6Tnp0ZhU6ir5ILdG/higY387CFRxRZpYaHnnUXj/+jztu4lhiihA7hXXJwDp/xC2aPfIQIrM0T5egkBqCauqH6Bfh546nvyTOiQA/1iyYexhLxGDRL7Vx/cVk3Ki5SKNomoMSoZEXAa1yuEHxLHWOu4Clrsm3O9ZmWhg7NWn4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781698542; c=relaxed/simple;
-	bh=Tf1/khh9z6R5y9h4eJ+zydpnoUQBDprt0v7g3rqhKeo=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=PF6sqBLzvZudxxJYCPiFQCzmiyd24g40KqE+TogcyHQOAk77Nm5WStMZdN/pkATr5ce6jiA7oCUD9GvleDh+iCudtYF4XMjLx313iRRshegbVGlxOXAXMluY4oGFDX2iM22r7q+/+LCHOcnLqNRYxPV1SxPt0xvtVLElBiyojB8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=J2hWAVju; arc=none smtp.client-ip=220.197.31.2
+	s=arc-20240116; t=1781701276; c=relaxed/simple;
+	bh=9LtdsQ0JuTmnog+dZGRky7Krtq9AFORvGdYo58efK2E=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=UC+7n8uJEkX5fmHnLXe0qG8T4vjqCF3mCA0h/bzNLdm0I85d7XEaU2d0FE8Y5slRROei+/jGQo0llbb6yePyX8dqvkMSExMPdUcMqs9FG0XXSm8T5xoKSjEfEMTylUVoIcSTnhB5LmdJpmTqVT3iSHv3ORcBadYqpzhUKhISw+E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=oEGEGcm0; arc=none smtp.client-ip=220.197.31.4
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="J2hWAVju"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="oEGEGcm0"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
 	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version:
-	Content-Type; bh=C9VMHOa2VCdcD/z/LqDiyi6lIyMM2P9QHS3VdbmZDjs=;
-	b=J2hWAVjuh7hDhIPS82GaMfAtiJPClcp/TElBbIdEb5mM7CSb4H69kdAclzvd2Z
-	TJI7p9X9y9Dv7Jk289WBG12iBinS3HjQDbykV8eejBYzLBDsfly3wOw3sz+mt8+3
-	1lZNgVEE4fCgRsWlbLM+a7pb5PDMCqnlQ9UhwycoLlMFU=
+	Content-Type; bh=xONk+ffBgrjTmNSftucSe+Xthn1FutDtUdHp6px0APg=;
+	b=oEGEGcm0VIZIvbvy5ejGNAOBE4UILLQyuzKxiWz8isjLoA3szTSqBpLe3Ok2C6
+	YEtRTwZLjmdyfjkeGoN9JvDBr8cXSyVb18zEG2S35z4NLxzUtUiirMl4DtPZ2vDw
+	LNbeUeMPwJoopUQfkcyKpEGyjDFihzI52ugVCW/y6Ec38=
 Received: from localhost.localdomain (unknown [])
-	by gzsmtp3 (Coremail) with SMTP id PigvCgBHD_7WjzJqUv2fCw--.63726S2;
-	Wed, 17 Jun 2026 20:15:18 +0800 (CST)
+	by gzsmtp2 (Coremail) with SMTP id PSgvCgAHrPp5mjJqerv4CQ--.23392S2;
+	Wed, 17 Jun 2026 21:00:41 +0800 (CST)
 From: Chi Wang <wangchi@kylinos.cn>
 To: Paul Moore <paul@paul-moore.com>,
 	Eric Paris <eparis@redhat.com>
 Cc: audit@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	wangchi <wangchi@kylinos.cn>
+	stable@vger.kernel.org,
+	Chi Wang <wangchi@kylinos.cn>
 Subject: [PATCH] audit: Fix data race in audit_log_start()
-Date: Wed, 17 Jun 2026 20:15:16 +0800
-Message-Id: <20260617121516.4023092-1-wangchi@kylinos.cn>
+Date: Wed, 17 Jun 2026 21:00:38 +0800
+Message-Id: <20260617130038.57465-1-wangchi@kylinos.cn>
 X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
@@ -42,15 +43,13 @@ List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:PigvCgBHD_7WjzJqUv2fCw--.63726S2
-X-Coremail-Antispam: 1Uf129KBjvJXoWxArWxtFyDuw4rtFy3tryDtrb_yoW5Gw1fpr
-	yDWFWIyrs5ZFyUX3W8A3WUZrW5ta15KF13Grn3tr1ayr98GF1UWr18Ja1aqryUCrs8A3W7
-	JF98tayqvr4DGr7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jnhL8UUUUU=
+X-CM-TRANSID:PSgvCgAHrPp5mjJqerv4CQ--.23392S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxArWxtFyDuw4rtFy3tryDtrb_yoW5Grykpr
+	yDWFWxArs5ZFyUJ3W8A3WUZrW5ta15KF13Grn3tF1ayr98KF1jgr1UJa1aqryUCrs8A3W7
+	JFn8tayqvw4DGr7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jeUDJUUUUU=
 Sender: wangchi05@163.com
-X-CM-SenderInfo: 5zdqwulklqkqqrwthudrp/xtbC4RZAY2oyj9bvLwAA3V
-
-From: wangchi <wangchi@kylinos.cn>
+X-CM-SenderInfo: 5zdqwulklqkqqrwthudrp/xtbC4RnrD2oymnnOzQAA3k
 
 audit_log_start() reads audit_queue.qlen via skb_queue_len() without
 holding the queue lock or using READ_ONCE(), while kauditd writes to
@@ -87,8 +86,8 @@ which internally uses READ_ONCE() and properly pairs with the WRITE_ONCE()
 write accesses already present on the writer side.
 
 Fixes: 3197542482df ("audit: rework audit_log_start()")
-Change-Id: I766cc99f6a567b898a08e1d68cd13bae5699e5b2
-Signed-off-by: wangchi <wangchi@kylinos.cn>
+Signed-off-by: Chi Wang <wangchi@kylinos.cn>
+Cc: stable@vger.kernel.org
 ---
  kernel/audit.c | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
