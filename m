@@ -1,141 +1,157 @@
-Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from ewsoutbound.kpnmail.nl (ewsoutbound.kpnmail.nl [195.121.94.183])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E3F112F585
-	for <audit@vger.kernel.org>; Wed, 17 Jun 2026 02:32:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.216.53
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781663572; cv=pass; b=t5ZAg6FqtVYC4PvTPdP+LxqA/gWDLXRhl/6lZIiUDb3ns9qtk1CXoix4TzR0z0s+rmEfR91JLPgCQJd0AA2u6GbrQTzESAx6yMmpJnWdnka33W3p0IPWAkjb2q7P8TDZ8VzX/1IKoTzFzEQhTWCt+WGjlKGZWfeR7pdlnjSWbQs=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781663572; c=relaxed/simple;
-	bh=xG2DgqZGuUaGU3ywEUgEkhOK3PRTvPd+4WM++5gnIv8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Y4C/LDH2+qmOo56hRyGICQ/3KBP0j0tew2mBx6/dO1J//7PKnuveYDd5LLdAhjMyQokGIbywFlFRRQZGxIgXp3GZiWlCs/QgqP9jhc6xJJQDrneSjh5k/3fGmpYft0quoo63H0hvnqmpz1BhpL2Int5sKjFLz04Y1lTKqD0P/Fw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=G8eftUyS; arc=pass smtp.client-ip=209.85.216.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EA803B7760
+	for <audit@vger.kernel.org>; Wed, 17 Jun 2026 08:55:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.121.94.183
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1781686538; cv=none; b=fFIU0xX97Poo+4viBZi7LMLmelii0mY5T3Fomwz9j1Bo4kS6sA6CNFYg07CI12NMlkNWI3cno1c4WMQddSKp3Zdw35pj2indkVJJjc0WMDa6d1MdO75C/5Xr7d5s8Ry+DEhrd+s7kJ+yM95mxr6DWkuxXGBjX9vm4ns6sZw6Gyk=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1781686538; c=relaxed/simple;
+	bh=MmutxcldK+DtJ0RFE31YTswnGSG20eVh239ybyfYgYg=;
+	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
+	 MIME-Version:Content-Type; b=LnvUfPz4MhQeWI/Z5GbXO0dyyLOZBq81hkt2ICy9imZ7BxNJAIFuOpLzbQIq+90z1HULCkn4TOANKl4uP917s/A4iOY26lLjhdpwk20NnziC7HxKNgPNfPXF+41KTX2X/Opioh7yuAZUxUVDEnBMlwLsTtRNRnLpoHjGuVQhH2I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xs4all.nl; spf=pass smtp.mailfrom=xs4all.nl; dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b=miAq54xj; arc=none smtp.client-ip=195.121.94.183
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xs4all.nl
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xs4all.nl
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="G8eftUyS"
-Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-37cae11ba85so190575a91.1
-        for <audit@vger.kernel.org>; Tue, 16 Jun 2026 19:32:50 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1781663570; cv=none;
-        d=google.com; s=arc-20240605;
-        b=fnrQPEBmQpKsNiVGWbkjrDrhl8VINZgtmAQ9jCRE+UkKInYvnxdRTBnC013kzzjweF
-         yT0KZjtSIQBODOSLHcVbqla741UoNqyNA/AtlbMuQmB5hIi2xQBGuML04yTPcZ+aeE+z
-         nFDy9WJzzlHHqyGGwsH7VHdCr7FK+CkFtG7rF9t6ZEairXXCYaUUpFPAjaGFv+MnH5Z4
-         wlVWr5aa0pCnCZms7zNvs+ba2SQ8WaplS2K/5m8XRReNCbUUGEpjZCaewEddW40Jwtyb
-         HhLnPCPcUq1P6PGWVxnhISe+HGdBOtRDenPF8xAwH44Qk8kSCun5JW+Hw09Ux4XnK9Ug
-         gRjQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=rZTdV3B/ZTo07f/R002Ay7yCKDKVa4MK34m0NvQKlnk=;
-        fh=BeEYyzJpsngas1R7WboilgvVkkpVUtqCqnCwoB7nepQ=;
-        b=i0M+5OA1mfIiTO4WfXQD2T4KmcW/2iKMeYa/x4Mbm1YIY3DLkOXhFdd+BzxglhcnIv
-         dlfiSylA5j9lnBBov0rvOiiT1K15k9gFi29c6CjHq9lMWMolbnWIMxf7FBbbSPKLaIFS
-         gOuseBVHmIuNeVvOzLDDmVbTUfmakIZhkjVT+GCwpwx/KjTksCLWJG78bRJHPZv4VyIh
-         xoPAci5jevXLzS/xM8HztJNTH49rkL0jwakPiX9I1pRaj74z4rKKJrTUdBkxl/2m99U3
-         axQENO7s56qx3OFWP8T3pfaCnW1SBIWjPudpLSFavBZgn5ykQ3wu4QK2z6HUgW+b6lQU
-         eiig==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="miAq54xj"
+X-KPN-MessageId: 48950d68-6a2a-11f1-8f53-005056992ed3
+Received: from mta.kpnmail.nl (unknown [10.31.161.190])
+	by ewsoutbound.so.kpn.org (Halon) with ESMTPS
+	id 48950d68-6a2a-11f1-8f53-005056992ed3;
+	Wed, 17 Jun 2026 10:55:26 +0200 (CEST)
+Received: from mtaoutbound.kpnmail.nl (unknown [10.128.135.189])
+	by mta.kpnmail.nl (Halon) with ESMTP
+	id 48944385-6a2a-11f1-b2ea-0050569977a2;
+	Wed, 17 Jun 2026 10:55:26 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1781663570; x=1782268370; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rZTdV3B/ZTo07f/R002Ay7yCKDKVa4MK34m0NvQKlnk=;
-        b=G8eftUySTGq/7XgDcNG8jomNAP6G2ktSJTTM6LC3CvdfdyXja4VGH+md1BO5BKAsld
-         AX8t8F0SeFiPeCV9O3YQXeFtGqju8GHthCl/fbioQdYXtvLyDZClq1IoJdMS6bvnQljP
-         3zsVyzxrRtUcwkWrqEcY7gPE1K2lngppCJL5T5wx52iAG4hbStVZaHR/RTMcZaJVkjBN
-         MYHY3E3RohPlLttTKdqlqr5yuzWXcyEDK009qMYJcL1e7cjTq+0aFcCFjFC23EfxV03S
-         RlEif/Pe08Hm7aHxboHsEGm03/82ozBV/ZbuPoreuDhjQeCs2VVdNp5N2BUuLULtfg61
-         ZnEw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781663570; x=1782268370;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=rZTdV3B/ZTo07f/R002Ay7yCKDKVa4MK34m0NvQKlnk=;
-        b=aPE18L0VLa6gdMI7JhbXWaDUkyAGV1PAAJ3AJ90tkBGX41GBlRnGVOTnv8BiJGw4l7
-         ZloWD9kz7eP7cwPirzBshq6+PiJejvyRjyonrQVQR9DkfOaHdzGT/m3sp0AJq+gKOh6m
-         q2qESNmTlTS+41z3rhdFU5Oh5YKALi75kde/nAZO3o0JlDLhxMssYH3T6yQ6whDykwTw
-         cZ9ieqV0HZ0NYhq58+Zr6/FOgFfXo5iPfTvvMHBrL3KNuDjd3WcA3gGoYL9DXttJuA9i
-         +6zw4bOsm2vcgevXR19vtFoBQmFU5lFAOtuYeWAmffiDrDoRgvIwKBGvAXOpesMWsnGJ
-         xjGg==
-X-Forwarded-Encrypted: i=1; AFNElJ/NJVcD+yLN6s0D0xAK+c8JlZD5dnDuwuw0WUOyR5sHJG9ZY2E8pq66SKcnlfmjDtfwthMyig==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxzxlkkmjH62vnlSSe7jb6aFi22XcWYeygMUk7OGRGEYARQB4n+
-	xPCoJUUx4+Y4ESEm7u7MNaY+HToJGECp8A64O6R8MKidaqLaDdRgwYczpEjChE/KrhlRoeAUls/
-	dXtLYKQrlatD0rmmHNG+PHmY/mX7IzQV5idy6xkwW
-X-Gm-Gg: Acq92OG0pyNY8mzTm0QbmOpZ4TCZb/nH6PZDyhqX/NQnSROTWHHrywo6ZTYEy5e00j3
-	a24pdNVQ2fh1poONmMPj4Zji2OoqkR8JxBnKUy0RF5BFsBjkBqBZ/VC/A50hF9vbNlwSnpVurlD
-	qjZCwGaYzRMFoEYZ9DiQeGrzxZn2wD+IhID5XBPU7DVX+wNmcyJqILXrRfTAxvxc3CW1JSmJm0D
-	u/i94U2of8GXCU1Q0tg0busGoOZxW3h7cocbouC5R3aTbVZft6mZbxISyZX3WYt7++Zy0aA
-X-Received: by 2002:a05:6a20:2d23:b0:3b3:fdb0:2295 with SMTP id
- adf61e73a8af0-3b8b5b28234mr2192226637.6.1781663569701; Tue, 16 Jun 2026
- 19:32:49 -0700 (PDT)
+	d=xs4all.nl; s=xs4all01;
+	h=content-type:mime-version:subject:message-id:to:from:date;
+	bh=iXHBD4+j5O5wT5sSkRwzomAqYCmhns+sW69jzeRQ7jQ=;
+	b=miAq54xjVE42ufkSIA1oG6SAzZvzv4UGiknqzCUooquhI/jdCjPVXMDzoB6TaATqbR7NUpCL0rT2v
+	 Kxi+mRNC9UlzvTV3au1Lc9ibURY3s3V+g6IzhwgIdlRAxBOEmYG+mmvi3sthz9DrjwH00vrQPSeooV
+	 RilxIRYEDguhw6vtlL9mMslwCmhHmFjKVoEckYGKESLdSf28qJ0tTIq4TXb6eoEbEw2TnmC1e2a4lj
+	 n3GBfrhOPyq/VSK0I3M4pkYZaBFqMok/3nB/Vna44/+mN3SdSA2fZR4WeDfB7OJpgrZKtEKjL5TyUP
+	 LepAo8BtgdLnil/BSPpVMSweW2ekCOw==
+X-KPN-MID: 33|YwThd7xqZPFR7GM5iPQuWnhohNC8fpebY9QI1bPttks9FRIB2zlaDXRgfKoSWot
+ 6LKlUNvyRMBV2r9yFtsYEmLdMAQVjkUm5qHZJTktsGmg=
+X-CMASSUN: 33|DlaiNBNymlHfYl2c3+Nqv6APSb+bxY+3EjhUb/Q7dJL9JXLIT4eSKyU9aXKepQb
+ ZRpU3N+FHjuS73eKM96C/gw==
+X-KPN-VerifiedSender: Yes
+Received: from cpxoxapps-mh06 (cpxoxapps-mh06.personalcloud.so.kpn.org [10.128.135.212])
+	by mtaoutbound.kpnmail.nl (Halon) with ESMTPSA
+	id 488779d6-6a2a-11f1-8edb-00505699eff2;
+	Wed, 17 Jun 2026 10:55:26 +0200 (CEST)
+Date: Wed, 17 Jun 2026 10:55:26 +0200 (CEST)
+From: Jori Koolstra <jkoolstra@xs4all.nl>
+To: Paul Moore <paul@paul-moore.com>, NeilBrown <neil@brown.name>
+Cc: Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
+	Al Viro <viro@zeniv.linux.org.uk>, linux-fsdevel@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	"audit@vger.kernel.org" <audit@vger.kernel.org>
+Message-ID: <1304452148.2041031.1781686526317@kpc.webmail.kpnmail.nl>
+In-Reply-To: <CAHC9VhSBOQqjQ6A+f4YEJZmWVxVqOrRbtj7hF2qL_-vCCBc2Fg@mail.gmail.com>
+References: <20260614164438.2980769-1-jkoolstra@xs4all.nl>
+ <20260614164438.2980769-5-jkoolstra@xs4all.nl>
+ <526417482.1849950.1781559782000@kpc.webmail.kpnmail.nl>
+ <CAHC9VhSBOQqjQ6A+f4YEJZmWVxVqOrRbtj7hF2qL_-vCCBc2Fg@mail.gmail.com>
+Subject: Re: [PATCH 04/12] fs/namei.c: lookup_open(): move
+ audit_inode_child() up
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260614164438.2980769-1-jkoolstra@xs4all.nl> <20260614164438.2980769-5-jkoolstra@xs4all.nl>
- <526417482.1849950.1781559782000@kpc.webmail.kpnmail.nl>
-In-Reply-To: <526417482.1849950.1781559782000@kpc.webmail.kpnmail.nl>
-From: Paul Moore <paul@paul-moore.com>
-Date: Tue, 16 Jun 2026 22:32:37 -0400
-X-Gm-Features: AVVi8CeBzQPsndw9BAmE-isUeqXVnMvX0g_IsdGEMSwro9rl0HZmb4E-x0wn-Ws
-Message-ID: <CAHC9VhSBOQqjQ6A+f4YEJZmWVxVqOrRbtj7hF2qL_-vCCBc2Fg@mail.gmail.com>
-Subject: Re: [PATCH 04/12] fs/namei.c: lookup_open(): move audit_inode_child() up
-To: Jori Koolstra <jkoolstra@xs4all.nl>
-Cc: Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, Al Viro <viro@zeniv.linux.org.uk>, 
-	NeilBrown <neil@brown.name>, linux-fsdevel@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, "audit@vger.kernel.org" <audit@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
+X-Priority: 3
+Importance: Normal
 
-On Mon, Jun 15, 2026 at 5:43=E2=80=AFPM Jori Koolstra <jkoolstra@xs4all.nl>=
- wrote:
-> > Op 14-06-2026 18:44 CEST schreef Jori Koolstra <jkoolstra@xs4all.nl>:
+
+> Op 17-06-2026 04:32 CEST schreef Paul Moore <paul@paul-moore.com>:
+>=20
+> =20
+> On Mon, Jun 15, 2026 at 5:43=E2=80=AFPM Jori Koolstra <jkoolstra@xs4all.n=
+l> wrote:
+> > > Op 14-06-2026 18:44 CEST schreef Jori Koolstra <jkoolstra@xs4all.nl>:
+> > >
+> > > In the mknod(2) path of calling vfs_create() we call audit_inode_chil=
+d()
+> > > before permission checks in may_create_dentry() (but after path-based
+> > > LSM check). Copy this behaviour to lookup_open() and move
+> > > audit_inode_child() to may_o_create().
+> > >
+> > > Signed-off-by: Jori Koolstra <jkoolstra@xs4all.nl>
+> > > ---
+> > >  fs/namei.c | 3 ++-
+> > >  1 file changed, 2 insertions(+), 1 deletion(-)
+>=20
+> ...
+>=20
+> > CC, audit@vger.kernel.org
 > >
-> > In the mknod(2) path of calling vfs_create() we call audit_inode_child(=
+> > Went too quick with this one... audit_inode_child() probably shouldn't =
+be called
+> > if we are in the lookup case. So there isn't really a way to do this ex=
+actly
+> > symmetrical to the vfs_create()/vfs_mkdir() paths.
+> >
+> > But certainly the current implementation is also wrong. In the atomic_o=
+pen case
+> > audit_inode_child() is called only once (in the final fsnotify call in
+> > open_last_lookups()), but in the regular ->create case audit_inode_chil=
+d() is
+> > called twice.
+> >
+> > What behavior is actually wanted here?
+>=20
+> I haven't looked at the VFS open/create code in a while, and I'm kinda
+> swamped with other things at the moment so a few pointers would go a
+> long way towards helping get the right context for your question.
+>=20
+
+You are right, I should have added some more context, sorry about that.
+And thank-you for taking the time to look into this.
+
+In the current mainline code, in lookup_open() in fs/namei.c (which is
+the primary function that handles creates from open(O_CREAT)) on line
+4502 we call
+
+=09audit_inode_child(dir_inode, dentry, AUDIT_TYPE_CHILD_CREATE);
+
+just before we delegate to i_op->create(). However, on return of lookup_ope=
+n()
+in open_last_lookups() on line 4610 we also have
+
+=09if (!IS_ERR(dentry)) {
+=09=09if (file->f_mode & FMODE_CREATED)
+=09=09=09fsnotify_create(dir->d_inode, dentry);
+
+So, if the create succeeded, fsnotify_create() is called on the same inode.
+This function is given by:
+
+static inline void fsnotify_create(struct inode *dir, struct dentry *dentry=
 )
-> > before permission checks in may_create_dentry() (but after path-based
-> > LSM check). Copy this behaviour to lookup_open() and move
-> > audit_inode_child() to may_o_create().
-> >
-> > Signed-off-by: Jori Koolstra <jkoolstra@xs4all.nl>
-> > ---
-> >  fs/namei.c | 3 ++-
-> >  1 file changed, 2 insertions(+), 1 deletion(-)
+{
+=09audit_inode_child(dir, dentry, AUDIT_TYPE_CHILD_CREATE);
 
-...
+=09fsnotify_dirent(dir, dentry, FS_CREATE);
+}
 
-> CC, audit@vger.kernel.org
->
-> Went too quick with this one... audit_inode_child() probably shouldn't be=
- called
-> if we are in the lookup case. So there isn't really a way to do this exac=
-tly
-> symmetrical to the vfs_create()/vfs_mkdir() paths.
->
-> But certainly the current implementation is also wrong. In the atomic_ope=
-n case
-> audit_inode_child() is called only once (in the final fsnotify call in
-> open_last_lookups()), but in the regular ->create case audit_inode_child(=
-) is
-> called twice.
->
-> What behavior is actually wanted here?
+Thus it appears that audit_inode_child() is called twice. This happens is
+various forms for most other audit involved paths in vfs too (like mknod,
+mkdir, etc.)
 
-I haven't looked at the VFS open/create code in a while, and I'm kinda
-swamped with other things at the moment so a few pointers would go a
-long way towards helping get the right context for your question.
+This is what is confusing me. What should be the correct order/number of ca=
+lls
+here?
 
-We shouldn't *need* multiple calls into audit_inode_child() for a
-given filesystem object as long as all of the information audit needs
-can be captured in the single call site.
 
---=20
-paul-moore.com
+> We shouldn't *need* multiple calls into audit_inode_child() for a
+> given filesystem object as long as all of the information audit needs
+> can be captured in the single call site.
+>=20
+> --=20
+> paul-moore.com
