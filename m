@@ -1,44 +1,85 @@
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.2])
+Received: from out-188.mta0.migadu.com (out-188.mta0.migadu.com [91.218.175.188])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2B122E3FE;
-	Fri, 19 Jun 2026 07:43:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.2
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1799734EF0F
+	for <audit@vger.kernel.org>; Mon, 22 Jun 2026 04:06:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.188
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781854997; cv=none; b=ptaGUAw/EU6vls4rlLBhdkSsXcblZ8ePTApNPmGLjRK6iEsVhazO3BAFnEJRRVUsZDgPdTsEoYokFXHXEOs7c07zJvOT29pXgMBvZgFDu4eRa5WZRoYUf8zVJLn7/nvz8lUhi1oxtWMgy9vy9YIbt7Acrv+XyBsfeYwSGiEce5M=
+	t=1782101204; cv=none; b=sNKF37ltKkRM73SCNWUtnvVX5pectq/0H6D+x3vzDiixW2rak4uUHLwEgn0J8mEsmX1/edf3kiMvLqizhKgkFx/giVk+4nh8rn2aWYm2yvgoanEmhs1YeJDbGCxZIjmm0ZhKYfZkw8Ky54gHLSm6ApSGBFArd1I2DvxXEdaFocA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781854997; c=relaxed/simple;
-	bh=FOgKStLzO0xOF0jO7bzXqhVD0/V66GPgX0shuXv/kGY=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Y5GJKEmYcMUgg9X2aIVM3u9Z/zvc5d1PggKIOZjzptrmFeVJd6vG0rIvWe3byNM+Z/Ws62vQ0yie/g7msSAYAuRAFMGBlmiLgJTWrdA3PaqBxo3gKamwa5x9Mo1bv9aosNI9EOZMqpDvUTLaFHcFyj3XY9gOEyo0vvjNmQm64ks=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=E2sqEzuw; arc=none smtp.client-ip=220.197.31.2
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	s=arc-20240116; t=1782101204; c=relaxed/simple;
+	bh=sI2dRrm2rYzC5hsq52tWdXiGHIDaT9AxOFi7X+Rlza0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=SIqL/ifW3wkROpBUE4L4shmMA2B8x0LD8DIZXjfVPOjADAK84pUrOImDQRT+/YSDaIHVopMfrM4suJhxH1f+KZ7/c1pTZui+UxwVV93oRgL86ddoHWfPUIVaXcbsGmq1UUkgwbxzGTf6ytylC9zeSldmjSlRxISbUNzdZRk6StQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=oHrwj+Sj; arc=none smtp.client-ip=91.218.175.188
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="E2sqEzuw"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version:
-	Content-Type; bh=7A/B2ddRDY+Y78/x8MCWrdcZlXw9tB+5L+xXJCdcCFY=;
-	b=E2sqEzuwyLGrtoqXOxH/v4eMZMLBT8ABAj227TdiHJI7AqnfNpoJhTahbnynC4
-	9V8iJUPs2U6g0wY5RUllKcyYoxpmL/PdxhLr5rzHDdjKpHemUBA/WmAxT36PlnXT
-	Z7dtbPG/2lIkIkVNcK2LH2ZDecMXpheDpLSd+fWk5OF78=
-Received: from localhost.localdomain (unknown [])
-	by gzga-smtp-mtada-g1-3 (Coremail) with SMTP id _____wCnT8328jRq9k3FDw--.7545S2;
-	Fri, 19 Jun 2026 15:42:47 +0800 (CST)
-From: Chi Wang <wangchi@kylinos.cn>
-To: Paul Moore <paul@paul-moore.com>,
-	Eric Paris <eparis@redhat.com>
-Cc: audit@vger.kernel.org,
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="oHrwj+Sj"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1782101196;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=ZUWyFEvXeVLfLgRyqSt5dzUpDWIXdvcmv/YrGiPhDm0=;
+	b=oHrwj+SjzLCSYGSoHMsBlTyi/BPO1LYEAowZCiJy/BgfowxK1Nhv4wBnxGATzNJAQy2Usu
+	3Aui+a8Xl2VwYnUg4vaKt1jLEunHuuM12PdPzSO2e5i/XDE+X1RLFq1HeiZLctcF2EtPOU
+	pEKF/++lDxrY0G4TuBJvKoXJ/NqYwTU=
+From: Kaitao Cheng <kaitao.cheng@linux.dev>
+To: Andrew Morton <akpm@linux-foundation.org>,
+	David Hildenbrand <david@kernel.org>,
+	Jens Axboe <axboe@kernel.dk>,
+	Tejun Heo <tj@kernel.org>,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Christian Brauner <brauner@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Namhyung Kim <namhyung@kernel.org>,
+	Thomas Gleixner <tglx@kernel.org>,
+	Juri Lelli <juri.lelli@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Paul Moore <paul@paul-moore.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	=?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>
+Cc: David Howells <dhowells@redhat.com>,
+	Simona Vetter <simona.vetter@ffwll.ch>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Luca Ceresoli <luca.ceresoli@bootlin.com>,
+	Philipp Stanner <phasta@kernel.org>,
+	linux-block@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org,
-	Ricardo Robaina <rrobaina@redhat.com>,
-	Chi Wang <wangchi@kylinos.cn>
-Subject: [PATCH v2] audit: Fix data races of skb_queue_len() readers on audit_queue
-Date: Fri, 19 Jun 2026 15:42:44 +0800
-Message-Id: <20260619074244.377226-1-wangchi@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20260617130038.57465-1-wangchi@kylinos.cn>
-References: <20260617130038.57465-1-wangchi@kylinos.cn>
+	cgroups@vger.kernel.org,
+	linux-ntfs-dev@lists.sourceforge.net,
+	linux-fsdevel@vger.kernel.org,
+	io-uring@vger.kernel.org,
+	audit@vger.kernel.org,
+	bpf@vger.kernel.org,
+	netdev@vger.kernel.org,
+	dri-devel@lists.freedesktop.org,
+	linux-perf-users@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org,
+	kexec@lists.infradead.org,
+	live-patching@vger.kernel.org,
+	linux-modules@vger.kernel.org,
+	linux-crypto@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	rcu@vger.kernel.org,
+	sched-ext@lists.linux.dev,
+	linux-mm@kvack.org,
+	virtualization@lists.linux.dev,
+	damon@lists.linux.dev,
+	llvm@lists.linux.dev,
+	chengkaitao <chengkaitao@kylinos.cn>
+Subject: [PATCH v3 0/7] Prepare mutable list iterators to cache cursor state
+Date: Mon, 22 Jun 2026 12:05:30 +0800
+Message-ID: <20260622040533.29824-1-kaitao.cheng@linux.dev>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
@@ -47,111 +88,196 @@ List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wCnT8328jRq9k3FDw--.7545S2
-X-Coremail-Antispam: 1Uf129KBjvJXoWxArWxtFyDtrW7XFWDKrWfZrb_yoWrAr1kpr
-	yDWFWIyrs5ZFy8Xr18AF10vr4Yva18KF13Jrs3tF1ayr98KF1jgF1xJF4aqry8Crs8Aa1U
-	JFn8tayDtr4kGrUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jFhFxUUUUU=
-Sender: wangchi05@163.com
-X-CM-SenderInfo: 5zdqwulklqkqqrwthudrp/xtbC4RiixWo08vgiKwAA3D
+X-Migadu-Flow: FLOW_OUT
 
-Multiple readers access audit_queue.qlen via skb_queue_len() without
-holding the queue lock or using READ_ONCE(), while kauditd writes to
-this field via the skb_dequeue() → __skb_unlink() path with WRITE_ONCE()
-protected by a spinlock. This constitutes data races.
+From: chengkaitao <chengkaitao@kylinos.cn>
 
-All affected skb_queue_len(&audit_queue) call sites:
-  - kauditd_thread() wait_event_freezable() condition
-  - audit_receive_msg() AUDIT_GET handler (s.backlog assignment)
-  - audit_receive() backlog check
-  - audit_log_start() backlog check and pr_warn()
+The list_for_each*_safe() helpers are used when the loop body may remove
+the current entry.  Their current interface, however, forces every caller
+to define a temporary cursor outside the macro and pass it in, even when
+the caller never uses that cursor directly.  For most call sites this
+extra cursor is just boilerplate required by the macro implementation.
 
-KCSAN reports the following conflicting access pattern (one example):
-==================================================================
-BUG: KCSAN: data-race in audit_log_start / skb_dequeue
+This is awkward because the saved next pointer is an internal detail of
+the iteration.  Callers that only remove or move the current entry do not
+need to spell it out.
 
-write (marked) to 0xffffffff8512ee20 of 4 bytes by task 661 on cpu 57:
- skb_dequeue+0x70/0xf0
- kauditd_send_queue+0x71/0x220
- kauditd_thread+0x1cb/0x430
- kthread+0x1c2/0x210
- ret_from_fork+0x162/0x1a0
- ret_from_fork_asm+0x1a/0x30
+The _safe() suffix has also caused confusion.  Christian Koenig pointed
+out that the name is easy to read as a thread-safe variant, especially
+for beginners, even though it only means that the iterator keeps enough
+state to tolerate removal of the current entry.  He suggested _mutable()
+as a clearer description of what the loop permits.
 
-read to 0xffffffff8512ee20 of 4 bytes by task 36586 on cpu 1:
- audit_log_start+0x2a0/0x6b0
- audit_core_dumps+0x64/0xa0
- do_coredump+0x14b/0x1260
- get_signal+0xeb2/0xf70
- arch_do_signal_or_restart+0x41/0x170
- exit_to_user_mode_loop+0xa2/0x1c0
- do_syscall_64+0x1a3/0x1c0
- entry_SYSCALL_64_after_hwframe+0x76/0xe0
+Add *_mutable() iterator variants for list, hlist and llist.  The new
+helpers are variadic and support both forms.  In the common case, the
+caller omits the temporary cursor and the macro creates a unique internal
+cursor with typeof(pos) and __UNIQUE_ID().  If a loop really needs an
+explicit temporary cursor, the caller can still pass it and the helper
+keeps the existing *_safe() behaviour.
 
-value changed: 0x00000001 -> 0x00000000
-==================================================================
+For example, a call site may use the shorter form:
 
-Resolve the race by switching to lockless helper skb_queue_len_lockless(),
-which internally uses READ_ONCE() and properly pairs with the WRITE_ONCE()
-write accesses already present on the writer side.
+  list_for_each_entry_mutable(pos, head, member)
 
-Fixes: 3197542482df ("audit: rework audit_log_start()")
-Signed-off-by: Chi Wang <wangchi@kylinos.cn>
-Cc: stable@vger.kernel.org
-Reviewed-by: Ricardo Robaina <rrobaina@redhat.com>
----
- kernel/audit.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+or keep the explicit temporary cursor form:
 
-diff --git a/kernel/audit.c b/kernel/audit.c
-index 34dc7cb246ff..cf385393d1ed 100644
---- a/kernel/audit.c
-+++ b/kernel/audit.c
-@@ -950,7 +950,7 @@ static int kauditd_thread(void *dummy)
- 		 *       do the multicast send and rotate records from the
- 		 *       main queue to the retry/hold queues */
- 		wait_event_freezable(kauditd_wait,
--				     (skb_queue_len(&audit_queue) ? 1 : 0));
-+				     (skb_queue_len_lockless(&audit_queue) ? 1 : 0));
- 	}
+  list_for_each_entry_mutable(pos, tmp, head, member)
 
- 	return 0;
-@@ -1283,7 +1283,7 @@ static int audit_receive_msg(struct sk_buff *skb, struct nlmsghdr *nlh,
- 		s.rate_limit		   = audit_rate_limit;
- 		s.backlog_limit		   = audit_backlog_limit;
- 		s.lost			   = atomic_read(&audit_lost);
--		s.backlog		   = skb_queue_len(&audit_queue);
-+		s.backlog		   = skb_queue_len_lockless(&audit_queue);
- 		s.feature_bitmap	   = AUDIT_FEATURE_BITMAP_ALL;
- 		s.backlog_wait_time	   = audit_backlog_wait_time;
- 		s.backlog_wait_time_actual = atomic_read(&audit_backlog_wait_time_actual);
-@@ -1627,7 +1627,7 @@ static void audit_receive(struct sk_buff *skb)
+The existing *_safe() helpers remain available for compatibility.  This
+series only converts users in mm, block, kernel, init and io_uring.  If
+this approach looks acceptable, the remaining users can be converted in
+follow-up series.
 
- 	/* can't block with the ctrl lock, so penalize the sender now */
- 	if (audit_backlog_limit &&
--	    (skb_queue_len(&audit_queue) > audit_backlog_limit)) {
-+	    (skb_queue_len_lockless(&audit_queue) > audit_backlog_limit)) {
- 		DECLARE_WAITQUEUE(wait, current);
+Changes in v3 (Christian König, Andy Shevchenko):
+- Convert safe list walks to mutable iterators
 
- 		/* wake kauditd to try and flush the queue */
-@@ -1933,7 +1933,7 @@ struct audit_buffer *audit_log_start(struct audit_context *ctx, gfp_t gfp_mask,
- 		long stime = audit_backlog_wait_time;
+Changes in v2 (Muchun Song, Andy Shevchenko):
+- Drop the list_for_each_entry_mutable*() helpers from v1 and make the
+  cursor change directly in the existing list_for_each_entry*() helpers.
+- Open-code special list walks that rely on updating the loop cursor in
+  the body, preserving their existing traversal semantics.
 
- 		while (audit_backlog_limit &&
--		       (skb_queue_len(&audit_queue) > audit_backlog_limit)) {
-+			(skb_queue_len_lockless(&audit_queue) > audit_backlog_limit)) {
- 			/* wake kauditd to try and flush the queue */
- 			wake_up_interruptible(&kauditd_wait);
+Link to v2:
+https://lore.kernel.org/all/20260609061347.93688-1-kaitao.cheng@linux.dev/
 
-@@ -1953,7 +1953,7 @@ struct audit_buffer *audit_log_start(struct audit_context *ctx, gfp_t gfp_mask,
- 			} else {
- 				if (audit_rate_check() && printk_ratelimit())
- 					pr_warn("audit_backlog=%d > audit_backlog_limit=%d\n",
--						skb_queue_len(&audit_queue),
-+						skb_queue_len_lockless(&audit_queue),
- 						audit_backlog_limit);
- 				audit_log_lost("backlog limit exceeded");
- 				return NULL;
---
-2.25.1
+Link to v1:
+https://lore.kernel.org/all/20260529082149.76764-1-kaitao.cheng@linux.dev/
+
+Kaitao Cheng (7):
+  list: Add mutable iterator variants
+  llist: Add mutable iterator variants
+  mm: Use mutable list iterators
+  block: Use mutable list iterators
+  kernel: Use mutable list iterators
+  initramfs: Use mutable list iterator
+  io_uring: Use mutable list iterators
+
+ block/bfq-iosched.c                 |  17 +-
+ block/blk-cgroup.c                  |  12 +-
+ block/blk-flush.c                   |   4 +-
+ block/blk-iocost.c                  |  18 +-
+ block/blk-mq.c                      |   8 +-
+ block/blk-throttle.c                |   4 +-
+ block/kyber-iosched.c               |   4 +-
+ block/partitions/ldm.c              |   8 +-
+ block/sed-opal.c                    |   4 +-
+ include/linux/list.h                | 269 ++++++++++++++++++++++++----
+ include/linux/llist.h               |  81 +++++++--
+ init/initramfs.c                    |   5 +-
+ io_uring/cancel.c                   |   6 +-
+ io_uring/poll.c                     |   3 +-
+ io_uring/rw.c                       |   4 +-
+ io_uring/timeout.c                  |   8 +-
+ io_uring/uring_cmd.c                |   3 +-
+ kernel/audit_tree.c                 |   4 +-
+ kernel/audit_watch.c                |  16 +-
+ kernel/auditfilter.c                |   4 +-
+ kernel/auditsc.c                    |   4 +-
+ kernel/bpf/arena.c                  |  10 +-
+ kernel/bpf/arraymap.c               |   8 +-
+ kernel/bpf/bpf_local_storage.c      |   3 +-
+ kernel/bpf/bpf_lru_list.c           |  25 ++-
+ kernel/bpf/btf.c                    |  18 +-
+ kernel/bpf/cgroup.c                 |   7 +-
+ kernel/bpf/cpumap.c                 |   4 +-
+ kernel/bpf/devmap.c                 |  10 +-
+ kernel/bpf/helpers.c                |   8 +-
+ kernel/bpf/local_storage.c          |   4 +-
+ kernel/bpf/memalloc.c               |  16 +-
+ kernel/bpf/offload.c                |   8 +-
+ kernel/bpf/states.c                 |   4 +-
+ kernel/bpf/stream.c                 |   4 +-
+ kernel/bpf/verifier.c               |   6 +-
+ kernel/cgroup/cgroup-v1.c           |   4 +-
+ kernel/cgroup/cgroup.c              |  54 +++---
+ kernel/cgroup/dmem.c                |  12 +-
+ kernel/cgroup/rdma.c                |   8 +-
+ kernel/events/core.c                |  44 +++--
+ kernel/events/uprobes.c             |  12 +-
+ kernel/exit.c                       |   8 +-
+ kernel/fail_function.c              |   4 +-
+ kernel/gcov/clang.c                 |   4 +-
+ kernel/irq_work.c                   |   4 +-
+ kernel/kexec_core.c                 |   4 +-
+ kernel/kprobes.c                    |  16 +-
+ kernel/livepatch/core.c             |   4 +-
+ kernel/livepatch/core.h             |   4 +-
+ kernel/liveupdate/kho_block.c       |   4 +-
+ kernel/liveupdate/luo_flb.c         |   4 +-
+ kernel/locking/rwsem.c              |   2 +-
+ kernel/locking/test-ww_mutex.c      |   2 +-
+ kernel/module/main.c                |  11 +-
+ kernel/padata.c                     |   4 +-
+ kernel/power/snapshot.c             |   8 +-
+ kernel/power/wakelock.c             |   4 +-
+ kernel/printk/printk.c              |  11 +-
+ kernel/ptrace.c                     |   4 +-
+ kernel/rcu/rcutorture.c             |   3 +-
+ kernel/rcu/tasks.h                  |   9 +-
+ kernel/rcu/tree.c                   |   6 +-
+ kernel/resource.c                   |   4 +-
+ kernel/sched/core.c                 |   4 +-
+ kernel/sched/ext.c                  |  22 +--
+ kernel/sched/fair.c                 |  28 +--
+ kernel/sched/topology.c             |   4 +-
+ kernel/sched/wait.c                 |   4 +-
+ kernel/seccomp.c                    |   4 +-
+ kernel/signal.c                     |  11 +-
+ kernel/smp.c                        |   4 +-
+ kernel/taskstats.c                  |   8 +-
+ kernel/time/clockevents.c           |   6 +-
+ kernel/time/clocksource.c           |   4 +-
+ kernel/time/posix-cpu-timers.c      |   4 +-
+ kernel/time/posix-timers.c          |   3 +-
+ kernel/torture.c                    |   3 +-
+ kernel/trace/bpf_trace.c            |   4 +-
+ kernel/trace/ftrace.c               |  49 +++--
+ kernel/trace/ring_buffer.c          |  25 ++-
+ kernel/trace/trace.c                |  12 +-
+ kernel/trace/trace_dynevent.c       |   6 +-
+ kernel/trace/trace_dynevent.h       |   5 +-
+ kernel/trace/trace_events.c         |  35 ++--
+ kernel/trace/trace_events_filter.c  |   4 +-
+ kernel/trace/trace_events_hist.c    |   8 +-
+ kernel/trace/trace_events_trigger.c |  17 +-
+ kernel/trace/trace_events_user.c    |  16 +-
+ kernel/trace/trace_stat.c           |   4 +-
+ kernel/user-return-notifier.c       |   3 +-
+ kernel/workqueue.c                  |  16 +-
+ mm/backing-dev.c                    |   8 +-
+ mm/balloon.c                        |   8 +-
+ mm/cma.c                            |   4 +-
+ mm/compaction.c                     |   4 +-
+ mm/damon/core.c                     |   4 +-
+ mm/damon/sysfs-schemes.c            |   4 +-
+ mm/dmapool.c                        |   4 +-
+ mm/huge_memory.c                    |   8 +-
+ mm/hugetlb.c                        |  56 +++---
+ mm/hugetlb_vmemmap.c                |  16 +-
+ mm/khugepaged.c                     |  14 +-
+ mm/kmemleak.c                       |   7 +-
+ mm/ksm.c                            |  25 +--
+ mm/list_lru.c                       |   4 +-
+ mm/memcontrol-v1.c                  |   8 +-
+ mm/memory-failure.c                 |  12 +-
+ mm/memory-tiers.c                   |   4 +-
+ mm/migrate.c                        |  23 ++-
+ mm/mmu_notifier.c                   |   9 +-
+ mm/page_alloc.c                     |   8 +-
+ mm/page_reporting.c                 |   2 +-
+ mm/percpu.c                         |  11 +-
+ mm/pgtable-generic.c                |   4 +-
+ mm/rmap.c                           |  10 +-
+ mm/shmem.c                          |   9 +-
+ mm/slab_common.c                    |  14 +-
+ mm/slub.c                           |  33 ++--
+ mm/swapfile.c                       |   4 +-
+ mm/userfaultfd.c                    |  12 +-
+ mm/vmalloc.c                        |  24 +--
+ mm/vmscan.c                         |   7 +-
+ mm/zsmalloc.c                       |   4 +-
+ 124 files changed, 875 insertions(+), 681 deletions(-)
+
+-- 
+2.43.0
 
