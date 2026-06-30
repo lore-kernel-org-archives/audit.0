@@ -1,65 +1,64 @@
-Received: from mail-qk1-f176.google.com (mail-qk1-f176.google.com [209.85.222.176])
+Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com [209.85.160.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8ECFE472760
-	for <audit@vger.kernel.org>; Tue, 30 Jun 2026 19:58:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 867B02135C5
+	for <audit@vger.kernel.org>; Tue, 30 Jun 2026 20:15:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782849512; cv=none; b=h1CJGBg6v6tl6jMv34XhTWEdl/PrKsrtUfobl9ir0L+4VRx6ajtNyR7OkbG6CiZyunDQxkA8KVHLfFHqFZrGnjyFnVMEre1n2OLrNdv8ppNlwaqOklShE0twPRGZGpvAAU+HON531Xpph6KLfuHouPhpzJcAoGSX4/FyBaHWTO4=
+	t=1782850542; cv=none; b=QgqJ0NxXIZJplKh/T5hTWDiwulLtyrJJnHHz9CxTYMrGioWK9VTc0zbrw7QEB9rLAmVoBUDwsITvSLVZu4nOQg9zyOCW6/nS5LJO9O2x87ICkBteovQSfR9t8vNRj1kdhuEc4Imy9OJX5Nf8Oj7s+WWwWlgJMPufY4DMq5EKLR0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782849512; c=relaxed/simple;
-	bh=4nYJG1YG5AoiVmrUumv2zgkEe418m75IRGFi8Qt7DuY=;
+	s=arc-20240116; t=1782850542; c=relaxed/simple;
+	bh=KIFyvcUp0DrVIt8fHT9eaTmd9j+JW0nG/kc0JEntHo0=;
 	h=Date:Message-ID:MIME-Version:Content-Type:From:To:Cc:Subject:
-	 References:In-Reply-To; b=oTG1rHNjq3Tyt/vVDcs3t/b6veqTsH8DwTZbYFSruD6aNybD0rOkWTzgrHxq5tlEBo/oNjSSH6tv8rI2WcftO2a+LB6nReejLjMpnoKW45O8E49gxkJiumxkJqxg07R1TIlOYphAtJYGJ5IRzv7D0IPe9j3fzx7sS0YoDHPRs8I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=OxUtO3NH; arc=none smtp.client-ip=209.85.222.176
+	 References:In-Reply-To; b=HYoH5DZhMM7W3AyVvR4Twox4QYZvGhIoE8oJ/ZkM4OjQPd1dJUj+KSIqKB4NqzhaWVEYR5oeuqnLitVb/ltvbBZVKSJZcZqhZPjLYVTIOFkzcHDMcJsqDf5Slqmw62f9zGkevbbLl0uPx0dzQUoxDpCYLqD0s2laTGXepE1frqQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=H5LecyNZ; arc=none smtp.client-ip=209.85.160.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="OxUtO3NH"
-Received: by mail-qk1-f176.google.com with SMTP id af79cd13be357-92e54f8c051so179147985a.3
-        for <audit@vger.kernel.org>; Tue, 30 Jun 2026 12:58:31 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="H5LecyNZ"
+Received: by mail-qt1-f169.google.com with SMTP id d75a77b69052e-51c167c58f2so8849951cf.0
+        for <audit@vger.kernel.org>; Tue, 30 Jun 2026 13:15:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1782849510; x=1783454310; darn=vger.kernel.org;
+        d=paul-moore.com; s=google; t=1782850540; x=1783455340; darn=vger.kernel.org;
         h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
          :mime-version:message-id:date:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=0G4JtKNZKietXIX7cSX7DaLFUuZ0+QvM5uhq2BtGSGU=;
-        b=OxUtO3NHyANd/sF4kSlmMpZPr5HRsinLTemjiW9OJ+giUIuoRJxnNsW1NfV3YFoynB
-         HStDBYL6QSZuuJUXXBQiBtxKfY1ZCrWBbcN6ICmhllysIt2ucOsWKMFLeK6Uz9CmxsDs
-         qoF1h/G5l+1N7rNLxr/q6zuvzdXKEVHcZ0kljQmS18xgYQTu5xj6+uWGr34vy1Y+s7Xs
-         NEy0yTWTIw4m3e/HfX9wLwOBdLsKAfZlCiQAx1QKXWCAzbe04hNbniHkjwHOORShn3FD
-         Xoj6mGxM5GnaKYirEH3GekPO0YXd3PpEuRBB2bre2vNcF4ltf/yeSMlEj6EYaN0dHIsM
-         XxJw==
+        bh=kFbHVAQO3lUQEfR1Rl9bV17oIFy3lRBFLhFrds1anbs=;
+        b=H5LecyNZ6LGZ2KRWNnVCeCb5OtKt3yilbGl1jWJTb0+APodq9+4kjVxAEcIJ76Ll7l
+         rE8QY+P8UbdtIAosO/kLyiV+VqwNkNs3NF0O52nrLolnLLq9k/i+6Fb//6eWIkUgN6FN
+         PFVPmRuBFdMKQQYddLfTzPwxHlfpcnF+WGcrfEiQnjMtAf3JjPVy29KsB+y3qxRUmrXE
+         yhosmBf7njB3Qg/zrVWEN00Qj7D3WPxHGafGpmUEvh7pShCm8YjzAhoDB+RdP6GV7SJh
+         6nEDKDxuYZCEreZtl10qy+dNHZZ0GFRSBzCHdE/JdjlJ+YQsJF9DHCSgEuo5xxNucLMg
+         tHTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782849510; x=1783454310;
+        d=1e100.net; s=20251104; t=1782850540; x=1783455340;
         h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
          :mime-version:message-id:date:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=0G4JtKNZKietXIX7cSX7DaLFUuZ0+QvM5uhq2BtGSGU=;
-        b=sVLbtJ73OAWi5h2sjBzc/TkL5ogT4OdBG4lVtmARRAKmrT50SNxYLflD/KfUjK/Dbz
-         w/FFDe7UUYhSdSQ5lKPZHTEgRttEXagbDCU4UOiTkKtIAzySXXH96M1xP0diqxu+tDdz
-         mnNrK/wS24hVCuzwHAC9+itzos67GbZIjBDF1zu1ukP7+X4xtfK0h/y6YOXcXgHmhyn/
-         GfFTqukMjN7IhhZBTlq9srsLwvi20sswbsvKJMvDhaXZTfKwHKoe0KlnnHbWATup9mlk
-         uRw41qqGolek+Qtlg4pICpgHHE1ZmiETRufRS8JJbH7ORyQ1hxcmLND6ch0I2AZf15aP
-         Bv7g==
-X-Forwarded-Encrypted: i=1; AFNElJ8sSqij94HJYCf40WVD0fCV3pB8pATSkefe0sNRVf0uX42GlGf3H+Q3+wuMrWgFcWQaNWqu1Q==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxBfuYiRd5IiW8AYvKMtz/R3d47FiFuJlFuBtmHvzvk4kkRI/2b
-	GkZYZQLNP60zqByetXw4d65QYKMjIDBWY4wL+jLMoBkhHhQtxNeOhq+2Yx8jhEAVDQ==
-X-Gm-Gg: AfdE7ckh1Xe5jv2lk6wgwNd2jUR8TrxRaGhoD7oi2PEi4ddK+0bXTMw8hEuxwfenXYF
-	7T5BhV8BnopOdVQZyHhagL9ONz4LX7PjykQrGL/EZHngK/ynzCpt4osbta5E3y+9d6FnXrQBeiP
-	78BucBJbKGPmBbwbzaRx9RuOkMctTQ6m9so7t1XAwG9Eql8zPfM/LmTvhGeJe3t7mgMgjB9/ONj
-	2LYUFqPgxkpzLygSdP5wgCmucj5qgCCVOJEWBZ15BjFJ0ZGuyFishnJeh3UKRwgJ/A6ng62qeBH
-	B5Xf/K6Mu2Ia870R7usvtqscdJv6ls7C0ChNPpC05hoR+WlgOemEEHvYf+3GRPYS0bj3Q14OjpR
-	Vv/GeRlJb3S8ltUgPeot4XrSfp6McgOt9UxJQ0AeDUixP3HR+WlKCQg9vz/AgY6MQ7ABAf6pj9w
-	gjof0svsUCovqi8cFT0Ksvb/dteXK62DjzdB4e65OfghZD1guBzFwA69GZQg==
-X-Received: by 2002:a05:620a:2b4b:b0:92a:36e7:64fc with SMTP id af79cd13be357-92e625fe7fcmr818474485a.25.1782849510519;
-        Tue, 30 Jun 2026 12:58:30 -0700 (PDT)
+        bh=kFbHVAQO3lUQEfR1Rl9bV17oIFy3lRBFLhFrds1anbs=;
+        b=BcPI3MScl/5klqbWDzL/sbFMpdy2xbjEOsaAceSk+K4NQE/yNhn018hxHoJ+D08lmI
+         kfTX45ZA7xoAxiO/i7PmZGE87QrVGdrCUgYGqgiZUaC6gUdcrZ9/Roe5gaVTwm/HVVhC
+         8V99tU7EMsJmrjEcm7rBhT5mBgt3f8yvIhCwKzmmcsNzvJLVPtJj71jYzEftU3WDDAsi
+         mlw3UANXbcLk5LS7wZybMst4E+Fn7k07JbMGV5kCyoGiU617pj7QQISKH5w3DaPO9Yaj
+         htp/Gia0eKZf1qEbbtAk1orW6AIlEhDhYCZWiRCkJTKCb0Dryte6ysmDIM59SVJvzI1s
+         FROg==
+X-Gm-Message-State: AOJu0YzGEnbeOg4cooyj3O0H5pNDVw9OcFmhVCKKUixT7kqYzJcazZUP
+	xYfYjHVEE32oIZbxy6xbcUrAg4XjzRmtCJ6eSTDd79Mk6pNgGu7T3YvNJ8B+IFUmGA==
+X-Gm-Gg: AfdE7cn5nP1Y10/amdLPzJHa57IYjKn6hOWkVPw2TzPa77Ed3wqb5RsGpMCZG18ont8
+	SBGU9TpWBvyqljLcb3sYsq/HCH97x0w4apfiNB0UUREb4tAE0mZg1Hwfg7a0NIquv9boAIkzSvJ
+	e1IzlmPH+W9x5n6XC6RrMuJESY0VEIyHWbLWe8sE65ozQ99jtdh93o1HFEK53vuzb912+7FTAaE
+	V7uNVEKLl1/V1fm8uhgR7fWndmj/6VDz0YvSI751WcTpRXIbz4PiZlM/gIXq5LKsitpVgH6lN6F
+	cGJwK+YaMjeanLCyZsAADKxAJPvNmqS82SRBffpPCDT6iZE+vN3SCmCjH/T4qjj7SURvMDLoDMp
+	DWSQ4IvJrG0R9q/GQkd+l/1P1vR2qsFOa3MiVoyyAcvtSH6Wrgv750wLfv9t3HQHjl8q8t+pJ4o
+	xF82ES3klRtv5CV3flRr5SKz2g4T2vDJLFjlaJnWR1V6NlfrcbkX6E8pqGnw==
+X-Received: by 2002:ac8:7d52:0:b0:51a:8c97:9375 with SMTP id d75a77b69052e-51c108d823bmr65449501cf.61.1782850540414;
+        Tue, 30 Jun 2026 13:15:40 -0700 (PDT)
 Received: from localhost (pool-71-126-255-178.bstnma.fios.verizon.net. [71.126.255.178])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-92e62163f34sm317497885a.12.2026.06.30.12.58.29
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8f1a727429fsm32068956d6.37.2026.06.30.13.15.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Jun 2026 12:58:29 -0700 (PDT)
-Date: Tue, 30 Jun 2026 15:58:28 -0400
-Message-ID: <a12cfd8a21c2b8a51302a28e05c924ba@paul-moore.com>
+        Tue, 30 Jun 2026 13:15:39 -0700 (PDT)
+Date: Tue, 30 Jun 2026 16:15:38 -0400
+Message-ID: <790e5ee50f15c85b8b1e36c85f0e7f2f@paul-moore.com>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
@@ -70,45 +69,63 @@ Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit 
 X-Mailer: pstg-pwork:20260630_1523/pstg-lib:20260630_1303/pstg-pwork:20260630_1523
 From: Paul Moore <paul@paul-moore.com>
-To: Ricardo Robaina <rrobaina@redhat.com>, audit@vger.kernel.org, linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
-Cc: eparis@redhat.com, arnd@arndb.de, sgrubb@redhat.com, Ricardo Robaina <rrobaina@redhat.com>
-Subject: Re: [PATCH v2] audit: add missing syscalls to PERM class tables
-References: <20260612141436.3137694-1-rrobaina@redhat.com>
-In-Reply-To: <20260612141436.3137694-1-rrobaina@redhat.com>
+To: Chi Wang <wangchi@kylinos.cn>, Eric Paris <eparis@redhat.com>
+Cc: audit@vger.kernel.org, linux-kernel@vger.kernel.org, stable@vger.kernel.org, Ricardo Robaina <rrobaina@redhat.com>, Chi Wang <wangchi@kylinos.cn>
+Subject: Re: [PATCH v2] audit: Fix data races of skb_queue_len() readers on  audit_queue
+References: <20260619074244.377226-1-wangchi@kylinos.cn>
+In-Reply-To: <20260619074244.377226-1-wangchi@kylinos.cn>
 
-On Jun 12, 2026 Ricardo Robaina <rrobaina@redhat.com> wrote:
+On Jun 19, 2026 Chi Wang <wangchi@kylinos.cn> wrote:
 > 
-> Add missing file metadata syscalls to the audit PERM class tables,
-> addressing gaps where certain file operations were not properly
-> classified for audit rule matching.
+> Multiple readers access audit_queue.qlen via skb_queue_len() without
+> holding the queue lock or using READ_ONCE(), while kauditd writes to
+> this field via the skb_dequeue() → __skb_unlink() path with WRITE_ONCE()
+> protected by a spinlock. This constitutes data races.
 > 
-> Changes:
-> - audit_change_attr.h: Add file_setattr
+> All affected skb_queue_len(&audit_queue) call sites:
+>   - kauditd_thread() wait_event_freezable() condition
+>   - audit_receive_msg() AUDIT_GET handler (s.backlog assignment)
+>   - audit_receive() backlog check
+>   - audit_log_start() backlog check and pr_warn()
 > 
-> - audit_read.h: Add quotactl_fd, file_getattr, stat, stat64, lstat,
->   lstat64, fstat, fstat64, newfstatat, fstatat64, and statx
+> KCSAN reports the following conflicting access pattern (one example):
+> ==================================================================
+> BUG: KCSAN: data-race in audit_log_start / skb_dequeue
 > 
-> - audit_write.h: Add quotactl_fd
+> write (marked) to 0xffffffff8512ee20 of 4 bytes by task 661 on cpu 57:
+>  skb_dequeue+0x70/0xf0
+>  kauditd_send_queue+0x71/0x220
+>  kauditd_thread+0x1cb/0x430
+>  kthread+0x1c2/0x210
+>  ret_from_fork+0x162/0x1a0
+>  ret_from_fork_asm+0x1a/0x30
 > 
-> Architecture-specific and conditionally-compiled syscalls are guarded
-> with #ifdef.
+> read to 0xffffffff8512ee20 of 4 bytes by task 36586 on cpu 1:
+>  audit_log_start+0x2a0/0x6b0
+>  audit_core_dumps+0x64/0xa0
+>  do_coredump+0x14b/0x1260
+>  get_signal+0xeb2/0xf70
+>  arch_do_signal_or_restart+0x41/0x170
+>  exit_to_user_mode_loop+0xa2/0x1c0
+>  do_syscall_64+0x1a3/0x1c0
+>  entry_SYSCALL_64_after_hwframe+0x76/0xe0
 > 
-> Signed-off-by: Steve Grubb <sgrubb@redhat.com>
-> Signed-off-by: Ricardo Robaina <rrobaina@redhat.com>
+> value changed: 0x00000001 -> 0x00000000
+> ==================================================================
+> 
+> Resolve the race by switching to lockless helper skb_queue_len_lockless(),
+> which internally uses READ_ONCE() and properly pairs with the WRITE_ONCE()
+> write accesses already present on the writer side.
+> 
+> Fixes: 3197542482df ("audit: rework audit_log_start()")
+> Signed-off-by: Chi Wang <wangchi@kylinos.cn>
+> Cc: stable@vger.kernel.org
+> Reviewed-by: Ricardo Robaina <rrobaina@redhat.com>
 > ---
-> Changes in v2:
-> - Added stat64 family syscalls (stat64, lstat64, fstat64, fstatat64) to
->   audit_read.h for 32-bit architecture support.
-> - Dropped timestamp-related syscalls (utime, utimes, utimensat, etc.)
->   due to potential audit log volume increase impact. Those will be
->   addressed in a separate patch after closer investigation.
-> 
->  include/asm-generic/audit_change_attr.h |  3 +++
->  include/asm-generic/audit_read.h        | 31 +++++++++++++++++++++++++
->  include/asm-generic/audit_write.h       |  3 +++
->  3 files changed, 37 insertions(+)
+>  kernel/audit.c | 10 +++++-----
+>  1 file changed, 5 insertions(+), 5 deletions(-)
 
-Looks good to me, merged into audit/dev, thanks.
+Merged into stable-7.2, thanks.
 
 --
 paul-moore.com
