@@ -1,166 +1,183 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D0E3224B04
-	for <audit@vger.kernel.org>; Wed,  1 Jul 2026 13:20:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57D9043CEFE
+	for <audit@vger.kernel.org>; Wed,  1 Jul 2026 13:24:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782912011; cv=none; b=dysjp4Yt/BmCo7qR1vpsb5Pk+0dQU93P1Iu6KykTPWrhBZbSv7Ln2hEUtrjscNr//r8f7x+8ro1BXnzFU9naKjEqLO2LaTHHoVEyDSGHRGPjE8ctXBY2unWMuSCPHu/oXWo0jqhlON/J6+Hq4ri+5o/3OnJUG8mZztelkVyzEGw=
+	t=1782912281; cv=none; b=mLiLqmFBeJz1bvTepMJjuuXUqxESFnpfkJAMLNLHTyjT0JMBpBbd9zfl4LcDeMYKPjxfJ07PhV2qh2eFhRykh2//0a3D5jKv1GbuLH55pYM31x9xtrE9Js9da52e6BCTLuzTYHBMpL1KXUkCePvwXyJiSRROJO69SEZ4Lih83P4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782912011; c=relaxed/simple;
-	bh=NMzxxg7ZgLCOKsY+USMeby7o9dFCZTquK2xGp6K4vfY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=pOwKvc6A9dffPX7yVaikxYPDb08XJA5O9P/OfMvmjxn65QxdMvORi5u4p2DhrLGJt9L4jayMeE/QzLYH08bw9nENilkEgkjAykncG0G4iOUkgL8LeryhSphKd7Eud7Y+TBz62alE/vTvCb1Y2jKcmV+UQ+6/+s2XEFz73Pg6sXI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ZecgZAwe; arc=none smtp.client-ip=170.10.133.124
+	s=arc-20240116; t=1782912281; c=relaxed/simple;
+	bh=ici8yNXnB3gpVN7apDYOV7smMCz4wI/KHevs80PKr20=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:content-type; b=qoRwLG2ams6kMjpVnMrSFg4VC+uqoEzgp3p0N4md9tJ4KboekR2Hzcg1yE7t54efpoUbBNbM7i6d0NSbBx1ZYh5ocNUQGsRN2dAjpi2W0OPWiaDydaxoaF4K6sMQKcL1qpyE3FK0QjPW8AMW4H1dUqctZTlMGkMn5hcOWCfOuik=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=atzMlYAF; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ZecgZAwe"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="atzMlYAF"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1782912009;
+	s=mimecast20190719; t=1782912279;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ZkyHBx8qc3TZHAZdVcz1ygge0E0qA4+vhFJQ0TyghSU=;
-	b=ZecgZAwei7LabqCYUYFgc3ySg1toJ2FR85NcvdSvH/Jx8xz+JW2ct3Yipz3nrT+85ARaZT
-	qoVNUwKQK1mKqc45zO9Lzk3Zph/90AUwHvsSyOZujcvWtggc1qMbjoyiqlBE7lrOq9EPg0
-	jnKqZpkA4qYPFOFvKEr35uOB7POXiF4=
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
- [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-342-oL-WeAF5PT21di1wlGTLCQ-1; Wed, 01 Jul 2026 09:20:08 -0400
-X-MC-Unique: oL-WeAF5PT21di1wlGTLCQ-1
-X-Mimecast-MFC-AGG-ID: oL-WeAF5PT21di1wlGTLCQ_1782912007
-Received: by mail-ej1-f72.google.com with SMTP id a640c23a62f3a-c128c8c345eso95500566b.0
-        for <audit@vger.kernel.org>; Wed, 01 Jul 2026 06:20:08 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782912007; x=1783516807;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=ZkyHBx8qc3TZHAZdVcz1ygge0E0qA4+vhFJQ0TyghSU=;
-        b=Au0p//4KeNDVzFvjlgchHumc+upmw89CDTUzwzvpK+AEeQCrwmm+Nq9bYnyDqavFHi
-         r3BgCoC4Y3ZS9FD8LaQ4qN0OG2g2RmJmR36OqS/mgziV3nThQ44eaVrt4wCFFgBCcY9X
-         YbtTkh2tr/MSKFJkS0plFXAjUzzRk/tAdqIAN9JkZmoK4Y5HNo9V/vnT58/ssR9WCXLI
-         qVxbIgYwi6qp8ZWIxX+ty/q6CUwfszmvW7/ez33eBn43oLpHYhEHtan5hKwsVRQECflY
-         iJxeFrKby2mMJHHLYtVKriSLR2is2O6ev1JResQjUJP3cFtdVqDHgUYRlCruUcytxgGn
-         a7Xg==
-X-Gm-Message-State: AOJu0Yz2ERRn+ertRjtRky3jUqxpa4mqcPjnzD0WpUUmwPiZ6RfKbe2c
-	xLtdX5bTCEs8dLj2Qe97gJTlrfDoholPsyKkTb8nzBxZQADAEPdwTjSUne7PdHocpDIeFvgTYL7
-	r4Sg664XP9NRNfRI0P5amJvuR6uEbd82hk2XOJA+2IyYtbJ4VQSsi6v25HYdYEGi5WJ1FgZCwT9
-	7J/qFsdaKiQyd3w/CQx1Jp0XE2qIJNwQOxkP5bUnBhpQ==
-X-Gm-Gg: AfdE7clgp5yUT/JeplkAvuy01B4kC+7WaZfifLvzk59WC8/SyWdqb9L2ygI7uVt7VU0
-	i8rTtxQbOJ/wTw45ad0zPb0zhV5xS8yYqH3AzrZjhFihEySolaqCmvsS0sppKc5/sR4MRqZc0Ko
-	CKbWyWvN3KsRmRksCqnbYmCZ1fb9r/0Tjp2nOg2HRFZM1PI1GbrTngvnFCjDK2PdBbSZiDIqg3F
-	/1POS8YR2x5gLpy/en5C10i66N+vunjIX9qteGi3bVJIhCiWOWOW1tT
-X-Received: by 2002:a17:907:3c82:b0:bd2:15b5:bf60 with SMTP id a640c23a62f3a-c12a79b3ee4mr88566566b.3.1782912006963;
-        Wed, 01 Jul 2026 06:20:06 -0700 (PDT)
-X-Received: by 2002:a17:907:3c82:b0:bd2:15b5:bf60 with SMTP id
- a640c23a62f3a-c12a79b3ee4mr88566066b.3.1782912006564; Wed, 01 Jul 2026
- 06:20:06 -0700 (PDT)
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=qb9iA84rqAqSmFrq0wPj5mg0126cHARBoB7HeqhLUc8=;
+	b=atzMlYAFkxwLJIpmCYx4lEErTzYvGxuDGj9EfHZTZ+PhsK9l5frk7u9XvdnIZA+kJwDe7D
+	wH5ZI81upHemBM6yyjf+e2LJrKMWrVkHbOntdh9lFTRJnL1WO3xM6n9pEKzNC+JNSktjKm
+	shpsHkdDN7Jvsjn3WZO+DghB4vhFcTk=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-515-_6kSB2JfPk2pm9yOsUsnAA-1; Wed,
+ 01 Jul 2026 09:24:36 -0400
+X-MC-Unique: _6kSB2JfPk2pm9yOsUsnAA-1
+X-Mimecast-MFC-AGG-ID: _6kSB2JfPk2pm9yOsUsnAA_1782912272
+Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 7BCDA1977027;
+	Wed,  1 Jul 2026 13:24:29 +0000 (UTC)
+Received: from wsxc.redhat.com (unknown [10.96.134.62])
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id E7510195E486;
+	Wed,  1 Jul 2026 13:24:25 +0000 (UTC)
+From: Ricardo Robaina <rrobaina@redhat.com>
+To: audit@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: paul@paul-moore.com,
+	eparis@redhat.com,
+	viro@zeniv.linux.org.uk,
+	brauner@kernel.org,
+	jack@suse.cz,
+	Ricardo Robaina <rrobaina@redhat.com>
+Subject: [PATCH] audit: add FSOPEN record to log filesystem name
+Date: Wed,  1 Jul 2026 10:24:10 -0300
+Message-ID: <20260701132410.711205-1-rrobaina@redhat.com>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260630195242.367870-2-paul@paul-moore.com>
-In-Reply-To: <20260630195242.367870-2-paul@paul-moore.com>
-From: Ricardo Robaina <rrobaina@redhat.com>
-Date: Wed, 1 Jul 2026 10:19:54 -0300
-X-Gm-Features: AVVi8CdFni7dW1oIHQKDxp_uBxO7NsEqbjOT4q8HVkTqQf1YHsUS9DNTnga5hBM
-Message-ID: <CAABTaaCG9xrLXsYoAx9QD85t8xkpveMXi_sBndz-7mbCmpZgBw@mail.gmail.com>
-Subject: Re: [RFC PATCH] audit: drop BUG_ON() from audit_log_XXX()
-To: Paul Moore <paul@paul-moore.com>
-Cc: audit@vger.kernel.org
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: oqc2q7uae7FD2VE5xBDtS9eGfwOXU-EqDjpa2OfrtwY_1782912007
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
+X-Mimecast-MFC-PROC-ID: 1pjLvrs-T8gQ5SP6KezcumFbWXJupGJ_onraRfXm8YU_1782912272
 X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+content-type: text/plain; charset="US-ASCII"; x-default=true
 
-On Tue, Jun 30, 2026 at 4:53=E2=80=AFPM Paul Moore <paul@paul-moore.com> wr=
-ote:
->
-> We can easily drop the BUG_ON()s from the audit_log_XXX() helpers and
-> simply return to the caller as we do if we are passed a NULL
-> audit_buffer.
->
-> Signed-off-by: Paul Moore <paul@paul-moore.com>
-> ---
->  kernel/audit.c | 9 +++------
->  1 file changed, 3 insertions(+), 6 deletions(-)
->
-> diff --git a/kernel/audit.c b/kernel/audit.c
-> index dcc657d35776..d05c92d74361 100644
-> --- a/kernel/audit.c
-> +++ b/kernel/audit.c
-> @@ -2016,10 +2016,9 @@ void audit_log_vformat(struct audit_buffer *ab, co=
-nst char *fmt, va_list args)
->         struct sk_buff *skb;
->         va_list args2;
->
-> -       if (!ab)
-> +       if (!ab || !ab->skb)
->                 return;
->
-> -       BUG_ON(!ab->skb);
->         skb =3D ab->skb;
->         avail =3D skb_tailroom(skb);
->         if (avail =3D=3D 0) {
-> @@ -2084,10 +2083,9 @@ void audit_log_n_hex(struct audit_buffer *ab, cons=
-t unsigned char *buf,
->         unsigned char *ptr;
->         struct sk_buff *skb;
->
-> -       if (!ab)
-> +       if (!ab || !ab->skb)
->                 return;
->
-> -       BUG_ON(!ab->skb);
->         skb =3D ab->skb;
->         avail =3D skb_tailroom(skb);
->         new_len =3D len<<1;
-> @@ -2117,10 +2115,9 @@ void audit_log_n_string(struct audit_buffer *ab, c=
-onst char *string,
->         unsigned char *ptr;
->         struct sk_buff *skb;
->
-> -       if (!ab)
-> +       if (!ab || !ab->skb)
->                 return;
->
-> -       BUG_ON(!ab->skb);
->         skb =3D ab->skb;
->         avail =3D skb_tailroom(skb);
->         new_len =3D slen + 3;     /* enclosing quotes + null terminator *=
-/
-> --
-> 2.55.0
->
->
+Modern mount tools (util-linux >= 2.39.1) use the new mount API
+(fsopen, fsconfig, fsmount, move_mount) instead of the legacy mount(2)
+syscall. The generic SYSCALL audit record logs the fsopen syscall but
+does not capture the filesystem name string, creating an audit gap for
+filesystem mount operations.
 
-Hi Paul,
+Add an FSOPEN auxiliary record that logs the dereferenced filesystem
+name string passed to fsopen(2).
 
-It looks good to me. I agree that it was not worth panicking the
-kernel in these cases.
-Reviewed-by: Ricardo Robaina <rrobaina@redhat.com>
+  type=SYSCALL ... : arch=x86_64 syscall=fsopen ... a1=FSOPEN_CLOEXEC
+  type=FSOPEN  ... : fs_name="tmpfs"
 
-I was taking a look at other BUG_ON instances and noticed a couple
-that might benefit from similar treatment:
+Link: https://github.com/linux-audit/audit-kernel/issues/152
+Signed-off-by: Ricardo Robaina <rrobaina@redhat.com>
+---
+ fs/fsopen.c                |  3 +++
+ include/linux/audit.h      | 10 ++++++++++
+ include/uapi/linux/audit.h |  1 +
+ kernel/auditsc.c           | 13 +++++++++++++
+ 4 files changed, 27 insertions(+)
 
-  1. In audit_add_to_parent() at kernel/audit_watch.c:375:
-     BUG_ON(!mutex_is_locked(&audit_filter_mutex));
-
-     Couldn't we use lockdep_assert_held() instead?
-
-  2. In __audit_log_bprm_fcaps() at kernel/auditsc.c:2715:
-     BUG_ON(axp->pid_count >=3D AUDIT_AUX_PIDS);
-
-     This could gracefully return an error instead of panicking.
-
-I can send patches for these if you think they're worthwhile.
-
--Ricardo
+diff --git a/fs/fsopen.c b/fs/fsopen.c
+index ae19e5136598..8b07f9d42be2 100644
+--- a/fs/fsopen.c
++++ b/fs/fsopen.c
+@@ -15,6 +15,7 @@
+ #include <linux/namei.h>
+ #include <linux/file.h>
+ #include <uapi/linux/mount.h>
++#include <linux/audit.h>
+ #include "internal.h"
+ #include "mount.h"
+ 
+@@ -150,6 +151,8 @@ SYSCALL_DEFINE2(fsopen, const char __user *, _fs_name, unsigned int, flags)
+ 	if (ret < 0)
+ 		goto err_fc;
+ 
++	audit_log_fsopen(fs_name);
++
+ 	return fscontext_create_fd(fc, flags & FSOPEN_CLOEXEC ? O_CLOEXEC : 0);
+ 
+ err_fc:
+diff --git a/include/linux/audit.h b/include/linux/audit.h
+index 45abb3722d30..077b2667180d 100644
+--- a/include/linux/audit.h
++++ b/include/linux/audit.h
+@@ -449,6 +449,7 @@ extern void __audit_tk_injoffset(struct timespec64 offset);
+ extern void __audit_ntp_log(const struct audit_ntp_data *ad);
+ extern void __audit_log_nfcfg(const char *name, u8 af, unsigned int nentries,
+ 			      enum audit_nfcfgop op, gfp_t gfp);
++extern void __audit_log_fsopen(const char *fs_name);
+ 
+ static inline void audit_ipc_obj(struct kern_ipc_perm *ipcp)
+ {
+@@ -598,6 +599,12 @@ static inline void audit_log_nfcfg(const char *name, u8 af,
+ 		__audit_log_nfcfg(name, af, nentries, op, gfp);
+ }
+ 
++static inline void audit_log_fsopen(const char *fs_name)
++{
++	if (!audit_dummy_context())
++		__audit_log_fsopen(fs_name);
++}
++
+ extern int audit_n_rules;
+ extern int audit_signals;
+ #else /* CONFIG_AUDITSYSCALL */
+@@ -730,6 +737,9 @@ static inline void audit_log_nfcfg(const char *name, u8 af,
+ 				   enum audit_nfcfgop op, gfp_t gfp)
+ { }
+ 
++static inline void audit_log_fsopen(const char *fs_name)
++{ }
++
+ #define audit_n_rules 0
+ #define audit_signals 0
+ #endif /* CONFIG_AUDITSYSCALL */
+diff --git a/include/uapi/linux/audit.h b/include/uapi/linux/audit.h
+index e8f5ce677df7..abae0524746e 100644
+--- a/include/uapi/linux/audit.h
++++ b/include/uapi/linux/audit.h
+@@ -122,6 +122,7 @@
+ #define AUDIT_OPENAT2		1337	/* Record showing openat2 how args */
+ #define AUDIT_DM_CTRL		1338	/* Device Mapper target control */
+ #define AUDIT_DM_EVENT		1339	/* Device Mapper events */
++#define AUDIT_FSOPEN		1340	/* Record showing fsopen fs_name arg */
+ 
+ #define AUDIT_AVC		1400	/* SE Linux avc denial or grant */
+ #define AUDIT_SELINUX_ERR	1401	/* Internal SE Linux Errors */
+diff --git a/kernel/auditsc.c b/kernel/auditsc.c
+index 6610e667c728..c82fd5606de5 100644
+--- a/kernel/auditsc.c
++++ b/kernel/auditsc.c
+@@ -2882,6 +2882,19 @@ void __audit_log_nfcfg(const char *name, u8 af, unsigned int nentries,
+ }
+ EXPORT_SYMBOL_GPL(__audit_log_nfcfg);
+ 
++void __audit_log_fsopen(const char *fs_name)
++{
++	struct audit_buffer *ab;
++
++	ab = audit_log_start(audit_context(), GFP_KERNEL, AUDIT_FSOPEN);
++	if (!ab)
++		return;
++
++	audit_log_format(ab, "fs_name=");
++	audit_log_untrustedstring(ab, fs_name);
++	audit_log_end(ab);
++}
++
+ static void audit_log_task(struct audit_buffer *ab)
+ {
+ 	kuid_t auid, uid;
+-- 
+2.53.0
 
