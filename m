@@ -1,169 +1,126 @@
-Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2785E47885D
-	for <audit@vger.kernel.org>; Thu,  2 Jul 2026 13:28:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.178
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782998885; cv=pass; b=beMml/wtdR8zgE7NMY0RHSHt24zCwnzGU+sIivYt45o2F59GGaqDIuddG0tyugK6CPsRKPkrVTi0ofYv19ceNEO24nE+1rHdS7UuJ3v9xdMPJ3Fpxf5nXZh+MCw1Tcs5zAJqks+PxR/n/TXi/xptY1hV4Uca1sX1GN8mSTk53Xg=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782998885; c=relaxed/simple;
-	bh=1ebbCZNQOhwtvyIatV3/diTS323Ucr9fIzyIFnkR6LE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=AxTT644q5Nl5rloeSjwF3tfF2MPiJbeLKncP9j9JsGl1/Q8YGGLaBqv8YBXjB7E/TtcTn1Zeulw/4EpVxmVIHo/1PdyXI9rBsB2iT+Gt544SdxCRsJcd6i4/bd68H8TRuNutwonrsgqJbR+CfZrp8FcGOfQvaRfG3e8oL2LjBuc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=em0dBGqF; arc=pass smtp.client-ip=209.85.210.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 975754ADD87
+	for <audit@vger.kernel.org>; Thu,  2 Jul 2026 14:04:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1783001064; cv=none; b=ZMJN5tyQVVQDD3bu7gHbHBgd/QHH+VljZhJNWTCUi+ttGAzY3NudTHzcoZ1hThrwOj1tVBHEImZ8UF1w2XE/H0ksnt2S+sUuZNQaAKgr8Pm4z1QHHZMy9AiqntndVDxjrHqUzYaKWpLiP/fKBx1fB9upNFsg6W4QlpXIPf7PUPQ=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1783001064; c=relaxed/simple;
+	bh=h7r4bj9XBmBGhZtZnRMqd0IcQyBJvh05nMqNpjkPEaM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:content-type; b=I3Jm3qsGPAJz4Wq1hhC/4+wpLXxyw+cKrONns84rLhZvSm6fXk6GWxhn6amrYrL5wM3dFfa9320xRtjGaJHnzwtu6RHh6kJJuL8/E8DC+Q1DrLiUsVKMjU22C2JNFlwqKRy8U17LuyIzJKN8bbbc7ql4cOBWjDaSE6Wd61J19sE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=KFOe4MrD; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="em0dBGqF"
-Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-845e363246aso1607423b3a.1
-        for <audit@vger.kernel.org>; Thu, 02 Jul 2026 06:28:03 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1782998883; cv=none;
-        d=google.com; s=arc-20260327;
-        b=HV9zYOMFuNCrwUggeEDzteP766MGMxld3/OuYoXYHy1SXPPtw0KfnIE9Mj1fRvH5s4
-         mrciyfUsJ8Xs+Adl9C0Do+kFEMuzJDJfKixawQ/4EfCHptJEmjywI+jTPvnXthORt3eM
-         skX8U9PKH2//ItmEqeX0MJmv+DYXv+LXM73VmBczLyyJ9wbT7PMnZpWlB5SLc5wbGPjG
-         aDjU5oqLO6eisKP/8NzP6SFw3sAbUpTngl+Vt3eW2lDGKSPMW9cbsUG+Xk8pasNulrIb
-         2ORD6FWjBmGdDLUYJRpJIgFJKrXVQLUAH/vAbH4JzuItIQubN5nP4clzkHN9jzgXryiz
-         EKvw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=NNJ2RnvoQeNfDsJ73crtioMLjPdXpQiGlVuyqIgcPxs=;
-        fh=FW495/tsNaS3rZLIZxo78Pp8lwkFWycdMLfUKJpu0+4=;
-        b=cFBbwnI+t9lXn4Tsif04Vmq0513yq34namrVGz76hsKcTFIhXra7hHMjPrT0FPbVNY
-         Wcl+XKHr+ru7TmkNj886JA+A5uftTRUeVUs4Sytl1HbEVhvoa5X2W3QNTh73+4mma+yE
-         SGqGRCvyiozVviQgZBCoSnA2DNIXefkUe6cp/Ug32C7+1FjfBy4YwD1xV1JNHtaFl/19
-         6TE1+H7Y0sNJm7ZhZ8ZMuPlt4GzwTPBINqIQLkhd/y8y19ZKN7yPfazrQVt5fxjqnFdU
-         EBGrGgJUfNFB/3eXm8NXznc0FbQUKX7hclW5C/ZkH/kS8ZEdJCNDKVxPhNABaRFfwN56
-         7Utg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1782998883; x=1783603683; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NNJ2RnvoQeNfDsJ73crtioMLjPdXpQiGlVuyqIgcPxs=;
-        b=em0dBGqFd6hBGfLP7tko52TDyqsGXVmxjqsKm27/6TsLffVxfh3N55qEawJFeGIAjU
-         vDvNj9Wc5cJrARIVcO3iM8zD1jknNYP7/vWh3VI+t66F2U9xa3Djr9tdKUydKaOko2vH
-         0kMOhvi4bLihFQFkjVSuQMilyUfiXA93hZz+iLXIZNJjdERIFYgXZ9JE2VFYU80d40RK
-         uGyPhwO5mCYmykFcjsr28bYWMgcWzkL3Prq0FMzO4YSyTK19J7Q2lmHZkbrQzkjl5DYM
-         jx9uJiKQ4aDVX2HEpsLMXvzv9ln9GE2qyh6SUSfcpBpmg9aOBoQR3C8NRvIhiMAFy+Cc
-         RYCw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782998883; x=1783603683;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=NNJ2RnvoQeNfDsJ73crtioMLjPdXpQiGlVuyqIgcPxs=;
-        b=UTOELWqSiHAVYF64MUPCrOqOeZOG8kK4HOE7iQo9GfysNshcGFpADYkkq9A6hGAIvx
-         ASZqxVRGSPrtpPApfqsDuTsdp/l0MBZZ3QQFG9+So+nsJ95SBEbV1W6foW/1y7xS4wu0
-         FjEDgbLZoUMlH8cPcfppKnpwHz4A5XpQ3jiK85ZBIHN6UUd50Y5CYQfMCY4JdU55sOCP
-         48CTt5WgMUqEyCF5r01syCj88IOQWm9yqUn59dduolsETTo+Rp0DAQtzmZaNoXL7DPRU
-         gWsAGcpWRX+SYXqSX1AJmwo22zOI96mvq1K+gJW/GkmEWaJk7hkx3b41re2xpaMc70/4
-         Z5Bw==
-X-Forwarded-Encrypted: i=1; AHgh+RqWyx/n9EjuNrlOGh6W6Jla6b8N41Qj+lG0XGV9Mx7mxuvCozBekDN3Q0jYtYq/PerN4iPbLQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx1V45P3yPRme57swGcF+OUNF2H53RtGMpkhHh43MujVAsX8RFS
-	2y1luI9cqMcYnPLhZgRcelJNXFjmK1jhgn2afnjQL+H7CueBFWlTZUn9X+h1cdM4Nxsg98LNEaJ
-	pO17F54kFe94Aeq9RmcqdGaYO4WRE13XFxr0oZdcW
-X-Gm-Gg: AfdE7cnPoCZI79NEvUy4N7oSv9Q67B6t1y5juPeP1lvJwcA3xJcPEjMJ6581qp4z5/b
-	4cuhLvsYugyOoatJkw37Yz8TMHiq4CKKzqvf1Z21cw+vsvx/DH0peFZgY/wgj74mcOXS5TFpo5r
-	ikpQhgQGhEWC3TwS97icUF6q3KfbEw/ROBFRfzQ82luu5AnItrZMJhdM/X24ZIsG/r+pobGnIz1
-	WO8goE5lDSNPhhA6NWlhkXJZNe8WRHddD5DGfnSCmT3LAhENZTEM0yO/BO/z1cydceMiL3m
-X-Received: by 2002:aa7:8883:0:b0:846:bc60:5bf7 with SMTP id
- d2e1a72fcca58-847c0675300mr6113283b3a.6.1782998883309; Thu, 02 Jul 2026
- 06:28:03 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="KFOe4MrD"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1783001062;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=aNWsbqtUS5+uQXhPAE+XTy+9YZezBuU727X0UpkOd6k=;
+	b=KFOe4MrDD69j8gmFTspMfBX/mTJ6ka41zMbPSrRsT8xvhusO86ibBNy9ryqY6ubiD344vz
+	9+9bxUTJDDvKIQq4gLM/W5wn3oUbPBkTzNhRNU3mDGLYfvZ5AjTqGMiOYR5MjG/+9fkHYk
+	6kdSB+eaXDJG+E7H0bE8S122e+62oTc=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-349-JFwXBTTxMt-NRHs9gCpKPQ-1; Thu,
+ 02 Jul 2026 10:04:20 -0400
+X-MC-Unique: JFwXBTTxMt-NRHs9gCpKPQ-1
+X-Mimecast-MFC-AGG-ID: JFwXBTTxMt-NRHs9gCpKPQ_1783001060
+Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id DFA641944B2F;
+	Thu,  2 Jul 2026 14:04:19 +0000 (UTC)
+Received: from wsxc.redhat.com (unknown [10.96.134.69])
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 1C7A0180056E;
+	Thu,  2 Jul 2026 14:04:16 +0000 (UTC)
+From: Ricardo Robaina <rrobaina@redhat.com>
+To: audit@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: paul@paul-moore.com,
+	eparis@redhat.com,
+	Ricardo Robaina <rrobaina@redhat.com>,
+	Richard Guy Briggs <rgb@redhat.com>
+Subject: [PATCH v3] audit: fix potential integer overflow in audit_log_n_hex()
+Date: Thu,  2 Jul 2026 11:04:11 -0300
+Message-ID: <20260702140411.1021373-1-rrobaina@redhat.com>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <261b1be5b8dc526b83d73e8281e682a73536ea28.1773155031.git.chleroy@kernel.org>
- <CAHC9VhTyOuuPs1uovodM9M_8zZeJnVXs9xrWSdPhZcjXUb=mvA@mail.gmail.com>
- <fce0a701-ee58-4cb2-b34b-8aec26aaab5d@linux.ibm.com> <09e72f42-e180-4e2b-b379-92b755792a2c@linux.ibm.com>
- <CAHC9VhTzuO=RFtrUUuZyieVdkrM5H4ZCb1=PoL-oEEgiw38azg@mail.gmail.com>
- <ea6e629f-dac7-45dd-bb18-5cd6361fe6c4@linux.ibm.com> <9c53ae3f-ccfd-4e8f-ac4f-0038e9b97a7e@linux.ibm.com>
- <b1d6e9a5-34ce-42ca-906a-d4237e18be25@kernel.org> <50507bb3-4229-4815-90e8-c01eaad058fc@linux.ibm.com>
- <ba00c7a8-b4d5-4d80-859b-d75e9c91ebdb@kernel.org> <203f6e6d-2ce8-4e47-99a6-f4af745e0aaa@linux.ibm.com>
-In-Reply-To: <203f6e6d-2ce8-4e47-99a6-f4af745e0aaa@linux.ibm.com>
-From: Paul Moore <paul@paul-moore.com>
-Date: Thu, 2 Jul 2026 09:27:49 -0400
-X-Gm-Features: AVVi8Ce7kHZ6K-SM1XnzyYNf6UB60lCb0qSg6t5Q-Zh2t2hWQVqxIh32cuDs3y0
-Message-ID: <CAHC9VhQvoK4uYP0NBnd4FGbXCQkDka4nHqdz9kAn2bGnm4qVHQ@mail.gmail.com>
-Subject: Re: [PATCH v3] powerpc/audit: Convert powerpc to AUDIT_ARCH_COMPAT_GENERIC
-To: Venkat Rao Bagalkote <venkat88@linux.ibm.com>, rrobaina@redhat.com
-Cc: "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>, Madhavan Srinivasan <maddy@linux.ibm.com>, 
-	Harsh Prateek Bora <harshpb@linux.ibm.com>, Michael Ellerman <mpe@ellerman.id.au>, 
-	Nicholas Piggin <npiggin@gmail.com>, Eric Paris <eparis@redhat.com>, linux-kernel@vger.kernel.org, 
-	linuxppc-dev@lists.ozlabs.org, audit@vger.kernel.org, 
-	Thomas Weissschuh <thomas.weissschuh@linutronix.de>, =?UTF-8?Q?C=C3=A9dric_Le_Goater?= <clg@kaod.org>, 
-	ritesh.list@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
+X-Mimecast-MFC-PROC-ID: w27JhgOQ08TOq6EsDaGiMOfXSvOqsUPtOOLEf6s598s_1783001060
+X-Mimecast-Originator: redhat.com
+Content-Transfer-Encoding: 8bit
+content-type: text/plain; charset="US-ASCII"; x-default=true
 
-On Thu, Jul 2, 2026 at 8:50=E2=80=AFAM Venkat Rao Bagalkote
-<venkat88@linux.ibm.com> wrote:
->
-> Current remaining issue:
->
-> 1. amcast_joinpart
-> ------------------
-> Still fails due to a missing Perl dependency:
->
->      Can't locate Socket/Netlink.pm in @INC
->
-> I searched the configured repositories and could not find a package
-> providing Socket::Netlink / Socket/Netlink.pm on this EL10 ppc64le system=
-.
->
-> Latest run summary:
->
-> amcast_joinpart/test ................. Can't locate Socket/Netlink.pm in
-> @INC (you may need to install the Socket::Netlink module) (@INC entries
-> checked: /usr/local/lib64/perl5/5.40 /usr/local/share/perl5/5.40
-> /usr/lib64/perl5/vendor_perl /usr/share/perl5/vendor_perl
-> /usr/lib64/perl5 /usr/share/perl5 .) at amcast_joinpart/test line 10.
-> BEGIN failed--compilation aborted at amcast_joinpart/test line 10.
-> amcast_joinpart/test ................. Dubious, test returned 2 (wstat
-> 512, 0x200)
-> Failed 7/7 subtests
-> backlog_wait_time_actual_reset/test .. ok
-> bpf/test ............................. ok
-> exec_execve/test ..................... ok
-> exec_name/test ....................... ok
-> fanotify/test ........................ ok
-> field_compare/test ................... ok
-> file_create/test ..................... ok
-> file_delete/test ..................... ok
-> file_permission/test ................. ok
-> file_rename/test ..................... ok
-> filter_exclude/test .................. ok
-> filter_exit/test ..................... ok
-> filter_saddr_fam/test ................ ok
-> filter_sessionid/test ................ ok
-> io_uring/test ........................ ok
-> login_tty/test ....................... ok
-> lost_reset/test ...................... ok
-> netfilter_pkt/test ................... ok
-> signal/test .......................... ok
-> syscalls_file/test ................... ok
-> syscall_module/test .................. ok
-> time_change/test ..................... ok
-> user_msg/test ........................ ok
->
-> All tests now pass except amcast_joinpart, which is blocked by the
-> missing Socket::Netlink Perl module.
->
-> Please let me know if there is a recommended package source for
-> Socket::Netlink on EL10 ppc64le.
+The function calculates new_len as len << 1 for hex encoding. This
+has two overflow risks: the shift itself can overflow when len is
+large, and the result can be truncated when assigned to new_len
+(declared as int) from the size_t calculation.
 
-Thanks for following up on this Venkat.
+Fix by using check_shl_overflow() to catch shift overflow and
+changing new_len and loop counter i to size_t to prevent truncation.
 
-I'm adding your colleague Ricardo from the RH side of the house.
-Ricardo is very familiar with audit and should be able to help you
-with missing RHEL packages.
+Fixes: 168b7173959f ("AUDIT: Clean up logging of untrusted strings")
+Reviewed-by: Richard Guy Briggs <rgb@redhat.com>
+Signed-off-by: Ricardo Robaina <rrobaina@redhat.com>
+---
+Changes in v2:
+- Use check_shl_overflow() instead of manual overflow check.
+Changes in v3:
+- Log "?" before returning when overflow detected.
 
---
-paul-moore.com
+ kernel/audit.c | 12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
+
+diff --git a/kernel/audit.c b/kernel/audit.c
+index e1d489bc2dff..52eb3b511bad 100644
+--- a/kernel/audit.c
++++ b/kernel/audit.c
+@@ -62,6 +62,7 @@
+ #include <net/ip.h>
+ #include <net/ipv6.h>
+ #include <linux/sctp.h>
++#include <linux/overflow.h>
+ 
+ #include "audit.h"
+ 
+@@ -2076,7 +2077,8 @@ void audit_log_format(struct audit_buffer *ab, const char *fmt, ...)
+ void audit_log_n_hex(struct audit_buffer *ab, const unsigned char *buf,
+ 		size_t len)
+ {
+-	int i, avail, new_len;
++	int avail;
++	size_t i, new_len;
+ 	unsigned char *ptr;
+ 	struct sk_buff *skb;
+ 
+@@ -2084,9 +2086,15 @@ void audit_log_n_hex(struct audit_buffer *ab, const unsigned char *buf,
+ 		return;
+ 
+ 	BUG_ON(!ab->skb);
++
+ 	skb = ab->skb;
+ 	avail = skb_tailroom(skb);
+-	new_len = len<<1;
++
++	if (check_shl_overflow(len, 1, &new_len)) {
++		audit_log_format(ab, "?");
++		return;
++	}
++
+ 	if (new_len >= avail) {
+ 		/* Round the buffer request up to the next multiple */
+ 		new_len = AUDIT_BUFSIZ*(((new_len-avail)/AUDIT_BUFSIZ) + 1);
+-- 
+2.53.0
+
