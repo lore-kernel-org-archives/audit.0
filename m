@@ -1,186 +1,319 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 811053D1AA0
-	for <audit@vger.kernel.org>; Fri,  3 Jul 2026 12:26:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AB1D3F54C7;
+	Mon,  6 Jul 2026 08:29:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783081598; cv=none; b=px70WhkPUEQ/ObkgpPazvrIOCPIgxPlJX5Oc7Wi64AGcgxw9dg6bOuaRSLtbUetL9nu2IWDB97LdS35XcoOloRjUkXuP830apOLPO+UvIE9OA6X2tKpjSwpvLZfkac/Ht2epoawZmZ6vcdvnnmSk3j1INTH/xpwfBnvVvJ38STg=
+	t=1783326610; cv=none; b=cdN1QW9YHapnBzVPLz0v65+sq7iYt1r8SlFtzBH4XlzQO2tjPL/2U7dvLjiJYJsH1jP2dcBJ8fEBNiPvSj8WaWuonM+tcdIYiXpIQpiNk+rTa19wkr3lUUV5RJp4Qhnr9kuGjG9u9BqiA26NKUVUUXrKLNWLjkH9Ox7EhaFddVU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783081598; c=relaxed/simple;
-	bh=KuXKXW+/ESq7QQvhE4aqDlbngtzI88Dcz0VFbFiOw4I=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:content-type; b=dsXNPMfgi0hgykAY1D3cWADneNewgE0fue2dRkiqJdUoUgsRVQUpxkPloavibhVAQ9OU2Ir5Ze2gUQGImeDg2aGujJ59QuSu8bHLnatryS0ek3fSJ7yO+HyjwVc9dmbx+bA/qcRWwLszLcqAKGsqjzSdP4ogKfG9eHItXvAoL6g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=AN+lbV8Y; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1783326610; c=relaxed/simple;
+	bh=vJm1UjsfgvjoZXU8s6uqXWtFAUWv0DeG+8aDizKnjf0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=TC6uCVreiddc59udDOLz98dYyadCnjIDXNXBXwTYZiRY//qydScRA2vGGuPFWWUuwTE5P3aqzIR+1naERK2y24IQ1Yvo91V/blgI80DIuxOJNeIAWMw3mM/eqGUpKPK/ZSRua8jZA305kYPwf4zPnGe1R5rUUwBsACGGLxEjZoU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=cmQmgvwJ; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="AN+lbV8Y"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1783081596;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=5hqGqMq8u2GihOWhvtoDCphdtM6GWjTzbBwzRoiZQ8w=;
-	b=AN+lbV8YuFmEtg8cdRt35x9+4RRXNYhvBc3Bs8ClEC6GhXqPCD4rWUjw4DHeu6c3Z6lpJa
-	rLkGw/ziHCcvDZnAwOfHAYgDdKYMi9ZtyCM40HDqMkS30JMlYYAghVAQw9RCS8OQZpjoL+
-	BM7WJVSwjqyI2Jjnrj2FoWIFg0yDSDQ=
-Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-107-C2Lu73WUN2GRO-7A2rsLJA-1; Fri,
- 03 Jul 2026 08:26:31 -0400
-X-MC-Unique: C2Lu73WUN2GRO-7A2rsLJA-1
-X-Mimecast-MFC-AGG-ID: C2Lu73WUN2GRO-7A2rsLJA_1783081590
-Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 989E2196C434;
-	Fri,  3 Jul 2026 12:26:29 +0000 (UTC)
-Received: from wsxc.redhat.com (unknown [10.22.64.112])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 1BAE630030D6;
-	Fri,  3 Jul 2026 12:26:25 +0000 (UTC)
-From: Ricardo Robaina <rrobaina@redhat.com>
-To: audit@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: paul@paul-moore.com,
-	eparis@redhat.com,
-	viro@zeniv.linux.org.uk,
-	brauner@kernel.org,
-	jack@suse.cz,
-	Ricardo Robaina <rrobaina@redhat.com>
-Subject: [PATCH v2] audit: add FSOPEN record to log filesystem name
-Date: Fri,  3 Jul 2026 09:25:49 -0300
-Message-ID: <20260703122548.1623981-2-rrobaina@redhat.com>
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="cmQmgvwJ"
+Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 665MJ9SX2252059;
+	Mon, 6 Jul 2026 08:29:29 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=ZmDot0
+	cKwa4uXNqmgKe29o/ZI4dn5aWBu5lkDCK+JWs=; b=cmQmgvwJQL4sV02y8lRlbt
+	jN5dQycU7aNNteVL+tUIgwgQdXbArasb2yy//UMvDg43qTqYT5gt+3NAY/KU5uHb
+	usgv86vCt3YXqHmXRH2ua0QHWDiXGeY5MxbAbNgC0eXcjCaIILsMpu6fPLwksBc9
+	8nz7erjfqXrXGarXcam8wzAeXPkHcOvsteB+wOsB5WicOh1yT42XipfGwxDOr1CW
+	Tg8KI7bxDBmLDNbYRU4Hs1jAHgFyjmnIOh+MnWX4gRnWJcUBEP5PxmhBrZ4yWiNT
+	hktut6pxognSZd2kT1UW9lL3sQrL0ogZ2kpO3+ZWWWWYGy7YjRRavllKf/N1BKhw
+	==
+Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4f6qkn8k96-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 06 Jul 2026 08:29:28 +0000 (GMT)
+Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma11.dal12v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 6668JdQg016678;
+	Mon, 6 Jul 2026 08:29:27 GMT
+Received: from smtprelay03.wdc07v.mail.ibm.com ([172.16.1.70])
+	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 4f7f6xvdnc-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 06 Jul 2026 08:29:27 +0000 (GMT)
+Received: from smtpav01.wdc07v.mail.ibm.com (smtpav01.wdc07v.mail.ibm.com [10.39.53.228])
+	by smtprelay03.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 6668SqON42205682
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 6 Jul 2026 08:28:52 GMT
+Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 014AA58055;
+	Mon,  6 Jul 2026 08:29:26 +0000 (GMT)
+Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 500E15804B;
+	Mon,  6 Jul 2026 08:29:21 +0000 (GMT)
+Received: from [9.61.244.93] (unknown [9.61.244.93])
+	by smtpav01.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+	Mon,  6 Jul 2026 08:29:20 +0000 (GMT)
+Message-ID: <8a568842-0a62-41d1-8e7b-cf2bcce6a71e@linux.ibm.com>
+Date: Mon, 6 Jul 2026 13:59:19 +0530
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
-X-Mimecast-MFC-PROC-ID: iw_leO6ZiFsuLeHct0gzHBCTGsXVtbJIlpKY5VITr3s_1783081590
-X-Mimecast-Originator: redhat.com
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3] powerpc/audit: Convert powerpc to
+ AUDIT_ARCH_COMPAT_GENERIC
+Content-Language: en-GB
+To: Ricardo Robaina <rrobaina@redhat.com>, Paul Moore <paul@paul-moore.com>,
+        "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
+        Madhavan Srinivasan <maddy@linux.ibm.com>
+Cc: "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
+        Madhavan Srinivasan <maddy@linux.ibm.com>,
+        Harsh Prateek Bora <harshpb@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>, Eric Paris <eparis@redhat.com>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        audit@vger.kernel.org,
+        Thomas Weissschuh <thomas.weissschuh@linutronix.de>,
+        =?UTF-8?Q?C=C3=A9dric_Le_Goater?= <clg@kaod.org>,
+        ritesh.list@gmail.com
+References: <261b1be5b8dc526b83d73e8281e682a73536ea28.1773155031.git.chleroy@kernel.org>
+ <CAHC9VhTyOuuPs1uovodM9M_8zZeJnVXs9xrWSdPhZcjXUb=mvA@mail.gmail.com>
+ <fce0a701-ee58-4cb2-b34b-8aec26aaab5d@linux.ibm.com>
+ <09e72f42-e180-4e2b-b379-92b755792a2c@linux.ibm.com>
+ <CAHC9VhTzuO=RFtrUUuZyieVdkrM5H4ZCb1=PoL-oEEgiw38azg@mail.gmail.com>
+ <ea6e629f-dac7-45dd-bb18-5cd6361fe6c4@linux.ibm.com>
+ <9c53ae3f-ccfd-4e8f-ac4f-0038e9b97a7e@linux.ibm.com>
+ <b1d6e9a5-34ce-42ca-906a-d4237e18be25@kernel.org>
+ <50507bb3-4229-4815-90e8-c01eaad058fc@linux.ibm.com>
+ <ba00c7a8-b4d5-4d80-859b-d75e9c91ebdb@kernel.org>
+ <203f6e6d-2ce8-4e47-99a6-f4af745e0aaa@linux.ibm.com>
+ <CAHC9VhQvoK4uYP0NBnd4FGbXCQkDka4nHqdz9kAn2bGnm4qVHQ@mail.gmail.com>
+ <CAABTaaCQCBuR9Ny6zBHNK=gy3Cd0WGj-f9qgzwuyjWD_i=v_dQ@mail.gmail.com>
+ <CAABTaaC_vQTM8B0wLqfHuv-S9JDzXeuDeLd0Sh3M21pO+=Zg2Q@mail.gmail.com>
+From: Venkat Rao Bagalkote <venkat88@linux.ibm.com>
+In-Reply-To: <CAABTaaC_vQTM8B0wLqfHuv-S9JDzXeuDeLd0Sh3M21pO+=Zg2Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-content-type: text/plain; charset="US-ASCII"; x-default=true
+X-TM-AS-GCONF: 00
+X-Proofpoint-Reinject: loops=2 maxloops=12
+X-Authority-Analysis: v=2.4 cv=Q/XiJY2a c=1 sm=1 tr=0 ts=6a4b6769 cx=c_pps
+ a=aDMHemPKRhS1OARIsFnwRA==:117 a=aDMHemPKRhS1OARIsFnwRA==:17
+ a=IkcTkHD0fZMA:10 a=RAioF0-LDSMA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=RnoormkPH1_aCDwRdu11:22 a=Y2IxJ9c9Rs8Kov3niI8_:22 a=eNcD7ojaAAAA:8
+ a=wyjpycHzAAAA:8 a=20KFwNOVAAAA:8 a=xVhDTqbCAAAA:8 a=VnNF1IyMAAAA:8
+ a=PlrRbfSCXYS7fjFACv8A:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+ a=rRYMMicksRHQPzyJ67jW:22 a=ROKTiUA5NBresHysc1Cf:22 a=GrmWmAYt4dzCMttCBZOh:22
+X-Proofpoint-GUID: 0H5iLqL_28n9RdSSg5OChJFY7Mb9h3-j
+X-Proofpoint-ORIG-GUID: vNFlc0bO4n0CClGQq5cHj5xQSK-ekaYM
+X-Proofpoint-Spam-Info: AW1haW4tMjYwNzA2MDA4MyBTYWx0ZWRfX9VBi9dAymKth
+ zaCa/nxklqL65hvt2qYqBYqK2UutXOUyD2PzeUccLM0W74Y7e2NlHxY+h3PVf7GM0mVHLJGHoxu
+ o1nzID5bEyNekeexZ3+J8TkkiHsykY8=
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNzA2MDA4MyBTYWx0ZWRfX9anzZgysbZNB
+ Wua/YK+RTpZBma8eB9bxE8IjOkQ/AW2Q6SMyZxMmrPFGum2nPOHR9Sawq1VVCjRCgpdmdSY0Wy3
+ jmCYVhxtPRLF9lADSyaTRzg58T4MvZF8R1iRBj+unkFC97tSh+LYbaGDcbC+Kz4JXzoPi5js+Bj
+ rgK06Ua0jQ3UaHJJcmx57rBHXensvpJ8wLLLZTmEtHGfEfzjRVAQuWzTkI8ChU6EFXfuapDzjXL
+ QiQV0svaajQ6Cp+HCOuyprmn35LkaCKyxiot4TSoam7MvBW0fOrUtFhN+XSGS4nDtgYZsMU0VFK
+ riBtZDHomgrn/F3ki/QwdYE5MLl0ry2RfhdhfDENwbiu43RFCWHpGRon1t+tMNXfJrf03rZI5dx
+ LNy1zKhoD4CTAmkAaT946uc9/yRmGeKVJS11eS72OZm4QW7EeoXnT31qcIs/eOBal7AkCNnVwrZ
+ NPi6x+aQV3k/RtW+Fvg==
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.125,FMLib:17.12.100.49
+ definitions=2026-07-05_02,2026-07-03_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ adultscore=0 impostorscore=0 spamscore=0 phishscore=0 priorityscore=1501
+ bulkscore=0 clxscore=1011 lowpriorityscore=0 suspectscore=0 malwarescore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2606150000 definitions=main-2607060083
 
-Modern mount tools (util-linux >= 2.39.1) use the new mount API
-(fsopen, fsconfig, fsmount, move_mount) instead of the legacy mount(2)
-syscall. The generic SYSCALL audit record logs the fsopen syscall but
-does not capture the filesystem name string, creating an audit gap for
-filesystem mount operations.
 
-Add an FSOPEN auxiliary record that logs the dereferenced filesystem
-name string passed to fsopen(2).
+On 03/07/26 4:19 am, Ricardo Robaina wrote:
+> On Thu, Jul 2, 2026 at 3:19 PM Ricardo Robaina <rrobaina@redhat.com> wrote:
+>> On Thu, Jul 2, 2026 at 10:28 AM Paul Moore <paul@paul-moore.com> wrote:
+>>> On Thu, Jul 2, 2026 at 8:50 AM Venkat Rao Bagalkote
+>>> <venkat88@linux.ibm.com> wrote:
+>>>> Current remaining issue:
+>>>>
+>>>> 1. amcast_joinpart
+>>>> ------------------
+>>>> Still fails due to a missing Perl dependency:
+>>>>
+>>>>       Can't locate Socket/Netlink.pm in @INC
+>>>>
+>>>> I searched the configured repositories and could not find a package
+>>>> providing Socket::Netlink / Socket/Netlink.pm on this EL10 ppc64le system.
+>>>>
+>>>> Latest run summary:
+>>>>
+>>>> amcast_joinpart/test ................. Can't locate Socket/Netlink.pm in
+>>>> @INC (you may need to install the Socket::Netlink module) (@INC entries
+>>>> checked: /usr/local/lib64/perl5/5.40 /usr/local/share/perl5/5.40
+>>>> /usr/lib64/perl5/vendor_perl /usr/share/perl5/vendor_perl
+>>>> /usr/lib64/perl5 /usr/share/perl5 .) at amcast_joinpart/test line 10.
+>>>> BEGIN failed--compilation aborted at amcast_joinpart/test line 10.
+>>>> amcast_joinpart/test ................. Dubious, test returned 2 (wstat
+>>>> 512, 0x200)
+>>>> Failed 7/7 subtests
+>>>> backlog_wait_time_actual_reset/test .. ok
+>>>> bpf/test ............................. ok
+>>>> exec_execve/test ..................... ok
+>>>> exec_name/test ....................... ok
+>>>> fanotify/test ........................ ok
+>>>> field_compare/test ................... ok
+>>>> file_create/test ..................... ok
+>>>> file_delete/test ..................... ok
+>>>> file_permission/test ................. ok
+>>>> file_rename/test ..................... ok
+>>>> filter_exclude/test .................. ok
+>>>> filter_exit/test ..................... ok
+>>>> filter_saddr_fam/test ................ ok
+>>>> filter_sessionid/test ................ ok
+>>>> io_uring/test ........................ ok
+>>>> login_tty/test ....................... ok
+>>>> lost_reset/test ...................... ok
+>>>> netfilter_pkt/test ................... ok
+>>>> signal/test .......................... ok
+>>>> syscalls_file/test ................... ok
+>>>> syscall_module/test .................. ok
+>>>> time_change/test ..................... ok
+>>>> user_msg/test ........................ ok
+>>>>
+>>>> All tests now pass except amcast_joinpart, which is blocked by the
+>>>> missing Socket::Netlink Perl module.
+>>>>
+>>>> Please let me know if there is a recommended package source for
+>>>> Socket::Netlink on EL10 ppc64le.
+>>> Thanks for following up on this Venkat.
+>>>
+>>> I'm adding your colleague Ricardo from the RH side of the house.
+>>> Ricardo is very familiar with audit and should be able to help you
+>>> with missing RHEL packages.
+>> Thanks for looping me in,  Paul!
+>>
+>> Venkat, unfortunately, perl-Socket-Netlink is not packaged for RHEL-10
+>> ppc64le. An alternative is to use CPAN[1] to install the
+>> Socket::Netlink Perl module.
+>>
+>>   # dnf install cpan
+>>   # cpan App::cpanminus
+>>   # cpanm Socket::Netlink
+>>
+>> I'll reserve a ppc64le machine and run the tests locally as well. I'll
+>> share the results shortly.
+>>
+>> [1] https://www.cpan.org/modules/INSTALL.html
+>>
+Thanks for the RPM's Ricardo.
 
-  type=SYSCALL ... : arch=x86_64 syscall=fsopen ... a1=FSOPEN_CLOEXEC
-  type=FSOPEN  ... : fs_name="tmpfs"
+I installed the missing dependencies (netcat, iptables, ip6tables) and 
+rebuilt the kernel with arp_tables available as a module. I also 
+installed Socket::Netlink using:
 
-Link: https://github.com/linux-audit/audit-kernel/issues/152
-Signed-off-by: Ricardo Robaina <rrobaina@redhat.com>
----
-Changes in v2:
-- Better placement of audit_log_fsopen() call to avoid UAF.
+     cpanm --mirror https://cpan.metacpan.org --mirror-only Socket::Netlink
 
- fs/fsopen.c                |  3 +++
- include/linux/audit.h      | 10 ++++++++++
- include/uapi/linux/audit.h |  1 +
- kernel/auditsc.c           | 13 +++++++++++++
- 4 files changed, 27 insertions(+)
+After these changes, I reran audit-testsuite and all tests are now passing:
 
-diff --git a/fs/fsopen.c b/fs/fsopen.c
-index ae19e5136598..70024870fefa 100644
---- a/fs/fsopen.c
-+++ b/fs/fsopen.c
-@@ -15,6 +15,7 @@
- #include <linux/namei.h>
- #include <linux/file.h>
- #include <uapi/linux/mount.h>
-+#include <linux/audit.h>
- #include "internal.h"
- #include "mount.h"
- 
-@@ -134,6 +135,8 @@ SYSCALL_DEFINE2(fsopen, const char __user *, _fs_name, unsigned int, flags)
- 	if (IS_ERR(fs_name))
- 		return PTR_ERR(fs_name);
- 
-+	audit_log_fsopen(fs_name);
-+
- 	fs_type = get_fs_type(fs_name);
- 	kfree(fs_name);
- 	if (!fs_type)
-diff --git a/include/linux/audit.h b/include/linux/audit.h
-index 45abb3722d30..077b2667180d 100644
---- a/include/linux/audit.h
-+++ b/include/linux/audit.h
-@@ -449,6 +449,7 @@ extern void __audit_tk_injoffset(struct timespec64 offset);
- extern void __audit_ntp_log(const struct audit_ntp_data *ad);
- extern void __audit_log_nfcfg(const char *name, u8 af, unsigned int nentries,
- 			      enum audit_nfcfgop op, gfp_t gfp);
-+extern void __audit_log_fsopen(const char *fs_name);
- 
- static inline void audit_ipc_obj(struct kern_ipc_perm *ipcp)
- {
-@@ -598,6 +599,12 @@ static inline void audit_log_nfcfg(const char *name, u8 af,
- 		__audit_log_nfcfg(name, af, nentries, op, gfp);
- }
- 
-+static inline void audit_log_fsopen(const char *fs_name)
-+{
-+	if (!audit_dummy_context())
-+		__audit_log_fsopen(fs_name);
-+}
-+
- extern int audit_n_rules;
- extern int audit_signals;
- #else /* CONFIG_AUDITSYSCALL */
-@@ -730,6 +737,9 @@ static inline void audit_log_nfcfg(const char *name, u8 af,
- 				   enum audit_nfcfgop op, gfp_t gfp)
- { }
- 
-+static inline void audit_log_fsopen(const char *fs_name)
-+{ }
-+
- #define audit_n_rules 0
- #define audit_signals 0
- #endif /* CONFIG_AUDITSYSCALL */
-diff --git a/include/uapi/linux/audit.h b/include/uapi/linux/audit.h
-index e8f5ce677df7..abae0524746e 100644
---- a/include/uapi/linux/audit.h
-+++ b/include/uapi/linux/audit.h
-@@ -122,6 +122,7 @@
- #define AUDIT_OPENAT2		1337	/* Record showing openat2 how args */
- #define AUDIT_DM_CTRL		1338	/* Device Mapper target control */
- #define AUDIT_DM_EVENT		1339	/* Device Mapper events */
-+#define AUDIT_FSOPEN		1340	/* Record showing fsopen fs_name arg */
- 
- #define AUDIT_AVC		1400	/* SE Linux avc denial or grant */
- #define AUDIT_SELINUX_ERR	1401	/* Internal SE Linux Errors */
-diff --git a/kernel/auditsc.c b/kernel/auditsc.c
-index 6610e667c728..c82fd5606de5 100644
---- a/kernel/auditsc.c
-+++ b/kernel/auditsc.c
-@@ -2882,6 +2882,19 @@ void __audit_log_nfcfg(const char *name, u8 af, unsigned int nentries,
- }
- EXPORT_SYMBOL_GPL(__audit_log_nfcfg);
- 
-+void __audit_log_fsopen(const char *fs_name)
-+{
-+	struct audit_buffer *ab;
-+
-+	ab = audit_log_start(audit_context(), GFP_KERNEL, AUDIT_FSOPEN);
-+	if (!ab)
-+		return;
-+
-+	audit_log_format(ab, "fs_name=");
-+	audit_log_untrustedstring(ab, fs_name);
-+	audit_log_end(ab);
-+}
-+
- static void audit_log_task(struct audit_buffer *ab)
- {
- 	kuid_t auid, uid;
--- 
-2.53.0
+     Files=24, Tests=279
 
+     Result: PASS
+
+
+amcast_joinpart/test ................. ok
+backlog_wait_time_actual_reset/test .. ok
+bpf/test ............................. ok
+exec_execve/test ..................... ok
+exec_name/test ....................... ok
+fanotify/test ........................ ok
+field_compare/test ................... ok
+file_create/test ..................... ok
+file_delete/test ..................... ok
+file_permission/test ................. ok
+file_rename/test ..................... ok
+filter_exclude/test .................. ok
+filter_exit/test ..................... ok
+filter_saddr_fam/test ................ ok
+filter_sessionid/test ................ ok
+io_uring/test ........................ ok
+login_tty/test ....................... ok
+lost_reset/test ...................... ok
+netfilter_pkt/test ................... ok
+signal/test .......................... ok
+syscalls_file/test ................... ok
+syscall_module/test .................. ok
+time_change/test ..................... ok
+user_msg/test ........................ ok
+
+
+Paul/Christophe/Maddy,
+
+Hope we are good now. Please let me know, if anything else needs to be done.
+
+
+Regards,
+
+Venkat.
+
+>>> --
+>>> paul-moore.com
+>>>
+> Hello everyone,
+>
+> I built an RHEL-10 kernel with the patch applied and verified that
+> audit-testsuite passes successfully on a ppc64le machine. Please find
+> the logs below:
+>
+> Tested-by: Ricardo Robaina <rrobaina@redhat.com>
+>
+> ---
+> # uname -m
+> ppc64le
+>
+> # uname -r
+> 6.12.0-245.test.el10.ppc64le
+>
+> # make test
+> ...
+> chmod +x */test
+> Running as   user    root
+>          with context unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023
+>          on   system  RHEL10
+>
+> amcast_joinpart/test ................. ok
+> backlog_wait_time_actual_reset/test .. ok
+> bpf/test ............................. ok
+> coredump/test ........................ ok
+> exec_execve/test ..................... ok
+> exec_name/test ....................... ok
+> fanotify/test ........................ ok
+> field_compare/test ................... ok
+> file_create/test ..................... ok
+> file_delete/test ..................... ok
+> file_permission/test ................. ok
+> file_rename/test ..................... ok
+> filter_device/test ................... ok
+> filter_exclude/test .................. ok
+> filter_exit/test ..................... ok
+> filter_inode/test .................... ok
+> filter_saddr_fam/test ................ ok
+> filter_sessionid/test ................ ok
+> io_uring/test ........................ ok
+> login_tty/test ....................... ok
+> lost_reset/test ...................... ok
+> netfilter_pkt/test ................... ok
+> signal/test .......................... ok
+> syscalls_file/test ................... ok
+> syscall_module/test .................. ok
+> time_change/test ..................... ok
+> user_msg/test ........................ ok
+> All tests successful.
+> Files=27, Tests=300, 252 wallclock secs ( 0.12 usr  0.01 sys + 54.34
+> cusr  1.38 csys = 55.85 CPU)
+> Result: PASS
+> make[1]: Leaving directory '/root/rrobaina/audit-testsuite/tests'
+> ---
+>
+> I hope it helps!
+> -Ricardo
+>
+>
