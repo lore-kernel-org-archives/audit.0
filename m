@@ -1,171 +1,138 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 646FE43800D
-	for <audit@vger.kernel.org>; Wed,  8 Jul 2026 18:28:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783535298; cv=none; b=C3V438k52hzQDXS/ypK9o48jXeiptPHJJ85tG4itvFK61+ZifiwIXqZL0DpdJJjfyYtUtQEseicC/6SE/XhJmA4i2smAXC0X7xZVOxmrnOYftKG/55ObveJvYi6zuAR+2ZwfYrIu27SHm1WzdHBfvYKyquHrYHrGWNS9sTSfoRo=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783535298; c=relaxed/simple;
-	bh=/X9GXlqC0r4eyLIsmlyI0d4nG6zxhWJBQPdDC1a1rPE=;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02FED4D2ECC
+	for <audit@vger.kernel.org>; Wed,  8 Jul 2026 18:35:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.177
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1783535749; cv=pass; b=ZZz7Myk45is/k9+Dp2d/zymLo5Y0nLEz1dOZKIbvKm5wQPKDk4xcSR0ZTN1vWtksaHwgqd+nNUCkpaI3wcSwdVS63wnXYqUvLmYBjrYoZNwsWUAFBOR6RplMsWtRHM3hZgqDjyLaH5bSyu2IJXGxjhbajigzeNcIoHOpddRmivk=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1783535749; c=relaxed/simple;
+	bh=QehcSz6vCvUk5JYMILPy5wBJGc+OD+X9IzLND2dhr3Q=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=t7UFwhXjBs9X8XjZQZcQJeppAkn8ZC7WaD1V/P+6/DUV7mWkelMJfvy5DGFdAPCRSw6PeKxnX8V69jqsrFvIBXqT2QzXbz+F03gIYfrx/6tVb5/I44dKBAlXXBZ4YeIwYuV4lS6nsFXKui2clP2MAh97l4FkmP+kvbseF2Cg1k8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=I+BrIzdk; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	 To:Cc:Content-Type; b=BkqFw9IXKVCWrXvHVPoHezBsDhVA9XUsaG6U48rXXDCFB1aWpyVKXs9cC+FktFQYEH22ve2CPZyDDBZilzwEnWJdTXcCG+jbcQi2Kxy/DBhFjLWF+nwiA3F2eOwtO/fwmZV719ffLGKOhNIAkm7W2rCJjCLuO7J1zbEGlrPvQxU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=Mkii83qZ; arc=pass smtp.client-ip=209.85.210.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="I+BrIzdk"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1783535296;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=jjPUR/fBEQnSxUmu91cPfm7bBDoRx+HXFLWGKfkBsZc=;
-	b=I+BrIzdksS6n8EIt06zwhaJ7M/QHc5pfUYcag0in1lxjJ2YN2q1Xtn9ygwPi9ZzFjXuS4Z
-	8uesUMd8rpKT/CAJDNjHnHLSd/Om2it47qn/3g5+noVrsuk1eLUIxEnAa8UWBiZv7FnAr+
-	vwfFQbgYTbCQVxtm97bvU3JpgM4xURg=
-Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
- [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-330-thcErLqJOA6HLF99ozZv-g-1; Wed, 08 Jul 2026 14:28:15 -0400
-X-MC-Unique: thcErLqJOA6HLF99ozZv-g-1
-X-Mimecast-MFC-AGG-ID: thcErLqJOA6HLF99ozZv-g_1783535294
-Received: by mail-ej1-f70.google.com with SMTP id a640c23a62f3a-c126399a328so17255066b.1
-        for <audit@vger.kernel.org>; Wed, 08 Jul 2026 11:28:15 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="Mkii83qZ"
+Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-848479c9bd5so746497b3a.3
+        for <audit@vger.kernel.org>; Wed, 08 Jul 2026 11:35:47 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1783535747; cv=none;
+        d=google.com; s=arc-20260327;
+        b=aG/DW5AnkghcdAVKqL0oTjC7LugNpb67rSHNxcmzrmwFpW7mCX3rFYZoLXe5V+6CSA
+         NEcgRhXFwzvJ2MsxsJ/QTjnxMYxIQoPRGPvZRJtCdtX6gyvgP2UMtpOTFMuJFFIzLS9G
+         A+ltUN+k3FdrZmC0hYuRpqszeMEFl/bYzU5hLmFVRM6YYdnywI9pq1526rt4COpacrMu
+         UHxPLH2bX639pfukH+MJnYDxUJqjOVxoJR6GIU4M+qxfIUNMqL1q8k3KWjqKYgM98O+t
+         fnIJVq/HJxCnrbIjHx0nTG2r4151MbKjg8olBXrZrqwS+bSEkoW4rcOeW4Vv+d/FznT9
+         RinQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=BfTGWSdMJAl6flv5r0Gj2t6QPtFx1AHneJ/te76wCZ8=;
+        fh=DgjS6SecTIx5+zlmW9FgRBU4xq5BC9Fwrvc4MyOM22k=;
+        b=seNAgPTX+DlPHYC2h2JvgpYMLWx83zicMMWOLPdjJ1JzG+DM+1BBDg1acxLz1vYdrQ
+         2vpm4s7Nlg4vi4bDd1q2B1oqQhUboMouThtxaESPCLOu3fcyU2jH4tHxTPZ7SCF/7Dd+
+         Jv2Q9vNBccnsi0aAbscXQVPBWXbXu+Eu4507tZAnNDG2qEAbuZOTobNQKZnuj4fRErPY
+         l9yc0/yrhZ6mOAZ0sCKvOXt1S3zFIa7WI21o6UfScKLwpmvPAS8AvlZktl0u4Pr6N8Yh
+         iqFDpqsMLnYsVKzu9jXVN6DZ57IyrLUcS39HUiE2Adn4I6jeP6kvxgCQY5fg8Rkz68AY
+         a0cQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1783535747; x=1784140547; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=BfTGWSdMJAl6flv5r0Gj2t6QPtFx1AHneJ/te76wCZ8=;
+        b=Mkii83qZI++T735dsp7IWettPkm2iyMIeCfEtYmwBCGutRPJVslByZLanCgq/Nmb3E
+         lplR6F0JYTyZ7X6fuxZnxap1A3KDof0s+sLbmmpVaDddNJxYkSxhxnmy7eqr6Ow5ds7Y
+         ++GG9b2YVaVFJDg/1nEbqaRnSPx0SaYOiJyu+UfwB2K37g2sl3IZlmRLtMj6T6lYi+pT
+         frrFpS0vmJ8LfOGh0E3a0CTdGvKO3Vjmsx35FRa+3B10aqEfOe8V110mUDA/ZZtIaQwK
+         UZLzsKXHPMatqzH9bKzwOWufE/iVpq37hc9q0YXBbVZmS1L2qKEyk8hNJc/ERDWX/Aje
+         fEnA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783535294; x=1784140094;
+        d=1e100.net; s=20251104; t=1783535747; x=1784140547;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=jjPUR/fBEQnSxUmu91cPfm7bBDoRx+HXFLWGKfkBsZc=;
-        b=XyKfIHN4SiCQ0vCy3Fkj8rUUeX0Bp7r4Y59s/Ena/ytTGYDImEXbSKvWarT9DV7d4o
-         gscBazDxpDx5Mq3VBd3O99im7K1nfy6faYgORtS9B4bNDtdVk239xKj0EsQwAV1JugI6
-         CcXtsj+YL8my/HYWsVQKyupQ1vFdboamp+XAuY9G9jN6W+xno8wRJXF6bAENBfYv9FGR
-         8S+G5P128P8owO7ok/VZ8P/TkYsdamUZm3w6XCLjPqspb3B14Gw7Z7V10Lf6xTT+DGOd
-         6D6FV31/yBG0lARyt8tE1VtLowNiv60urAT2p2osGIKME8RG5VJjzQXhSSqj2i+Zbd6g
-         OG7Q==
-X-Gm-Message-State: AOJu0YxR5HvpVEdgydNZSKF6Q2hWjakUr53EdEr265uce1AL9Aget7gZ
-	OBDijlN7f/7WF5n2fkRv+oHvDlnrHzUssuXPXqTesToF6olKbmztxn+D6pauSEkwdsXSW4o0sGm
-	Az+nSRkyXy77sBKzHWwYXXklUjQsx8pi4annKNR7eKjaQneASFAjOeuJ4gJ64+l245/oxyt6K4q
-	WWerZTHlPnSFIhZb05SiEDAKXCXKe9RW0=
-X-Gm-Gg: AfdE7cnUQTeWLaKLdKzoRQl6r2Cn41BoeaP5c2STuRo6hlrZETHoOsMZpA+J5tBeA5Q
-	l+D5+zUO6odux3N+L3/nyh5gUlwHqeiAT2QvN4sN6Rxq1RqBgswUipPLggzdJI06RZR3nu1A+LB
-	Xs0kzxEXvezQKjtFi0/ZwXtIubQ6CajvrxURXS8gHdZjt068g9ZqddJ7bHEdZhLa4EcVuznsbCj
-	E6IfD847DxN6M2pIBtAymfO4+vuq9+yOvek2CHWHjf8J2ViwtzfhkZlxO42KGhVUD0UeSckWsp4
-	4rlpcPZw9/Jf
-X-Received: by 2002:a17:907:a43:b0:c12:1c2a:16e6 with SMTP id a640c23a62f3a-c15ce0b2f35mr167361066b.23.1783535294072;
-        Wed, 08 Jul 2026 11:28:14 -0700 (PDT)
-X-Received: by 2002:a17:907:a43:b0:c12:1c2a:16e6 with SMTP id
- a640c23a62f3a-c15ce0b2f35mr167360066b.23.1783535293734; Wed, 08 Jul 2026
- 11:28:13 -0700 (PDT)
+        bh=BfTGWSdMJAl6flv5r0Gj2t6QPtFx1AHneJ/te76wCZ8=;
+        b=ksJojzcDyOuFs8FgKg7BjEcXhaRUsGWTrBgD25KZOiisMs8NZSe+w+nDw508Kc41lK
+         hoJBYvmWa5OuHwUO1YM7k7Bw695cGDfz41hTBs1RvTw7589pt/kKzxoIHqkZ8Po6KawB
+         fpBzlddUfnpEXhDliF3C0TMoKZsfBZ3MPhx7wQehvdYZx2+HCF7/gVdoB+OWMWDEQUjy
+         NXb1VHDMwxbnjzyCi4mSeBCSMhTP87XSfSAwzpdr92ywGKkWvm5LtrXYjgnyjakEZUy7
+         YqbhJ2wj17vCEZS0w9h6x4DL1LSZRAMqf32O0zP3mGcx2mtFjPjI6/AWuI5+11/9UULx
+         OCLw==
+X-Forwarded-Encrypted: i=1; AHgh+RpNpvmhhhZ+7V7n0rl9F2So51ORRYvK0OIue8ix+CWVka/nsRS5waElfZ9KVQY20F3SQGZfZg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxnOMZkKbR8Qfp5UF4wujX1YtrDerRJrt1VUCqhw6ZZXd6CWtkr
+	1pGc3higshkVX7bLIMK48TLYXI1Pb5mPp6VLMkpvxHDYyV8d4s5FclChYS5mEh4LgQjMWuX1MWb
+	tmepOSxwmv7Xmr3zZAZSRRZQtr/B46dlbsMQfDmW0
+X-Gm-Gg: AfdE7ck1+T+wWvcz0cQgtalnwpi8O8vkV7SSdd0fH6SgWkWgDHf/ipEPMahBqeYWsw7
+	98dz5blmDyJZ/0Ut11u/aWSdw3Mqa2BpYqx7pnBl3s0nCzI1pxZV7yDqbtQhrOgxp4rvCnZAmld
+	Dy84qFNkoYp5x566uL29MXodelHjerAc/rkeERU3hNtER+wWhXvCoPSO/oHgHPfOiDeK1cD9LFY
+	wKd8HU+aIgKTzirWpI3k8BrVu++f8dRG4pkEPuOMGSCHP9n5PBRYSxJCN9UxSnbTXiKsrvA
+X-Received: by 2002:a05:6a20:3d0c:b0:3bf:b84c:2984 with SMTP id
+ adf61e73a8af0-3c0bceb75bcmr4322897637.11.1783535747245; Wed, 08 Jul 2026
+ 11:35:47 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260702140411.1021373-1-rrobaina@redhat.com> <a0e1827116da6fc4c48a22957a0c6748@paul-moore.com>
-In-Reply-To: <a0e1827116da6fc4c48a22957a0c6748@paul-moore.com>
-From: Ricardo Robaina <rrobaina@redhat.com>
-Date: Wed, 8 Jul 2026 15:28:01 -0300
-X-Gm-Features: AVVi8CcsWLPuvbbbi3BYXWUhnYpt-Qzch2fW03-gOCJ1Nds75vsil90Qf08CGtI
-Message-ID: <CAABTaaChPTar2ZyE6H3NYrP9sAJc6yaQb9D1TMWd5ULy23shTg@mail.gmail.com>
-Subject: Re: [PATCH v3] audit: fix potential integer overflow in audit_log_n_hex()
-To: Paul Moore <paul@paul-moore.com>
-Cc: audit@vger.kernel.org, linux-kernel@vger.kernel.org, eparis@redhat.com, 
-	Richard Guy Briggs <rgb@redhat.com>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: FAWWzGS8ZylE-CoA0wLq0OOpuBMs3siUJN0IGOQhXMY_1783535294
-X-Mimecast-Originator: redhat.com
+References: <20260708152957.150112-1-cuigaosheng1@huawei.com>
+In-Reply-To: <20260708152957.150112-1-cuigaosheng1@huawei.com>
+From: Paul Moore <paul@paul-moore.com>
+Date: Wed, 8 Jul 2026 14:35:35 -0400
+X-Gm-Features: AVVi8CcAnOf3DxXEmFl45ZzpYHKVhUpuqEv_daGD3vtJQ1WIh5MeE2psl6iI_Ys
+Message-ID: <CAHC9VhSZeDd_v9MEstqH-9pvt7xBkmKbO09Nrm7Gn+chuCkfGA@mail.gmail.com>
+Subject: Re: [PATCH RFC,-next] audit: add syscall fastpath to skip audit for
+ uncovered syscalls
+To: Gaosheng Cui <cuigaosheng1@huawei.com>
+Cc: eparis@redhat.com, audit@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jul 8, 2026 at 3:22=E2=80=AFPM Paul Moore <paul@paul-moore.com> wro=
-te:
+On Wed, Jul 8, 2026 at 11:32=E2=80=AFAM Gaosheng Cui <cuigaosheng1@huawei.c=
+om> wrote:
 >
-> On Jul  2, 2026 Ricardo Robaina <rrobaina@redhat.com> wrote:
-> >
-> > The function calculates new_len as len << 1 for hex encoding. This
-> > has two overflow risks: the shift itself can overflow when len is
-> > large, and the result can be truncated when assigned to new_len
-> > (declared as int) from the size_t calculation.
-> >
-> > Fix by using check_shl_overflow() to catch shift overflow and
-> > changing new_len and loop counter i to size_t to prevent truncation.
-> >
-> > Fixes: 168b7173959f ("AUDIT: Clean up logging of untrusted strings")
-> > Reviewed-by: Richard Guy Briggs <rgb@redhat.com>
-> > Signed-off-by: Ricardo Robaina <rrobaina@redhat.com>
-> > ---
-> > Changes in v2:
-> > - Use check_shl_overflow() instead of manual overflow check.
-> > Changes in v3:
-> > - Log "?" before returning when overflow detected.
-> >
-> >  kernel/audit.c | 12 ++++++++++--
-> >  1 file changed, 10 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/kernel/audit.c b/kernel/audit.c
-> > index e1d489bc2dff..52eb3b511bad 100644
-> > --- a/kernel/audit.c
-> > +++ b/kernel/audit.c
-> > @@ -62,6 +62,7 @@
-> >  #include <net/ip.h>
-> >  #include <net/ipv6.h>
-> >  #include <linux/sctp.h>
-> > +#include <linux/overflow.h>
-> >
-> >  #include "audit.h"
-> >
-> > @@ -2076,7 +2077,8 @@ void audit_log_format(struct audit_buffer *ab, co=
-nst char *fmt, ...)
-> >  void audit_log_n_hex(struct audit_buffer *ab, const unsigned char *buf=
-,
-> >               size_t len)
-> >  {
-> > -     int i, avail, new_len;
-> > +     int avail;
-> > +     size_t i, new_len;
-> >       unsigned char *ptr;
-> >       struct sk_buff *skb;
-> >
-> > @@ -2084,9 +2086,15 @@ void audit_log_n_hex(struct audit_buffer *ab, co=
-nst unsigned char *buf,
-> >               return;
-> >
-> >       BUG_ON(!ab->skb);
-> > +
+> When audit rules are configured, syscalls not covered by any rule
+> (e.g., futex, nanosleep, epoll_pwait) still incur full audit
+> overhead.
 >
-> I removed this added vertical whitespace as it wasn't really necessary
-> and could potentially impact anyone who wants to backport this patch.
-> Otherwise this looks good to me, so I'm going to mark it for stable and
-> merge it via audit/stable-7.2.
+> Add a bitmap fastpath: at syscall entry, audit_fastpath_skip()
+> checks a precomputed bitmap; if the syscall is not covered, set
+> dummy=3D1 so the exit path skips both filter traversal and context
+> reset.
 >
-> Thanks!
+> The bitmap is the OR of:
+>   - All EXIT rules' masks (not including watch/tree rules, ORed
+>     under audit_filter_mutex during rebuild)
+>   - audit_inode_syscalls[]: native syscalls that may trigger
+>     __audit_inode()/__audit_getname(), built at init from the
+>     file-operation audit classes plus audit_classify_syscall().
+>
+> Compat syscalls are excluded from the fastpath because native and
+> compat syscall numbers share the same flat bitmap but belong to
+> different namespaces.  in_compat_syscall() guards the fastpath
+> so compat paths always take the original full audit processing.
+> Accordingly, audit_inode_syscalls[] only includes native audit
+> classes, not their _32 compat variants.
+>
+> The bitmap is read lock-free via READ_ONCE on syscall hot paths
+> and written under audit_filter_mutex with WRITE_ONCE per word =E2=80=94
+> the same no-guarantee-during-rule-change policy as audit_n_rules.
+>
+> Signed-off-by: Gaosheng Cui <cuigaosheng1@huawei.com>
+> ---
+>  kernel/audit.h       |   6 ++
+>  kernel/auditfilter.c | 140 +++++++++++++++++++++++++++++++++++++++++++
+>  kernel/auditsc.c     |   3 +
+>  3 files changed, 149 insertions(+)
 
-Thanks, Paul!
+I really don't like adding another set of filters to audit, have you
+looked at improving the performance of the existing filter code?
 
->
-> >       skb =3D ab->skb;
-> >       avail =3D skb_tailroom(skb);
-> > -     new_len =3D len<<1;
-> > +
-> > +     if (check_shl_overflow(len, 1, &new_len)) {
-> > +             audit_log_format(ab, "?");
-> > +             return;
-> > +     }
-> > +
-> >       if (new_len >=3D avail) {
-> >               /* Round the buffer request up to the next multiple */
-> >               new_len =3D AUDIT_BUFSIZ*(((new_len-avail)/AUDIT_BUFSIZ) =
-+ 1);
-> > --
-> > 2.53.0
->
-> --
-> paul-moore.com
->
-
+--=20
+paul-moore.com
