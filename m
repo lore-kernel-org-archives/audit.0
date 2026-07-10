@@ -1,43 +1,44 @@
-Received: from ewsoutbound.kpnmail.nl (ewsoutbound.kpnmail.nl [195.121.94.167])
+Received: from ewsoutbound.kpnmail.nl (ewsoutbound.kpnmail.nl [195.121.94.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23C6124677B
-	for <audit@vger.kernel.org>; Fri, 10 Jul 2026 16:41:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.121.94.167
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86FE643C04D
+	for <audit@vger.kernel.org>; Fri, 10 Jul 2026 16:42:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.121.94.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783701720; cv=none; b=UH661xUIAc7Z/OEoIIfwFsEP1xMQSqeP1MzQ+wxAtYSWTSDhFxn/aODewFJolSZps9Ed8iXDaar3SId3PmBBMOVZ13U9YZ8DQbsiW1VpJUUNniLSdVzlxBoPbbrYrW/s4F/cx7GLWtrYMfzrhqSPhq2o9IAfD6qxe8tmv3+lm+s=
+	t=1783701724; cv=none; b=N8szqaeQ93R+z42yaTPLbJ559g/jbgY1617mFl4HSUn286coZvbZGVNxuV+g/OLKZgjYlBUCFCGTQ8dWpziqAf1dwvH5NeuDGn2cPMzFP44vK6tAHkQU+iA20bAUcHKVB8iaoty0Q+FW091Okp+FUFJ5K8irf3ClrRBvQ67T0iI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783701720; c=relaxed/simple;
-	bh=jUOieeBJRHbn6Gns5XzNo7qWOQuSmiWxVTwypInjydg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=KAfXCh+BUiia7WlGqg3vkocl3ShoCAbzIhv4VbEhxmXh5qQ3F6qP8QVVaghFLF8FBpQQ6WUrtP0XcupWycoMNId6K+Cz48j8DToE0f8hsU3a03PioegS1XI/7bPkOG9IIIIPQjsR3kffl1bIjbb52tj2khvsSCjOEekrAU1sWS4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xs4all.nl; spf=pass smtp.mailfrom=xs4all.nl; dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b=thYfp+Kl; arc=none smtp.client-ip=195.121.94.167
+	s=arc-20240116; t=1783701724; c=relaxed/simple;
+	bh=X/kXAetW2sPVYfXhfYTYqrxjj0S3DACiT8zM2IYPlxU=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=KXUT18/t7QVRkR3BOQ8y3EP6PTinXsWv+6aJxxqWk/xET29/vIA5Us9ZEUh2aocytu/+/XRLCSVWBH9ChYlvquK4f27tSOvNl5BU4kd2zN/Ex7wwxPiiM1GmGwufrx6pKMMCN/bW/Vo6GpR1C7a4nI+TBYcJ7KwtIXEd/EbTLrE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xs4all.nl; spf=pass smtp.mailfrom=xs4all.nl; dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b=UxMsSInU; arc=none smtp.client-ip=195.121.94.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xs4all.nl
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xs4all.nl
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="thYfp+Kl"
-X-KPN-MessageId: 3ec1bf42-7c7e-11f1-b2a8-005056abbe64
+	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="UxMsSInU"
+X-KPN-MessageId: 41911e9f-7c7e-11f1-83b1-005056ab378f
 Received: from smtp.kpnmail.nl (unknown [10.31.155.37])
 	by ewsoutbound.so.kpn.org (Halon) with ESMTPS
-	id 3ec1bf42-7c7e-11f1-b2a8-005056abbe64;
-	Fri, 10 Jul 2026 18:41:48 +0200 (CEST)
+	id 41911e9f-7c7e-11f1-83b1-005056ab378f;
+	Fri, 10 Jul 2026 18:41:53 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
 	d=xs4all.nl; s=xs4all01;
 	h=mime-version:message-id:date:subject:to:from;
-	bh=NfVWrMGnL56cCC92A5genhZc1yTHyhGNKSqNIUzvOpQ=;
-	b=thYfp+Kl4qVMewwYCXFIoI/RW1AZY88QalJ+KNUqVN5EPHU0JiRlPxCA7nQx1mrkD4ka+WYh4TFCS
-	 ReV7h3UHvTpXtrld7OXMBVRgqUrdq2aBjQAxUnRNjJsID0UG2r36A1PCU+AYR21h12PrNkdGOZ1vu8
-	 8XvE0om98api+b4OoNvW+aI7HkulnVraxafiU0iwwmVJpd6wvtwPw6tZ3/j2Qi75bhzJx3IZa1tUIp
-	 MlvLk2o9NE/g9ukE5F9mHZdFfelIRlh6wsHnZXwPl5KNf68Vz+p2VqLQCimR/QdQoeG8HzBvDJDvJT
-	 Q5ISclevmJkt0L341aBu6Rp6nkVPVow==
-X-KPN-MID: 33|Mgjkyfbs8ofKkLUryk4oZJa8ElqGRUNCvJoIS67Twz2cpnmRIlzJmFx+/tGUcVp
- q/GiBlhaVttREoDbNxrplp8i+wytClrNzGDM00Eaf30I=
+	bh=EaS0+HBaDnj4tkmHVi48ZsTwA3AYyy9jlZrZreHsuSk=;
+	b=UxMsSInUFHQCRWfuJBdUaaFHYOsp69sEQyhtWsmehz1MX/Sqre4p9z5t/Bkx8PkbvTyqRNa29WvYS
+	 Vd4uf/LYpGI5Vl7ITa8LQDMMUQAaWhSRc/vzIMKaZfeh1O7chPsY9cnUQc1jZkXAUxSd5yTk3PEsei
+	 JsQ2BNRJcByahyKeO1hD4un3b+tS3oJQ1+Ghw5SNeDWTUbgHFCTyYeGLuVKCDwRvueEt1fdfneqjIR
+	 lqFKvkxrXwYonwwOzm4NMBbl7/b0PtBpgUlNaIG1vPgjH0u6XaM0NBIEolGt9Nq4A+QTSdt7XKSlH3
+	 cGoQz+3GZZ62u7wNPvJCdnrz+b9WY6Q==
+X-KPN-MID: 33|ElAlLdLVWS3/cD0+SN9fIexGI2It/EhztNKB+HSJsja6xPUP4btPFvkXIKek4m4
+ XBinfvqBsJWpg2jSK84wWeBL+otkIPryXpnKkpjCEfAs=
 X-KPN-VerifiedSender: Yes
-X-CMASSUN: 33|XonvkG5AXzpijmVBjKnIK1b1UsNDVUck0+qJl6QIRRfrjAd8a/+6Y14EdewwJCP
- eNiliC/RmpWYTWlLL5ZfGLg==
+X-CMASSUN: 33|Fa8Mq6V4joKmX+J4Mu8wSeW9/PWOJcAKWwzYgUG/DWA0mi35Pk0tXnSGXW6aZK1
+ NKAns7lAhcH3+pGCmVbZLEw==
 Received: from daedalus.home (unknown [178.229.235.145])
 	by smtp.xs4all.nl (Halon) with ESMTPSA
-	id 3bede612-7c7e-11f1-91ec-005056ab1411;
-	Fri, 10 Jul 2026 18:41:48 +0200 (CEST)
+	id 4154fdea-7c7e-11f1-91ec-005056ab1411;
+	Fri, 10 Jul 2026 18:41:53 +0200 (CEST)
 From: Jori Koolstra <jkoolstra@xs4all.nl>
 To: Alexander Viro <viro@zeniv.linux.org.uk>,
 	Christian Brauner <brauner@kernel.org>,
@@ -49,10 +50,12 @@ Cc: Jan Kara <jack@suse.cz>,
 	audit@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Jori Koolstra <jkoolstra@xs4all.nl>
-Subject: [PATCH 0/3] vfs: call audit_inode_child() in lookup_open() on failure
-Date: Fri, 10 Jul 2026 18:42:30 +0200
-Message-ID: <20260710164233.827744-1-jkoolstra@xs4all.nl>
+Subject: [PATCH 3/3] fs/namei.c: update kerneldoc of atomic_open()
+Date: Fri, 10 Jul 2026 18:42:33 +0200
+Message-ID: <20260710164233.827744-4-jkoolstra@xs4all.nl>
 X-Mailer: git-send-email 2.55.0
+In-Reply-To: <20260710164233.827744-1-jkoolstra@xs4all.nl>
+References: <20260710164233.827744-1-jkoolstra@xs4all.nl>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
@@ -61,30 +64,62 @@ List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-While reworking lookup_open() to implement O_CREAT|O_DIRECTORY I came
-across inconsistency in how audit_inode_child() is called in various
-file create paths.
+The comments above atomic_open() contain several errors:
 
-audit_inode_child() is called in may_create_dentry() so that failed
-filesystem operations still register an audit entry. On success, the
-entry is overwritten when, for instance, fsnotify_create() is called.
-This is the calling convention in vfs_create() and vfs_mkdir().
-In lookup_open(), however, when atomic_open() should have created a
-file but didn't, no call to audit_inode_child() is made. The same is
-true for the regular ->create() path.
+  - atomic_open() does not return 0 if successful
+  - @path is not updated
 
-On the suggestion of Brauner, I am splitting this series from the
-O_CREAT|O_DIRECTORY work, so that this can be discussed with the audit
-people without delaying that work.
+Fix those and be more explicit about when FMODE_OPENED and FMODE_CREATED
+are set. Change to a full kerneldoc.
 
-Jori Koolstra (3):
-  vfs: move create error && negative dentry case in lookup_open() up
-  vfs: call audit_inode_child() in lookup_open() on failure
-  fs/namei.c: update kerneldoc of atomic_open()
+Signed-off-by: Jori Koolstra <jkoolstra@xs4all.nl>
+---
+ fs/namei.c | 32 ++++++++++++++++++++------------
+ 1 file changed, 20 insertions(+), 12 deletions(-)
 
- fs/namei.c | 128 ++++++++++++++++++++++++++++++++---------------------
- 1 file changed, 78 insertions(+), 50 deletions(-)
-
+diff --git a/fs/namei.c b/fs/namei.c
+index fe5d59c6f925..2eef2a49d3f4 100644
+--- a/fs/namei.c
++++ b/fs/namei.c
+@@ -4336,18 +4336,26 @@ static int may_o_create(struct mnt_idmap *idmap,
+ 	return security_inode_create(dir->dentry->d_inode, dentry, mode);
+ }
+ 
+-/*
+- * Attempt to atomically look up, create and open a file from a negative
+- * dentry.
+- *
+- * Returns 0 if successful.  The file will have been created and attached to
+- * @file by the filesystem calling finish_open().
+- *
+- * If the file was looked up only or didn't need creating, FMODE_OPENED won't
+- * be set.  The caller will need to perform the open themselves.  @path will
+- * have been updated to point to the new dentry.  This may be negative.
+- *
+- * Returns an error code otherwise.
++/**
++ * atomic_open() - attempt to atomically look up, create and open a file
++ * from a negative dentry.
++ * @path:          parent directory path
++ * @dentry:        child to ->atomic_open()
++ * @file:          file to attach child to
++ * @open_flag:     open flags
++ * @mode:          create mode
++ * @create_error:  return value from may_o_create()
++ *
++ * If a non-error dentry is returned then: when FMODE_OPENED is set,
++ * the file will have been attached to @file by the filesystem calling
++ * finish_open(). If FMODE_OPENED isn't set, the filesystem instead called
++ * finish_no_open() and the caller will need to perform the open themselves.
++ *
++ * FMODE_CREATED is set when the call to ->atomic_open() actually created
++ * the file.
++ *
++ * Returns the opened/looked-up dentry on success or ERR_PTR(-E) on failure.
++ * On error, atomic_open() consumes @dentry.
+  */
+ static struct dentry *atomic_open(const struct path *path, struct dentry *dentry,
+ 				  struct file *file,
 -- 
 2.55.0
 
