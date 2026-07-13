@@ -1,63 +1,240 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 598D72BE7DD;
-	Sat, 11 Jul 2026 03:08:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BC362857F0
+	for <audit@vger.kernel.org>; Mon, 13 Jul 2026 17:00:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783739298; cv=none; b=mviGpkwtUEmZdBwSJ4FHSI+T38iLgszyDeSrTolT5DZZZlbPG50UeOCxEMjvwS/+O+wMCej1f3xm4xA3DwKYEA1x2zZI2aZAxaCkJJ1YY9Nc7+UrBWbEJRzJCMkPBFVQx4owbgP8KzukNkebi9hdMRc9+uKXNiG656vlQbSAoPo=
+	t=1783962030; cv=none; b=m+AH1t926OhhQyNDB6kzbQPR0G4hYu1ctqQmL7PYbc+tjLBktfoI5/qD5StTymg0G1Pjb2HhQQ5xCqZqL6Mb+JQq1PaIdz1Az5L+l/tVvpFCv74greMi+PtNmyZ3mUrrOPxdMioBLs/ykAJjSOoeseVHlcmo3YKdb8vyNfAOsdY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783739298; c=relaxed/simple;
-	bh=ZL955bvAMCidUf7YGk1jHBJKd4U2/e9EMBM/ebVw9mc=;
-	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=m0eX6PrFRtTJVvN2/JzWZLe3bl/bUwZgyuJ8Sb6V0d3xgK8unxnmbszLALSDXkaYgekx1DlkexNQephB0V/XEOGEa4VOwhZT1TbwpLbGIN00kkgdP7Ex9fDIJ2NCsnop9ghJtt7C99ncxL/UWfhLcTsl2BiLgkqiTVmCp6C1VSo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cRN8XUFr; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1783962030; c=relaxed/simple;
+	bh=V+KM+vPxI4Ogx85SRR1uTgAvTTWwG+wm7EyiWVFvf8Y=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:content-type; b=PPkxE11voQ/rKwtk49Rm5QCXZnyRpRq0XvnWo17EdqfTwk5L0MNH1epAio1FSba1Xt59YPMFKAHBrqidbTLiQ1r/7hD+fPBffzwDk4nn9Wu8e8p9UkpWS+ZeR6XiO2EwJU6nEyp6H9rdpHQV62qXdLSx4a0/40tLVscJaKCJynY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=VKkcEr0X; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cRN8XUFr"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4125E1F000E9;
-	Sat, 11 Jul 2026 03:08:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783739297;
-	bh=/pfjzzxIaWcmqh8TRPmH49WJ5ehH890aWxOxahscmUU=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc;
-	b=cRN8XUFrVVgWArCFBsw8Eix26zSLDEYCgoMuglP+EHl2w1kbfAcOD1NPoHQAgrCVd
-	 FFD5oe3fM3rn8fWlh07vACdlEqs3N6KMzSMXhVRRohiW3R0YT1DagD16ayyZhVPBus
-	 ApQlbg6RhVF1rIk0ca+ZsOa0BfoyiiCjqjxIWm3xYdcpMrZZYNABmAF8C1DymOiNwb
-	 oS21zNQwH0WJEDPs3yDUxcniWu9QBsbXVL/syIwdPE8SPXWWMcX4Xzr3Dui7Zo5yW1
-	 dGAffMmYFc1T9r4y+oA91sHUTgsOYdKnEQUv01yX2zv7h/R02PaG9fYBmv7kWohYB0
-	 UsGUz/EoKcorA==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id D0C8739244DF;
-	Sat, 11 Jul 2026 03:07:55 +0000 (UTC)
-Subject: Re: [GIT PULL] audit/audit-pr-20260710
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <a307fda8417d3a1e3f6985535d4a62ae@paul-moore.com>
-References: <a307fda8417d3a1e3f6985535d4a62ae@paul-moore.com>
-X-PR-Tracked-List-Id: <audit.vger.kernel.org>
-X-PR-Tracked-Message-Id: <a307fda8417d3a1e3f6985535d4a62ae@paul-moore.com>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/audit.git tags/audit-pr-20260710
-X-PR-Tracked-Commit-Id: 65dfde57d1e29ce2b76fc23dd565eccd5c0bc0f0
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: bf124bae08c35cb8b5392ec8005f9890833b9056
-Message-Id: <178373927451.966321.7227694651429361376.pr-tracker-bot@kernel.org>
-Date: Sat, 11 Jul 2026 03:07:54 +0000
-To: Paul Moore <paul@paul-moore.com>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, audit@vger.kernel.org, linux-kernel@vger.kernel.org
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="VKkcEr0X"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1783962027;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=6A5f+FwjZK0+6lpKa/A2QPfH0c31sI/ogQwv34uiowk=;
+	b=VKkcEr0XqhY/wSwIH3lPuqFF4c0NGLbceXO562+fbgSxO+wus4lRpcZcGT7JkV55fVPVsl
+	t8i6gY5nz8TlQ/nFYpUr+4n6ubWxNDn0D+lWNySubo5pDiAYSLg7G8s06JF3AottSEpSQ5
+	btysaJ5s58Axczj+kCj6R9wxHMZ6rfs=
+Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-642-5R3e1YTpP7CtHrd6rT6yUw-1; Mon,
+ 13 Jul 2026 13:00:23 -0400
+X-MC-Unique: 5R3e1YTpP7CtHrd6rT6yUw-1
+X-Mimecast-MFC-AGG-ID: 5R3e1YTpP7CtHrd6rT6yUw_1783962022
+Received: from mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.95])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 7B7CC1956045;
+	Mon, 13 Jul 2026 17:00:21 +0000 (UTC)
+Received: from wsxc.redhat.com (unknown [10.96.134.95])
+	by mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id C364136F2A;
+	Mon, 13 Jul 2026 17:00:17 +0000 (UTC)
+From: Ricardo Robaina <rrobaina@redhat.com>
+To: audit@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: paul@paul-moore.com,
+	eparis@redhat.com,
+	viro@zeniv.linux.org.uk,
+	brauner@kernel.org,
+	jack@suse.cz,
+	sgrubb@redhat.com,
+	Ricardo Robaina <rrobaina@redhat.com>
+Subject: [PATCH] audit: add FSCONFIG auxiliary record to log filesystem configuration
+Date: Mon, 13 Jul 2026 14:00:13 -0300
+Message-ID: <20260713170013.4073499-1-rrobaina@redhat.com>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+X-Scanned-By: MIMEDefang 3.6 on 10.30.177.95
+X-Mimecast-MFC-PROC-ID: EbNtNfYGW_gzBY0gel3cEuur-fu_Zioim-2FH2FezUM_1783962022
+X-Mimecast-Originator: redhat.com
+Content-Transfer-Encoding: 8bit
+content-type: text/plain; charset="US-ASCII"; x-default=true
 
-The pull request you sent on Fri, 10 Jul 2026 15:13:49 -0400:
+Modern mount tools (util-linux >= 2.39.1) use the new mount API
+(fsopen, fsconfig, fsmount, move_mount) instead of the legacy mount(2)
+syscall. The generic SYSCALL audit record logs the fsconfig syscall but
+does not capture the configuration parameters, creating an audit gap for
+critical mount information such as the device being mounted.
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/audit.git tags/audit-pr-20260710
+Add an FSCONFIG auxiliary record that logs the command type, parameter
+name (key), parameter value, and aux parameter passed to fsconfig(2).
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/bf124bae08c35cb8b5392ec8005f9890833b9056
+ ----
+ type=SYSCALL : syscall=fsconfig a1=FSCONFIG_SET_STRING ...
+ type=FSCONFIG : fs_cmd=1 fs_key=source fs_val="tmpfs" fs_aux=0
+ ----
+ type=SYSCALL : syscall=fsconfig a1=FSCONFIG_CMD_CREATE ...
+ type=FSCONFIG : fs_cmd=6 fs_key=(null) fs_val=(null) fs_aux=0
+ ----
+ type=SYSCALL : syscall=fsconfig a0=0x4 a1=FSCONFIG_SET_BINARY ...
+ type=FSCONFIG : fs_cmd=2 fs_key=hidepid fs_val="<binary>" fs_aux=4
 
-Thank you!
+Link: https://github.com/linux-audit/audit-kernel/issues/153
+Signed-off-by: Ricardo Robaina <rrobaina@redhat.com>
+---
+ fs/fsopen.c                |  7 +++++++
+ include/linux/audit.h      | 13 +++++++++++++
+ include/uapi/linux/audit.h |  1 +
+ kernel/auditsc.c           | 27 +++++++++++++++++++++++++++
+ 4 files changed, 48 insertions(+)
 
+diff --git a/fs/fsopen.c b/fs/fsopen.c
+index ae19e5136598..9b3c02f59df4 100644
+--- a/fs/fsopen.c
++++ b/fs/fsopen.c
+@@ -15,6 +15,7 @@
+ #include <linux/namei.h>
+ #include <linux/file.h>
+ #include <uapi/linux/mount.h>
++#include <linux/audit.h>
+ #include "internal.h"
+ #include "mount.h"
+ 
+@@ -357,6 +358,7 @@ SYSCALL_DEFINE5(fsconfig,
+ 	struct fs_context *fc;
+ 	int ret;
+ 	int lookup_flags = 0;
++	const char *value_str = NULL;
+ 
+ 	struct fs_parameter param = {
+ 		.type	= fs_value_is_undefined,
+@@ -423,6 +425,7 @@ SYSCALL_DEFINE5(fsconfig,
+ 			goto out_key;
+ 		}
+ 		param.size = strlen(param.string);
++		value_str = param.string;
+ 		break;
+ 	case FSCONFIG_SET_BINARY:
+ 		param.type = fs_value_is_blob;
+@@ -432,6 +435,7 @@ SYSCALL_DEFINE5(fsconfig,
+ 			ret = PTR_ERR(param.blob);
+ 			goto out_key;
+ 		}
++		value_str = "<binary>";
+ 		break;
+ 	case FSCONFIG_SET_PATH_EMPTY:
+ 		lookup_flags = LOOKUP_EMPTY;
+@@ -445,6 +449,7 @@ SYSCALL_DEFINE5(fsconfig,
+ 		}
+ 		param.dirfd = aux;
+ 		param.size = strlen(param.name->name);
++		value_str = param.name->name;
+ 		break;
+ 	case FSCONFIG_SET_FD:
+ 		param.type = fs_value_is_file;
+@@ -458,6 +463,8 @@ SYSCALL_DEFINE5(fsconfig,
+ 		break;
+ 	}
+ 
++	audit_log_fsconfig(cmd, param.key, value_str, aux);
++
+ 	ret = mutex_lock_interruptible(&fc->uapi_mutex);
+ 	if (ret == 0) {
+ 		ret = vfs_fsconfig_locked(fc, cmd, &param);
+diff --git a/include/linux/audit.h b/include/linux/audit.h
+index 45abb3722d30..978eb881974c 100644
+--- a/include/linux/audit.h
++++ b/include/linux/audit.h
+@@ -449,6 +449,8 @@ extern void __audit_tk_injoffset(struct timespec64 offset);
+ extern void __audit_ntp_log(const struct audit_ntp_data *ad);
+ extern void __audit_log_nfcfg(const char *name, u8 af, unsigned int nentries,
+ 			      enum audit_nfcfgop op, gfp_t gfp);
++extern void __audit_log_fsconfig(unsigned int cmd, const char *key,
++				 const char *value, int aux);
+ 
+ static inline void audit_ipc_obj(struct kern_ipc_perm *ipcp)
+ {
+@@ -598,6 +600,13 @@ static inline void audit_log_nfcfg(const char *name, u8 af,
+ 		__audit_log_nfcfg(name, af, nentries, op, gfp);
+ }
+ 
++static inline void audit_log_fsconfig(unsigned int cmd, const char *key,
++				      const char *value, int aux)
++{
++	if (!audit_dummy_context())
++		__audit_log_fsconfig(cmd, key, value, aux);
++}
++
+ extern int audit_n_rules;
+ extern int audit_signals;
+ #else /* CONFIG_AUDITSYSCALL */
+@@ -730,6 +739,10 @@ static inline void audit_log_nfcfg(const char *name, u8 af,
+ 				   enum audit_nfcfgop op, gfp_t gfp)
+ { }
+ 
++static inline void audit_log_fsconfig(unsigned int cmd, const char *key,
++				      const char *value, int aux)
++{ }
++
+ #define audit_n_rules 0
+ #define audit_signals 0
+ #endif /* CONFIG_AUDITSYSCALL */
+diff --git a/include/uapi/linux/audit.h b/include/uapi/linux/audit.h
+index e8f5ce677df7..5cd0eb602528 100644
+--- a/include/uapi/linux/audit.h
++++ b/include/uapi/linux/audit.h
+@@ -122,6 +122,7 @@
+ #define AUDIT_OPENAT2		1337	/* Record showing openat2 how args */
+ #define AUDIT_DM_CTRL		1338	/* Device Mapper target control */
+ #define AUDIT_DM_EVENT		1339	/* Device Mapper events */
++#define AUDIT_FSCONFIG		1341	/* Record showing fsconfig args */
+ 
+ #define AUDIT_AVC		1400	/* SE Linux avc denial or grant */
+ #define AUDIT_SELINUX_ERR	1401	/* Internal SE Linux Errors */
+diff --git a/kernel/auditsc.c b/kernel/auditsc.c
+index 6610e667c728..222bf79ee9bd 100644
+--- a/kernel/auditsc.c
++++ b/kernel/auditsc.c
+@@ -2882,6 +2882,33 @@ void __audit_log_nfcfg(const char *name, u8 af, unsigned int nentries,
+ }
+ EXPORT_SYMBOL_GPL(__audit_log_nfcfg);
+ 
++void __audit_log_fsconfig(unsigned int cmd, const char *key,
++			  const char *value, int aux)
++{
++	struct audit_buffer *ab;
++
++	ab = audit_log_start(audit_context(), GFP_KERNEL, AUDIT_FSCONFIG);
++	if (!ab)
++		return;
++
++	audit_log_format(ab, "fs_cmd=%u", cmd);
++	audit_log_format(ab, " fs_key=");
++	if (value)
++		audit_log_untrustedstring(ab, key);
++	else
++		audit_log_format(ab, "(null)");
++
++	audit_log_format(ab, " fs_val=");
++	if (value)
++		audit_log_untrustedstring(ab, value);
++	else
++		audit_log_format(ab, "(null)");
++
++	audit_log_format(ab, " fs_aux=%d", aux);
++
++	audit_log_end(ab);
++}
++
+ static void audit_log_task(struct audit_buffer *ab)
+ {
+ 	kuid_t auid, uid;
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+2.53.0
+
