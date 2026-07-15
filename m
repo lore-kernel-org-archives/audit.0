@@ -1,200 +1,135 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C1412931C2
-	for <audit@vger.kernel.org>; Tue, 14 Jul 2026 19:33:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EA8837A4AF
+	for <audit@vger.kernel.org>; Wed, 15 Jul 2026 02:46:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784057606; cv=none; b=AvLvr1Wj9WUUIMslwLeMTl1rIYx3R0eh2FssqbJFTWblMj/mQFMsGOU4FeB22TbOm8qbSaYvfOi8UIq/PUII7EzLIVd4hdd1y+ETCsEYTi9cf5hCu8bwmag5rhUbf4vAvsOuFrw8EtAsCRAqN/bbopjSMcmf03pIr0teSTefIZc=
+	t=1784083605; cv=none; b=ZEHZ+swdmcjJlQEGF9fS9suaMVbHcEIgDcmmK6c80N/i94C/QjrzVDzqgQuQm3Zw+/cCzjPc89l2UkiIATfHOjldHNFNiFwmWep/QUhLejcT0lAIjYEcF/g1+iDsC/AkHGP1XQuk75uzRpmwQ9nUWzC9YogJwQOWMBaVpfnZp68=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784057606; c=relaxed/simple;
-	bh=gVM/d5SfAe6uHLAYzW7X9QBgcgocaO2VKDsMxwQpo0U=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 In-Reply-To:Content-Type:Content-Disposition; b=kQOcLsjYsjed1mOzeJXEJ1rfCCnWKm4sMn5+MPB+cxRORPmwkkOm46e4o8fVrM/09Ebn7WyMUPB78SIT4OhOiF/5ERPp3KaV8yvsuIlfuvazJU4DXT+mpmr10iSfdkQ710eZf4QVdREfgCypOYuBEVY3f9Y8E9f2LgRA4pU1xtk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=hmpaln3I; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1784083605; c=relaxed/simple;
+	bh=y95DrYbP/VmjOSUNzUGbzSp38YYbp8UhXE/2Bv6rCrs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=EXn6Sx1YgVasKip+ycrBI1gkvpdx40ZELan/oR5zYfpNYkkb8+u26mwJKytazF5kfvZAstT/G7NbMGzVgX0QPnXdS+yM04sSVRzbS9UAXnMbK+eLh3YZjlwN3BxRwFCE7d6kIBJ/xcks7sOezSzjIW30dS8nNaOWIsHC71kVfkg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QpHGXfsl; arc=none smtp.client-ip=209.85.214.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="hmpaln3I"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1784057604;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=dOyx3Ss1GDlj0S08vrxO5V3zk5u0XYHPcKtfFy4rKzs=;
-	b=hmpaln3IezeloI6Hh8b/KyP0Yh5+jCl3wTs7YV5tWz86ssOuMABiMgtc6I+Xk3rppbSQHx
-	9x3q7Ln69xVgic3/Eoi2Z3DhO2u5M117TfukLlGMhDOFdGnpo6bxB1pKe3Y1u0Xpq1p0xf
-	T1evD+EYVqITLjsjB6DoyOeIDZEEYng=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-615-sWOUTYU9PceUFgeNZI6QoA-1; Tue,
- 14 Jul 2026 15:33:22 -0400
-X-MC-Unique: sWOUTYU9PceUFgeNZI6QoA-1
-X-Mimecast-MFC-AGG-ID: sWOUTYU9PceUFgeNZI6QoA_1784057601
-Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id CF8351956060;
-	Tue, 14 Jul 2026 19:33:20 +0000 (UTC)
-Received: from madcap2.tricolour.ca (unknown [10.22.58.2])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 633F01955F7B;
-	Tue, 14 Jul 2026 19:33:15 +0000 (UTC)
-Date: Tue, 14 Jul 2026 15:33:12 -0400
-From: Richard Guy Briggs <rgb@redhat.com>
-To: Ricardo Robaina <rrobaina@redhat.com>
-Cc: audit@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-	linux-kernel@vger.kernel.org, paul@paul-moore.com,
-	eparis@redhat.com, viro@zeniv.linux.org.uk, brauner@kernel.org,
-	jack@suse.cz
-Subject: Re: [PATCH v2] audit: add FSOPEN record to log filesystem name
-Message-ID: <alaO+HZ7qJ1Iv9SP@madcap2.tricolour.ca>
-References: <20260703122548.1623981-2-rrobaina@redhat.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QpHGXfsl"
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2cab973140bso57195725ad.3
+        for <audit@vger.kernel.org>; Tue, 14 Jul 2026 19:46:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1784083604; x=1784688404; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=IgrBcgsc/jMn8PcArbo69Rr9sOwNc88jPEb6vu9Je+A=;
+        b=QpHGXfslb83Ccc2nR3Soo0LX+Pr5KmLbmE9LZwcfK4rWzMXNGWv4QoVcLKq3ZapsBO
+         shlPznte5Sh6O4F/MMfN9hg5YBEKBIjLQ385vQG7RC+bGscRLdCXUyclOdpzpiiLEUDT
+         OYQLcrpiHChxM18J/g3c1nFV/QJM/OF0fvT8wVEPJkGbFRTy5j2Vi3SCFLfijeAppcpa
+         hfumkkE/SsCFfEgAVgxB490AYYJgabY5pwvNoCd2gmVAOQnev3EqCU2Duqcn09ouiT7r
+         zrV+LczB41Rin5FMr7FhgqYihci7SYdSXQLS81QKltOwvO8GJoNMBY2JyamHobISe5n7
+         DOzw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1784083604; x=1784688404;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=IgrBcgsc/jMn8PcArbo69Rr9sOwNc88jPEb6vu9Je+A=;
+        b=j8ni1DSgW5PAGm7YP7Z89y1/KL121x15APDjtw010wwn4Cy03ms9nz3LhdrK4OugmK
+         egd2UfZ2Y+t/Qrog7kiMaL89yVfgPZIRROlwz4uGRZGTzPavxRXqX1RFr3Ix1LqUAUJN
+         5k0cwg4MQC0azM5MrJG/S/ShI+o35qp7PbjFsqdNOhAtanECV1rqUs7IjHxvIesb+c4d
+         yvebxX8ulqp/6rTQFcSvv+qsgXqcfGFYA4viyQlAmB9jS8ua3jUWmNUa0Y6dIZKIbJHn
+         YOy29MmCsDh6bIoLW4o4kUWQr98oFsQ5M+gmg7aIS5XeFvTTpQ2lxzD0GGw30Rtzsyr4
+         8H2A==
+X-Forwarded-Encrypted: i=1; AHgh+RpNfN8+w2IZ8dMUgfv5q35cdsSXo9YHriftiy+mWlfC94N8t22OJfC2++Zb/6hCgFuBMzlIlQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx3Om2DSY32qgxixQRsqu/aqdq4i+RjEeMzfZRWjTWUoXAJ0Pok
+	gs07TYIoNgRvck05sXY7LXcH6tpokT7S2e5LIPpP/vcFg9AQc/ZUMMMqJkA5jg==
+X-Gm-Gg: AfdE7cmPkib/pkxvOuzxWtqFZOUxvrcOo5ckhKNgsqYWzZNKAiXPJSDZSylxS6HXVdv
+	Iru2hSjs7/gLkpEwP3LDtyJfJ8bQzn9KFwgmY6KBiUGe6o8LfE431ZlTgE5A2TgP7PNHn6gpyMZ
+	r97sZUY7RcDYBePcPISOtlqUHt/ut69MDM3EwHWQLlfDww3yr7zmilfHKx3LzIVLbMfPRkZucK0
+	q8y0chuo0mnxcxgZ4aTuyLc9A7hYcju7oxHq6oNaxBre6ZslCOo610G+dPcVkn0mmsXPsLhC3Az
+	y6XAmqTQpRQlug7PRLkHj7LVZJFJOpfH2FTc6A5kFhmpDa8nBijNsB8Yz3QU2F/XULgf8hycK1H
+	YynowkGuhLDTj3zsITbP73K+ZSIJFxWEnYAQQpQt2UCgMQ7Gqd05sgMM0VkXdATXjdekoOaGcMz
+	ZscQwTo6LBUZjVS16OxwS+QvbyyoedH2fRNlA=
+X-Received: by 2002:a17:902:e787:b0:2cc:7c36:2c23 with SMTP id d9443c01a7336-2cf03d6be8amr8405355ad.43.1784083603695;
+        Tue, 14 Jul 2026 19:46:43 -0700 (PDT)
+Received: from osman.mioffice.cn ([43.224.245.178])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ccc9d1edb0sm124530935ad.53.2026.07.14.19.46.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Jul 2026 19:46:42 -0700 (PDT)
+From: Zhan Xusheng <zhanxusheng1024@gmail.com>
+X-Google-Original-From: Zhan Xusheng <zhanxusheng@xiaomi.com>
+To: Paul Moore <paul@paul-moore.com>
+Cc: Eric Paris <eparis@redhat.com>,
+	Ricardo Robaina <rrobaina@redhat.com>,
+	Richard Guy Briggs <rgb@redhat.com>,
+	audit@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Zhan Xusheng <zhanxusheng@xiaomi.com>,
+	stable@vger.kernel.org
+Subject: [PATCH] audit: fix potential integer overflow in audit_log_n_string()
+Date: Wed, 15 Jul 2026 10:46:35 +0800
+Message-ID: <20260715024635.25376-1-zhanxusheng@xiaomi.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20260703122548.1623981-2-rrobaina@redhat.com>
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
-X-Mimecast-MFC-PROC-ID: ogBJa0I9z_JSlgJMJfnC4FMhQPNx8scg0iGf0dtAieU_1784057601
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
-On 2026-07-03 09:25, Ricardo Robaina wrote:
-> Modern mount tools (util-linux >= 2.39.1) use the new mount API
-> (fsopen, fsconfig, fsmount, move_mount) instead of the legacy mount(2)
-> syscall. The generic SYSCALL audit record logs the fsopen syscall but
-> does not capture the filesystem name string, creating an audit gap for
-> filesystem mount operations.
-> 
-> Add an FSOPEN auxiliary record that logs the dereferenced filesystem
-> name string passed to fsopen(2).
-> 
->   type=SYSCALL ... : arch=x86_64 syscall=fsopen ... a1=FSOPEN_CLOEXEC
->   type=FSOPEN  ... : fs_name="tmpfs"
-> 
-> Link: https://github.com/linux-audit/audit-kernel/issues/152
-> Signed-off-by: Ricardo Robaina <rrobaina@redhat.com>
+audit_log_n_string() computes new_len as "slen + 3" (enclosing quotes
+plus the NUL terminator) and stores it into an int, while slen is a
+size_t.  For a sufficiently large slen the addition can overflow and/or
+the result be truncated when assigned to the int new_len, so the
+"new_len > avail" check can be bypassed and the subsequent
+memcpy(ptr, string, slen) can write past the skb tail.
 
-Reviewed-by: Richard Guy Briggs <rgb@redhat.com>
+This is the same class of bug that was fixed for the hex sibling in
+commit 65dfde57d1e2 ("audit: fix potential integer overflow in
+audit_log_n_hex()"); both helpers are reached through
+audit_log_n_untrustedstring() with the same length source.
 
-> ---
-> Changes in v2:
-> - Better placement of audit_log_fsopen() call to avoid UAF.
-> 
->  fs/fsopen.c                |  3 +++
->  include/linux/audit.h      | 10 ++++++++++
->  include/uapi/linux/audit.h |  1 +
->  kernel/auditsc.c           | 13 +++++++++++++
->  4 files changed, 27 insertions(+)
-> 
-> diff --git a/fs/fsopen.c b/fs/fsopen.c
-> index ae19e5136598..70024870fefa 100644
-> --- a/fs/fsopen.c
-> +++ b/fs/fsopen.c
-> @@ -15,6 +15,7 @@
->  #include <linux/namei.h>
->  #include <linux/file.h>
->  #include <uapi/linux/mount.h>
-> +#include <linux/audit.h>
->  #include "internal.h"
->  #include "mount.h"
->  
-> @@ -134,6 +135,8 @@ SYSCALL_DEFINE2(fsopen, const char __user *, _fs_name, unsigned int, flags)
->  	if (IS_ERR(fs_name))
->  		return PTR_ERR(fs_name);
->  
-> +	audit_log_fsopen(fs_name);
-> +
->  	fs_type = get_fs_type(fs_name);
->  	kfree(fs_name);
->  	if (!fs_type)
-> diff --git a/include/linux/audit.h b/include/linux/audit.h
-> index 45abb3722d30..077b2667180d 100644
-> --- a/include/linux/audit.h
-> +++ b/include/linux/audit.h
-> @@ -449,6 +449,7 @@ extern void __audit_tk_injoffset(struct timespec64 offset);
->  extern void __audit_ntp_log(const struct audit_ntp_data *ad);
->  extern void __audit_log_nfcfg(const char *name, u8 af, unsigned int nentries,
->  			      enum audit_nfcfgop op, gfp_t gfp);
-> +extern void __audit_log_fsopen(const char *fs_name);
->  
->  static inline void audit_ipc_obj(struct kern_ipc_perm *ipcp)
->  {
-> @@ -598,6 +599,12 @@ static inline void audit_log_nfcfg(const char *name, u8 af,
->  		__audit_log_nfcfg(name, af, nentries, op, gfp);
->  }
->  
-> +static inline void audit_log_fsopen(const char *fs_name)
-> +{
-> +	if (!audit_dummy_context())
-> +		__audit_log_fsopen(fs_name);
-> +}
-> +
->  extern int audit_n_rules;
->  extern int audit_signals;
->  #else /* CONFIG_AUDITSYSCALL */
-> @@ -730,6 +737,9 @@ static inline void audit_log_nfcfg(const char *name, u8 af,
->  				   enum audit_nfcfgop op, gfp_t gfp)
->  { }
->  
-> +static inline void audit_log_fsopen(const char *fs_name)
-> +{ }
-> +
->  #define audit_n_rules 0
->  #define audit_signals 0
->  #endif /* CONFIG_AUDITSYSCALL */
-> diff --git a/include/uapi/linux/audit.h b/include/uapi/linux/audit.h
-> index e8f5ce677df7..abae0524746e 100644
-> --- a/include/uapi/linux/audit.h
-> +++ b/include/uapi/linux/audit.h
-> @@ -122,6 +122,7 @@
->  #define AUDIT_OPENAT2		1337	/* Record showing openat2 how args */
->  #define AUDIT_DM_CTRL		1338	/* Device Mapper target control */
->  #define AUDIT_DM_EVENT		1339	/* Device Mapper events */
-> +#define AUDIT_FSOPEN		1340	/* Record showing fsopen fs_name arg */
->  
->  #define AUDIT_AVC		1400	/* SE Linux avc denial or grant */
->  #define AUDIT_SELINUX_ERR	1401	/* Internal SE Linux Errors */
-> diff --git a/kernel/auditsc.c b/kernel/auditsc.c
-> index 6610e667c728..c82fd5606de5 100644
-> --- a/kernel/auditsc.c
-> +++ b/kernel/auditsc.c
-> @@ -2882,6 +2882,19 @@ void __audit_log_nfcfg(const char *name, u8 af, unsigned int nentries,
->  }
->  EXPORT_SYMBOL_GPL(__audit_log_nfcfg);
->  
-> +void __audit_log_fsopen(const char *fs_name)
-> +{
-> +	struct audit_buffer *ab;
-> +
-> +	ab = audit_log_start(audit_context(), GFP_KERNEL, AUDIT_FSOPEN);
-> +	if (!ab)
-> +		return;
-> +
-> +	audit_log_format(ab, "fs_name=");
-> +	audit_log_untrustedstring(ab, fs_name);
-> +	audit_log_end(ab);
-> +}
-> +
->  static void audit_log_task(struct audit_buffer *ab)
->  {
->  	kuid_t auid, uid;
-> -- 
-> 2.53.0
-> 
-> 
+Make new_len a size_t and use check_add_overflow() to catch the
+overflow, mirroring the audit_log_n_hex() fix.  No functional change for
+the in-tree callers, which all pass bounded lengths.
 
-- RGB
+Fixes: 168b7173959f ("AUDIT: Clean up logging of untrusted strings")
+Cc: stable@vger.kernel.org
+Signed-off-by: Zhan Xusheng <zhanxusheng@xiaomi.com>
+---
+ kernel/audit.c | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
 
---
-Richard Guy Briggs <rgb@redhat.com>
-Sr. S/W Engineer, Kernel Security, Base Operating Systems
-Remote, Ottawa, Red Hat Canada
-Upstream IRC: SunRaycer
-Voice: +1.613.860 2354 SMS: +1.613.518.6570
+diff --git a/kernel/audit.c b/kernel/audit.c
+index 562476937fa7..547ae0cebec9 100644
+--- a/kernel/audit.c
++++ b/kernel/audit.c
+@@ -2120,7 +2120,8 @@ void audit_log_n_hex(struct audit_buffer *ab, const unsigned char *buf,
+ void audit_log_n_string(struct audit_buffer *ab, const char *string,
+ 			size_t slen)
+ {
+-	int avail, new_len;
++	int avail;
++	size_t new_len;
+ 	unsigned char *ptr;
+ 	struct sk_buff *skb;
+ 
+@@ -2130,7 +2131,13 @@ void audit_log_n_string(struct audit_buffer *ab, const char *string,
+ 	BUG_ON(!ab->skb);
+ 	skb = ab->skb;
+ 	avail = skb_tailroom(skb);
+-	new_len = slen + 3;	/* enclosing quotes + null terminator */
++
++	/* enclosing quotes + null terminator */
++	if (check_add_overflow(slen, (size_t)3, &new_len)) {
++		audit_log_format(ab, "\"?\"");
++		return;
++	}
++
+ 	if (new_len > avail) {
+ 		avail = audit_expand(ab, new_len);
+ 		if (!avail)
+-- 
+2.43.0
 
