@@ -1,293 +1,79 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5562833E374
-	for <audit@vger.kernel.org>; Wed, 22 Jul 2026 13:22:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A29D534A3D9;
+	Wed, 22 Jul 2026 14:41:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784726542; cv=none; b=R772jkp8OKdai9VsMAskkpB8oHLBi+c4fjpuSwVWpEl/g3fOjurtMlgjRIFxOqyE+3v4UXBIWZwTaZe+xfC8woBMjbkNG9CedzSWAOcyfScPcxZzlAm65qkChJ4jYJFTDvFek/LVJ8nZMPW2++w9x7IklUTD/ZZSsRm1HeYAtI0=
+	t=1784731266; cv=none; b=DlxOHJRVfh+fSWKXJZCt/+Uwb1rqjz2OxH9ipOTJuN622CqrVavSLGDW99j5xF2ncrtvh6/CnAcibiXzuTC16mYxrucQs/e6aBQSgfMKwpIrFXiv3cFUrLDpUShqnB7bFHE+ZDu9aiLpY9hl8DCcVkdNQ+lxivV3guHFya4rXME=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784726542; c=relaxed/simple;
-	bh=gb7ddQHiT+tMQ0lfH+mGwqPhC5v4sQB5i18+U/GNU+c=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 In-Reply-To:Content-Type:Content-Disposition; b=S2zT5UsSkLqZpa9NPVvBcVUJG6DFIAb0lP8FT/89hyVkZjR784yQlrqVY1lXQKqMGGAqmms/v1ztGCXF47Gv8nH1ojRDx9qJd1HurewH4DR0uiH/GHEsUhaTvVGUqmhedzBzKG90FJyM2Se7zDr+oxCQ+GkoTv7M9nSlP9aQsiQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=QjEKma9B; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1784731266; c=relaxed/simple;
+	bh=r7HEopcqZQVCsuyPTjY2Df8a46NkzdYDZO4mEueFl5g=;
+	h=MIME-Version:Content-Type:Subject:From:To:Cc:In-Reply-To:
+	 References:Date:Message-Id; b=KY8/SFzIF7m2BDRyQX4A1zI7RvOjK9OLeW2NkFViOsdmtzNTfdMwMMvkpd96N7wHFKy0CrHjTSqI/CqZAyS4JMIYnCTX9DEYphTOaKe+yvGgA6F4vBbTHAhE9iXKb/t3g+ha4MP7ZzR8O+RKpuFDUzbNPp47ZT7Ze8dsobfaCow=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PDMjNdhm; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="QjEKma9B"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1784726539;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=feEVvExtCwbDdg7aSX8cuuWXWuzFoLtfoMT1v05EBhU=;
-	b=QjEKma9BIpH/xqhi+XkxisLsvIjzP5Pt6xd92Y2VtUnVK9Quf/Ca1eremYqj3fDO1i/8uh
-	FWF+xoAY8T8GIyZpGAIYRWigvf48JDQJxGZzxbAcf9fRVFj1DMRn62rBdGCFBKmaeu+LP4
-	rMaEWtEFxa6jJr7+1H7NzqtOXOUz0zY=
-Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-369-O3z-pCoTM_20hCLgVKA5sA-1; Wed,
- 22 Jul 2026 09:22:16 -0400
-X-MC-Unique: O3z-pCoTM_20hCLgVKA5sA-1
-X-Mimecast-MFC-AGG-ID: O3z-pCoTM_20hCLgVKA5sA_1784726534
-Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 5440518002C3;
-	Wed, 22 Jul 2026 13:22:14 +0000 (UTC)
-Received: from madcap2.tricolour.ca (unknown [10.22.58.2])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 27FF51955D88;
-	Wed, 22 Jul 2026 13:22:12 +0000 (UTC)
-Date: Wed, 22 Jul 2026 09:22:09 -0400
-From: Richard Guy Briggs <rgb@redhat.com>
-To: Ricardo Robaina <rrobaina@redhat.com>
-Cc: audit@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-	linux-kernel@vger.kernel.org, paul@paul-moore.com,
-	eparis@redhat.com, viro@zeniv.linux.org.uk, brauner@kernel.org,
-	jack@suse.cz, sgrubb@redhat.com
-Subject: Re: [PATCH] audit: add FSCONFIG auxiliary record to log filesystem
- configuration
-Message-ID: <amDEAQD1Wb5HHWe6@madcap2.tricolour.ca>
-References: <20260713170013.4073499-1-rrobaina@redhat.com>
- <al/wQsmHmVMSo+RH@madcap2.tricolour.ca>
- <CAABTaaBP3g-np2MhYHebiQpGHFpTe6Z_itqvt2qu9hsymkbHCw@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PDMjNdhm"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFAEF1F00A3A;
+	Wed, 22 Jul 2026 14:41:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1784731265;
+	bh=n/Co1BRUJxV8Ilnz0HmcLKDLBLt1Hht56jIYYXO45Kk=;
+	h=Subject:From:To:Cc:In-Reply-To:References:Date;
+	b=PDMjNdhmsMNcnFmbElhJiWIRqgRYRP33iz5wRRgYMFiRcjIZoxHWNLmK7xLZHhUw1
+	 on1roFgC7Q0NkdC9vylVxx6/RA1q3B/jMzfP0+/MKbL3/ivN42rvqTxnjvLmwqD2uX
+	 EigvSr7T2p9lgPPzOTqYZkOcgi8AnvgjWFUe8x1fPdzLaIFzA6bde9FLXelI7lI70w
+	 boSNSuH9BTMzJdJLHuEkpjojnpdhxB2IZZluBWrzdc9eJ8Vq24UhNjOCOhnALM7Sqx
+	 iPZAiEZe7dsYQkgbhl2/fRznG8NR5uk53EFrnsfIKCebCNzarK4AUR5w8zOo7IZBhJ
+	 sLWcd+9IvXx8A==
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <CAABTaaBP3g-np2MhYHebiQpGHFpTe6Z_itqvt2qu9hsymkbHCw@mail.gmail.com>
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
-X-Mimecast-MFC-PROC-ID: l4gFJAj9DuwWPzwOCQ6eLabHd6vj1-npxhWmQGPc5Ww_1784726534
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH 0/3] vfs: call audit_inode_child() in lookup_open() on
+ failure
+From: Christian Brauner <brauner@kernel.org>
+To: Jori Koolstra <jkoolstra@xs4all.nl>
+Cc: Alexander Viro <viro@zeniv.linux.org.uk>, 
+ Christian Brauner <brauner@kernel.org>, Paul Moore <paul@paul-moore.com>, 
+ Eric Paris <eparis@redhat.com>, Jan Kara <jack@suse.cz>, 
+ NeilBrown <neil@brown.name>, linux-fsdevel@vger.kernel.org, 
+ audit@vger.kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20260710164233.827744-1-jkoolstra@xs4all.nl>
+References: <20260710164233.827744-1-jkoolstra@xs4all.nl>
+Date: Wed, 22 Jul 2026 16:40:59 +0200
+Message-Id: <20260722-semester-unerlaubt-raubkatze-aa55ce95f36d@brauner>
+X-Mailer: b4 0.16-dev-2f6f2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=901; i=brauner@kernel.org;
+ h=from:subject:message-id; bh=r7HEopcqZQVCsuyPTjY2Df8a46NkzdYDZO4mEueFl5g=;
+ b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWQlXKs7bBbnx2vGOLt41fsf8f4zbYPbp8aUZKQe7M0V2
+ DEzfXd5RykLgxgXg6yYIotDu0m43HKeis1GmRowc1iZQIYwcHEKwER01zIyTNDotlpQ01oq+G7D
+ +om7WqR2rbviJOtcq8x2oHvDhthbAYwMd7t8DFx2H7Kc0bj1xEWVssAWNqFfWy9o7dk8KeHJyfQ
+ SVgA=
+X-Developer-Key: i=brauner@kernel.org; a=openpgp;
+ fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
 
-On 2026-07-22 10:05, Ricardo Robaina wrote:
-> On Tue, Jul 21, 2026 at 7:18 PM Richard Guy Briggs <rgb@redhat.com> wrote:
-> >
-> > On 2026-07-13 14:00, Ricardo Robaina wrote:
-> > > Modern mount tools (util-linux >= 2.39.1) use the new mount API
-> > > (fsopen, fsconfig, fsmount, move_mount) instead of the legacy mount(2)
-> > > syscall. The generic SYSCALL audit record logs the fsconfig syscall but
-> > > does not capture the configuration parameters, creating an audit gap for
-> > > critical mount information such as the device being mounted.
-> > >
-> > > Add an FSCONFIG auxiliary record that logs the command type, parameter
-> > > name (key), parameter value, and aux parameter passed to fsconfig(2).
-> > >
-> > >  ----
-> > >  type=SYSCALL : syscall=fsconfig a1=FSCONFIG_SET_STRING ...
-> >
-> > This looks like it is missing "a0=..."?
-> >
-> > >  type=FSCONFIG : fs_cmd=1 fs_key=source fs_val="tmpfs" fs_aux=0
-> > >  ----
-> > >  type=SYSCALL : syscall=fsconfig a1=FSCONFIG_CMD_CREATE ...
-> >
-> > This looks like it is missing "a0=..."?
-> > I'm guessing this isn't actually real test output?
-> >
+> While reworking lookup_open() to implement O_CREAT|O_DIRECTORY I came
+> across inconsistency in how audit_inode_child() is called in various
+> file create paths.
 > 
-> Thanks for reviewing this patch, Richard!
+> audit_inode_child() is called in may_create_dentry() so that failed
+> filesystem operations still register an audit entry. On success, the
+> entry is overwritten when, for instance, fsnotify_create() is called.
+> This is the calling convention in vfs_create() and vfs_mkdir().
+> In lookup_open(), however, when atomic_open() should have created a
+> file but didn't, no call to audit_inode_child() is made. The same is
+> true for the regular ->create() path.
 > 
-> That's real test output; I just trimmed the SYSCALL record output to
-> fit in the commit message. Since this patch does not touch this
-> record, I don't see a problem. I can
-> add a0=... for consistency if you prefer, though.
+> On the suggestion of Brauner, I am splitting this series from the
+> O_CREAT|O_DIRECTORY work, so that this can be discussed with the audit
+> people without delaying that work.
 
-Consistent use of ... would help to clarify that.
+Looks good to me. I'll wait for the audit people to look at it too.
 
-> > >  type=FSCONFIG : fs_cmd=6 fs_key=(null) fs_val=(null) fs_aux=0
-> >
-> > Was there a fs_key output here that didn't make it due to the issue below?
-> 
-> Actually, in this case, the test result happened to be right (that's
-> why I missed it).
-> FSCONFIG_CMD_CREATE has no key or value, so both are NULL[1].
-
-Yup, fair, had to ask.  :-)
-
-> [1] https://man7.org/linux/man-pages/man2/fsconfig.2.html
-> 
-> > >  ----
-> > >  type=SYSCALL : syscall=fsconfig a0=0x4 a1=FSCONFIG_SET_BINARY ...
-> > >  type=FSCONFIG : fs_cmd=2 fs_key=hidepid fs_val="<binary>" fs_aux=4
-> > >
-> > > Link: https://github.com/linux-audit/audit-kernel/issues/153
-> > > Signed-off-by: Ricardo Robaina <rrobaina@redhat.com>
-> > > ---
-> > >  fs/fsopen.c                |  7 +++++++
-> > >  include/linux/audit.h      | 13 +++++++++++++
-> > >  include/uapi/linux/audit.h |  1 +
-> > >  kernel/auditsc.c           | 27 +++++++++++++++++++++++++++
-> > >  4 files changed, 48 insertions(+)
-> > >
-> > > diff --git a/fs/fsopen.c b/fs/fsopen.c
-> > > index ae19e5136598..9b3c02f59df4 100644
-> > > --- a/fs/fsopen.c
-> > > +++ b/fs/fsopen.c
-> > > @@ -15,6 +15,7 @@
-> > >  #include <linux/namei.h>
-> > >  #include <linux/file.h>
-> > >  #include <uapi/linux/mount.h>
-> > > +#include <linux/audit.h>
-> > >  #include "internal.h"
-> > >  #include "mount.h"
-> > >
-> > > @@ -357,6 +358,7 @@ SYSCALL_DEFINE5(fsconfig,
-> > >       struct fs_context *fc;
-> > >       int ret;
-> > >       int lookup_flags = 0;
-> > > +     const char *value_str = NULL;
-> > >
-> > >       struct fs_parameter param = {
-> > >               .type   = fs_value_is_undefined,
-> > > @@ -423,6 +425,7 @@ SYSCALL_DEFINE5(fsconfig,
-> > >                       goto out_key;
-> > >               }
-> > >               param.size = strlen(param.string);
-> > > +             value_str = param.string;
-> > >               break;
-> > >       case FSCONFIG_SET_BINARY:
-> > >               param.type = fs_value_is_blob;
-> > > @@ -432,6 +435,7 @@ SYSCALL_DEFINE5(fsconfig,
-> > >                       ret = PTR_ERR(param.blob);
-> > >                       goto out_key;
-> > >               }
-> > > +             value_str = "<binary>";
-> > >               break;
-> > >       case FSCONFIG_SET_PATH_EMPTY:
-> > >               lookup_flags = LOOKUP_EMPTY;
-> > > @@ -445,6 +449,7 @@ SYSCALL_DEFINE5(fsconfig,
-> > >               }
-> > >               param.dirfd = aux;
-> > >               param.size = strlen(param.name->name);
-> > > +             value_str = param.name->name;
-> > >               break;
-> > >       case FSCONFIG_SET_FD:
-> > >               param.type = fs_value_is_file;
-> > > @@ -458,6 +463,8 @@ SYSCALL_DEFINE5(fsconfig,
-> > >               break;
-> > >       }
-> > >
-> > > +     audit_log_fsconfig(cmd, param.key, value_str, aux);
-> > > +
-> > >       ret = mutex_lock_interruptible(&fc->uapi_mutex);
-> > >       if (ret == 0) {
-> > >               ret = vfs_fsconfig_locked(fc, cmd, &param);
-> > > diff --git a/include/linux/audit.h b/include/linux/audit.h
-> > > index 45abb3722d30..978eb881974c 100644
-> > > --- a/include/linux/audit.h
-> > > +++ b/include/linux/audit.h
-> > > @@ -449,6 +449,8 @@ extern void __audit_tk_injoffset(struct timespec64 offset);
-> > >  extern void __audit_ntp_log(const struct audit_ntp_data *ad);
-> > >  extern void __audit_log_nfcfg(const char *name, u8 af, unsigned int nentries,
-> > >                             enum audit_nfcfgop op, gfp_t gfp);
-> > > +extern void __audit_log_fsconfig(unsigned int cmd, const char *key,
-> > > +                              const char *value, int aux);
-> > >
-> > >  static inline void audit_ipc_obj(struct kern_ipc_perm *ipcp)
-> > >  {
-> > > @@ -598,6 +600,13 @@ static inline void audit_log_nfcfg(const char *name, u8 af,
-> > >               __audit_log_nfcfg(name, af, nentries, op, gfp);
-> > >  }
-> > >
-> > > +static inline void audit_log_fsconfig(unsigned int cmd, const char *key,
-> > > +                                   const char *value, int aux)
-> > > +{
-> > > +     if (!audit_dummy_context())
-> > > +             __audit_log_fsconfig(cmd, key, value, aux);
-> > > +}
-> > > +
-> > >  extern int audit_n_rules;
-> > >  extern int audit_signals;
-> > >  #else /* CONFIG_AUDITSYSCALL */
-> > > @@ -730,6 +739,10 @@ static inline void audit_log_nfcfg(const char *name, u8 af,
-> > >                                  enum audit_nfcfgop op, gfp_t gfp)
-> > >  { }
-> > >
-> > > +static inline void audit_log_fsconfig(unsigned int cmd, const char *key,
-> > > +                                   const char *value, int aux)
-> > > +{ }
-> > > +
-> > >  #define audit_n_rules 0
-> > >  #define audit_signals 0
-> > >  #endif /* CONFIG_AUDITSYSCALL */
-> > > diff --git a/include/uapi/linux/audit.h b/include/uapi/linux/audit.h
-> > > index e8f5ce677df7..5cd0eb602528 100644
-> > > --- a/include/uapi/linux/audit.h
-> > > +++ b/include/uapi/linux/audit.h
-> > > @@ -122,6 +122,7 @@
-> > >  #define AUDIT_OPENAT2                1337    /* Record showing openat2 how args */
-> > >  #define AUDIT_DM_CTRL                1338    /* Device Mapper target control */
-> > >  #define AUDIT_DM_EVENT               1339    /* Device Mapper events */
-> > > +#define AUDIT_FSCONFIG               1341    /* Record showing fsconfig args */
-> > >
-> > >  #define AUDIT_AVC            1400    /* SE Linux avc denial or grant */
-> > >  #define AUDIT_SELINUX_ERR    1401    /* Internal SE Linux Errors */
-> > > diff --git a/kernel/auditsc.c b/kernel/auditsc.c
-> > > index 6610e667c728..222bf79ee9bd 100644
-> > > --- a/kernel/auditsc.c
-> > > +++ b/kernel/auditsc.c
-> > > @@ -2882,6 +2882,33 @@ void __audit_log_nfcfg(const char *name, u8 af, unsigned int nentries,
-> > >  }
-> > >  EXPORT_SYMBOL_GPL(__audit_log_nfcfg);
-> > >
-> > > +void __audit_log_fsconfig(unsigned int cmd, const char *key,
-> > > +                       const char *value, int aux)
-> > > +{
-> > > +     struct audit_buffer *ab;
-> > > +
-> > > +     ab = audit_log_start(audit_context(), GFP_KERNEL, AUDIT_FSCONFIG);
-> > > +     if (!ab)
-> > > +             return;
-> > > +
-> > > +     audit_log_format(ab, "fs_cmd=%u", cmd);
-> > > +     audit_log_format(ab, " fs_key=");
-> > > +     if (value)
-> >
-> > This looks like it should be "if (key)".
-> 
-> Good catch!
-> 
-> > > +             audit_log_untrustedstring(ab, key);
-> > > +     else
-> > > +             audit_log_format(ab, "(null)");
-> > > +
-> > > +     audit_log_format(ab, " fs_val=");
-> > > +     if (value)
-> > > +             audit_log_untrustedstring(ab, value);
-> > > +     else
-> > > +             audit_log_format(ab, "(null)");
-> > > +
-> > > +     audit_log_format(ab, " fs_aux=%d", aux);
-> > > +
-> > > +     audit_log_end(ab);
-> > > +}
-> > > +
-> > >  static void audit_log_task(struct audit_buffer *ab)
-> > >  {
-> > >       kuid_t auid, uid;
-> > > --
-> > > 2.53.0
-> >
-> > - RGB
-> 
-> -Ricardo
-
-- RGB
-
---
-Richard Guy Briggs <rgb@redhat.com>
-Sr. S/W Engineer, Kernel Security, Base Operating Systems
-Remote, Ottawa, Red Hat Canada
-Upstream IRC: SunRaycer
-Voice: +1.613.860 2354 SMS: +1.613.518.6570
+-- 
 
