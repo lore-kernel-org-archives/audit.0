@@ -1,146 +1,145 @@
-Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
+Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com [209.85.160.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43C8535F610
-	for <audit@vger.kernel.org>; Thu, 23 Jul 2026 20:12:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.216.49
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784837571; cv=pass; b=LySUPtz7bqCTP/NCMuUJLjg8mWOKzrhXQc5FjM695YvbZRtCKIGalP6nCvkQNfsugf2ZN0XhRTy3ZpXSJD7KfYq5obNhKY315mRImNene4VaZE1vsGRnBl0zyUcR+5jB6WVm1kzXGq05TD3RDTidPxdyKbOKnrHSJbNc7HxyyMo=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784837571; c=relaxed/simple;
-	bh=cRa1jnXHjfehu+vQdb0wwfICkozzEfrwV7jXJ2JhzSY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=jKUa2AaoK9EKmkDjR6sCMydy8qwJq8ZaYPmx/sRJTMLVILyLiBg+SLbo/8VYJ5bi1aqZoweeNS1cqbFAgNhBpSbei0SQwuzvGmfv/FLQqZnWCj1cnDJnRpaaGyFib03/y/InE/b+4CxOovcLhYX6exqsiKIaBaXUVqq68suTlRY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=NlfyWus+; arc=pass smtp.client-ip=209.85.216.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 289ED3F8899
+	for <audit@vger.kernel.org>; Thu, 23 Jul 2026 21:57:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.175
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1784843878; cv=none; b=TRre6Ki/n8KLF3JQDPGeNDJViLrN9/z5qZ9eo2y5a9Al/J/rXg2eRTB86yUU/cyi8xUio8WHZ53ewgkxz7/so5AVYg7kb01fbk9mwnocLDCD+0vkCxtge7W3cK+mcmZwf740J3NRJGUFIIMDCIDE5tR8bRTfrZ7e4ee0DY8IZ1I=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1784843878; c=relaxed/simple;
+	bh=ylOeIKd1L7ZIVJMCcRBVkSvyVCfZcUOpGEO57Hr+PBU=;
+	h=Date:Message-ID:MIME-Version:Content-Type:From:To:Cc:Subject:
+	 References:In-Reply-To; b=bVhKETZdQmHaA0zBNriBgXP8XrcRUF6eiM6y+/dXEztTGFAUjlrPHplJYCw7Z5VmaA7bOqiwytOE0oI9iYU9x8+trPX8kTry/oqt+BdJbDeqybFj6mHga9/OR1FtoSaW5f/6TRuWoO/1J/IvIlNrxbXXOkUwOhlI4n6mPknAq8U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=HIjYBiDf; arc=none smtp.client-ip=209.85.160.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="NlfyWus+"
-Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-38dc4553f62so1122024a91.0
-        for <audit@vger.kernel.org>; Thu, 23 Jul 2026 13:12:47 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1784837567; cv=none;
-        d=google.com; s=arc-20260327;
-        b=Wc5FX6NonULKl5YWtPnSw1X/WkSjDu/PUTDJZ+H3dlEFgTPBs84qKxxhbJeecqSJjN
-         iV1diNqkTRbOILyQwsLXp3NchXSlZ1oj8wzL6KArkdGaR3+QKQlfL5yw1oU+Lwm/Bfx0
-         CSq7yiwuLhwmojgdRN+bhexKDyj7TJsWkSGqLQpgGUOEMrYYw7jzNYxJmtgHYy0JFaTD
-         TGO+6akZZ+cnAbXbUXS5c/u4dpReVehQe37q9BB/zg2Kbq/UG8YDU+c1zYfj3ipy4tOP
-         cFmG2Sz87XbqrWJ4ezlSTXO1CXRcbEPwy7lHOuZOwTE03oNwJ20IbjBN31U4NPI6SuKz
-         iKbg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=c2R25w+oINRR/xO92ByMjiKR0FyCYK7I928sU6jzTY4=;
-        fh=QBUvzydCXueJShwRyJoac18uuPW74t4ds85BWLuyne0=;
-        b=iDdeViI9IiSE2RL3mF5eDmY72PtRCZ+bIlSeQQtLbTEdRaKS0LvZPXgNEj8uLiiCLd
-         f1aa56/Bk3jLAhWeQ6ani3ZbVcgPVpKsd4OzAaMiIAtzLvk72LjCIzL65V3uPaSopKEc
-         yilDPTLAVsmMhpBor5KjIXrSzeg7uoD9JPdDkHadfyzgFPG9OOVOj8nSp4LPiO8xkd3W
-         BhYlk82V4IiXrKbB4Rz/bxzyqXS73F+250diV/Tlogs+iWA+xl4VNHemADCDAftDTzd2
-         oyASCS4uIymBBZ7Mkp/aykFHjhFw65vEf75GFXcX+RP/IqTIqqmv30GYA9uhL4nNG3J1
-         kyHg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="HIjYBiDf"
+Received: by mail-qt1-f175.google.com with SMTP id d75a77b69052e-5276d598b96so9343661cf.3
+        for <audit@vger.kernel.org>; Thu, 23 Jul 2026 14:57:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1784837567; x=1785442367; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=c2R25w+oINRR/xO92ByMjiKR0FyCYK7I928sU6jzTY4=;
-        b=NlfyWus+LpxuhxS+hsaat8b3rOzWFUZA7R/yq75tvcHFYD92bHQJljK3UHTGGq7li9
-         WXacoO8BF5MA9t1PqCrA7pDp9yY7JCXldnJifrwrsqywCK3mzIhwVkrsBSPpyv99q4ZZ
-         j19Uf1GYZFRtKAOTwOUsg/niisFF/6ZAHAeLtFWHbmy/mEkOnZySB1w2wYBLtnaS/nfR
-         XZwuFinVkUqPU8bo1V+cR0RetvtKHDgVrWd+co9XpSFuuSF8i7rVuJdDl7vzgpYm4SMw
-         FycqT8b5s1dmV3oGVFExc2EmYwQDSd3Ry80YCwqq4cZA6dsANAxvVMDd+8qH3yvDWesH
-         xtFw==
+        d=paul-moore.com; s=google; t=1784843875; x=1785448675; darn=vger.kernel.org;
+        h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
+         :content-type:mime-version:message-id:date:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=lqDNQfwHL9fM3Gt3gkX3y29OCx2aWzPuHHonYTNvKak=;
+        b=HIjYBiDfMPttfBpheT31E8tR8hns7WmaD321Oeg9W7qDSLkLNhCgqmvfjiPCnkceFS
+         6+RX1vU1Hb8C71BUj49LWk+rMdtmZEBR9i7Nq7Odr1NuWrTjSL+YaIfsJbxQKb7TIAb9
+         iYkHJAkl141GIvxE6FfJ2/qSkW2rxy5HbEQLoEV4aHunMXnKzaxhn9Gk8EoAGWFsQQSG
+         mjgxqhkVniCJGWh3DvM04nItffCRd0g/FtTPo5Mbm6oYWaX52sG85lpNILgguKtOf+JU
+         2cQ0U5Hhk7zICjfLvpVjZsywgWnedQZbpkDmgGlwQZRkHR8VfAQkJABV2S41hjk9jVXB
+         KvHQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784837567; x=1785442367;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
+        d=1e100.net; s=20251104; t=1784843875; x=1785448675;
+        h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
+         :content-type:mime-version:message-id:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=c2R25w+oINRR/xO92ByMjiKR0FyCYK7I928sU6jzTY4=;
-        b=aCrW/3vC+NhEL/fdSCqSpHpeY+22P0tHRPYpznEuTvCyVvS/UAhMMRyUJTcV49aAnN
-         ns8qAMydX/VIKL5AZX5cW9ltJ/8K7M6j49+4jg/qCCoeU6w+7sfyAJT87yWIaF5qE0Rw
-         PQb4uVJATxZ43cmGGC3vH3Nss57FXiTMxEhuJw5HzrXkINpZ+H4jA90RedmxmrDfPkJ9
-         +PrlzlnZr6sWommBT9WE6hWtPYuGf6gxOAWeAL4uUQUcZeH7Rl+oG/OAQqjfcPL3ASGQ
-         q1V/nl/72p9ajbHSnnldC8PkCYrWpnKoD/e7uqOimNPazCjxWj1igVjftX9C8fEOaj8A
-         SY2Q==
-X-Gm-Message-State: AOJu0Yw/2f1RkgKhyqZMDhiqMGTSN1Xf/DUhtu5y1U4b9IH+9vEnJH41
-	SoMPXd5nyI+C7UwAcu9yUySbrKpdebjaQmH/9nlUexGqpUwM+Vk+NsDRS6u88fQkrCqnbT7vuur
-	OXPNvB8K9IqzPZsup2J2G4n2vDzExxI0KsJTRqpOU
-X-Gm-Gg: AR+sD136YbOTHdH+Mdb7BTbIX2dYE/gijECDlYUg8qy797nybfciAPrTBz2tF1cJ2Ec
-	apTC0Lo04u2IUTgsO74b6nxWTYn+ttrDAwRnS829zk6IJkHXsGqIBnQBGH1KJ4otc7jLky8+l4O
-	1pXBtB/KyoGtFZGIPsP/txH5C9pdM13F62LoPM4n/SfNjL5Y5J2OthF/+28oKECX+8vsI6059xU
-	aJcRrUqIt19eHRVk0b/4ROdw1ubY8/jSYkkO3tF9kLF9RWrT5Wt5z91rf9DjKjUG49nCxoL
-X-Received: by 2002:a17:90b:5824:b0:37f:ad36:8fc5 with SMTP id
- 98e67ed59e1d1-38ec65ed894mr5038107a91.23.1784837567354; Thu, 23 Jul 2026
- 13:12:47 -0700 (PDT)
+        bh=lqDNQfwHL9fM3Gt3gkX3y29OCx2aWzPuHHonYTNvKak=;
+        b=SO1JWbfqB6Q+IEIyndE56Zbg/APafbSWE4lu117N0jwOnuFdxeQhVvf0vnOpCvYBbG
+         Ch5rwTe0IIqzacgsuQieldDRoOpUgjLkf8xyhQw1I90oNDOLo0VRFZMbkicXGkZlXtTI
+         V9+HhkQYezfi6mAIvfl6WEhx4v3p6i5zZuWaeuKJNvJmEfRv5fiffTvu4noBkjzTO4gd
+         A9kD3EmentAy1qx5MI3s61Kcav1zl21L0Hn0h9ThLzuLLkvuiqWoZAmOUlbc7daGhP2Z
+         IoUlUW/2f2oijS4xUDJBJx4JI8a/oWvji13G9pXrcAoGzzOXC9KYlrctQaqDbKfHaXqK
+         EGIA==
+X-Forwarded-Encrypted: i=1; AHgh+Rqaa+Fky42SaKX4MyNWUaGl3CMTKL1OZt7sM97GAUnnOhH9T3iuYJaGV8pAni0cdLsrQgB1uQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxAjqN6G0AQK155LpFa0EI1LE2P/znk9peeWIe44rfYZ4+KsdND
+	vLRHSeqA+JRhV+cMUbxUTDWMO6nt/L9X7nYN5gQ4wzBUKx9ZHAUgVmRjxvijDIvp7A==
+X-Gm-Gg: AR+sD10rIIfk+hfKgSlNxu8Te+BNcRmITJ6VYCpwnj6ng/KVZBHr94OwH3eSUNrVlOQ
+	VYrgicrnQr+JQn8rm4pzCnc5XYflRuOKpw8e5SClTo+JokOH8I1dygybM6vJl7SsJ8jMndmrUw6
+	rSseZUiupdOjgWW9iZiQbaTSBOtM/wJ1ARU/CH9JtUQo6ZL//WqVj13YAGvJXZ7qFK78JexCyOG
+	xQjk5LTRxyFdHYBZRhg7k4iH4/Ta9ZP+v2Coaa5YhSHu1CVJzmqkRAVg+e1ypwT5Evs+kRPhVT6
+	wdZRp2NnJKjjzAOs+dHsaZMepR3T3WPg56oRBnNdl/HrnBrqnvvjeRrYaQ/1OVUC0kAxmyug4AM
+	f0g2qOYbKeSyZ21MnNcmY1ReHuVODMFsvWph4t+LU4Aybu7GDp8ld4TGy1LVflaOR7LQI5KKmUy
+	mxo3uunfSmhnZQ47ou5Y6XWN7zsbpTIyupHl6Ca6Hk67G0qMg=
+X-Received: by 2002:a05:622a:4c1b:b0:51c:7b11:41b0 with SMTP id d75a77b69052e-5283df9c8f0mr53089181cf.76.1784843874688;
+        Thu, 23 Jul 2026 14:57:54 -0700 (PDT)
+Received: from localhost (pool-71-126-255-178.bstnma.fios.verizon.net. [71.126.255.178])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-527d3a47ee2sm42095211cf.26.2026.07.23.14.57.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Jul 2026 14:57:53 -0700 (PDT)
+Date: Thu, 23 Jul 2026 17:57:52 -0400
+Message-ID: <623bf8c0c7725ae7d93d7c0847821212@paul-moore.com>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20260630195242.367870-2-paul@paul-moore.com> <CAABTaaCG9xrLXsYoAx9QD85t8xkpveMXi_sBndz-7mbCmpZgBw@mail.gmail.com>
-In-Reply-To: <CAABTaaCG9xrLXsYoAx9QD85t8xkpveMXi_sBndz-7mbCmpZgBw@mail.gmail.com>
+MIME-Version: 1.0 
+Content-Type: text/plain; charset=UTF-8 
+Content-Transfer-Encoding: 8bit 
+X-Mailer: pstg-pwork:20260723_1338/pstg-lib:20260723_1454/pstg-pwork:20260723_1338
 From: Paul Moore <paul@paul-moore.com>
-Date: Thu, 23 Jul 2026 16:12:35 -0400
-X-Gm-Features: AUfX_mx5wxE7RhkYwkiQm09t32vOdTvM3o4Wonluc-_9MEn_WEGj1iUpGhAuzxo
-Message-ID: <CAHC9VhQJicGZY_xAAQgD7jOC5qFAgqAYiw5q906ZHzTY4v+SKA@mail.gmail.com>
-Subject: Re: [RFC PATCH] audit: drop BUG_ON() from audit_log_XXX()
-To: Ricardo Robaina <rrobaina@redhat.com>
-Cc: audit@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+To: Ren Wei <enjou1224z@gmail.com>, audit@vger.kernel.org
+Cc: eparis@redhat.com, rgb@redhat.com, vega@nebusec.ai, rakukuip@gmail.com, enjou1224z@gmail.com
+Subject: Re: [PATCH 1/1] audit: fix potential use-after-free in  audit_del_rule()
+References: <ffdeea400054f4d42e394d09003cb4dd5ffe862c.1784611349.git.rakukuip@gmail.com>
+In-Reply-To: <ffdeea400054f4d42e394d09003cb4dd5ffe862c.1784611349.git.rakukuip@gmail.com>
 
-On Wed, Jul 1, 2026 at 9:20=E2=80=AFAM Ricardo Robaina <rrobaina@redhat.com=
-> wrote:
-> On Tue, Jun 30, 2026 at 4:53=E2=80=AFPM Paul Moore <paul@paul-moore.com> =
-wrote:
-> >
-> > We can easily drop the BUG_ON()s from the audit_log_XXX() helpers and
-> > simply return to the caller as we do if we are passed a NULL
-> > audit_buffer.
-> >
-> > Signed-off-by: Paul Moore <paul@paul-moore.com>
-> > ---
-> >  kernel/audit.c | 9 +++------
-> >  1 file changed, 3 insertions(+), 6 deletions(-)
+On Jul 21, 2026 Ren Wei <enjou1224z@gmail.com> wrote:
+> 
+> `audit_del_rule()` destroys `e->rule.exe` via `audit_remove_mark_rule()`
+> before unlinking the rule from RCU-visible filter lists and waiting for a
+> grace period. Concurrent readers in `audit_filter()` and
+> `audit_filter_rules()` still dereference `e->rule.exe`, while the fsnotify
+> mark can be freed on an independent lifetime path. This creates a use-after-free
+> window during rule deletion.
+> 
+> Fix this by unlinking the rule from the RCU-visible lists and invoking
+> `synchronize_rcu()` before calling `audit_remove_mark_rule()` (and other
+> rule removal helpers). This ensures that all existing RCU readers have exited
+> the critical section before any underlying resources are destroyed.
+> 
+> Fixes: 34d99af52ad4 ("audit: implement audit by executable")
+> Cc: stable@vger.kernel.org
+> Reported-by: Vega <vega@nebusec.ai>
+> Assisted-by: Codex:gpt-5.4
+> Signed-off-by: Luxiao Xu <rakukuip@gmail.com>
+> Signed-off-by: Ren Wei <enjou1224z@gmail.com>
+> ---
+>  kernel/auditfilter.c | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
 
-...
+Thanks for identifying this and providing a patch, some initial thoughts
+below ...
 
-> Hi Paul,
->
-> It looks good to me. I agree that it was not worth panicking the
-> kernel in these cases.
-> Reviewed-by: Ricardo Robaina <rrobaina@redhat.com>
+> diff --git a/kernel/auditfilter.c b/kernel/auditfilter.c
+> index 4401119b5275..7f791afe5791 100644
+> --- a/kernel/auditfilter.c
+> +++ b/kernel/auditfilter.c
+> @@ -1045,6 +1045,10 @@ int audit_del_rule(struct audit_entry *entry)
+>  		goto out;
+>  	}
+>  
+> +	list_del_rcu(&e->list);
+> +	list_del(&e->rule.list);
+> +	synchronize_rcu();
 
-Thanks for taking a look.  As an FYI, I'm dropping this patch as I'm
-folding it into a larger patchset that I'll post as soon as I have a
-chance to test it.  While looking at the overflow checks in the
-logging functions I was "inspired" to fix a number of related problems
-this afternoon and this BUG_ON fix fit well with the new patchset.
+I generally prefer to use call_rcu() instead of synchronize_rcu() when
+possible.  Did you consider creating a audit_del_rule_rcu() (or similar)
+function which would perform the other cleanups/releases below this point
+including the call to audit_free_rule_rcu() which could then be called
+by call_rcu()?
 
-> I was taking a look at other BUG_ON instances and noticed a couple
-> that might benefit from similar treatment:
->
->   1. In audit_add_to_parent() at kernel/audit_watch.c:375:
->      BUG_ON(!mutex_is_locked(&audit_filter_mutex));
->
->      Couldn't we use lockdep_assert_held() instead?
+It's worth mentioning that I didn't verify all of the code involved to
+know if this would work, be safe, etc., I just wanted to check to see if
+you already had and decided synchronize_rcu() was the only option.
 
-I believe so.  Nice catch :)
+>  	if (e->rule.watch)
+>  		audit_remove_watch_rule(&e->rule);
+>  
+> @@ -1062,8 +1066,6 @@ int audit_del_rule(struct audit_entry *entry)
+>  		audit_signals--;
+>  #endif
+>  
+> -	list_del_rcu(&e->list);
+> -	list_del(&e->rule.list);
+>  	call_rcu(&e->rcu, audit_free_rule_rcu);
+>  
+>  out:
+> -- 
+> 2.43.0
 
->   2. In __audit_log_bprm_fcaps() at kernel/auditsc.c:2715:
->      BUG_ON(axp->pid_count >=3D AUDIT_AUX_PIDS);
->
->      This could gracefully return an error instead of panicking.
-
-I'm assuming you meant audit_signal_info_syscall()?  If so, yes, this
-would be another good improvement.
-
-> I can send patches for these if you think they're worthwhile.
-
-That would be great, thanks!
-
---=20
+--
 paul-moore.com
