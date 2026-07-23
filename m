@@ -1,85 +1,132 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5182041A501;
-	Wed, 22 Jul 2026 15:59:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784735953; cv=none; b=p/RaP9GqrhgxLsMyimgNmqKs3H1Om8XrS2JzwV8d89tVblVfXG8JysMvr4EnS7cE0hONF7Zx97z6GKmAy4UdBatDokvy6ZZqcZlYLBj9WvkuE65w09Q76mkNHBxUTLENoMWVfhUzj74SzxGf8dTnkMZ9HURH3/warLQpnPcVBMg=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784735953; c=relaxed/simple;
-	bh=ovdxwvAWRVrDlJaz62HOuk3XignNiSoaHXa5SU2T174=;
-	h=MIME-Version:Content-Type:Subject:From:To:Cc:In-Reply-To:
-	 References:Date:Message-Id; b=Q8sSLOyqY7miuJMokirq88SKIXFVlYInzKjcCOVxt6K13IuKpLlul2xDnk/egIhoHm4xfRHDiMey74PHzH/MZ4m2YieCjWx5eByAUGKelAMseuQ6sKWi12daQRDvkPTZYWQYjsVmPTaLSEMw2EcfzZDWAVr6Z7qt/vG7KgrFwWc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=avVV55CJ; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3ACE1417BE1
+	for <audit@vger.kernel.org>; Thu, 23 Jul 2026 17:21:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.215.180
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1784827300; cv=pass; b=Tuf7FxK6+p7zo9AADyGJpzl+5KVHmrT24zFhpenwSYxsE7J5VsUsFvgwArmqfuuVoSop9LT9265tjIVzSF8KDd7w3rKuH9xh2pboT/qyJc/h8hfzpT3yjrzzq6dholwcgQPknigMdhLcrN+8SoTQPvm4YTKL8yVxANd+0m1d3YE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1784827300; c=relaxed/simple;
+	bh=8Gg2XbldpLMsUZojY/TpMY/hmG9JSL4yamN9EKridMg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ZOH8nobWokyl9jUkMOklELdppnlWLTq4Fex40XB+6ZSLmsqtByIzEPOxRforvPbBCVz/2WhSAttScO7XOJCZMM91Ei06060OXCEG6O972y36EoyPfFUX/ehQ5oEA0Xxzco9+IgPuFdC702JOMGTZxS9A5bF+DHSHOOknfbnYAVk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=dntao2o3; arc=pass smtp.client-ip=209.85.215.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="avVV55CJ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B57311F000E9;
-	Wed, 22 Jul 2026 15:59:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784735952;
-	bh=jHAJXYDYaNZ5gxL1qCSFKgNVd3B79GW84exIfRUAmC8=;
-	h=Subject:From:To:Cc:In-Reply-To:References:Date;
-	b=avVV55CJ7lao9oFT9t1UMifTjEnIbHVieQT8EVDjMcqt8u1dtBnT0/1mtTRC5jmbo
-	 StHORgu6sy+HowiIuv66/jzLtdKuVpEQANXM4zsw30hTvG+B4yVu//7sbRt1f2z9ou
-	 B+/a/wZx1HkWEI7QnFbEOUQXiAWYKmnlxuzbtFpQruyB5Lv/gVpSxXhsKqwGuMSKGK
-	 tk0Tp4/ZDWXG1QWU7slIZxO0KFB5p+FeDf/uAYGHSRGwjMrR8yre1aKdHq7or0uSOX
-	 ydABoWog2G9A48e9sEV4kIUW6JEwCczrDFH0kCMAXozPvkHHiwFsIQn6DL9Bb67coA
-	 4+4R7B63lOWtg==
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="dntao2o3"
+Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-c9e0b89e228so694707a12.1
+        for <audit@vger.kernel.org>; Thu, 23 Jul 2026 10:21:39 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1784827298; cv=none;
+        d=google.com; s=arc-20260327;
+        b=adQwESioeDqV1G6CZLzd85RbbC//NqkMdpaZ5IlH4M4PDfqAHEDexhb4ba9Saa13Xg
+         6KWT571xYNNFNKQTltUPC4h52qYu/XE2atQxshRGosQHLcb6litekRnWiFj06tgHhOvb
+         0MY4eectc6w9DPo/WFRL7YWSafxmu9GxfUXVArvrk7OuS7NdcOSRvZblV1UdNpjjnffs
+         Qai6DzMt2CFOLU7vdhPIRRVCX95g/KO0xKRvikqQj2GKRJbJjmioL7YP9bmelT8UK0Oi
+         s2WXpwgLQ8LxVM2oQKT1l79muosrtx5voqPwVEPAakj843PXDDyUVdmvbnK5Fn8ozmwZ
+         Zrcw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=tiv4QrJoovLT4G3A2lfHDYRca3fItAiSKI996i+aMNI=;
+        fh=LJ1nkRAKnZDuTHV7hMCc3bBF5tcegFgoLfM5jSrlRGQ=;
+        b=RZqDC9wu1K4zvcyWr04omCg57Q5WPGVYBrfyqN1ikPvnkv5mCAKU63Xm63LiOoYeTH
+         FzP9F168tRRaoVxq+aQNCXt+wSkZchZ6SGyH4WjvZAKFQ0rGpmKTP9jtg1+4e/kUyjTS
+         NgY9GRKQChJZMaPDzyTn6MeNyC5PTlFrCaoCx+PerkhEufCS9jXjQNDMbPss0uxlIFdA
+         hp8zW+7KgqCz9LQJbAJnYMIciTl1ODIgsrG/Zqs0unPZRtg9JW/kKgI3vJ1XCTjwxAOs
+         tKV3brkxmLMSuSdAqky5Jjq1uqdPP/kjsdappyF7WMkO0WSWcwvkp7S0YBHTKEteZRJy
+         DTMw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1784827298; x=1785432098; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=tiv4QrJoovLT4G3A2lfHDYRca3fItAiSKI996i+aMNI=;
+        b=dntao2o3XXiXSveZTbpBVFUE73slzQAyieLn9VwwoxHwjVP9ZR7E+mdlCW3COT9LKH
+         G01efTuD9fxVyArO7bmCWSArBE2vIsnGXCVTmBU9hQnmS/IyjPl9HLqA2unhrQWwAbwZ
+         WvxREEVyuMIlTj8YQqxFM8HYehtalUG6u86NX/4l2Tey3q2LSTTQepxocYiaH2OSza1K
+         bebAWHMGT924nuiJnqd9B/7SftmdTfYOdDcDwwZadZr1C282Bc1FIo0RjsXLTHV2AGvq
+         Hb/czHthOWj34QI1jQOiCjG8CyVRQ1LyBOdViImCv46jjebvkLS+xhVkvHJKjFfNnAjG
+         PNVA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1784827298; x=1785432098;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=tiv4QrJoovLT4G3A2lfHDYRca3fItAiSKI996i+aMNI=;
+        b=c9xfkcsJOKYrw/8lbPupMa5BrTuUv3RrwM7EVVXhwBnofdPmXQzTs2BdoV0H1feV50
+         Gm2Lo98pR/nM/N3H1ojXu7XsHVeR6gdQhywIbu9ytBQd6xLavu3RVkl2Y3NTINylhNpY
+         TEsnp9HyCZb3jf4eoTykXeRU5vNMEs68pB78edBv5pgvo9K+M4nRfsyfOT5/26y6VVwS
+         ZMt5hrMqQkOpwtqqS1Guq0gm0TsjBKD8tVu0RQl5hAJIglHxuxM4vSXn6dXD3TrFZNlF
+         S2pjsXIFGexQGJBvDfVhIJJv/ShqFYmuWCMN4F381JX4EtXT2wR3OBFJXY+5oMTUxdZJ
+         U3Bg==
+X-Forwarded-Encrypted: i=1; AHgh+RpCFuPvmpFgp0TxRFZUTLDM3TmrnLlYEy1udxXSKpTQuBYmUSNvQZRpiEWh06g3rjL6UPH1rA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzUJdwyIDM73c+tN3uodaBAqPtOHU3rQz/YCgZabsTbD6bz5VD0
+	962tmrkCsKufsMuCaLmDunU/ybk19XjrCYVmWjxykmq4ncbZIBdjsBqrYMyt4ChP/XwyK10aRdS
+	wTUfRyWvB8lYyhB9nj3AouJlRl0/N5IyVEVxC5RB1
+X-Gm-Gg: AR+sD13wwBQvNq0Y5UjxKwcEs3ZSINuGGnR5ZYHOW5TOzrb8zMk/qxtj8RIsQTJAGSj
+	DTho3lkJYm6Jm8WImiKHixBFLe1xlYAv+CmSZih6bffWGDQ9RwpUnzTVOZrFwslh8p2MH2rn8oW
+	I1E7UTb98Q3JchUKGXtnomkBr2UWlnzIQUjLdUiiX4Yj1rhVX4rxeLag0JqLYhnhTv+T8wHelzl
+	yQqVFLONxTeYVSapW8wOxw3DisS9ofeiKNE/1QOCBdhjStd4OjcWHkDJbgl9w==
+X-Received: by 2002:a05:6a21:6f89:b0:3c0:9c1a:8950 with SMTP id
+ adf61e73a8af0-3c44b23a18bmr4372470637.72.1784827298557; Thu, 23 Jul 2026
+ 10:21:38 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Subject: Re: [PATCH] audit: add MOVE_MOUNT auxiliary record to log mount
- relocation
-From: Christian Brauner <brauner@kernel.org>
-To: Ricardo Robaina <rrobaina@redhat.com>
-Cc: audit@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
- linux-kernel@vger.kernel.org, paul@paul-moore.com, eparis@redhat.com, 
- viro@zeniv.linux.org.uk, brauner@kernel.org, jack@suse.cz, 
- sgrubb@redhat.com
-In-Reply-To: <20260713170035.4073532-1-rrobaina@redhat.com>
-References: <20260713170035.4073532-1-rrobaina@redhat.com>
-Date: Wed, 22 Jul 2026 17:59:07 +0200
-Message-Id: <20260722-hecht-bauch-eiskunstlauf-7e2cab5ae9bc@brauner>
-X-Mailer: b4 0.16-dev-2f6f2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1154; i=brauner@kernel.org;
- h=from:subject:message-id; bh=ovdxwvAWRVrDlJaz62HOuk3XignNiSoaHXa5SU2T174=;
- b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWQlvDj7MfLh+1+s/ZuW7xKy+HTbO3xOmGWjwPLHHc2/p
- R7t/91Z2lHKwiDGxSArpsji0G4SLrecp2KzUaYGzBxWJpAhDFycAjCRN4mMDKdbfbdeFLrvdH9Z
- bewkrUeZz5atPpGz7fO5TcrLLojdfSPAyLDyyw5VkyV71hgt3mrzxndzxuHJqaLackoFAi1cicn
- yG/gA
-X-Developer-Key: i=brauner@kernel.org; a=openpgp;
- fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
+References: <20260721040118.1000554-1-ruanjinjie@huawei.com> <87jyqolqn3.ffs@fw13>
+In-Reply-To: <87jyqolqn3.ffs@fw13>
+From: Paul Moore <paul@paul-moore.com>
+Date: Thu, 23 Jul 2026 13:21:27 -0400
+X-Gm-Features: AUfX_mzzHjU3lavD1ndH6OyXlCnXpV0-hf9UtH6alK3pSFD66pYroW73SuW3LWo
+Message-ID: <CAHC9VhSohbG8n5WW4VaEjU7nVA4WCrkJ1eD-=34ioaJOQ0-rCg@mail.gmail.com>
+Subject: Re: [PATCH v2] audit: Force audit_context() to be always inlined
+To: Thomas Gleixner <tglx@kernel.org>
+Cc: Jinjie Ruan <ruanjinjie@huawei.com>, eparis@redhat.com, audit@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 2026-07-13 14:00 -0300, Ricardo Robaina wrote:
-> Modern mount tools (util-linux >= 2.39.1) use the new mount API
-> (fsopen, fsconfig, fsmount, move_mount) instead of the legacy mount(2)
-> syscall. The generic SYSCALL audit record logs the move_mount syscall
-> but does not capture the flags argument, creating an audit gap for
-> mount relocation operations.
-> 
-> Add a MOVE_MOUNT auxiliary record that logs the flags argument passed
-> to move_mount(2). Pathnames and file descriptors are captured through
-> existing PATH records and SYSCALL record arguments.
-> 
->  ----
->  type=PATH : item=0 name=/mnt/test_src inode=1 dev=00:41 ...
->  type=SYSCALL : arch=x86_64 syscall=move_mount ...
->  type=MOVE_MOUNT : fs_flags=0x4
->  ----
->  type=PATH : item=0 name=/mnt/test_dst inode=27460862 dev=fc:00 ...
->  type=SYSCALL : arch=x86_64 syscall=move_mount ...
->  type=MOVE_MOUNT : fs_flags=0x4
-> 
-> Link: https://github.com/linux-audit/audit-kernel/issues/152
-> Link: https://github.com/linux-audit/audit-kernel/issues/153
-> Signed-off-by: Ricardo Robaina <rrobaina@redhat.com>
-> ---
+On Tue, Jul 21, 2026 at 3:59=E2=80=AFAM Thomas Gleixner <tglx@kernel.org> w=
+rote:
+> On Tue, Jul 21 2026 at 12:01, Jinjie Ruan wrote:
+> > commit 6f25517010dd ("entry: Rework syscall_audit_enter()") relies on
+> > dead code elimination to remove the call to syscall_enter_audit() when
+> > CONFIG_AUDITSYSCALL is disabled. However, with s390 GCC 13.4.0 +
+> > CONFIG_KASAN, audit_context() is not inlined despite being marked
+> > inline, causing an undefined reference to syscall_enter_audit().
+> >
+> > Force audit_context() to be __always_inline to ensure the conditional
+> > can be constant-folded and dead code elimination works correctly.
+> >
+> > Signed-off-by: Jinjie Ruan <ruanjinjie@huawei.com>
+> > Suggested-by: Thomas Gleixner <tglx@kernel.org>
+> > Reported-by: kernel test robot <lkp@intel.com>
+> > Closes: https://lore.kernel.org/oe-kbuild-all/202607181530.2nx8zb3J-lkp=
+@intel.com/
+>
+> Obsolete. Is already in:
+>
+> https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?h=3Dc=
+ore/entry&id=3D6f25517010ddd3f8080d7e06b9b1cb1b64b73772
 
-Acked-by: Christian Brauner <brauner@kernel.org>
+It would have been nice to see that patch CC'd to the audit mailing
+list for obvious reasons.
 
+Since I'm just looking at that tip tree patch now (perhaps there are
+other preceding patches that affect this?), does it still compile
+properly when CONFIG_AUDITSYSCALL is not defined?  With
+syscall_trace_enter() calling out to syscall_enter_audit() that is no
+longer inlined in the same header, and no dummy function/macro defined
+for syscall_enter_audit() when !CONFIG_AUDITSYSCALL, it looks like
+there might be an issue on some configurations, no?
+
+--=20
+paul-moore.com
