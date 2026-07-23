@@ -1,132 +1,114 @@
-Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
+Received: from mail-qv1-f54.google.com (mail-qv1-f54.google.com [209.85.219.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3ACE1417BE1
-	for <audit@vger.kernel.org>; Thu, 23 Jul 2026 17:21:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.215.180
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784827300; cv=pass; b=Tuf7FxK6+p7zo9AADyGJpzl+5KVHmrT24zFhpenwSYxsE7J5VsUsFvgwArmqfuuVoSop9LT9265tjIVzSF8KDd7w3rKuH9xh2pboT/qyJc/h8hfzpT3yjrzzq6dholwcgQPknigMdhLcrN+8SoTQPvm4YTKL8yVxANd+0m1d3YE=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784827300; c=relaxed/simple;
-	bh=8Gg2XbldpLMsUZojY/TpMY/hmG9JSL4yamN9EKridMg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ZOH8nobWokyl9jUkMOklELdppnlWLTq4Fex40XB+6ZSLmsqtByIzEPOxRforvPbBCVz/2WhSAttScO7XOJCZMM91Ei06060OXCEG6O972y36EoyPfFUX/ehQ5oEA0Xxzco9+IgPuFdC702JOMGTZxS9A5bF+DHSHOOknfbnYAVk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=dntao2o3; arc=pass smtp.client-ip=209.85.215.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04CC83515E8
+	for <audit@vger.kernel.org>; Thu, 23 Jul 2026 17:43:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.54
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1784828641; cv=none; b=Zz7DAlTbD3LVU8srmm08s0Ob7VHF4/1QokGdr0JY8Y818ZSaHvBx0TOuCNMcXdGZ935BzIRgodNPVao574mIAD9PPW9ek0ETjdBoW1GwNwCP9r43tSakxz58usmIOQL7lJIqkYkvfbmX5l2okkY7LZZlb9L3NcBsU7iVRxvCPX0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1784828641; c=relaxed/simple;
+	bh=7CfLiwE5M0TCOSUKAJEyT22HQx9DD5s4V+fJwhTJWV8=;
+	h=Date:Message-ID:MIME-Version:Content-Type:From:To:Cc:Subject:
+	 References:In-Reply-To; b=aO0DLXAFZgqUQ88cP775ghg0Lu0YuRVGjl0m1CmgohwpgNc2ZGQMKO2ruDrx3+Js9+EhJg0FMk0ic6hg95I7BidmRJ0TqGMk0/cOeM3MXBpAMbIGIpIwTd6WLwhTuZfvoWhgwv9AsbZgSV35GLZcBl1tAasxaJ2Mk2aLLHEADs8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=Vr71dgUz; arc=none smtp.client-ip=209.85.219.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="dntao2o3"
-Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-c9e0b89e228so694707a12.1
-        for <audit@vger.kernel.org>; Thu, 23 Jul 2026 10:21:39 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1784827298; cv=none;
-        d=google.com; s=arc-20260327;
-        b=adQwESioeDqV1G6CZLzd85RbbC//NqkMdpaZ5IlH4M4PDfqAHEDexhb4ba9Saa13Xg
-         6KWT571xYNNFNKQTltUPC4h52qYu/XE2atQxshRGosQHLcb6litekRnWiFj06tgHhOvb
-         0MY4eectc6w9DPo/WFRL7YWSafxmu9GxfUXVArvrk7OuS7NdcOSRvZblV1UdNpjjnffs
-         Qai6DzMt2CFOLU7vdhPIRRVCX95g/KO0xKRvikqQj2GKRJbJjmioL7YP9bmelT8UK0Oi
-         s2WXpwgLQ8LxVM2oQKT1l79muosrtx5voqPwVEPAakj843PXDDyUVdmvbnK5Fn8ozmwZ
-         Zrcw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=tiv4QrJoovLT4G3A2lfHDYRca3fItAiSKI996i+aMNI=;
-        fh=LJ1nkRAKnZDuTHV7hMCc3bBF5tcegFgoLfM5jSrlRGQ=;
-        b=RZqDC9wu1K4zvcyWr04omCg57Q5WPGVYBrfyqN1ikPvnkv5mCAKU63Xm63LiOoYeTH
-         FzP9F168tRRaoVxq+aQNCXt+wSkZchZ6SGyH4WjvZAKFQ0rGpmKTP9jtg1+4e/kUyjTS
-         NgY9GRKQChJZMaPDzyTn6MeNyC5PTlFrCaoCx+PerkhEufCS9jXjQNDMbPss0uxlIFdA
-         hp8zW+7KgqCz9LQJbAJnYMIciTl1ODIgsrG/Zqs0unPZRtg9JW/kKgI3vJ1XCTjwxAOs
-         tKV3brkxmLMSuSdAqky5Jjq1uqdPP/kjsdappyF7WMkO0WSWcwvkp7S0YBHTKEteZRJy
-         DTMw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="Vr71dgUz"
+Received: by mail-qv1-f54.google.com with SMTP id 6a1803df08f44-8ef1dc934d1so8694796d6.0
+        for <audit@vger.kernel.org>; Thu, 23 Jul 2026 10:43:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1784827298; x=1785432098; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=tiv4QrJoovLT4G3A2lfHDYRca3fItAiSKI996i+aMNI=;
-        b=dntao2o3XXiXSveZTbpBVFUE73slzQAyieLn9VwwoxHwjVP9ZR7E+mdlCW3COT9LKH
-         G01efTuD9fxVyArO7bmCWSArBE2vIsnGXCVTmBU9hQnmS/IyjPl9HLqA2unhrQWwAbwZ
-         WvxREEVyuMIlTj8YQqxFM8HYehtalUG6u86NX/4l2Tey3q2LSTTQepxocYiaH2OSza1K
-         bebAWHMGT924nuiJnqd9B/7SftmdTfYOdDcDwwZadZr1C282Bc1FIo0RjsXLTHV2AGvq
-         Hb/czHthOWj34QI1jQOiCjG8CyVRQ1LyBOdViImCv46jjebvkLS+xhVkvHJKjFfNnAjG
-         PNVA==
+        d=paul-moore.com; s=google; t=1784828621; x=1785433421; darn=vger.kernel.org;
+        h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
+         :content-type:mime-version:message-id:date:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=brmtQMY+PCLY5SqHqKFMvLTgXx8Pdh/IhOMrgYqDWxI=;
+        b=Vr71dgUzOAqYSVvjqBnD6ZQCE3SPE5Mmk4qfCKiMbM9zK5Zr4I8p928xXutV5b6dN+
+         qgIWEu4UiU7JjrDa4b/fmYS/1mGAkKcs8vnDR9BihkanA6IU4TSVc0gY7gO4hTu2D3z2
+         iMkBy1bOnr6rYTzrO+OgDRZuRPEedoExVPsjfD2V8miArtLe+od5z8UwDMSxPFDM791O
+         HSySg46wlvWky8fNj4rDm7MS/iWMRHLeKpMjF6GEjdk5jCudU61Zv1QSKC5OcyzE4miH
+         QRWLNdXpD5oyRK8mRueLgoJ59UDZJQLfMqeafDuPdrCKWKSvHT7uYiA9DzJqSKPJkgEi
+         nfXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784827298; x=1785432098;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
+        d=1e100.net; s=20251104; t=1784828621; x=1785433421;
+        h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
+         :content-type:mime-version:message-id:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=tiv4QrJoovLT4G3A2lfHDYRca3fItAiSKI996i+aMNI=;
-        b=c9xfkcsJOKYrw/8lbPupMa5BrTuUv3RrwM7EVVXhwBnofdPmXQzTs2BdoV0H1feV50
-         Gm2Lo98pR/nM/N3H1ojXu7XsHVeR6gdQhywIbu9ytBQd6xLavu3RVkl2Y3NTINylhNpY
-         TEsnp9HyCZb3jf4eoTykXeRU5vNMEs68pB78edBv5pgvo9K+M4nRfsyfOT5/26y6VVwS
-         ZMt5hrMqQkOpwtqqS1Guq0gm0TsjBKD8tVu0RQl5hAJIglHxuxM4vSXn6dXD3TrFZNlF
-         S2pjsXIFGexQGJBvDfVhIJJv/ShqFYmuWCMN4F381JX4EtXT2wR3OBFJXY+5oMTUxdZJ
-         U3Bg==
-X-Forwarded-Encrypted: i=1; AHgh+RpCFuPvmpFgp0TxRFZUTLDM3TmrnLlYEy1udxXSKpTQuBYmUSNvQZRpiEWh06g3rjL6UPH1rA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzUJdwyIDM73c+tN3uodaBAqPtOHU3rQz/YCgZabsTbD6bz5VD0
-	962tmrkCsKufsMuCaLmDunU/ybk19XjrCYVmWjxykmq4ncbZIBdjsBqrYMyt4ChP/XwyK10aRdS
-	wTUfRyWvB8lYyhB9nj3AouJlRl0/N5IyVEVxC5RB1
-X-Gm-Gg: AR+sD13wwBQvNq0Y5UjxKwcEs3ZSINuGGnR5ZYHOW5TOzrb8zMk/qxtj8RIsQTJAGSj
-	DTho3lkJYm6Jm8WImiKHixBFLe1xlYAv+CmSZih6bffWGDQ9RwpUnzTVOZrFwslh8p2MH2rn8oW
-	I1E7UTb98Q3JchUKGXtnomkBr2UWlnzIQUjLdUiiX4Yj1rhVX4rxeLag0JqLYhnhTv+T8wHelzl
-	yQqVFLONxTeYVSapW8wOxw3DisS9ofeiKNE/1QOCBdhjStd4OjcWHkDJbgl9w==
-X-Received: by 2002:a05:6a21:6f89:b0:3c0:9c1a:8950 with SMTP id
- adf61e73a8af0-3c44b23a18bmr4372470637.72.1784827298557; Thu, 23 Jul 2026
- 10:21:38 -0700 (PDT)
+        bh=brmtQMY+PCLY5SqHqKFMvLTgXx8Pdh/IhOMrgYqDWxI=;
+        b=X/cRX0XecePx9kls+WQcqlV9/06Bn9c/piOPy2egS7mUNEsj41Xr00uAzDU+d/Pd2u
+         1FHyy+laKrM0vaG3yEM1L8qAf5pjy47NBeA4dPoWiyjiEgpVOAocjL4ldWY5KxXBpfbk
+         umdG2S4H87q75S2gCFlsY/akQmggku5y7Bw5EG3CSh13Q+HehqIs7emGOvlfgaxHv9i/
+         Iwi/PEw3FD59PBaPk1T7YXos7rA1SPLisPiSOz4OE0PZFfzduEm3A6WhteFkK1vWaS5r
+         286uWqcD4oeUzcj781VWzzZrASQpTqAK2dvJauwUxVruBQOabDW7b/VYtDFCQt/h3hKJ
+         E5vg==
+X-Forwarded-Encrypted: i=1; AHgh+RoT3LFEHGmXI/w4RR3OuKnD3TU5d+FdWIvKgrjA1vI+kD/YQUZ+hWvdYARsRq5cy4WujyGl0Q==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyxujwDXqNhvUtM2slLhjW8fnsishCFmyDmsSv9KTKVJKhXJ0gt
+	1EBdPmUOQRufZxVx5j1w0r84nCDE2KXAvovgLMRtc/EAtIZiC/epho1wvZNl9a5WhQ==
+X-Gm-Gg: AR+sD11hklqbxpb4qm+kzjFKi1zkaBukViD7IMZkelBza59JTZq8HLq04/bwjZMkC+E
+	fMNId7VHGt+OwHmRNQelo5Qw3tm4tH+Rx/2cRUSPO5iGeWfwoYqY5bnjkP5bKs5M9PTDEtxT9+P
+	/G6xswWf1KHzJfYPbI3Bgn4zNwKBUsaLo3MKn/rMLBZW+zlqkDu38Ere6j24IU6LW5oRQGBgg/E
+	Pmjre0EsU4cs4h0e+wU0mM0PljcA5YThjJN8P0S8VAb7017xuq/8mcLv9HrO+i9x4mNLTo5NIgm
+	tJusCZd55b2kdQuHbig6dog0gIkf5PB87oM94BbcKqJ9Lk6iSinwm7FlompHHy1zz9R8uujLauf
+	wrJpLosZPGJqoztCEe/78LPlWylY/T2117yI57mwP6UmXpMALhkG1bwTkEftMOaQ7v4OUfxjNnZ
+	1htNfYONohVnE+s95Bud95NdSA9A5SPZcVrELbHvOUnBR1Y+rLinHZ2jIDjw==
+X-Received: by 2002:a05:6214:508d:b0:907:6fce:b82a with SMTP id 6a1803df08f44-907cd19b0a6mr33743506d6.23.1784828620932;
+        Thu, 23 Jul 2026 10:43:40 -0700 (PDT)
+Received: from localhost (pool-71-126-255-178.bstnma.fios.verizon.net. [71.126.255.178])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-907ba901c24sm49954856d6.21.2026.07.23.10.43.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Jul 2026 10:43:39 -0700 (PDT)
+Date: Thu, 23 Jul 2026 13:43:39 -0400
+Message-ID: <d79fe8753ff88268bbd9bcd601cc4aa1@paul-moore.com>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20260721040118.1000554-1-ruanjinjie@huawei.com> <87jyqolqn3.ffs@fw13>
-In-Reply-To: <87jyqolqn3.ffs@fw13>
+MIME-Version: 1.0 
+Content-Type: text/plain; charset=UTF-8 
+Content-Transfer-Encoding: 8bit 
+X-Mailer: pstg-pwork:20260723_1338/pstg-lib:20260722_1430/pstg-pwork:20260723_1338
 From: Paul Moore <paul@paul-moore.com>
-Date: Thu, 23 Jul 2026 13:21:27 -0400
-X-Gm-Features: AUfX_mzzHjU3lavD1ndH6OyXlCnXpV0-hf9UtH6alK3pSFD66pYroW73SuW3LWo
-Message-ID: <CAHC9VhSohbG8n5WW4VaEjU7nVA4WCrkJ1eD-=34ioaJOQ0-rCg@mail.gmail.com>
-Subject: Re: [PATCH v2] audit: Force audit_context() to be always inlined
-To: Thomas Gleixner <tglx@kernel.org>
-Cc: Jinjie Ruan <ruanjinjie@huawei.com>, eparis@redhat.com, audit@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+To: Zhan Xusheng <zhanxusheng1024@gmail.com>
+Cc: Eric Paris <eparis@redhat.com>, Ricardo Robaina <rrobaina@redhat.com>, Richard Guy Briggs <rgb@redhat.com>, audit@vger.kernel.org, linux-kernel@vger.kernel.org, stable@vger.kernel.org, Zhan Xusheng <zhanxusheng@xiaomi.com>
+Subject: Re: [PATCH v2] audit: fix potential integer overflow in  audit_log_n_string()
+References: <20260718050922.1980425-1-zhanxusheng@xiaomi.com>
+In-Reply-To: <20260718050922.1980425-1-zhanxusheng@xiaomi.com>
 
-On Tue, Jul 21, 2026 at 3:59=E2=80=AFAM Thomas Gleixner <tglx@kernel.org> w=
-rote:
-> On Tue, Jul 21 2026 at 12:01, Jinjie Ruan wrote:
-> > commit 6f25517010dd ("entry: Rework syscall_audit_enter()") relies on
-> > dead code elimination to remove the call to syscall_enter_audit() when
-> > CONFIG_AUDITSYSCALL is disabled. However, with s390 GCC 13.4.0 +
-> > CONFIG_KASAN, audit_context() is not inlined despite being marked
-> > inline, causing an undefined reference to syscall_enter_audit().
-> >
-> > Force audit_context() to be __always_inline to ensure the conditional
-> > can be constant-folded and dead code elimination works correctly.
-> >
-> > Signed-off-by: Jinjie Ruan <ruanjinjie@huawei.com>
-> > Suggested-by: Thomas Gleixner <tglx@kernel.org>
-> > Reported-by: kernel test robot <lkp@intel.com>
-> > Closes: https://lore.kernel.org/oe-kbuild-all/202607181530.2nx8zb3J-lkp=
-@intel.com/
->
-> Obsolete. Is already in:
->
-> https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?h=3Dc=
-ore/entry&id=3D6f25517010ddd3f8080d7e06b9b1cb1b64b73772
+On Jul 18, 2026 Zhan Xusheng <zhanxusheng1024@gmail.com> wrote:
+> 
+> audit_log_n_string() computes new_len as "slen + 3" (enclosing quotes
+> plus the NUL terminator) and stores it into an int, while slen is a
+> size_t.  For a sufficiently large slen the addition can overflow and/or
+> the result be truncated when assigned to the int new_len, so the
+> "new_len > avail" check can be bypassed and the subsequent
+> memcpy(ptr, string, slen) can write past the skb tail.
+> 
+> This is the same class of bug that was fixed for the hex sibling in
+> commit 65dfde57d1e2 ("audit: fix potential integer overflow in
+> audit_log_n_hex()"); both helpers are reached through
+> audit_log_n_untrustedstring() with the same length source.
+> 
+> Make new_len a size_t and use check_add_overflow() to catch the
+> overflow, mirroring the audit_log_n_hex() fix.  No functional change for
+> the in-tree callers, which all pass bounded lengths.
+> 
+> Fixes: 168b7173959f ("AUDIT: Clean up logging of untrusted strings")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Zhan Xusheng <zhanxusheng@xiaomi.com>
+> ---
+> v2:
+>  - drop the unnecessary (size_t) cast on the constant (Paul Moore)
+>  - emit "?" instead of "\"?\"" on overflow, matching
+>    audit_log_n_hex() (Paul Moore)
+> 
+>  kernel/audit.c | 11 +++++++++--
+>  1 file changed, 9 insertions(+), 2 deletions(-)
 
-It would have been nice to see that patch CC'd to the audit mailing
-list for obvious reasons.
+Merged into audit/stable-7.2 with the intent of sending this up to Linus
+once it has gone through some testing.  Thanks!
 
-Since I'm just looking at that tip tree patch now (perhaps there are
-other preceding patches that affect this?), does it still compile
-properly when CONFIG_AUDITSYSCALL is not defined?  With
-syscall_trace_enter() calling out to syscall_enter_audit() that is no
-longer inlined in the same header, and no dummy function/macro defined
-for syscall_enter_audit() when !CONFIG_AUDITSYSCALL, it looks like
-there might be an issue on some configurations, no?
-
---=20
+--
 paul-moore.com
