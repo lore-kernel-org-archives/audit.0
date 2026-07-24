@@ -1,191 +1,96 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f43.google.com (mail-qv1-f43.google.com [209.85.219.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBDE33D9DDE
-	for <audit@vger.kernel.org>; Fri, 24 Jul 2026 15:03:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 273144483A2
+	for <audit@vger.kernel.org>; Fri, 24 Jul 2026 19:56:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784905425; cv=none; b=VR1lahexJEI5X6/KuuQksL1BxTtsP7IOyeUI/4LtzmLCAlz5BjDFKu8+ZEW7bq42fA2n0FFEy4+ibNPv33oMXN9/vsF81BolKhnXbxUP+KxBBVpQ5RKK68zEPuqHbHMBvV0B/7bsAzjGYtfNHk1CksAq8ZsyRn6df8KnA3XUf+w=
+	t=1784923018; cv=none; b=Vd9eOLJfvSgSOYNQTLb2ZlLdWiO0HES2vtPwDEF2wQw+TIniwoCXabMtktqE7ltt0GzV4gacOGm+lkXtY8vvQCPs25BW1tR/rYphZqAXPhzuroFr+/NofG/eHkqFhZ8mHuQdWiPZg5qOUe1Nrsf1oEL7Qo857y/OVAY8togGuvQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784905425; c=relaxed/simple;
-	bh=WAgDDePxRbNzo95S0T4oCMtij9uVeiX2EuJ/RfCFP9I=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:content-type; b=hrTH2M6+3cyPGlMNOOdfd0gYICiJ+vcm3GjCucSe72pvlM0EM9VTLcUozzsS7iZy6HRxyi1/bbaaLSBgSEl/sOhXLbVLOiyZhTGXmiJ1ttuVLA6TUyqskdhlgAE5mEIH3bYHV8uX/URlGYQ/JdN894goSLNOs46lJVG+OWxu1XA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=gc8TcsBO; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1784923018; c=relaxed/simple;
+	bh=mjSH/K+hTsYO95TjfehGOS1qN3CAVCc+EyUGJf3Xxsg=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version; b=tAzydEO0Rw5fn2a32reiqp8LMst/lLrbuZSL3cFQkrysjBMCX+Hmm6YuY03DEl1N9cgw3ddhEuy6IBY9xpC1gZGlT/dHcEevNdACcLkviw2tVEy4bZBxHvCqacdvag75JB4XvcYqRaevr4NA8goaVpa4cYOsfH7ll9O4uC6vVK8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=gFstSk5w; arc=none smtp.client-ip=209.85.219.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="gc8TcsBO"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1784905422;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=c0ViCeYIvDvbmJchKqAuBa754g93eEZt4PnUI1bl52Q=;
-	b=gc8TcsBO4TqrgwoDZD0MWWeZ/IeR/br2lJcJAJ/btu+lJNZIpNqlWNSR3g9fZAEn3LUacX
-	c+fKVMziUsXzIF9urWWUtORAsiX9ZTm11/IZvO/7Fm/fvid/5hHPW8cCI/pxA0iR44Ttr1
-	Mn3JuWZipsP2L/mMSA6IwjK0D2t8sm0=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-126-P1r0y-izPyOZOjBHnfPl1Q-1; Fri,
- 24 Jul 2026 11:03:39 -0400
-X-MC-Unique: P1r0y-izPyOZOjBHnfPl1Q-1
-X-Mimecast-MFC-AGG-ID: P1r0y-izPyOZOjBHnfPl1Q_1784905417
-Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 1050A19775FC;
-	Fri, 24 Jul 2026 15:03:37 +0000 (UTC)
-Received: from wsxc.redhat.com (unknown [10.96.134.40])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id C82F330002D5;
-	Fri, 24 Jul 2026 15:03:31 +0000 (UTC)
-From: Ricardo Robaina <rrobaina@redhat.com>
-To: audit@vger.kernel.org,
-	linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org
-Cc: paul@paul-moore.com,
-	eparis@redhat.com,
-	sgrubb@redhat.com,
-	kees@kernel.org,
-	mingo@redhat.com,
-	peterz@infradead.org,
-	juri.lelli@redhat.com,
-	vincent.guittot@linaro.org,
-	akpm@linux-foundation.org,
-	david@kernel.org,
-	brauner@kernel.org,
-	Ricardo Robaina <rrobaina@redhat.com>
-Subject: [PATCH] audit: add CLONE3 auxiliary record to log process cloning
-Date: Fri, 24 Jul 2026 12:02:59 -0300
-Message-ID: <20260724150258.560396-2-rrobaina@redhat.com>
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="gFstSk5w"
+Received: by mail-qv1-f43.google.com with SMTP id 6a1803df08f44-8f0d6853360so8316246d6.0
+        for <audit@vger.kernel.org>; Fri, 24 Jul 2026 12:56:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1784923016; x=1785527816; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=RqcLPegislg7DeQ4y52im/u1rvBxCERW92Zqq3OXeLw=;
+        b=gFstSk5wVzFDs8FBJz2+cBJs1LAr+Mi2gn0gxuFslUP9QNIdSKk1tsTVAQPy1VPXq1
+         LM5zvJfGxuLB53BPvXTHKelTHyd0YshP+dJNT/xAVJpmDBqerIZeal9a4flwNbFb4vca
+         n/p/X12/UL3IrCzkWMLoV3KGrUJMD7pkPWxecNZJZRCstmuI4GZZm/WOPcLggJa/TQRY
+         kr3eRMnlO0UbWUMXEf6WVOke7ySBakQA8pOzLQrBg1XhrrJPIkvFiZeokPEnQeNX26Qh
+         t8mh82WXrhJlQUeJJzo1haPuDzPw0ITTtNdZKeskpVdKKicYlZZ5MUtxzS5q1/VpLxid
+         hbqA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1784923016; x=1785527816;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=RqcLPegislg7DeQ4y52im/u1rvBxCERW92Zqq3OXeLw=;
+        b=hvzJnPTS4kryJNZG5aF9DtRjhjfDFM14diozKTBSLGvSV1byN7kN59zsGfqn9Ge4R/
+         0GdRbx8fqmp3uuDeBZ3QoUTdD1uGJauoiyIz+4l/1SiiWKm12a5ew3V4y/+xdMf8roLT
+         YTcOK0p2RXtDweK2lejc0IyVZq5fqSSMP0P/lvJRilg6To1/oVJAXI+JAqmwfU9mlSCU
+         cf3/00tzGFBCBopT2Mhh9ymAKytjNBKDkRW+0OJfRSFjdQoBtHW6IxD0tMlfK4xjiC70
+         rui4KC4e2eKY02ugien+XthN7yt99Bhg2dtGsF5qE0Sx4PKhmIA/2LgDcF3irxVK9KmI
+         aHpg==
+X-Gm-Message-State: AOJu0YxS9T4PiJOvgxxU9ADd+K55zsccXRmYxrVbZrdR78SqdurYUjs8
+	oWh3ZxZEXfRnmOUy0Ql3Irdy3frFQmMwi8Z1cpaxaCCVh+AGbZ49SGjrq1wOtClX1QtEFprzgFR
+	hpb0bNA==
+X-Gm-Gg: AR+sD12RMmh7Bv8IcR1+TYtfetA2ypmkb/PfP825OlKSR025adjNgm0Gc039ww8+B7o
+	iLWvNuC2q4dBjYD9RLeYMnAQ2cqGBMmTplC46SSktHsbUiKYNgXPLyZZHMItHAKDN8oy+Xun7lF
+	OEJzk8E1a/9lDRnlZiZacPgFUqGyI6EbJhv77dKW6cY3Fehv6e3a+MnuR+RS8GHmkhBR0iQLEu7
+	CDSRaTzFgDKbsG5p4sYWochC2hrkXx5av72ZgbltDOZlf0nGNAH01oaih/VTdelUdDB5HHznVhc
+	nMwVu1zfkoh6ja0xOw+aLHCw125hpTaFdTbDsDsQebHKvvZkWxkkXDHd9aI18AuiqPBDy6OCr3t
+	cFwZYUs6B8WOepz27JmGY4ri2Zo0/IAcvbotvJuATkG6Q7GBbUGRja079JXxIKsQcvFTM6dw4UY
+	vlGbjXzICeMsEyzC8hgvDzn1aQtNGDJ6xxCnPlV0xAFSifTCk=
+X-Received: by 2002:a05:6214:3a84:b0:8dc:ad48:70a7 with SMTP id 6a1803df08f44-907ca58fbb0mr100780346d6.26.1784923016013;
+        Fri, 24 Jul 2026 12:56:56 -0700 (PDT)
+Received: from localhost (pool-71-126-255-178.bstnma.fios.verizon.net. [71.126.255.178])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-907e854fe34sm5448656d6.14.2026.07.24.12.56.54
+        for <audit@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Jul 2026 12:56:54 -0700 (PDT)
+From: Paul Moore <paul@paul-moore.com>
+To: audit@vger.kernel.org
+Subject: [RFC PATCH 0/5] Cleanup code in and around audit_expand()
+Date: Fri, 24 Jul 2026 15:56:18 -0400
+Message-ID: <20260724195626.327253-7-paul@paul-moore.com>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
-X-Mimecast-MFC-PROC-ID: 5-ymRGu9xta1JoIb6KOGGlwv7zkIQXs459cQjIHH9kg_1784905417
-X-Mimecast-Originator: redhat.com
 Content-Transfer-Encoding: 8bit
-content-type: text/plain; charset="US-ASCII"; x-default=true
 
-The clone3(2) syscall moves most parameters to struct clone_args.
-For this reason, the generic SYSCALL audit record does not capture
-the structured arguments.
+The recent audit match overflow patches caused me to take a closer look
+at audit_expand() and how it is used, which unsurprisingly revealed a
+number of things that we could do a bit better.  This patchset is the
+result of that and aims to cleanup some of the ugliness while also
+making the code a bit more robust.
 
-Add a CLONE3 auxiliary record that logs: flags, exit_signal, cgroup,
-and pidfd fields from struct clone_args. When CLONE_PIDFD is set and
-the syscall succeeds, the resolved pidfd is logged; otherwise
-pidfd=(null).
+Currently a RFC pending some closer self-review, but the patchset
+compiles, boots, and passes the audit-testsuite and selinux-testsuite
+cleanly.
 
- ----
- type=SYSCALL : syscall=clone3 a0=0x7ffe7f1ec640 a1=0x58 a2=0x0 ...
- type=CLONE3 : cl3_flags=0x1000 exit_signal=17 cgroup=0 pidfd=3
+--
+Paul Moore (5):
+      audit: only call audit_expand() once in audit_log_vformat()
+      audit: convert audit_expand() to operate in multiples of
+         AUDIT_BUFSIZ
+      audit: move from a size_t buffer length to an int buffer length
+      audit: add a missing function definition when !CONFIG_AUDIT
+      audit: drop BUG_ON() from audit_log_XXX()
 
-Link: https://github.com/linux-audit/audit-kernel/issues/151
-Signed-off-by: Ricardo Robaina <rrobaina@redhat.com>
----
- include/linux/audit.h      | 10 ++++++++++
- include/uapi/linux/audit.h |  1 +
- kernel/auditsc.c           | 20 ++++++++++++++++++++
- kernel/fork.c              |  4 +++-
- 4 files changed, 34 insertions(+), 1 deletion(-)
-
-diff --git a/include/linux/audit.h b/include/linux/audit.h
-index 45abb3722d30..833f349bf415 100644
---- a/include/linux/audit.h
-+++ b/include/linux/audit.h
-@@ -449,6 +449,7 @@ extern void __audit_tk_injoffset(struct timespec64 offset);
- extern void __audit_ntp_log(const struct audit_ntp_data *ad);
- extern void __audit_log_nfcfg(const char *name, u8 af, unsigned int nentries,
- 			      enum audit_nfcfgop op, gfp_t gfp);
-+extern void __audit_log_clone3(struct kernel_clone_args *kargs, int ret);
- 
- static inline void audit_ipc_obj(struct kern_ipc_perm *ipcp)
- {
-@@ -598,6 +599,12 @@ static inline void audit_log_nfcfg(const char *name, u8 af,
- 		__audit_log_nfcfg(name, af, nentries, op, gfp);
- }
- 
-+static inline void audit_log_clone3(struct kernel_clone_args *kargs, int ret)
-+{
-+	if (!audit_dummy_context())
-+		__audit_log_clone3(kargs, ret);
-+}
-+
- extern int audit_n_rules;
- extern int audit_signals;
- #else /* CONFIG_AUDITSYSCALL */
-@@ -730,6 +737,9 @@ static inline void audit_log_nfcfg(const char *name, u8 af,
- 				   enum audit_nfcfgop op, gfp_t gfp)
- { }
- 
-+static inline void audit_log_clone3(struct kernel_clone_args *kargs, int ret)
-+{ }
-+
- #define audit_n_rules 0
- #define audit_signals 0
- #endif /* CONFIG_AUDITSYSCALL */
-diff --git a/include/uapi/linux/audit.h b/include/uapi/linux/audit.h
-index e8f5ce677df7..37357e17adbf 100644
---- a/include/uapi/linux/audit.h
-+++ b/include/uapi/linux/audit.h
-@@ -122,6 +122,7 @@
- #define AUDIT_OPENAT2		1337	/* Record showing openat2 how args */
- #define AUDIT_DM_CTRL		1338	/* Device Mapper target control */
- #define AUDIT_DM_EVENT		1339	/* Device Mapper events */
-+#define AUDIT_CLONE3		1343	/* Record showing clone3 args */
- 
- #define AUDIT_AVC		1400	/* SE Linux avc denial or grant */
- #define AUDIT_SELINUX_ERR	1401	/* Internal SE Linux Errors */
-diff --git a/kernel/auditsc.c b/kernel/auditsc.c
-index 6610e667c728..c0106bb71c19 100644
---- a/kernel/auditsc.c
-+++ b/kernel/auditsc.c
-@@ -2882,6 +2882,26 @@ void __audit_log_nfcfg(const char *name, u8 af, unsigned int nentries,
- }
- EXPORT_SYMBOL_GPL(__audit_log_nfcfg);
- 
-+void __audit_log_clone3(struct kernel_clone_args *kargs, int ret)
-+{
-+	struct audit_buffer *ab;
-+	int pidfd;
-+
-+	ab = audit_log_start(audit_context(), GFP_KERNEL,
-+			     AUDIT_CLONE3);
-+	if (!ab)
-+		return;
-+
-+	audit_log_format(ab, "cl3_flags=0x%llx exit_signal=%d cgroup=%d",
-+			 kargs->flags, kargs->exit_signal, kargs->cgroup);
-+	if ((kargs->flags & CLONE_PIDFD) && ret >= 0 &&
-+	    !get_user(pidfd, kargs->pidfd))
-+		audit_log_format(ab, " pidfd=%d", pidfd);
-+	else
-+		audit_log_format(ab, " pidfd=(null)");
-+	audit_log_end(ab);
-+}
-+
- static void audit_log_task(struct audit_buffer *ab)
- {
- 	kuid_t auid, uid;
-diff --git a/kernel/fork.c b/kernel/fork.c
-index f0e2e131a9a5..0f52e8c0e900 100644
---- a/kernel/fork.c
-+++ b/kernel/fork.c
-@@ -3047,7 +3047,9 @@ SYSCALL_DEFINE2(clone3, struct clone_args __user *, uargs, size_t, size)
- 	if (!clone3_args_valid(&kargs))
- 		return -EINVAL;
- 
--	return kernel_clone(&kargs);
-+	err = kernel_clone(&kargs);
-+	audit_log_clone3(&kargs, err);
-+	return err;
- }
- 
- void walk_process_tree(struct task_struct *top, proc_visitor visitor, void *data)
--- 
-2.53.0
+ include/linux/audit.h |   22 +++++-----
+ kernel/audit.c        |   89 +++++++++++++++++++++---------------------
+ 2 files changed, 57 insertions(+), 54 deletions(-)
 
