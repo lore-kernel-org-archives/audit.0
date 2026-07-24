@@ -1,93 +1,191 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3492E2E2DFB;
-	Fri, 24 Jul 2026 14:53:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBDE33D9DDE
+	for <audit@vger.kernel.org>; Fri, 24 Jul 2026 15:03:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784904820; cv=none; b=dPKsDyaXLEEYNXNBmOq82NvpaQDR63Ye59bOchHyGoKAv0++30Tee61G81JGC5+FlfUsCzd0iHV+t403GfUCKI8udSSmpxxndibGDu2/SmKP2JLdPU6s8sDbbqlpuqHXLwH9DE5MlvOVA4ImIYO6Yp0/ZVU3q9olQISmEmuo+0A=
+	t=1784905425; cv=none; b=VR1lahexJEI5X6/KuuQksL1BxTtsP7IOyeUI/4LtzmLCAlz5BjDFKu8+ZEW7bq42fA2n0FFEy4+ibNPv33oMXN9/vsF81BolKhnXbxUP+KxBBVpQ5RKK68zEPuqHbHMBvV0B/7bsAzjGYtfNHk1CksAq8ZsyRn6df8KnA3XUf+w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784904820; c=relaxed/simple;
-	bh=L+/7y63ogR4FwfUuuNc+XWgeV6zSTZ/73r5e48qP9kM=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=iRBsOKOclL1TZiYvrl4JnjMICEaQpbR5fVmdvGUZdD0xC/eWfT4LCzvoF4NbDsW864kkwM8hHUZabVk6Vtpt7YmJAase/YT0iaz1z4xBtuFiY/j72jlpWKx5HXxcS+hkiyWzAQEGZESygX0Kc75QB85AVdp2gfwm1h5GyAEg6lY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=R91iXaI+; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1784905425; c=relaxed/simple;
+	bh=WAgDDePxRbNzo95S0T4oCMtij9uVeiX2EuJ/RfCFP9I=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:content-type; b=hrTH2M6+3cyPGlMNOOdfd0gYICiJ+vcm3GjCucSe72pvlM0EM9VTLcUozzsS7iZy6HRxyi1/bbaaLSBgSEl/sOhXLbVLOiyZhTGXmiJ1ttuVLA6TUyqskdhlgAE5mEIH3bYHV8uX/URlGYQ/JdN894goSLNOs46lJVG+OWxu1XA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=gc8TcsBO; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="R91iXaI+"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 287661F000E9;
-	Fri, 24 Jul 2026 14:53:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784904818;
-	bh=TuiqrxRDtIBl6/qO5JaWMo3g74y4ZaaFSB9qiqwjhKk=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date;
-	b=R91iXaI+cd4+S2QPGKFrkXkqXvw+VlzMXZ2fO9T1EKfFbAy0hkQtxKUwTFEwjPwc4
-	 Wy+TS2q1CZSIDXSvCw/+jdM7ZhgroEyJB/hHGw5MeskJKjzeh27IqsPI1t73Cl3jnA
-	 fgvX0YUUrdSQVZhGVAIgCdZ/YuPl1GtHKliobguZ1mGaAVMBU/uZNhBPOTamDwIl5x
-	 bUDVp/B13pdbjX0tm31JYoqNgHspBA9lIr4jv38eHtJaYXFNIoq5SBEBfF/LgAL9VL
-	 lZYTR5QpBRDbsuZL1YEQRealK4mZP4iJNTufzKV6UP0NxlhRtfm56wEDqiu4JBh70q
-	 7Tcbhz4KWKveg==
-From: Thomas Gleixner <tglx@kernel.org>
-To: Paul Moore <paul@paul-moore.com>
-Cc: Jinjie Ruan <ruanjinjie@huawei.com>, eparis@redhat.com,
- audit@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] audit: Force audit_context() to be always inlined
-In-Reply-To: <CAHC9VhSohbG8n5WW4VaEjU7nVA4WCrkJ1eD-=34ioaJOQ0-rCg@mail.gmail.com>
-References: <20260721040118.1000554-1-ruanjinjie@huawei.com>
- <87jyqolqn3.ffs@fw13>
- <CAHC9VhSohbG8n5WW4VaEjU7nVA4WCrkJ1eD-=34ioaJOQ0-rCg@mail.gmail.com>
-Date: Fri, 24 Jul 2026 16:53:35 +0200
-Message-ID: <87mrvgjv68.ffs@fw13>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="gc8TcsBO"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1784905422;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=c0ViCeYIvDvbmJchKqAuBa754g93eEZt4PnUI1bl52Q=;
+	b=gc8TcsBO4TqrgwoDZD0MWWeZ/IeR/br2lJcJAJ/btu+lJNZIpNqlWNSR3g9fZAEn3LUacX
+	c+fKVMziUsXzIF9urWWUtORAsiX9ZTm11/IZvO/7Fm/fvid/5hHPW8cCI/pxA0iR44Ttr1
+	Mn3JuWZipsP2L/mMSA6IwjK0D2t8sm0=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-126-P1r0y-izPyOZOjBHnfPl1Q-1; Fri,
+ 24 Jul 2026 11:03:39 -0400
+X-MC-Unique: P1r0y-izPyOZOjBHnfPl1Q-1
+X-Mimecast-MFC-AGG-ID: P1r0y-izPyOZOjBHnfPl1Q_1784905417
+Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 1050A19775FC;
+	Fri, 24 Jul 2026 15:03:37 +0000 (UTC)
+Received: from wsxc.redhat.com (unknown [10.96.134.40])
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id C82F330002D5;
+	Fri, 24 Jul 2026 15:03:31 +0000 (UTC)
+From: Ricardo Robaina <rrobaina@redhat.com>
+To: audit@vger.kernel.org,
+	linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org
+Cc: paul@paul-moore.com,
+	eparis@redhat.com,
+	sgrubb@redhat.com,
+	kees@kernel.org,
+	mingo@redhat.com,
+	peterz@infradead.org,
+	juri.lelli@redhat.com,
+	vincent.guittot@linaro.org,
+	akpm@linux-foundation.org,
+	david@kernel.org,
+	brauner@kernel.org,
+	Ricardo Robaina <rrobaina@redhat.com>
+Subject: [PATCH] audit: add CLONE3 auxiliary record to log process cloning
+Date: Fri, 24 Jul 2026 12:02:59 -0300
+Message-ID: <20260724150258.560396-2-rrobaina@redhat.com>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
+X-Mimecast-MFC-PROC-ID: 5-ymRGu9xta1JoIb6KOGGlwv7zkIQXs459cQjIHH9kg_1784905417
+X-Mimecast-Originator: redhat.com
+Content-Transfer-Encoding: 8bit
+content-type: text/plain; charset="US-ASCII"; x-default=true
 
-On Thu, Jul 23 2026 at 13:21, Paul Moore wrote:
-> On Tue, Jul 21, 2026 at 3:59=E2=80=AFAM Thomas Gleixner <tglx@kernel.org>=
- wrote:
->> On Tue, Jul 21 2026 at 12:01, Jinjie Ruan wrote:
->> > commit 6f25517010dd ("entry: Rework syscall_audit_enter()") relies on
->> > dead code elimination to remove the call to syscall_enter_audit() when
->> > CONFIG_AUDITSYSCALL is disabled. However, with s390 GCC 13.4.0 +
->> > CONFIG_KASAN, audit_context() is not inlined despite being marked
->> > inline, causing an undefined reference to syscall_enter_audit().
->> >
->> > Force audit_context() to be __always_inline to ensure the conditional
->> > can be constant-folded and dead code elimination works correctly.
->> >
->> > Signed-off-by: Jinjie Ruan <ruanjinjie@huawei.com>
->> > Suggested-by: Thomas Gleixner <tglx@kernel.org>
->> > Reported-by: kernel test robot <lkp@intel.com>
->> > Closes: https://lore.kernel.org/oe-kbuild-all/202607181530.2nx8zb3J-lk=
-p@intel.com/
->>
->> Obsolete. Is already in:
->>
->> https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?h=3D=
-core/entry&id=3D6f25517010ddd3f8080d7e06b9b1cb1b64b73772
->
-> It would have been nice to see that patch CC'd to the audit mailing
-> list for obvious reasons.
->
-> Since I'm just looking at that tip tree patch now (perhaps there are
-> other preceding patches that affect this?), does it still compile
-> properly when CONFIG_AUDITSYSCALL is not defined?  With
-> syscall_trace_enter() calling out to syscall_enter_audit() that is no
-> longer inlined in the same header, and no dummy function/macro defined
-> for syscall_enter_audit() when !CONFIG_AUDITSYSCALL, it looks like
-> there might be an issue on some configurations, no?
+The clone3(2) syscall moves most parameters to struct clone_args.
+For this reason, the generic SYSCALL audit record does not capture
+the structured arguments.
 
-It compiles properly due to dead code elimination on everything except on
-old s390 compilers for whatever reasons.
+Add a CLONE3 auxiliary record that logs: flags, exit_signal, cgroup,
+and pidfd fields from struct clone_args. When CLONE_PIDFD is set and
+the syscall succeeds, the resolved pidfd is logged; otherwise
+pidfd=(null).
 
-I'll bite the bullet and add the stub inline for syscall_enter_audit(),
-though keeping audit_context() __always_inline makes a lot of sense as
-especially clang has a tendency to out of line the most trivial inlines.
+ ----
+ type=SYSCALL : syscall=clone3 a0=0x7ffe7f1ec640 a1=0x58 a2=0x0 ...
+ type=CLONE3 : cl3_flags=0x1000 exit_signal=17 cgroup=0 pidfd=3
 
-Thanks,
+Link: https://github.com/linux-audit/audit-kernel/issues/151
+Signed-off-by: Ricardo Robaina <rrobaina@redhat.com>
+---
+ include/linux/audit.h      | 10 ++++++++++
+ include/uapi/linux/audit.h |  1 +
+ kernel/auditsc.c           | 20 ++++++++++++++++++++
+ kernel/fork.c              |  4 +++-
+ 4 files changed, 34 insertions(+), 1 deletion(-)
 
-        tglx
+diff --git a/include/linux/audit.h b/include/linux/audit.h
+index 45abb3722d30..833f349bf415 100644
+--- a/include/linux/audit.h
++++ b/include/linux/audit.h
+@@ -449,6 +449,7 @@ extern void __audit_tk_injoffset(struct timespec64 offset);
+ extern void __audit_ntp_log(const struct audit_ntp_data *ad);
+ extern void __audit_log_nfcfg(const char *name, u8 af, unsigned int nentries,
+ 			      enum audit_nfcfgop op, gfp_t gfp);
++extern void __audit_log_clone3(struct kernel_clone_args *kargs, int ret);
+ 
+ static inline void audit_ipc_obj(struct kern_ipc_perm *ipcp)
+ {
+@@ -598,6 +599,12 @@ static inline void audit_log_nfcfg(const char *name, u8 af,
+ 		__audit_log_nfcfg(name, af, nentries, op, gfp);
+ }
+ 
++static inline void audit_log_clone3(struct kernel_clone_args *kargs, int ret)
++{
++	if (!audit_dummy_context())
++		__audit_log_clone3(kargs, ret);
++}
++
+ extern int audit_n_rules;
+ extern int audit_signals;
+ #else /* CONFIG_AUDITSYSCALL */
+@@ -730,6 +737,9 @@ static inline void audit_log_nfcfg(const char *name, u8 af,
+ 				   enum audit_nfcfgop op, gfp_t gfp)
+ { }
+ 
++static inline void audit_log_clone3(struct kernel_clone_args *kargs, int ret)
++{ }
++
+ #define audit_n_rules 0
+ #define audit_signals 0
+ #endif /* CONFIG_AUDITSYSCALL */
+diff --git a/include/uapi/linux/audit.h b/include/uapi/linux/audit.h
+index e8f5ce677df7..37357e17adbf 100644
+--- a/include/uapi/linux/audit.h
++++ b/include/uapi/linux/audit.h
+@@ -122,6 +122,7 @@
+ #define AUDIT_OPENAT2		1337	/* Record showing openat2 how args */
+ #define AUDIT_DM_CTRL		1338	/* Device Mapper target control */
+ #define AUDIT_DM_EVENT		1339	/* Device Mapper events */
++#define AUDIT_CLONE3		1343	/* Record showing clone3 args */
+ 
+ #define AUDIT_AVC		1400	/* SE Linux avc denial or grant */
+ #define AUDIT_SELINUX_ERR	1401	/* Internal SE Linux Errors */
+diff --git a/kernel/auditsc.c b/kernel/auditsc.c
+index 6610e667c728..c0106bb71c19 100644
+--- a/kernel/auditsc.c
++++ b/kernel/auditsc.c
+@@ -2882,6 +2882,26 @@ void __audit_log_nfcfg(const char *name, u8 af, unsigned int nentries,
+ }
+ EXPORT_SYMBOL_GPL(__audit_log_nfcfg);
+ 
++void __audit_log_clone3(struct kernel_clone_args *kargs, int ret)
++{
++	struct audit_buffer *ab;
++	int pidfd;
++
++	ab = audit_log_start(audit_context(), GFP_KERNEL,
++			     AUDIT_CLONE3);
++	if (!ab)
++		return;
++
++	audit_log_format(ab, "cl3_flags=0x%llx exit_signal=%d cgroup=%d",
++			 kargs->flags, kargs->exit_signal, kargs->cgroup);
++	if ((kargs->flags & CLONE_PIDFD) && ret >= 0 &&
++	    !get_user(pidfd, kargs->pidfd))
++		audit_log_format(ab, " pidfd=%d", pidfd);
++	else
++		audit_log_format(ab, " pidfd=(null)");
++	audit_log_end(ab);
++}
++
+ static void audit_log_task(struct audit_buffer *ab)
+ {
+ 	kuid_t auid, uid;
+diff --git a/kernel/fork.c b/kernel/fork.c
+index f0e2e131a9a5..0f52e8c0e900 100644
+--- a/kernel/fork.c
++++ b/kernel/fork.c
+@@ -3047,7 +3047,9 @@ SYSCALL_DEFINE2(clone3, struct clone_args __user *, uargs, size_t, size)
+ 	if (!clone3_args_valid(&kargs))
+ 		return -EINVAL;
+ 
+-	return kernel_clone(&kargs);
++	err = kernel_clone(&kargs);
++	audit_log_clone3(&kargs, err);
++	return err;
+ }
+ 
+ void walk_process_tree(struct task_struct *top, proc_visitor visitor, void *data)
+-- 
+2.53.0
+
