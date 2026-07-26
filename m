@@ -1,98 +1,164 @@
-Received: from mail-qv1-f53.google.com (mail-qv1-f53.google.com [209.85.219.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 429F4524F
-	for <audit@vger.kernel.org>; Fri, 24 Jul 2026 21:10:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 658952EEE95
+	for <audit@vger.kernel.org>; Sun, 26 Jul 2026 21:37:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784927443; cv=none; b=LK3kow7Hg6hWGmKgV7qtZYbVlS1HbqTY/xLGM7W572DwtgObAGVO+vkA5F+jER+sOdZy2Y5zM/lxVsIixKZDk+heQWwJIH826TndGVxxyVErcx7akPeJv8j3xlUHIchFlKvwGQNTuLBHVyLP7GDoXZdyvIcqJtaq/zduCjLW9AM=
+	t=1785101880; cv=none; b=Y7RMfVr62NOMmizwrdSqUs5TVNiS4OQ9x4FdOWc00mR0FWhRwSWDFbLKnBqOWdGvOVFB14lL6bZ1CBWf2+LRMvbC9gndDUBdCH1m7dsm1TVvkERL7BgBNSyP8GYbaQsG+5BMy3hfdCSoZM5OIhp4+vqg8kaOanuU94W10UYJ25s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784927443; c=relaxed/simple;
-	bh=80pVOvLhx+Wdn2FQlmGhXjRbHTitdSLioqC2O3ubCNg=;
-	h=Date:Message-ID:MIME-Version:Content-Type:From:To:Cc:Subject:
-	 References:In-Reply-To; b=Wggy07jqFlFyFPuwMWMKwcKwP2NuZ6cWCfxT/k+zLonwfhEmXqGXAi8yHuNrO2TSm/TTCbPaoRJctzhpuuhhSO6V76hDBX5n9Kcqk+H3qQa0zUvttQG5N57Xto83zLLaaFYP+zduigYd/gfEx1ZBWSvBlAE9kKxGwqs7UN3CnaI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=GsgTI+hk; arc=none smtp.client-ip=209.85.219.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+	s=arc-20240116; t=1785101880; c=relaxed/simple;
+	bh=yO/1rBEgspF2pky3bo6xrFYrRB0eDf9RvneSpMYePzg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-type; b=aUXFFawIWfTyLlXXhN4GHY98JzIUFmXmQRHVPEHjV09M2qtY/nYXrzu/QBYOm+tGdVP30/OHd4XhSu0F4BDXlbzrYc0h/z1Ox1NghdiEJn3FQhuljaQZ5lk8ra1abBR9E2cKLtalKcXbaCX8vkiZ62b4s98A9/7dkfbfZLaxmxk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Kph3fOVW; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="GsgTI+hk"
-Received: by mail-qv1-f53.google.com with SMTP id 6a1803df08f44-8efb708b1a0so7951116d6.3
-        for <audit@vger.kernel.org>; Fri, 24 Jul 2026 14:10:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1784927440; x=1785532240; darn=vger.kernel.org;
-        h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
-         :content-type:mime-version:message-id:date:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=uhsc75Oo6AuEhvOwEPNfuq0mbfOFTRMSybKBRxOVKlw=;
-        b=GsgTI+hkHZ8VmqwdycBolYwd8MAMkyuNZF/A+K2t7KBqJqUidBRThjwV7HnfkkibJ3
-         msHHPvb0nmhZdhv/aRTscPRcdzMN8oeCnxagwJaEcH92q6e7hoIvhwME25JXHWLZ5TCl
-         jR28bKTd8Lf/tx2+68pdLvrj0wGa+iTL8/J0QGnp9o4gjP/Xld9auKLLAYliAk0cC290
-         omly/ZMeIfggI/rX5DEGpNlWP0tZKJlOasvDJ1wVXio26fN/InyVJFwuelEqfyjxADTd
-         lgdMOZWf7y1au3iqjPRQ7j3HgDZHROLtt5/PTfiP7lUKO6XxryOim3mOZ+dli0rgwYSx
-         1K5A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784927440; x=1785532240;
-        h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
-         :content-type:mime-version:message-id:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=uhsc75Oo6AuEhvOwEPNfuq0mbfOFTRMSybKBRxOVKlw=;
-        b=I6gYkSdFV+zIqjuIqQY4ctQmoKJX3LmP9sp509dlP/Ewcm1h3mqoxhNEnI/TDQShEo
-         pENQQh99TLWTo0cMT9didau4y0+36Dx8rrX21mHsDhyVqBrb2P54fcSB8WH7C+HFUx0w
-         ubrL7ng+pWnycUgmJxOfjVNPifemSZC/zgnr9rtZUMTRL3V3DGvFN8oLO6GfXC4IGlcX
-         Qy1aaPAtf/IUW0FV1mv/1dS1iOyxUmEIAhnE78jmAFuhd0M6JJ1vRFF8Xmq1qq3fqIdh
-         f2gTZBwCB+HlhQgmnx7zGhkKalUtu41KJZEWu/eHrLUqWWgrhCDxzupQVOCIfe/d6LPp
-         1Rvg==
-X-Forwarded-Encrypted: i=1; AHgh+RrcRDu64XDR9kxcGbRkOIAub894mrHhyibmI2JEQMn4HFMxz0NQA6/jJiJYGPN8It7VluU2JA==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz3nZejRiuruwXw5tDEpO1WNt0iJQE1913xQv/QvZifrDn2szp0
-	70UNkVd+DPEzNeAt5dabw2SuBhddFQoQCkKkmSrYRyNmatCTIPqlR8V7hyrBTnAamg==
-X-Gm-Gg: AR+sD11SjA+5tcc8g2iKG+PhoRBdEknvZCV7DTpW97/sD385fKloJwndlU5YXboohHP
-	MbKaeymAEYgQSyzAi7hOCgr799/DkL0GfzuAEXjHPa32wSaE0PUpYQzBtGHSZom/hOQF2JnalqR
-	eUjv04ND3IY8WEN85ImvajT3KLBbB86iT9S6qFe73fnPALOcuDfXWo+TY+bNnSgnigQBfRNC/NB
-	ii+m7d5FLD7Re0FGut/YWUgYQZ01drJfBesxcpzpWy11tRXvEiKjSMgTmADXqYKTWiC7yKyh4yO
-	N118BP8nUH2fv8vw8IpC8S2+bNh/YjbfO3FNX5eEcrS9LwzZ2hILx9ZqAVtWQA4zW15I+5SutEJ
-	DnzS3ayfBvt9C9N1nP/ogKaJVwsyuNHX0o171ZrE2t2Dl8ixJnO/XfDv7mck6XB7yea8ehidwzq
-	X0ZqcCEtO2Q/JGzMN5RG3nz4nqQ0MUTk5o3GSdCu41BdCxbRg=
-X-Received: by 2002:a05:620a:2915:b0:92e:7ba3:740d with SMTP id af79cd13be357-93103a568cfmr1043858085a.68.1784927439959;
-        Fri, 24 Jul 2026 14:10:39 -0700 (PDT)
-Received: from localhost (pool-71-126-255-178.bstnma.fios.verizon.net. [71.126.255.178])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-932de676a41sm5540085a.46.2026.07.24.14.10.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Jul 2026 14:10:39 -0700 (PDT)
-Date: Fri, 24 Jul 2026 17:10:38 -0400
-Message-ID: <0ea73a164fb2397e58ae28a2fa35266d@paul-moore.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Kph3fOVW"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1785101878;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=icC9lmHxi+eXaZ/PK7TjCUqIg70gArkiW9mP3zqc+Cw=;
+	b=Kph3fOVWhiM3NyibT5lXWkzuWb5OhT/Vri+8mgGoKbaY1ROgJLveazjajfD0SchhSFJkW2
+	m5rcTSVm0T3OQYJWMEjiunmZrI1CZVYiUNAFvc1gJEnYQLIJ20ZZqhFUJswfWcYj0oS2mk
+	NzoRWkJ8Pb/xVZatH90iSUxgLVaqa8w=
+Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-691-1Nhuo64yNZalb-x2ri4hQA-1; Sun,
+ 26 Jul 2026 17:37:56 -0400
+X-MC-Unique: 1Nhuo64yNZalb-x2ri4hQA-1
+X-Mimecast-MFC-AGG-ID: 1Nhuo64yNZalb-x2ri4hQA_1785101875
+Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id D87641956045;
+	Sun, 26 Jul 2026 21:37:54 +0000 (UTC)
+Received: from madcap2.tricolour.com (unknown [10.22.58.2])
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id A37FD30001BE;
+	Sun, 26 Jul 2026 21:37:52 +0000 (UTC)
+From: Richard Guy Briggs <rgb@redhat.com>
+To: Linux-Audit Mailing List <linux-audit@lists.linux-audit.osci.io>,
+	LKML <linux-kernel@vger.kernel.org>,
+	linux-fsdevel@vger.kernel.org,
+	Linux Kernel Audit Mailing List <audit@vger.kernel.org>
+Cc: Paul Moore <paul@paul-moore.com>,
+	Eric Paris <eparis@parisplace.org>,
+	Steve Grubb <sgrubb@redhat.com>,
+	Richard Guy Briggs <rgb@redhat.com>
+Subject: [PATCH v1] audit: free proctitle in context so it can be set by fork
+Date: Sun, 26 Jul 2026 17:37:14 -0400
+Message-ID: <d67349e701acb3125d733f833e6ef2e47c91daae.1785101356.git.rgb@redhat.com>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 
-Content-Type: text/plain; charset=UTF-8 
-Content-Transfer-Encoding: 8bit 
-X-Mailer: pstg-pwork:20260724_1628/pstg-lib:20260724_1535/pstg-pwork:20260724_1628
-From: Paul Moore <paul@paul-moore.com>
-To: Jori Koolstra <jkoolstra@xs4all.nl>, Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, Eric Paris <eparis@redhat.com>
-Cc: Jan Kara <jack@suse.cz>, NeilBrown <neil@brown.name>, linux-fsdevel@vger.kernel.org, audit@vger.kernel.org, linux-kernel@vger.kernel.org, Jori Koolstra <jkoolstra@xs4all.nl>
-Subject: Re: [PATCH 3/3] fs/namei.c: update kerneldoc of atomic_open()
-References: <20260710164233.827744-4-jkoolstra@xs4all.nl>
-In-Reply-To: <20260710164233.827744-4-jkoolstra@xs4all.nl>
+MIME-Version: 1.0
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
+X-Mimecast-MFC-PROC-ID: pttXlo_NgAUxMtlrgRVmsYk-w-pp96RszMrF_VN5fkc_1785101875
+X-Mimecast-Originator: redhat.com
+Content-type: text/plain
+Content-Transfer-Encoding: 8bit
 
-On Jul 10, 2026 Jori Koolstra <jkoolstra@xs4all.nl> wrote:
-> 
-> The comments above atomic_open() contain several errors:
-> 
->   - atomic_open() does not return 0 if successful
->   - @path is not updated
-> 
-> Fix those and be more explicit about when FMODE_OPENED and FMODE_CREATED
-> are set. Change to a full kerneldoc.
-> 
-> Signed-off-by: Jori Koolstra <jkoolstra@xs4all.nl>
-> ---
->  fs/namei.c | 32 ++++++++++++++++++++------------
->  1 file changed, 20 insertions(+), 12 deletions(-)
+Original title: fixes clean proctitle in audit context on exec call
 
-Reviewed-by: Paul Moore <paul@paul-moore.com>
+Between the actual process startup (fork systemd) and the executable file
+replacement (exec), systemd sets a temporary file name (executable file
+name in parentheses). If an auditable system call occurs at this point,
+the audit context will latch the temporary process name into the cache.
+This name will not change again. The patch clears proctitle into the
+audit cache when the exec call is made, allowing the new process name to
+be latched.
 
---
-paul-moore.com
+Suggested by Roman Dolgikh https://github.com/rmd4ctf 2025-06-11
+Link: https://github.com/linux-audit/audit-kernel/issues/170.
+Signed-off-by: Richard Guy Briggs <rgb@redhat.com>
+---
+ fs/exec.c             | 2 ++
+ include/linux/audit.h | 9 +++++++++
+ kernel/auditsc.c      | 4 ++--
+ 3 files changed, 13 insertions(+), 2 deletions(-)
+
+diff --git a/fs/exec.c b/fs/exec.c
+index b92fe7db176c..bd51489dec23 100644
+--- a/fs/exec.c
++++ b/fs/exec.c
+@@ -1744,6 +1744,8 @@ static int exec_binprm(struct linux_binprm *bprm)
+ 			fput(exec);
+ 	}
+ 
++	/* clear proctitle in audit context to allow replacement */
++	audit_proctitle_free(audit_context());
+ 	audit_bprm(bprm);
+ 	trace_sched_process_exec(current, old_pid, bprm);
+ 	ptrace_event(PTRACE_EVENT_EXEC, old_vpid);
+diff --git a/include/linux/audit.h b/include/linux/audit.h
+index 45abb3722d30..03ae563ca348 100644
+--- a/include/linux/audit.h
++++ b/include/linux/audit.h
+@@ -320,6 +320,7 @@ static inline void audit_cfg_lsm(const struct lsm_id *lsmid, int flags)
+ /* These are defined in auditsc.c */
+ 				/* Public API */
+ extern int  audit_alloc(struct task_struct *task);
++extern void __audit_proctitle_free(struct audit_context *context);
+ extern void __audit_free(struct task_struct *task);
+ extern void __audit_uring_entry(u8 op);
+ extern void __audit_uring_exit(int success, long code);
+@@ -353,6 +354,11 @@ static inline bool audit_dummy_context(void)
+ 	void *p = audit_context();
+ 	return !p || *(int *)p;
+ }
++static inline void audit_proctitle_free(struct audit_context *context)
++{
++	if (unlikely(!audit_dummy_context()))
++		__audit_proctitle_free(context);
++}
+ static inline void audit_free(struct task_struct *task)
+ {
+ 	if (unlikely(task->audit_context))
+@@ -470,6 +476,7 @@ static inline void audit_bprm(struct linux_binprm *bprm)
+ 	if (unlikely(!audit_dummy_context()))
+ 		__audit_bprm(bprm);
+ }
++
+ static inline int audit_socketcall(int nargs, unsigned long *args)
+ {
+ 	if (unlikely(!audit_dummy_context()))
+@@ -605,6 +612,8 @@ static inline int audit_alloc(struct task_struct *task)
+ {
+ 	return 0;
+ }
++static inline void audit_proctitle_free(struct audit_context *context)
++{ }
+ static inline void audit_free(struct task_struct *task)
+ { }
+ static inline void audit_uring_entry(u8 op)
+diff --git a/kernel/auditsc.c b/kernel/auditsc.c
+index 6610e667c728..69484ab2c8bc 100644
+--- a/kernel/auditsc.c
++++ b/kernel/auditsc.c
+@@ -913,7 +913,7 @@ void audit_filter_inodes(struct task_struct *tsk, struct audit_context *ctx)
+ 	rcu_read_unlock();
+ }
+ 
+-static inline void audit_proctitle_free(struct audit_context *context)
++void __audit_proctitle_free(struct audit_context *context)
+ {
+ 	kfree(context->proctitle.value);
+ 	context->proctitle.value = NULL;
+@@ -1086,7 +1086,7 @@ static inline void audit_free_context(struct audit_context *context)
+ {
+ 	/* resetting is extra work, but it is likely just noise */
+ 	audit_reset_context(context);
+-	audit_proctitle_free(context);
++	__audit_proctitle_free(context);
+ 	free_tree_refs(context);
+ 	kfree(context->filterkey);
+ 	kfree(context);
+-- 
+2.43.5
+
