@@ -1,164 +1,77 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 658952EEE95
-	for <audit@vger.kernel.org>; Sun, 26 Jul 2026 21:37:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE00B2F7F00;
+	Mon, 27 Jul 2026 09:41:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785101880; cv=none; b=Y7RMfVr62NOMmizwrdSqUs5TVNiS4OQ9x4FdOWc00mR0FWhRwSWDFbLKnBqOWdGvOVFB14lL6bZ1CBWf2+LRMvbC9gndDUBdCH1m7dsm1TVvkERL7BgBNSyP8GYbaQsG+5BMy3hfdCSoZM5OIhp4+vqg8kaOanuU94W10UYJ25s=
+	t=1785145266; cv=none; b=HYzQilJrjKK+GS7wY1tK+xbYkg8I3Y8yOaTWa7CIRfqFC5xex1zS7Z24Cp+bXF/jSgkYq6I99+aXDBjdKPFCXF2QKolnhfsVENJ600F+1qMGO9etGf42i9u+QXFhgODn4bK3pdLz43gZ0GBrUXQl1aNQT1hMQz1icQtu3XHqUE4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785101880; c=relaxed/simple;
-	bh=yO/1rBEgspF2pky3bo6xrFYrRB0eDf9RvneSpMYePzg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-type; b=aUXFFawIWfTyLlXXhN4GHY98JzIUFmXmQRHVPEHjV09M2qtY/nYXrzu/QBYOm+tGdVP30/OHd4XhSu0F4BDXlbzrYc0h/z1Ox1NghdiEJn3FQhuljaQZ5lk8ra1abBR9E2cKLtalKcXbaCX8vkiZ62b4s98A9/7dkfbfZLaxmxk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Kph3fOVW; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1785145266; c=relaxed/simple;
+	bh=wsRbU9sCZjs0Rrp7qUKiCZTZh+YDJQke24MlJNELvco=;
+	h=MIME-Version:Content-Type:Subject:From:To:Cc:In-Reply-To:
+	 References:Date:Message-Id; b=DDZcgjLJPen6Gs9dgS9r7XyuJMDkyF7le7Nd3IVM5J6924dwm/dnW4A8kwFuVYBRJV4LIGVyXxmmsv0CbcxuD16sez3QLzBskes75xzg90SqS6D7baYMLbZSfXfzmaL/MfkY0fS34BHeASRbveJjV8l5RBDQluhTOCHmWd7g830=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EfUErfJV; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Kph3fOVW"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1785101878;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=icC9lmHxi+eXaZ/PK7TjCUqIg70gArkiW9mP3zqc+Cw=;
-	b=Kph3fOVWhiM3NyibT5lXWkzuWb5OhT/Vri+8mgGoKbaY1ROgJLveazjajfD0SchhSFJkW2
-	m5rcTSVm0T3OQYJWMEjiunmZrI1CZVYiUNAFvc1gJEnYQLIJ20ZZqhFUJswfWcYj0oS2mk
-	NzoRWkJ8Pb/xVZatH90iSUxgLVaqa8w=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-691-1Nhuo64yNZalb-x2ri4hQA-1; Sun,
- 26 Jul 2026 17:37:56 -0400
-X-MC-Unique: 1Nhuo64yNZalb-x2ri4hQA-1
-X-Mimecast-MFC-AGG-ID: 1Nhuo64yNZalb-x2ri4hQA_1785101875
-Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id D87641956045;
-	Sun, 26 Jul 2026 21:37:54 +0000 (UTC)
-Received: from madcap2.tricolour.com (unknown [10.22.58.2])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id A37FD30001BE;
-	Sun, 26 Jul 2026 21:37:52 +0000 (UTC)
-From: Richard Guy Briggs <rgb@redhat.com>
-To: Linux-Audit Mailing List <linux-audit@lists.linux-audit.osci.io>,
-	LKML <linux-kernel@vger.kernel.org>,
-	linux-fsdevel@vger.kernel.org,
-	Linux Kernel Audit Mailing List <audit@vger.kernel.org>
-Cc: Paul Moore <paul@paul-moore.com>,
-	Eric Paris <eparis@parisplace.org>,
-	Steve Grubb <sgrubb@redhat.com>,
-	Richard Guy Briggs <rgb@redhat.com>
-Subject: [PATCH v1] audit: free proctitle in context so it can be set by fork
-Date: Sun, 26 Jul 2026 17:37:14 -0400
-Message-ID: <d67349e701acb3125d733f833e6ef2e47c91daae.1785101356.git.rgb@redhat.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EfUErfJV"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ABE061F000E9;
+	Mon, 27 Jul 2026 09:41:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1785145265;
+	bh=h1KtGJh/H8DtrXw+EFYt4rytGfK+Dd9+WsYLWovTkiQ=;
+	h=Subject:From:To:Cc:In-Reply-To:References:Date;
+	b=EfUErfJVPts0dA2RsHzN2Wnb/PfwHFiR0h01JTrqLFtkXsR7HO0DJ2pDbvD2JD3uq
+	 FFoP3+2wX7McvKug79DobXnuGnyeIE5hHRhrrXKtSByg5SIKveMoI8Jg7noCgy/axX
+	 lAlSXXmDKJ8vXvzNdAvDy15y4V86WvoN82uP7TjE1+/XW78/siKiVrKiUcjnqoPTt4
+	 zddgKHk9dpeL3wUbdnOKGWnylEzHwsy+Z3m8+ImCNzduzMVmA+nxtnivjnCTMYi0Ao
+	 Waj8v1jm/nN49jUmbbGjqGtx5YaX+BzggM1LZeuZ3yqz/NHVfqq4XzATQ0N7t0paIR
+	 r8mrR77qOWrkQ==
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
-X-Mimecast-MFC-PROC-ID: pttXlo_NgAUxMtlrgRVmsYk-w-pp96RszMrF_VN5fkc_1785101875
-X-Mimecast-Originator: redhat.com
-Content-type: text/plain
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH v1] audit: free proctitle in context so it can be set
+ by fork
+From: Christian Brauner <brauner@kernel.org>
+To: Richard Guy Briggs <rgb@redhat.com>
+Cc: Linux-Audit Mailing List <linux-audit@lists.linux-audit.osci.io>, 
+ LKML <linux-kernel@vger.kernel.org>, linux-fsdevel@vger.kernel.org, 
+ Linux Kernel Audit Mailing List <audit@vger.kernel.org>, 
+ Paul Moore <paul@paul-moore.com>, Eric Paris <eparis@parisplace.org>, 
+ Steve Grubb <sgrubb@redhat.com>
+In-Reply-To: <d67349e701acb3125d733f833e6ef2e47c91daae.1785101356.git.rgb@redhat.com>
+References: <d67349e701acb3125d733f833e6ef2e47c91daae.1785101356.git.rgb@redhat.com>
+Date: Mon, 27 Jul 2026 11:41:00 +0200
+Message-Id: <20260727-freischaffend-anzapfen-checken-00706290941d@brauner>
+X-Mailer: b4 0.16-dev-09492
+X-Developer-Signature: v=1; a=openpgp-sha256; l=790; i=brauner@kernel.org;
+ h=from:subject:message-id; bh=wsRbU9sCZjs0Rrp7qUKiCZTZh+YDJQke24MlJNELvco=;
+ b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWSlq68vuBwr4vxCdoNupZGdV0H9pfonZx/1zT0z7QRPj
+ UszU+vEjlIWBjEuBlkxRRaHdpNwueU8FZuNMjVg5rAygQxh4OIUgInkdzH8D2qbb1tZdyT51bLc
+ /ztF5Rx//ZOY4Op3R2hXT6O4YsfaDkaGqRIbN03MlPl2a4OrU9WGwoKK/wZVTr1h1c9+f4t4FHi
+ eFQA=
+X-Developer-Key: i=brauner@kernel.org; a=openpgp;
+ fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
 
-Original title: fixes clean proctitle in audit context on exec call
+> Original title: fixes clean proctitle in audit context on exec call
+> 
+> Between the actual process startup (fork systemd) and the executable file
+> replacement (exec), systemd sets a temporary file name (executable file
+> name in parentheses). If an auditable system call occurs at this point,
+> the audit context will latch the temporary process name into the cache.
+> This name will not change again. The patch clears proctitle into the
+> audit cache when the exec call is made, allowing the new process name to
+> be latched.
+> 
+> Suggested by Roman Dolgikh https://github.com/rmd4ctf 2025-06-11
+> Link: https://github.com/linux-audit/audit-kernel/issues/170.
+> Signed-off-by: Richard Guy Briggs <rgb@redhat.com>
 
-Between the actual process startup (fork systemd) and the executable file
-replacement (exec), systemd sets a temporary file name (executable file
-name in parentheses). If an auditable system call occurs at this point,
-the audit context will latch the temporary process name into the cache.
-This name will not change again. The patch clears proctitle into the
-audit cache when the exec call is made, allowing the new process name to
-be latched.
+Acked-by: Christian Brauner <brauner@kernel.org>
 
-Suggested by Roman Dolgikh https://github.com/rmd4ctf 2025-06-11
-Link: https://github.com/linux-audit/audit-kernel/issues/170.
-Signed-off-by: Richard Guy Briggs <rgb@redhat.com>
----
- fs/exec.c             | 2 ++
- include/linux/audit.h | 9 +++++++++
- kernel/auditsc.c      | 4 ++--
- 3 files changed, 13 insertions(+), 2 deletions(-)
-
-diff --git a/fs/exec.c b/fs/exec.c
-index b92fe7db176c..bd51489dec23 100644
---- a/fs/exec.c
-+++ b/fs/exec.c
-@@ -1744,6 +1744,8 @@ static int exec_binprm(struct linux_binprm *bprm)
- 			fput(exec);
- 	}
- 
-+	/* clear proctitle in audit context to allow replacement */
-+	audit_proctitle_free(audit_context());
- 	audit_bprm(bprm);
- 	trace_sched_process_exec(current, old_pid, bprm);
- 	ptrace_event(PTRACE_EVENT_EXEC, old_vpid);
-diff --git a/include/linux/audit.h b/include/linux/audit.h
-index 45abb3722d30..03ae563ca348 100644
---- a/include/linux/audit.h
-+++ b/include/linux/audit.h
-@@ -320,6 +320,7 @@ static inline void audit_cfg_lsm(const struct lsm_id *lsmid, int flags)
- /* These are defined in auditsc.c */
- 				/* Public API */
- extern int  audit_alloc(struct task_struct *task);
-+extern void __audit_proctitle_free(struct audit_context *context);
- extern void __audit_free(struct task_struct *task);
- extern void __audit_uring_entry(u8 op);
- extern void __audit_uring_exit(int success, long code);
-@@ -353,6 +354,11 @@ static inline bool audit_dummy_context(void)
- 	void *p = audit_context();
- 	return !p || *(int *)p;
- }
-+static inline void audit_proctitle_free(struct audit_context *context)
-+{
-+	if (unlikely(!audit_dummy_context()))
-+		__audit_proctitle_free(context);
-+}
- static inline void audit_free(struct task_struct *task)
- {
- 	if (unlikely(task->audit_context))
-@@ -470,6 +476,7 @@ static inline void audit_bprm(struct linux_binprm *bprm)
- 	if (unlikely(!audit_dummy_context()))
- 		__audit_bprm(bprm);
- }
-+
- static inline int audit_socketcall(int nargs, unsigned long *args)
- {
- 	if (unlikely(!audit_dummy_context()))
-@@ -605,6 +612,8 @@ static inline int audit_alloc(struct task_struct *task)
- {
- 	return 0;
- }
-+static inline void audit_proctitle_free(struct audit_context *context)
-+{ }
- static inline void audit_free(struct task_struct *task)
- { }
- static inline void audit_uring_entry(u8 op)
-diff --git a/kernel/auditsc.c b/kernel/auditsc.c
-index 6610e667c728..69484ab2c8bc 100644
---- a/kernel/auditsc.c
-+++ b/kernel/auditsc.c
-@@ -913,7 +913,7 @@ void audit_filter_inodes(struct task_struct *tsk, struct audit_context *ctx)
- 	rcu_read_unlock();
- }
- 
--static inline void audit_proctitle_free(struct audit_context *context)
-+void __audit_proctitle_free(struct audit_context *context)
- {
- 	kfree(context->proctitle.value);
- 	context->proctitle.value = NULL;
-@@ -1086,7 +1086,7 @@ static inline void audit_free_context(struct audit_context *context)
- {
- 	/* resetting is extra work, but it is likely just noise */
- 	audit_reset_context(context);
--	audit_proctitle_free(context);
-+	__audit_proctitle_free(context);
- 	free_tree_refs(context);
- 	kfree(context->filterkey);
- 	kfree(context);
 -- 
-2.43.5
 
