@@ -1,95 +1,134 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ua1-f52.google.com (mail-ua1-f52.google.com [209.85.222.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26ACB448BBD
-	for <audit@vger.kernel.org>; Tue, 28 Jul 2026 14:15:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A95F36C588
+	for <audit@vger.kernel.org>; Tue, 28 Jul 2026 16:16:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785248117; cv=none; b=aEJSz+Ec9rplKOS8Jts2kpFXIZZ5Qd0kmd1qmSZT/O0CLD14ro0REg1EsTLyXHh8tsKQZextKxkZTdcyK/cCYEPJLcaZFbesC7B4dVngOFz13PKXKIL9WQozzRKubjsVFZGLoceLsVj1p/Gb8Hp6/DgWXYPxepe0BI9TzjM3GgY=
+	t=1785255390; cv=none; b=CrHVZIfNy2OzllNPuxijC0uvoSbN+dBHTa1BEzfgwwuW5Fukb+sNOHZaPAT/GlxmM3pF8rUEmBhTxad5B+P37v3PHARQV9pMw0XtfIwzZymjiVpU6DKuYnj+PyUGWm7rP8lw9NjqfeYRlpP+RiV+Db0wL+q/elIzexmiD6ayGg4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785248117; c=relaxed/simple;
-	bh=z0E5sq0E6BedNZSbG1Ta/V7KGZUvWPdCv9yhsNszASE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:content-type; b=mxAC88zIZ12TnzKdf4TA4PJMxjA0xPrP9FTXpGa0AB9yb84eyehSrnC/Dx3rbi6y1tUGt/lUAWwBJHtsuJL8qgOW5mp6AzIpPp+doP5Fi/oeNYG71Muid6Z3jI2mjdcYPIwPb53ggMejzCu4tG1qyQrT/cWSs6gN+j2uB3BufPg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=TxlA4Xw6; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1785255390; c=relaxed/simple;
+	bh=zbP0fgi+EApB+uBYo7yptEDQz6XO8DHNjqcRXnDFGI8=;
+	h=Date:Message-ID:MIME-Version:Content-Type:From:To:Cc:Subject:
+	 References:In-Reply-To; b=pHsIbFRJMXc1yRBC2IpDs878pN1vxdp1bEAm9ziffRza6A4mMO583lzMt/oRVwWINhDFjYbhutDy+KPLAh5F/qVl4h0Lb7fkOiNcuRAHxsYWpV25aJs+273nLfsRU9S9p5WZi07OyANi45g+qwEjsvimgIlkaWeDAWaLMr4p5LU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=MLrO+Sc4; arc=none smtp.client-ip=209.85.222.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="TxlA4Xw6"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1785248115;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Vob2+CnBOfoHzDTBPvquR0ip+nHAQQOCLFjnk1EBmQM=;
-	b=TxlA4Xw6mSvKPM8ZmWPBC+AoDlPMTQzoY6NKcJi1cmcOgBaeDHTcPcEwiUF/tuZTl38UfS
-	BiJ+Pwh8yRsuxjGFIy9V3nnMtrRc6r4dBqBn94mWM2v7VP9MyhfjcEArrUdko3cFY74gAo
-	tutbwcZuqst9qZPfAVds/ve3byRLG8o=
-Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-681-vy8D0WrVO9eGK9SZolVMlQ-1; Tue,
- 28 Jul 2026 10:15:09 -0400
-X-MC-Unique: vy8D0WrVO9eGK9SZolVMlQ-1
-X-Mimecast-MFC-AGG-ID: vy8D0WrVO9eGK9SZolVMlQ_1785248107
-Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id C027D195396E;
-	Tue, 28 Jul 2026 14:14:55 +0000 (UTC)
-Received: from wsxc.redhat.com (unknown [10.96.134.116])
-	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 926A7180056E;
-	Tue, 28 Jul 2026 14:14:53 +0000 (UTC)
-From: Ricardo Robaina <rrobaina@redhat.com>
-To: audit@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: paul@paul-moore.com,
-	eparis@redhat.com,
-	Ricardo Robaina <rrobaina@redhat.com>
-Subject: [PATCH 2/2] audit: drop BUG_ON() from audit_signal_info_syscall()
-Date: Tue, 28 Jul 2026 11:14:24 -0300
-Message-ID: <32c8fbc6f680e8309f64fd04f580b6a51bec0176.1785246707.git.rrobaina@redhat.com>
-In-Reply-To: <cover.1785246707.git.rrobaina@redhat.com>
-References: <cover.1785246707.git.rrobaina@redhat.com>
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="MLrO+Sc4"
+Received: by mail-ua1-f52.google.com with SMTP id a1e0cc1a2514c-976ea28c65fso2193552241.1
+        for <audit@vger.kernel.org>; Tue, 28 Jul 2026 09:16:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1785255387; x=1785860187; darn=vger.kernel.org;
+        h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
+         :content-type:mime-version:message-id:date:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=cAriX3tLCmrnUO4qSHhwDGkR5q4S1pPXvajnZr56PhA=;
+        b=MLrO+Sc4b6q1HMMDqe8zweEY+eTufkd72mEHrcIeunJYiD+DD8V3OG6GtVPpqOETgf
+         5eiXG39R6K6hoE7+QJXkI2Luw5UzPtDYiaB8Gs17bACYCsCG8nhymMPxlcfrulcdKfap
+         QLxp8M7Hzc07VUZqFr6zWw8gZyP9K0PJjQCoBwIwZULxzOeI3tZyALg8nhbKRV3nZzFx
+         vHUYM7XA0Mi46VMkSq6YTUr8ySBzQxhvs1298n0Fc+6amab5jL3t5JlPUT9+pa5Dmivm
+         29uFdxdKQ6eYJO+r6HPiqe6gD/VCbBJQ3FZk56Bm86uI6jWgJJXbAbLhRKFNkr+HpSB2
+         ntLw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785255387; x=1785860187;
+        h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
+         :content-type:mime-version:message-id:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=cAriX3tLCmrnUO4qSHhwDGkR5q4S1pPXvajnZr56PhA=;
+        b=JUGY8ygAMLKlCTYRSXkbmohfw7TlCyu5uyev+/u/hC9c9Psp+xPrSlr5BXJqh6i3K1
+         lNM21Hi5N2jhGZjQolyvpd2wQLf4JiLw3ybjMw3lgJ1LhxEGHjcR7h90W4yP+yn+YUfz
+         M0EpZGSo81uGhpM1TmUBsfpcjBhqLkjswicZ6f8a3cq+uE5m/8wX3MkxIEZVTrR6bfki
+         qddeJvmZOaPi47vqEGqJ5Ay5ArlBj1oE58D3XjA6JXNGAawelDHzDhgLAHO0MrZkM01R
+         rm7zRceFQYwYlRX/HK9ZLFDJiHrnWSWZfM/NPpBiSLu2WlEs2q+4LgjMmKnVT4D2PbA7
+         2rxw==
+X-Forwarded-Encrypted: i=1; AHgh+RoorTpZN/hm7m6qV/cuMzpoz7KEbil0+Z3bB0OCsGo+ucg4wpJHxIYCWCJpKWpkP5B2B4+wrw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwRqX5mIZzOmXw80coRuIpgZghOb9fxEQ3BZCIxYlLl6ygBUr7H
+	rz201NxXbnJEc89/pRSByqBzPEf9Hmq276c3ZHXe7R0g4IOr4r5CDv3avhHv5s01mw==
+X-Gm-Gg: AR+sD12M9Nu+/ETXj0pZ0Ze/kHz5bqyw6J5m6rmZidmtooxjtycb77WG3ZLA31sQxFx
+	z1jv2Taw5itPUQOWFIG7nH5Hj4/FG0pKBPwmoCe/yhGmS4w3xnIl1MPHiQ9vR4KGdvaOoPmBr9Q
+	ygKWwxsQoROJopiBIby3JaDoq23zQhe2t4ZhNBKwW4sEdwy9iHG2SbdlJxoMZ2TI4riheNInQwP
+	gYTy7eaTCvWhvGagh1teSzuDV+7eGxg/6NK2UA4ZKV0pgou/mOUCiIVmaYI/mH+vEGAyyMGde9a
+	HYLNaBBbWC0PrTncnzSZTCAgo1YWmyF/9GH4nezcBfFT+CnTEO1FwsKY6RRQf++t3oYhlSMZYVV
+	A6au9Dhy1NGKnHeA7LApCOp7YJCD/ABfwBABe2rZHS75A/up8+wIbPp3no7yBzDQRxJ/PRzY7Lx
+	/6b8/SAKaIbSPfA5aQXhyP3Dyfy/Xeau/kkzyvrBAi6OhlD1I=
+X-Received: by 2002:a05:6102:942:b0:737:ba2e:8a26 with SMTP id ada2fe7eead31-754a2dcd8f7mr1579232137.27.1785255386692;
+        Tue, 28 Jul 2026 09:16:26 -0700 (PDT)
+Received: from localhost (pool-71-126-255-178.bstnma.fios.verizon.net. [71.126.255.178])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-9081dc44d0fsm2424756d6.6.2026.07.28.09.16.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Jul 2026 09:16:25 -0700 (PDT)
+Date: Tue, 28 Jul 2026 12:16:24 -0400
+Message-ID: <2f53e3c8ee57824f1c741f76021eb2ce@paul-moore.com>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
-X-Mimecast-MFC-PROC-ID: O6Hl8UMbMrMrlYgSuI8cFVQ9ai69pQY7aEXBt2BlNA0_1785248107
-X-Mimecast-Originator: redhat.com
-Content-Transfer-Encoding: 8bit
-content-type: text/plain; charset="US-ASCII"; x-default=true
+MIME-Version: 1.0 
+Content-Type: text/plain; charset=UTF-8 
+Content-Transfer-Encoding: 8bit 
+X-Mailer: pstg-pwork:20260727_1648/pstg-lib:20260728_1147/pstg-pwork:20260727_1648
+From: Paul Moore <paul@paul-moore.com>
+To: Richard Guy Briggs <rgb@redhat.com>, Linux-Audit Mailing List <linux-audit@lists.linux-audit.osci.io>, LKML <linux-kernel@vger.kernel.org>, linux-fsdevel@vger.kernel.org, Linux Kernel Audit Mailing List <audit@vger.kernel.org>
+Cc: Eric Paris <eparis@parisplace.org>, Steve Grubb <sgrubb@redhat.com>, Richard Guy Briggs <rgb@redhat.com>
+Subject: Re: [PATCH v1] audit: free proctitle in context so it can be set by  fork
+References: <d67349e701acb3125d733f833e6ef2e47c91daae.1785101356.git.rgb@redhat.com>
+In-Reply-To: <d67349e701acb3125d733f833e6ef2e47c91daae.1785101356.git.rgb@redhat.com>
 
-The BUG_ON(axp->pid_count >= AUDIT_AUX_PIDS) check in
-audit_signal_info_syscall() will panic the kernel if the signal target
-pid array overflows, which is too severe for this situation.
+On Jul 26, 2026 Richard Guy Briggs <rgb@redhat.com> wrote:
+> 
+> Original title: fixes clean proctitle in audit context on exec call
 
-Replace it with a WARN_ON_ONCE() and return of -EINVAL, instead.
+Please don't add stuff like that to the description, it's not
+particularly helpful by itself.  If you want to link this patch to
+something outside of the git log, use the 'Link:' tag.
 
-Signed-off-by: Ricardo Robaina <rrobaina@redhat.com>
----
- kernel/auditsc.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+> Between the actual process startup (fork systemd) and the executable file
+> replacement (exec), systemd sets a temporary file name (executable file
+> name in parentheses). If an auditable system call occurs at this point,
+> the audit context will latch the temporary process name into the cache.
+> This name will not change again. The patch clears proctitle into the
+> audit cache when the exec call is made, allowing the new process name to
+> be latched.
+> 
+> Suggested by Roman Dolgikh https://github.com/rmd4ctf 2025-06-11
 
-diff --git a/kernel/auditsc.c b/kernel/auditsc.c
-index 6610e667c728..2b9ce0b52511 100644
---- a/kernel/auditsc.c
-+++ b/kernel/auditsc.c
-@@ -2712,7 +2712,8 @@ int audit_signal_info_syscall(struct task_struct *t)
- 		axp->d.next = ctx->aux_pids;
- 		ctx->aux_pids = (void *)axp;
- 	}
--	BUG_ON(axp->pid_count >= AUDIT_AUX_PIDS);
-+	if (WARN_ON_ONCE(axp->pid_count >= AUDIT_AUX_PIDS))
-+		return -EINVAL;
- 
- 	axp->target_pid[axp->pid_count] = task_tgid_nr(t);
- 	axp->target_auid[axp->pid_count] = audit_get_loginuid(t);
--- 
-2.53.0
+Considering that Roman lists an email on his public GH profile, it
+would be better to use a traditional "Suggested-by:" tag, for example:
 
+Suggested-by: Roman Dolgikh <rmd4work@mail.ru>
+
+> Link: https://github.com/linux-audit/audit-kernel/issues/170.
+
+No trailing period please.
+
+> Signed-off-by: Richard Guy Briggs <rgb@redhat.com>
+> Acked-by: Christian Brauner <brauner@kernel.org>
+> ---
+>  fs/exec.c             | 2 ++
+>  include/linux/audit.h | 9 +++++++++
+>  kernel/auditsc.c      | 4 ++--
+>  3 files changed, 13 insertions(+), 2 deletions(-)
+> 
+> diff --git a/fs/exec.c b/fs/exec.c
+> index b92fe7db176c..bd51489dec23 100644
+> --- a/fs/exec.c
+> +++ b/fs/exec.c
+> @@ -1744,6 +1744,8 @@ static int exec_binprm(struct linux_binprm *bprm)
+>  			fput(exec);
+>  	}
+>  
+> +	/* clear proctitle in audit context to allow replacement */
+> +	audit_proctitle_free(audit_context());
+>  	audit_bprm(bprm);
+
+Since this is the only place where audit_bprm() is called, is there
+any reason why you simply didn't just move the free into __audit_bprm()?
+
+Doing so should shrink this patch considerably and would keep the audit
+overhead to just a single !audit_dummy_context() check as it is now.
+
+--
+paul-moore.com
