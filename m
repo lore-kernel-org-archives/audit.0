@@ -1,133 +1,157 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3AC93D47AF
-	for <audit@vger.kernel.org>; Tue, 28 Jul 2026 22:46:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785278804; cv=none; b=pP3R2l/ocs42WX0RSvK5NGH6NxgvWTveXb4rkIaZ3t1r1dcArxLBIi9VVtfXRRL4N0CeX7ecFzIUXTsWgznFgEuXZHsgibcgeVm3ECnuqfeJNlSkyZHr1PVOUcOFa2yxTOXw9qipTzqvouSq5y2qoE5+pEoMdRYhb5Kw3fZ6URA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785278804; c=relaxed/simple;
-	bh=StfNncF7l44Pi/nFXCjFV4Li67JqwYsuC+z7cnlHi+g=;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D52FC3A16B9
+	for <audit@vger.kernel.org>; Wed, 29 Jul 2026 17:54:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.176
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785347670; cv=pass; b=NN+JqTqoka/O1hyMmgJbC2cRDieDKX6Oel36w+TeuwK882HtnbQS88Spw5W+UI2pmaOjvyKH4IR1FHycQWUay2+co2f0XhQJuLqk6NsjvvY6lAq0A5cRqr5U24ZbokkAX3SAe0BFUGK9IC8IDlclIS/7V+MspupRiY9PsK6hN9I=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785347670; c=relaxed/simple;
+	bh=6foRPgcQEslNBFscPNEPG9I3ccn7/eLvNpa1/K1biMU=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=l6K1qMmuycLkMtWCLOoSayPKZyvWu7rZNB+BgpSqVmTMutrl0dTGta7dUakLGxO6ey/Bj06Hxobz6WV8U29K2w5mU261nYGQHX9TIzdtCI3oWwW5yfTwIrcp+Q0NnJE/WelmjzqqWCW/Vwr+EKstH/XUSd2HCmmF6gpkCzVlZyI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=QdP8tt2U; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	 To:Cc:Content-Type; b=ZjtTIYLIfu8efZcNlXlpL+/biSpHnBy9/F10Vb4EGWABYzeFmqgeSIs3Px+DhA1hxTzfoPCyUqdLQ5ie1Z9gChd5Z2Rxlm1ljDeFWDaiqNZ9XI4/X86dOtsq6HBgsteafQgGQ6wHaFE+1CKUIpAD8iBECWmepARhDdF3qq1HFBM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=E0RCz2dK; arc=pass smtp.client-ip=209.85.214.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="QdP8tt2U"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1785278801;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=NlEke2Zqj6DMdoaLkrGIGqPHj+QNXslCH1f5cMmE21U=;
-	b=QdP8tt2U258eFngM0iaFDaqAZ0EHpM7cFX789bjlhLw8aQuhryfK2oHTY9Xhz6Q/w390RJ
-	TAFsttV1iH2tcXwhMtiya7Y8fIMdmRBw+jEm67VyvQc9z4ApavPTBswsXx405BSXu0KaVr
-	tYG1N2POEK9qzGdgmHS5kaU2fI9mEJE=
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
- [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-159-vFGTp-kWPROwZLUFyp6_RQ-1; Tue, 28 Jul 2026 18:46:40 -0400
-X-MC-Unique: vFGTp-kWPROwZLUFyp6_RQ-1
-X-Mimecast-MFC-AGG-ID: vFGTp-kWPROwZLUFyp6_RQ_1785278799
-Received: by mail-ej1-f72.google.com with SMTP id a640c23a62f3a-c15e6109f9aso27350066b.2
-        for <audit@vger.kernel.org>; Tue, 28 Jul 2026 15:46:40 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="E0RCz2dK"
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-2cfff5f88dbso14719825ad.3
+        for <audit@vger.kernel.org>; Wed, 29 Jul 2026 10:54:23 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1785347659; cv=none;
+        d=google.com; s=arc-20260327;
+        b=Bxv872Swbp0hnIFxY87NFV7/iXuqjMNAubgFivotxlFvYDXVn0zA8N9aw7NOEh3Y89
+         Da9fit8xLyc6dozIjVsQkPURSWSjZ/tkJoYSoFfvfK7RgxgxLflON9yZ8KbuYrsbLqMw
+         dr5c9tBbaIecPhigbv26UJEbjaEOb9Q4Ca96l8/WyqSoidguzfk/zprk7URQAsZJl6c/
+         Bmf1E/iW1myGsIqNsVLkOg5nKc1lGVUopW0BcGAfdsxanXA5MumuDKvo3R++iptEkppY
+         aJd+i8dbLvIRAZBMH21+qqHT9Nd0WnMeF/zlDAyPFt3LQ7GEjiHOlLBHux5gs8pwEPyY
+         LlUw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=ZmGdt5Io4WXqOXdtwiF09bKELDwsm21C5P5pzyFwm2g=;
+        fh=ePmt5QSlSOPFMVMqJ6QSuI1V82KQ5PB8L30QuKXu1M4=;
+        b=Pn6vq5ndn7yEx+HXyuEns49aDiKbIEJfQwxn6xF7C+MbyACZU776yDoxZPqQ3wMSa0
+         TD6CujxluwglJIheWlF4hVRgbEd8y52eU+3g50ZwvTRcGAJZZGB+JBr3X+9wxwSuwerI
+         jNHqzFQyOKA/OLpNId5Qpg9X4y9why5jUbocqZOMzrH4+Xn7wCrLuwwlmsD+Sq7R6nQM
+         JQ8e6+jowXDxsVtJb5Ohs/ZLiCVREZOct4xOYdTY1YSFVQpx0Dv8BiE3/xn29RPsyRL5
+         JqufSz+lc/wMr3/XlScl7azcrn9FTAshIEY58Hf96qgXDuhKVklNv0p9kNB4i7UP11An
+         z3Nw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1785347659; x=1785952459; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=ZmGdt5Io4WXqOXdtwiF09bKELDwsm21C5P5pzyFwm2g=;
+        b=E0RCz2dKcgJyDHX09icJx8/hdX3aC9l+X8JBPVS1dI/iDfL3UZ/h98Em5vG80EUghK
+         Qiw1XB8m7x8GvxtAVsMa18J6HWiUidcFL+EoA5TfenMR6V6GkgxtMnPeO+LGpcRLtcJC
+         0WKo+PEo1s/RRjQv/d9qu9CdaJhrhIo495xD0kOmpP2Fh5ObRBEl2q+cDlMYHTu7wgoY
+         ixBtW2gH0tvF5fOByExCZ7+O3euZ8bJWrL83SBCg7f/Au0PKZKHgWJHyg7B471wB73pi
+         hZyxtQbXhAgdA+zTKPt1/ccrVj501Zaq+qqPdROU4e7dedT9z4Y92EIGWQCW+qwbRfmp
+         0vpw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785278799; x=1785883599;
+        d=1e100.net; s=20251104; t=1785347659; x=1785952459;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=NlEke2Zqj6DMdoaLkrGIGqPHj+QNXslCH1f5cMmE21U=;
-        b=kif78PUxeOldacvkxo7wovQm5YeG58YcFWfGLsVVYUOoInitiWsGghdHlwo7iQJ/xs
-         m25VxHF/Sy/V5iH+OmJg/99r6uW3FSe+AM+JlxoWxV+ezZrprSjm4uOnySpKPZFZsnx0
-         xbMGazncAFvKQWbXUx+gjhhLDTFDMLdUacMCtTf0yjY6CmOQb6t1+Lj3U6BBnLQD6rDV
-         n625HnXxUHZR/c0atfXScUWGHac4YlvGLSA6pqO1M47F3OaReY13Y6Io0mtk/zk21KTz
-         rDBO2yI7JZ7vP/7zqshOfpIkMGaLGXW92rh6cZjglbbv2gnRyPFs1RjP8FoomUGQmVqE
-         6N8g==
-X-Gm-Message-State: AOJu0YyCeRVOkfX0ePg63bUnJdkODhNKK/BC8n7UCx0PcDNsyxCCWBDA
-	QvrxyEHFJtzE4R9xYzyrpMPKesrTo+A591U0KrQ1Sy0uWU8gb2pGa31JsNb5I3Ik/yt/XiLMfPz
-	eIO8RVfwg2roN8mY/qXeOzX+7BFVIBYQTab/HHJwTcw17ay/5QTl2Coxwdieo5TxCguJENloOqK
-	VaR2z09VSbL9TiLDTOKZU+YL19LtVnGtc=
-X-Gm-Gg: AR+sD11mTs5xpJ85zratkPMXXswIFg++Q6NgMATnRxSThAbP0TZbcMVSMibAMDoBgH0
-	L01NTPC/y3wTJp+kdDrOaDrewnxX6nkXEPWozUiD/cMSlycc1KZKlN+lBW5rE//iFsCPqjfc88U
-	GgDq3KRWTADdS12Md62oivmqPm12TVHlpgLJh6Kh2nW7vtmnIOgMAwbnrPcLwjTS/ilOJXVsHzR
-	l7A83aLJaRi/JGpmAbAW9AkY0gbgbKlRMAgDfbVDEjlxeG7ni5aemLuI25XuHQG/UULlrR0E4Ni
-	EFs=
-X-Received: by 2002:a17:907:3e18:b0:c15:bed9:f492 with SMTP id a640c23a62f3a-c1f71e874ecmr219748066b.10.1785278799222;
-        Tue, 28 Jul 2026 15:46:39 -0700 (PDT)
-X-Received: by 2002:a17:907:3e18:b0:c15:bed9:f492 with SMTP id
- a640c23a62f3a-c1f71e874ecmr219746966b.10.1785278798856; Tue, 28 Jul 2026
- 15:46:38 -0700 (PDT)
+        bh=ZmGdt5Io4WXqOXdtwiF09bKELDwsm21C5P5pzyFwm2g=;
+        b=EyANQvg9w/ki7uP63OBcRoQ1NpNEgzn+tNnpx2n58JqoScwG+k3wQvuLgPojbsjo8y
+         FjJa7gdZMfYSIlCIHeMJkrQrZvI7JgDK94g9wwqORW8X/vDDGM8MkTkLyKiWE1V8j7dg
+         N433NU55UJs7m1gUG4daKtuGT2EyyHVUl5x4gIxTUD6HBV1V9cRpU2jb8ErJ7i1zP4a7
+         43MJ3twP69VhG2YCxDi3v9cfL7XX0YiCi+cZ9bdYJm/9sAi6k2K88cFmwj4ijjPQa5Ci
+         kJ8k8a71pneL/ffGxKhU1JiWnQIrEPjNOOauMrfHHC/LfDDDNBhbDTipnP2q2kYRiJCB
+         N1gQ==
+X-Forwarded-Encrypted: i=1; AHgh+RoKwrEeJk+w7cMo7i9gARzllq7mBqOV3ODTjPx3E18HDaLQ6QR2o4PDyhpj59NhfPraFcdGfg==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yztg7igJLZVlGfco+Mr4QlbFj57whBW0B37xsGOReKHi+VP0NCt
+	H/jlbdKg8vMM6x4moXm6vZ2FVi/1030H9owd31Y43pTnUvwme7UbgiYSdE1YJ/Gjvx54tLXOOLI
+	wJB+wgTT4nWXK+oxYSGBOSI6AkVStNRFfZZ33qWtg
+X-Gm-Gg: AR+sD111VoWnrJRlCHn1aHvOuqlgGOM44RNXIIc+SPnOV/ORqSjGQqCmVHHfaP9vwsG
+	p2UZgxkd8CtPYz72FjB8FiPLil16ZACBMq7LJOpRSH1ItjdDmNuY2ciRarFEV+xD2X8P4FckfWs
+	TOfvFTmMfBUjyddA25pFm+3wf8kbvY2PrP7LhPsERTMmPeeC8dbJK89J+jVdZwNAs3VXS++kfHI
+	Dnpu1qmHZNwERGEYAPTbsOmMQiOzveI4SRc6QTN8HRdDErdvjSEps9GOOF98Twk5lDQcACwPEWL
+	UNfveuAfoVN6vrtU5XK6xuSs9le054ieVBQKZQY6afscZVfO3H+so3M=
+X-Received: by 2002:a17:903:94d:b0:2c9:97a8:8c1b with SMTP id
+ d9443c01a7336-2d015ee611amr76397685ad.46.1785347659214; Wed, 29 Jul 2026
+ 10:54:19 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <32c8fbc6f680e8309f64fd04f580b6a51bec0176.1785246707.git.rrobaina@redhat.com>
- <883ee05917e857f5176178f2f14f3cee@paul-moore.com>
-In-Reply-To: <883ee05917e857f5176178f2f14f3cee@paul-moore.com>
-From: Ricardo Robaina <rrobaina@redhat.com>
-Date: Tue, 28 Jul 2026 18:46:28 -0400
-X-Gm-Features: AUfX_mxZjuAxfLYaej-QXAM7CbmcrUr1nyVF8dYYyr_HtIwK_ZbmVVk3JEy-r10
-Message-ID: <CAABTaaDjMreZmXrmYH9MW2rEmvi=8b_8DL6=RWP7ZFXjKO_4cw@mail.gmail.com>
-Subject: Re: [PATCH 2/2] audit: drop BUG_ON() from audit_signal_info_syscall()
-To: Paul Moore <paul@paul-moore.com>
-Cc: audit@vger.kernel.org, linux-kernel@vger.kernel.org, eparis@redhat.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: MiknEmLyN2_F__E1KkFQzKvbxPrFn3BMQ7ZFHYYmKuo_1785278799
-X-Mimecast-Originator: redhat.com
+References: <20260721040118.1000554-1-ruanjinjie@huawei.com>
+ <87jyqolqn3.ffs@fw13> <CAHC9VhSohbG8n5WW4VaEjU7nVA4WCrkJ1eD-=34ioaJOQ0-rCg@mail.gmail.com>
+ <87mrvgjv68.ffs@fw13>
+In-Reply-To: <87mrvgjv68.ffs@fw13>
+From: Paul Moore <paul@paul-moore.com>
+Date: Wed, 29 Jul 2026 13:54:06 -0400
+X-Gm-Features: AUfX_mzVBYhFObFmWn4bu9O3gNFkO-pLlJdokT1yaynw-xj0j6rqRPnP05cSGP0
+Message-ID: <CAHC9VhSGV+XdCdfts7rf80JBa-Sap+9uSXd-XwXqT3T4ocv-Nw@mail.gmail.com>
+Subject: Re: [PATCH v2] audit: Force audit_context() to be always inlined
+To: Thomas Gleixner <tglx@kernel.org>
+Cc: Jinjie Ruan <ruanjinjie@huawei.com>, eparis@redhat.com, audit@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jul 28, 2026 at 3:53=E2=80=AFPM Paul Moore <paul@paul-moore.com> wr=
-ote:
+On Fri, Jul 24, 2026 at 10:53=E2=80=AFAM Thomas Gleixner <tglx@kernel.org> =
+wrote:
+> On Thu, Jul 23 2026 at 13:21, Paul Moore wrote:
+> > On Tue, Jul 21, 2026 at 3:59=E2=80=AFAM Thomas Gleixner <tglx@kernel.or=
+g> wrote:
+> >> On Tue, Jul 21 2026 at 12:01, Jinjie Ruan wrote:
+> >> > commit 6f25517010dd ("entry: Rework syscall_audit_enter()") relies o=
+n
+> >> > dead code elimination to remove the call to syscall_enter_audit() wh=
+en
+> >> > CONFIG_AUDITSYSCALL is disabled. However, with s390 GCC 13.4.0 +
+> >> > CONFIG_KASAN, audit_context() is not inlined despite being marked
+> >> > inline, causing an undefined reference to syscall_enter_audit().
+> >> >
+> >> > Force audit_context() to be __always_inline to ensure the conditiona=
+l
+> >> > can be constant-folded and dead code elimination works correctly.
+> >> >
+> >> > Signed-off-by: Jinjie Ruan <ruanjinjie@huawei.com>
+> >> > Suggested-by: Thomas Gleixner <tglx@kernel.org>
+> >> > Reported-by: kernel test robot <lkp@intel.com>
+> >> > Closes: https://lore.kernel.org/oe-kbuild-all/202607181530.2nx8zb3J-=
+lkp@intel.com/
+> >>
+> >> Obsolete. Is already in:
+> >>
+> >> https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?h=
+=3Dcore/entry&id=3D6f25517010ddd3f8080d7e06b9b1cb1b64b73772
+> >
+> > It would have been nice to see that patch CC'd to the audit mailing
+> > list for obvious reasons.
+> >
+> > Since I'm just looking at that tip tree patch now (perhaps there are
+> > other preceding patches that affect this?), does it still compile
+> > properly when CONFIG_AUDITSYSCALL is not defined?  With
+> > syscall_trace_enter() calling out to syscall_enter_audit() that is no
+> > longer inlined in the same header, and no dummy function/macro defined
+> > for syscall_enter_audit() when !CONFIG_AUDITSYSCALL, it looks like
+> > there might be an issue on some configurations, no?
 >
-> On Jul 28, 2026 Ricardo Robaina <rrobaina@redhat.com> wrote:
-> >
-> > The BUG_ON(axp->pid_count >=3D AUDIT_AUX_PIDS) check in
-> > audit_signal_info_syscall() will panic the kernel if the signal target
-> > pid array overflows, which is too severe for this situation.
-> >
-> > Replace it with a WARN_ON_ONCE() and return of -EINVAL, instead.
-> >
-> > Signed-off-by: Ricardo Robaina <rrobaina@redhat.com>
-> > ---
-> >  kernel/auditsc.c | 3 ++-
-> >  1 file changed, 2 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/kernel/auditsc.c b/kernel/auditsc.c
-> > index 6610e667c728..2b9ce0b52511 100644
-> > --- a/kernel/auditsc.c
-> > +++ b/kernel/auditsc.c
-> > @@ -2712,7 +2712,8 @@ int audit_signal_info_syscall(struct task_struct =
-*t)
-> >               axp->d.next =3D ctx->aux_pids;
-> >               ctx->aux_pids =3D (void *)axp;
-> >       }
-> > -     BUG_ON(axp->pid_count >=3D AUDIT_AUX_PIDS);
-> > +     if (WARN_ON_ONCE(axp->pid_count >=3D AUDIT_AUX_PIDS))
-> > +             return -EINVAL;
+> It compiles properly due to dead code elimination on everything except on
+> old s390 compilers for whatever reasons.
 >
-> Part of me wonders if the WARN_ON_ONCE() should be a pr_err(), possibly
-> ratelimited, but given that I don't recall ever seeing this BUG_ON()
-> trigger I think this is fine.  We can always change the WARN_ON_ONCE()
-> later if needed, getting rid of the BUG_ON() is the big win.
->
-> Merged into audit/dev, thanks.
+> I'll bite the bullet and add the stub inline for syscall_enter_audit() ..=
+.
 
-Makes sense. Thanks, Paul!
+Thanks.  Did you CC the audit mailing list?  I don't see it in my
+inbox or in the lore archives of the audit list.
 
->
-> >       axp->target_pid[axp->pid_count] =3D task_tgid_nr(t);
-> >       axp->target_auid[axp->pid_count] =3D audit_get_loginuid(t);
-> > --
-> > 2.53.0
->
-> --
-> paul-moore.com
->
+> though keeping audit_context() __always_inline makes a lot of sense as
+> especially clang has a tendency to out of line the most trivial inlines.
 
+That seems reasonable, but as you previously mentioned that Jinjie
+Ruan's patch was "obsolete" I wanted to clarify that you are now in
+favor of the patch at the top of this thread?
+
+--=20
+paul-moore.com
