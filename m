@@ -1,157 +1,271 @@
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D52FC3A16B9
-	for <audit@vger.kernel.org>; Wed, 29 Jul 2026 17:54:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.176
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785347670; cv=pass; b=NN+JqTqoka/O1hyMmgJbC2cRDieDKX6Oel36w+TeuwK882HtnbQS88Spw5W+UI2pmaOjvyKH4IR1FHycQWUay2+co2f0XhQJuLqk6NsjvvY6lAq0A5cRqr5U24ZbokkAX3SAe0BFUGK9IC8IDlclIS/7V+MspupRiY9PsK6hN9I=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785347670; c=relaxed/simple;
-	bh=6foRPgcQEslNBFscPNEPG9I3ccn7/eLvNpa1/K1biMU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ZjtTIYLIfu8efZcNlXlpL+/biSpHnBy9/F10Vb4EGWABYzeFmqgeSIs3Px+DhA1hxTzfoPCyUqdLQ5ie1Z9gChd5Z2Rxlm1ljDeFWDaiqNZ9XI4/X86dOtsq6HBgsteafQgGQ6wHaFE+1CKUIpAD8iBECWmepARhDdF3qq1HFBM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=E0RCz2dK; arc=pass smtp.client-ip=209.85.214.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D11743AFCEC
+	for <audit@vger.kernel.org>; Wed, 29 Jul 2026 18:11:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785348694; cv=none; b=oykXr97/PmoFUKXd6tVpqg38gLo9sCszf+zVhbA7XBteK058KSfQwxt3aIB7TYHl/xAoSg+lMB8GUwQ8AbKpTkejzctZABUWeNW6bsYTsIZgwqAbBht1zHqlzYaJB1OFd3zrOsN03rtfWQlkGdIG4nNM8YR4eZ9srVkYCmDGNrA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785348694; c=relaxed/simple;
+	bh=MVophVNk5ArCFb62+dJCRops/puauAYLotDQ7KFEI6o=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=mv6t2XWMaXb1wxNIXQxQNHh65x4CVoQu1ccOUpjWPNUt9EMh3Ux5DhHRtuH7dntlWVIuoU6OrfDV3SVMP0NZ/IhfxCJOgPt5MUkcL4KrEbXAhzpM7pbk90Zf0VFnhFoNNIyiF1jCP4gChQvkiPjiR3Eye8rCuT3jTfXdzYvrt2A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=WXMH0fda; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="E0RCz2dK"
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-2cfff5f88dbso14719825ad.3
-        for <audit@vger.kernel.org>; Wed, 29 Jul 2026 10:54:23 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1785347659; cv=none;
-        d=google.com; s=arc-20260327;
-        b=Bxv872Swbp0hnIFxY87NFV7/iXuqjMNAubgFivotxlFvYDXVn0zA8N9aw7NOEh3Y89
-         Da9fit8xLyc6dozIjVsQkPURSWSjZ/tkJoYSoFfvfK7RgxgxLflON9yZ8KbuYrsbLqMw
-         dr5c9tBbaIecPhigbv26UJEbjaEOb9Q4Ca96l8/WyqSoidguzfk/zprk7URQAsZJl6c/
-         Bmf1E/iW1myGsIqNsVLkOg5nKc1lGVUopW0BcGAfdsxanXA5MumuDKvo3R++iptEkppY
-         aJd+i8dbLvIRAZBMH21+qqHT9Nd0WnMeF/zlDAyPFt3LQ7GEjiHOlLBHux5gs8pwEPyY
-         LlUw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=ZmGdt5Io4WXqOXdtwiF09bKELDwsm21C5P5pzyFwm2g=;
-        fh=ePmt5QSlSOPFMVMqJ6QSuI1V82KQ5PB8L30QuKXu1M4=;
-        b=Pn6vq5ndn7yEx+HXyuEns49aDiKbIEJfQwxn6xF7C+MbyACZU776yDoxZPqQ3wMSa0
-         TD6CujxluwglJIheWlF4hVRgbEd8y52eU+3g50ZwvTRcGAJZZGB+JBr3X+9wxwSuwerI
-         jNHqzFQyOKA/OLpNId5Qpg9X4y9why5jUbocqZOMzrH4+Xn7wCrLuwwlmsD+Sq7R6nQM
-         JQ8e6+jowXDxsVtJb5Ohs/ZLiCVREZOct4xOYdTY1YSFVQpx0Dv8BiE3/xn29RPsyRL5
-         JqufSz+lc/wMr3/XlScl7azcrn9FTAshIEY58Hf96qgXDuhKVklNv0p9kNB4i7UP11An
-         z3Nw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1785347659; x=1785952459; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=ZmGdt5Io4WXqOXdtwiF09bKELDwsm21C5P5pzyFwm2g=;
-        b=E0RCz2dKcgJyDHX09icJx8/hdX3aC9l+X8JBPVS1dI/iDfL3UZ/h98Em5vG80EUghK
-         Qiw1XB8m7x8GvxtAVsMa18J6HWiUidcFL+EoA5TfenMR6V6GkgxtMnPeO+LGpcRLtcJC
-         0WKo+PEo1s/RRjQv/d9qu9CdaJhrhIo495xD0kOmpP2Fh5ObRBEl2q+cDlMYHTu7wgoY
-         ixBtW2gH0tvF5fOByExCZ7+O3euZ8bJWrL83SBCg7f/Au0PKZKHgWJHyg7B471wB73pi
-         hZyxtQbXhAgdA+zTKPt1/ccrVj501Zaq+qqPdROU4e7dedT9z4Y92EIGWQCW+qwbRfmp
-         0vpw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785347659; x=1785952459;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=ZmGdt5Io4WXqOXdtwiF09bKELDwsm21C5P5pzyFwm2g=;
-        b=EyANQvg9w/ki7uP63OBcRoQ1NpNEgzn+tNnpx2n58JqoScwG+k3wQvuLgPojbsjo8y
-         FjJa7gdZMfYSIlCIHeMJkrQrZvI7JgDK94g9wwqORW8X/vDDGM8MkTkLyKiWE1V8j7dg
-         N433NU55UJs7m1gUG4daKtuGT2EyyHVUl5x4gIxTUD6HBV1V9cRpU2jb8ErJ7i1zP4a7
-         43MJ3twP69VhG2YCxDi3v9cfL7XX0YiCi+cZ9bdYJm/9sAi6k2K88cFmwj4ijjPQa5Ci
-         kJ8k8a71pneL/ffGxKhU1JiWnQIrEPjNOOauMrfHHC/LfDDDNBhbDTipnP2q2kYRiJCB
-         N1gQ==
-X-Forwarded-Encrypted: i=1; AHgh+RoKwrEeJk+w7cMo7i9gARzllq7mBqOV3ODTjPx3E18HDaLQ6QR2o4PDyhpj59NhfPraFcdGfg==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yztg7igJLZVlGfco+Mr4QlbFj57whBW0B37xsGOReKHi+VP0NCt
-	H/jlbdKg8vMM6x4moXm6vZ2FVi/1030H9owd31Y43pTnUvwme7UbgiYSdE1YJ/Gjvx54tLXOOLI
-	wJB+wgTT4nWXK+oxYSGBOSI6AkVStNRFfZZ33qWtg
-X-Gm-Gg: AR+sD111VoWnrJRlCHn1aHvOuqlgGOM44RNXIIc+SPnOV/ORqSjGQqCmVHHfaP9vwsG
-	p2UZgxkd8CtPYz72FjB8FiPLil16ZACBMq7LJOpRSH1ItjdDmNuY2ciRarFEV+xD2X8P4FckfWs
-	TOfvFTmMfBUjyddA25pFm+3wf8kbvY2PrP7LhPsERTMmPeeC8dbJK89J+jVdZwNAs3VXS++kfHI
-	Dnpu1qmHZNwERGEYAPTbsOmMQiOzveI4SRc6QTN8HRdDErdvjSEps9GOOF98Twk5lDQcACwPEWL
-	UNfveuAfoVN6vrtU5XK6xuSs9le054ieVBQKZQY6afscZVfO3H+so3M=
-X-Received: by 2002:a17:903:94d:b0:2c9:97a8:8c1b with SMTP id
- d9443c01a7336-2d015ee611amr76397685ad.46.1785347659214; Wed, 29 Jul 2026
- 10:54:19 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="WXMH0fda"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1785348689;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=5LeOKsRSX9LQ/Z888u+WD2bBKTgN2PNxGsIp4x88jiQ=;
+	b=WXMH0fdayFgnqWhmPKmvXHYa6UANu9CoLCFnORurAneXLgA4F7U2ZjiTGjuhxXsT+sdoa9
+	qyyy7ea41qzOhLjYKrr8/RQm7RXwU67kFpb3cZbAuxdUCXY/VUtKt3kQtvkrFrG7d8Q7ST
+	IE3cKxA9C6N0r0PxkirvXXPmt3iUHiU=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-620-Ex3xmxqZNEmW1NYcoOLPLQ-1; Wed,
+ 29 Jul 2026 14:11:25 -0400
+X-MC-Unique: Ex3xmxqZNEmW1NYcoOLPLQ-1
+X-Mimecast-MFC-AGG-ID: Ex3xmxqZNEmW1NYcoOLPLQ_1785348684
+Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id A3DC61956094;
+	Wed, 29 Jul 2026 18:11:23 +0000 (UTC)
+Received: from x2.localnet (unknown [10.22.89.105])
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id C3EDA1800480;
+	Wed, 29 Jul 2026 18:11:20 +0000 (UTC)
+From: Steve Grubb <sgrubb@redhat.com>
+To: Ricardo Robaina <rrobaina@redhat.com>, audit@vger.kernel.org,
+ linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Paul Moore <paul@paul-moore.com>
+Cc: eparis@redhat.com, viro@zeniv.linux.org.uk, brauner@kernel.org,
+ jack@suse.cz, rbriggs@redhat.com, Ricardo Robaina <rrobaina@redhat.com>
+Subject: Re: [PATCH v2] audit: add FSCONFIG auxiliary record to log filesystem
+ configuration
+Date: Wed, 29 Jul 2026 14:11:19 -0400
+Message-ID: <-GF9cdtWTQSigd6gY6zWOw@redhat.com>
+Organization: Red Hat
+In-Reply-To: <4fad20e4737ff546ce0a822d9522adac@paul-moore.com>
+References: <20260727173710.964626-1-rrobaina@redhat.com>
+ <4fad20e4737ff546ce0a822d9522adac@paul-moore.com>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260721040118.1000554-1-ruanjinjie@huawei.com>
- <87jyqolqn3.ffs@fw13> <CAHC9VhSohbG8n5WW4VaEjU7nVA4WCrkJ1eD-=34ioaJOQ0-rCg@mail.gmail.com>
- <87mrvgjv68.ffs@fw13>
-In-Reply-To: <87mrvgjv68.ffs@fw13>
-From: Paul Moore <paul@paul-moore.com>
-Date: Wed, 29 Jul 2026 13:54:06 -0400
-X-Gm-Features: AUfX_mzVBYhFObFmWn4bu9O3gNFkO-pLlJdokT1yaynw-xj0j6rqRPnP05cSGP0
-Message-ID: <CAHC9VhSGV+XdCdfts7rf80JBa-Sap+9uSXd-XwXqT3T4ocv-Nw@mail.gmail.com>
-Subject: Re: [PATCH v2] audit: Force audit_context() to be always inlined
-To: Thomas Gleixner <tglx@kernel.org>
-Cc: Jinjie Ruan <ruanjinjie@huawei.com>, eparis@redhat.com, audit@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
+X-Mimecast-MFC-PROC-ID: MJoDW38yzq24VzjPFRiW5i3Dxkh87jct6HXg2YFsuJQ_1785348684
+X-Mimecast-Originator: redhat.com
 Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
 
-On Fri, Jul 24, 2026 at 10:53=E2=80=AFAM Thomas Gleixner <tglx@kernel.org> =
-wrote:
-> On Thu, Jul 23 2026 at 13:21, Paul Moore wrote:
-> > On Tue, Jul 21, 2026 at 3:59=E2=80=AFAM Thomas Gleixner <tglx@kernel.or=
-g> wrote:
-> >> On Tue, Jul 21 2026 at 12:01, Jinjie Ruan wrote:
-> >> > commit 6f25517010dd ("entry: Rework syscall_audit_enter()") relies o=
-n
-> >> > dead code elimination to remove the call to syscall_enter_audit() wh=
-en
-> >> > CONFIG_AUDITSYSCALL is disabled. However, with s390 GCC 13.4.0 +
-> >> > CONFIG_KASAN, audit_context() is not inlined despite being marked
-> >> > inline, causing an undefined reference to syscall_enter_audit().
-> >> >
-> >> > Force audit_context() to be __always_inline to ensure the conditiona=
-l
-> >> > can be constant-folded and dead code elimination works correctly.
-> >> >
-> >> > Signed-off-by: Jinjie Ruan <ruanjinjie@huawei.com>
-> >> > Suggested-by: Thomas Gleixner <tglx@kernel.org>
-> >> > Reported-by: kernel test robot <lkp@intel.com>
-> >> > Closes: https://lore.kernel.org/oe-kbuild-all/202607181530.2nx8zb3J-=
-lkp@intel.com/
-> >>
-> >> Obsolete. Is already in:
-> >>
-> >> https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?h=
-=3Dcore/entry&id=3D6f25517010ddd3f8080d7e06b9b1cb1b64b73772
-> >
-> > It would have been nice to see that patch CC'd to the audit mailing
-> > list for obvious reasons.
-> >
-> > Since I'm just looking at that tip tree patch now (perhaps there are
-> > other preceding patches that affect this?), does it still compile
-> > properly when CONFIG_AUDITSYSCALL is not defined?  With
-> > syscall_trace_enter() calling out to syscall_enter_audit() that is no
-> > longer inlined in the same header, and no dummy function/macro defined
-> > for syscall_enter_audit() when !CONFIG_AUDITSYSCALL, it looks like
-> > there might be an issue on some configurations, no?
->
-> It compiles properly due to dead code elimination on everything except on
-> old s390 compilers for whatever reasons.
->
-> I'll bite the bullet and add the stub inline for syscall_enter_audit() ..=
-.
+On Tuesday, July 28, 2026 4:35:20=E2=80=AFPM Eastern Daylight Time Paul Moo=
+re wrote:
+> On Jul 27, 2026 Ricardo Robaina <rrobaina@redhat.com> wrote:
+> > Modern mount tools (util-linux >=3D 2.39.1) use the new mount API
+> > (fsopen, fsconfig, fsmount, move_mount) instead of the legacy mount(2)
+> > syscall. The generic SYSCALL audit record logs the fsconfig syscall but
+> > does not capture the configuration parameters, creating an audit gap fo=
+r
+> > critical mount information such as the device being mounted.
+> >=20
+> > Add an FSCONFIG auxiliary record that logs the command type, parameter
+> > name (key), parameter value, and aux parameter passed to fsconfig(2).
+> >=20
+> >  ----
+> >  type=3DSYSCALL : syscall=3Dfsconfig ... a1=3DFSCONFIG_SET_STRING ...
+> >  type=3DFSCONFIG : fs_cmd=3D1 fs_key=3Dsource fs_val=3D"tmpfs" fs_aux=
+=3D0
+> >  ----
+> >  type=3DSYSCALL : syscall=3Dfsconfig ... a1=3DFSCONFIG_CMD_CREATE ...
+> >  type=3DFSCONFIG : fs_cmd=3D6 fs_key=3D(null) fs_val=3D(null) fs_aux=3D=
+0
+> >  ----
+> >  type=3DSYSCALL : syscall=3Dfsconfig ... a1=3DFSCONFIG_SET_BINARY ...
+> >  type=3DFSCONFIG : fs_cmd=3D2 fs_key=3Dhidepid fs_val=3D"<binary>" fs_a=
+ux=3D4
+> >=20
+> > Link: https://github.com/linux-audit/audit-kernel/issues/153
+> > Acked-by: Christian Brauner <brauner@kernel.org>
+> > Signed-off-by: Ricardo Robaina <rrobaina@redhat.com>
+> > ---
+> > Changes in v2:
+> > - Fixed null-check for fs_key field.
+> > - Clarified trimmed SYSCALL output in commit message examples.
+> >=20
+> >  fs/fsopen.c                |  7 +++++++
+> >  include/linux/audit.h      | 13 +++++++++++++
+> >  include/uapi/linux/audit.h |  1 +
+> >  kernel/auditsc.c           | 27 +++++++++++++++++++++++++++
+> >  4 files changed, 48 insertions(+)
+> >=20
+> > diff --git a/fs/fsopen.c b/fs/fsopen.c
+> > index ae19e5136598..9b3c02f59df4 100644
+> > --- a/fs/fsopen.c
+> > +++ b/fs/fsopen.c
+> > @@ -15,6 +15,7 @@
+> >=20
+> >  #include <linux/namei.h>
+> >  #include <linux/file.h>
+> >  #include <uapi/linux/mount.h>
+> >=20
+> > +#include <linux/audit.h>
+> >=20
+> >  #include "internal.h"
+> >  #include "mount.h"
+> >=20
+> > @@ -357,6 +358,7 @@ SYSCALL_DEFINE5(fsconfig,
+> >=20
+> >  =09struct fs_context *fc;
+> >  =09int ret;
+> >  =09int lookup_flags =3D 0;
+> >=20
+> > +=09const char *value_str =3D NULL;
+> >=20
+> >  =09struct fs_parameter param =3D {
+> >  =09
+> >  =09=09.type=09=3D fs_value_is_undefined,
+> >=20
+> > @@ -423,6 +425,7 @@ SYSCALL_DEFINE5(fsconfig,
+> >=20
+> >  =09=09=09goto out_key;
+> >  =09=09
+> >  =09=09}
+> >  =09=09param.size =3D strlen(param.string);
+> >=20
+> > +=09=09value_str =3D param.string;
+> >=20
+> >  =09=09break;
+> >  =09
+> >  =09case FSCONFIG_SET_BINARY:
+> >  =09=09param.type =3D fs_value_is_blob;
+> >=20
+> > @@ -432,6 +435,7 @@ SYSCALL_DEFINE5(fsconfig,
+> >=20
+> >  =09=09=09ret =3D PTR_ERR(param.blob);
+> >  =09=09=09goto out_key;
+> >  =09=09
+> >  =09=09}
+> >=20
+> > +=09=09value_str =3D "<binary>";
+>=20
+> Is there a reason why we're not logging the binary data?  We might want
+> to impose a size limit to truncate the logged data (although we have
+> provisions to log rather large binary chunks), but I don't see a reason
+> why we couldn't log the binary data as a hex string.
 
-Thanks.  Did you CC the audit mailing list?  I don't see it in my
-inbox or in the lore archives of the audit list.
+I did a search for any user of this. There are no known consumers. Last=20
+February, fsparam_blob() / fs_param_is_blob parser support was removed. Tha=
+t=20
+means we don't really have a use case. If, for example, someone decided to=
+=20
+use this API to insert a private key used for decryption or something, we=
+=20
+probably don't want that in logs. So, without an actual use case, it's hard=
+=20
+to say if logging this would be a liability or something needed. But yes, i=
+t=20
+could be done with the hex string encoding if required.
 
-> though keeping audit_context() __always_inline makes a lot of sense as
-> especially clang has a tendency to out of line the most trivial inlines.
+-Steve
 
-That seems reasonable, but as you previously mentioned that Jinjie
-Ruan's patch was "obsolete" I wanted to clarify that you are now in
-favor of the patch at the top of this thread?
 
---=20
-paul-moore.com
+> >  =09=09break;
+> >  =09
+> >  =09case FSCONFIG_SET_PATH_EMPTY:
+> >  =09=09lookup_flags =3D LOOKUP_EMPTY;
+> >=20
+> > @@ -445,6 +449,7 @@ SYSCALL_DEFINE5(fsconfig,
+> >=20
+> >  =09=09}
+> >  =09=09param.dirfd =3D aux;
+> >  =09=09param.size =3D strlen(param.name->name);
+> >=20
+> > +=09=09value_str =3D param.name->name;
+> >=20
+> >  =09=09break;
+> >  =09
+> >  =09case FSCONFIG_SET_FD:
+> >  =09=09param.type =3D fs_value_is_file;
+> >=20
+> > @@ -458,6 +463,8 @@ SYSCALL_DEFINE5(fsconfig,
+> >=20
+> >  =09=09break;
+> >  =09
+> >  =09}
+> >=20
+> > +=09audit_log_fsconfig(cmd, param.key, value_str, aux);
+> > +
+> >=20
+> >  =09ret =3D mutex_lock_interruptible(&fc->uapi_mutex);
+> >  =09if (ret =3D=3D 0) {
+> >  =09
+> >  =09=09ret =3D vfs_fsconfig_locked(fc, cmd, &param);
+>=20
+> ...
+>=20
+> > diff --git a/kernel/auditsc.c b/kernel/auditsc.c
+> > index 6610e667c728..fefc5c5dd4aa 100644
+> > --- a/kernel/auditsc.c
+> > +++ b/kernel/auditsc.c
+> > @@ -2882,6 +2882,33 @@ void __audit_log_nfcfg(const char *name, u8 af,
+> > unsigned int nentries,>=20
+> >  }
+> >  EXPORT_SYMBOL_GPL(__audit_log_nfcfg);
+> >=20
+> > +void __audit_log_fsconfig(unsigned int cmd, const char *key,
+> > +=09=09=09  const char *value, int aux)
+> > +{
+> > +=09struct audit_buffer *ab;
+> > +
+> > +=09ab =3D audit_log_start(audit_context(), GFP_KERNEL, AUDIT_FSCONFIG)=
+;
+> > +=09if (!ab)
+> > +=09=09return;
+> > +
+> > +=09audit_log_format(ab, "fs_cmd=3D%u", cmd);
+> > +=09audit_log_format(ab, " fs_key=3D");
+>=20
+> Calling into audit_log_format() is expensive due to the string
+> processing, we should combine this into a single audit_log_format()
+> call:
+>=20
+>  audit_log_format(ab, "fs_cmd=3D%u fs_key=3D", cmd);
+>=20
+> > +=09if (key)
+> > +=09=09audit_log_untrustedstring(ab, key);
+> > +=09else
+> > +=09=09audit_log_format(ab, "(null)");
+> > +
+> > +=09audit_log_format(ab, " fs_val=3D");
+> > +=09if (value)
+> > +=09=09audit_log_untrustedstring(ab, value);
+> > +=09else
+> > +=09=09audit_log_format(ab, "(null)");
+> > +
+> > +=09audit_log_format(ab, " fs_aux=3D%d", aux);
+> > +
+> > +=09audit_log_end(ab);
+> > +}
+> > +
+> >=20
+> >  static void audit_log_task(struct audit_buffer *ab)
+> >  {
+> > =20
+> >  =09kuid_t auid, uid;
+>=20
+> --
+> paul-moore.com
+
+
+
+
