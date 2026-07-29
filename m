@@ -1,216 +1,243 @@
-Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40A423D47A7
-	for <audit@vger.kernel.org>; Wed, 29 Jul 2026 20:33:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C85C43803C
+	for <audit@vger.kernel.org>; Wed, 29 Jul 2026 22:03:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.216.42
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785357210; cv=pass; b=DvvRFDhBuX8XRsYuOoDUVqbzacoJIAvYZ7TPuT0RCq2P3Wsuv7qElrlPE7YmeYskVmYoKyQxmiufijaejb7URomkXhVTlLArS8b+tKdK9FaRVKBYEzIH5uEJg5xrFqzCgVcdGnOKtg8fBtIzpBTdZCLeColNElkFRg0GyLjREMI=
+	t=1785362593; cv=pass; b=YmTWCTlhlos+/A9mTBkkkH802Ar9ZPwuCuWXs8s9hq7A+EGXaNKjnACBfw4Z9vIdKD5EYXxkss/Ue01OYJTTjqrw9oSLa+9fxKf2jKzVqaRTQIObFLcgrHbOqMSbpjFoH4cm6TOWOc3CMuuu07yReQQf8akVWTWujR/jChu4IyI=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785357210; c=relaxed/simple;
-	bh=rl00CFnjfTQdhYmoLt+8jdSHsilIM9IioAykyBOfUKs=;
+	s=arc-20240116; t=1785362593; c=relaxed/simple;
+	bh=HcMbH29taY+ufNcfCTbZJI4vNI2GzSiaiAez8EQJNgo=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=LkopezmMi60N/lz2Ytt8f/g5oyN1Hy9WD3bZi2Lal0TEgql2qZ4hPmrRpFbbSTbjHlIWpzv6Ip1MZ+gikq6FrNvWhrWlC3uAaeqFTfFdKNM0yie0wqyEdAZUTnksUh8wHAprfQed6iiKiEk2HJZ42jt6mJTcnRkPQrbqOLI42cY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=fMQSdpgB; arc=pass smtp.client-ip=209.85.210.180
+	 To:Cc:Content-Type; b=NBrUNOstaynIZ7CmTW0d9iFFGvDjJyyIOh6wWeGhrHHUnz7Ix2xPBFizWsrKBJ++6JHlNi5csRHCR+t0sqO5pCC2wQSmBJo0DI3ruBP2Hxy9Nq1VFVdfOraUblfAOA+qLPNVaKXzxFaXaLubT/7TitVW/3BVMUQt40k9kaW+scg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=Sbe7PTzB; arc=pass smtp.client-ip=209.85.216.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="fMQSdpgB"
-Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-848593533cbso966003b3a.3
-        for <audit@vger.kernel.org>; Wed, 29 Jul 2026 13:33:27 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1785357207; cv=none;
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="Sbe7PTzB"
+Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-38a0c7e841fso1743656a91.2
+        for <audit@vger.kernel.org>; Wed, 29 Jul 2026 15:03:09 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1785362589; cv=none;
         d=google.com; s=arc-20260327;
-        b=Sjjk3Gq8wsuKDvQ6Qaa27BCSSo701b+5KQRwqQWCJPjiVayGEpkUCjHJns/qJXpqHT
-         +IMCpAFb97o0pqZYLVgWB6TRmPOm3+Ykk8Gzqudb3GfFSH0RuLwWWD1luPqnY5bfaGD2
-         5d+Dn02cc5e5O7Q9+jjgYVj1mQ3wUANAFLPMooXlAtLpvcwAhRoZNnyFPkUBZVBgJ35f
-         /iJyyTCHwERjk+MPt7Vh7IvK1ftrqgl2INWS5sW0b6oPxFSQHoQrbDMoWAXMq2JGg63+
-         EMKvymtwg9FR/OymFSPTLqkJwrCjb7fbWhlHB+BdCuuXlu4ukX+QbAk9zbIHz6nYRGDi
-         RlQQ==
+        b=gUpW5lZCaDnGu0dpqXBp+fj/jH+pZd/K5R+w8ObHjL5W6I7e3lW3M+PGWhADVYYfrO
+         02W8ahttqlyYWwyXmSF/RDe1f10nwotIDOk3opeubpEAXzLP6n7mhcaNDiHk+PWwP0pn
+         hJ254PILsFLKXeMVjjk1j1V0tBDbHmFez/ksNo9NGGOoUO3gFpWCtD0VAA2k3XNRyA/s
+         zRUpSSEZ7dHoWUOK95azP7hgpWVxvJ2l/IeMgR+t6+oGfe5xVVIwF1jp2oPNqs5tqyBq
+         IS4jS+jUSGBdqmMwKsSMUCLKEtlaJi2xrxyy8PwMM+bVIlzZw9g3qlBwYmne0F7emYFu
+         lSQQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=zMzMKASiaVaPlMq9bXgSDhTmU/j2ygeKpecM5A6PZIc=;
-        fh=S7v6FmG33HpyyubrkolZZ9RnqE98BDXRuvlcJR6bGDE=;
-        b=Nw6sIMAmbT0+GNhvir0iPlmgSlItSahCyGYjPYwE5ZQA9O84R1SueDC+4MnZ3VbFGI
-         QVa9aBtlIBrVil/S2STDqa63dMST7Njy2Ym6950Gz2JooqYGnwnF37/j4XKz+/Jah4HQ
-         /tydNwbJzjD2GImfF+fAitAB+VRqLjIY7BIRLHO4l7MrXCnZKrhiMX37KcjwqIEyf6BK
-         JcloiEVQOk4anVRNURxNf+/zQNBKibg6ePMxVz5fij5CVsoD9x/bySm1aPjwzDHm4Pwq
-         536YqA9PSFiAd5s1J6O0qpqHTa/WQiEpQbA3c4wxW4SExDAKwHjc8pqQRxmDuz7B+9jn
-         5DFw==;
+        bh=tf+R8andN/8C1l9MVMV+XEC/VXhqnJMJYXGT9VY4exY=;
+        fh=GDEtS87Wl4+QJBWppBeZMbnAHKRuKQ0xuJsAytQ2ACg=;
+        b=o83C8BrvOpAowzHmi5b9IYdwhZ7L8YlhOEpXv00IEaa48DHARpYESiF9zDvmuFW1Bk
+         X1RkE9tcmTvRTX0tDijQoFWOEPMlIPYj82P5UVGnN7JGwsdoSN1cU13n/xw05k4omC2P
+         QZ4jFRUM8G601A/8h/yuc1+rKnijAc+0MLwBQxh6S4xKpjSRhlXgkU/NtQdsoorSjsEG
+         SJ/6tbZNqKQOnSpzeoSYNtIICUiHaUdzvrOY9DZL3wFfOFBLPs03tuxstZm6kewUpYtL
+         Yxsidj+hq0z3w8Xa1Ts2DqwK1RrO54dz256NaH9r8kHZ3nE0XDxT4fwCEYaaBxyRdrBj
+         pOzg==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1785357207; x=1785962007; darn=vger.kernel.org;
+        d=paul-moore.com; s=google; t=1785362589; x=1785967389; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=zMzMKASiaVaPlMq9bXgSDhTmU/j2ygeKpecM5A6PZIc=;
-        b=fMQSdpgBPsKgFB908EtBrWpBsp+xWzcB7dUCFAsehLNVh9zmzitSlvKGCcNtcv0a6u
-         Ewaz8T9FZY3UZv9TYfdczohm/Naw0iHz91olO3sLXKu/JwIj2+1NUbSjyL5QZQmNBZU0
-         4Xp5IsqVGrf/p6Z70H842w4giCTPUDOX0ovT/sC1gPcRASfgX1EK9nJEf288osdjsTVg
-         Q86njvQDZ8O+CkSLCvH4EJ9GI21y/pIdBYt9JmOIIL7UBfQpTA++1jWd+Q1B/MXMnnL+
-         pkF2ofcrgcdcz0EZh5UtqWfWpyMtgfi1ZlpIdQHYym2bP3b3GCEoyaR1esO/Hl8VnEzl
-         M1Gg==
+        bh=tf+R8andN/8C1l9MVMV+XEC/VXhqnJMJYXGT9VY4exY=;
+        b=Sbe7PTzBFpbscn3r1e01imuXl/FChP/xTd29kaJH01wO/zk4eKvfkEslwN9wzQuCEq
+         WaKPCZoIbmO0BD9+u8cvo9y8w6mo1r9igiykhpL0DDLBfEBolkPXX5saMEIUwLxClp5Q
+         WVPaaFyTGt4t4x8wDAfJz2P++YI5PjrxZrL4rJUASzmzE9W0d7DeLPwKqoeaWj5nVJ0i
+         ZcolCFk9G5NyQHMPfesRZCN56ETfetkij05B4Ipg1XObew/L9xUo7h03/NGDSA8CUgsA
+         pIx+ioGGDE3hfFWEQLShQplUjR2kc2yydx9Xnvdsc5puVO9hml5tzgmmELhWhn3QBd1m
+         aU/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785357207; x=1785962007;
+        d=1e100.net; s=20251104; t=1785362589; x=1785967389;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=zMzMKASiaVaPlMq9bXgSDhTmU/j2ygeKpecM5A6PZIc=;
-        b=EmojEhp/ntnIKAeGa2cl74nNjEYYKHS1rmXsVrmJUEsLd4+5A4Ss4Apji+wpYiRv4z
-         v+XD23KinDsRtqd4Vir9qcALPyukrQq250UwVSHlIbSMzelZKUVxxKWGqZp0fftBCyHn
-         pWKs7ptFeGJMwjNTJUZ+c8AsFLvbR8RQTQeRu+xYRIdETUN/lC1nIsmFA8KQlrvyYjH6
-         6V1c7NuakTmCds9sonx3a9DeP2DLBAJ9y60aOYOsl7gHC8E1tqLebJXpdqX4vFGax7TV
-         DyqgaVyL0usGVveNRQjvuO1thySqxq4d/4Bi3KKeSilm5fGLGKJXpN1j9EKn6NUOyJFj
-         iy8Q==
-X-Forwarded-Encrypted: i=1; AHgh+Ro8Q9YwThO5XtmGvAWtALAxFKxDM4hrgrCOcnoSwOjStQqaUZNo5zwMhf4wjHnRsSu24D+0eQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwuObYW/GOzixB4q5y76iisEMJ38/9M8078ojMbHjJEI1J9O/N1
-	8aUK0aS47XCABCR0tFLLJD2tVT9nLj0wDrh7qNJh4iCABCAhK0G8jsLAIeGYVE4sNVmQW/qHmj0
-	hEYHTcc3l6h+M93osxpwk2i2UOFBEnNT8X9E0HQx/
-X-Gm-Gg: AR+sD10Rs+6PwIa1vNkKXjGg2MXDR2nUzkEFmXW8rpBBGWisyRZ4G/lYti7jDZhz5pW
-	aLSxhYWFY9HICqC5abRFOLBxzY0IQ5bb6VTLIX0HfpIer19Mxbw4qnQgIwPcNyapDkDuvYtmaRO
-	f4Tg9+sF/QiUkfmCQFC6AkvyD8+B4rV1Npgk7o5Ym9iZIw6JxxxY30OTEPXxdFRtB773lUHITv2
-	8yXUqe7f+o5odmBJQZWcZQLqWFlWHjQdTfC29gpVWtdjA5jfsft8n0O7dw3/SPh7rC3x+TxRykP
-	qQwz9H1oEXmx26+zis5p+SixJk1fVlKHA3ozXtiOQU0q
-X-Received: by 2002:a05:6a00:1407:b0:842:6a3b:60d8 with SMTP id
- d2e1a72fcca58-84eba0d2741mr290741b3a.30.1785357207079; Wed, 29 Jul 2026
- 13:33:27 -0700 (PDT)
+        bh=tf+R8andN/8C1l9MVMV+XEC/VXhqnJMJYXGT9VY4exY=;
+        b=rnCCeQi8qFUvArZz4zXyE4YxXdDAIyNJ+IEn7W+EEOU4lh7p01AFCnwy7z2lxzQdbQ
+         jSKDnebrS8rpJsmVcMVIxOacXVrg7cbHP9OJTt0FDepb8IfBBGLUY1BexGu1AqS9CnID
+         PFCkFstbrJuGdxeIYW3Mf1iwpDFqXxZ9h1UWGeuXkJjeqfD52+C/oBGvmVPHE0QEpI0x
+         DXxhgWXobro2Qi3pK2DjSWdb9v6Hd+cwJ3kFSsP197Kuz0Af1w4N/frHm1JuT7kmExQO
+         m4SgGd9h1Oq1CZhPOSUvim80U5axQWQXLpR6SgQ1ayvrghD6hsQo4aFsOYZbcAjNRkS+
+         ZpNA==
+X-Gm-Message-State: AOJu0YzCBFHbUtJIZQhdFhdqJVrd58c3rWgOeHv+jN9b6VIhWzJkPrkc
+	ccPRLfZnowcd+8WxBUgcmVpT7fTk8P96cpn5fG5+Gb26p+zAp1XVgSQsPXzDj5IPbH+dnLGg5gv
+	rjwlI6U9XqJRN6gR+kcJJSiwWR9eldNcElnyRajgo
+X-Gm-Gg: AR+sD11xl2poehDZXjebiVAW1fxC/QuwyCwGVFN6yxGfqUi2U1JTeVya5jpg5yxNDIb
+	/h7pTNWX9d4GtMIHRzes/9sjssNPcQjBcG72BQV7d8humhW6YVpf8nhFC/BLRNaona/SnhZuYXh
+	Zqy+kqkhGIkOHtV9/yQ1CGilLrZTMPP8+6OPr3rzy3TKzEM1N96ijtWEVEr2wScKXqs1dv17Nvj
+	AYLJpWl9uuACnMQgxgWBTezcxwTlVQxaFEgvDCENR8j2L7FaSDOOfpmnXSCptfUheqvIVQ7C3SM
+	co73qQEopIk2ef7KYhZrBU9eoYau4l8pz5kpIXzqnifO9U+ojXPj/SdV
+X-Received: by 2002:a17:90b:4c8b:b0:384:5b5b:3465 with SMTP id
+ 98e67ed59e1d1-38f9c03f3f8mr16712a91.29.1785362588743; Wed, 29 Jul 2026
+ 15:03:08 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260727173710.964626-1-rrobaina@redhat.com> <4fad20e4737ff546ce0a822d9522adac@paul-moore.com>
- <-GF9cdtWTQSigd6gY6zWOw@redhat.com>
-In-Reply-To: <-GF9cdtWTQSigd6gY6zWOw@redhat.com>
+References: <20260724150258.560396-2-rrobaina@redhat.com>
+In-Reply-To: <20260724150258.560396-2-rrobaina@redhat.com>
 From: Paul Moore <paul@paul-moore.com>
-Date: Wed, 29 Jul 2026 16:33:15 -0400
-X-Gm-Features: AUfX_mzIikCBs8eykvIkNwAKaaJ_gfDNHj6hpFCIxVi_KmhNMPnn4-xMb0XDtzo
-Message-ID: <CAHC9VhQYFi2nioWpqOrfDkooQd=yu=0PNArjFvmBkwYfoatamw@mail.gmail.com>
-Subject: Re: [PATCH v2] audit: add FSCONFIG auxiliary record to log filesystem configuration
-To: Steve Grubb <sgrubb@redhat.com>
-Cc: Ricardo Robaina <rrobaina@redhat.com>, audit@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	eparis@redhat.com, viro@zeniv.linux.org.uk, brauner@kernel.org, jack@suse.cz, 
-	rbriggs@redhat.com
+Date: Wed, 29 Jul 2026 18:02:56 -0400
+X-Gm-Features: AUfX_mzcntZ6VC8RqxPzHKxTitoDJtU_-OrjKrjMj_YpWSH2DybA-fWhadZG5cM
+Message-ID: <CAHC9VhSzhyw--ycYMG_RaT5wpRQWDPBSuaNixsVrWrRXKc9hzw@mail.gmail.com>
+Subject: Re: [PATCH] audit: add CLONE3 auxiliary record to log process cloning
+To: Ricardo Robaina <rrobaina@redhat.com>
+Cc: audit@vger.kernel.org, linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
+	eparis@redhat.com, sgrubb@redhat.com, kees@kernel.org, mingo@redhat.com, 
+	peterz@infradead.org, juri.lelli@redhat.com, vincent.guittot@linaro.org, 
+	akpm@linux-foundation.org, david@kernel.org, brauner@kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jul 29, 2026 at 2:11=E2=80=AFPM Steve Grubb <sgrubb@redhat.com> wro=
-te:
-> On Tuesday, July 28, 2026 4:35:20=E2=80=AFPM Eastern Daylight Time Paul M=
-oore wrote:
-> > On Jul 27, 2026 Ricardo Robaina <rrobaina@redhat.com> wrote:
-> > > Modern mount tools (util-linux >=3D 2.39.1) use the new mount API
-> > > (fsopen, fsconfig, fsmount, move_mount) instead of the legacy mount(2=
-)
-> > > syscall. The generic SYSCALL audit record logs the fsconfig syscall b=
-ut
-> > > does not capture the configuration parameters, creating an audit gap =
-for
-> > > critical mount information such as the device being mounted.
-> > >
-> > > Add an FSCONFIG auxiliary record that logs the command type, paramete=
-r
-> > > name (key), parameter value, and aux parameter passed to fsconfig(2).
-> > >
-> > >  ----
-> > >  type=3DSYSCALL : syscall=3Dfsconfig ... a1=3DFSCONFIG_SET_STRING ...
-> > >  type=3DFSCONFIG : fs_cmd=3D1 fs_key=3Dsource fs_val=3D"tmpfs" fs_aux=
-=3D0
-> > >  ----
-> > >  type=3DSYSCALL : syscall=3Dfsconfig ... a1=3DFSCONFIG_CMD_CREATE ...
-> > >  type=3DFSCONFIG : fs_cmd=3D6 fs_key=3D(null) fs_val=3D(null) fs_aux=
-=3D0
-> > >  ----
-> > >  type=3DSYSCALL : syscall=3Dfsconfig ... a1=3DFSCONFIG_SET_BINARY ...
-> > >  type=3DFSCONFIG : fs_cmd=3D2 fs_key=3Dhidepid fs_val=3D"<binary>" fs=
-_aux=3D4
-> > >
-> > > Link: https://github.com/linux-audit/audit-kernel/issues/153
-> > > Acked-by: Christian Brauner <brauner@kernel.org>
-> > > Signed-off-by: Ricardo Robaina <rrobaina@redhat.com>
-> > > ---
-> > > Changes in v2:
-> > > - Fixed null-check for fs_key field.
-> > > - Clarified trimmed SYSCALL output in commit message examples.
-> > >
-> > >  fs/fsopen.c                |  7 +++++++
-> > >  include/linux/audit.h      | 13 +++++++++++++
-> > >  include/uapi/linux/audit.h |  1 +
-> > >  kernel/auditsc.c           | 27 +++++++++++++++++++++++++++
-> > >  4 files changed, 48 insertions(+)
-> > >
-> > > diff --git a/fs/fsopen.c b/fs/fsopen.c
-> > > index ae19e5136598..9b3c02f59df4 100644
-> > > --- a/fs/fsopen.c
-> > > +++ b/fs/fsopen.c
-> > > @@ -15,6 +15,7 @@
-> > >
-> > >  #include <linux/namei.h>
-> > >  #include <linux/file.h>
-> > >  #include <uapi/linux/mount.h>
-> > >
-> > > +#include <linux/audit.h>
-> > >
-> > >  #include "internal.h"
-> > >  #include "mount.h"
-> > >
-> > > @@ -357,6 +358,7 @@ SYSCALL_DEFINE5(fsconfig,
-> > >
-> > >     struct fs_context *fc;
-> > >     int ret;
-> > >     int lookup_flags =3D 0;
-> > >
-> > > +   const char *value_str =3D NULL;
-> > >
-> > >     struct fs_parameter param =3D {
-> > >
-> > >             .type   =3D fs_value_is_undefined,
-> > >
-> > > @@ -423,6 +425,7 @@ SYSCALL_DEFINE5(fsconfig,
-> > >
-> > >                     goto out_key;
-> > >
-> > >             }
-> > >             param.size =3D strlen(param.string);
-> > >
-> > > +           value_str =3D param.string;
-> > >
-> > >             break;
-> > >
-> > >     case FSCONFIG_SET_BINARY:
-> > >             param.type =3D fs_value_is_blob;
-> > >
-> > > @@ -432,6 +435,7 @@ SYSCALL_DEFINE5(fsconfig,
-> > >
-> > >                     ret =3D PTR_ERR(param.blob);
-> > >                     goto out_key;
-> > >
-> > >             }
-> > >
-> > > +           value_str =3D "<binary>";
-> >
-> > Is there a reason why we're not logging the binary data?  We might want
-> > to impose a size limit to truncate the logged data (although we have
-> > provisions to log rather large binary chunks), but I don't see a reason
-> > why we couldn't log the binary data as a hex string.
+On Fri, Jul 24, 2026 at 11:03=E2=80=AFAM Ricardo Robaina <rrobaina@redhat.c=
+om> wrote:
 >
-> I did a search for any user of this. There are no known consumers. Last
-> February, fsparam_blob() / fs_param_is_blob parser support was removed. T=
-hat
-> means we don't really have a use case. If, for example, someone decided t=
-o
-> use this API to insert a private key used for decryption or something, we
-> probably don't want that in logs. So, without an actual use case, it's ha=
-rd
-> to say if logging this would be a liability or something needed. But yes,=
- it
-> could be done with the hex string encoding if required.
+> The clone3(2) syscall moves most parameters to struct clone_args.
+> For this reason, the generic SYSCALL audit record does not capture
+> the structured arguments.
+>
+> Add a CLONE3 auxiliary record that logs: flags, exit_signal, cgroup,
+> and pidfd fields from struct clone_args. When CLONE_PIDFD is set and
+> the syscall succeeds, the resolved pidfd is logged; otherwise
+> pidfd=3D(null).
+>
+>  ----
+>  type=3DSYSCALL : syscall=3Dclone3 a0=3D0x7ffe7f1ec640 a1=3D0x58 a2=3D0x0=
+ ...
+>  type=3DCLONE3 : cl3_flags=3D0x1000 exit_signal=3D17 cgroup=3D0 pidfd=3D3
+>
+> Link: https://github.com/linux-audit/audit-kernel/issues/151
+> Signed-off-by: Ricardo Robaina <rrobaina@redhat.com>
+> ---
+>  include/linux/audit.h      | 10 ++++++++++
+>  include/uapi/linux/audit.h |  1 +
+>  kernel/auditsc.c           | 20 ++++++++++++++++++++
+>  kernel/fork.c              |  4 +++-
+>  4 files changed, 34 insertions(+), 1 deletion(-)
+>
+> diff --git a/include/linux/audit.h b/include/linux/audit.h
+> index 45abb3722d30..833f349bf415 100644
+> --- a/include/linux/audit.h
+> +++ b/include/linux/audit.h
+> @@ -449,6 +449,7 @@ extern void __audit_tk_injoffset(struct timespec64 of=
+fset);
+>  extern void __audit_ntp_log(const struct audit_ntp_data *ad);
+>  extern void __audit_log_nfcfg(const char *name, u8 af, unsigned int nent=
+ries,
+>                               enum audit_nfcfgop op, gfp_t gfp);
+> +extern void __audit_log_clone3(struct kernel_clone_args *kargs, int ret)=
+;
+>
+>  static inline void audit_ipc_obj(struct kern_ipc_perm *ipcp)
+>  {
+> @@ -598,6 +599,12 @@ static inline void audit_log_nfcfg(const char *name,=
+ u8 af,
+>                 __audit_log_nfcfg(name, af, nentries, op, gfp);
+>  }
+>
+> +static inline void audit_log_clone3(struct kernel_clone_args *kargs, int=
+ ret)
+> +{
+> +       if (!audit_dummy_context())
+> +               __audit_log_clone3(kargs, ret);
+> +}
+> +
+>  extern int audit_n_rules;
+>  extern int audit_signals;
+>  #else /* CONFIG_AUDITSYSCALL */
+> @@ -730,6 +737,9 @@ static inline void audit_log_nfcfg(const char *name, =
+u8 af,
+>                                    enum audit_nfcfgop op, gfp_t gfp)
+>  { }
+>
+> +static inline void audit_log_clone3(struct kernel_clone_args *kargs, int=
+ ret)
+> +{ }
+> +
+>  #define audit_n_rules 0
+>  #define audit_signals 0
+>  #endif /* CONFIG_AUDITSYSCALL */
+> diff --git a/include/uapi/linux/audit.h b/include/uapi/linux/audit.h
+> index e8f5ce677df7..37357e17adbf 100644
+> --- a/include/uapi/linux/audit.h
+> +++ b/include/uapi/linux/audit.h
+> @@ -122,6 +122,7 @@
+>  #define AUDIT_OPENAT2          1337    /* Record showing openat2 how arg=
+s */
+>  #define AUDIT_DM_CTRL          1338    /* Device Mapper target control *=
+/
+>  #define AUDIT_DM_EVENT         1339    /* Device Mapper events */
+> +#define AUDIT_CLONE3           1343    /* Record showing clone3 args */
+>
+>  #define AUDIT_AVC              1400    /* SE Linux avc denial or grant *=
+/
+>  #define AUDIT_SELINUX_ERR      1401    /* Internal SE Linux Errors */
+> diff --git a/kernel/auditsc.c b/kernel/auditsc.c
+> index 6610e667c728..c0106bb71c19 100644
+> --- a/kernel/auditsc.c
+> +++ b/kernel/auditsc.c
+> @@ -2882,6 +2882,26 @@ void __audit_log_nfcfg(const char *name, u8 af, un=
+signed int nentries,
+>  }
+>  EXPORT_SYMBOL_GPL(__audit_log_nfcfg);
+>
+> +void __audit_log_clone3(struct kernel_clone_args *kargs, int ret)
+> +{
+> +       struct audit_buffer *ab;
+> +       int pidfd;
+> +
+> +       ab =3D audit_log_start(audit_context(), GFP_KERNEL,
+> +                            AUDIT_CLONE3);
+> +       if (!ab)
+> +               return;
+> +
+> +       audit_log_format(ab, "cl3_flags=3D0x%llx exit_signal=3D%d cgroup=
+=3D%d",
+> +                        kargs->flags, kargs->exit_signal, kargs->cgroup)=
+;
+> +       if ((kargs->flags & CLONE_PIDFD) && ret >=3D 0 &&
+> +           !get_user(pidfd, kargs->pidfd))
+> +               audit_log_format(ab, " pidfd=3D%d", pidfd);
 
-Let's just log the binary data.
+Do we care about distinguishing between the combination of CLONE_PIDFD
+and CLONE_THREAD vs CLONE_PIDFD alone?  In other words, do we care if
+the "pidfd" field sometimes represents a pidfd of the child process vs
+a thread in the current process?
+
+> +       else
+> +               audit_log_format(ab, " pidfd=3D(null)");
+> +       audit_log_end(ab);
+> +}
+> +
+>  static void audit_log_task(struct audit_buffer *ab)
+>  {
+>         kuid_t auid, uid;
+> diff --git a/kernel/fork.c b/kernel/fork.c
+> index f0e2e131a9a5..0f52e8c0e900 100644
+> --- a/kernel/fork.c
+> +++ b/kernel/fork.c
+> @@ -3047,7 +3047,9 @@ SYSCALL_DEFINE2(clone3, struct clone_args __user *,=
+ uargs, size_t, size)
+>         if (!clone3_args_valid(&kargs))
+>                 return -EINVAL;
+>
+> -       return kernel_clone(&kargs);
+> +       err =3D kernel_clone(&kargs);
+> +       audit_log_clone3(&kargs, err);
+> +       return err;
+>  }
+>
+>  void walk_process_tree(struct task_struct *top, proc_visitor visitor, vo=
+id *data)
+> --
+> 2.53.0
 
 --=20
 paul-moore.com
