@@ -1,92 +1,67 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from confino.investici.org (confino.investici.org [93.190.126.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D094A3DEAD2
-	for <audit@vger.kernel.org>; Mon, 10 Aug 2026 12:57:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D3443D9DC9;
+	Mon, 10 Aug 2026 13:27:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.190.126.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786366678; cv=none; b=FwzIVXMlS2AO95apNWKT6czt1Kv1d9bQp13J5YKvqZmB+ll7rJpP7crWBNZ7ReUjuUwILRtM1nN4URPcVJSiYbNFr1FaVvNjEHfw+/O+9UL9T4+lMCJ9cwZRniJ0+CnnJR5p7ctk2N7E8kPHGeSxux9prjwGFA2L/haSbZCbxV4=
+	t=1786368425; cv=none; b=VXwIZC4JLm0/looC2fCnZValgiUfhYMLMqD/u4aTqEaOJLWNPyD0C9h0B/mwcoiw68Up5I6BOQPeqfjfyAX3s2KCUlTf3ghLOVW7pd5/3HATxH7ly/XDfxju/l4ORzc4Dy8meo2Tf4YqFr0gUsehwq7mdYRT3bfIIussvUPU5nM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786366678; c=relaxed/simple;
-	bh=+510A7GiHY7/qcirOaoZ7N5SV3/7LwaxiNCTB+eM8o8=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:content-type; b=IP2FhBnMsI/UWUtz9Ce8h1zM+TV9h3JgylxoA3p0e55u0LKVviJkEDBOJQ0Z9DnZQYZkAK3P5Vb6zk2OVuFzIObZESl8kvQ+leZLuP5B+6E3gk9URDfGJ6N07aAoXJ+e/CEpVeKOMTeJtY6L+isOfIu3DA5btA8WraX+TKjyqeI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=DyunMvDb; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1786368425; c=relaxed/simple;
+	bh=rYVq4hXlLZZs1GGfk6BSVoYk+Dg/pLAYKo4khMCXfHg=;
+	h=Date:From:To:CC:Subject:In-Reply-To:Message-ID:MIME-Version:
+	 Content-Type; b=FHgLYoSMjHlBXle2ygV5UDIlz6zAe9OOkGb7isMVewRUE8+omEounGlq3xaH/yZruRrGiA3QGyUcFQYbERx69D7/uLKqN9LkmUNgDvDqXsL8z+JpNXW3jg9yaKNEI7GZ04PjeVRjrT4roOL1oj24yEDxKwCN1/exdFq9RkFrLOA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=grrlz.net; spf=pass smtp.mailfrom=grrlz.net; dkim=pass (1024-bit key) header.d=grrlz.net header.i=@grrlz.net header.b=M1rm7ug7; arc=none smtp.client-ip=93.190.126.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=grrlz.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=grrlz.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="DyunMvDb"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1786366675;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=05myzdjIMIBk1m/LR62eqp2SB4flFPFKPkm3CMFSeYc=;
-	b=DyunMvDbWRffMA+fSnGqW1h/HkoTsTRhZRIEX0qGg7WqIbtIddoKlDmuwDq12TBAHrdQ2R
-	GZSEJ95AxW9GqPBexJwa0fQzqQDVfAyJ9/ExD63cjsa5ZlI7lJgQhehwE4pWStIdad3B7g
-	+s1oxAevS4lhvr0csvrtpIOTQFH1KTA=
-Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-523-QrB449cZMaGGSp6VPr_E5A-1; Mon,
- 10 Aug 2026 08:57:52 -0400
-X-MC-Unique: QrB449cZMaGGSp6VPr_E5A-1
-X-Mimecast-MFC-AGG-ID: QrB449cZMaGGSp6VPr_E5A_1786366671
-Received: from mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.95])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 593161800643;
-	Mon, 10 Aug 2026 12:57:51 +0000 (UTC)
-Received: from wsxc.redhat.com (unknown [10.96.134.49])
-	by mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 2BCC1422;
-	Mon, 10 Aug 2026 12:57:48 +0000 (UTC)
-From: Ricardo Robaina <rrobaina@redhat.com>
-To: audit@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: paul@paul-moore.com,
-	eparis@redhat.com,
-	Ricardo Robaina <rrobaina@redhat.com>
-Subject: [PATCH] audit: use copied skb length in kauditd_send_multicast_skb()
-Date: Mon, 10 Aug 2026 09:57:27 -0300
-Message-ID: <20260810125726.775689-2-rrobaina@redhat.com>
+	dkim=pass (1024-bit key) header.d=grrlz.net header.i=@grrlz.net header.b="M1rm7ug7"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=grrlz.net;
+	s=stigmate; t=1786368413;
+	bh=UvpTMhxmKnCiBtisEMb1Wx0FJYaIPgWDBQ3cSKofVkQ=;
+	h=Date:From:To:CC:Subject:In-Reply-To:From;
+	b=M1rm7ug7wJIIH28J1TsMq/P2117N4t4LrXnuysVxKvUIrP4gaus0ToKNT5t7ibJYN
+	 EJjAuV2KloTuxFWfiFfCmr+fEgH/5KRpoM0HhprEopvCwkKZWnT4PE7iqlfiPdkMyZ
+	 F/9fGGn89rzSnpoDUTKAuOrfUFjK5hBYJ/tp9gkE=
+Received: from mx1.investici.org (unknown [127.0.0.1])
+	by confino.investici.org (Postfix) with ESMTP id 4hJbBj33vNz10tB;
+	Mon, 10 Aug 2026 13:26:53 +0000 (UTC)
+Received: by mx1.investici.org (Postfix) id 4hJbBj01hYz10sm;
+	Mon, 10 Aug 2026 13:26:52 +0000 (UTC)
+Date: Mon, 10 Aug 2026 14:26:54 +0100
+From: Bradley Morgan <include@grrlz.net>
+To: rrobaina@redhat.com
+CC: audit@vger.kernel.org, eparis@redhat.com, linux-kernel@vger.kernel.org,
+ paul@paul-moore.com
+Subject: =?US-ASCII?Q?Re=3A_=5BPATCH=5D_audit=3A_use_copied_skb_le?=
+ =?US-ASCII?Q?ngth_in_kauditd=5Fsend=5Fmulticast=5Fskb=28=29?=
+In-Reply-To: <20260810125726.775689-2-rrobaina@redhat.com>
+Message-ID: <D8FC4B83-AC7B-4ECC-AA70-17DCE5AB2AD6@grrlz.net>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.6 on 10.30.177.95
-X-Mimecast-MFC-PROC-ID: Jvu96PPf6HobDZcor1IzwmhPXJfPkqUKwfyi1gOaZ_4_1786366671
-X-Mimecast-Originator: redhat.com
+Content-Type: text/plain;
+ charset=utf-8
 Content-Transfer-Encoding: 8bit
-content-type: text/plain; charset="US-ASCII"; x-default=true
 
-The netlink header's nlmsg_len was being set using the original skb
-instead of the local copy passed to nlmsg_multicast().
+Hi Ricardo,
 
-While skb->len and copy->len are identical at this point following
-skb_copy(), it is conceptually cleaner and safer to use the length
-of the skb being actively modified and sent. Thus, this is a minor
-cleanup only, no functional change expected.
+> -	nlh->nlmsg_len = skb->len;
+> +	nlh->nlmsg_len = copy->len;
 
-Signed-off-by: Ricardo Robaina <rrobaina@redhat.com>
----
- kernel/audit.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Fine. skb_copy() does skb_put(n, skb->len) and nothing touches
+copy->len in between, so the two are always identical. 
+Which is also why "safer" is a bit of a stretch, it prevents nothing.
+Feel free to bikeshed the changelog wording on that.
 
-diff --git a/kernel/audit.c b/kernel/audit.c
-index 9412af9144bc..631d6d4a23cf 100644
---- a/kernel/audit.c
-+++ b/kernel/audit.c
-@@ -871,7 +871,7 @@ static void kauditd_send_multicast_skb(struct sk_buff *skb)
- 	if (!copy)
- 		return;
- 	nlh = nlmsg_hdr(copy);
--	nlh->nlmsg_len = skb->len;
-+	nlh->nlmsg_len = copy->len;
- 
- 	nlmsg_multicast(sock, copy, 0, AUDIT_NLGRP_READLOG, GFP_KERNEL);
- }
--- 
-2.55.0
+If you ever want a more interesting cleanup here, the real quirk is
+the line above: the unicast path sets nlmsg_len to skb->len minus
+NLMSG_HDRLEN, this one uses the full length.
 
+Well, why not, please add:
+
+Reviewed-by: Bradley Morgan <include@grrlz.net>
+Thanks!
