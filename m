@@ -1,137 +1,321 @@
-Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70E1F441022
-	for <audit@vger.kernel.org>; Mon, 10 Aug 2026 19:41:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7CDB30F95C
+	for <audit@vger.kernel.org>; Mon, 10 Aug 2026 20:49:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786390920; cv=none; b=CYeJUTsbi/ffNTBL+HNXCBBi/p2sS6C73dVx9L2uYVIPUZlMo4t1hzO1Q9pWa5D24MQI8rPHFRTNc29OFH8gk2cApxTkZbmEq8W72qIsDDKoOzPHwpZM7S4/sTnGa0dB7zhEhjS8o5IFuDpyX1xeOFB1EK4AV5oh8YmUadF6XoU=
+	t=1786395001; cv=none; b=eSfPW3IRDXRRhrQLMeCvJqFs3Nss/5jftlrLjAI3SbRTmWXSlKms9Z38/w6EAQNJkP8Dp5GLeFaBrCZY9tUXaOLrDedICtvgQZP9fWlYvGtOPqJeDQ9FfuGihwlwW6WIh3hmeLS+vkPTYcfJ45Rj7n4v0q8Q2j64uqAaiFSnobs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786390920; c=relaxed/simple;
-	bh=LOri3CcuBtdSvAEYFeKTd1PeW4G632pF4oItWhfE/Pw=;
-	h=Date:Message-ID:MIME-Version:Content-Type:From:To:Cc:Subject:
-	 References:In-Reply-To; b=blqRAlLXnlBeqknwUxj8vlsIXuqGWnu3slA6jEQT7Fhjm8FLm1pXCd3t3Z85MJ4kgh1MOHGotI4cygkuIYSpRyFq96iklrAnZBKdJwzB76hOGbTv29Rr/At59NAmdrL8GfDysCpz4bl9qrVHMlNTtTqo/DP+QvO+hrrYzFIFE7g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=dgxzB4zK; arc=none smtp.client-ip=209.85.160.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+	s=arc-20240116; t=1786395001; c=relaxed/simple;
+	bh=A7jf9tU/SC9eXUsdjE1P2Ut7bn9Q+lSSmZ64XKufwdQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=H4VWB7sBw8f+gVGHjqoEQKkbmeq/ksIW/E6/oEi4Iw5VtWUTdiCcN6Olc5h1vTEhUcFMiWbP7lSa/aalWdszI3ob2E+kTbLAV7yoXtj3wEHt2RAOleqHjd+GhhWSMmc7YeB5iZ0L46sDZsY2H90nuiLK9I4OEbulSdHeu5S65Cs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=J/aOwBc9; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="dgxzB4zK"
-Received: by mail-qt1-f177.google.com with SMTP id d75a77b69052e-51c149c5722so2593251cf.0
-        for <audit@vger.kernel.org>; Mon, 10 Aug 2026 12:41:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1786390916; x=1786995716; darn=vger.kernel.org;
-        h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
-         :content-type:mime-version:message-id:date:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=Vsd1x7Iz/VQJIsN2hgBouGDdRtwtfDh2Zexev25G1Ak=;
-        b=dgxzB4zKI8coAO1aT0pFwxfat56Zm5zt1gevfiFT3TU/hSJDhqFvnzP2B9KbkXTomS
-         cU1Y3PIXTk1EgUa11NJMZcNki/kAQEFPu2l+MugzfiYMkFVbwUvaNcGKdCJ6A9fgg9oi
-         6KVyJ90ygYkML+wsvi5jkO5PyGATs3PuCSPpoiJtbs6s0AXa4mvMqSJVKpGj5PMpNwMb
-         16KiBTwxk27BL9H585nqYDt9vEuVMtbdrRKF8wTdi4SGFlYlKkk9u7blK0sRJHVOxnnu
-         WJdOT2JWiuVyIdl81mw/GIqdJdsV0l4K/SaaWrIhndTJG703QAkFU6ZlW6M05RsbGK15
-         LRhQ==
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="J/aOwBc9"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1786394998;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=8CgStpdtwmcx/2havoB3iiNK5i92qVfh1v3jKyYVEis=;
+	b=J/aOwBc9XyZDJ+66hNjUOxiRXEjzagMiIIWuOf5i5ked3A87nGjnZqhORriLYWqP+8ClNW
+	Ba3pCX3oRXJun5HtbtISI+or6OAo45GXZoRDun8M7snbaXlBOi6P/d1tRzVQOI3zPv9YxM
+	CarEcjgMfdMM9vGixAHPbVzyyAnypAY=
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
+ [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-529-CF5K_JAJP5mkPu8KkLkqgw-1; Mon, 10 Aug 2026 16:49:57 -0400
+X-MC-Unique: CF5K_JAJP5mkPu8KkLkqgw-1
+X-Mimecast-MFC-AGG-ID: CF5K_JAJP5mkPu8KkLkqgw_1786394996
+Received: by mail-ej1-f71.google.com with SMTP id a640c23a62f3a-c15ff68c858so208013966b.0
+        for <audit@vger.kernel.org>; Mon, 10 Aug 2026 13:49:57 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786390916; x=1786995716;
-        h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
-         :content-type:mime-version:message-id:date:x-gm-gg
+        d=1e100.net; s=20251104; t=1786394996; x=1786999796;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=Vsd1x7Iz/VQJIsN2hgBouGDdRtwtfDh2Zexev25G1Ak=;
-        b=r5yCst+ojJy+SRUcKh88kAp2a/JFSLNdzxCF7DphJGY1dAnhNkMq8qwpvyXaTPADqF
-         sdU1OErBrWaK/gTCtYNRPbLPPAHmodSCjcaWJGMAYygWm742l9YecOY+1czKpT5bw8rS
-         6VsRl2g3i7rmG30HCEgIO4qz2wxaQRUy2Aq2gSsGzMuYV5KUMk+rx8768h8k/2267swH
-         yAAnM3OO0eMPLC1ltV8PsiYnl9Yk2z08M2cOBs0l8L9RUvI8kzsReb+epPF0zpvVR5Ty
-         9ldo/CPhOzxWvKOdiWj0wKQbvPTyNRsXPFmrANHCcDoOdVJL1rM3OzKwDZAvKvVTxPkU
-         2pLQ==
-X-Forwarded-Encrypted: i=1; AHgh+Rr/ZVS0+Eo+2N9ybYoHFAWD5YeBeZeNxUvtjzDzVGvoNt+APP8jnM+Bz15idro17wzIdZ2ptQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz0AzeV6tlp7424u2+idUVvzMJ+Dbg5siEa7zxk/BC7gB48Y0fj
-	jmw19dEg7iOjIig81tduJ9ZgIEEvbXwS4jNTE2bdu+Ymw6kK9YpY4+ZzmacE9/0ISg==
-X-Gm-Gg: AR+sD11pGqHGHCwHN2s+R5R9s34URSjpxIZnh0ZiTr6Ch74QSt5ZVoWp8rtrjzaPFhS
-	+PMvAEcHunXa0Ie8wy69ajQmwBzosnuGf0pTagTnJBFadqKiUk8yPrkRjX/3OiwL1eTqWLpZTC/
-	/no6XMUvcrDffVmsFLBPKQAzDBcRo7P9cYTqXtgtXXjnJBDEgBp3hzIwwgo2J1QSNZH60mExEJb
-	JEPoGHX6JabAyOi0PUMPTVXBx17ukJbEORHQQfeuSwLEybj6SMlCue6I2P8pBHpcH/1cg5S0Oif
-	bweoMF3A4HRSwbGcXx5CqDKO65K4kzUoMY+J2RJelvtTgnzkguOPnvFFx1LYHSLBtzm/uK5VZND
-	NyX0+7dnboxEdrigzfVp9EfeFe6447gTPG0j9cqY1NBmacjNrfpyFTalSD0xfGptovP2esd8uO3
-	1OeeC5KayuDJPSAquEl4WRHqXNkK5UOcCSNCydlh7B7ExqDZEP4Wg7BysId3srRs+5if4UN5Ekj
-	ln+wYJlfnBDsWLFj8qp1EHGxuS6UwBHUQ==
-X-Received: by 2002:ac8:584c:0:b0:516:35fe:5524 with SMTP id d75a77b69052e-52d5139f5a9mr11184741cf.5.1786390915980;
-        Mon, 10 Aug 2026 12:41:55 -0700 (PDT)
-Received: from localhost (pool-71-126-255-178.bstnma.fios.verizon.net. [71.126.255.178])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-908a91e2cdfsm79012536d6.22.2026.08.10.12.41.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Aug 2026 12:41:55 -0700 (PDT)
-Date: Mon, 10 Aug 2026 15:41:54 -0400
-Message-ID: <2bdf79f45c5eb2ea66d59904418081c5@paul-moore.com>
+        bh=8CgStpdtwmcx/2havoB3iiNK5i92qVfh1v3jKyYVEis=;
+        b=VTeR31xEUtHj+0eeeDy/o/3TiJDz8nwHFpwTB5vNHzcnFEVlHrflq79Rq5+6xuNKTg
+         fh6M7eBVWo9hle0CFbkEs5R7OkJxxkILAcD20RvdjMgoLiqGskN3E09p8FQSY2ODKYo4
+         3CgtCDeJS/LNJgZ6t5wHWxNG2EE/oq/2mGgrowbjUIzwoYyc+1tMZD0PdqVgjvgaodsN
+         PW7vujZSWxmS73m3vu0M9KX7aC5i3kiEp9Arc9ti+Kd55eaj4JSYqxF4Q4/H/LiXKRK7
+         z8rgoLhf7K+1q3wQr/9Lp7RVwespFz1qybfsq7IviA1P9IslVcFHRoIxVNlXe3LaaKtt
+         k60g==
+X-Gm-Message-State: AOJu0Yzmwx+tGp/TMhRt7PuqG2lJgWwReTV3RGEAryTQ1KI2qBAUKdxI
+	PXypypskoWo860qh2fk/AocHkWRKyqfMMYp63ItHB9uKabvlqdlg4L04rPA7y3jD/S7QWzl8sBz
+	tV0xBbFt7wvrcBe0E5y2dtiLRewC3fhEMwsGOcvOOlHN3U1YCp+y+HkL7R64EtsTC/WQml60/ZQ
+	kL+0G7bo04SXJGyZKIXAnOL2Enp+C9miTg4CU5Tcj+MA==
+X-Gm-Gg: AR+sD11Jo2Y0yy6VZSiRB/1umS9s2kBRNsMW9YQpNdn8rNZbqDaTzj7N5QfgWq3XIKH
+	yUtApRjNDbIceP06hnH10PCEjCpA/8W6BCGtGRZZVdH3GGhAXoALwrfWbkLJ6PFQWiBA0m5IBfG
+	t/jxRHMXAzFMTJHdGHMbrik6tirfDzp4FfdPUfFWJGuqIzXvVcBMpXZiCoKrENlBX2xetcES4RM
+	UnMhkIfvsqVDMRvoNnUu3UqOuBYDa8qV1OC7HPTA+Gkz90fJkda8AAnMVDiMunzt+xm6JUpyoOw
+	64Q=
+X-Received: by 2002:a17:906:fe46:b0:c20:1ec5:feb8 with SMTP id a640c23a62f3a-c20c6a09bccmr231682766b.29.1786394996320;
+        Mon, 10 Aug 2026 13:49:56 -0700 (PDT)
+X-Received: by 2002:a17:906:fe46:b0:c20:1ec5:feb8 with SMTP id
+ a640c23a62f3a-c20c6a09bccmr231680566b.29.1786394995921; Mon, 10 Aug 2026
+ 13:49:55 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 
-Content-Type: text/plain; charset=UTF-8 
-Content-Transfer-Encoding: 8bit 
-X-Mailer: pstg-pwork:20260810_1522/pstg-lib:20260809_1908/pstg-pwork:20260810_1522
-From: Paul Moore <paul@paul-moore.com>
-To: Jann Horn <jannh@google.com>, Serge Hallyn <sergeh@kernel.org>
-Cc: Eric Paris <eparis@redhat.com>, James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org, audit@vger.kernel.org, Jann Horn <jannh@google.com>
-Subject: Re: [PATCH] cred: clarify that task_struct::cred is only for the  current task
-References: <20260806-cred-nonrcu-annotation-fix-v1-1-5fd149b2ab54@google.com>
-In-Reply-To: <20260806-cred-nonrcu-annotation-fix-v1-1-5fd149b2ab54@google.com>
+MIME-Version: 1.0
+References: <20260810125726.775689-2-rrobaina@redhat.com> <D8FC4B83-AC7B-4ECC-AA70-17DCE5AB2AD6@grrlz.net>
+ <CAABTaaDWFgz=kJr8YHx8NpKwuWnkCfjf==3noP36x83Zxv5APQ@mail.gmail.com> <93F6051A-4D51-4887-AED1-4BED3881FF72@grrlz.net>
+In-Reply-To: <93F6051A-4D51-4887-AED1-4BED3881FF72@grrlz.net>
+From: Ricardo Robaina <rrobaina@redhat.com>
+Date: Mon, 10 Aug 2026 17:49:45 -0300
+X-Gm-Features: AUfX_mwLdWo0v7okgYAOZekv4CUurDnHijzO6aSSt22kurZY2Uo2c-oqbhC_3E4
+Message-ID: <CAABTaaCzXCJRH-LhjU_i1E4bKw1QyQ-5sanmvZPAGVhUp_D0kQ@mail.gmail.com>
+Subject: Re: [PATCH] audit: use copied skb length in kauditd_send_multicast_skb()
+To: Bradley Morgan <include@grrlz.net>
+Cc: audit@vger.kernel.org, eparis@redhat.com, linux-kernel@vger.kernel.org, 
+	paul@paul-moore.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: he7fenjsIPS8SnmMc7_-2ZztZyvPNS1orVMhGINTuaM_1786394996
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Aug  6, 2026 Jann Horn <jannh@google.com> wrote:
-> 
-> The `cred` field in task_struct is currently marked as __rcu, but that's
-> not true: It can point to credentials from access_override_creds(), which
-> do not get freed with RCU delay.
-> 
-> What actually protects task_struct::cred is that accessing it is only
-> permitted for the current task (except for setting up a child during fork()
-> or tearing down a dead process).
-> (There is currently code in Smack that violates this rule, but that's a bug
-> and causes UAF, I have sent a separate fix for that.)
-> 
-> Clarify this, remove the __rcu marker, and remove RCU helpers from all
-> accesses to this field.
-> 
-> Signed-off-by: Jann Horn <jannh@google.com>
+On Mon, Aug 10, 2026 at 1:28=E2=80=AFPM Bradley Morgan <include@grrlz.net> =
+wrote:
+>
+> On 10 August 2026 16:19:10 BST, Ricardo Robaina <rrobaina@redhat.com>
+> wrote:
+> >On Mon, Aug 10, 2026 at 10:32=E2=80=AFAM Bradley Morgan <include@grrlz.n=
+et> wrote:
+> >>
+> >> Hi Ricardo,
+> >>
+> >> > -     nlh->nlmsg_len =3D skb->len;
+> >> > +     nlh->nlmsg_len =3D copy->len;
+> >>
+> >> Fine. skb_copy() does skb_put(n, skb->len) and nothing touches
+> >> copy->len in between, so the two are always identical.
+> >> Which is also why "safer" is a bit of a stretch, it prevents nothing.
+> >> Feel free to bikeshed the changelog wording on that.
+> >>
+> >
+> >Thanks for reviewing this patch, Bradley. I agree with you on the wordin=
+g.
+> >
+>
+> np.
+>
+> >> If you ever want a more interesting cleanup here, the real quirk is
+> >> the line above: the unicast path sets nlmsg_len to skb->len minus
+> >> NLMSG_HDRLEN, this one uses the full length.
+> >
+> >That's interesting, maybe moving the nlmsg_len fixup out of
+> >__audit_log_end() would be better. I'll look into it.
+> >
+>
+> Hmmm.. perhaps it will. I will suggest a fix:
+>
+> From 776375d625cd9cb138f7a6f876861bf428ae1e6c Mon Sep 17 00:00:00 2001
+> From: Bradley Morgan <include@grrlz.net>
+> Date: Mon, 10 Aug 2026 16:26:06 +0000
+> Subject: [PATCH] audit: move the nlmsg_len fixup from __audit_log_end() t=
+o
+>  send time
+>
+> The auditd breakage (nlmsg_len set to the payload length instead of
+> the full message length) is applied in __audit_log_end() when the
+> record is queued. That forces kauditd_send_multicast_skb() to deep
+> copy every record and undo the length on the copy, so the multicast
+> group still sees a standard netlink message.
+>
+> Instead, finalize the header with the standard full length at queue
+> time and apply the auditd length right before the unicast send in
+> kauditd_send_queue(). Records stay standard netlink messages while
+> they sit in the queues, and the multicast copy no longer needs its
+> own fixup. The deep copy itself stays, since the auditd length
+> rewrite lands in the shared data region after the copy is already
+> handed to the listeners.
+>
+> auditd sees the same bytes as before. The fixup is computed from
+> skb->len, which does not change between queueing and sending, so
+> records that come back through the retry and hold queues get the same
+> value again. Reply and rule list skbs are built with nlmsg_put() and
+> sent on other paths, none of those are touched.
+>
+> This came out of the "use copied skb length" thread, where moving the
+> fixup was suggested as the more interesting cleanup.
+>
+> Signed-off-by: Bradley Morgan <include@grrlz.net>
 > ---
-> For context:
-> There have been at least two UAFs of struct cred that I'm aware of, both
-> caused by wrong use of task_struct::cred:
-> 
->  - https://git.kernel.org/linus/a3727a8bac0a9e77c70820655fd8715523ba3db7
->  - https://lore.kernel.org/all/20260806-smack-uaf-fix-v1-1-26426d389a26@google.com/
-> ---
->  include/linux/cred.h  | 17 +++++++++++------
->  include/linux/sched.h |  8 ++++++--
->  kernel/auditsc.c      |  5 +++--
->  kernel/cred.c         |  2 +-
->  security/lsm_init.c   |  2 +-
->  5 files changed, 22 insertions(+), 12 deletions(-)
+>  kernel/audit.c | 38 ++++++++++++++++++++++----------------
+>  1 file changed, 22 insertions(+), 16 deletions(-)
+>
+> diff --git a/kernel/audit.c b/kernel/audit.c
+> index 9412af9144bc..5b6528fc6eb5 100644
+> --- a/kernel/audit.c
+> +++ b/kernel/audit.c
+> @@ -802,6 +802,15 @@ static int kauditd_send_queue(struct sock *sk, u32 p=
+ortid,
+>                 if (skb_hook)
+>                         (*skb_hook)(skb);
+>
+> +               /*
+> +                * auditd expects nlmsg_len to be the payload length rath=
+er
+> +                * than the full message length.  Apply the breakage here=
+ at
+> +                * send time so the record stays a standard netlink messa=
+ge
+> +                * while queued and while it is copied for the multicast
+> +                * group above.
+> +                */
+> +               nlmsg_hdr(skb)->nlmsg_len =3D skb->len - NLMSG_HDRLEN;
+> +
+>                 /* can we send to anyone via unicast? */
+>                 if (!sk) {
+>                         if (err_hook)
+> @@ -849,7 +858,6 @@ static void kauditd_send_multicast_skb(struct sk_buff=
+ *skb)
+>  {
+>         struct sk_buff *copy;
+>         struct sock *sock =3D audit_get_sk(&init_net);
+> -       struct nlmsghdr *nlh;
+>
+>         /* NOTE: we are not taking an additional reference for init_net s=
+ince
+>          *       we don't have to worry about it going away */
+> @@ -859,19 +867,15 @@ static void kauditd_send_multicast_skb(struct sk_bu=
+ff *skb)
+>
+>         /*
+>          * The seemingly wasteful skb_copy() rather than bumping the refc=
+ount
+> -        * using skb_get() is necessary because non-standard mods are mad=
+e to
+> -        * the skb by the original kaudit unicast socket send routine.  T=
+he
+> -        * existing auditd daemon assumes this breakage.  Fixing this wou=
+ld
+> -        * require co-ordinating a change in the established protocol bet=
+ween
+> -        * the kaudit kernel subsystem and the auditd userspace code.  Th=
+ere is
+> -        * no reason for new multicast clients to continue with this
+> -        * non-compliance.
+> +        * using skb_get() is necessary because the unicast send in
+> +        * kauditd_send_queue() rewrites nlmsg_len to the payload only le=
+ngth
+> +        * that auditd expects.  The copy shields the multicast listeners=
+ from
+> +        * that historical breakage, there is no reason for them to conti=
+nue
+> +        * with this non compliance.
+>          */
+>         copy =3D skb_copy(skb, GFP_KERNEL);
+>         if (!copy)
+>                 return;
+> -       nlh =3D nlmsg_hdr(copy);
+> -       nlh->nlmsg_len =3D skb->len;
+>
+>         nlmsg_multicast(sock, copy, 0, AUDIT_NLGRP_READLOG, GFP_KERNEL);
+>  }
+> @@ -2785,13 +2789,15 @@ int audit_signal_info(int sig, struct task_struct=
+ *t)
+>   */
+>  static void __audit_log_end(struct sk_buff *skb)
+>  {
+> -       struct nlmsghdr *nlh;
+> -
+>         if (audit_rate_check()) {
+> -               /* setup the netlink header, see the comments in
+> -                * kauditd_send_multicast_skb() for length quirks */
+> -               nlh =3D nlmsg_hdr(skb);
+> -               nlh->nlmsg_len =3D skb->len - NLMSG_HDRLEN;
+> +               /*
+> +                * The record was built by appending data after nlmsg_put=
+()
+> +                * without keeping nlmsg_len up to date, so finalize the
+> +                * header here with the standard full message length.  Th=
+e
+> +                * payload only length that auditd expects is applied at
+> +                * send time in kauditd_send_queue().
+> +                */
+> +               nlmsg_end(skb, nlmsg_hdr(skb));
+>
+>                 /* queue the netlink packet */
+>                 skb_queue_tail(&audit_queue, skb);
+> --
+> 2.47.3
+>
+>
+>
+>
+> >>
+> >> Well, why not, please add:
+> >>
+> >> Reviewed-by: Bradley Morgan <include@grrlz.net>
+> >> Thanks!
+> >>
+> >
+> >-Ricardo
+> >
+> >
+>
+> Thanks!
+>
 
-This looks good to me, with one small nit below, but as we are at -rc7
-I think this is best kept until after the upcoming merge window so it
-has more than a few days in linux-next.  I'm going to merge this into
-lsm/dev-staging with the expectation of merging it into lsm/dev after
-the upcoming merge window closes.  If anyone wishes to object to this
-patch or add their own review/ACK/test tag before then, please do.
+It looks good to me. I've built a kernel to test it and verified that
+it passes the audit testsuite.
 
-Thanks Jann.
+# uname -r
+7.2.0-rc6+
 
-> diff --git a/security/lsm_init.c b/security/lsm_init.c
-> index 7c0fd17f1601..1328a2ceef4b 100644
-> --- a/security/lsm_init.c
-> +++ b/security/lsm_init.c
-> @@ -476,7 +476,7 @@ int __init security_init(void)
->  						    blob_sizes.lbs_inode, 0,
->  						    SLAB_PANIC, NULL);
->  
-> -	if (lsm_cred_alloc((struct cred *)unrcu_pointer(current->cred),
-> +	if (lsm_cred_alloc((struct cred *)current->cred,
->  			   GFP_KERNEL))
+# make test
+make -C tests test
+chmod +x */test
+Running as   user    root
+        with context unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023
+        on   system  Fedora
 
-Just a FYI, but I pulled the GFP_KERNEL up on the line above while
-merging since it now fits.
+amcast_joinpart/test ................. ok
+backlog_wait_time_actual_reset/test .. ok
+bpf/test ............................. ok
+coredump/test ........................ ok
+exec_execve/test ..................... ok
+exec_name/test ....................... ok
+fanotify/test ........................ ok
+field_compare/test ................... ok
+file_create/test ..................... ok
+file_delete/test ..................... ok
+file_permission/test ................. ok
+file_rename/test ..................... ok
+filter_device/test ................... ok
+filter_exclude/test .................. ok
+filter_exit/test ..................... ok
+filter_inode/test .................... ok
+filter_saddr_fam/test ................ ok
+filter_sessionid/test ................ ok
+io_uring/test ........................ ok
+login_tty/test ....................... ok
+lost_reset/test ...................... ok
+netfilter_pkt/test ................... ok
+signal/test .......................... ok
+syscalls_file/test ................... ok
+syscall_module/test .................. ok
+syscall_socketcall/test .............. ok
+time_change/test ..................... ok
+user_msg/test ........................ ok
+All tests successful.
+Files=3D28, Tests=3D303, 46 wallclock secs ( 0.08 usr  0.03 sys + 14.50
+cusr  1.56 csys =3D 16.17 CPU)
+Result: PASS
 
---
-paul-moore.com
+Reviewed-by: Ricardo Robaina <rrobaina@redhat.com>
+Tested-by: Ricardo Robaina <rrobaina@redhat.com>
+
+-Ricardo
+
