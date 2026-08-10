@@ -1,207 +1,137 @@
-Received: from latitanza.investici.org (latitanza.investici.org [185.218.207.228])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47CC0361943;
-	Mon, 10 Aug 2026 16:27:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.218.207.228
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70E1F441022
+	for <audit@vger.kernel.org>; Mon, 10 Aug 2026 19:41:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786379258; cv=none; b=hDYWTEBu80LzcjQ+nX7f5QHGza8b0c+TbQdyd8wtpgT9J8wZpqajuqg9LpfZAH7J2tJOsjszXdG6soWingZAiaoG6gYBws3uSTap7SkH4Fkx3lOF54oZkhgBXrspCE74kDOz8aS4EyEIx6wem7WYDjGtxo6V6kBL2N9jcjDPnj8=
+	t=1786390920; cv=none; b=CYeJUTsbi/ffNTBL+HNXCBBi/p2sS6C73dVx9L2uYVIPUZlMo4t1hzO1Q9pWa5D24MQI8rPHFRTNc29OFH8gk2cApxTkZbmEq8W72qIsDDKoOzPHwpZM7S4/sTnGa0dB7zhEhjS8o5IFuDpyX1xeOFB1EK4AV5oh8YmUadF6XoU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786379258; c=relaxed/simple;
-	bh=/0DsenQ4SsuriWJghAWRpvM9+MW61hukSojkWxIUdsI=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
-	 MIME-Version:Content-Type; b=fKeTx4POZ6GtvVdf9Djc3dMIb5ossEWeAFCuajxaRy1A4rIAVBCN2b6YIqHyG0kE1/JbqHUyGI78S1r5LnZqde8+OmJ/aXWxPubZ0ssIq0U6wr/kcIAoCIjECAs+4he4iyE0IP7U7hrdEhjjRxlOhjt9pF3IXh5zduDCzc+0IZA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=grrlz.net; spf=pass smtp.mailfrom=grrlz.net; dkim=pass (1024-bit key) header.d=grrlz.net header.i=@grrlz.net header.b=pn6Mloix; arc=none smtp.client-ip=185.218.207.228
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=grrlz.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=grrlz.net
+	s=arc-20240116; t=1786390920; c=relaxed/simple;
+	bh=LOri3CcuBtdSvAEYFeKTd1PeW4G632pF4oItWhfE/Pw=;
+	h=Date:Message-ID:MIME-Version:Content-Type:From:To:Cc:Subject:
+	 References:In-Reply-To; b=blqRAlLXnlBeqknwUxj8vlsIXuqGWnu3slA6jEQT7Fhjm8FLm1pXCd3t3Z85MJ4kgh1MOHGotI4cygkuIYSpRyFq96iklrAnZBKdJwzB76hOGbTv29Rr/At59NAmdrL8GfDysCpz4bl9qrVHMlNTtTqo/DP+QvO+hrrYzFIFE7g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=dgxzB4zK; arc=none smtp.client-ip=209.85.160.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=grrlz.net header.i=@grrlz.net header.b="pn6Mloix"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=grrlz.net;
-	s=stigmate; t=1786379253;
-	bh=uPQ/dDQs102CXgd0GjW3HTYMhbLO5XGfpLdIKlKy19E=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-	b=pn6MloixeQfGsMFkcqJi0mG8nSF6VhwHmNd0qg6hKNrMnIIP93Wb9i4iZTSGocTQq
-	 TTp/cXscEy5sqG0MsFGNBOM90mGgXcaWJBqftZKEEiooBfX8MM74BNIY5GqpETLQut
-	 9r3KsD8ki2w1rlsjuQpDP6Kjpp7ggzTeyhIDkqIc=
-Received: from mx3.investici.org (unknown [127.0.0.1])
-	by latitanza.investici.org (Postfix) with ESMTP id 4hJgC90cFWzGpGr;
-	Mon, 10 Aug 2026 16:27:33 +0000 (UTC)
-Received: by mx3.investici.org (Postfix) id 4hJgC850YlzGpGq;
-	Mon, 10 Aug 2026 16:27:32 +0000 (UTC)
-Date: Mon, 10 Aug 2026 17:27:30 +0100
-From: Bradley Morgan <include@grrlz.net>
-To: Ricardo Robaina <rrobaina@redhat.com>
-CC: audit@vger.kernel.org, eparis@redhat.com, linux-kernel@vger.kernel.org,
- paul@paul-moore.com
-Subject: =?US-ASCII?Q?Re=3A_=5BPATCH=5D_audit=3A_use_copied_skb_le?=
- =?US-ASCII?Q?ngth_in_kauditd=5Fsend=5Fmulticast=5Fskb=28=29?=
-In-Reply-To: <CAABTaaDWFgz=kJr8YHx8NpKwuWnkCfjf==3noP36x83Zxv5APQ@mail.gmail.com>
-References: <20260810125726.775689-2-rrobaina@redhat.com> <D8FC4B83-AC7B-4ECC-AA70-17DCE5AB2AD6@grrlz.net> <CAABTaaDWFgz=kJr8YHx8NpKwuWnkCfjf==3noP36x83Zxv5APQ@mail.gmail.com>
-Message-ID: <93F6051A-4D51-4887-AED1-4BED3881FF72@grrlz.net>
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="dgxzB4zK"
+Received: by mail-qt1-f177.google.com with SMTP id d75a77b69052e-51c149c5722so2593251cf.0
+        for <audit@vger.kernel.org>; Mon, 10 Aug 2026 12:41:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1786390916; x=1786995716; darn=vger.kernel.org;
+        h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
+         :content-type:mime-version:message-id:date:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=Vsd1x7Iz/VQJIsN2hgBouGDdRtwtfDh2Zexev25G1Ak=;
+        b=dgxzB4zKI8coAO1aT0pFwxfat56Zm5zt1gevfiFT3TU/hSJDhqFvnzP2B9KbkXTomS
+         cU1Y3PIXTk1EgUa11NJMZcNki/kAQEFPu2l+MugzfiYMkFVbwUvaNcGKdCJ6A9fgg9oi
+         6KVyJ90ygYkML+wsvi5jkO5PyGATs3PuCSPpoiJtbs6s0AXa4mvMqSJVKpGj5PMpNwMb
+         16KiBTwxk27BL9H585nqYDt9vEuVMtbdrRKF8wTdi4SGFlYlKkk9u7blK0sRJHVOxnnu
+         WJdOT2JWiuVyIdl81mw/GIqdJdsV0l4K/SaaWrIhndTJG703QAkFU6ZlW6M05RsbGK15
+         LRhQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1786390916; x=1786995716;
+        h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
+         :content-type:mime-version:message-id:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=Vsd1x7Iz/VQJIsN2hgBouGDdRtwtfDh2Zexev25G1Ak=;
+        b=r5yCst+ojJy+SRUcKh88kAp2a/JFSLNdzxCF7DphJGY1dAnhNkMq8qwpvyXaTPADqF
+         sdU1OErBrWaK/gTCtYNRPbLPPAHmodSCjcaWJGMAYygWm742l9YecOY+1czKpT5bw8rS
+         6VsRl2g3i7rmG30HCEgIO4qz2wxaQRUy2Aq2gSsGzMuYV5KUMk+rx8768h8k/2267swH
+         yAAnM3OO0eMPLC1ltV8PsiYnl9Yk2z08M2cOBs0l8L9RUvI8kzsReb+epPF0zpvVR5Ty
+         9ldo/CPhOzxWvKOdiWj0wKQbvPTyNRsXPFmrANHCcDoOdVJL1rM3OzKwDZAvKvVTxPkU
+         2pLQ==
+X-Forwarded-Encrypted: i=1; AHgh+Rr/ZVS0+Eo+2N9ybYoHFAWD5YeBeZeNxUvtjzDzVGvoNt+APP8jnM+Bz15idro17wzIdZ2ptQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz0AzeV6tlp7424u2+idUVvzMJ+Dbg5siEa7zxk/BC7gB48Y0fj
+	jmw19dEg7iOjIig81tduJ9ZgIEEvbXwS4jNTE2bdu+Ymw6kK9YpY4+ZzmacE9/0ISg==
+X-Gm-Gg: AR+sD11pGqHGHCwHN2s+R5R9s34URSjpxIZnh0ZiTr6Ch74QSt5ZVoWp8rtrjzaPFhS
+	+PMvAEcHunXa0Ie8wy69ajQmwBzosnuGf0pTagTnJBFadqKiUk8yPrkRjX/3OiwL1eTqWLpZTC/
+	/no6XMUvcrDffVmsFLBPKQAzDBcRo7P9cYTqXtgtXXjnJBDEgBp3hzIwwgo2J1QSNZH60mExEJb
+	JEPoGHX6JabAyOi0PUMPTVXBx17ukJbEORHQQfeuSwLEybj6SMlCue6I2P8pBHpcH/1cg5S0Oif
+	bweoMF3A4HRSwbGcXx5CqDKO65K4kzUoMY+J2RJelvtTgnzkguOPnvFFx1LYHSLBtzm/uK5VZND
+	NyX0+7dnboxEdrigzfVp9EfeFe6447gTPG0j9cqY1NBmacjNrfpyFTalSD0xfGptovP2esd8uO3
+	1OeeC5KayuDJPSAquEl4WRHqXNkK5UOcCSNCydlh7B7ExqDZEP4Wg7BysId3srRs+5if4UN5Ekj
+	ln+wYJlfnBDsWLFj8qp1EHGxuS6UwBHUQ==
+X-Received: by 2002:ac8:584c:0:b0:516:35fe:5524 with SMTP id d75a77b69052e-52d5139f5a9mr11184741cf.5.1786390915980;
+        Mon, 10 Aug 2026 12:41:55 -0700 (PDT)
+Received: from localhost (pool-71-126-255-178.bstnma.fios.verizon.net. [71.126.255.178])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-908a91e2cdfsm79012536d6.22.2026.08.10.12.41.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Aug 2026 12:41:55 -0700 (PDT)
+Date: Mon, 10 Aug 2026 15:41:54 -0400
+Message-ID: <2bdf79f45c5eb2ea66d59904418081c5@paul-moore.com>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 8bit
+MIME-Version: 1.0 
+Content-Type: text/plain; charset=UTF-8 
+Content-Transfer-Encoding: 8bit 
+X-Mailer: pstg-pwork:20260810_1522/pstg-lib:20260809_1908/pstg-pwork:20260810_1522
+From: Paul Moore <paul@paul-moore.com>
+To: Jann Horn <jannh@google.com>, Serge Hallyn <sergeh@kernel.org>
+Cc: Eric Paris <eparis@redhat.com>, James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org, audit@vger.kernel.org, Jann Horn <jannh@google.com>
+Subject: Re: [PATCH] cred: clarify that task_struct::cred is only for the  current task
+References: <20260806-cred-nonrcu-annotation-fix-v1-1-5fd149b2ab54@google.com>
+In-Reply-To: <20260806-cred-nonrcu-annotation-fix-v1-1-5fd149b2ab54@google.com>
 
-On 10 August 2026 16:19:10 BST, Ricardo Robaina <rrobaina@redhat.com>
-wrote:
->On Mon, Aug 10, 2026 at 10:32 AM Bradley Morgan <include@grrlz.net> wrote:
->>
->> Hi Ricardo,
->>
->> > -     nlh->nlmsg_len = skb->len;
->> > +     nlh->nlmsg_len = copy->len;
->>
->> Fine. skb_copy() does skb_put(n, skb->len) and nothing touches
->> copy->len in between, so the two are always identical.
->> Which is also why "safer" is a bit of a stretch, it prevents nothing.
->> Feel free to bikeshed the changelog wording on that.
->>
->
->Thanks for reviewing this patch, Bradley. I agree with you on the wording.
->
+On Aug  6, 2026 Jann Horn <jannh@google.com> wrote:
+> 
+> The `cred` field in task_struct is currently marked as __rcu, but that's
+> not true: It can point to credentials from access_override_creds(), which
+> do not get freed with RCU delay.
+> 
+> What actually protects task_struct::cred is that accessing it is only
+> permitted for the current task (except for setting up a child during fork()
+> or tearing down a dead process).
+> (There is currently code in Smack that violates this rule, but that's a bug
+> and causes UAF, I have sent a separate fix for that.)
+> 
+> Clarify this, remove the __rcu marker, and remove RCU helpers from all
+> accesses to this field.
+> 
+> Signed-off-by: Jann Horn <jannh@google.com>
+> ---
+> For context:
+> There have been at least two UAFs of struct cred that I'm aware of, both
+> caused by wrong use of task_struct::cred:
+> 
+>  - https://git.kernel.org/linus/a3727a8bac0a9e77c70820655fd8715523ba3db7
+>  - https://lore.kernel.org/all/20260806-smack-uaf-fix-v1-1-26426d389a26@google.com/
+> ---
+>  include/linux/cred.h  | 17 +++++++++++------
+>  include/linux/sched.h |  8 ++++++--
+>  kernel/auditsc.c      |  5 +++--
+>  kernel/cred.c         |  2 +-
+>  security/lsm_init.c   |  2 +-
+>  5 files changed, 22 insertions(+), 12 deletions(-)
 
-np.
+This looks good to me, with one small nit below, but as we are at -rc7
+I think this is best kept until after the upcoming merge window so it
+has more than a few days in linux-next.  I'm going to merge this into
+lsm/dev-staging with the expectation of merging it into lsm/dev after
+the upcoming merge window closes.  If anyone wishes to object to this
+patch or add their own review/ACK/test tag before then, please do.
 
->> If you ever want a more interesting cleanup here, the real quirk is
->> the line above: the unicast path sets nlmsg_len to skb->len minus
->> NLMSG_HDRLEN, this one uses the full length.
->
->That's interesting, maybe moving the nlmsg_len fixup out of
->__audit_log_end() would be better. I'll look into it.
->
+Thanks Jann.
 
-Hmmm.. perhaps it will. I will suggest a fix:
+> diff --git a/security/lsm_init.c b/security/lsm_init.c
+> index 7c0fd17f1601..1328a2ceef4b 100644
+> --- a/security/lsm_init.c
+> +++ b/security/lsm_init.c
+> @@ -476,7 +476,7 @@ int __init security_init(void)
+>  						    blob_sizes.lbs_inode, 0,
+>  						    SLAB_PANIC, NULL);
+>  
+> -	if (lsm_cred_alloc((struct cred *)unrcu_pointer(current->cred),
+> +	if (lsm_cred_alloc((struct cred *)current->cred,
+>  			   GFP_KERNEL))
 
-From 776375d625cd9cb138f7a6f876861bf428ae1e6c Mon Sep 17 00:00:00 2001
-From: Bradley Morgan <include@grrlz.net>
-Date: Mon, 10 Aug 2026 16:26:06 +0000
-Subject: [PATCH] audit: move the nlmsg_len fixup from __audit_log_end() to
- send time
+Just a FYI, but I pulled the GFP_KERNEL up on the line above while
+merging since it now fits.
 
-The auditd breakage (nlmsg_len set to the payload length instead of
-the full message length) is applied in __audit_log_end() when the
-record is queued. That forces kauditd_send_multicast_skb() to deep
-copy every record and undo the length on the copy, so the multicast
-group still sees a standard netlink message.
-
-Instead, finalize the header with the standard full length at queue
-time and apply the auditd length right before the unicast send in
-kauditd_send_queue(). Records stay standard netlink messages while
-they sit in the queues, and the multicast copy no longer needs its
-own fixup. The deep copy itself stays, since the auditd length
-rewrite lands in the shared data region after the copy is already
-handed to the listeners.
-
-auditd sees the same bytes as before. The fixup is computed from
-skb->len, which does not change between queueing and sending, so
-records that come back through the retry and hold queues get the same
-value again. Reply and rule list skbs are built with nlmsg_put() and
-sent on other paths, none of those are touched.
-
-This came out of the "use copied skb length" thread, where moving the
-fixup was suggested as the more interesting cleanup.
-
-Signed-off-by: Bradley Morgan <include@grrlz.net>
----
- kernel/audit.c | 38 ++++++++++++++++++++++----------------
- 1 file changed, 22 insertions(+), 16 deletions(-)
-
-diff --git a/kernel/audit.c b/kernel/audit.c
-index 9412af9144bc..5b6528fc6eb5 100644
---- a/kernel/audit.c
-+++ b/kernel/audit.c
-@@ -802,6 +802,15 @@ static int kauditd_send_queue(struct sock *sk, u32 portid,
- 		if (skb_hook)
- 			(*skb_hook)(skb);
- 
-+		/*
-+		 * auditd expects nlmsg_len to be the payload length rather
-+		 * than the full message length.  Apply the breakage here at
-+		 * send time so the record stays a standard netlink message
-+		 * while queued and while it is copied for the multicast
-+		 * group above.
-+		 */
-+		nlmsg_hdr(skb)->nlmsg_len = skb->len - NLMSG_HDRLEN;
-+
- 		/* can we send to anyone via unicast? */
- 		if (!sk) {
- 			if (err_hook)
-@@ -849,7 +858,6 @@ static void kauditd_send_multicast_skb(struct sk_buff *skb)
- {
- 	struct sk_buff *copy;
- 	struct sock *sock = audit_get_sk(&init_net);
--	struct nlmsghdr *nlh;
- 
- 	/* NOTE: we are not taking an additional reference for init_net since
- 	 *       we don't have to worry about it going away */
-@@ -859,19 +867,15 @@ static void kauditd_send_multicast_skb(struct sk_buff *skb)
- 
- 	/*
- 	 * The seemingly wasteful skb_copy() rather than bumping the refcount
--	 * using skb_get() is necessary because non-standard mods are made to
--	 * the skb by the original kaudit unicast socket send routine.  The
--	 * existing auditd daemon assumes this breakage.  Fixing this would
--	 * require co-ordinating a change in the established protocol between
--	 * the kaudit kernel subsystem and the auditd userspace code.  There is
--	 * no reason for new multicast clients to continue with this
--	 * non-compliance.
-+	 * using skb_get() is necessary because the unicast send in
-+	 * kauditd_send_queue() rewrites nlmsg_len to the payload only length
-+	 * that auditd expects.  The copy shields the multicast listeners from
-+	 * that historical breakage, there is no reason for them to continue
-+	 * with this non compliance.
- 	 */
- 	copy = skb_copy(skb, GFP_KERNEL);
- 	if (!copy)
- 		return;
--	nlh = nlmsg_hdr(copy);
--	nlh->nlmsg_len = skb->len;
- 
- 	nlmsg_multicast(sock, copy, 0, AUDIT_NLGRP_READLOG, GFP_KERNEL);
- }
-@@ -2785,13 +2789,15 @@ int audit_signal_info(int sig, struct task_struct *t)
-  */
- static void __audit_log_end(struct sk_buff *skb)
- {
--	struct nlmsghdr *nlh;
--
- 	if (audit_rate_check()) {
--		/* setup the netlink header, see the comments in
--		 * kauditd_send_multicast_skb() for length quirks */
--		nlh = nlmsg_hdr(skb);
--		nlh->nlmsg_len = skb->len - NLMSG_HDRLEN;
-+		/*
-+		 * The record was built by appending data after nlmsg_put()
-+		 * without keeping nlmsg_len up to date, so finalize the
-+		 * header here with the standard full message length.  The
-+		 * payload only length that auditd expects is applied at
-+		 * send time in kauditd_send_queue().
-+		 */
-+		nlmsg_end(skb, nlmsg_hdr(skb));
- 
- 		/* queue the netlink packet */
- 		skb_queue_tail(&audit_queue, skb);
--- 
-2.47.3
-
-
-
-
->>
->> Well, why not, please add:
->>
->> Reviewed-by: Bradley Morgan <include@grrlz.net>
->> Thanks!
->>
->
->-Ricardo
->
->
-
-Thanks!
+--
+paul-moore.com
