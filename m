@@ -1,291 +1,120 @@
-Received: from confino.investici.org (confino.investici.org [93.190.126.19])
+Received: from oss.cyber.gouv.fr (oss.cyber.gouv.fr [51.159.188.251])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6ACF6344040;
-	Mon, 10 Aug 2026 21:10:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.190.126.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A5E23B27CF;
+	Tue, 11 Aug 2026 22:01:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=51.159.188.251
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786396221; cv=none; b=evnxrLtE0RAiqg5IwIkgDKM+heLnfVs/4doSe18cYhypSDbLUA9PgZvJW0h7DDdOJvIuj9BZRjQkwYsu7k7a5qAME74RlGUCwVxeEiWsy8MRIJSu/DPmpvlO1tv/z3lr4L2E3I5pYndo++Qj4TX1ETkGBp9mJpuvWVCgBZVwHk0=
+	t=1786485714; cv=none; b=SlWifyNswOvC+bndrzWyD6HIX2SOAje0SaebjhyoPCPmMvyuclwVIb9SdIcbzuBMh0lBVR8lARCl76mtn16jZcpsGeq+WiJk2/5YM/5uTJVMNF1YjPPu3U9EQ4a428gK7ZJufN04Gzthds7zV2XLF3f88l9iEbxX23vLbGR5lNg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786396221; c=relaxed/simple;
-	bh=z/fazSs5pYPXCj3VZTED0mACwJCT7jFZYsIXmZj7gAE=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
-	 MIME-Version:Content-Type; b=KcVtSocGCpxCi80tQmS02ue4yWrQZT4j7pxpEpeUhQQyT12824fZojtovAtN+ZwqBqzkxkf4hLDJeNGFiSrJ4DjssT/J7xtYTqTThMhO4K3MQgw962M1h4yumAdmmw9qvW7NsOfOSzMv/oE7EPWxMy9VJWLuroi3jOCjJhgRiKQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=grrlz.net; spf=pass smtp.mailfrom=grrlz.net; dkim=pass (1024-bit key) header.d=grrlz.net header.i=@grrlz.net header.b=ftAbrRx6; arc=none smtp.client-ip=93.190.126.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=grrlz.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=grrlz.net
+	s=arc-20240116; t=1786485714; c=relaxed/simple;
+	bh=B0sp1A8eEY/DdBvcTmjkRqIbjuY1AAom3/xVVFWhUIU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=JbmtsjTdVs+hG1VygMj+rIahvzBJ28iBsYjlkE0wpTTglu6h6hlXMyh0jowCxCImdWUeuLkhgOoWb7PZ6ESpMhZn1qiX+GCa3jqApMDe0+no9iLQUoIko9N1+3EXVZJyK3f7Hr9AQeoFiUG7NO91R623ZbKuav7ez85K6gmXHgI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.cyber.gouv.fr; spf=pass smtp.mailfrom=oss.cyber.gouv.fr; dkim=pass (2048-bit key) header.d=oss.cyber.gouv.fr header.i=@oss.cyber.gouv.fr header.b=BBPEcLLM; arc=none smtp.client-ip=51.159.188.251
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.cyber.gouv.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.cyber.gouv.fr
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=grrlz.net header.i=@grrlz.net header.b="ftAbrRx6"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=grrlz.net;
-	s=stigmate; t=1786396215;
-	bh=N7bJ9DTmPDhWYsWJhN5PotUAuZQsD/ovoEnK7ISTqVg=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-	b=ftAbrRx6hiB0iEm7u54wQz29hbuY7NJ/q9VcgtYz3bYRHffYwKXuQqm3xoB0LrP8c
-	 pNmSKmrW4+n63dlNt5b85LCAviLQ3tqc4zrrcrfrNQtnrE9FeOq2Lo6w8riTE/wV9w
-	 hjEw0DTWijWIOJaSeAihpoovzm/xsRFP05ZPdyk0=
-Received: from mx1.investici.org (unknown [127.0.0.1])
-	by confino.investici.org (Postfix) with ESMTP id 4hJnTM71Fgz10wy;
-	Mon, 10 Aug 2026 21:10:15 +0000 (UTC)
-Received: by mx1.investici.org (Postfix) id 4hJnTM2Gxhz10wW;
-	Mon, 10 Aug 2026 21:10:15 +0000 (UTC)
-Date: Mon, 10 Aug 2026 22:10:17 +0100
-From: Bradley Morgan <include@grrlz.net>
-To: Ricardo Robaina <rrobaina@redhat.com>
-CC: audit@vger.kernel.org, eparis@redhat.com, linux-kernel@vger.kernel.org,
- paul@paul-moore.com
-Subject: =?US-ASCII?Q?Re=3A_=5BPATCH=5D_audit=3A_use_copied_skb_le?=
- =?US-ASCII?Q?ngth_in_kauditd=5Fsend=5Fmulticast=5Fskb=28=29?=
-In-Reply-To: <CAABTaaCzXCJRH-LhjU_i1E4bKw1QyQ-5sanmvZPAGVhUp_D0kQ@mail.gmail.com>
-References: <20260810125726.775689-2-rrobaina@redhat.com> <D8FC4B83-AC7B-4ECC-AA70-17DCE5AB2AD6@grrlz.net> <CAABTaaDWFgz=kJr8YHx8NpKwuWnkCfjf==3noP36x83Zxv5APQ@mail.gmail.com> <93F6051A-4D51-4887-AED1-4BED3881FF72@grrlz.net> <CAABTaaCzXCJRH-LhjU_i1E4bKw1QyQ-5sanmvZPAGVhUp_D0kQ@mail.gmail.com>
-Message-ID: <5FA9260A-6C4D-427C-AE3D-C6FD5BB3B51C@grrlz.net>
+	dkim=pass (2048-bit key) header.d=oss.cyber.gouv.fr header.i=@oss.cyber.gouv.fr header.b="BBPEcLLM"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=oss.cyber.gouv.fr; s=default; h=Content-Transfer-Encoding:Content-Type:
+	MIME-Version:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
+	List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=9WSDOJhgBdbkl9FirK6VjGWEjStGMItBQCq9OixTMZk=; b=BBPEcLLMEE4e3BgqmFhVYPteW8
+	sNZ5Zg+mCgAYavD0XnV5NXX8bCPyGANLhSZu9vfCbx3R2uLXWgn7X+6hMLgGAjNjfszl/GM+w/cO4
+	dXTc4NhoZbQpOCzy9QVJiEqYBI1ZaD14E9VSBRW1pNV7PFSslbrUEhqzqm3Dd/VJFX8Bub+Zpl5oA
+	hPJWDXlCXQcrVlz6873MPLp3lpL31MTFeCK5IQtZ31hQFTnPHGb/PSY+pYuvunK4M/tgj3KRj5D4a
+	Zm3iemzvhRoBFOTIzcfrNBxwPBqcMBriDn+em1vfV8LD5y81GBBC2gks7KbntLH83vjUS9IQKfDxU
+	0+PsPidg==;
+Received: from [151.115.150.205] (port=41644 helo=gepetto..)
+	by pf-012.whm.fr-par.scw.cloud with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.99.5)
+	(envelope-from <Jeremy.Jean@oss.cyber.gouv.fr>)
+	id 1wtuXZ-00000007r0W-0XEq;
+	Wed, 12 Aug 2026 00:01:44 +0200
+From: =?UTF-8?q?J=C3=A9r=C3=A9my=20Jean?= <Jeremy.Jean@oss.cyber.gouv.fr>
+To: audit@vger.kernel.org
+Cc: Paul Moore <paul@paul-moore.com>,
+	Eric Paris <eparis@redhat.com>,
+	linux-kernel@vger.kernel.org,
+	=?UTF-8?q?J=C3=A9r=C3=A9my=20Jean?= <Jeremy.Jean@oss.cyber.gouv.fr>
+Subject: [PATCH] audit: avoid dropping live tree ref on fsnotify rule autoremove
+Date: Tue, 11 Aug 2026 22:01:27 +0000
+Message-ID: <20260811220128.275783-1-Jeremy.Jean@oss.cyber.gouv.fr>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - pf-012.whm.fr-par.scw.cloud
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - oss.cyber.gouv.fr
+X-Get-Message-Sender-Via: pf-012.whm.fr-par.scw.cloud: authenticated_id: jeremy.jean@oss.cyber.gouv.fr
+X-Authenticated-Sender: pf-012.whm.fr-par.scw.cloud: jeremy.jean@oss.cyber.gouv.fr
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
 
-On 10 August 2026 21:49:45 BST, Ricardo Robaina <rrobaina@redhat.com>
-wrote:
->On Mon, Aug 10, 2026 at 1:28 PM Bradley Morgan <include@grrlz.net> wrote:
->>
->> On 10 August 2026 16:19:10 BST, Ricardo Robaina <rrobaina@redhat.com>
->> wrote:
->> >On Mon, Aug 10, 2026 at 10:32 AM Bradley Morgan <include@grrlz.net>
->wrote:
->> >>
->> >> Hi Ricardo,
->> >>
->> >> > -     nlh->nlmsg_len = skb->len;
->> >> > +     nlh->nlmsg_len = copy->len;
->> >>
->> >> Fine. skb_copy() does skb_put(n, skb->len) and nothing touches
->> >> copy->len in between, so the two are always identical.
->> >> Which is also why "safer" is a bit of a stretch, it prevents nothing.
->> >> Feel free to bikeshed the changelog wording on that.
->> >>
->> >
->> >Thanks for reviewing this patch, Bradley. I agree with you on the
->wording.
->> >
->>
->> np.
->>
->> >> If you ever want a more interesting cleanup here, the real quirk is
->> >> the line above: the unicast path sets nlmsg_len to skb->len minus
->> >> NLMSG_HDRLEN, this one uses the full length.
->> >
->> >That's interesting, maybe moving the nlmsg_len fixup out of
->> >__audit_log_end() would be better. I'll look into it.
->> >
->>
->> Hmmm.. perhaps it will. I will suggest a fix:
->>
->> From 776375d625cd9cb138f7a6f876861bf428ae1e6c Mon Sep 17 00:00:00 2001
->> From: Bradley Morgan <include@grrlz.net>
->> Date: Mon, 10 Aug 2026 16:26:06 +0000
->> Subject: [PATCH] audit: move the nlmsg_len fixup from __audit_log_end()
->to
->>  send time
->>
->> The auditd breakage (nlmsg_len set to the payload length instead of
->> the full message length) is applied in __audit_log_end() when the
->> record is queued. That forces kauditd_send_multicast_skb() to deep
->> copy every record and undo the length on the copy, so the multicast
->> group still sees a standard netlink message.
->>
->> Instead, finalize the header with the standard full length at queue
->> time and apply the auditd length right before the unicast send in
->> kauditd_send_queue(). Records stay standard netlink messages while
->> they sit in the queues, and the multicast copy no longer needs its
->> own fixup. The deep copy itself stays, since the auditd length
->> rewrite lands in the shared data region after the copy is already
->> handed to the listeners.
->>
->> auditd sees the same bytes as before. The fixup is computed from
->> skb->len, which does not change between queueing and sending, so
->> records that come back through the retry and hold queues get the same
->> value again. Reply and rule list skbs are built with nlmsg_put() and
->> sent on other paths, none of those are touched.
->>
->> This came out of the "use copied skb length" thread, where moving the
->> fixup was suggested as the more interesting cleanup.
->>
->> Signed-off-by: Bradley Morgan <include@grrlz.net>
->> ---
->>  kernel/audit.c | 38 ++++++++++++++++++++++----------------
->>  1 file changed, 22 insertions(+), 16 deletions(-)
->>
->> diff --git a/kernel/audit.c b/kernel/audit.c
->> index 9412af9144bc..5b6528fc6eb5 100644
->> --- a/kernel/audit.c
->> +++ b/kernel/audit.c
->> @@ -802,6 +802,15 @@ static int kauditd_send_queue(struct sock *sk, u32
->portid,
->>                 if (skb_hook)
->>                         (*skb_hook)(skb);
->>
->> +               /*
->> +                * auditd expects nlmsg_len to be the payload length
->rather
->> +                * than the full message length.  Apply the breakage
->here at
->> +                * send time so the record stays a standard netlink
->message
->> +                * while queued and while it is copied for the multicast
->> +                * group above.
->> +                */
->> +               nlmsg_hdr(skb)->nlmsg_len = skb->len - NLMSG_HDRLEN;
->> +
->>                 /* can we send to anyone via unicast? */
->>                 if (!sk) {
->>                         if (err_hook)
->> @@ -849,7 +858,6 @@ static void kauditd_send_multicast_skb(struct
->sk_buff *skb)
->>  {
->>         struct sk_buff *copy;
->>         struct sock *sock = audit_get_sk(&init_net);
->> -       struct nlmsghdr *nlh;
->>
->>         /* NOTE: we are not taking an additional reference for init_net
->since
->>          *       we don't have to worry about it going away */
->> @@ -859,19 +867,15 @@ static void kauditd_send_multicast_skb(struct
->sk_buff *skb)
->>
->>         /*
->>          * The seemingly wasteful skb_copy() rather than bumping the
->refcount
->> -        * using skb_get() is necessary because non-standard mods are
->made to
->> -        * the skb by the original kaudit unicast socket send routine. 
->The
->> -        * existing auditd daemon assumes this breakage.  Fixing this
->would
->> -        * require co-ordinating a change in the established protocol
->between
->> -        * the kaudit kernel subsystem and the auditd userspace code. 
->There is
->> -        * no reason for new multicast clients to continue with this
->> -        * non-compliance.
->> +        * using skb_get() is necessary because the unicast send in
->> +        * kauditd_send_queue() rewrites nlmsg_len to the payload only
->length
->> +        * that auditd expects.  The copy shields the multicast
->listeners from
->> +        * that historical breakage, there is no reason for them to
->continue
->> +        * with this non compliance.
->>          */
->>         copy = skb_copy(skb, GFP_KERNEL);
->>         if (!copy)
->>                 return;
->> -       nlh = nlmsg_hdr(copy);
->> -       nlh->nlmsg_len = skb->len;
->>
->>         nlmsg_multicast(sock, copy, 0, AUDIT_NLGRP_READLOG, GFP_KERNEL);
->>  }
->> @@ -2785,13 +2789,15 @@ int audit_signal_info(int sig, struct
->task_struct *t)
->>   */
->>  static void __audit_log_end(struct sk_buff *skb)
->>  {
->> -       struct nlmsghdr *nlh;
->> -
->>         if (audit_rate_check()) {
->> -               /* setup the netlink header, see the comments in
->> -                * kauditd_send_multicast_skb() for length quirks */
->> -               nlh = nlmsg_hdr(skb);
->> -               nlh->nlmsg_len = skb->len - NLMSG_HDRLEN;
->> +               /*
->> +                * The record was built by appending data after
->nlmsg_put()
->> +                * without keeping nlmsg_len up to date, so finalize the
->> +                * header here with the standard full message length. 
->The
->> +                * payload only length that auditd expects is applied at
->> +                * send time in kauditd_send_queue().
->> +                */
->> +               nlmsg_end(skb, nlmsg_hdr(skb));
->>
->>                 /* queue the netlink packet */
->>                 skb_queue_tail(&audit_queue, skb);
->> --
->> 2.47.3
->>
->>
->>
->>
->> >>
->> >> Well, why not, please add:
->> >>
->> >> Reviewed-by: Bradley Morgan <include@grrlz.net>
->> >> Thanks!
->> >>
->> >
->> >-Ricardo
->> >
->> >
->>
->> Thanks!
->>
->
->It looks good to me. I've built a kernel to test it and verified that
->it passes the audit testsuite.
->
-># uname -r
->7.2.0-rc6+
->
-># make test
->make -C tests test
->chmod +x */test
->Running as   user    root
->        with context unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023
->        on   system  Fedora
->
->amcast_joinpart/test ................. ok
->backlog_wait_time_actual_reset/test .. ok
->bpf/test ............................. ok
->coredump/test ........................ ok
->exec_execve/test ..................... ok
->exec_name/test ....................... ok
->fanotify/test ........................ ok
->field_compare/test ................... ok
->file_create/test ..................... ok
->file_delete/test ..................... ok
->file_permission/test ................. ok
->file_rename/test ..................... ok
->filter_device/test ................... ok
->filter_exclude/test .................. ok
->filter_exit/test ..................... ok
->filter_inode/test .................... ok
->filter_saddr_fam/test ................ ok
->filter_sessionid/test ................ ok
->io_uring/test ........................ ok
->login_tty/test ....................... ok
->lost_reset/test ...................... ok
->netfilter_pkt/test ................... ok
->signal/test .......................... ok
->syscalls_file/test ................... ok
->syscall_module/test .................. ok
->syscall_socketcall/test .............. ok
->time_change/test ..................... ok
->user_msg/test ........................ ok
->All tests successful.
->Files=28, Tests=303, 46 wallclock secs ( 0.08 usr  0.03 sys + 14.50
->cusr  1.56 csys = 16.17 CPU)
->Result: PASS
->
->Reviewed-by: Ricardo Robaina <rrobaina@redhat.com>
->Tested-by: Ricardo Robaina <rrobaina@redhat.com>
->
->-Ricardo
->
->
+audit_del_rule() is used for both netlink deletion templates and internal
+fsnotify autoremove.  The former passes a parsed template which owns a
+temporary tree reference; the latter passes the installed entry itself.
 
-woah, thanks for the review too. so do I like post or will Paul take it
+The unconditional audit_put_tree() at the end of audit_del_rule() assumes
+the template case.  For mixed AUDIT_DIR plus AUDIT_EXE rules, an fsnotify
+autoremove event therefore drops the installed rule's live tree reference.
+Repeating this across rules sharing the same tree can free the tree while
+another rule still references it, and a later autoremove dereferences the
+freed pathname while comparing rules.
 
-Thanks!
+Move the temporary-tree put to audit_rule_change(), the caller that owns
+deletion templates.  Keep it in the AUDIT_DEL_RULE cleanup so both
+successful deletion and -ENOENT still release the parser-owned tree.
+
+Fixes: 34d99af52ad4 ("audit: implement audit by executable")
+Assisted-by: Codex:gpt-5
+Signed-off-by: Jérémy Jean <Jeremy.Jean@oss.cyber.gouv.fr>
+---
+ kernel/auditfilter.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
+
+diff --git a/kernel/auditfilter.c b/kernel/auditfilter.c
+index 7f791afe5791..666c2091b9e4 100644
+--- a/kernel/auditfilter.c
++++ b/kernel/auditfilter.c
+@@ -1023,7 +1023,6 @@ static inline int audit_add_rule(struct audit_entry *entry)
+ int audit_del_rule(struct audit_entry *entry)
+ {
+ 	struct audit_entry  *e;
+-	struct audit_tree *tree = entry->rule.tree;
+ 	struct list_head *list;
+ 	int ret = 0;
+ #ifdef CONFIG_AUDITSYSCALL
+@@ -1071,9 +1070,6 @@ int audit_del_rule(struct audit_entry *entry)
+ out:
+ 	mutex_unlock(&audit_filter_mutex);
+ 
+-	if (tree)
+-		audit_put_tree(tree);	/* that's the temporary one */
+-
+ 	return ret;
+ }
+ 
+@@ -1158,6 +1154,8 @@ int audit_rule_change(int type, int seq, void *data, size_t datasz)
+ 	}
+ 
+ 	if (err || type == AUDIT_DEL_RULE) {
++		if (type == AUDIT_DEL_RULE && entry->rule.tree)
++			audit_put_tree(entry->rule.tree); /* that's the template one */
+ 		if (entry->rule.exe)
+ 			audit_remove_mark(entry->rule.exe);
+ 		audit_free_rule(entry);
+-- 
+2.47.3
+
