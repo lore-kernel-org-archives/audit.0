@@ -1,160 +1,191 @@
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F9914749D8
-	for <audit@vger.kernel.org>; Wed, 12 Aug 2026 15:44:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.170
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786549480; cv=pass; b=Dg4sjleEKRogYiFTFGPm+l0eZP2Mbibs9WSJNH150g96IJNKpsYYKSdlyOow9eOcBx4Cr+eE+tPY44pMKpvArReAVOexHXDi9Z1fR/sqfjgLB2VW7OwzdxIHKP/94YsAmL9SQ5GEVG9hDNrGtxYEm/x4xFkzagqXUo/hPt9t4NM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786549480; c=relaxed/simple;
-	bh=/IeII68tNcQyIIr8PeEhC3EiDZx+rpE15xSusoJdc5E=;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78B6F477E28
+	for <audit@vger.kernel.org>; Wed, 12 Aug 2026 15:59:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1786550395; cv=none; b=sD/Gw6fLioweu8p5+hhSmsdz4QWf2M6FnWIcP1Q0yrUgmzp95GQtUCSsECGzirnxlMUjCba4/JLYi8XdI/nJFyAtXFbGUpI2J6pNTW4VQekrZKHoxcnq9bN3JhGGY9KcwCVoCbKnkAwh9QbnyphNiGtLnXpVTBpSt96ivtspLYc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1786550395; c=relaxed/simple;
+	bh=lNri8v2Q/r9NFRrfLadJhdmPEGChFfJBd9vL3iVMKuM=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=jvwcNNr66Wn2R0E+nmMH1uDger0w56QfK2hq/2GCs2gPInUnbsa2ECxiFHY0QZ3fuIsTdgeIbK29LuPsanAydHINfiqY5/c9pMkm/PPVYmK9+22YMdQLAvCsCHNKLak4ktbJfuHxcZR9Ttrl57JxPDDMjxARX7wvtiEY2uf6ctw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=fQ3Wx++p; arc=pass smtp.client-ip=209.85.214.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+	 To:Cc:Content-Type; b=C8q6vI/P6ujT0i1h6VDCDB4BWiB83NuTaKmIycAI6WLwlbXj4mvPFcZjqcxHYR8jN2GpvJfCPkuugQq5jfAdTxQ7QZ3Lc1TJqWJa5Ikn+sCbHlBW24AUMlvWp+pqZ7p10+AIO6bFl+vvXW1x9V6Riir69xlXcx7bkX+cLimGDf0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=DEbFXgQp; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="fQ3Wx++p"
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-2cc73e322dbso14952965ad.1
-        for <audit@vger.kernel.org>; Wed, 12 Aug 2026 08:44:38 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1786549478; cv=none;
-        d=google.com; s=arc-20260327;
-        b=O3+a6TJ4/+eD/mxelfQer07DaO+XMX702sUdvbu69em5J6ptBoCK1JoJavOZazY62x
-         opNXvG4myblQLZMV0IvcAwsvBVx/aOEUJdSijKB9OLDyI8vCSjD0kTXL72v5zEkOrGhv
-         TCfqilhuYDlSqnvyV4SbGFB5pff0rRqeyd5MQ6GfZPKRIk4LBWPg+kXiNukZKtwjPMIS
-         xFTuY+fVb0HfmHMO5xYqn5PflGFiDz/wqeVHZ+ESrfsHifDAVE7iIEINizOUhw+ut8L3
-         JbHfrRL25h/zkHiR7qMUcQdwrt13iAXNX5DswP7A34fqc6rIB32Qij8wdIevM3sD6qf7
-         2CgA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=s1IWDnG3AF52MXJuclYMYHc+IQmTD43ohn2LvgapWrc=;
-        fh=6TU7MYdA3Q5TMg0ZnyJJA4DOMuWefc+hMXpsbHhQHWc=;
-        b=O5whkC0mh5l7aji+f9V0S15n/pdjrd8HXzbNUFAErobPv/AVD2GWO89B8c13YhL4aT
-         QxfLeN6EkCvda+S6w+w0jQLFtCdFR8MLGKfwOe5769HABh0q7ylJ4+CKrCRjF6oKyN6b
-         DDbk1rQbcp/ExUcCn49bQSzUzkaaRvXsfwMTGslvJaJjS8gKegv8kcDQOOzJK0CCSmHV
-         97D+hWJ2OQeTs6ZpBw++wJ1ecfQsi/qUW5i3fP2Zc1VMofnLzJ1gPA+gkmauAWjoXyE3
-         mtcyOjOzgnZpeZhnpbj+9+nn/y+DEf5cChPlHT5INyKOCuKDeb2U+nDRpJKiWCmDpQ+A
-         ybcQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1786549478; x=1787154278; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=s1IWDnG3AF52MXJuclYMYHc+IQmTD43ohn2LvgapWrc=;
-        b=fQ3Wx++pKT3wCst4Hb0bcoiH3pYGN9sbXz5tjnke6dH3EVT19Ewls3USSY1jTjNr8E
-         pGP4umrfgQhAKsMJQXsCtzXaZE30JkxavfyYd4+Rj3c2OboHhwEcdtIBc7GZuNI/lTys
-         heaS2J+odmMIY4h8lsHUlb1Z4U4/Tuvlg0gXtFxlEd+Ejfof0ih5Tq3y7apM0ez/9ixF
-         jDcCd9UyG4jhqpU3w+IIk4Ry/FWlkY8EEiosg5F3SWD8jbRAIqIDw2a7enAU2S61fNNE
-         QJ/vWkZn6PI4YjlzxbGXtFguixw6neTgUItoO8HPmW4psh2qUW3p6QLeOciowQ8Rs0SY
-         xDhA==
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="DEbFXgQp"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1786550392;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=0scKLPOx43FEdah6Lw0ZsI57S7nTRPvyJpBjUipLS3U=;
+	b=DEbFXgQpumAFRtGpCavFJjxehw3v/3gC9M4Jns0BeKl7diR6BFUl7pZGv3t+IU3nRoq5Wl
+	MeGKvLT7Tl/duzx8uGdi10yRwMNQLbOFXEz+3r44fJw+V/+qup4ytI4NpFq4wPkL5DVFvK
+	N11lXBcrnm9EODJs2VZ22D0Tnxst6CY=
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
+ [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-608-iZtf4i_-MQmXXzjrBbh7Qw-1; Wed, 12 Aug 2026 11:59:48 -0400
+X-MC-Unique: iZtf4i_-MQmXXzjrBbh7Qw-1
+X-Mimecast-MFC-AGG-ID: iZtf4i_-MQmXXzjrBbh7Qw_1786550387
+Received: by mail-ej1-f70.google.com with SMTP id a640c23a62f3a-c15e82278cbso63295866b.2
+        for <audit@vger.kernel.org>; Wed, 12 Aug 2026 08:59:48 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786549478; x=1787154278;
+        d=1e100.net; s=20251104; t=1786550387; x=1787155187;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=s1IWDnG3AF52MXJuclYMYHc+IQmTD43ohn2LvgapWrc=;
-        b=JKXuTjMEKZSJw2AARHrHXd7MQgxWMATA+RC4LUq3hvM2bvbeAk6ekf8syQBZCgdJad
-         89YpjDq2/b4ZQSymLfKgx2sdPrmbqsryBezs+1P9hvIPq7gA35+aw76N75KGELh+wHFt
-         R0j8mfvy0q2PfQ/smLuHeVrdANsJJntq2Qz+M4DS9deDoEf3bBgwSwJX+QIIF6CLYkRo
-         VeiAzHBg0urs5ADqSoU3yPeGfujIG72LA8GXUG6vTT6LiSIpbGw2dgW/p77ZNu8YA2ao
-         kctv0b9aW6uj3LqNlWzWG1ZGp7G6VgL7NmHmZF9lM+u/DD3LOEd5nAgpXSVfzMiT88CT
-         P1Wg==
-X-Forwarded-Encrypted: i=1; AHgh+RpLPIy3WktfTMTL2h+bXjLYW03hAkNcSSeQ3j0ewsGWyJGmGRH7pPLMTZ5MTVW3HwIOPK4RLg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzEJqTL8uCveI5/MZcyz2hkwYWM45zzhdQtSBrtEfCVODVHy4/x
-	M/sQTQ+rAem6W2OOrqlUCWA2dBRB8KHT0Pq1ed4AJw8eHDhl244nxYhekYijlNrGMndaVwHZdC+
-	DcmYqXsSXtBOsTwiEkMogSk962fb8YtjtutyFCFHq
-X-Gm-Gg: AR+sD11sR7IXb5MHVvn2anmEjR9R0Nm+Zfl0Qcuv0Y9eFzIoseenDhBU0Q9nzrnXyMd
-	RZIfHmrD7A0BnfsATdaXeFLIYgUekYr6bDRgyAjcFQFoEUeKzQBFFL02BIx9QV7NwNcKJcKTt5y
-	rquDd47FNohV+wpsBOc8+Y957NduGyHF5LPVRdHKJOlrq+4uvm42CYosRRCtN0bf9/pSMNEWFF7
-	vwVtvEgTCmxNVkYC1QDX94ZdnxUv5E5vhRazYX5gJtzvdciglV6EKmW1AWINgkd4vkeDIg7XnPG
-	zR7Vztiyv2IUxDeLCHuoWzUmwFWEd0RWMA5pyAZlXyOk
-X-Received: by 2002:a17:903:230b:b0:2ca:d975:5bbd with SMTP id
- d9443c01a7336-2d3455ffabcmr66794735ad.20.1786549477549; Wed, 12 Aug 2026
- 08:44:37 -0700 (PDT)
+        bh=0scKLPOx43FEdah6Lw0ZsI57S7nTRPvyJpBjUipLS3U=;
+        b=hKmZZqL/PTHOgW/lBzH0EeTvYwJXZAh0NUMB/e+p8qxvPHEzeJXaCJacRleIcQKBVB
+         Jzg3wXWigeqy9NIw+G8mmN1awy5Lymu5L1fnWF5mKzWI/rXG2rOqGrhapJ83VO4j3SaA
+         uM7oCg0TLMYkK05rTi6Hld5GrSJ7Z1M+gomkwv5XqerwzreScc52Gq3X3+oVR9Om+Yja
+         lNbj2GuVDsHl3oAGxcorcLRWxP0qcXLqaObKG0Nt5li1inbOOJCxNgKf2vk9xIwud/02
+         9zlkvF2jwlV1Q1DAk8cant/5xJPyYJUUGApMGABAeVH4s4lxXrdKFjjAIT3OkqiB8hiu
+         wEQA==
+X-Gm-Message-State: AOJu0YwmRDaMCgH5XHRpqNuRw0t1F5QNPbcrOt8nDkN68UditnmaGWDy
+	Tl7VMerRIeSX3Ce2dI5425u9nkTIpQGnfkOu4xF7yGdHpWJZHwUigD0ZQ/5FYVqTogpJ9+x4vXz
+	QFtsPx1/G/6opuDBvidDQd5lUyLE9eTctasa3jgVVenx7DrRrzuidjoLHwyPdyNtw9o8i0JjYA+
+	4/tZ0hsycSObSct/6GKHDrW8gPcJQUSeLEkBiDrR0tSMXK
+X-Gm-Gg: AR+sD11KsWG4a8BSrPB2FME/Li2b6GXH/8eC6T2P8RuyHQgAiBHzaBHGHuLk6NUyKiu
+	pMgDul7pwXAditKN4Hy4rp9+hebwsAzoJUNlMhpzdtNaoxP3c0OADaERaObtNXKZ9Odg9S3Y18A
+	MZNkxab/Ro6lEfN1iY0vwBf11yr10ChG+OSPbUI/IJOXK4wbx3CH1aiCwZ6J6LrWT2cp9OJZPDB
+	CuexABm226BbopouTL9MHnMafLGhla770HkoqZ0ZrzE8z1vP+dmKk2n7ss3F+pXaeJz99nQuNpj
+	MCg=
+X-Received: by 2002:a17:906:4789:b0:c16:29eb:e834 with SMTP id a640c23a62f3a-c20f2fbdd0dmr285256866b.21.1786550387486;
+        Wed, 12 Aug 2026 08:59:47 -0700 (PDT)
+X-Received: by 2002:a17:906:4789:b0:c16:29eb:e834 with SMTP id
+ a640c23a62f3a-c20f2fbdd0dmr285254666b.21.1786550387090; Wed, 12 Aug 2026
+ 08:59:47 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260806-cred-nonrcu-annotation-fix-v1-1-5fd149b2ab54@google.com>
- <2bdf79f45c5eb2ea66d59904418081c5@paul-moore.com> <anyKVxRCiWy/g0Cn@mail.hallyn.com>
-In-Reply-To: <anyKVxRCiWy/g0Cn@mail.hallyn.com>
-From: Paul Moore <paul@paul-moore.com>
-Date: Wed, 12 Aug 2026 11:44:25 -0400
-X-Gm-Features: AUfX_mz1CYC-wzRPK5n3KTtv131zQRSOinsU2x1ZkDohfDgiuhfc7o6Q6fO3Nrw
-Message-ID: <CAHC9VhSv-+BgaOzfw7=86cWgnPkD_KD88NKk=j-fY=K_85wTxQ@mail.gmail.com>
-Subject: Re: [PATCH] cred: clarify that task_struct::cred is only for the
- current task
-To: "Serge E. Hallyn" <serge@hallyn.com>
-Cc: Jann Horn <jannh@google.com>, Serge Hallyn <sergeh@kernel.org>, Eric Paris <eparis@redhat.com>, 
-	James Morris <jmorris@namei.org>, linux-security-module@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, audit@vger.kernel.org
+References: <20260811220128.275783-1-Jeremy.Jean@oss.cyber.gouv.fr>
+In-Reply-To: <20260811220128.275783-1-Jeremy.Jean@oss.cyber.gouv.fr>
+From: Ricardo Robaina <rrobaina@redhat.com>
+Date: Wed, 12 Aug 2026 12:59:35 -0300
+X-Gm-Features: AUfX_myQl1VUN_7eobNn_0Oc2n3JWLbgYrvtnvEq8ohTwSkOSUz8SmQYlmItKqs
+Message-ID: <CAABTaaCM=y76EswxmG-U6LowPmWpZJSwdpFMPkMuOtzGYW8t-g@mail.gmail.com>
+Subject: Re: [PATCH] audit: avoid dropping live tree ref on fsnotify rule autoremove
+To: =?UTF-8?B?SsOpcsOpbXkgSmVhbg==?= <Jeremy.Jean@oss.cyber.gouv.fr>
+Cc: audit@vger.kernel.org, Paul Moore <paul@paul-moore.com>, 
+	Eric Paris <eparis@redhat.com>, linux-kernel@vger.kernel.org
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: Mcn6P_AGIfV-psRJl7B8fmvUnXiR_x7v5qcbnGv1GuI_1786550387
+X-Mimecast-Originator: redhat.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Aug 12, 2026 at 10:59=E2=80=AFAM Serge E. Hallyn <serge@hallyn.com>=
- wrote:
-> On Mon, Aug 10, 2026 at 03:41:54PM -0400, Paul Moore wrote:
-> > On Aug  6, 2026 Jann Horn <jannh@google.com> wrote:
-> > >
-> > > The `cred` field in task_struct is currently marked as __rcu, but tha=
-t's
-> > > not true: It can point to credentials from access_override_creds(), w=
-hich
-> > > do not get freed with RCU delay.
-> > >
-> > > What actually protects task_struct::cred is that accessing it is only
-> > > permitted for the current task (except for setting up a child during =
-fork()
-> > > or tearing down a dead process).
-> > > (There is currently code in Smack that violates this rule, but that's=
- a bug
-> > > and causes UAF, I have sent a separate fix for that.)
-> > >
-> > > Clarify this, remove the __rcu marker, and remove RCU helpers from al=
-l
-> > > accesses to this field.
-> > >
-> > > Signed-off-by: Jann Horn <jannh@google.com>
-> > > ---
-> > > For context:
-> > > There have been at least two UAFs of struct cred that I'm aware of, b=
-oth
-> > > caused by wrong use of task_struct::cred:
-> > >
-> > >  - https://git.kernel.org/linus/a3727a8bac0a9e77c70820655fd8715523ba3=
-db7
-> > >  - https://lore.kernel.org/all/20260806-smack-uaf-fix-v1-1-26426d389a=
-26@google.com/
-> > > ---
-> > >  include/linux/cred.h  | 17 +++++++++++------
-> > >  include/linux/sched.h |  8 ++++++--
-> > >  kernel/auditsc.c      |  5 +++--
-> > >  kernel/cred.c         |  2 +-
-> > >  security/lsm_init.c   |  2 +-
-> > >  5 files changed, 22 insertions(+), 12 deletions(-)
-> >
-> > This looks good to me, with one small nit below, but as we are at -rc7
-> > I think this is best kept until after the upcoming merge window so it
-> > has more than a few days in linux-next.  I'm going to merge this into
-> > lsm/dev-staging with the expectation of merging it into lsm/dev after
-> > the upcoming merge window closes.  If anyone wishes to object to this
-> > patch or add their own review/ACK/test tag before then, please do.
-> >
-> > Thanks Jann.
-> >
+On Tue, Aug 11, 2026 at 7:02=E2=80=AFPM J=C3=A9r=C3=A9my Jean
+<Jeremy.Jean@oss.cyber.gouv.fr> wrote:
 >
-> Thanks.  FWIW I did also look at this closely.
+> audit_del_rule() is used for both netlink deletion templates and internal
+> fsnotify autoremove.  The former passes a parsed template which owns a
+> temporary tree reference; the latter passes the installed entry itself.
 >
-> Reviewed-by: Serge Hallyn <serge@hallyn.com>
+> The unconditional audit_put_tree() at the end of audit_del_rule() assumes
+> the template case.  For mixed AUDIT_DIR plus AUDIT_EXE rules, an fsnotify
+> autoremove event therefore drops the installed rule's live tree reference=
+.
+> Repeating this across rules sharing the same tree can free the tree while
+> another rule still references it, and a later autoremove dereferences the
+> freed pathname while comparing rules.
+>
+> Move the temporary-tree put to audit_rule_change(), the caller that owns
+> deletion templates.  Keep it in the AUDIT_DEL_RULE cleanup so both
+> successful deletion and -ENOENT still release the parser-owned tree.
+>
+> Fixes: 34d99af52ad4 ("audit: implement audit by executable")
+> Assisted-by: Codex:gpt-5
+> Signed-off-by: J=C3=A9r=C3=A9my Jean <Jeremy.Jean@oss.cyber.gouv.fr>
+> ---
+>  kernel/auditfilter.c | 6 ++----
+>  1 file changed, 2 insertions(+), 4 deletions(-)
+>
+> diff --git a/kernel/auditfilter.c b/kernel/auditfilter.c
+> index 7f791afe5791..666c2091b9e4 100644
+> --- a/kernel/auditfilter.c
+> +++ b/kernel/auditfilter.c
+> @@ -1023,7 +1023,6 @@ static inline int audit_add_rule(struct audit_entry=
+ *entry)
+>  int audit_del_rule(struct audit_entry *entry)
+>  {
+>         struct audit_entry  *e;
+> -       struct audit_tree *tree =3D entry->rule.tree;
+>         struct list_head *list;
+>         int ret =3D 0;
+>  #ifdef CONFIG_AUDITSYSCALL
+> @@ -1071,9 +1070,6 @@ int audit_del_rule(struct audit_entry *entry)
+>  out:
+>         mutex_unlock(&audit_filter_mutex);
+>
+> -       if (tree)
+> -               audit_put_tree(tree);   /* that's the temporary one */
+> -
+>         return ret;
+>  }
+>
+> @@ -1158,6 +1154,8 @@ int audit_rule_change(int type, int seq, void *data=
+, size_t datasz)
+>         }
+>
+>         if (err || type =3D=3D AUDIT_DEL_RULE) {
+> +               if (type =3D=3D AUDIT_DEL_RULE && entry->rule.tree)
+> +                       audit_put_tree(entry->rule.tree); /* that's the t=
+emplate one */
+>                 if (entry->rule.exe)
+>                         audit_remove_mark(entry->rule.exe);
+>                 audit_free_rule(entry);
+> --
+> 2.47.3
+>
+>
 
-Updated, thanks.
+Looks good to me. It passes the audit testsuite as well.
 
---=20
-paul-moore.com
+# make test
+amcast_joinpart/test ................. ok
+backlog_wait_time_actual_reset/test .. ok
+bpf/test ............................. ok
+coredump/test ........................ ok
+exec_execve/test ..................... ok
+exec_name/test ....................... ok
+fanotify/test ........................ ok
+field_compare/test ................... ok
+file_create/test ..................... ok
+file_delete/test ..................... ok
+file_permission/test ................. ok
+file_rename/test ..................... ok
+filter_device/test ................... ok
+filter_exclude/test .................. ok
+filter_exit/test ..................... ok
+filter_inode/test .................... ok
+filter_saddr_fam/test ................ ok
+filter_sessionid/test ................ ok
+io_uring/test ........................ ok
+login_tty/test ....................... ok
+lost_reset/test ...................... ok
+netfilter_pkt/test ................... ok
+signal/test .......................... ok
+syscalls_file/test ................... ok
+syscall_module/test .................. ok
+syscall_socketcall/test .............. ok
+time_change/test ..................... ok
+user_msg/test ........................ ok
+All tests successful.
+Files=3D28, Tests=3D303, 107 wallclock secs ( 0.10 usr  0.02 sys + 31.68
+cusr  1.89 csys =3D 33.69 CPU)
+Result: PASS
+
+Reviewed-by: Ricardo Robaina <rrobaina@redhat.com>
+Tested-by: Ricardo Robaina <rrobaina@redhat.com>
+
+-Ricardo
+
