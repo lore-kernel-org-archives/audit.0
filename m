@@ -1,191 +1,159 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78B6F477E28
-	for <audit@vger.kernel.org>; Wed, 12 Aug 2026 15:59:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45FEC2D876A
+	for <audit@vger.kernel.org>; Wed, 12 Aug 2026 16:01:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786550395; cv=none; b=sD/Gw6fLioweu8p5+hhSmsdz4QWf2M6FnWIcP1Q0yrUgmzp95GQtUCSsECGzirnxlMUjCba4/JLYi8XdI/nJFyAtXFbGUpI2J6pNTW4VQekrZKHoxcnq9bN3JhGGY9KcwCVoCbKnkAwh9QbnyphNiGtLnXpVTBpSt96ivtspLYc=
+	t=1786550519; cv=none; b=pigfOshyUCWdMQfej1fjZVymx1caYn73/y4aiEVGiGKshmUQ6e3aR5yT3CNbixwZBec2FNBqcoy8aVQkJOZUywSGpZcTbQse/6Y9hb+Ys1nyQ4vOINPrc2dgRkgmyULNAh9LpxB1bcevRXAFWKSqn66X1n1XYiWe7VZX07Iz3vY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786550395; c=relaxed/simple;
-	bh=lNri8v2Q/r9NFRrfLadJhdmPEGChFfJBd9vL3iVMKuM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=C8q6vI/P6ujT0i1h6VDCDB4BWiB83NuTaKmIycAI6WLwlbXj4mvPFcZjqcxHYR8jN2GpvJfCPkuugQq5jfAdTxQ7QZ3Lc1TJqWJa5Ikn+sCbHlBW24AUMlvWp+pqZ7p10+AIO6bFl+vvXW1x9V6Riir69xlXcx7bkX+cLimGDf0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=DEbFXgQp; arc=none smtp.client-ip=170.10.133.124
+	s=arc-20240116; t=1786550519; c=relaxed/simple;
+	bh=nTMPf7j6iOyMCzfeuxTXeLYGWpoimEfc+UOuF3ldixM=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=kF6fAN8e/NSTLtHEzx/TOh4VJkC2VgSPhFG45KGkXAEmXWEvfCP4KkPZZiEytmPnVJ3uAV9rBxVnc3hvSbvgGQ0+Crbd99ym/lmAq4dof0RlpsmFKxCjvmZwR4lBGs+B3FIlTjItyA+qfU/k2AEra3Pd1xl2P2JFTJ3oge/ssrM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=bgEvdduV; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="DEbFXgQp"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="bgEvdduV"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1786550392;
+	s=mimecast20190719; t=1786550515;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=0scKLPOx43FEdah6Lw0ZsI57S7nTRPvyJpBjUipLS3U=;
-	b=DEbFXgQpumAFRtGpCavFJjxehw3v/3gC9M4Jns0BeKl7diR6BFUl7pZGv3t+IU3nRoq5Wl
-	MeGKvLT7Tl/duzx8uGdi10yRwMNQLbOFXEz+3r44fJw+V/+qup4ytI4NpFq4wPkL5DVFvK
-	N11lXBcrnm9EODJs2VZ22D0Tnxst6CY=
-Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
- [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-608-iZtf4i_-MQmXXzjrBbh7Qw-1; Wed, 12 Aug 2026 11:59:48 -0400
-X-MC-Unique: iZtf4i_-MQmXXzjrBbh7Qw-1
-X-Mimecast-MFC-AGG-ID: iZtf4i_-MQmXXzjrBbh7Qw_1786550387
-Received: by mail-ej1-f70.google.com with SMTP id a640c23a62f3a-c15e82278cbso63295866b.2
-        for <audit@vger.kernel.org>; Wed, 12 Aug 2026 08:59:48 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786550387; x=1787155187;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=0scKLPOx43FEdah6Lw0ZsI57S7nTRPvyJpBjUipLS3U=;
-        b=hKmZZqL/PTHOgW/lBzH0EeTvYwJXZAh0NUMB/e+p8qxvPHEzeJXaCJacRleIcQKBVB
-         Jzg3wXWigeqy9NIw+G8mmN1awy5Lymu5L1fnWF5mKzWI/rXG2rOqGrhapJ83VO4j3SaA
-         uM7oCg0TLMYkK05rTi6Hld5GrSJ7Z1M+gomkwv5XqerwzreScc52Gq3X3+oVR9Om+Yja
-         lNbj2GuVDsHl3oAGxcorcLRWxP0qcXLqaObKG0Nt5li1inbOOJCxNgKf2vk9xIwud/02
-         9zlkvF2jwlV1Q1DAk8cant/5xJPyYJUUGApMGABAeVH4s4lxXrdKFjjAIT3OkqiB8hiu
-         wEQA==
-X-Gm-Message-State: AOJu0YwmRDaMCgH5XHRpqNuRw0t1F5QNPbcrOt8nDkN68UditnmaGWDy
-	Tl7VMerRIeSX3Ce2dI5425u9nkTIpQGnfkOu4xF7yGdHpWJZHwUigD0ZQ/5FYVqTogpJ9+x4vXz
-	QFtsPx1/G/6opuDBvidDQd5lUyLE9eTctasa3jgVVenx7DrRrzuidjoLHwyPdyNtw9o8i0JjYA+
-	4/tZ0hsycSObSct/6GKHDrW8gPcJQUSeLEkBiDrR0tSMXK
-X-Gm-Gg: AR+sD11KsWG4a8BSrPB2FME/Li2b6GXH/8eC6T2P8RuyHQgAiBHzaBHGHuLk6NUyKiu
-	pMgDul7pwXAditKN4Hy4rp9+hebwsAzoJUNlMhpzdtNaoxP3c0OADaERaObtNXKZ9Odg9S3Y18A
-	MZNkxab/Ro6lEfN1iY0vwBf11yr10ChG+OSPbUI/IJOXK4wbx3CH1aiCwZ6J6LrWT2cp9OJZPDB
-	CuexABm226BbopouTL9MHnMafLGhla770HkoqZ0ZrzE8z1vP+dmKk2n7ss3F+pXaeJz99nQuNpj
-	MCg=
-X-Received: by 2002:a17:906:4789:b0:c16:29eb:e834 with SMTP id a640c23a62f3a-c20f2fbdd0dmr285256866b.21.1786550387486;
-        Wed, 12 Aug 2026 08:59:47 -0700 (PDT)
-X-Received: by 2002:a17:906:4789:b0:c16:29eb:e834 with SMTP id
- a640c23a62f3a-c20f2fbdd0dmr285254666b.21.1786550387090; Wed, 12 Aug 2026
- 08:59:47 -0700 (PDT)
+	bh=sYq8IVqyhd8lg6HYL8U9TD1UCBoIwb2CVk0+0ytouPs=;
+	b=bgEvdduV7c7uC+4KUP3+XTJpmDHqRsqJKGquSlNB8Wx3x24HR8hy8o7uCGN0VaAFUtOwcw
+	Rx6/D5c1j/U8897wkCFIog6KjCamOkvTaedVcTxKLXD0kPp5SL0okXh/DfaVeDg1oSSdXv
+	XjQWfdqanenh/yxI2WaCEE4EB7HcvEY=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-539-ZbrUaPziMGGIaayA_nFnZQ-1; Wed,
+ 12 Aug 2026 12:01:22 -0400
+X-MC-Unique: ZbrUaPziMGGIaayA_nFnZQ-1
+X-Mimecast-MFC-AGG-ID: ZbrUaPziMGGIaayA_nFnZQ_1786550435
+Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 2BDB319560AB;
+	Wed, 12 Aug 2026 16:00:35 +0000 (UTC)
+Received: from x2.localnet (unknown [10.22.81.16])
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id A2358180034C;
+	Wed, 12 Aug 2026 16:00:33 +0000 (UTC)
+From: Steve Grubb <sgrubb@redhat.com>
+To: Paul Moore <paul@paul-moore.com>, Ricardo Robaina <rrobaina@redhat.com>
+Cc: audit@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+ linux-kernel@vger.kernel.org, eparis@redhat.com, viro@zeniv.linux.org.uk,
+ brauner@kernel.org, jack@suse.cz
+Subject: Re: [PATCH] audit: add MOVE_MOUNT auxiliary record to log mount relocation
+Date: Wed, 12 Aug 2026 12:00:31 -0400
+Message-ID: <P3A-8ZIRRiqomtqZCupr6w@redhat.com>
+Organization: Red Hat
+In-Reply-To: <CAABTaaCTYuwXYcnY22YzN1G=Gs1=YKfNn8Efs2umOUWdnMQZwA@mail.gmail.com>
+References: <20260713170035.4073532-1-rrobaina@redhat.com>
+ <CAHC9VhTR-qaU-WFiuWZLfxhNisTtKXahLMHrH7-Ts5o09VMYcw@mail.gmail.com>
+ <CAABTaaCTYuwXYcnY22YzN1G=Gs1=YKfNn8Efs2umOUWdnMQZwA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260811220128.275783-1-Jeremy.Jean@oss.cyber.gouv.fr>
-In-Reply-To: <20260811220128.275783-1-Jeremy.Jean@oss.cyber.gouv.fr>
-From: Ricardo Robaina <rrobaina@redhat.com>
-Date: Wed, 12 Aug 2026 12:59:35 -0300
-X-Gm-Features: AUfX_myQl1VUN_7eobNn_0Oc2n3JWLbgYrvtnvEq8ohTwSkOSUz8SmQYlmItKqs
-Message-ID: <CAABTaaCM=y76EswxmG-U6LowPmWpZJSwdpFMPkMuOtzGYW8t-g@mail.gmail.com>
-Subject: Re: [PATCH] audit: avoid dropping live tree ref on fsnotify rule autoremove
-To: =?UTF-8?B?SsOpcsOpbXkgSmVhbg==?= <Jeremy.Jean@oss.cyber.gouv.fr>
-Cc: audit@vger.kernel.org, Paul Moore <paul@paul-moore.com>, 
-	Eric Paris <eparis@redhat.com>, linux-kernel@vger.kernel.org
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: Mcn6P_AGIfV-psRJl7B8fmvUnXiR_x7v5qcbnGv1GuI_1786550387
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
+X-Mimecast-MFC-PROC-ID: EYGY5qBxkcSVmQM44Bo_-IGMI33L-CxvTvxqfdTJXzs_1786550435
 X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
 
-On Tue, Aug 11, 2026 at 7:02=E2=80=AFPM J=C3=A9r=C3=A9my Jean
-<Jeremy.Jean@oss.cyber.gouv.fr> wrote:
->
-> audit_del_rule() is used for both netlink deletion templates and internal
-> fsnotify autoremove.  The former passes a parsed template which owns a
-> temporary tree reference; the latter passes the installed entry itself.
->
-> The unconditional audit_put_tree() at the end of audit_del_rule() assumes
-> the template case.  For mixed AUDIT_DIR plus AUDIT_EXE rules, an fsnotify
-> autoremove event therefore drops the installed rule's live tree reference=
+On Wednesday, August 12, 2026 10:39:52=E2=80=AFAM Eastern Daylight Time Ric=
+ardo=20
+Robaina wrote:
+> On Tue, Jul 28, 2026 at 6:22=E2=80=AFPM Paul Moore <paul@paul-moore.com> =
+wrote:
+> > On Mon, Jul 13, 2026 at 1:00=E2=80=AFPM Ricardo Robaina <rrobaina@redha=
+t.com>=20
+wrote:
+> > > Modern mount tools (util-linux >=3D 2.39.1) use the new mount API
+> > > (fsopen, fsconfig, fsmount, move_mount) instead of the legacy mount(2=
+)
+> > > syscall. The generic SYSCALL audit record logs the move_mount syscall
+> > > but does not capture the flags argument, creating an audit gap for
+> > > mount relocation operations.
+> > >=20
+> > > Add a MOVE_MOUNT auxiliary record that logs the flags argument passed
+> > > to move_mount(2). Pathnames and file descriptors are captured through
+> > > existing PATH records and SYSCALL record arguments.
+> > >=20
+> > >  ----
+> > >  type=3DPATH : item=3D0 name=3D/mnt/test_src inode=3D1 dev=3D00:41 ..=
 .
-> Repeating this across rules sharing the same tree can free the tree while
-> another rule still references it, and a later autoremove dereferences the
-> freed pathname while comparing rules.
->
-> Move the temporary-tree put to audit_rule_change(), the caller that owns
-> deletion templates.  Keep it in the AUDIT_DEL_RULE cleanup so both
-> successful deletion and -ENOENT still release the parser-owned tree.
->
-> Fixes: 34d99af52ad4 ("audit: implement audit by executable")
-> Assisted-by: Codex:gpt-5
-> Signed-off-by: J=C3=A9r=C3=A9my Jean <Jeremy.Jean@oss.cyber.gouv.fr>
-> ---
->  kernel/auditfilter.c | 6 ++----
->  1 file changed, 2 insertions(+), 4 deletions(-)
->
-> diff --git a/kernel/auditfilter.c b/kernel/auditfilter.c
-> index 7f791afe5791..666c2091b9e4 100644
-> --- a/kernel/auditfilter.c
-> +++ b/kernel/auditfilter.c
-> @@ -1023,7 +1023,6 @@ static inline int audit_add_rule(struct audit_entry=
- *entry)
->  int audit_del_rule(struct audit_entry *entry)
->  {
->         struct audit_entry  *e;
-> -       struct audit_tree *tree =3D entry->rule.tree;
->         struct list_head *list;
->         int ret =3D 0;
->  #ifdef CONFIG_AUDITSYSCALL
-> @@ -1071,9 +1070,6 @@ int audit_del_rule(struct audit_entry *entry)
->  out:
->         mutex_unlock(&audit_filter_mutex);
->
-> -       if (tree)
-> -               audit_put_tree(tree);   /* that's the temporary one */
-> -
->         return ret;
->  }
->
-> @@ -1158,6 +1154,8 @@ int audit_rule_change(int type, int seq, void *data=
-, size_t datasz)
->         }
->
->         if (err || type =3D=3D AUDIT_DEL_RULE) {
-> +               if (type =3D=3D AUDIT_DEL_RULE && entry->rule.tree)
-> +                       audit_put_tree(entry->rule.tree); /* that's the t=
-emplate one */
->                 if (entry->rule.exe)
->                         audit_remove_mark(entry->rule.exe);
->                 audit_free_rule(entry);
-> --
-> 2.47.3
->
->
+> > >  type=3DSYSCALL : arch=3Dx86_64 syscall=3Dmove_mount ...
+> > >  type=3DMOVE_MOUNT : fs_flags=3D0x4
+> > >  ----
+> > >  type=3DPATH : item=3D0 name=3D/mnt/test_dst inode=3D27460862 dev=3Df=
+c:00 ...
+> > >  type=3DSYSCALL : arch=3Dx86_64 syscall=3Dmove_mount ...
+> > >  type=3DMOVE_MOUNT : fs_flags=3D0x4
+> > >=20
+> > > Link: https://github.com/linux-audit/audit-kernel/issues/152
+> > > Link: https://github.com/linux-audit/audit-kernel/issues/153
+> > > Signed-off-by: Ricardo Robaina <rrobaina@redhat.com>
+> > > ---
+> > >=20
+> > >  fs/namespace.c             |  3 +++
+> > >  include/linux/audit.h      | 10 ++++++++++
+> > >  include/uapi/linux/audit.h |  1 +
+> > >  kernel/auditsc.c           | 13 +++++++++++++
+> > >  4 files changed, 27 insertions(+)
+>=20
+> Thanks for reviewing this patch, Paul!
+>=20
+> > This is because we only log the first four syscall parameters,
+> > correct?  To put this another way, if we logged all six syscall
+> > parameters this wouldn't be an issue, yes?
+>=20
+> Yes, that's correct.
 
-Looks good to me. It passes the audit testsuite as well.
+I've been aiming to reply to this and lost the original...in the case of=20
+mmap, yes. If we had just 5 of the passed values, we would not need a=20
+supplemental record just to record the fd.
 
-# make test
-amcast_joinpart/test ................. ok
-backlog_wait_time_actual_reset/test .. ok
-bpf/test ............................. ok
-coredump/test ........................ ok
-exec_execve/test ..................... ok
-exec_name/test ....................... ok
-fanotify/test ........................ ok
-field_compare/test ................... ok
-file_create/test ..................... ok
-file_delete/test ..................... ok
-file_permission/test ................. ok
-file_rename/test ..................... ok
-filter_device/test ................... ok
-filter_exclude/test .................. ok
-filter_exit/test ..................... ok
-filter_inode/test .................... ok
-filter_saddr_fam/test ................ ok
-filter_sessionid/test ................ ok
-io_uring/test ........................ ok
-login_tty/test ....................... ok
-lost_reset/test ...................... ok
-netfilter_pkt/test ................... ok
-signal/test .......................... ok
-syscalls_file/test ................... ok
-syscall_module/test .................. ok
-syscall_socketcall/test .............. ok
-time_change/test ..................... ok
-user_msg/test ........................ ok
-All tests successful.
-Files=3D28, Tests=3D303, 107 wallclock secs ( 0.10 usr  0.02 sys + 31.68
-cusr  1.89 csys =3D 33.69 CPU)
-Result: PASS
+However, in many other syscalls, we only have pointers. Sometimes syscalls=
+=20
+are designed to pass a structure with config items where some are security=
+=20
+relevant. In those cases having all the args doesn't help and we still need=
+=20
+the supplemental record.
 
-Reviewed-by: Ricardo Robaina <rrobaina@redhat.com>
-Tested-by: Ricardo Robaina <rrobaina@redhat.com>
+-Steve
 
--Ricardo
+> > I'm aware of the argument for only logging the first four parameters,
+> > but I've always thought it was a rather foolish decision.  Perhaps now
+> > is the time to spend to investigate adding those two missing
+> > parameters to the SYSCALL record so we don't have to worry about hacky
+> > workarounds like this (to be clear, I know this hacky workaround isn't
+> > your fault, you are just trying to make the best of a kludgy thing
+> > <g>).
+>=20
+> I completely agree that's the right thing to do, and I'm happy to hear
+> that you'd be open to it.
+>=20
+> I did a quick check and there are 100+ syscalls (~18% of the total)
+> with more than 4 arguments
+>  --around 67 of which pass audit-relevant scalars (flags, sizes,
+> modes) in the 5th or 6th position
+> that are currently lost.
+>=20
+> I'll look into it. Please disregard this patch in the meantime.
+>=20
+> > --
+> > paul-moore.com
+>=20
+> -Ricardo
+
+
+
 
