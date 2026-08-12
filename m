@@ -1,158 +1,115 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mail.hallyn.com (mail.hallyn.com [178.63.66.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6639466B75
-	for <audit@vger.kernel.org>; Wed, 12 Aug 2026 14:40:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B2EC372B50;
+	Wed, 12 Aug 2026 15:05:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.63.66.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786545611; cv=none; b=TQNbEHdAvaJf0vGUCMJYxVhM0mCH2yAAHGyy4Ng82j2OGGZrTqDDG4Yxaxcw+NmXB6vkGXYQAUSGVu9m5VMNyhqim6Sl42bm5Nrc/Oc+v/7iyugJ9TtR6M7g3OB8q+zr3rZge5J1Ier7JRgRgDW3tQ+nd0g1NRWpv7JeVRmiXSw=
+	t=1786547117; cv=none; b=d6/VcLj1wjQNXv/2UXJSZJW5Vm+julT3ZriWAEy+j0vLkhHwMeaEZW/9R6NEQM/sXy98EYP86AegKgyvHrNOsd8QcJTU5ox6mXpFzu4/ePBHFlC7JIGu1nAM9w+dHBI0HiP+P1B3pYzfQGMG5yCMOZQcZ4KgLIrkCGAawaZo6t0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786545611; c=relaxed/simple;
-	bh=8CdK4aAIC7mcIHPIYzvtW/2HqSiJbn5alOoec8aFw74=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=VSGIYblB5P6oiHa2U9IlUe8ZjVo5l5KaRRaLVm20LcN1t5/kv63lGpIktl4jhh0rt7QixxoUjqKpgT/x7re1DbXmOcFriRueZA74t0pC/KMtizeRHOoKnEanY2/kojV3nDJw8OwVcsWetzHIliYXKNKOGwIgkBLfoOmmejzWLtc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=CBYHQp0N; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1786547117; c=relaxed/simple;
+	bh=NBrKaFEIxE5Z6Dx6ESMvW7CYI2E30pWd0pCH+p0OAr8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=bv6KKQHX1HVHl7EQY3L8u5siQ4JBF8N8uogi+bE0SpsRUM7aEHcqOebhHDvb4/vuhmpe32KpfmDH7QbR1F1Y2V1RyF33AOLQI9gmXTBhb1yRExXlEcIKyZQstwOiWgbhREqQ63I4zUwjihnbmNNm6/pqpeUBWqHjsEeOR+MG9z8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hallyn.com; spf=unknown smtp.mailfrom=mail.hallyn.com; dkim=pass (2048-bit key) header.d=hallyn.com header.i=@hallyn.com header.b=XvVWRqIc; arc=none smtp.client-ip=178.63.66.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hallyn.com
+Authentication-Results: smtp.subspace.kernel.org; spf=tempfail smtp.mailfrom=mail.hallyn.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="CBYHQp0N"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1786545606;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=VgQEXPTBEOAjmNXcUxzWeiUVVEpt0TAGVQPJcagJWa4=;
-	b=CBYHQp0NL36OpMxsWv3TPRSwLqDtX/nX/y9bSec8slG1Xqfn4NXkNhnRPbwlduMtFl07h4
-	aRDKpj+MqWgPaMUbJ0ZteVPIa4B7ecLXSuYhVs5qZrlsB2dhjReZVvHngIoK0Ei7Ybg0yw
-	//2KBCNON19CgAdcSt1YajePhsCK6x8=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-696-2_qCjRd5N4iiae1YIjf6aw-1; Wed, 12 Aug 2026 10:40:04 -0400
-X-MC-Unique: 2_qCjRd5N4iiae1YIjf6aw-1
-X-Mimecast-MFC-AGG-ID: 2_qCjRd5N4iiae1YIjf6aw_1786545604
-Received: by mail-ej1-f69.google.com with SMTP id a640c23a62f3a-c15e555a164so112024866b.1
-        for <audit@vger.kernel.org>; Wed, 12 Aug 2026 07:40:04 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786545603; x=1787150403;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=VgQEXPTBEOAjmNXcUxzWeiUVVEpt0TAGVQPJcagJWa4=;
-        b=lBoO5k+vAI8Uf43hIN7dc6ccAxrg9s651+YFcZSWP7WopVGqkdDBMV662OfQCjkcJS
-         HolWJnhMGdyHyesbBRERj8N7vk5IIQk37gXWe8V/3Zj/H/IsBxklvb/SyW0Vru+ydfsL
-         l4AOYCprgAObRedbbqO03JON34SVlQwlNCajclpqVqZAk4G2mWoKL5brSH2oHbsMaBSx
-         zVcWDgbJ+E+PW1qCJrL62Wbno0/KJ/+E1iRPT30aGwWbBaqU8alrPNqsnvGLNgdfZH+W
-         mALtGxBrDq/aUNHT9SzH15ODN6VcYgscg7KHb3SznIivzt0Kl92rjPkm0jOVQ6/u++z3
-         otSw==
-X-Gm-Message-State: AOJu0YxZ95+STfNCx/WSvekoAMwzLb4z+2bf+rqvDhnmILKyu11dhUVb
-	yK0eiX27mJG8dh14C3Hl8ATfTRQ3zBN3r7yBiv7trrvBaSwB3n8y8Jnsy1aNci3BnY1DLAJcxcy
-	aQPBBGYNhDLy9f/nvMu3d56rMEHD2lKcHvfgV3vLw8QOart9Ojc0OwufKXD9IP9NzQebqinnSng
-	hoIWOfe/5aaeztkB3gYH+pURWgV+0cC/Q=
-X-Gm-Gg: AR+sD13qwbG4PygteIUx9DmAPovnyOwmwO6KjWaqqFNmhj7Q1iEqbAlPIFX9rF8g+Yp
-	KwsT72lYMZC+aXT273xnkX4IKAAiVnYS0XRM4Kp1IrohMoV10VclANnS54UKieJjKFqiXmA0E4g
-	abYnb+1ZonU94rcYwLn+SJ3gAGpRmazLJ/UBDDlkQJ/HUjoF/rXn2KmBIDjHi36Na5YWJic9ZFb
-	BdWJYWs3auEQ6FSfOj8ZvPn3opOSySrP/ky6+trLwnk3ulYc7swibEnYZCoQLORaS/bgvtSCJ5e
-	V8Y=
-X-Received: by 2002:a17:907:d307:b0:c20:a243:9a52 with SMTP id a640c23a62f3a-c20f4ea80fcmr88400466b.0.1786545603493;
-        Wed, 12 Aug 2026 07:40:03 -0700 (PDT)
-X-Received: by 2002:a17:907:d307:b0:c20:a243:9a52 with SMTP id
- a640c23a62f3a-c20f4ea80fcmr88398566b.0.1786545603149; Wed, 12 Aug 2026
- 07:40:03 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=hallyn.com header.i=@hallyn.com header.b="XvVWRqIc"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=hallyn.com; s=mail;
+	t=1786546776; bh=NBrKaFEIxE5Z6Dx6ESMvW7CYI2E30pWd0pCH+p0OAr8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=XvVWRqIcVj4l+Hn25LZ7coTRxql9Rtobc3U5wAwcRR1IqqqqArLi0iRsfecPdkaAB
+	 d09zSdibBmakYiCqJc8O8smWI9awXM2guC5a5E0QJTJo/Mqes47gXVrBmiV2IbOxxM
+	 SD8me3GQTbcaXg+n+WRbA5jgBDNyILelFXbWSNocXzZWsrrINTikHNen+VGH+vZEfN
+	 wEH9I65iWPQbLIoTimsK83i7ESW2hsxCVSVKTt8nuw4r5r6z3TG6nG7ItrzdrT3fIR
+	 wBaDgK6hKoQe1ft61TBks5xZY5mGnqOXiZO2htAW07BaAS6L+uhouGIDjPgO0lIN+q
+	 k+rUNZpSLpYJQ==
+Received: by mail.hallyn.com (Postfix, from userid 1001)
+	id 1B51FCAB; Wed, 12 Aug 2026 09:59:35 -0500 (CDT)
+Date: Wed, 12 Aug 2026 09:59:35 -0500
+From: "Serge E. Hallyn" <serge@hallyn.com>
+To: Paul Moore <paul@paul-moore.com>
+Cc: Jann Horn <jannh@google.com>, Serge Hallyn <sergeh@kernel.org>,
+	Eric Paris <eparis@redhat.com>, James Morris <jmorris@namei.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>,
+	linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org,
+	audit@vger.kernel.org
+Subject: Re: [PATCH] cred: clarify that task_struct::cred is only for the
+ current task
+Message-ID: <anyKVxRCiWy/g0Cn@mail.hallyn.com>
+References: <20260806-cred-nonrcu-annotation-fix-v1-1-5fd149b2ab54@google.com>
+ <2bdf79f45c5eb2ea66d59904418081c5@paul-moore.com>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260713170035.4073532-1-rrobaina@redhat.com> <CAHC9VhTR-qaU-WFiuWZLfxhNisTtKXahLMHrH7-Ts5o09VMYcw@mail.gmail.com>
-In-Reply-To: <CAHC9VhTR-qaU-WFiuWZLfxhNisTtKXahLMHrH7-Ts5o09VMYcw@mail.gmail.com>
-From: Ricardo Robaina <rrobaina@redhat.com>
-Date: Wed, 12 Aug 2026 11:39:52 -0300
-X-Gm-Features: AUfX_mwnybZDq79vyvt9hciCVBXIFAsKZAAqavu-6vxhVBt7hiB0e3ibAcyYOVw
-Message-ID: <CAABTaaCTYuwXYcnY22YzN1G=Gs1=YKfNn8Efs2umOUWdnMQZwA@mail.gmail.com>
-Subject: Re: [PATCH] audit: add MOVE_MOUNT auxiliary record to log mount relocation
-To: Paul Moore <paul@paul-moore.com>
-Cc: audit@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, eparis@redhat.com, viro@zeniv.linux.org.uk, 
-	brauner@kernel.org, jack@suse.cz, sgrubb@redhat.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: wpcdT1g9b2iJJCoubBgEguC-SFnfyOr28HVTrSLykNo_1786545604
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2bdf79f45c5eb2ea66d59904418081c5@paul-moore.com>
 
-On Tue, Jul 28, 2026 at 6:22=E2=80=AFPM Paul Moore <paul@paul-moore.com> wr=
-ote:
->
-> On Mon, Jul 13, 2026 at 1:00=E2=80=AFPM Ricardo Robaina <rrobaina@redhat.=
-com> wrote:
-> >
-> > Modern mount tools (util-linux >=3D 2.39.1) use the new mount API
-> > (fsopen, fsconfig, fsmount, move_mount) instead of the legacy mount(2)
-> > syscall. The generic SYSCALL audit record logs the move_mount syscall
-> > but does not capture the flags argument, creating an audit gap for
-> > mount relocation operations.
-> >
-> > Add a MOVE_MOUNT auxiliary record that logs the flags argument passed
-> > to move_mount(2). Pathnames and file descriptors are captured through
-> > existing PATH records and SYSCALL record arguments.
-> >
-> >  ----
-> >  type=3DPATH : item=3D0 name=3D/mnt/test_src inode=3D1 dev=3D00:41 ...
-> >  type=3DSYSCALL : arch=3Dx86_64 syscall=3Dmove_mount ...
-> >  type=3DMOVE_MOUNT : fs_flags=3D0x4
-> >  ----
-> >  type=3DPATH : item=3D0 name=3D/mnt/test_dst inode=3D27460862 dev=3Dfc:=
-00 ...
-> >  type=3DSYSCALL : arch=3Dx86_64 syscall=3Dmove_mount ...
-> >  type=3DMOVE_MOUNT : fs_flags=3D0x4
-> >
-> > Link: https://github.com/linux-audit/audit-kernel/issues/152
-> > Link: https://github.com/linux-audit/audit-kernel/issues/153
-> > Signed-off-by: Ricardo Robaina <rrobaina@redhat.com>
+On Mon, Aug 10, 2026 at 03:41:54PM -0400, Paul Moore wrote:
+> On Aug  6, 2026 Jann Horn <jannh@google.com> wrote:
+> > 
+> > The `cred` field in task_struct is currently marked as __rcu, but that's
+> > not true: It can point to credentials from access_override_creds(), which
+> > do not get freed with RCU delay.
+> > 
+> > What actually protects task_struct::cred is that accessing it is only
+> > permitted for the current task (except for setting up a child during fork()
+> > or tearing down a dead process).
+> > (There is currently code in Smack that violates this rule, but that's a bug
+> > and causes UAF, I have sent a separate fix for that.)
+> > 
+> > Clarify this, remove the __rcu marker, and remove RCU helpers from all
+> > accesses to this field.
+> > 
+> > Signed-off-by: Jann Horn <jannh@google.com>
 > > ---
-> >  fs/namespace.c             |  3 +++
-> >  include/linux/audit.h      | 10 ++++++++++
-> >  include/uapi/linux/audit.h |  1 +
-> >  kernel/auditsc.c           | 13 +++++++++++++
-> >  4 files changed, 27 insertions(+)
->
+> > For context:
+> > There have been at least two UAFs of struct cred that I'm aware of, both
+> > caused by wrong use of task_struct::cred:
+> > 
+> >  - https://git.kernel.org/linus/a3727a8bac0a9e77c70820655fd8715523ba3db7
+> >  - https://lore.kernel.org/all/20260806-smack-uaf-fix-v1-1-26426d389a26@google.com/
+> > ---
+> >  include/linux/cred.h  | 17 +++++++++++------
+> >  include/linux/sched.h |  8 ++++++--
+> >  kernel/auditsc.c      |  5 +++--
+> >  kernel/cred.c         |  2 +-
+> >  security/lsm_init.c   |  2 +-
+> >  5 files changed, 22 insertions(+), 12 deletions(-)
+> 
+> This looks good to me, with one small nit below, but as we are at -rc7
+> I think this is best kept until after the upcoming merge window so it
+> has more than a few days in linux-next.  I'm going to merge this into
+> lsm/dev-staging with the expectation of merging it into lsm/dev after
+> the upcoming merge window closes.  If anyone wishes to object to this
+> patch or add their own review/ACK/test tag before then, please do.
+> 
+> Thanks Jann.
+> 
 
-Thanks for reviewing this patch, Paul!
+Thanks.  FWIW I did also look at this closely.
 
-> This is because we only log the first four syscall parameters,
-> correct?  To put this another way, if we logged all six syscall
-> parameters this wouldn't be an issue, yes?
+Reviewed-by: Serge Hallyn <serge@hallyn.com>
 
-Yes, that's correct.
-
->
-> I'm aware of the argument for only logging the first four parameters,
-> but I've always thought it was a rather foolish decision.  Perhaps now
-> is the time to spend to investigate adding those two missing
-> parameters to the SYSCALL record so we don't have to worry about hacky
-> workarounds like this (to be clear, I know this hacky workaround isn't
-> your fault, you are just trying to make the best of a kludgy thing
-> <g>).
-
-I completely agree that's the right thing to do, and I'm happy to hear
-that you'd be open to it.
-
-I did a quick check and there are 100+ syscalls (~18% of the total)
-with more than 4 arguments
- --around 67 of which pass audit-relevant scalars (flags, sizes,
-modes) in the 5th or 6th position
-that are currently lost.
-
-I'll look into it. Please disregard this patch in the meantime.
-
->
+> > diff --git a/security/lsm_init.c b/security/lsm_init.c
+> > index 7c0fd17f1601..1328a2ceef4b 100644
+> > --- a/security/lsm_init.c
+> > +++ b/security/lsm_init.c
+> > @@ -476,7 +476,7 @@ int __init security_init(void)
+> >  						    blob_sizes.lbs_inode, 0,
+> >  						    SLAB_PANIC, NULL);
+> >  
+> > -	if (lsm_cred_alloc((struct cred *)unrcu_pointer(current->cred),
+> > +	if (lsm_cred_alloc((struct cred *)current->cred,
+> >  			   GFP_KERNEL))
+> 
+> Just a FYI, but I pulled the GFP_KERNEL up on the line above while
+> merging since it now fits.
+> 
 > --
 > paul-moore.com
->
-
--Ricardo
-
