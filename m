@@ -1,112 +1,132 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 742EF4ADD91;
-	Thu, 13 Aug 2026 17:26:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFE583E1D1D
+	for <audit@vger.kernel.org>; Thu, 13 Aug 2026 17:58:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786642011; cv=none; b=mKG+izfhU4/46Ot66PUT0bKpVaPekjXXVRQUg0TxSjyx0zQa+f4zLWmZlW3KP1rXyuOpavyeKWK3eu1DmHQqg1JnX47WAQbQZC30RW+zFQNQwyH2YkE0mC265/UlYls/YVRWV+m61b2gAfqU7HWve/SQ2iSLTu79nELpzkg75Bk=
+	t=1786643888; cv=none; b=QKt2EmqMXCYnHp6TXXfYhQOgWbBgz1Pjw7iMdEuXNJte58MZuCDKXaqCuuGassKKENx9XRlvz0xjot/0kVT/OYD5Jm4PQ8Ss0JnhcR6fRsjNP3oDFm161SPciAQ25xdLgWEDTwaQqavGHnLPXU3xe1MdQYFwFA469FiOicv8zcc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786642011; c=relaxed/simple;
-	bh=IFnZi3g8BMI0vxyWIK2VtTAeelD3MMtSt71w8dZGZp4=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=k662hgpcu5AYo2VNqUGJvJvgI53kP7R7yF+amByv1PRsSPEIu2rmte92O1+Ew/ylLHqhsH7+O4iYinqH6Gh+KU5/YUAJoJ6jJhGrwN5UOUnVGl9GurXlODogAc7NAfzfJtE/KfGaxjPIsij9+GKg0FiS/F5CLe64XSNxW8FAkOA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AosNgLk7; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786643888; c=relaxed/simple;
+	bh=TyKtUql8/UMqDIvuNXPwCFvRWEM9LL83DrHVkXw9tQk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 In-Reply-To:Content-Type:Content-Disposition; b=i8bi5L44t7fzObHukC4H8JmSMBTQey7pjoyNEZLMZ8JkkAwTaEmX3dAPtGCwemtDzyfXeNpS9Avc21f1JCxpofEnTRDu1QJIg40rApnCYzusmIY3TxueGu0Bk/ScLQ1hgPVIGLmKuKxd9UXSPodeWyQ1cg8gXM5Jxi50IzDPKfQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=QVGSep/D; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AosNgLk7"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1476F1F00A3A;
-	Thu, 13 Aug 2026 17:26:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786642006;
-	bh=haMCmZyb05K8mwuVv41pjeqoLQGPRwynnCkuEihX5yY=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=AosNgLk76jpjvZ8DCWBbiBPXvFPc/wGBpunJdwRYUCpnU6ZSO4GA5qA7/MdERIwEz
-	 OybX4uPQf5wRhLvlFnH8/NMJIUNu0SSkOKSm46MynsKW+Du3ohf4jeKJRN4SBPvKVB
-	 ZJ9Oudiv+Z2Gnrt/Rd4bQvjAPl6VIgpqUokuGtUW8zA7WdLG9hHLzJAfKesRgZBvbr
-	 XfT/qQGyag8n+m8ajHv0f2WhQn6mZDhi1ISfkEw0BFBtISEnPIMu5J503fVAAngc9f
-	 YNJTYWbb+LhzhA6ovFWG+6ViF49nBaMAZ3n8Gi+axThGwOL9/Ig1TanTBY85rUf/1F
-	 e/j4rwj12quuw==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 11/13] sparc64: pass all six syscall args to
- audit_syscall_entry()
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Ricardo Robaina" <rrobaina@redhat.com>
-Cc: bpf@vger.kernel.org, audit@vger.kernel.org
-In-Reply-To: <fc2810a850a8bf343b7ad7ae9caf3da57e1f41ec.1786626275.git.rrobaina@redhat.com>
-References: <cover.1786626275.git.rrobaina@redhat.com>
- <fc2810a850a8bf343b7ad7ae9caf3da57e1f41ec.1786626275.git.rrobaina@redhat.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 13 Aug 2026 17:26:45 +0000
-Message-Id: <20260813172646.1476F1F00A3A@smtp.kernel.org>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="QVGSep/D"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1786643876;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=OukkhkVorBxthESNUlOuVMe4JLx+OvknbdAjxQDfoCo=;
+	b=QVGSep/DCWKtAO/DqHeHCmaqh4aWg1GTyftKx6yRDuiDgvIzdshOoSXM2xACH1UIe4w9KO
+	IuJSt/ZV5XmyH+r4lPRKx2d176cqwG6qqlZ9l2PX0Clz28O+0nzJU7H5yefEkHrawnG4jW
+	FHVbi7luNszyZWvgh7xpjrKstvnA58A=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-589-LcEgHWJwMwyEu-ZNJlzpMQ-1; Thu,
+ 13 Aug 2026 13:57:43 -0400
+X-MC-Unique: LcEgHWJwMwyEu-ZNJlzpMQ-1
+X-Mimecast-MFC-AGG-ID: LcEgHWJwMwyEu-ZNJlzpMQ_1786643862
+Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 8372E195609D;
+	Thu, 13 Aug 2026 17:57:41 +0000 (UTC)
+Received: from madcap2.tricolour.ca (unknown [10.22.74.4])
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 8C939180049F;
+	Thu, 13 Aug 2026 17:57:38 +0000 (UTC)
+Date: Thu, 13 Aug 2026 13:57:36 -0400
+From: Richard Guy Briggs <rgb@redhat.com>
+To: Ricardo Robaina <rrobaina@redhat.com>
+Cc: Linux-Audit Mailing List <linux-audit@lists.linux-audit.osci.io>,
+	LKML <linux-kernel@vger.kernel.org>, linux-fsdevel@vger.kernel.org,
+	Linux Kernel Audit Mailing List <audit@vger.kernel.org>,
+	Paul Moore <paul@paul-moore.com>,
+	Eric Paris <eparis@parisplace.org>, Steve Grubb <sgrubb@redhat.com>,
+	Roman Dolgikh <rmd4work@mail.ru>
+Subject: Re: [PATCH v2] audit: free proctitle in context so it can be re-set
+ by fork on exec_binprm
+Message-ID: <an4FkMk27Wxo2PuS@madcap2.tricolour.ca>
+References: <c8581fcfb66e5cfb2e6e9b0e95f9b356b2245b7b.1785261601.git.rgb@redhat.com>
+ <CAABTaaAR4O188N6wazEuqMMUmMyWFxr2oX0WhyS7Hw_CauuC0Q@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+In-Reply-To: <CAABTaaAR4O188N6wazEuqMMUmMyWFxr2oX0WhyS7Hw_CauuC0Q@mail.gmail.com>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
+X-Mimecast-MFC-PROC-ID: VWfpCSkBlFYZT4oduzG53mOc77KaV_zTj37qHOtd0K8_1786643862
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
+On 2026-08-07 09:25, Ricardo Robaina wrote:
+> On Thu, Aug 6, 2026 at 6:17 PM Richard Guy Briggs <rgb@redhat.com> wrote:
+> >
+> > Between the actual process startup (fork systemd) and the executable file
+> > replacement (exec), systemd sets a temporary file name (executable file
+> > name in parentheses). If an auditable system call occurs at this point,
+> > the audit context will latch the temporary process name into the cache.
+> > This name will not change again. The patch clears proctitle into the
+> > audit cache when the exec call is made, allowing the new process name to
+> > be latched.
+> >
+> > Suggested-by: Roman Dolgikh <rmd4work@mail.ru>
+> > Link: https://github.com/user-attachments/files/20751461/fix_audit_proctitle.txt
+> > Link: https://github.com/linux-audit/audit-kernel/issues/170
+> > Signed-off-by: Richard Guy Briggs <rgb@redhat.com>
+> > ---
+> > Changelog:
+> > v2: simplified to call single use directly before need in audit_bimprm
+> > ---
+> >  kernel/auditsc.c | 2 ++
+> >  1 file changed, 2 insertions(+)
+> >
+> > diff --git a/kernel/auditsc.c b/kernel/auditsc.c
+> > index 6610e667c728..c12b5dfcb279 100644
+> > --- a/kernel/auditsc.c
+> > +++ b/kernel/auditsc.c
+> > @@ -2601,6 +2601,8 @@ void __audit_bprm(struct linux_binprm *bprm)
+> >  {
+> >         struct audit_context *context = audit_context();
+> >
+> > +       /* clear proctitle in audit context to allow replacement */
+> > +       audit_proctitle_free(audit_context());
+> 
+> Since we already got the context right above, it would probably be
+> better to use the context var instead to avoid calling audit_context()
+> again.
 
-Pre-existing issues:
-- [High] 32-bit compat syscall arguments are not zero-extended before being=
- passed to audit_syscall_entry(), leading to a high-severity audit evasion =
-vulnerability for socketcall multiplexed syscalls.
+Yup, right you are.  Silly oversight.
+
+> Otherwise looks good to me.
+> 
+> Reviewed-by: Ricardo Robaina <rrobaina@redhat.com>
+> 
+> >         context->type = AUDIT_EXECVE;
+> >         context->execve.argc = bprm->argc;
+> >  }
+> > --
+> > 2.43.5
+> 
+> -Ricardo
+
+- RGB
+
 --
+Richard Guy Briggs <rgb@redhat.com>
+Sr. S/W Engineer, Kernel Security, Base Operating Systems
+Remote, Ottawa, Red Hat Canada
+Upstream IRC: SunRaycer
+Voice: +1.613.860 2354 SMS: +1.613.518.6570
 
---- Patch [11]: [PATCH 11/13] sparc64: pass all six syscall args to audit_s=
-yscall_entry() ---
-commit 5c60aff4dd1af29adf66c85f200b0a80fe2238fb
-Author: Ricardo Robaina <rrobaina@redhat.com>
-
-sparc64: pass all six syscall args to audit_syscall_entry()
-
-This commit updates syscall_trace_enter() to forward the 5th and 6th syscall
-arguments (UREG_I4, UREG_I5) to audit_syscall_entry(). This change ensures
-all six arguments are passed, aligning with the audit core's expectations.
-
-> diff --git a/arch/sparc/kernel/ptrace_64.c b/arch/sparc/kernel/ptrace_64.c
-> index 9fc67fa9336fe..d0ad3200d789c 100644
-> --- a/arch/sparc/kernel/ptrace_64.c
-> +++ b/arch/sparc/kernel/ptrace_64.c
-> @@ -1100,7 +1100,8 @@ asmlinkage int syscall_trace_enter(struct pt_regs *=
-regs)
-> =20
->  	audit_syscall_entry(regs->u_regs[UREG_G1], regs->u_regs[UREG_I0],
->  			    regs->u_regs[UREG_I1], regs->u_regs[UREG_I2],
-> -			    regs->u_regs[UREG_I3]);
-> +			    regs->u_regs[UREG_I3], regs->u_regs[UREG_I4],
-> +			    regs->u_regs[UREG_I5]);
-
-[Severity: High]
-This isn't a bug introduced by this patch, but is it possible for a 32-bit
-compat process to evade audit rules because these arguments are not
-zero-extended?
-
-For a 32-bit process executing a multiplexed system call like socketcall,
-an attacker could intentionally leave non-zero garbage in the upper 32 bits=
- of
-the registers.=20
-
-Because syscall_trace_enter() passes the raw 64-bit values directly from
-regs->u_regs without zero-extending them, the audit subsystem stores the fu=
-ll
-64-bit value. When the audit core later evaluates rules (e.g., checking
-ctx->argv[0] =3D=3D SYS_BIND), the comparison fails due to the upper 32-bit
-garbage, bypassing the rule.
-
-Since the SPARC64 assembly later zero-extends the arguments before invoking=
- the
-actual compat syscall handler, the syscall succeeds without being properly
-audited.
-
-Could we zero-extend these register values for 32-bit compat tasks before
-passing them to audit_syscall_entry() to prevent this bypass?
-
-> =20
->  	return ret;
->  }
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/cover.1786626275.gi=
-t.rrobaina@redhat.com?part=3D11
