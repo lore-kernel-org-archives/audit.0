@@ -1,117 +1,188 @@
-Received: from mail-qk1-f181.google.com (mail-qk1-f181.google.com [209.85.222.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B8DC29D26E
-	for <audit@vger.kernel.org>; Wed, 12 Aug 2026 20:46:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B10B147F2DE
+	for <audit@vger.kernel.org>; Thu, 13 Aug 2026 17:03:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786567618; cv=none; b=LUcVK0ijJYihjuwElWFLrR2UvlwC3JR/qg8mRpZx+ksRBz57AqOOtUXX+v6xxfisqIqKuhg7jM+bY+DNV7C1ItjMBLJxJyk75ZvnunjU3/wSPfkRxpk1ZD/OVvg+VyAky9/YkMExjnmIpN9UCmD723h1/3LF7rroKYry/YUJYPg=
+	t=1786640631; cv=none; b=dRfXiWQzMMsTX2zse3CaFot1SAq7KIqve8cfCEsTK3nJWT0BVVQP1Wf/8//tA7WHnt9fb05HxbN/k8ur5++37GWRF9RE66Xs6n6IKglSR5o7tsKQ4NY4ROuKFu9SVO2/GQB8ST55+Hii0QYu4K7Ooqiop/WFXCPTIyzEwkhiKCg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786567618; c=relaxed/simple;
-	bh=4I/32K7J6mxO5dI6LSD3V4ov9JkZ/eYl//UrtEaxHF8=;
-	h=Date:Message-ID:MIME-Version:Content-Type:From:To:Cc:Subject:
-	 References:In-Reply-To; b=rzPLPgaStoNsOIcQME0q1Ep2mxPMAxfHjpspj0544RFET7e/LcPDt5FpzwFwyZJIf0nHhdnkb0NZlCexG6MpUW+X8Ep9Z1iHSGSqc30/Mc5sQSdBW9OKGYwVvWCUH3S5bNCNjt/JbYmLqVr8DVmGDHOoEPnRpxMEe/rHyG5EJk4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=ZzPDPIbA; arc=none smtp.client-ip=209.85.222.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+	s=arc-20240116; t=1786640631; c=relaxed/simple;
+	bh=Zr8IxGjQEdNZwO/mw1hkjoIxGZXeTN3xUTUKhHhEOyo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:content-type; b=Eth0m6cBUcg3ST1oYyuaztGZ4xrQgiC47T/c0R7ncxtv1Rn7DlmNUde0rjhVubLERRhZ75zoJyHvXT2E8x903EcDX0sjRFB3wtfTLG2/+y2QJhh/indOcfOb61SrHv9eeY2cS4UvSSekXsNGjkpk4HqLcj7F/DBl2Y+oMkEiM+0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=VJqKWVWM; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="ZzPDPIbA"
-Received: by mail-qk1-f181.google.com with SMTP id af79cd13be357-92e6c4a867cso96198885a.0
-        for <audit@vger.kernel.org>; Wed, 12 Aug 2026 13:46:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1786567615; x=1787172415; darn=vger.kernel.org;
-        h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
-         :content-type:mime-version:message-id:date:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=TRATdCyioF/pQhvH8lNkn9inChCQPeW2cLYdQioNcfM=;
-        b=ZzPDPIbA1Wmp7ip52/urB7EBnboCiYx09XVmLk1OpKYWRf1/q7ZwHhwt9DxPO5KXJH
-         OTWxP9/1sqJ/tWiEUKfby8XjYFd03MAMZyw9LOROGlzhqTwmxmztXkIp/4nVHWd/SDH5
-         W5CPyFdLLjL6VQRqk1I4LsVlFt96Ud3le7lXqC/ktQmcZ4MmfTHdPy2TemyJYq4/lg4a
-         1Rquo1WcraWWGJRixaTsEj/V5n3ic1LXhrSyWUep4Py1RC/79+BDu3eg+vu78R2+BrNz
-         ImE9Y2keX8e0NFVXb6dWf2jQ9W4su5X/wTW7KWxIrwi5b7Dzw//yOM+ozNDRYuKx/Vr2
-         Pfig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786567615; x=1787172415;
-        h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
-         :content-type:mime-version:message-id:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=TRATdCyioF/pQhvH8lNkn9inChCQPeW2cLYdQioNcfM=;
-        b=qCZ7He35Lfaf3HXUZJSxfLUEBDAmt7KwLiujoo5lfIBu8i7FAEJdNLR1ivwmWxltrp
-         B1a1dlygTWcbrt0Vx82HG6yfB/Bfpib0n2EaK/Vz7yh6wM3xXDBLhCIFkiuP54NQ9Qod
-         YTqpkqK9sssi0WxgCVCYeG0yfiPef7VFAng9xfUk36Urq7LAIIizDPkDPX7gkKZyIGZH
-         BavXvLFeBqeJ2lRp48RNJEQwlgBcqXMDvxKMFiSCXyF3tPDzWSepMCe43QkR7lHGgWOA
-         2tU4XD9MWalpt1F6OW7FEzisEVqzDNTc4LrfdyD960ShW33La+kANf5TQLbZn1sQzdAQ
-         UyzA==
-X-Forwarded-Encrypted: i=1; AHgh+Rp3NpPeACg9Mb4zFjZe5B/cgJ6VzLJi0kxpqiqGPP41TWR5+TJ3Itjr+pMXGgwH+B2qEyk8xw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzcHbLJhP1Rv17Bq3VsYzE5Ez270m8E/oB/6NhzvYSvYmdgAQOi
-	nkfOeuUB1/Pv4fEyIrTuGeKBSbXg0UvPEbJyrR84x+C3E8QR9+G0RubST7TDmZz4vw==
-X-Gm-Gg: AR+sD12eAYcV323sl5Zr7XWTQQxKfmWqZzqJzsS7AOME/1vDDXiAyeC2SdY4pcInJUk
-	/xHOD0oSQ40cTrbVgzOa5e7UE0zmPPo6JLXMjdAHVW7t7I2a1gX5btTMBfafhpm7OOrvW76+mCJ
-	EOkwqsUtWEVZcpmf2+vue9h4qR8gOCf0PCq0QpKvqhdiSLprUtr5N1YKKuNk+dVYxTorSKrO0tG
-	cy96v/zYpqtZMbKnjHmPKued6PbTQG8XbKXVr1iJ2lg/5fjjA/4dZ+aNd12+fuYUHuKt+jopGvV
-	Jg6IqG7ev0odUlIU40asnYNdTiT/lByOCSfAJJovH38L3kzVDdE/kt3ldZRbFKTQWF7n8PxzoZ7
-	pA0ORdk5DAsp4oXnQqcQHn9sciZUNcyTmRcAO+2PSMxwYvMGqpfQsxmZ+tp2S8I5lt51hnoEAox
-	aOV5rwisrN95XmSll3cDP1G4ONpOLYa7FV1Kn1QVbJe5ua62531tJ/aDABa9wpWraCwxSyfwY+f
-	a5kD/hoIbM9q9dUOFghP0EV7JccfzLY8w==
-X-Received: by 2002:a05:620a:3901:b0:936:883f:e994 with SMTP id af79cd13be357-936bf9fe198mr93596185a.20.1786567615310;
-        Wed, 12 Aug 2026 13:46:55 -0700 (PDT)
-Received: from localhost (pool-71-126-255-178.bstnma.fios.verizon.net. [71.126.255.178])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-936b5dd3f5fsm213705785a.8.2026.08.12.13.46.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Aug 2026 13:46:54 -0700 (PDT)
-Date: Wed, 12 Aug 2026 16:46:53 -0400
-Message-ID: <ab0a41e0c2a549f8d684706c02b671c1@paul-moore.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="VJqKWVWM"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1786640628;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=o+r4ruNkApE26fuyn6KtkFW0QuXubfwA1Uwqu5ezEYw=;
+	b=VJqKWVWMOltllUJPwESLOLKqv5GlNiPFOA6EgO7MyclzuUNEoV4LwUw6uGyZPF4yn/TmLW
+	lKxOckaJgAf1Kbf0fACIgyDao8dgKL04v820f5miFDejUe7SR5PgVxSaAKVPXhOHRXscjV
+	iRAW1G1Dmkfm5Bjn3KYwIf4sZk2DcWo=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-551-3v5IuKYOPO-SU8jOK2nwmw-1; Thu,
+ 13 Aug 2026 13:03:46 -0400
+X-MC-Unique: 3v5IuKYOPO-SU8jOK2nwmw-1
+X-Mimecast-MFC-AGG-ID: 3v5IuKYOPO-SU8jOK2nwmw_1786640620
+Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 63C311800650;
+	Thu, 13 Aug 2026 17:03:36 +0000 (UTC)
+Received: from wsxc.redhat.com (unknown [10.96.134.24])
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 6F76A195608A;
+	Thu, 13 Aug 2026 17:03:19 +0000 (UTC)
+From: Ricardo Robaina <rrobaina@redhat.com>
+To: audit@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-alpha@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-csky@vger.kernel.org,
+	linux-mips@vger.kernel.org,
+	linux-openrisc@vger.kernel.org,
+	linux-parisc@vger.kernel.org,
+	linux-sh@vger.kernel.org,
+	sparclinux@vger.kernel.org,
+	linux-um@lists.infradead.org,
+	bpf@vger.kernel.org
+Cc: paul@paul-moore.com,
+	eparis@redhat.com,
+	sgrubb@redhat.com,
+	oleg@redhat.com,
+	richard.henderson@linaro.org,
+	mattst88@gmail.com,
+	linmag7@gmail.com,
+	linux@armlinux.org.uk,
+	catalin.marinas@arm.com,
+	will@kernel.org,
+	guoren@kernel.org,
+	monstr@monstr.eu,
+	tsbogend@alpha.franken.de,
+	jonas@southpole.se,
+	stefan.kristiansson@saunalahti.fi,
+	shorne@gmail.com,
+	James.Bottomley@HansenPartnership.com,
+	deller@gmx.de,
+	ysato@users.sourceforge.jp,
+	dalias@libc.org,
+	glaubitz@physik.fu-berlin.de,
+	davem@davemloft.net,
+	andreas@gaisler.com,
+	richard@nod.at,
+	anton.ivanov@cambridgegreys.com,
+	johannes@sipsolutions.net,
+	chris@zankel.net,
+	jcmvbkbc@gmail.com,
+	tglx@kernel.org,
+	peterz@infradead.org,
+	luto@kernel.org,
+	Ricardo Robaina <rrobaina@redhat.com>
+Subject: [PATCH 00/13] audit: log all six syscall arguments in the SYSCALL record
+Date: Thu, 13 Aug 2026 14:02:50 -0300
+Message-ID: <cover.1786626275.git.rrobaina@redhat.com>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 
-Content-Type: text/plain; charset=UTF-8 
-Content-Transfer-Encoding: 8bit 
-X-Mailer: pstg-pwork:20260812_1638/pstg-lib:20260812_1616/pstg-pwork:20260812_1638
-From: Paul Moore <paul@paul-moore.com>
-To: =?UTF-8?q?J=C3=A9r=C3=A9my=20Jean?= <Jeremy.Jean@oss.cyber.gouv.fr>, audit@vger.kernel.org
-Cc: Eric Paris <eparis@redhat.com>, linux-kernel@vger.kernel.org, =?UTF-8?q?J=C3=A9r=C3=A9my=20Jean?= <Jeremy.Jean@oss.cyber.gouv.fr>
-Subject: Re: [PATCH] audit: avoid dropping live tree ref on fsnotify rule  autoremove
-References: <20260811220128.275783-1-Jeremy.Jean@oss.cyber.gouv.fr>
-In-Reply-To: <20260811220128.275783-1-Jeremy.Jean@oss.cyber.gouv.fr>
+MIME-Version: 1.0
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
+X-Mimecast-MFC-PROC-ID: jts9xlJ_MnDrkpASsC_CM8vGO5_dje-Ad4wS3I3Ly4g_1786640620
+X-Mimecast-Originator: redhat.com
+Content-Transfer-Encoding: 8bit
+content-type: text/plain; charset="US-ASCII"; x-default=true
 
-On Aug 11, 2026 =?UTF-8?q?J=C3=A9r=C3=A9my=20Jean?= <Jeremy.Jean@oss.cyber.gouv.fr> wrote:
-> 
-> audit_del_rule() is used for both netlink deletion templates and internal
-> fsnotify autoremove.  The former passes a parsed template which owns a
-> temporary tree reference; the latter passes the installed entry itself.
-> 
-> The unconditional audit_put_tree() at the end of audit_del_rule() assumes
-> the template case.  For mixed AUDIT_DIR plus AUDIT_EXE rules, an fsnotify
-> autoremove event therefore drops the installed rule's live tree reference.
-> Repeating this across rules sharing the same tree can free the tree while
-> another rule still references it, and a later autoremove dereferences the
-> freed pathname while comparing rules.
-> 
-> Move the temporary-tree put to audit_rule_change(), the caller that owns
-> deletion templates.  Keep it in the AUDIT_DEL_RULE cleanup so both
-> successful deletion and -ENOENT still release the parser-owned tree.
-> 
-> Fixes: 34d99af52ad4 ("audit: implement audit by executable")
-> Assisted-by: Codex:gpt-5
-> Signed-off-by: Jérémy Jean <Jeremy.Jean@oss.cyber.gouv.fr>
-> Reviewed-by: Ricardo Robaina <rrobaina@redhat.com>
-> Tested-by: Ricardo Robaina <rrobaina@redhat.com>
-> ---
->  kernel/auditfilter.c | 6 ++----
->  1 file changed, 2 insertions(+), 4 deletions(-)
+The SYSCALL record currently logs only four of the six syscall
+arguments (a0-a3), silently discarding the remaining two. This
+leads to the need for auxiliary records when audit-relevant
+data lands in the 5th or 6th argument of a syscall.
 
-Thanks for finding this and submitting a fix!
+This series extends the SYSCALL record to log all six arguments,
+by adding arguments a4 and a5 inline within the existing record.
 
-This looks good to me too, so I'm going to merge this, but instead of the
-normal audit/stable-7.2 branch, I'm going to merge this into the audit/dev
-branch since we are likely only a few days away from a v7.2 release and I
-think it would be good to get some additional testing.  I am going to tag
-this commit with a stable tag so it will/should get backported once it
-lands in Linus' tree.
+The audit testsuite runs successfully:
 
---
-paul-moore.com
+ # make test
+ make -C tests test
+ chmod +x */test
+ Running as   user    root
+        with context unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023
+        on   system  Fedora
+
+ amcast_joinpart/test ................. ok   
+ backlog_wait_time_actual_reset/test .. ok   
+ bpf/test ............................. ok   
+ coredump/test ........................ ok   
+ exec_execve/test ..................... ok   
+ exec_name/test ....................... ok     
+ fanotify/test ........................ ok   
+ field_compare/test ................... ok     
+ file_create/test ..................... ok   
+ file_delete/test ..................... ok   
+ file_permission/test ................. ok   
+ file_rename/test ..................... ok   
+ filter_device/test ................... ok     
+ filter_exclude/test .................. ok     
+ filter_exit/test ..................... ok   
+ filter_inode/test .................... ok   
+ filter_saddr_fam/test ................ ok   
+ filter_sessionid/test ................ ok   
+ io_uring/test ........................ ok   
+ login_tty/test ....................... ok   
+ lost_reset/test ...................... ok   
+ netfilter_pkt/test ................... ok     
+ signal/test .......................... ok   
+ syscalls_file/test ................... ok   
+ syscall_module/test .................. ok   
+ syscall_socketcall/test .............. ok   
+ time_change/test ..................... ok     
+ user_msg/test ........................ ok   
+ All tests successful.
+ Result: PASS
+
+Ricardo Robaina (13):
+  audit: log all six syscall arguments in the SYSCALL record
+  alpha: pass all six syscall args to audit_syscall_entry()
+  arm: pass all six syscall args to audit_syscall_entry()
+  arm64: pass all six syscall args to audit_syscall_entry()
+  csky: pass all six syscall args to audit_syscall_entry()
+  microblaze: pass all six syscall args to audit_syscall_entry()
+  mips: pass all six syscall args to audit_syscall_entry()
+  openrisc: pass all six syscall args to audit_syscall_entry()
+  parisc: pass all six syscall args to audit_syscall_entry()
+  sh: pass all six syscall args to audit_syscall_entry()
+  sparc64: pass all six syscall args to audit_syscall_entry()
+  um: pass all six syscall args to audit_syscall_entry()
+  xtensa: pass all six syscall args to audit_syscall_entry()
+
+ arch/alpha/kernel/ptrace.c      |  3 ++-
+ arch/arm/kernel/ptrace.c        |  2 +-
+ arch/arm64/kernel/ptrace.c      |  3 ++-
+ arch/csky/kernel/ptrace.c       |  3 ++-
+ arch/microblaze/kernel/ptrace.c |  3 ++-
+ arch/mips/kernel/ptrace.c       | 11 ++++++++---
+ arch/openrisc/kernel/ptrace.c   |  3 ++-
+ arch/parisc/kernel/ptrace.c     |  7 +++++--
+ arch/sh/kernel/ptrace_32.c      |  3 ++-
+ arch/sparc/kernel/ptrace_64.c   |  3 ++-
+ arch/um/kernel/ptrace.c         |  4 +++-
+ arch/xtensa/kernel/ptrace.c     |  3 ++-
+ include/linux/audit.h           | 11 +++++++----
+ include/linux/entry-common.h    |  3 ++-
+ include/uapi/linux/audit.h      |  2 ++
+ kernel/audit.h                  |  2 +-
+ kernel/auditfilter.c            |  2 ++
+ kernel/auditsc.c                | 31 ++++++++++++++++++++-----------
+ 18 files changed, 67 insertions(+), 32 deletions(-)
+
+-- 
+2.55.0
+
