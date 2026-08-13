@@ -1,125 +1,133 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFE583E1D1D
-	for <audit@vger.kernel.org>; Thu, 13 Aug 2026 17:58:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CB223F3282
+	for <audit@vger.kernel.org>; Thu, 13 Aug 2026 18:38:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786643888; cv=none; b=QKt2EmqMXCYnHp6TXXfYhQOgWbBgz1Pjw7iMdEuXNJte58MZuCDKXaqCuuGassKKENx9XRlvz0xjot/0kVT/OYD5Jm4PQ8Ss0JnhcR6fRsjNP3oDFm161SPciAQ25xdLgWEDTwaQqavGHnLPXU3xe1MdQYFwFA469FiOicv8zcc=
+	t=1786646299; cv=none; b=V3vQu8mT9vClzyGRHG5XjE9AJ5ryVdxE1NfD2PvOSTwR1KQGW6x8bqpLEU6QyGcHpgezB8C0oviCJkW1LItFFdg7mxK80OKfR68yhoLXnEU5STI+3uMU8MHrQ0TwplNNB0maRHQfNf1PV+eQXcSoNrorULFxdDEnU4+/FtpxITs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786643888; c=relaxed/simple;
-	bh=TyKtUql8/UMqDIvuNXPwCFvRWEM9LL83DrHVkXw9tQk=;
+	s=arc-20240116; t=1786646299; c=relaxed/simple;
+	bh=ojp2NQRF9AcENpZGFFPB1P+sQAUMLLM/0PDtnYLV2HA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 In-Reply-To:Content-Type:Content-Disposition; b=i8bi5L44t7fzObHukC4H8JmSMBTQey7pjoyNEZLMZ8JkkAwTaEmX3dAPtGCwemtDzyfXeNpS9Avc21f1JCxpofEnTRDu1QJIg40rApnCYzusmIY3TxueGu0Bk/ScLQ1hgPVIGLmKuKxd9UXSPodeWyQ1cg8gXM5Jxi50IzDPKfQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=QVGSep/D; arc=none smtp.client-ip=170.10.129.124
+	 In-Reply-To:Content-Type:Content-Disposition; b=tKsHMW/rF8PoVFftq5E4zZq5rSkv/PLxVLe3k2dg4eOWLvIyQAwb8kIEhVZ8yxopBBYh5aK34SfMav+MLlh/cDqBNe+VmyHYEee+lpptqOFNWwmpLoi9sZQv7uGwoT10AVizK+PiEXSHcxGfuKO0MO2bouA272Ogeg/EB2c4Wwc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=XOUK09+W; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="QVGSep/D"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="XOUK09+W"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1786643876;
+	s=mimecast20190719; t=1786646296;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=OukkhkVorBxthESNUlOuVMe4JLx+OvknbdAjxQDfoCo=;
-	b=QVGSep/DCWKtAO/DqHeHCmaqh4aWg1GTyftKx6yRDuiDgvIzdshOoSXM2xACH1UIe4w9KO
-	IuJSt/ZV5XmyH+r4lPRKx2d176cqwG6qqlZ9l2PX0Clz28O+0nzJU7H5yefEkHrawnG4jW
-	FHVbi7luNszyZWvgh7xpjrKstvnA58A=
-Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+	bh=+NXpmtye9fW5Bk/p7JBHiAivRkcTSnn1rf1VjuyhKSs=;
+	b=XOUK09+W3N4bsyNSE06UbQlBxMm1k3JLsgbSV1VtKLDFenU3aSQPecCINK1WEhpXuLuJsz
+	s++CH04gX++z79OvyjQY2lGXiA6y88lXbTPhVGa0OuTnnIuy21a/nRUtwPikIHTcwBdazl
+	jOCL1XXsiAH+zX/63BopcgQJhw3thEM=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-589-LcEgHWJwMwyEu-ZNJlzpMQ-1; Thu,
- 13 Aug 2026 13:57:43 -0400
-X-MC-Unique: LcEgHWJwMwyEu-ZNJlzpMQ-1
-X-Mimecast-MFC-AGG-ID: LcEgHWJwMwyEu-ZNJlzpMQ_1786643862
-Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-578-qU2SfC8ONN6vTQyb7JxZqw-1; Thu,
+ 13 Aug 2026 14:38:13 -0400
+X-MC-Unique: qU2SfC8ONN6vTQyb7JxZqw-1
+X-Mimecast-MFC-AGG-ID: qU2SfC8ONN6vTQyb7JxZqw_1786646292
+Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 8372E195609D;
-	Thu, 13 Aug 2026 17:57:41 +0000 (UTC)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id E09C818002C8;
+	Thu, 13 Aug 2026 18:38:11 +0000 (UTC)
 Received: from madcap2.tricolour.ca (unknown [10.22.74.4])
-	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 8C939180049F;
-	Thu, 13 Aug 2026 17:57:38 +0000 (UTC)
-Date: Thu, 13 Aug 2026 13:57:36 -0400
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 2E6A0195608A;
+	Thu, 13 Aug 2026 18:38:09 +0000 (UTC)
+Date: Thu, 13 Aug 2026 14:38:07 -0400
 From: Richard Guy Briggs <rgb@redhat.com>
-To: Ricardo Robaina <rrobaina@redhat.com>
-Cc: Linux-Audit Mailing List <linux-audit@lists.linux-audit.osci.io>,
-	LKML <linux-kernel@vger.kernel.org>, linux-fsdevel@vger.kernel.org,
-	Linux Kernel Audit Mailing List <audit@vger.kernel.org>,
-	Paul Moore <paul@paul-moore.com>,
-	Eric Paris <eparis@parisplace.org>, Steve Grubb <sgrubb@redhat.com>,
-	Roman Dolgikh <rmd4work@mail.ru>
-Subject: Re: [PATCH v2] audit: free proctitle in context so it can be re-set
- by fork on exec_binprm
-Message-ID: <an4FkMk27Wxo2PuS@madcap2.tricolour.ca>
-References: <c8581fcfb66e5cfb2e6e9b0e95f9b356b2245b7b.1785261601.git.rgb@redhat.com>
- <CAABTaaAR4O188N6wazEuqMMUmMyWFxr2oX0WhyS7Hw_CauuC0Q@mail.gmail.com>
+To: =?iso-8859-1?B?Suly6W15?= Jean <Jeremy.Jean@oss.cyber.gouv.fr>
+Cc: audit@vger.kernel.org, Paul Moore <paul@paul-moore.com>,
+	Eric Paris <eparis@redhat.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] audit: avoid dropping live tree ref on fsnotify rule
+ autoremove
+Message-ID: <an4PD+pSgk/kyU/R@madcap2.tricolour.ca>
+References: <20260811220128.275783-1-Jeremy.Jean@oss.cyber.gouv.fr>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <CAABTaaAR4O188N6wazEuqMMUmMyWFxr2oX0WhyS7Hw_CauuC0Q@mail.gmail.com>
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
-X-Mimecast-MFC-PROC-ID: VWfpCSkBlFYZT4oduzG53mOc77KaV_zTj37qHOtd0K8_1786643862
+In-Reply-To: <20260811220128.275783-1-Jeremy.Jean@oss.cyber.gouv.fr>
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
+X-Mimecast-MFC-PROC-ID: CifIjGjXdjobinP1AJt-Rrl6lndqMaaI86mqwRA6534_1786646292
 X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
 
-On 2026-08-07 09:25, Ricardo Robaina wrote:
-> On Thu, Aug 6, 2026 at 6:17â€¯PM Richard Guy Briggs <rgb@redhat.com> wrote:
-> >
-> > Between the actual process startup (fork systemd) and the executable file
-> > replacement (exec), systemd sets a temporary file name (executable file
-> > name in parentheses). If an auditable system call occurs at this point,
-> > the audit context will latch the temporary process name into the cache.
-> > This name will not change again. The patch clears proctitle into the
-> > audit cache when the exec call is made, allowing the new process name to
-> > be latched.
-> >
-> > Suggested-by: Roman Dolgikh <rmd4work@mail.ru>
-> > Link: https://github.com/user-attachments/files/20751461/fix_audit_proctitle.txt
-> > Link: https://github.com/linux-audit/audit-kernel/issues/170
-> > Signed-off-by: Richard Guy Briggs <rgb@redhat.com>
-> > ---
-> > Changelog:
-> > v2: simplified to call single use directly before need in audit_bimprm
-> > ---
-> >  kernel/auditsc.c | 2 ++
-> >  1 file changed, 2 insertions(+)
-> >
-> > diff --git a/kernel/auditsc.c b/kernel/auditsc.c
-> > index 6610e667c728..c12b5dfcb279 100644
-> > --- a/kernel/auditsc.c
-> > +++ b/kernel/auditsc.c
-> > @@ -2601,6 +2601,8 @@ void __audit_bprm(struct linux_binprm *bprm)
-> >  {
-> >         struct audit_context *context = audit_context();
-> >
-> > +       /* clear proctitle in audit context to allow replacement */
-> > +       audit_proctitle_free(audit_context());
+On 2026-08-11 22:01, Jérémy Jean wrote:
+> audit_del_rule() is used for both netlink deletion templates and internal
+> fsnotify autoremove.  The former passes a parsed template which owns a
+> temporary tree reference; the latter passes the installed entry itself.
 > 
-> Since we already got the context right above, it would probably be
-> better to use the context var instead to avoid calling audit_context()
-> again.
+> The unconditional audit_put_tree() at the end of audit_del_rule() assumes
+> the template case.  For mixed AUDIT_DIR plus AUDIT_EXE rules, an fsnotify
+> autoremove event therefore drops the installed rule's live tree reference.
+> Repeating this across rules sharing the same tree can free the tree while
+> another rule still references it, and a later autoremove dereferences the
+> freed pathname while comparing rules.
+> 
+> Move the temporary-tree put to audit_rule_change(), the caller that owns
+> deletion templates.  Keep it in the AUDIT_DEL_RULE cleanup so both
+> successful deletion and -ENOENT still release the parser-owned tree.
+> 
+> Fixes: 34d99af52ad4 ("audit: implement audit by executable")
+> Assisted-by: Codex:gpt-5
+> Signed-off-by: Jérémy Jean <Jeremy.Jean@oss.cyber.gouv.fr>
 
-Yup, right you are.  Silly oversight.
+Thanks for finding this!
 
-> Otherwise looks good to me.
+Reviewed-by: Richard Guy Briggs <rgb@redhat.com>
+
+> ---
+>  kernel/auditfilter.c | 6 ++----
+>  1 file changed, 2 insertions(+), 4 deletions(-)
 > 
-> Reviewed-by: Ricardo Robaina <rrobaina@redhat.com>
+> diff --git a/kernel/auditfilter.c b/kernel/auditfilter.c
+> index 7f791afe5791..666c2091b9e4 100644
+> --- a/kernel/auditfilter.c
+> +++ b/kernel/auditfilter.c
+> @@ -1023,7 +1023,6 @@ static inline int audit_add_rule(struct audit_entry *entry)
+>  int audit_del_rule(struct audit_entry *entry)
+>  {
+>  	struct audit_entry  *e;
+> -	struct audit_tree *tree = entry->rule.tree;
+>  	struct list_head *list;
+>  	int ret = 0;
+>  #ifdef CONFIG_AUDITSYSCALL
+> @@ -1071,9 +1070,6 @@ int audit_del_rule(struct audit_entry *entry)
+>  out:
+>  	mutex_unlock(&audit_filter_mutex);
+>  
+> -	if (tree)
+> -		audit_put_tree(tree);	/* that's the temporary one */
+> -
+>  	return ret;
+>  }
+>  
+> @@ -1158,6 +1154,8 @@ int audit_rule_change(int type, int seq, void *data, size_t datasz)
+>  	}
+>  
+>  	if (err || type == AUDIT_DEL_RULE) {
+> +		if (type == AUDIT_DEL_RULE && entry->rule.tree)
+> +			audit_put_tree(entry->rule.tree); /* that's the template one */
+>  		if (entry->rule.exe)
+>  			audit_remove_mark(entry->rule.exe);
+>  		audit_free_rule(entry);
+> -- 
+> 2.47.3
 > 
-> >         context->type = AUDIT_EXECVE;
-> >         context->execve.argc = bprm->argc;
-> >  }
-> > --
-> > 2.43.5
 > 
-> -Ricardo
 
 - RGB
 
