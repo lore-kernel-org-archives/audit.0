@@ -1,106 +1,65 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 788D73603C7
-	for <audit@vger.kernel.org>; Tue, 18 Aug 2026 18:31:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E5303DB630
+	for <audit@vger.kernel.org>; Tue, 18 Aug 2026 18:36:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787077913; cv=none; b=tpLj37GopqUqPkmcHQSyZZLcX34NXykM8ctWXIiOTqk+OQQzH0ir46MPU3WQIZjwNm9OljSjmTAU2dQ2kVNCTqX9Fbxco1/d31srhWu4w9MXSORt63ozkF66N6AAHHrEohRjL3IdIvO96FIhT+Zf2lT4FPUQrWVj52g+1pT9Cuc=
+	t=1787078202; cv=none; b=Jhmvw9ZxoOVOUK2RAC+B28ZMIIAyZvGXeMx9nRvtCm8tYBM/G5IkFe3HviXU/YI/tEDb7DBBaAIeO8/CWBjvrcrzifd25dNHXmG6jjq+DQDBXIOU3uLigfOYcc13sICggVe3Ih373LSkjXJTzh4vG9nJpxtMwafOndejS7M4haE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787077913; c=relaxed/simple;
-	bh=K9dLAmZy70kAfKCboOR4fvG9iZk+EHL+DmxuAiy3Ls4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-type; b=Tdc6MQzntXmDMSEkIcaMzivBj7xahJbB42v+hi5g81fpev2VKxgxQPFIMaxQC3oOU8kMqCqzMa+nJmpwTGO5ppVrdIItY+BFhhxXP7Nk+Yie+VE2mgBpVPwQRIszUkuuRT7fOk1sy/lQF8lLTh39UDtbKVy9s51VXsn3EU2by1A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=XuENGlUs; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1787078202; c=relaxed/simple;
+	bh=Vb02eEvUg1cGzjxFFjCDDNNZ03zJsUc1e32XCzZzB44=;
+	h=From:Subject:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=f1GI/cya+HCnDdxd1jXGbBvn9P0KKpZ93PIyfiN3FYKtU3AblJh1QizXIkT6uO0wjunDA4zVuC0tXzwlEQIYiHjXyZbMTRq6eKvhTUjBFtx1uYJpkTS/+2H799DQ7wX8bZ5wF6nE5xavM6ZKaf+RBAKHzDP6PmHF8lumOPSIcZ8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=E6LVasUH; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="XuENGlUs"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1787077911;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=JXSLvWbvRdaP0r5zYNJOeqQQQ1V2xG76u/lycvxngT8=;
-	b=XuENGlUsAI6e1Go2aInSXv8dkEqTACMzTA5JBl93X4or1YCwP3Ce6FKK//9UJ0WFwZ9O3V
-	rXS/uWqbWxaxj4+jDJd9CwTZICusLU+G+BDelq2/gYrthOAn7ywEUPGrbQUAtyvZ/+R7Sg
-	AJ+TXktTBuqJpG2GEx/ehifh2j9+P3g=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-669-Ihja_bpxNUWwqLfiVkxiBA-1; Tue,
- 18 Aug 2026 14:31:48 -0400
-X-MC-Unique: Ihja_bpxNUWwqLfiVkxiBA-1
-X-Mimecast-MFC-AGG-ID: Ihja_bpxNUWwqLfiVkxiBA_1787077907
-Received: from mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.95])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 1095F19560AA;
-	Tue, 18 Aug 2026 18:31:46 +0000 (UTC)
-Received: from madcap2.tricolour.com (unknown [10.22.74.2])
-	by mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id A5926422;
-	Tue, 18 Aug 2026 18:31:43 +0000 (UTC)
-From: Richard Guy Briggs <rgb@redhat.com>
-To: Linux-Audit Mailing List <linux-audit@lists.linux-audit.osci.io>,
-	LKML <linux-kernel@vger.kernel.org>,
-	linux-fsdevel@vger.kernel.org,
-	Linux Kernel Audit Mailing List <audit@vger.kernel.org>
-Cc: Paul Moore <paul@paul-moore.com>,
-	Eric Paris <eparis@parisplace.org>,
-	Steve Grubb <sgrubb@redhat.com>,
-	Richard Guy Briggs <rgb@redhat.com>,
-	Roman Dolgikh <rmd4work@mail.ru>,
-	Ricardo Robaina <rrobaina@redhat.com>
-Subject: [PATCH v3] audit: free proctitle in context so it can be re-set by fork on exec_binprm
-Date: Tue, 18 Aug 2026 14:31:39 -0400
-Message-ID: <ef5bf18a4b3805ec0fe5fb638963ccbdfc01d6fe.1787077711.git.rgb@redhat.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="E6LVasUH"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5370C1F000E9
+	for <audit@vger.kernel.org>; Tue, 18 Aug 2026 18:36:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1787078201;
+	bh=Vb02eEvUg1cGzjxFFjCDDNNZ03zJsUc1e32XCzZzB44=;
+	h=From:Subject:Reply-To:Cc:In-Reply-To:References:Date;
+	b=E6LVasUH3FEr3f/gCVa3ywxMgNvnmqTfDaEWnVsox5W6SYr16O++oXddDWfzRhbvR
+	 yyt9ukqSbtav8+6JMi32Q4SNF7MMrutLN2Fdo3msWL76uSnMn1Zq8+aWe9EfJsyLPR
+	 ese6WAozEv2/ImfxPNuhVRUAYfQHM0BxNMbexQXZexHTu9VcME2ByGb0kZ9Lam4Iio
+	 SfFgLylvQp4cXAemUsS6uNfo/Lb99pRD0sTOPGfF71X3746yfxIWamMGZMlkWXDnN7
+	 XZDffmPmpslScL1cniEAVKVm+2BAX5a5KxSQoLODkOWgzWEmNEmOdpGxt38S8fSdjD
+	 9t2TEwa0ycyQg==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v3] audit: free proctitle in context so it can be re-set
+ by fork on exec_binprm
+Reply-To: sashiko-reviews@lists.linux.dev
+Cc: audit@vger.kernel.org
+In-Reply-To: <ef5bf18a4b3805ec0fe5fb638963ccbdfc01d6fe.1787077711.git.rgb@redhat.com>
+References: <ef5bf18a4b3805ec0fe5fb638963ccbdfc01d6fe.1787077711.git.rgb@redhat.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 18 Aug 2026 18:36:40 +0000
+Message-Id: <20260818183641.5370C1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.6 on 10.30.177.95
-X-Mimecast-MFC-PROC-ID: 3wH3NB7FE3blRsOt2ci3Uf1TXfJX-qqdi1epOsBBjDc_1787077907
-X-Mimecast-Originator: redhat.com
-Content-type: text/plain
-Content-Transfer-Encoding: 8bit
-Message-ID: <20260818183139.f2v-HukfL5PLCOxXeJQYhoWurram5LBUy_vFSp37pU0@z>
 
-Between the actual process startup (fork systemd) and the executable file
-replacement (exec), systemd sets a temporary file name (executable file
-name in parentheses). If an auditable system call occurs at this point,
-the audit context will latch the temporary process name into the cache.
-This name will not change again. The patch clears proctitle into the
-audit cache when the exec call is made, allowing the new process name to
-be latched.
+> Between the actual process startup (fork systemd) and the executable file
+> replacement (exec), systemd sets a temporary file name (executable file
+> name in parentheses). If an auditable system call occurs at this point,
+> the audit context will latch the temporary process name into the cache.
+> This name will not change again. The patch clears proctitle into the
+> audit cache when the exec call is made, allowing the new process name to
+> be latched.
+>=20
+> Suggested-by: Roman Dolgikh <rmd4work@mail.ru>
+> Link: https://github.com/user-attachments/files/20751461/fix_audit_procti=
+tle.txt
+> Link: https://github.com/linux-audit/audit-kernel/issues/170
+> Signed-off-by: Richard Guy Briggs <rgb@redhat.com>
 
-Suggested-by: Roman Dolgikh <rmd4work@mail.ru>
-Link: https://github.com/user-attachments/files/20751461/fix_audit_proctitle.txt
-Link: https://github.com/linux-audit/audit-kernel/issues/170
-Signed-off-by: Richard Guy Briggs <rgb@redhat.com>
-Reviewed-by: Ricardo Robaina <rrobaina@redhat.com>
----
-Changelog:
-v3: use previously assigned context
-v2: simplified to call single use directly before need in audit_bimprm
----
- kernel/auditsc.c | 2 ++
- 1 file changed, 2 insertions(+)
+Sashiko has reviewed this patch and found no issues. It looks great!
 
-diff --git a/kernel/auditsc.c b/kernel/auditsc.c
-index 2b9ce0b52511..ee7e53d2cd52 100644
---- a/kernel/auditsc.c
-+++ b/kernel/auditsc.c
-@@ -2601,6 +2601,8 @@ void __audit_bprm(struct linux_binprm *bprm)
- {
- 	struct audit_context *context = audit_context();
- 
-+	/* clear proctitle in audit context to allow replacement */
-+	audit_proctitle_free(context);
- 	context->type = AUDIT_EXECVE;
- 	context->execve.argc = bprm->argc;
- }
--- 
-2.43.5
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/ef5bf18a4b3805ec0fe=
+5fb638963ccbdfc01d6fe.1787077711.git.rgb@redhat.com?part=3D1
 
