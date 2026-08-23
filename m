@@ -1,250 +1,159 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACA7D397942
-	for <audit@vger.kernel.org>; Fri, 21 Aug 2026 12:32:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9E711891A9
+	for <audit@vger.kernel.org>; Sun, 23 Aug 2026 18:10:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787315553; cv=none; b=lKvDLe2lMKb4dVI/CR23svzuWEWq9sFZY6wC3JAct+EbIwNrr51Sx9mQVtl71hlV/Ji9RF8cX+ZwemapW10AUdRCEmktayWdxe2tK4yWEcadnLSHwL3JRMk9CFE6a2UhA4oZL0/j9cj7N/gwbwzHkEJwUopZXVyOcgQx6hdllR8=
+	t=1787508640; cv=none; b=XFZDUzgOWN9RFS9lEfD6eAV0Z3fq8dYOAwT4bvFfU0rBUQFHktdFwccERQQWv+XbLgbyXF/YZq0Jab12I3D6z1rsnGDcbc1p+d8dyYUjQu0MtuaOK6mg0vgHxHUzRcFX1ZhbsDtDczqG6zYMuI1wD+1wS8QQvEgi4mKXfFSUPn0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787315553; c=relaxed/simple;
-	bh=buB9Ig8UGQ4yTr9/kwBEK00cFnmq3yF9NNlLBnrmGUU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=mTvbv5dCIl3Vhn6h2xG1sF4lLgGEeXB/HSOeeghkYNBZgXV5ggtkV8cDtdZBqMGLU690a1H5YzA3uV5QL8nbrMCBEvyJ7ANlbA7SCptx4GZt6sYmS533jkUTWgTeRWzHVOD8t8RdFqt2W+bJQuEPIG9mgQO05n4J+MfovhQzjc4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=jJNkl2es; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1787508640; c=relaxed/simple;
+	bh=fGYi03ob++A1OM/7GWgjQOyXpfe+tdTeHisTLkTszvA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=OWjqoGtolIYnAjWAtiXl7Vax2YCa/nB6AsYkI5gGQDI7r3O930b1owvbgw9r8fZziDskzUJhPZqLs5KqSTzk0sdHDwb0cFE0nQxxepwmOXsd4TJBGGwt0GfDr8LhmP3TvDF9C4NnlXnaDqOzDLVOQthQDe2tmdCq8wY2IuUox78=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=D2uJI3vi; arc=none smtp.client-ip=209.85.216.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="jJNkl2es"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1787315550;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=8nQiAnmFR1CPZ/lHsTXoGg00TJNHaMaAN/SMaiIN0sQ=;
-	b=jJNkl2esA7Wk0L3ATU5A1+vsR2Y5RFBSiiiWKe/CcV4AX3JhCvEHDu7loqZvX68gZtMskR
-	KtMvXfp6qNZCrz/3/8k62UPJiSuFqgTnMjZLVdYkREXy3qYoV3KEc0fuhaDioaihCwQXON
-	Dl3qgRiKkdy2Acp44Ajcnw/VgP/4P/M=
-Received: from mail-lj1-f199.google.com (mail-lj1-f199.google.com
- [209.85.208.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-275-9Wuc7IYQNMaEklem13DqBA-1; Fri, 21 Aug 2026 08:32:29 -0400
-X-MC-Unique: 9Wuc7IYQNMaEklem13DqBA-1
-X-Mimecast-MFC-AGG-ID: 9Wuc7IYQNMaEklem13DqBA_1787315548
-Received: by mail-lj1-f199.google.com with SMTP id 38308e7fff4ca-39f1aa2b439so5356771fa.1
-        for <audit@vger.kernel.org>; Fri, 21 Aug 2026 05:32:28 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="D2uJI3vi"
+Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-395cf2535acso2140500a91.1
+        for <audit@vger.kernel.org>; Sun, 23 Aug 2026 11:10:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1787508638; x=1788113438; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=40bzyEpk4244+pXyR4A/V35aPJohFaRdnFjBwHWe5DM=;
+        b=D2uJI3vi3WxZnfPn3ZjqspNiEPNmrh2ZZu968RILNByB/ZdBrYk4hj4mg8QQLNsXDK
+         U3wTEWZhEa0q8dUDkNEwhN3DTFTW566uCCmBj8SZzrBTTns1b9olqxBH8cqtSFMICCug
+         iot+VBD9XV6cdqRNIT0DDlMkSubimRJ2EAmlrJ02UjGimDBky21PNf2clvYo3z+uW1IM
+         sVO9dNNNKd8A3kTVBmEyxHpzILkYP55Q4BNrfRalEeeNGhbM0+gH1D6+L7kBYOQi6nn3
+         s05ViAGYGlqElNTQet2bmTq/sw8Jcahy91xazSQct4OEykM+sSROcQ6l8P4vktcM73he
+         a5EA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787315547; x=1787920347;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
+        d=1e100.net; s=20251104; t=1787508638; x=1788113438;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=8nQiAnmFR1CPZ/lHsTXoGg00TJNHaMaAN/SMaiIN0sQ=;
-        b=buW78Y4L6uaMDstaKrWp/lEv43wZZkzZwEdR50+a/XiApmsZ5NN7U+r19uJ10KEQ8C
-         /zW27eDLCca7RsvivpMzbUFztOmjOdFdOx93yHnp9uq0Y2gPo47SNnKOYFVeGWonqx7b
-         57yas357S0MAPjcfJ/tzcD/C1628nFzD39Q2+ZnK5G6/+nJJKVpuHH1bhoD/aBsrcft4
-         sU0Z89M58ERGiRZdUQtake3nb1cbYvmORYKf0AAkJhR2HpB1HgCJ4PB8hWCTgLAuERHx
-         6hlbHb8mARPwOuACGJh3gM1tTinj1543NBOnVy3/yK/pR4lbQ8vejDWp4aBY67taWyEt
-         LYwA==
-X-Gm-Message-State: AFuF++lMdXEDK8/Fg237fpamd62lcNDfaSBswgYXcsFLO/gQHvvgHbde
-	ltZPgy3T3L7V7ASxn1it1CotondL/Y10rI0/nEHLAaoyskP11C1ylNehrz318NFCC6hlfLKh5Lx
-	/Bi/qiQ2e1mmonMS/jna1y0305GthBfJ9Oct4TztHsfkHu0SuX2kIpyzhW2Gwl57yt9PVHBXuU9
-	VUHSpbNTnU8y4y08Pd4gO7pv+AClLBdGr+IQQF1fCIPf/u
-X-Gm-Gg: AR+sD115he2WDEvHL2FpApMfEjD7eLlVcIBDHg0AeHe0Q6uhlqWDmMcJOYbnu/m6sdZ
-	Ct+d3TjHIBOiUi4RtUHtbtdvDDiAZ/n3+nZYz2h8rRCkuRPx9E+i50pLK0NuQ+dRL/+FYa5AB4w
-	fuuvyPqMcojaZcWaxGykN53gdk/jcJkly6T1lJ1Fkk0w7OJJKdZlf8OHf48OqLBphjgxrkJz0wE
-	0UmX9A4Cn23Ehe83A7AvP2nplZGRhx4+EdvEgym0517pGmoJR0BlwblJC3bHCVupwaM8rtuubYP
-X-Received: by 2002:a2e:bc28:0:b0:3a1:11d3:173e with SMTP id 38308e7fff4ca-3a1aee83d62mr14946801fa.14.1787315547552;
-        Fri, 21 Aug 2026 05:32:27 -0700 (PDT)
-X-Received: by 2002:a17:907:3d56:b0:c1f:e9d6:2a6f with SMTP id
- a640c23a62f3a-c2469f9991dmr630333466b.0.1787315197822; Fri, 21 Aug 2026
- 05:26:37 -0700 (PDT)
+        bh=40bzyEpk4244+pXyR4A/V35aPJohFaRdnFjBwHWe5DM=;
+        b=f+tXvo/oS2m7dLj3aimvMy7YCilM20i30NXF5+HjLlWzOfCfsEquLe+TgvQG2yhowL
+         K/u/+oPoAtbYMnRidwl8nEgNgMUApJnto+q+nwV2ENgdwbhqeiNNIxlII+THcbCpbubv
+         9PqCnHbyv2CyT/0mYn3RX/nO+LR+bmjaTrYGmLutvPixrIdzaJ/1Ianu7fItQVMk8hVE
+         M46NhYIcFfJ0F85wSXQD+Imhb7b89ya2LrVWQzu/zHVet6QrNaIGDq3IzaSAUpknTHrh
+         YvIzwNfufbXTcs2PM79kzxqC0lgQchZZu+yrHpVLU4ZatwWYpu2KhLxTocRwwCC/83Jf
+         AASw==
+X-Forwarded-Encrypted: i=1; AHgh+RrwZ3OVbn4FA2Yt2N3jucUuS06ekbV4+fifKH3YNneg9zJmEWSBfhU35Z/16YnnYsSCFiGpwg==@vger.kernel.org
+X-Gm-Message-State: AFuF++ksg29ub6mcPNI3FnsfxbAKljZym+A/uiSh0wh2tIb5hNzVdlFt
+	J09unS8RE+C0KVJ/U/Hf6yv0Yhy6xI4FrKQDb8QtT181aArXZkgYfaDBf6Rxow==
+X-Gm-Gg: AR+sD106cEB+0JwUXs0nJFwMvyAGt8u4BONqwQt5l5IuDnNMWEiQLpWvLwC88y2a2Vn
+	nq1dXkQxkFFCuTE2PblhhS7h7+hrjYcqHssEiAAfoSf6UtYRVkbFKf9Z0F/z7i18OhqRzMk8Jw1
+	efJHojzKKX5eWLnFlwHRnSFZ6xAMthUaaO9TPmwPJ6hH523jK9RGplbmmjDd8zVXOKKEsjQFbPA
+	WUp9pceqVSa8tmtQUzsuB8pfdleXkTxSMJ6nZwPiwyIBNLzdbNE2OLFOyJSFsl3dn0DPHcmZGyw
+	I2h30/E0lJlro8nHZwwGFLi7VDGltY4bsGeNiC1DnsEyJRHZd6dl5yPVxMvf+swkSZ/jAtb65ti
+	rvwb8vISRL4xv24LEho7xDRK+QxZj67cy4hdevk2o+4zWOYj8Twic3k2tNEb7s2gurOZmjdO+Jz
+	xYaOqklxp0zkvwL4sEyNUzAsY/qMV3jxJnBQwMixebmwd63F9rcbVGDDOS03DQldauovTFvfuzz
+	hdI9S4hwiQOeCXhERqyvlOW2X6nYpU=
+X-Received: by 2002:a17:90b:37c5:b0:38e:6d55:b1a6 with SMTP id 98e67ed59e1d1-395c4c35ac3mr18952438a91.3.1787508638219;
+        Sun, 23 Aug 2026 11:10:38 -0700 (PDT)
+Received: from skinsburskii (c-98-225-44-182.hsd1.wa.comcast.net. [98.225.44.182])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-395e49d8b1csm7092886a91.11.2026.08.23.11.10.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 23 Aug 2026 11:10:37 -0700 (PDT)
+Date: Sun, 23 Aug 2026 11:10:35 -0700
+From: Stanislav Kinsburskii <skinsburskii@gmail.com>
+To: Shuah Khan <shuah@kernel.org>, Paul Moore <paul@paul-moore.com>,
+	Eric Paris <eparis@redhat.com>, Al Viro <viro@zeniv.linux.org.uk>,
+	Amy Griffis <amy.griffis@hp.com>
+Cc: Frank Hofmann <hofmann@deshaw.com>, Noah Orlando <orlandon@deshaw.com>,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	audit@vger.kernel.org
+Subject: Re: [PATCH 0/3] audit: Measure and reduce syscall filtering overhead
+Message-ID: <aos3m2wG3To3wCeo@skinsburskii>
+References: <20260806-audit-v1-0-ddd0d94ff0b6@gmail.com>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260724150258.560396-2-rrobaina@redhat.com> <CAHC9VhSzhyw--ycYMG_RaT5wpRQWDPBSuaNixsVrWrRXKc9hzw@mail.gmail.com>
-In-Reply-To: <CAHC9VhSzhyw--ycYMG_RaT5wpRQWDPBSuaNixsVrWrRXKc9hzw@mail.gmail.com>
-From: Ricardo Robaina <rrobaina@redhat.com>
-Date: Fri, 21 Aug 2026 09:26:26 -0300
-X-Gm-Features: AcwNN1WD71ac4WEQSUnfKMe1gRwRLyFnSk3rCPAS384W6Bqs5OsdV3sfC6_UdO4
-Message-ID: <CAABTaaA=FupPfFhOdMPi7nPy5wSh7znEdnBquYbTXCN=YbtKiA@mail.gmail.com>
-Subject: Re: [PATCH] audit: add CLONE3 auxiliary record to log process cloning
-To: Paul Moore <paul@paul-moore.com>
-Cc: audit@vger.kernel.org, linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
-	eparis@redhat.com, sgrubb@redhat.com, kees@kernel.org, mingo@redhat.com, 
-	peterz@infradead.org, juri.lelli@redhat.com, vincent.guittot@linaro.org, 
-	akpm@linux-foundation.org, david@kernel.org, brauner@kernel.org
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: rc4MA5q68JN91hPPNuN8Uquw7NdUReMntjgxhC5jPeA_1787315548
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260806-audit-v1-0-ddd0d94ff0b6@gmail.com>
 
-On Wed, Jul 29, 2026 at 7:03=E2=80=AFPM Paul Moore <paul@paul-moore.com> wr=
-ote:
->
-> On Fri, Jul 24, 2026 at 11:03=E2=80=AFAM Ricardo Robaina <rrobaina@redhat=
-.com> wrote:
-> >
-> > The clone3(2) syscall moves most parameters to struct clone_args.
-> > For this reason, the generic SYSCALL audit record does not capture
-> > the structured arguments.
-> >
-> > Add a CLONE3 auxiliary record that logs: flags, exit_signal, cgroup,
-> > and pidfd fields from struct clone_args. When CLONE_PIDFD is set and
-> > the syscall succeeds, the resolved pidfd is logged; otherwise
-> > pidfd=3D(null).
-> >
-> >  ----
-> >  type=3DSYSCALL : syscall=3Dclone3 a0=3D0x7ffe7f1ec640 a1=3D0x58 a2=3D0=
-x0 ...
-> >  type=3DCLONE3 : cl3_flags=3D0x1000 exit_signal=3D17 cgroup=3D0 pidfd=
-=3D3
-> >
-> > Link: https://github.com/linux-audit/audit-kernel/issues/151
-> > Signed-off-by: Ricardo Robaina <rrobaina@redhat.com>
-> > ---
-> >  include/linux/audit.h      | 10 ++++++++++
-> >  include/uapi/linux/audit.h |  1 +
-> >  kernel/auditsc.c           | 20 ++++++++++++++++++++
-> >  kernel/fork.c              |  4 +++-
-> >  4 files changed, 34 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/include/linux/audit.h b/include/linux/audit.h
-> > index 45abb3722d30..833f349bf415 100644
-> > --- a/include/linux/audit.h
-> > +++ b/include/linux/audit.h
-> > @@ -449,6 +449,7 @@ extern void __audit_tk_injoffset(struct timespec64 =
-offset);
-> >  extern void __audit_ntp_log(const struct audit_ntp_data *ad);
-> >  extern void __audit_log_nfcfg(const char *name, u8 af, unsigned int ne=
-ntries,
-> >                               enum audit_nfcfgop op, gfp_t gfp);
-> > +extern void __audit_log_clone3(struct kernel_clone_args *kargs, int re=
-t);
-> >
-> >  static inline void audit_ipc_obj(struct kern_ipc_perm *ipcp)
-> >  {
-> > @@ -598,6 +599,12 @@ static inline void audit_log_nfcfg(const char *nam=
-e, u8 af,
-> >                 __audit_log_nfcfg(name, af, nentries, op, gfp);
-> >  }
-> >
-> > +static inline void audit_log_clone3(struct kernel_clone_args *kargs, i=
-nt ret)
-> > +{
-> > +       if (!audit_dummy_context())
-> > +               __audit_log_clone3(kargs, ret);
-> > +}
-> > +
-> >  extern int audit_n_rules;
-> >  extern int audit_signals;
-> >  #else /* CONFIG_AUDITSYSCALL */
-> > @@ -730,6 +737,9 @@ static inline void audit_log_nfcfg(const char *name=
-, u8 af,
-> >                                    enum audit_nfcfgop op, gfp_t gfp)
-> >  { }
-> >
-> > +static inline void audit_log_clone3(struct kernel_clone_args *kargs, i=
-nt ret)
-> > +{ }
-> > +
-> >  #define audit_n_rules 0
-> >  #define audit_signals 0
-> >  #endif /* CONFIG_AUDITSYSCALL */
-> > diff --git a/include/uapi/linux/audit.h b/include/uapi/linux/audit.h
-> > index e8f5ce677df7..37357e17adbf 100644
-> > --- a/include/uapi/linux/audit.h
-> > +++ b/include/uapi/linux/audit.h
-> > @@ -122,6 +122,7 @@
-> >  #define AUDIT_OPENAT2          1337    /* Record showing openat2 how a=
-rgs */
-> >  #define AUDIT_DM_CTRL          1338    /* Device Mapper target control=
- */
-> >  #define AUDIT_DM_EVENT         1339    /* Device Mapper events */
-> > +#define AUDIT_CLONE3           1343    /* Record showing clone3 args *=
-/
-> >
-> >  #define AUDIT_AVC              1400    /* SE Linux avc denial or grant=
- */
-> >  #define AUDIT_SELINUX_ERR      1401    /* Internal SE Linux Errors */
-> > diff --git a/kernel/auditsc.c b/kernel/auditsc.c
-> > index 6610e667c728..c0106bb71c19 100644
-> > --- a/kernel/auditsc.c
-> > +++ b/kernel/auditsc.c
-> > @@ -2882,6 +2882,26 @@ void __audit_log_nfcfg(const char *name, u8 af, =
-unsigned int nentries,
-> >  }
-> >  EXPORT_SYMBOL_GPL(__audit_log_nfcfg);
-> >
-> > +void __audit_log_clone3(struct kernel_clone_args *kargs, int ret)
-> > +{
-> > +       struct audit_buffer *ab;
-> > +       int pidfd;
-> > +
-> > +       ab =3D audit_log_start(audit_context(), GFP_KERNEL,
-> > +                            AUDIT_CLONE3);
-> > +       if (!ab)
-> > +               return;
-> > +
-> > +       audit_log_format(ab, "cl3_flags=3D0x%llx exit_signal=3D%d cgrou=
-p=3D%d",
-> > +                        kargs->flags, kargs->exit_signal, kargs->cgrou=
-p);
-> > +       if ((kargs->flags & CLONE_PIDFD) && ret >=3D 0 &&
-> > +           !get_user(pidfd, kargs->pidfd))
-> > +               audit_log_format(ab, " pidfd=3D%d", pidfd);
->
-> Do we care about distinguishing between the combination of CLONE_PIDFD
-> and CLONE_THREAD vs CLONE_PIDFD alone?  In other words, do we care if
-> the "pidfd" field sometimes represents a pidfd of the child process vs
-> a thread in the current process?
->
+On Thu, Aug 06, 2026 at 06:01:18PM -0700, Stanislav Kinsburskii wrote:
+> This series adds a repeatable microbenchmark for audit's fixed syscall
+> overhead and uses it to address two cases where audit continues doing work
+> which cannot produce a record.
+> 
 
-Hi Paul,
+A gentle ping on this series.
 
-Thanks for reviewing this patch.
+Thanks,
+Stanislav
 
-The flags field can be use to check if CLONE_THREAD is set, so it's
-possible to determine whether the pidfd refers to a child process or a
-thread by inspecting the flags. Do you think we should include a
-dedicated field for that?
-
-> > +       else
-> > +               audit_log_format(ab, " pidfd=3D(null)");
-> > +       audit_log_end(ab);
-> > +}
-> > +
-> >  static void audit_log_task(struct audit_buffer *ab)
-> >  {
-> >         kuid_t auid, uid;
-> > diff --git a/kernel/fork.c b/kernel/fork.c
-> > index f0e2e131a9a5..0f52e8c0e900 100644
-> > --- a/kernel/fork.c
-> > +++ b/kernel/fork.c
-> > @@ -3047,7 +3047,9 @@ SYSCALL_DEFINE2(clone3, struct clone_args __user =
-*, uargs, size_t, size)
-> >         if (!clone3_args_valid(&kargs))
-> >                 return -EINVAL;
-> >
-> > -       return kernel_clone(&kargs);
-> > +       err =3D kernel_clone(&kargs);
-> > +       audit_log_clone3(&kargs, err);
-> > +       return err;
-> >  }
-> >
-> >  void walk_process_tree(struct task_struct *top, proc_visitor visitor, =
-void *data)
-> > --
-> > 2.53.0
->
-> --
-> paul-moore.com
->
-
--Ricardo
-
+> Patch 1 adds audit_bench, a manually run getpid(2) microbenchmark under
+> tools/testing/selftests/audit.  It leaves policy management to the caller
+> so the same workload can measure different rule configurations without
+> silently changing the system policy.
+> 
+> Patch 2 fixes audit_n_rules and audit_signals accounting when rules are
+> removed automatically with a watch or tree, or after an LSM rule update
+> fails.  These paths could leave the counters nonzero after the last
+> applicable rule had disappeared, causing every subsequent syscall to
+> allocate a non-dummy audit context.  It also centralizes rule accounting
+> so all rule removal paths share the same bookkeeping.
+> 
+> The median getpid latency in the same unpinned VM was:
+> 
+>                                   no rules   stale state   fixed
+>   automatically removed watch       38 ns       55 ns      38 ns
+>   automatically removed tree        38 ns       59 ns      38 ns
+> 
+> Patch 3 builds on those lifecycle helpers.  It maintains an aggregate mask
+> of the syscall numbers present in exit rules and checks that mask before
+> walking the exit filter list.  The mask is architecture-independent and
+> therefore conservative: overlapping syscall numbers may cause an
+> unnecessary scan, but cannot suppress a match.
+> 
+> For an unrelated getpid workload, the median latency scaled as follows:
+> 
+>   exit rules                         1       32      128      256
+>   before                            55 ns    71 ns   428 ns   791 ns
+>   after                             55 ns    55 ns    55 ns    55 ns
+> 
+> The aggregate mask is updated through the centralized accounting helpers.
+> Insertion sets the relevant bits before publishing the rule with
+> list_add_rcu(); removal unlinks the rule before clearing them.  This keeps
+> the lockless rejection test conservative during concurrent rule changes.
+> 
+> The series does not change the audit userspace ABI or rule matching
+> semantics.  The benchmark and complete reproduction procedures are
+> documented in the individual patches.
+> 
+> ---
+> Stanislav Kinsburskii (3):
+>       selftests/audit: Add syscall overhead benchmark
+>       audit: Fix filter rule accounting after automatic removal
+>       audit: Skip exit filtering for syscalls without rules
+> 
+>  MAINTAINERS                                 |   1 +
+>  kernel/audit.h                              |   7 +
+>  kernel/audit_tree.c                         |   1 +
+>  kernel/audit_watch.c                        |   2 +
+>  kernel/auditfilter.c                        | 140 +++++++++++------
+>  kernel/auditsc.c                            |  13 ++
+>  tools/testing/selftests/Makefile            |   1 +
+>  tools/testing/selftests/audit/.gitignore    |   2 +
+>  tools/testing/selftests/audit/Makefile      |   9 ++
+>  tools/testing/selftests/audit/README        |  30 ++++
+>  tools/testing/selftests/audit/audit_bench.c | 227 ++++++++++++++++++++++++++++
+>  11 files changed, 389 insertions(+), 44 deletions(-)
+> ---
+> base-commit: ea2bff00da89d7767d677bb68470130ba96f4928
+> change-id: 20260806-audit-96a1e71d38b1
+> 
+> Best regards,
+> -- 
+> Stanislav Kinsburskii <skinsburskii@gmail.com>
+> 
