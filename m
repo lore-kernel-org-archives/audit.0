@@ -1,159 +1,113 @@
-Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
+Received: from mail-qk1-f174.google.com (mail-qk1-f174.google.com [209.85.222.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9E711891A9
-	for <audit@vger.kernel.org>; Sun, 23 Aug 2026 18:10:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 144E9393DD3
+	for <audit@vger.kernel.org>; Mon, 24 Aug 2026 22:07:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787508640; cv=none; b=XFZDUzgOWN9RFS9lEfD6eAV0Z3fq8dYOAwT4bvFfU0rBUQFHktdFwccERQQWv+XbLgbyXF/YZq0Jab12I3D6z1rsnGDcbc1p+d8dyYUjQu0MtuaOK6mg0vgHxHUzRcFX1ZhbsDtDczqG6zYMuI1wD+1wS8QQvEgi4mKXfFSUPn0=
+	t=1787609229; cv=none; b=ODcHkmT3u21uM6ms7YJtrB/ge3n7rpM8uvD2PEv6q8esrOxAx8zN1TaiHdXnL1chOQWfh+BVqf8/Xjx0/rHoF1IZLsan4ByGptTijGqfLuYl3xbEIlWpNP+7B7Ou40qHXNL61beR+JtdQi1sQwDCA85EFC2+YTe47UC4cy+V+eE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787508640; c=relaxed/simple;
-	bh=fGYi03ob++A1OM/7GWgjQOyXpfe+tdTeHisTLkTszvA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OWjqoGtolIYnAjWAtiXl7Vax2YCa/nB6AsYkI5gGQDI7r3O930b1owvbgw9r8fZziDskzUJhPZqLs5KqSTzk0sdHDwb0cFE0nQxxepwmOXsd4TJBGGwt0GfDr8LhmP3TvDF9C4NnlXnaDqOzDLVOQthQDe2tmdCq8wY2IuUox78=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=D2uJI3vi; arc=none smtp.client-ip=209.85.216.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1787609229; c=relaxed/simple;
+	bh=FZJtR0w4GJCui3/VxgKSPznCm8GNF9lnWrpVODY0xqI=;
+	h=Date:Message-ID:MIME-Version:Content-Type:From:To:Cc:Subject:
+	 References:In-Reply-To; b=Go/IX0FFGJm42UKsGx+AUwu+3FixwBtguEPaM1xoBg5doLbTB920lFo4WMwjI6xASV0zO8FNyvfbbVGLYYqdEHLG9g/WFc7iXXdkyNsJ8wl8LzktKrpM53ewtGsFWcogMfwDjHpDDQ3wiuW4BZ6KvVgHfyWSZT5N2mg80VueCZ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=DeSWxW5w; arc=none smtp.client-ip=209.85.222.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="D2uJI3vi"
-Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-395cf2535acso2140500a91.1
-        for <audit@vger.kernel.org>; Sun, 23 Aug 2026 11:10:38 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="DeSWxW5w"
+Received: by mail-qk1-f174.google.com with SMTP id af79cd13be357-936e8bd9caaso286887485a.2
+        for <audit@vger.kernel.org>; Mon, 24 Aug 2026 15:07:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787508638; x=1788113438; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=40bzyEpk4244+pXyR4A/V35aPJohFaRdnFjBwHWe5DM=;
-        b=D2uJI3vi3WxZnfPn3ZjqspNiEPNmrh2ZZu968RILNByB/ZdBrYk4hj4mg8QQLNsXDK
-         U3wTEWZhEa0q8dUDkNEwhN3DTFTW566uCCmBj8SZzrBTTns1b9olqxBH8cqtSFMICCug
-         iot+VBD9XV6cdqRNIT0DDlMkSubimRJ2EAmlrJ02UjGimDBky21PNf2clvYo3z+uW1IM
-         sVO9dNNNKd8A3kTVBmEyxHpzILkYP55Q4BNrfRalEeeNGhbM0+gH1D6+L7kBYOQi6nn3
-         s05ViAGYGlqElNTQet2bmTq/sw8Jcahy91xazSQct4OEykM+sSROcQ6l8P4vktcM73he
-         a5EA==
+        d=paul-moore.com; s=google; t=1787609227; x=1788214027; darn=vger.kernel.org;
+        h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
+         :content-type:mime-version:message-id:date:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=1cJ9fg/zk2IC+Zn+5lDDiE/TIZcTQB+rQho1o9bYREE=;
+        b=DeSWxW5w1dy0jKxn7JdbNLtZIR6B8PYpnK7vvWAopWAfq6fbBEffZrnYlhhZM9jlia
+         QZe43YIq5NWZxQvSyuTny45vuLuCJ7w0y4jvrLaIzqryBZoWKEWvwjAYtVksw4Mn6ryQ
+         Ivd/dt1h6+QaIpVYBN9b0IU3Adb8gTQ5POIo8xgonKmVDbO/wyCnOuIzsNReayE2TaIG
+         /2bNZcL82oFRDNEmnO3sX6knVP+RpVtjudF53Ds1gd1/4GD2+98QvFgnKHKZWwl7/sTe
+         u8m6yHEY3YB80X6vFwN6pKITPEtkJweUBXxz5dO5OUqGkRe877QLFjBr/7PetIxtH7Vr
+         3WcA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787508638; x=1788113438;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
+        d=1e100.net; s=20251104; t=1787609227; x=1788214027;
+        h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
+         :content-type:mime-version:message-id:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=40bzyEpk4244+pXyR4A/V35aPJohFaRdnFjBwHWe5DM=;
-        b=f+tXvo/oS2m7dLj3aimvMy7YCilM20i30NXF5+HjLlWzOfCfsEquLe+TgvQG2yhowL
-         K/u/+oPoAtbYMnRidwl8nEgNgMUApJnto+q+nwV2ENgdwbhqeiNNIxlII+THcbCpbubv
-         9PqCnHbyv2CyT/0mYn3RX/nO+LR+bmjaTrYGmLutvPixrIdzaJ/1Ianu7fItQVMk8hVE
-         M46NhYIcFfJ0F85wSXQD+Imhb7b89ya2LrVWQzu/zHVet6QrNaIGDq3IzaSAUpknTHrh
-         YvIzwNfufbXTcs2PM79kzxqC0lgQchZZu+yrHpVLU4ZatwWYpu2KhLxTocRwwCC/83Jf
-         AASw==
-X-Forwarded-Encrypted: i=1; AHgh+RrwZ3OVbn4FA2Yt2N3jucUuS06ekbV4+fifKH3YNneg9zJmEWSBfhU35Z/16YnnYsSCFiGpwg==@vger.kernel.org
-X-Gm-Message-State: AFuF++ksg29ub6mcPNI3FnsfxbAKljZym+A/uiSh0wh2tIb5hNzVdlFt
-	J09unS8RE+C0KVJ/U/Hf6yv0Yhy6xI4FrKQDb8QtT181aArXZkgYfaDBf6Rxow==
-X-Gm-Gg: AR+sD106cEB+0JwUXs0nJFwMvyAGt8u4BONqwQt5l5IuDnNMWEiQLpWvLwC88y2a2Vn
-	nq1dXkQxkFFCuTE2PblhhS7h7+hrjYcqHssEiAAfoSf6UtYRVkbFKf9Z0F/z7i18OhqRzMk8Jw1
-	efJHojzKKX5eWLnFlwHRnSFZ6xAMthUaaO9TPmwPJ6hH523jK9RGplbmmjDd8zVXOKKEsjQFbPA
-	WUp9pceqVSa8tmtQUzsuB8pfdleXkTxSMJ6nZwPiwyIBNLzdbNE2OLFOyJSFsl3dn0DPHcmZGyw
-	I2h30/E0lJlro8nHZwwGFLi7VDGltY4bsGeNiC1DnsEyJRHZd6dl5yPVxMvf+swkSZ/jAtb65ti
-	rvwb8vISRL4xv24LEho7xDRK+QxZj67cy4hdevk2o+4zWOYj8Twic3k2tNEb7s2gurOZmjdO+Jz
-	xYaOqklxp0zkvwL4sEyNUzAsY/qMV3jxJnBQwMixebmwd63F9rcbVGDDOS03DQldauovTFvfuzz
-	hdI9S4hwiQOeCXhERqyvlOW2X6nYpU=
-X-Received: by 2002:a17:90b:37c5:b0:38e:6d55:b1a6 with SMTP id 98e67ed59e1d1-395c4c35ac3mr18952438a91.3.1787508638219;
-        Sun, 23 Aug 2026 11:10:38 -0700 (PDT)
-Received: from skinsburskii (c-98-225-44-182.hsd1.wa.comcast.net. [98.225.44.182])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-395e49d8b1csm7092886a91.11.2026.08.23.11.10.37
+        bh=1cJ9fg/zk2IC+Zn+5lDDiE/TIZcTQB+rQho1o9bYREE=;
+        b=E1zwlUIVBgH50tbhIrOnZU/bWaVQbnh8JRTtb0wJnjkaXf3HLOiIBy7OSz632Vi9yS
+         xZJtIPXCbxNqCujKEjU1EOHBOQaL5YDcH89MNyHmC4Px8nEaGghgIgIXFG+u6u2XZLlZ
+         EQJih39EheeT3HOMNsiTXmwuDlZnid0guMK02AlV/Cco3hgGUgqzn6XUN+0OxUN9UBOw
+         VebWOweMtSExTMzGSDSSOPU7FvzYa2ZHtr1ShUJve6IZHJi5bt8FrCGsvHMxlqYXkiEO
+         lLfAghUvepacj3juU/e9b/zU5iWLr8stxurI4pKU4BfS9vqEFXlsbRZTcvF91ZPiwC96
+         1gGA==
+X-Forwarded-Encrypted: i=1; AHgh+RoczyC7bebJwDUA1NgI7RocpHjhumDBBFN8uKJbGxN2lhqfm8FBmUY/2Zs56tYFhL8+YMSnZg==@vger.kernel.org
+X-Gm-Message-State: AFuF++liy7y6yKe1pOyfXixg3PzWFm+Nj8r9JV/5wcctg7Vxa5lkmnKF
+	TsDQWbRrEXidCqa9FV8bW3QwF+dQNeGLSMKoi0NUs0vTZbiXSq5mXwIxPp+oMUCm7w==
+X-Gm-Gg: AR+sD11TtaX/rEZI7gW5Pletu9eGfQdpE2GoOQzxAtCKyP6ibdXk9kcnhmy+nsucm6m
+	a6NjauOUwl0kspLQ9fFHR6px1yU4XHfM7Hba5T+Hg+1N/XgM1yG9+0EVSMgUv/F/384eMFN3tl6
+	uQcPt9bB514bmG2Eb8aZst/pvJfuUyyG0aiLIanZUqqLybZVdb7ygxrxay4fwTMLP7lp71VwIpn
+	LgexoLVG0+MokGqwMZc0Zz6u4jHVW20AIrbpPl8LxcGvS1JfkR/V0ZyDm8geLDdfeI4GFazZ+90
+	2Xb0blqrqEPfneeiYJZi6T56N8pMhqmctjW0tzybl/Y8tfFrAqB9B7SOG+vg4mSSK2LjQ8xvncV
+	kC2GYsevGWytlexMVM0oMlerZr6UOEoZ8EOYf9qDkbsdqQlVMyZs/aHZyuYKa25+aMcXJO52y/P
+	AXnwnpGaJABKS/rOPcBYhP6K2+7mt8X1WxgAh6XI/9jZcg7Wp6kSUm8oHjxXqzwbN0Me0UZV8FL
+	JxJUO5yb/pOoW+BhJxkttW7D0BQOUiA8A==
+X-Received: by 2002:a05:620a:1d05:b0:92a:3679:7978 with SMTP id af79cd13be357-9376f9b9b8amr279389385a.18.1787609226991;
+        Mon, 24 Aug 2026 15:07:06 -0700 (PDT)
+Received: from localhost (pool-71-126-255-178.bstnma.fios.verizon.net. [71.126.255.178])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-93749af1f4bsm592605085a.18.2026.08.24.15.07.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 23 Aug 2026 11:10:37 -0700 (PDT)
-Date: Sun, 23 Aug 2026 11:10:35 -0700
-From: Stanislav Kinsburskii <skinsburskii@gmail.com>
-To: Shuah Khan <shuah@kernel.org>, Paul Moore <paul@paul-moore.com>,
-	Eric Paris <eparis@redhat.com>, Al Viro <viro@zeniv.linux.org.uk>,
-	Amy Griffis <amy.griffis@hp.com>
-Cc: Frank Hofmann <hofmann@deshaw.com>, Noah Orlando <orlandon@deshaw.com>,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	audit@vger.kernel.org
-Subject: Re: [PATCH 0/3] audit: Measure and reduce syscall filtering overhead
-Message-ID: <aos3m2wG3To3wCeo@skinsburskii>
-References: <20260806-audit-v1-0-ddd0d94ff0b6@gmail.com>
+        Mon, 24 Aug 2026 15:07:06 -0700 (PDT)
+Date: Mon, 24 Aug 2026 18:07:05 -0400
+Message-ID: <65425b98ae226a9d19f89bd66a1defbe@paul-moore.com>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260806-audit-v1-0-ddd0d94ff0b6@gmail.com>
+MIME-Version: 1.0 
+Content-Type: text/plain; charset=UTF-8 
+Content-Transfer-Encoding: 8bit 
+X-Mailer: pstg-pwork:20260824_1800/pstg-lib:20260824_1107/pstg-pwork:20260824_1800
+From: Paul Moore <paul@paul-moore.com>
+To: Richard Guy Briggs <rgb@redhat.com>, Linux-Audit Mailing List <linux-audit@lists.linux-audit.osci.io>, LKML <linux-kernel@vger.kernel.org>, linux-fsdevel@vger.kernel.org, Linux Kernel Audit Mailing List <audit@vger.kernel.org>
+Cc: Eric Paris <eparis@parisplace.org>, Steve Grubb <sgrubb@redhat.com>, Richard Guy Briggs <rgb@redhat.com>, Roman Dolgikh <rmd4work@mail.ru>, Ricardo Robaina <rrobaina@redhat.com>
+Subject: Re: [PATCH v3] audit: free proctitle in context so it can be re-set by  fork on exec_binprm
+References: <ef5bf18a4b3805ec0fe5fb638963ccbdfc01d6fe.1787077711.git.rgb@redhat.com>
+In-Reply-To: <ef5bf18a4b3805ec0fe5fb638963ccbdfc01d6fe.1787077711.git.rgb@redhat.com>
 
-On Thu, Aug 06, 2026 at 06:01:18PM -0700, Stanislav Kinsburskii wrote:
-> This series adds a repeatable microbenchmark for audit's fixed syscall
-> overhead and uses it to address two cases where audit continues doing work
-> which cannot produce a record.
+On Aug 18, 2026 Richard Guy Briggs <rgb@redhat.com> wrote:
 > 
+> Between the actual process startup (fork systemd) and the executable file
+> replacement (exec), systemd sets a temporary file name (executable file
+> name in parentheses). If an auditable system call occurs at this point,
+> the audit context will latch the temporary process name into the cache.
+> This name will not change again. The patch clears proctitle into the
+> audit cache when the exec call is made, allowing the new process name to
+> be latched.
+> 
+> Suggested-by: Roman Dolgikh <rmd4work@mail.ru>
+> Link: https://github.com/user-attachments/files/20751461/fix_audit_proctitle.txt
 
-A gentle ping on this series.
+I did drop the link above from the commit as it is contained within the
+link below.
 
-Thanks,
-Stanislav
-
-> Patch 1 adds audit_bench, a manually run getpid(2) microbenchmark under
-> tools/testing/selftests/audit.  It leaves policy management to the caller
-> so the same workload can measure different rule configurations without
-> silently changing the system policy.
-> 
-> Patch 2 fixes audit_n_rules and audit_signals accounting when rules are
-> removed automatically with a watch or tree, or after an LSM rule update
-> fails.  These paths could leave the counters nonzero after the last
-> applicable rule had disappeared, causing every subsequent syscall to
-> allocate a non-dummy audit context.  It also centralizes rule accounting
-> so all rule removal paths share the same bookkeeping.
-> 
-> The median getpid latency in the same unpinned VM was:
-> 
->                                   no rules   stale state   fixed
->   automatically removed watch       38 ns       55 ns      38 ns
->   automatically removed tree        38 ns       59 ns      38 ns
-> 
-> Patch 3 builds on those lifecycle helpers.  It maintains an aggregate mask
-> of the syscall numbers present in exit rules and checks that mask before
-> walking the exit filter list.  The mask is architecture-independent and
-> therefore conservative: overlapping syscall numbers may cause an
-> unnecessary scan, but cannot suppress a match.
-> 
-> For an unrelated getpid workload, the median latency scaled as follows:
-> 
->   exit rules                         1       32      128      256
->   before                            55 ns    71 ns   428 ns   791 ns
->   after                             55 ns    55 ns    55 ns    55 ns
-> 
-> The aggregate mask is updated through the centralized accounting helpers.
-> Insertion sets the relevant bits before publishing the rule with
-> list_add_rcu(); removal unlinks the rule before clearing them.  This keeps
-> the lockless rejection test conservative during concurrent rule changes.
-> 
-> The series does not change the audit userspace ABI or rule matching
-> semantics.  The benchmark and complete reproduction procedures are
-> documented in the individual patches.
-> 
+> Link: https://github.com/linux-audit/audit-kernel/issues/170
+> Signed-off-by: Richard Guy Briggs <rgb@redhat.com>
+> Reviewed-by: Ricardo Robaina <rrobaina@redhat.com>
+> Reviewed-by: Bradley Morgan <include@grrlz.net>
 > ---
-> Stanislav Kinsburskii (3):
->       selftests/audit: Add syscall overhead benchmark
->       audit: Fix filter rule accounting after automatic removal
->       audit: Skip exit filtering for syscalls without rules
-> 
->  MAINTAINERS                                 |   1 +
->  kernel/audit.h                              |   7 +
->  kernel/audit_tree.c                         |   1 +
->  kernel/audit_watch.c                        |   2 +
->  kernel/auditfilter.c                        | 140 +++++++++++------
->  kernel/auditsc.c                            |  13 ++
->  tools/testing/selftests/Makefile            |   1 +
->  tools/testing/selftests/audit/.gitignore    |   2 +
->  tools/testing/selftests/audit/Makefile      |   9 ++
->  tools/testing/selftests/audit/README        |  30 ++++
->  tools/testing/selftests/audit/audit_bench.c | 227 ++++++++++++++++++++++++++++
->  11 files changed, 389 insertions(+), 44 deletions(-)
+> Changelog:
+> v3: use previously assigned context
+> v2: simplified to call single use directly before need in audit_bimprm
 > ---
-> base-commit: ea2bff00da89d7767d677bb68470130ba96f4928
-> change-id: 20260806-audit-96a1e71d38b1
-> 
-> Best regards,
-> -- 
-> Stanislav Kinsburskii <skinsburskii@gmail.com>
-> 
+>  kernel/auditsc.c | 2 ++
+>  1 file changed, 2 insertions(+)
+
+Merged into audit/dev-staging since we're currently in the middle of the
+merge window, this will got to audit/dev once the window closes.
+
+--
+paul-moore.com
