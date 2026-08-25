@@ -1,67 +1,67 @@
-Received: from mail-qv1-f50.google.com (mail-qv1-f50.google.com [209.85.219.50])
+Received: from mail-qk1-f176.google.com (mail-qk1-f176.google.com [209.85.222.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B75039448F
-	for <audit@vger.kernel.org>; Mon, 24 Aug 2026 22:25:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2C35C2EA
+	for <audit@vger.kernel.org>; Tue, 25 Aug 2026 00:08:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787610337; cv=none; b=A9/WCxHAWtyDeYXDjbbzLCRcyuepjWACfTRGh7s/LxZO6AXzTWfaBjnUPRKqdjk7RQ3qhIzCmmAzWafnhq9IM4ROgD72JegaR+uvBJOw2Lc2sUzYcN8SCYdGpPFy2r7iwDl87h1WMf04nk1dsPRKeaetxVtdpaw4nBVOJa1z3ZE=
+	t=1787616532; cv=none; b=b62hHdvyg3r6rMnYybmPtAIziUB+B7TynqpPzuQYr5ubq8bH3k1XVI1VZ6ua3r4QnV7V+0XlkDpQFMbg//4LkwGLKTyNS3dH+Ugc+PMU4gFFod/FBkbeNDkPeod00P+937c70cWe5N0uhq4JecH/r3UFoZrFzHtvJTOXJ/789I8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787610337; c=relaxed/simple;
-	bh=DiYaIg23voHnWic5pRIFmoyFDeYKH4RNaLdhk0wtH68=;
+	s=arc-20240116; t=1787616532; c=relaxed/simple;
+	bh=zNt8ul5Dug+HD7DqsrQH280x7qPjPH0DLVMLUclrytk=;
 	h=Date:Message-ID:MIME-Version:Content-Type:From:To:Cc:Subject:
-	 References:In-Reply-To; b=teqV4IFfDng3Vgrn/Yq/xw9voj1snQOwde9X3BhGIXRaFy5Ch++MdRG/ByyXoPvf/z6l2siMy/2ZwF52C5C0ghiFxZoOajmvJftSDwxBfeRZ9a8pYTDz32Mqb5DKozZBJlGE48jJnwjmqSoMcWoOjV+lMr38FLMburZ157EoVfc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=WyzrJ3vQ; arc=none smtp.client-ip=209.85.219.50
+	 References:In-Reply-To; b=ixAkYsCg14u7g8uyElq6Kaw7LdVMyFfp36eTgQagLbvWR/CWO/4wu0qTbCkJwouis94Cv2dbLUVndTHFEAwlcXuZSME/L4C6wLrZNT0+Go9CfX40IekJ1sZ3ZJ3NysbLuHjMgCV5or7s+5go+AAIZVtr7zGvwFBE2ym2IUWhXRo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=PdZDM98u; arc=none smtp.client-ip=209.85.222.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="WyzrJ3vQ"
-Received: by mail-qv1-f50.google.com with SMTP id 6a1803df08f44-90c4e297a01so24752656d6.3
-        for <audit@vger.kernel.org>; Mon, 24 Aug 2026 15:25:35 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="PdZDM98u"
+Received: by mail-qk1-f176.google.com with SMTP id af79cd13be357-92e6c4a867cso239148085a.0
+        for <audit@vger.kernel.org>; Mon, 24 Aug 2026 17:08:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1787610335; x=1788215135; darn=vger.kernel.org;
+        d=paul-moore.com; s=google; t=1787616529; x=1788221329; darn=vger.kernel.org;
         h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
          :content-type:mime-version:message-id:date:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=oGMZUUxQZBdIk0fR0JY3BBUlzUWNpfRyiBQlNEO9giM=;
-        b=WyzrJ3vQCq0NJ61pSV/KIqHlrVjHuesAJbiTUol90cMxRS3uFxv2xSZBM09kw5/Fk8
-         LqKtE/NIqHOrwek0OYOjfpP3S8tPa0SbmdYZxcoGaJfJdgjsQXXHgXb6hKRmTpKqDic4
-         X1ukfuinQTMXySPj+Qm7IjfJU1tdc86ZWTegKayCMgIyFom2qTH2wKqWyJiG7T4qVbnh
-         OPnxbKbB43Bpym2F9SN699Cq12We0sGGBFbb6c31kFqdO5B5/p9QuI91aX/d/T8DxUA5
-         r2BI9Yl7SMdBFsrA/nPqXq0tq2VO76WbsjMsf57YNIMbXSirdA5Ay43h9NCAJe0UKZdx
-         qZsg==
+        bh=fZYG0rGmvOndqq2+XvkG4bcHzhwd5RvRGcgzNkG8xqE=;
+        b=PdZDM98umYl/3pFR9//i9uiRywTTocZHnOWXRUQlMdW2GaLzatgB3DQKdtdR33aqUi
+         0lndTJ6JNR0fU2y56OlhqKnzBU4eh6nsZcrEyjFGAi6+aULTXTmA2t1vx06+PCbwukyc
+         S4CvCnppLdTcDFpwItOz0wlUR+/yx/oq6Zq6HaBieFW9J3lFsMCkYNHtqi6N7iz58vgk
+         sD9Mez24lxVgoDG+QW5wGXnW78V4Gk14H6qFBspjiI634gch77oewkPD9df24XIaR1uB
+         9UlXBZ/+DQu6H0ft50bpxUbsENLLgl0XJWjtEUQFureDQZvGRc6R4Q84ZxyPYHVS56AG
+         32gA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787610335; x=1788215135;
+        d=1e100.net; s=20251104; t=1787616529; x=1788221329;
         h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
          :content-type:mime-version:message-id:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=oGMZUUxQZBdIk0fR0JY3BBUlzUWNpfRyiBQlNEO9giM=;
-        b=Y8L6D7feG/aWEgOoVhOUrK2FOVa9hcKWfaMCDhySF9DdS6NmLCPdPk2ucHwyKtM5Q4
-         AIz9O89KNQbp0TOJNgvov15N0bTdvYuN11oU84OCTe/hWmW3ri0rma25wvxpsMb7O2VE
-         aHiIELYdc0Z5QPQcWUvdIiSYS9GqTBSdimliMAUUb34tPmEhUf/BqOHiSWCGkSvcRI5G
-         x8DkVrqX19/0bKdhZqMA8rNsPZhv4Dr4a9mJPf/qxuhgi+HbfGC0to7StdywWIIEX8S/
-         XO9xbYYsorMaMUa0jNrJmE2rtrnQAxhBCX/iq6+pzwbeN4h7Bop9IEXhI8aUovfAbBFp
-         s+Yw==
-X-Forwarded-Encrypted: i=1; AHgh+Rp97qwinn6SWcxo81IpjMPt0nQyyTgTiVmo3rWNSyCj6o4zkqH7khFUsgrNB+8vmuKm0Nb4lA==@vger.kernel.org
-X-Gm-Message-State: AFuF++lrGBAGPv99D3hbAO/K2rM9N3rN9Jv3TbDcYmR6tnCWmOlfLL7e
-	AvyubT0szS9TA5SKD8j4Frs6+0Q2qUQSyoj9lhrhTVxTkHVahf3VCr+aN6dx2EHp+g==
-X-Gm-Gg: AR+sD12PRJ96BNN3MJijilUrS36Gn/RpFBr4H5OwEor2o1FpmNMB96aI9eD+8PtgnVO
-	/7obopkBf42WIoeOdywY7iQdrMFJGuNyXjqrUG/J1vyxk+T+p+xdKPNGUWmtpduNb8zWSg5Q33B
-	QNPQP4k1Txi9D+ooEEVAm0zVPifE6QQH+xDhEqfVnGODvhlTgJWk+KfL39Tzh1ZPEK2jyPaaxMX
-	YbQqzXlQOwl/WDeKoisq+oD6Q+BfFV5hHUtIr8QffdGQSL0L0FaG4rvMiC2UuL3dpcMEtwUVKu5
-	Gwd4YeEZ4XG/+kBb6Gr8HMiu9JwTPVxa2on1qVDBFJVAoBQcjomvm/S9rIl4ItuEFMMik8yw9Yg
-	JsC8vmjvRSfe1uQtAwX5xAPA0i6YRyvz5QnoDBHfG5dB1M3WqKWdfW/es9BwHf59MunZl57B7Xt
-	EFS2DYDIzCLoAtdOuLCtPwDSrD7wEX/1vu3RiJqEJRBDMav65+xfe05GFXewZitX7FSZ9zal8nl
-	XEq8WFtG06rk+LzFeqgOM99y5OZRxC7cQ==
-X-Received: by 2002:a05:6214:62cc:20b0:90a:9683:8403 with SMTP id 6a1803df08f44-90cb7e97566mr16403646d6.14.1787610334819;
-        Mon, 24 Aug 2026 15:25:34 -0700 (PDT)
+        bh=fZYG0rGmvOndqq2+XvkG4bcHzhwd5RvRGcgzNkG8xqE=;
+        b=SFKlM41IYfud0vXJtrJgkk30ZVx8s3D7jVmpy+YtXbsKiyiLipEshItSzP/y+zuLEd
+         q2K5Ns1uo2lJooDjlGRkb1QpDLw9Y6qccnynKJGaGNgBR8QTZaybjGY4mWL7qOeO17n6
+         rabSy9OsiBfLv6tSRX4+CjI88p1eOlHF50R0iA8p5bBDpxErSk5QKUK7FgUwIErgLxAu
+         GUxvhvXXF9i9269EDMf7TfRFLIKzSc/HEOdqmGKwRn2CaKkGnI7fLGgXtk5uU2h1R8Ro
+         0JfF0HltzS8lnDpZWb7V7nU5j3u6OczoJD1kTKJSJtXxPwceIdxYjYCD2Wc/ixsw3laj
+         yfdQ==
+X-Forwarded-Encrypted: i=1; AHgh+RpLr4fSiWodkOd39uisjh7441B+gFu60heIxWGBn6osFMaII06VVxHsueynpkIUTpptz3NR4A==@vger.kernel.org
+X-Gm-Message-State: AFuF++nNIdOawu1JnTwF/RamZGPIyhXoGW0Wkyhr0+fmeFnoaovYZpAf
+	3KP9ijglINSjv12OtdRE6fe36zSEKLaZ6KjdloAPKbzejIQ/3qRQEtHNYopiQ2UcZQ==
+X-Gm-Gg: AR+sD11SJN82cHmIeylt6DSvDvbX+OnrH2jn8v7wRXIJ+fXGWo2mLS39LZXCe7jBZBN
+	XuvPQwh+U3YsRzlmnltZg1itbfN0LIXUEPF+ENLe6HxarlJ6v21FkbOPOJjAPToUBdIO4RUlWIQ
+	X3oBurglvMWYqEGxfvqUkiI2sKXspNg8gyRLvydRw4c2XxF8EVIe+wX4qeQeaisJKtiEePTCHsD
+	uWUfsbj10+d+QzM4HI6ttvE2RiiRayNd5iwvT0iTewIgGDOTkuEzMnI2R3GWhe97BQjPggkqEcE
+	A4RTDrYeGB88+Wgn9UdWKoifcY1GMMQJUvShVggZE3xsydFDwJ8M45ezlaDGAhjIAzebpGK+0jJ
+	9cWZyOn0FAVla5IxzWsSLRRCC581kT36+4usWgnhFd8q6cuRPvfhUKdLtFPmN87etSc0HHNkMZu
+	A82gpsRKhR6H8+JXsybUXXRPTRi444KT5YhwBWUCS75mvwrvjsOR7WdMAgN0RkunE8VmJdI66aJ
+	6+wP2szlLpXjGjGlxgY/mFxkjlzaNGdyLEGIvaRiHhY
+X-Received: by 2002:a05:620a:668f:b0:934:97c1:ca5c with SMTP id af79cd13be357-9376f994ecbmr245172785a.16.1787616529334;
+        Mon, 24 Aug 2026 17:08:49 -0700 (PDT)
 Received: from localhost (pool-71-126-255-178.bstnma.fios.verizon.net. [71.126.255.178])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-90c93a4bea7sm72682436d6.35.2026.08.24.15.25.33
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-93749da86eesm615566685a.34.2026.08.24.17.08.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Aug 2026 15:25:33 -0700 (PDT)
-Date: Mon, 24 Aug 2026 18:25:32 -0400
-Message-ID: <7b9f43325dc569ddb689b02893bde8cc@paul-moore.com>
+        Mon, 24 Aug 2026 17:08:48 -0700 (PDT)
+Date: Mon, 24 Aug 2026 20:08:46 -0400
+Message-ID: <552658f244965a3dca8081f0020155e8@paul-moore.com>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
@@ -72,30 +72,76 @@ Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit 
 X-Mailer: pstg-pwork:20260824_1800/pstg-lib:20260824_1107/pstg-pwork:20260824_1800
 From: Paul Moore <paul@paul-moore.com>
-To: Ricardo Robaina <rrobaina@redhat.com>, audit@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc: eparis@redhat.com, Ricardo Robaina <rrobaina@redhat.com>
-Subject: Re: [PATCH] audit: use copied skb length in  kauditd_send_multicast_skb()
-References: <20260810125726.775689-2-rrobaina@redhat.com>
-In-Reply-To: <20260810125726.775689-2-rrobaina@redhat.com>
+To: Bradley Morgan <include@grrlz.net>
+Cc: Eric Paris <eparis@redhat.com>, Ricardo Robaina <rrobaina@redhat.com>, audit@vger.kernel.org, linux-kernel@vger.kernel.org, include@grrlz.net
+Subject: Re: [PATCH] audit: move the nlmsg_len fixup from __audit_log_end() to  send time
+References: <20260814010153.14488-1-include@grrlz.net>
+In-Reply-To: <20260814010153.14488-1-include@grrlz.net>
 
-On Aug 10, 2026 Ricardo Robaina <rrobaina@redhat.com> wrote:
+On Aug 13, 2026 Bradley Morgan <include@grrlz.net> wrote:
 > 
-> The netlink header's nlmsg_len was being set using the original skb
-> instead of the local copy passed to nlmsg_multicast().
+> Right now the auditd breakage (nlmsg_len gets set to the payload
+> length instead of the full message length) is applied when the record
+> is queued, in __audit_log_end(). That is why
+> kauditd_send_multicast_skb() has to deep copy every record and then
+> undo the length on the copy, just so the multicast group still sees a
+> standard netlink message.
 > 
-> While skb->len and copy->len are identical at this point following
-> skb_copy(), it is conceptually cleaner and safer to use the length
-> of the skb being actively modified and sent. Thus, this is a minor
-> cleanup only, no functional change expected.
+> So flip it: finalize the header with the standard full length at
+> queue time, and apply the auditd length at send time in
+> kauditd_send_queue(), right before the unicast. Records stay standard
+> netlink messages the whole time they sit in the queues, and the
+> multicast copy stops needing its own fixup. The copy itself stays,
+> because the rewrite still lands in the data region the listeners
+> already hold.
 > 
-> Signed-off-by: Ricardo Robaina <rrobaina@redhat.com>
-> Reviewed-by: Bradley Morgan <include@grrlz.net>
+> auditd sees the same bytes as before: the fixup is computed from
+> skb->len and that does not change between queueing and sending, so
+> records that come back around through the retry and hold queues get
+> the same value again. Reply and rule list skbs are built with
+> nlmsg_put() and go out on their own paths, none of that is touched.
+> 
+> This came out of reviewing Ricardo's "use copied skb length" patch,
+> where I suggested moving the fixup as the more interesting cleanup.
+> 
+> Reviewed-by: Ricardo Robaina <rrobaina@redhat.com>
+> Tested-by: Ricardo Robaina <rrobaina@redhat.com>
+> Signed-off-by: Bradley Morgan <include@grrlz.net>
+> Link: https://lore.kernel.org/r/20260810125726.775689-2-rrobaina@redhat.com
 > ---
->  kernel/audit.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  kernel/audit.c | 30 +++++++++++++-----------------
+>  1 file changed, 13 insertions(+), 17 deletions(-)
+> 
+> diff --git a/kernel/audit.c b/kernel/audit.c
+> index 9412af9144bc..bcfed6e3678e 100644
+> --- a/kernel/audit.c
+> +++ b/kernel/audit.c
+> @@ -802,6 +802,12 @@ static int kauditd_send_queue(struct sock *sk, u32 portid,
+>  		if (skb_hook)
+>  			(*skb_hook)(skb);
+>  
+> +		/*
+> +		 * auditd wants nlmsg_len to be the payload length, not the
+> +		 * full length, so break it here at send time.
+> +		 */
+> +		nlmsg_hdr(skb)->nlmsg_len = skb->len - NLMSG_HDRLEN;
 
-Looks reasonable.  Merged into audit/dev-staging, will be moved to
-audit/dev next week.
+One of the reasons we set the length in __audit_log_end() is so that we
+only do it once, plus the multicast fixup.  In this patch we still set the
+length in __audit_log_end() as well as potentially multiple times in
+kauditd_send_queue().  This patch does drop the multicast fixup, but it
+isn't as clean a solution conceptually as the current code in my opinion.
+
+Ultimately, in this patch we still have at least two length calculations
+with the potential for additional unnecessary calculations/assignments if
+we need to loop through kauditd_send_queue() multiple times.  The existing
+code is capped at two calculations/assignments.  I appreciate the time
+you've put into this, but I think the existing code is the better option
+at this point in time.
+
+>  		/* can we send to anyone via unicast? */
+>  		if (!sk) {
+>  			if (err_hook)
 
 --
 paul-moore.com
