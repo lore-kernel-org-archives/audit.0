@@ -1,137 +1,115 @@
-Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4810B25A2DD
-	for <audit@vger.kernel.org>; Thu, 27 Aug 2026 01:42:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.215.181
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787794966; cv=pass; b=f6Y7+LbtKQS9CQCUk+vnOd7EztQ5eFM7YvBqvHkxL92J7WhFnERU6Ceuj1uLgnpOxBZlzRql1mZYtE/KT+MlDNSKii2GBZW7wu8r8XSNzGAsowgjm2ZMjpBIaDPKna7X2vbsR5z0HFmmRohEkr9f6ppGMr3/KTIKn8Abkri2Nf4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787794966; c=relaxed/simple;
-	bh=jQXZpWEa69A8mhfcE1SS+n9nS7LZ88iDUXIZo6zOxlc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=U3hJxrJe/Kh9oo5dqH7wbHWapy3uxj3JpY2hAVQUDTBpLvUsesEQY/7c2MqVyJ9eb8DxM1eEPVgvUj5uc4EGENfLmHbat0svAxmpoD7vwrgR7dpmojYfCAZ5vHq/zdW/npkKMbfhQLz8nlZJ0xMX+TucjiodHXhGRAJcrwbbgIs=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=WUkkzwSL; arc=pass smtp.client-ip=209.85.215.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F8DF320A14
+	for <audit@vger.kernel.org>; Fri, 28 Aug 2026 01:53:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1787881996; cv=none; b=YN7PYceCVrQlyP7hnkZLz/5vrkTpNpP3Y6h5tdsyIq90weKn4PEAJd9wOE11hwGR65Cn3gNqSjy4rZd7VTLLvxzHSsuGKntQgvjEQIcRLwHLqVgni+sMlLCBXzK316Infck3Dn9nOL/66iD6IXPfSWylwFX+HJP6TdU1Q6j16Os=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1787881996; c=relaxed/simple;
+	bh=a879juwz7YnXRSU0aj4H9oqy8QG+UQ6p/1llyGoW7h8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 In-Reply-To:Content-Type:Content-Disposition; b=CJflxnZOH0EFGqf4wav4nvKwKlqdYzABeMpCmXT21IALI2PPWDKuysoXo6gCEHtPQDmQFOPNPKd+AguQHbdqTmKOKSq/yk6b7IBFSE4+O09OF+Bchj0sUpPAfZMLl9yrpLBtZhzGWO0wPfyO1mxayh1BA5vgWChx0tGyRxdo8Hg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=OK3bA1gE; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="WUkkzwSL"
-Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-c9e7391839cso1485873a12.0
-        for <audit@vger.kernel.org>; Wed, 26 Aug 2026 18:42:45 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1787794965; cv=none;
-        d=google.com; s=arc-20260327;
-        b=CKJGndxnSQ+89xom6E26nCX8XS7pB5VuaeBI/0k0BYy8wCIGjNfQpXAW8L+GIvWhhe
-         unOI0xeKwluAEJJV92zX6FMlAEcn5tymBmDsSwBpC0lp0IgXzvM2WZz5yg1J7abgUovL
-         tZJEGt6jEulShF1eSMwoaeC4RwZBVqZP/Yge+sxiBq+gdSPUq6ofMi6XmdYXfkrE6hc/
-         do92jUnJOIeYukoUgTT+zXM+ABxATaKAP5C/cj1NN+w+KqrPcSPLjXiI+pB38cwybBO7
-         jDwbHUjfWNAoeEjn9mscPTdJOP2MSg9QG+aBtFZkK5wQlj3DR/l/QMTeqrZ/eg3jgamV
-         iOJg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=MW12y6xPgbaKCNUYBedVgTiCqU80qClCqNc6nnpgicY=;
-        fh=Ndqgwvk5413DjaXd0/eakH6ecmR+ziRGRGeTWONY92o=;
-        b=VIhpeGOcWPcTa7TKY0h8X6ggj1iOsjktLIOkPS9ktZPNli4x5qlsKLsn/yk1W02n3J
-         0fjfPp63pXWYl4ms+O8ouJdhkOGDc34RwdX2HBDIOLsvFv5irtnTiWCEIg/ZWIpxWz3s
-         XGgq4b0NZmlwzmcdd1n/ymG1UFuiaFGZ34mdwffmBuEi7SWnTLd/Fv/KeMJO6H6HXGmr
-         E+koL5kjeek0ysOzfgFogypyyc8Lv+iv1d9IH2bo8redk2SeBjQ/lcplBb/4+PoDazut
-         XbjP4K/Y4+C5szof1yUrjfjgskuwOHHNwYL1bcsWdUkhZA/wKBhpij6rZQi2C+iwvR6T
-         vk7A==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1787794965; x=1788399765; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=MW12y6xPgbaKCNUYBedVgTiCqU80qClCqNc6nnpgicY=;
-        b=WUkkzwSL7c4v3IpPSPmt1VB6GOjcx4j4iCuMchKTUiu6UpAEWXQJUS8d0C8DwWy4RB
-         jqMVETOAQuIhP5N74NuSXmdPWooZtIWT5IXQruakCBWrnMhja30h8IhJ8Ww9C/8lW/7L
-         aAmpiOTayqWX1YGWwHnOJyEFPygbADX1wRCfLQbKFOynryAO4T6wcVTkStutEAMX+3or
-         /3/BdJ6eit5xsi4iiGIsxS8cUMZySyv/MtNYHGOqMFF7gu0mgH3BqDnj7IefJXaRttDL
-         FCtLzws4IzPSX4HRktfw/PiWqo5jd5t6/YKXsR6E4EHwGc6z0XfKNegSzPCoYe4ni3g2
-         FQKQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787794965; x=1788399765;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=MW12y6xPgbaKCNUYBedVgTiCqU80qClCqNc6nnpgicY=;
-        b=pU3i8klvPGKCkOt3VubAczeUnkQXK91Y/i2YxMn6YkMCBcnD9zZkTa+U4HfeMrES+U
-         gx79r2l2ez7p8YTzil+uGCsmuypmSO6PWnXL+dhE1RoHjCPkkHXgm9PQl+3c3u2WestV
-         dD4LYuEi3ccfY+8pMg3JFLYOVoDD+LIsgcBmRGOx/V41O0ECUtuVhvMo0Gsx/ipuaIJ9
-         dLYSlLx9/bWwbHKJj+hAfdueYRgXGPEmazmRTJAiAJCHkvphFRUXsbQeF6Ar9H/dUbXq
-         /I272rN+Imr3/stZ92ZPs+cuFksFjb2luBixOjER16BOIFyOfD0sqn5w9aUe9nGrPjae
-         dEhw==
-X-Forwarded-Encrypted: i=1; AHgh+RqzTYSDqA3MhE9+Q/ltVu9HGWhavMZFW7fthqJqaydDL8yZaLeb0jEI45kyy3HWmgrGfA8aEw==@vger.kernel.org
-X-Gm-Message-State: AFuF++kDenYpRm5RUHPhXuM8R0CeQCl02B+tBnyIcuo92S5vRi9A0Q8d
-	19mmTT3bRGOtXQziW8KCAA3dvCfpDYwuK754ZTpHz4bLlD/qGWFAlhANoxHQh0PXIqKulc1KKVj
-	Gf72/9U8H4TPQiKCuaf469ewyIV/+FAm1Cz/HUBN2
-X-Gm-Gg: AR+sD10FSNbA6NZZqHIty6im740lVZwZ+aH29xSxZOLvCNw5vr07Vs175ZmFnV1nH6d
-	vlBbDCXVHSvbgGupMiKkG3u/TEXLQGooB4notj/a/LnhQs0KeMqXiXf5LxkcdOSqHXg4+tPAcDL
-	XGfS+SfTbEBPt9CQnFEitns1Jg/ZbqvPBMBgL9pv/EXWNlTXzAbidxcoVipT8FEe/P2L19f3lFm
-	DG+HQeGlG9PQsdhWGV5JtWnKlCRUWvq2O7KZlVOo1/G4S2oNmIGrSeZMXVbYQN9elNcwuMSnSNd
-	wHiWRLBZtisiKDGyvzOpYplaOX2LTK8HExeDIB2lCmSL
-X-Received: by 2002:a05:6a21:9202:b0:3c3:64cb:9b99 with SMTP id
- adf61e73a8af0-3cf76283ed6mr24475298637.6.1787794964690; Wed, 26 Aug 2026
- 18:42:44 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="OK3bA1gE"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1787881992;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=cVa9ltN/AYxfIIR3vFfpODM3T6RUi+J6FBmrLKMnXUo=;
+	b=OK3bA1gE1ESCr4nrsx5EgkrK2BBT6xAD17iV55vT4x/GUEE3k+W9qE8C+WYXyDlXhS0v9+
+	fTRElR9iNBt3cMuSYsQ7P5QInVnxviLKQbOebx3D7d+eBu1QhGy04D2l1Xd+Fh/tC2jhg+
+	HPtrN9frrTd97uLSIR1QqgbDCnS+l34=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-256-jo8oXn_8Ne6Y4KKQywx0iw-1; Thu,
+ 27 Aug 2026 21:53:09 -0400
+X-MC-Unique: jo8oXn_8Ne6Y4KKQywx0iw-1
+X-Mimecast-MFC-AGG-ID: jo8oXn_8Ne6Y4KKQywx0iw_1787881988
+Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 6056219539AE;
+	Fri, 28 Aug 2026 01:53:07 +0000 (UTC)
+Received: from madcap2.tricolour.ca (unknown [10.22.76.4])
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id B4CB5180059E;
+	Fri, 28 Aug 2026 01:53:04 +0000 (UTC)
+Date: Thu, 27 Aug 2026 21:53:02 -0400
+From: Richard Guy Briggs <rgb@redhat.com>
+To: Paul Moore <paul@paul-moore.com>
+Cc: Linux-Audit Mailing List <linux-audit@lists.linux-audit.osci.io>,
+	LKML <linux-kernel@vger.kernel.org>, linux-fsdevel@vger.kernel.org,
+	Linux Kernel Audit Mailing List <audit@vger.kernel.org>,
+	Eric Paris <eparis@parisplace.org>, Steve Grubb <sgrubb@redhat.com>,
+	Roman Dolgikh <rmd4work@mail.ru>,
+	Ricardo Robaina <rrobaina@redhat.com>
+Subject: Re: [PATCH v3] audit: free proctitle in context so it can be re-set
+ by  fork on exec_binprm
+Message-ID: <apDp/lou9KwOz7M/@madcap2.tricolour.ca>
+References: <ef5bf18a4b3805ec0fe5fb638963ccbdfc01d6fe.1787077711.git.rgb@redhat.com>
+ <65425b98ae226a9d19f89bd66a1defbe@paul-moore.com>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <6a8f89e5.1d9ded08.62e62.00bf.GAE@google.com> <7F4D890F-C006-4855-888A-62ED786A32ED@mainlining.org>
- <CAHC9VhRvoDkJ0Pn1WHgTAEJ5RwZTmD4vChFGgqATn90C-Aae+g@mail.gmail.com> <1129ADC2-8838-47EE-A817-87631D933BA0@mainlining.org>
-In-Reply-To: <1129ADC2-8838-47EE-A817-87631D933BA0@mainlining.org>
-From: Paul Moore <paul@paul-moore.com>
-Date: Wed, 26 Aug 2026 21:42:33 -0400
-X-Gm-Features: AcwNN1UZQjdl8nAFoKRE5OXLt1mXTI6xe4mUlw-2BQCvwnerelt_uTfOeFp0llk
-Message-ID: <CAHC9VhT-SH8ci5f4cEGafAub4qE09KgWPJHRMgO_Uhwca2c3Bg@mail.gmail.com>
-Subject: Re: [syzbot] [audit?] BUG: unable to handle kernel paging request in integrity_audit_message
-To: Bradley Morgan <brads@mainlining.org>
-Cc: Mimi Zohar <zohar@linux.ibm.com>, Roberto Sassu <roberto.sassu@huawei.com>, 
-	syzbot+5ebeb3089ea6439c37be@syzkaller.appspotmail.com, audit@vger.kernel.org, 
-	eparis@redhat.com, linux-kernel@vger.kernel.org, 
-	syzkaller-bugs@googlegroups.com, linux-integrity@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <65425b98ae226a9d19f89bd66a1defbe@paul-moore.com>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
+X-Mimecast-MFC-PROC-ID: 2XmkPauOj7Igb1STN4tHn7oBb1b9NhLHg9VuKvyoB20_1787881988
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Wed, Aug 26, 2026 at 9:23=E2=80=AFPM Bradley Morgan <brads@mainlining.or=
-g> wrote:
-> On 27 August 2026 02:22:17 BST, Paul Moore <paul@paul-moore.com> wrote:
-> >On Wed, Aug 26, 2026 at 9:06=E2=80=AFPM Bradley Morgan <brads@mainlining=
-.org>
-> >wrote:
-> >> On 27 August 2026 01:50:45 BST, syzbot
-> >> <syzbot+5ebeb3089ea6439c37be@syzkaller.appspotmail.com> wrote:
-> >> >Hello,
-> >> >
-> >> >syzbot found the following issue on:
-> >>
-> >> #syz set subsystems security:
-> >>
-> >> Note:  here's my suggested fix, in security/ima_appraise.c
-> >>
-> >>  path =3D dentry_path(dentry, pathbuf, PATH_MAX);
-> >>  +if (IS_ERR(path))
-> >>   path =3D NULL;
-> >>
-> >> apparmor and tomoyo both IS_ERR check their dentry_path calls, ima
-> >> is the only one that doesnt. NULL fname is already handled by the audi=
-t
-> >> side
-> >
-> >Thanks for taking a look Bradley.  Adding Mimi, Roberto, and the
-> >linux-integrity list as the security/integrity/ima/ima_appraise.c file
-> >is their domain.
->
-> np man, do you want me to submit a patch for it? or nahhhh
+On 2026-08-24 18:07, Paul Moore wrote:
+> On Aug 18, 2026 Richard Guy Briggs <rgb@redhat.com> wrote:
+> > 
+> > Between the actual process startup (fork systemd) and the executable file
+> > replacement (exec), systemd sets a temporary file name (executable file
+> > name in parentheses). If an auditable system call occurs at this point,
+> > the audit context will latch the temporary process name into the cache.
+> > This name will not change again. The patch clears proctitle into the
+> > audit cache when the exec call is made, allowing the new process name to
+> > be latched.
+> > 
+> > Suggested-by: Roman Dolgikh <rmd4work@mail.ru>
+> > Link: https://github.com/user-attachments/files/20751461/fix_audit_proctitle.txt
+> 
+> I did drop the link above from the commit as it is contained within the
+> link below.
+> 
+> > Link: https://github.com/linux-audit/audit-kernel/issues/170
+> > Signed-off-by: Richard Guy Briggs <rgb@redhat.com>
+> > Reviewed-by: Ricardo Robaina <rrobaina@redhat.com>
+> > Reviewed-by: Bradley Morgan <include@grrlz.net>
+> > ---
+> > Changelog:
+> > v3: use previously assigned context
+> > v2: simplified to call single use directly before need in audit_bimprm
+> > ---
+> >  kernel/auditsc.c | 2 ++
+> >  1 file changed, 2 insertions(+)
+> 
+> Merged into audit/dev-staging since we're currently in the middle of the
+> merge window, this will got to audit/dev once the window closes.
 
-That's a question for Mimi and Roberto, but if you can put together a
-patch without too much effort it definitely couldn't hurt to post it
-(make sure you post it to linux-integrity).
+Thank you!
 
---=20
-paul-moore.com
+> paul-moore.com
+
+- RGB
+
+--
+Richard Guy Briggs <rgb@redhat.com>
+Sr. S/W Engineer, Kernel Security, Base Operating Systems
+Remote, Ottawa, Red Hat Canada
+Upstream IRC: SunRaycer
+Voice: +1.613.860 2354 SMS: +1.613.518.6570
+
