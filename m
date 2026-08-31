@@ -1,235 +1,142 @@
-Received: from mail-oi2-f4.google.com (mail-oi2-f4.google.com [74.125.231.196])
+Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A3A040099D
-	for <audit@vger.kernel.org>; Sat, 29 Aug 2026 18:27:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.196
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788028061; cv=none; b=KRszkLljO57B4g7GadfRR839RgbetyAxK/UgRTzOzjnXolaKSIV1Bcxg3H4Y+DkRGM0d/mnU42b0X/h0AsueEP1uzL0f33sOkE/2AvPs6T4qTjMfyB8OxCEDt8eFEx9w1/waStC/TjThtPcH8pfCkMiN3MBQeRci9yy6ueIseDA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788028061; c=relaxed/simple;
-	bh=qmIY9cd4YfgD5xSO1PnpOaIsQXH/XfPQKGC4HygGPOs=;
-	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:Cc:
-	 Content-Type; b=eCHpti7iyKNfBDbf7EMFayx0j7mfBj2d2IqMOf6ys1Ahng393w1KT8drbZ1/5o0SP3gBP+NAUz/gWRmSC5AIdpsLNiQXjQ9s1UhQYblekKriQt4FNRMRhC/AUuquar+iUQPp2nNNHH3w7uZT8V4GHCjpkD2slmd/KXmvQmQUWKA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=74.125.231.196
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-oi2-f4.google.com with SMTP id 5614622812f47-4ab2d72ff13so876501b6e.0
-        for <audit@vger.kernel.org>; Sat, 29 Aug 2026 11:27:39 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24ED449F11C
+	for <audit@vger.kernel.org>; Mon, 31 Aug 2026 18:01:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.178
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1788199304; cv=pass; b=uIARPkrydVpw3CUdbpfHHAEGjsygc4gnXKwjh5405NCJvqkEHn0SRylqeQ6N63M0A8uE8ZwANNxxINzK8T8j/OpINzSOdIq1ZGlNXw/GY+qTQFCi4c2NtRjMI9ZH/Bkbh+7psTmlPnpQIjmbC9OR0ehzdErrF+ujWvzD3nqFuR4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1788199304; c=relaxed/simple;
+	bh=DN7ajB5HW+161pKga12XB+ux9+zyLcXTHDVln4XJ3u4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=cLqgjaziIeNOajUG1sRJEEju+tklOIZff79qH4rvOYRbPxI5SGfoe1VhBSIulLHWJfLzJnessq8d8zIQIPGg6k4WzQZEVOazBND/TU6NknpgWVnj21SdsjYkqXq+/PgMQUx24R/HO03qInXw7dHJEpaNY274sRTI667Q6/shajU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=TmgoL+AX; arc=pass smtp.client-ip=209.85.210.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="TmgoL+AX"
+Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-853c07a76adso4002654b3a.0
+        for <audit@vger.kernel.org>; Mon, 31 Aug 2026 11:01:42 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1788199302; cv=none;
+        d=google.com; s=arc-20260327;
+        b=YYx/I7ENqYUafc08+VmrY30n0hVOjH50UXwpk03RSGLbeK+3lwO2XxQEezmj1WOf9m
+         URiNQKqj5HK8SK6wDus61XWyfbwvt7jaT16MGWRmFvAlipTzu8aq4YDV6m9tkujrF488
+         +wlBQmrAZxA84FtNCoMagih1ZHVi96tGcCiMpa/5Z8ohSe1H9rn+SCa0mGPCPx4creW0
+         n3f8WvkkoqUEb7TPaajWSDWUkrapF7Q3PZErbr3D/DljbYFlZYLRDehKm5RMFE1w2xQh
+         Vubkt8KCtDCVuTHAXYCQinBtrxzj73qtC2O1q9TU8sisj5HGWmO/qDaKN8I3sBuU0GWb
+         fr5Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=qcH86xjgshAXJpFP6qrb20Jfgu2TTKubE4sb7Xw/UbQ=;
+        fh=PQrP1gAqN+hY7oF1iZa7QuIuIwbPptJY68jnmQLUxq8=;
+        b=T3khmkSX4Hdh5aMV/y6MPPhLp6SsZxRFdsCSKzzinej89Z/agwI174vbHv7K8ZMEz4
+         pkBp9Ih9heI1THmGxHX+dH/hSwFQmpvUE0yoYFffFu34nLymYCkQM3d+WqCA9wYEu06C
+         C2qzcwkO5iDaJgqQTwZorjQV7QrQuHdcpyWoEQbupP5ciMDxXx9i/XdX7BfOxnkAWt5h
+         yWyA969eRu71PEdFxr7EIJWZbc6cbXtxpu3Qf9ODF5pVyfcCHEEUYQ298O0kSSkq+T05
+         WaQhyRcniCGQOJ05rr/INbN3UikQmY0JJunDdTFPwEAWL6/Le8sqRtZhl7lv+9Qv2+Hm
+         pnWA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1788199302; x=1788804102; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=qcH86xjgshAXJpFP6qrb20Jfgu2TTKubE4sb7Xw/UbQ=;
+        b=TmgoL+AX+K+1e+0xEF544/bUrWJ3T3a80izkqNfqNAKO898D8dx8I5/igau5wIciZA
+         vv5WkZqD5Dy+XtReibK5Ct+B4wsdewKBKTguNt7YWEC3tSvy3LpjsMmN3R6UMFJ9GUNG
+         sZawzTAYN7cWNQIAnORI2I6foeE6YDpl9p5NrUv9i/ax+ax/Bi5DIzB2XI4KzlsYc3oN
+         VqH1GJB6jHJaMstxshrYgxxFObIJmQgz379rvIFau6q9DbkMblsZrQQ+vH1jjcDYDcKE
+         kPspNZqPeAW/1UrrPh0NAxvvWqxEU0Vy2m8QiXn/qphWxO+iARdvnPNB5Ot9aIGIgr4U
+         n29Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788028058; x=1788632858;
-        h=content-type:cc:to:from:subject:message-id:in-reply-to:date
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=VjRRuz0jNscHK4iFPXII8dmeH+0Ecm+OwBXd0YtveV8=;
-        b=QCFmrnPOc63CS/UcybNafgCFZcpt3hJRV2/d9vtVT5KVKIYCsTZJLyqFom8gdIllUL
-         xHa5wGk6yqYYjmuAmuDyxQxbv8N1HEx9HGqSg1sUgazN/qwYlBpaGMAUkKZdcGG0hcb3
-         rhF+e+97LYXWDQDVEPDXOZTHU6DwEL8s3VC8bih3foqs7gKyx0B/gEUbtork6O88EOQi
-         1LS9zwjJfJDf+lFv3nxceqbn3zk/Ux2zYaiDJ9m0lAzr4P4Rle5CXl1cgFttL4fw0S3v
-         67H+HRk0zRvTSEFfhaG3TryBw/kv8zebnq1HpsP32Nf95c+6mwrlkhbGzqi7gH4lZP10
-         j1pQ==
-X-Gm-Message-State: AFuF++lIybVEQW2/3OZsr6cgeOGMH79Fv3/earjnkElC4foIOkKqYLNQ
-	TxrnHBNIejj2gsHvQB6ulvkzkIFv5WFWUqqkhBLWhtZMthf2rWmvFRTOq+GvSRn7VV5w8SCjWLL
-	9cBBzSqHnQ5bLEwjVpC41eNLMhQ/x7dAhT8k0NAo4yLTTA9hRHN+dBgLhGfA=
+        d=1e100.net; s=20251104; t=1788199302; x=1788804102;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=qcH86xjgshAXJpFP6qrb20Jfgu2TTKubE4sb7Xw/UbQ=;
+        b=SyOTrIol4VUWITZvNQrDDaxeYuPQdkm1DWCyAwmfhQ1BECz4vH4bbwNttBcKc/Wbih
+         pVmDIKY4W4fGmyhPPPQEJDUsTH4hfirIVY6OBX6SgWs7lwnGVHOB8CBnkfRzujnN1+/c
+         WHLTL7gri29MA7H7k4rJx5niic33/kAxDwAybSbXKBx2W8XNxCXkD7gIiNp+UcWOikH4
+         11tfNnqScrKJoyAwkeDGGx/aZRUnkqw7ZVze7zdFuSa4NDofOZ0m+1rbMGjH8NI2D/Sy
+         yG/UusFaAvU5JYDI6fM5dY8YAvhP8zH0AuIbKsj09GF8icKkOL39QSPS3TCVOEAeBdA1
+         BVOw==
+X-Forwarded-Encrypted: i=1; AHgh+Ro1QxSGxpS5BEuVujKUfCbqq2kyaOl3k07XJh6cefMsJX8taDE03el7vKnn6WLjRVE4B361EA==@vger.kernel.org
+X-Gm-Message-State: AFuF++l8aTAUxCRpox04nrYzG+l0d+UOnwoFVqYlOhRi6zLXBdvXUEX9
+	27CrIT/j3YZnp37CJw2EKnX+53I9JkNiwz5vyeq+SAHnz1pZJAHTS0fZp06i1HJdKS9Hge0VWcJ
+	KuHXKxbbrq8QCxaTsKfyh7/ysDOaVzPYgdFroDbEC
+X-Gm-Gg: AR+sD13lxeHWqnMoquoTkXuNdrQXAeXXt9M1BS/qPUCMZYnjGMFiNa3+AU62aTUE1Dj
+	1Duzzjzcgb8Cz7sJVT98IrpL1M1+H6aUSgm6I0EXy1jUqGiRRKBWe4ElZwxeCv/DfRXqRn1+GOT
+	E0/y3vAaNZ3ouiwTi3l89MJlGt81+7WyggHksKjTKCyDVSbHV3GfIfd/6cQn/+Bfb8V8MrUj+tA
+	oFi/jmtlTobk4QrquqDmVMSJSlSxl6WY+pysl17uNOTGDnsFcDjG+n4dhQlX5wIMnDqifN4Go9w
+	PIhdkNy03vgmmr6LebzlnOpi5PVzgVSEss9yMhfqjao3
+X-Received: by 2002:a05:6a00:802:b0:842:7296:dba with SMTP id
+ d2e1a72fcca58-85629064fcamr42578483b3a.7.1788199302293; Mon, 31 Aug 2026
+ 11:01:42 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6808:4f48:b0:4a0:d9a1:1a95 with SMTP id
- 5614622812f47-4b3981b36ffmr16005896b6e.14.1788028058163; Sat, 29 Aug 2026
- 11:27:38 -0700 (PDT)
-Date: Sat, 29 Aug 2026 11:27:38 -0700
-In-Reply-To: <2A2D4D25-BB50-40A5-AF2F-956EBDB07876@mainlining.org>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <6a93249a.4d659fcc.734b4.002d.GAE@google.com>
-Subject: Re: [syzbot] [audit?] BUG: unable to handle kernel paging request in integrity_audit_message
-From: syzbot <syzbot+5ebeb3089ea6439c37be@syzkaller.appspotmail.com>
-To: brads@mainlining.org
-Cc: audit@vger.kernel.org, brads@mainlining.org, eparis@redhat.com, 
-	linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, paul@paul-moore.com, 
-	roberto.sassu@huawei.com, stable@vger.kernel.org, 
-	syzkaller-bugs@googlegroups.com, zohar@linux.ibm.com
+References: <ef5bf18a4b3805ec0fe5fb638963ccbdfc01d6fe.1787077711.git.rgb@redhat.com>
+ <65425b98ae226a9d19f89bd66a1defbe@paul-moore.com>
+In-Reply-To: <65425b98ae226a9d19f89bd66a1defbe@paul-moore.com>
+From: Paul Moore <paul@paul-moore.com>
+Date: Mon, 31 Aug 2026 14:01:30 -0400
+X-Gm-Features: AcwNN1UjA6EQ0vdTUMZpIzMqbTR5XzQsbvy_jGC-ejOGutXWjivMDB6qbx9VHhc
+Message-ID: <CAHC9VhTAe1x5Fzj==SanTP85wxi+XQ5N2-m98fdxWmcAeM105g@mail.gmail.com>
+Subject: Re: [PATCH v3] audit: free proctitle in context so it can be re-set
+ by fork on exec_binprm
+To: Richard Guy Briggs <rgb@redhat.com>, 
+	Linux-Audit Mailing List <linux-audit@lists.linux-audit.osci.io>, LKML <linux-kernel@vger.kernel.org>, 
+	linux-fsdevel@vger.kernel.org, 
+	Linux Kernel Audit Mailing List <audit@vger.kernel.org>
+Cc: Eric Paris <eparis@parisplace.org>, Steve Grubb <sgrubb@redhat.com>, 
+	Roman Dolgikh <rmd4work@mail.ru>, Ricardo Robaina <rrobaina@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-> On 29 August 2026 19:12:29 BST, syzbot
-> <syzbot+5ebeb3089ea6439c37be@syzkaller.appspotmail.com> wrote:
->>syzbot has found a reproducer for the following issue on:
->>
+On Mon, Aug 24, 2026 at 6:07=E2=80=AFPM Paul Moore <paul@paul-moore.com> wr=
+ote:
+> On Aug 18, 2026 Richard Guy Briggs <rgb@redhat.com> wrote:
+> >
+> > Between the actual process startup (fork systemd) and the executable fi=
+le
+> > replacement (exec), systemd sets a temporary file name (executable file
+> > name in parentheses). If an auditable system call occurs at this point,
+> > the audit context will latch the temporary process name into the cache.
+> > This name will not change again. The patch clears proctitle into the
+> > audit cache when the exec call is made, allowing the new process name t=
+o
+> > be latched.
+> >
+> > Suggested-by: Roman Dolgikh <rmd4work@mail.ru>
+> > Link: https://github.com/user-attachments/files/20751461/fix_audit_proc=
+title.txt
 >
-> #syz test: dentry_path() returns ERR_PTR(-ENAMETOOLONG) when the path
+> I did drop the link above from the commit as it is contained within the
+> link below.
+>
+> > Link: https://github.com/linux-audit/audit-kernel/issues/170
+> > Signed-off-by: Richard Guy Briggs <rgb@redhat.com>
+> > Reviewed-by: Ricardo Robaina <rrobaina@redhat.com>
+> > Reviewed-by: Bradley Morgan <include@grrlz.net>
+> > ---
+> > Changelog:
+> > v3: use previously assigned context
+> > v2: simplified to call single use directly before need in audit_bimprm
+> > ---
+> >  kernel/auditsc.c | 2 ++
+> >  1 file changed, 2 insertions(+)
+>
+> Merged into audit/dev-staging since we're currently in the middle of the
+> merge window, this will got to audit/dev once the window closes.
 
-I've failed to parse your command.
-Did you perhaps forget to provide the branch name, or added an extra ':'?
-Please use one of the two supported formats:
-1. #syz test
-2. #syz test: repo branch-or-commit-hash
-Note the lack of ':' in option 1.
+... and now it's in audit/dev, thanks!
 
-> exceeds the
-> buffer. validate_hash_algo() passes the result straight to
-> integrity_audit_msg() without checking. ERR_PTR is not NULL, so
-> integrity_audit_message() sees a valid pointer and calls strlen() on
-> it, which faults:
->
->     BUG: unable to handle page fault for address: ffffffffffffffdc
->     RIP: 0010:strlen+0x30/0xa0
->     Call Trace:
->      audit_log_untrustedstring+0x19/0x30
->      integrity_audit_message+0x366/0x4f0
->      ima_inode_setxattr+0x512/0x5f0
->
-> Check for IS_ERR() and use NULL instead, which makes the audit message
-> skip the name= field instead of crashing.
->
-> Fixes: 4f2946aa0c45 ("IMA: introduce a new policy option func=SETXATTR_CHECK")
-> Cc: stable@vger.kernel.org
-> Reported-by: syzbot+5ebeb3089ea6439c37be@syzkaller.appspotmail.com
-> Link: https://lore.kernel.org/all/6a8f89e5.1d9ded08.62e62.00bf.GAE@google.com/
-> Signed-off-by: Bradley Morgan <brads@mainlining.org>
->  security/integrity/ima/ima_appraise.c | 2 ++
->  1 file changed, 2 insertions(+)
->
-> diff --git a/security/integrity/ima/ima_appraise.c b/security/integrity/ima/ima_appraise.c
-> index ced2e131b061..b280488e15fc 100644
-> --- a/security/integrity/ima/ima_appraise.c
-> +++ b/security/integrity/ima/ima_appraise.c
-> @@ -748,6 +748,8 @@ static int validate_hash_algo(struct dentry *dentry,
->  		return -EACCES;
->  
->  	path = dentry_path(dentry, pathbuf, PATH_MAX);
-> +	if (IS_ERR(path))
-> +		path = NULL;
->  
->  	integrity_audit_msg(AUDIT_INTEGRITY_DATA, d_inode(dentry), path,
->  			    "set_data", errmsg, -EACCES, 0);
-> -- 
-> 2.47.3
->
->>HEAD commit:    cf72cbb39da8 Merge tag 'io_uring-7.3-20260828' of
->>git://gi..
->>git tree:       upstream
->>console output: https://syzkaller.appspot.com/x/log.txt?x=16e7cc15580000
->>kernel config:  https://syzkaller.appspot.com/x/.config?x=85bc5cc2fc7394d9
->>dashboard link:
->>https://syzkaller.appspot.com/bug?extid=5ebeb3089ea6439c37be
->>compiler:       gcc (Debian 14.2.0-19) 14.2.0, GNU ld (GNU Binutils for Debian) 2.44
->>userspace arch: i386
->>syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=159ebd79580000
->>C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=123d1d79580000
->>
->>Downloadable assets:
->>disk image (non-bootable):
->>https://storage.googleapis.com/syzbot-assets/d900f083ada3/non_bootable_disk-cf72cbb3.raw.xz
->>vmlinux: https://storage.googleapis.com/syzbot-assets/755d053ff703/vmlinux-cf72cbb3.xz
->>kernel image:
->>https://storage.googleapis.com/syzbot-assets/0837738ba281/bzImage-cf72cbb3.xz
->>
->>IMPORTANT: if you fix the issue, please add the following tag to the commit:
->>Reported-by: syzbot+5ebeb3089ea6439c37be@syzkaller.appspotmail.com
->>
->>BUG: unable to handle page fault for address: ffffffffffffffdc
->>#PF: supervisor read access in kernel mode
->>#PF: error_code(0x0000) - not-present page
->>PGD eb99067 P4D eb99067 PUD eb9b067 PMD 0 
->>Oops: Oops: 0000 [#1] SMP KASAN NOPTI
->>CPU: 0 UID: 0 PID: 5921 Comm: syz.0.17 Not tainted syzkaller #0 PREEMPT(full) 
->>Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS
->>1.16.3-debian-1.16.3-2 04/01/2014
->>RIP: 0010:strlen+0x30/0xa0 lib/string.c:402
->>Code: 00 00 00 00 00 fc ff df 55 48 89 fa 48 89 fd 53 48 c1 ea 03 48 83 ec 08 0f b6 04 02 48 89 fa 83 e2 07 38 d0 7f 04 84 c0 75 50 <80> 7d 00 00 74 3d 48 bb 00 00 00 00 00 fc ff df 48 89 e8 48 83 c0
->>RSP: 0018:ffffc90002eb7920 EFLAGS: 00010246
->>RAX: 0000000000000000 RBX: ffffffffffffffdc RCX: 0000000000000000
->>RDX: 0000000000000004 RSI: ffffffff82081bc1 RDI: ffffffffffffffdc
->>RBP: ffffffffffffffdc R08: 0000000000000004 R09: 00000000000000a9
->>R10: 00000000000006c0 R11: 0000000000000001 R12: ffff888027be0e40
->>R13: 0000000000000007 R14: 00000000fffffff3 R15: ffffffffffffffdc
->>FS:  0000000000000000(0000) GS:ffff888096967000(0063) knlGS:000000005783f480
->>CS:  0010 DS: 002b ES: 002b CR0: 0000000080050033
->>CR2: ffffffffffffffdc CR3: 0000000055e55000 CR4: 0000000000352ef0
->>Call Trace:
->> <TASK>
->> __fortify_strlen include/linux/fortify-string.h:218 [inline]
->> audit_log_untrustedstring+0x19/0x30 kernel/audit.c:2203
->> integrity_audit_message+0x366/0x4f0
->> security/integrity/integrity_audit.c:60
->> integrity_audit_msg+0x41/0x60 security/integrity/integrity_audit.c:32
->> validate_hash_algo security/integrity/ima/ima_appraise.c:752 [inline]
->> ima_inode_setxattr+0x512/0x5f0 security/integrity/ima/ima_appraise.c:775
->> security_inode_setxattr+0x299/0x560 security/security.c:1940
->> __vfs_setxattr_locked+0xad/0x2b0 fs/xattr.c:309
->> vfs_setxattr+0x14a/0x390 fs/xattr.c:344
->> do_setxattr+0x145/0x180 fs/xattr.c:662
->> file_setxattr fs/xattr.c:672 [inline]
->> file_setxattr+0x139/0x1b0 fs/xattr.c:666
->> path_setxattrat+0x335/0x3b0 fs/xattr.c:732
->> __do_sys_fsetxattr fs/xattr.c:782 [inline]
->> __se_sys_fsetxattr fs/xattr.c:779 [inline]
->> __ia32_sys_fsetxattr+0xc4/0x140 fs/xattr.c:779
->> do_syscall_32_irqs_on arch/x86/entry/syscall_32.c:79 [inline]
->> __do_fast_syscall_32+0x13a/0x8b0 arch/x86/entry/syscall_32.c:291
->> do_fast_syscall_32+0x32/0x70 arch/x86/entry/syscall_32.c:316
->> entry_SYSENTER_compat_after_hwframe+0x84/0x8e
->>RIP: 0023:0xf7fb7fec
->>Code: Unable to access opcode bytes at 0xf7fb7fc2.
->>RSP: 002b:00000000fffd97bc EFLAGS: 00000296 ORIG_RAX: 00000000000000e4
->>RAX: ffffffffffffffda RBX: 0000000000000004 RCX: 0000000080000080
->>RDX: 0000000080001080 RSI: 0000000000000002 RDI: 0000000000000000
->>RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000000
->>R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
->>R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
->> </TASK>
->>Modules linked in:
->>CR2: ffffffffffffffdc
->>---[ end trace 0000000000000000 ]---
->>RIP: 0010:strlen+0x30/0xa0 lib/string.c:402
->>Code: 00 00 00 00 00 fc ff df 55 48 89 fa 48 89 fd 53 48 c1 ea 03 48 83 ec 08 0f b6 04 02 48 89 fa 83 e2 07 38 d0 7f 04 84 c0 75 50 <80> 7d 00 00 74 3d 48 bb 00 00 00 00 00 fc ff df 48 89 e8 48 83 c0
->>RSP: 0018:ffffc90002eb7920 EFLAGS: 00010246
->>RAX: 0000000000000000 RBX: ffffffffffffffdc RCX: 0000000000000000
->>RDX: 0000000000000004 RSI: ffffffff82081bc1 RDI: ffffffffffffffdc
->>RBP: ffffffffffffffdc R08: 0000000000000004 R09: 00000000000000a9
->>R10: 00000000000006c0 R11: 0000000000000001 R12: ffff888027be0e40
->>R13: 0000000000000007 R14: 00000000fffffff3 R15: ffffffffffffffdc
->>FS:  0000000000000000(0000) GS:ffff888096967000(0063) knlGS:000000005783f480
->>CS:  0010 DS: 002b ES: 002b CR0: 0000000080050033
->>CR2: 00000000f7fb8000 CR3: 0000000055e55000 CR4: 0000000000352ef0
->>----------------
->>Code disassembly (best guess):
->>   0:	00 00                	add    %al,(%rax)
->>   2:	00 00                	add    %al,(%rax)
->>   4:	00 fc                	add    %bh,%ah
->>   6:	ff                   	lcall  (bad)
->>   7:	df 55 48             	fists  0x48(%rbp)
->>   a:	89 fa                	mov    %edi,%edx
->>   c:	48 89 fd             	mov    %rdi,%rbp
->>   f:	53                   	push   %rbx
->>  10:	48 c1 ea 03          	shr    $0x3,%rdx
->>  14:	48 83 ec 08          	sub    $0x8,%rsp
->>  18:	0f b6 04 02          	movzbl (%rdx,%rax,1),%eax
->>  1c:	48 89 fa             	mov    %rdi,%rdx
->>  1f:	83 e2 07             	and    $0x7,%edx
->>  22:	38 d0                	cmp    %dl,%al
->>  24:	7f 04                	jg     0x2a
->>  26:	84 c0                	test   %al,%al
->>  28:	75 50                	jne    0x7a
->>* 2a:	80 7d 00 00          	cmpb   $0x0,0x0(%rbp) <-- trapping instruction
->>  2e:	74 3d                	je     0x6d
->>  30:	48 bb 00 00 00 00 00 	movabs $0xdffffc0000000000,%rbx
->>  37:	fc ff df
->>  3a:	48 89 e8             	mov    %rbp,%rax
->>  3d:	48                   	rex.W
->>  3e:	83                   	.byte 0x83
->>  3f:	c0                   	.byte 0xc0
->>
->>
->>---
->>If you want syzbot to run the reproducer, reply with:
->>#syz test: git://repo/address.git branch-or-commit-hash
->>If you attach or paste a git patch, syzbot will apply it before testing.
->>
->
-> --- Thanks!
-> https://lore.kernel.org/all/EE579805-42F2-4C58-B752-F28779EEB717@grrlz.net/
+--=20
+paul-moore.com
