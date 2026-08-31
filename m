@@ -1,142 +1,119 @@
-Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24ED449F11C
-	for <audit@vger.kernel.org>; Mon, 31 Aug 2026 18:01:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E8A4383339
+	for <audit@vger.kernel.org>; Mon, 31 Aug 2026 18:02:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.173
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788199304; cv=pass; b=uIARPkrydVpw3CUdbpfHHAEGjsygc4gnXKwjh5405NCJvqkEHn0SRylqeQ6N63M0A8uE8ZwANNxxINzK8T8j/OpINzSOdIq1ZGlNXw/GY+qTQFCi4c2NtRjMI9ZH/Bkbh+7psTmlPnpQIjmbC9OR0ehzdErrF+ujWvzD3nqFuR4=
+	t=1788199339; cv=pass; b=GU8N36yQ6G5fKgZPl6FSnVDDG29cHmiUgtG2PwtdGZMKDuhAKB18G6PmkIjGBWKx00Ahimb5Cf/skvJTXgEVBrJIIDaf80mPzmTdjd5YKx+v9dhCvNjh9PgkqZxu0ohG0GH9BcH1btxu3H4JleGe8DbkcbMofHlQC/vDDcrTPDE=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788199304; c=relaxed/simple;
-	bh=DN7ajB5HW+161pKga12XB+ux9+zyLcXTHDVln4XJ3u4=;
+	s=arc-20240116; t=1788199339; c=relaxed/simple;
+	bh=vUxrg70tu0gkCfDG0Y/HJqfjufL/MVav0fcyO6O4mEo=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=cLqgjaziIeNOajUG1sRJEEju+tklOIZff79qH4rvOYRbPxI5SGfoe1VhBSIulLHWJfLzJnessq8d8zIQIPGg6k4WzQZEVOazBND/TU6NknpgWVnj21SdsjYkqXq+/PgMQUx24R/HO03qInXw7dHJEpaNY274sRTI667Q6/shajU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=TmgoL+AX; arc=pass smtp.client-ip=209.85.210.178
+	 To:Cc:Content-Type; b=NUNYJwqlzTze/OE8mjssmt5+onZWeAljeZT0iq7A7+KAY+ys+PsO95GduOkyk1P+GNiRvBcVtQ/xZ6bCAoT7bDYTjtcpB3UT9tCfJ0GOuQJhZC2Y6u6c0kR6nXWj8M428qgbUeexSZ3pj0PjgeWNSvpYZrZlwTWlxsp39tZtvd0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=RzNNzC/5; arc=pass smtp.client-ip=209.85.214.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="TmgoL+AX"
-Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-853c07a76adso4002654b3a.0
-        for <audit@vger.kernel.org>; Mon, 31 Aug 2026 11:01:42 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1788199302; cv=none;
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="RzNNzC/5"
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2d91ff7d9acso11695085ad.3
+        for <audit@vger.kernel.org>; Mon, 31 Aug 2026 11:02:18 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1788199338; cv=none;
         d=google.com; s=arc-20260327;
-        b=YYx/I7ENqYUafc08+VmrY30n0hVOjH50UXwpk03RSGLbeK+3lwO2XxQEezmj1WOf9m
-         URiNQKqj5HK8SK6wDus61XWyfbwvt7jaT16MGWRmFvAlipTzu8aq4YDV6m9tkujrF488
-         +wlBQmrAZxA84FtNCoMagih1ZHVi96tGcCiMpa/5Z8ohSe1H9rn+SCa0mGPCPx4creW0
-         n3f8WvkkoqUEb7TPaajWSDWUkrapF7Q3PZErbr3D/DljbYFlZYLRDehKm5RMFE1w2xQh
-         Vubkt8KCtDCVuTHAXYCQinBtrxzj73qtC2O1q9TU8sisj5HGWmO/qDaKN8I3sBuU0GWb
-         fr5Q==
+        b=ZfPs6BVBCOD7sKzcTGIksUu4NuqB+E3/PjYg+PamdP7uj1HTSqbqUz/0CQ4JaBzwin
+         cHiIwlc5XYcoLUPDq3qXtVHA307NMZvXGVS3U5kJ60MQ0fYgluQS3y5c9g6eYMTn9mvP
+         EmfJGa7yFRZXZBbds4xC0yM/rG5+Nz48LresD+mXqguNkflx56Ln11Tqn3pCZ/UfLZBH
+         J2MYqRoTSJ9tS0HuFFFE7S1r9zQQmgjQ+uKpdqPE5Hhbnya6e6ai79nByP3xMrQJrE7r
+         +xnTpqAW5WXlSERwOtqvm8x0VojGvOj1Rtqio15pBEMv6F0Hzvqg2PzyRc1ZttFtZYFP
+         aDrQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=qcH86xjgshAXJpFP6qrb20Jfgu2TTKubE4sb7Xw/UbQ=;
-        fh=PQrP1gAqN+hY7oF1iZa7QuIuIwbPptJY68jnmQLUxq8=;
-        b=T3khmkSX4Hdh5aMV/y6MPPhLp6SsZxRFdsCSKzzinej89Z/agwI174vbHv7K8ZMEz4
-         pkBp9Ih9heI1THmGxHX+dH/hSwFQmpvUE0yoYFffFu34nLymYCkQM3d+WqCA9wYEu06C
-         C2qzcwkO5iDaJgqQTwZorjQV7QrQuHdcpyWoEQbupP5ciMDxXx9i/XdX7BfOxnkAWt5h
-         yWyA969eRu71PEdFxr7EIJWZbc6cbXtxpu3Qf9ODF5pVyfcCHEEUYQ298O0kSSkq+T05
-         WaQhyRcniCGQOJ05rr/INbN3UikQmY0JJunDdTFPwEAWL6/Le8sqRtZhl7lv+9Qv2+Hm
-         pnWA==;
+        bh=QrW08dhGSa6XRepSE7GPhDrEpeomStQDl4X2ydpzQUo=;
+        fh=J/p161vdmAeLP9BptdFuVhK2OSrTAKu5nmN1QAo+cZ8=;
+        b=ndCOcynSl+Oqjdq8T2yzeNarQcfuf0lI//S6Spzdf3szHhw9Mc63nLSKNiTfTUvctD
+         C93JivXDUjZuQaGOs3JXae/rAltMIUUfIiGl3YadrBUtTGFYkITnKrA+hPTs8mtsGmxz
+         Gxy5qAPoaRZ4vGXdqLQNjs3nxS5mFrwCzIGC1WMr91K9HeMEhIHkpZUCjy/n9CQthZoI
+         GAP8Y760oozVYv5lPmynTNbpNfczXPnAOcAE5iogq8ESo8VTj+TCnba43GxQMalCHFt8
+         lSK5NLLyy7x2QtMyjh28V6JQiquKRC8DAkqb+XYHcWM7O7Uqv8N9ibKzmD7R8bsSbFae
+         C1FQ==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1788199302; x=1788804102; darn=vger.kernel.org;
+        d=paul-moore.com; s=google; t=1788199338; x=1788804138; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=qcH86xjgshAXJpFP6qrb20Jfgu2TTKubE4sb7Xw/UbQ=;
-        b=TmgoL+AX+K+1e+0xEF544/bUrWJ3T3a80izkqNfqNAKO898D8dx8I5/igau5wIciZA
-         vv5WkZqD5Dy+XtReibK5Ct+B4wsdewKBKTguNt7YWEC3tSvy3LpjsMmN3R6UMFJ9GUNG
-         sZawzTAYN7cWNQIAnORI2I6foeE6YDpl9p5NrUv9i/ax+ax/Bi5DIzB2XI4KzlsYc3oN
-         VqH1GJB6jHJaMstxshrYgxxFObIJmQgz379rvIFau6q9DbkMblsZrQQ+vH1jjcDYDcKE
-         kPspNZqPeAW/1UrrPh0NAxvvWqxEU0Vy2m8QiXn/qphWxO+iARdvnPNB5Ot9aIGIgr4U
-         n29Q==
+        bh=QrW08dhGSa6XRepSE7GPhDrEpeomStQDl4X2ydpzQUo=;
+        b=RzNNzC/5r19aCD+cKnDE9LyAIenQXtB9Fed64ng+CaYCwMZ+XFtr3lyosyxoGAlDfP
+         vzywD/OD6Nl2EHmIF2qam+uan7fBNYlcJtM9VkATu42kHZwtVlLOJePfA7/1B40XP1sW
+         f427g9SdbPfd4sYwAcbiDwTgl/j6tUzTYeasFbMMHfWWyRs6KmYiOf7F00Vm41g3NYup
+         VknLI3bDOAaDiJ8e0kZVO6TAU6uDBShjhm9RcNpmTrNH5UEeIWXt4RZQG7MO7hI5piuO
+         2eqGlQGJ1D3By1bA7MbElRznLa2TwhSvABl54YqoEKXKEYMLn2/hbGP9ujfOWK77Fgp6
+         GGmw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788199302; x=1788804102;
+        d=1e100.net; s=20251104; t=1788199338; x=1788804138;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=qcH86xjgshAXJpFP6qrb20Jfgu2TTKubE4sb7Xw/UbQ=;
-        b=SyOTrIol4VUWITZvNQrDDaxeYuPQdkm1DWCyAwmfhQ1BECz4vH4bbwNttBcKc/Wbih
-         pVmDIKY4W4fGmyhPPPQEJDUsTH4hfirIVY6OBX6SgWs7lwnGVHOB8CBnkfRzujnN1+/c
-         WHLTL7gri29MA7H7k4rJx5niic33/kAxDwAybSbXKBx2W8XNxCXkD7gIiNp+UcWOikH4
-         11tfNnqScrKJoyAwkeDGGx/aZRUnkqw7ZVze7zdFuSa4NDofOZ0m+1rbMGjH8NI2D/Sy
-         yG/UusFaAvU5JYDI6fM5dY8YAvhP8zH0AuIbKsj09GF8icKkOL39QSPS3TCVOEAeBdA1
-         BVOw==
-X-Forwarded-Encrypted: i=1; AHgh+Ro1QxSGxpS5BEuVujKUfCbqq2kyaOl3k07XJh6cefMsJX8taDE03el7vKnn6WLjRVE4B361EA==@vger.kernel.org
-X-Gm-Message-State: AFuF++l8aTAUxCRpox04nrYzG+l0d+UOnwoFVqYlOhRi6zLXBdvXUEX9
-	27CrIT/j3YZnp37CJw2EKnX+53I9JkNiwz5vyeq+SAHnz1pZJAHTS0fZp06i1HJdKS9Hge0VWcJ
-	KuHXKxbbrq8QCxaTsKfyh7/ysDOaVzPYgdFroDbEC
-X-Gm-Gg: AR+sD13lxeHWqnMoquoTkXuNdrQXAeXXt9M1BS/qPUCMZYnjGMFiNa3+AU62aTUE1Dj
-	1Duzzjzcgb8Cz7sJVT98IrpL1M1+H6aUSgm6I0EXy1jUqGiRRKBWe4ElZwxeCv/DfRXqRn1+GOT
-	E0/y3vAaNZ3ouiwTi3l89MJlGt81+7WyggHksKjTKCyDVSbHV3GfIfd/6cQn/+Bfb8V8MrUj+tA
-	oFi/jmtlTobk4QrquqDmVMSJSlSxl6WY+pysl17uNOTGDnsFcDjG+n4dhQlX5wIMnDqifN4Go9w
-	PIhdkNy03vgmmr6LebzlnOpi5PVzgVSEss9yMhfqjao3
-X-Received: by 2002:a05:6a00:802:b0:842:7296:dba with SMTP id
- d2e1a72fcca58-85629064fcamr42578483b3a.7.1788199302293; Mon, 31 Aug 2026
- 11:01:42 -0700 (PDT)
+        bh=QrW08dhGSa6XRepSE7GPhDrEpeomStQDl4X2ydpzQUo=;
+        b=ic8HrK54t0tA8ji6COHidDKJk/zS1zruEzQ5dWZlZii45c/JvoMjVyossF6h73OKDI
+         JvA450QYTdOud4Z2NRNgJQjcDbRR4bKaNDj0jrjaihZx1TaFoR593oGPacCXyc3Mkqmb
+         A+mnKZxfcAC62gZLY7fBftDJoMXR4LXhjQxMN3ofDsmZA2d1o2b/pEoxkoSXIqCAUW5t
+         gLsjMz6zbecfz5BGx2wWfood1o0Hu41rn686XiVVWzeVOkuzrzUoFsE5gtNuD4mmcJp3
+         cVSwTrHsledWWo767CHnco0dHmcQ5vxtQXuVy4erh8XRTUQgDQ+Jjax6RZY+H2exvXwH
+         f5pA==
+X-Forwarded-Encrypted: i=1; AKwUvBw+52w3WUxAmg7ft++rFMT1qtr0gSRVkY2esLLSRGL3Bdpk+RQMHm7l29jB+O3Kg4z8PtofkA==@vger.kernel.org
+X-Gm-Message-State: AFuF++mEKrNPDYSuFsJ9iLSepiaISiZxyL9jplqRv4lvQyD/RpQ4DivE
+	qxXxsIoThnifB1psP9XGije+brbXMuDjmhAa9tt2Te1vU7MNzaQYnnf2IcGujzYYfN45poxthWF
+	R2Ib9/BjVAg8ZLKfxqmV35MkW6c6uLohNprBfGP+v
+X-Gm-Gg: AYBFou17VNRHzlGlz5UG67tsFg5xXh0FR74AzE/qz8eukn3AOePntyVpiXT+jCvzMqf
+	JvhPPwyYdQ3UFNYxBILp84MGocd+haGN0PF9xJW6IHsYELubdZSjWdAtcBkLFXSbFIx87RLqh5+
+	SagR2fAYeJ2ErAt7YO+tLPKd4CUsbCzxxKLgf92v/Oxilq3OW2ivYXV9qf7Iffp/sd0TZVdrbji
+	bh5jkcvV0QkUHTcK8NHU1H3D3d9PPuo4EAVrWJGtO5yTFGM4jYRQYDgipYf+iSz6/RdHdoDnCMk
+	1Y12cFi9xbGBDxoXxB/Jmyd/3bSkr3f7ISMVz2UgTVF+nEHpWAcdXFk=
+X-Received: by 2002:a17:903:354b:b0:2d9:49b3:abac with SMTP id
+ d9443c01a7336-2d949b3ac16mr40004415ad.18.1788199337441; Mon, 31 Aug 2026
+ 11:02:17 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <ef5bf18a4b3805ec0fe5fb638963ccbdfc01d6fe.1787077711.git.rgb@redhat.com>
- <65425b98ae226a9d19f89bd66a1defbe@paul-moore.com>
-In-Reply-To: <65425b98ae226a9d19f89bd66a1defbe@paul-moore.com>
+References: <20260807140521.510904-1-rrobaina@redhat.com> <77cb8aa1365ead24eda2ff0800a8ec8c@paul-moore.com>
+In-Reply-To: <77cb8aa1365ead24eda2ff0800a8ec8c@paul-moore.com>
 From: Paul Moore <paul@paul-moore.com>
-Date: Mon, 31 Aug 2026 14:01:30 -0400
-X-Gm-Features: AcwNN1UjA6EQ0vdTUMZpIzMqbTR5XzQsbvy_jGC-ejOGutXWjivMDB6qbx9VHhc
-Message-ID: <CAHC9VhTAe1x5Fzj==SanTP85wxi+XQ5N2-m98fdxWmcAeM105g@mail.gmail.com>
-Subject: Re: [PATCH v3] audit: free proctitle in context so it can be re-set
- by fork on exec_binprm
-To: Richard Guy Briggs <rgb@redhat.com>, 
-	Linux-Audit Mailing List <linux-audit@lists.linux-audit.osci.io>, LKML <linux-kernel@vger.kernel.org>, 
-	linux-fsdevel@vger.kernel.org, 
-	Linux Kernel Audit Mailing List <audit@vger.kernel.org>
-Cc: Eric Paris <eparis@parisplace.org>, Steve Grubb <sgrubb@redhat.com>, 
-	Roman Dolgikh <rmd4work@mail.ru>, Ricardo Robaina <rrobaina@redhat.com>
+Date: Mon, 31 Aug 2026 14:02:05 -0400
+X-Gm-Features: AcwNN1UdcuneJpmiDkNpAMqFfZZyAkd8QZdDly9SilEWFq-m2qXi3m1Fl70HtsU
+Message-ID: <CAHC9VhSaEx6q165P=ifZcRBDwcdCmbAK0zuomjR83Kg4c52QNg@mail.gmail.com>
+Subject: Re: [PATCH] audit: add missing unlikely hint to audit_dummy_context() wrappers
+To: Ricardo Robaina <rrobaina@redhat.com>, audit@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Cc: eparis@redhat.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Aug 24, 2026 at 6:07=E2=80=AFPM Paul Moore <paul@paul-moore.com> wr=
+On Mon, Aug 24, 2026 at 6:11=E2=80=AFPM Paul Moore <paul@paul-moore.com> wr=
 ote:
-> On Aug 18, 2026 Richard Guy Briggs <rgb@redhat.com> wrote:
+> On Aug  7, 2026 Ricardo Robaina <rrobaina@redhat.com> wrote:
 > >
-> > Between the actual process startup (fork systemd) and the executable fi=
-le
-> > replacement (exec), systemd sets a temporary file name (executable file
-> > name in parentheses). If an auditable system call occurs at this point,
-> > the audit context will latch the temporary process name into the cache.
-> > This name will not change again. The patch clears proctitle into the
-> > audit cache when the exec call is made, allowing the new process name t=
-o
-> > be latched.
+> > The inline wrappers: audit_log_kern_module(), audit_tk_injoffset(),
+> > and audit_ntp_log() check audit_dummy_context() without unlikely(),
+> > unlike every other wrapper in the file.
 > >
-> > Suggested-by: Roman Dolgikh <rmd4work@mail.ru>
-> > Link: https://github.com/user-attachments/files/20751461/fix_audit_proc=
-title.txt
->
-> I did drop the link above from the commit as it is contained within the
-> link below.
->
-> > Link: https://github.com/linux-audit/audit-kernel/issues/170
-> > Signed-off-by: Richard Guy Briggs <rgb@redhat.com>
-> > Reviewed-by: Ricardo Robaina <rrobaina@redhat.com>
-> > Reviewed-by: Bradley Morgan <include@grrlz.net>
+> > Add the missing annotations for consistency.
+> >
+> > Signed-off-by: Ricardo Robaina <rrobaina@redhat.com>
 > > ---
-> > Changelog:
-> > v3: use previously assigned context
-> > v2: simplified to call single use directly before need in audit_bimprm
-> > ---
-> >  kernel/auditsc.c | 2 ++
-> >  1 file changed, 2 insertions(+)
+> >  include/linux/audit.h | 6 +++---
+> >  1 file changed, 3 insertions(+), 3 deletions(-)
 >
-> Merged into audit/dev-staging since we're currently in the middle of the
-> merge window, this will got to audit/dev once the window closes.
+> Thanks.  Merged into audit/dev-staging due to the merge window, this will
+> move to audit/dev next week.
 
-... and now it's in audit/dev, thanks!
+... now in audit/dev, thanks!
 
 --=20
 paul-moore.com
