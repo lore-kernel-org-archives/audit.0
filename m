@@ -1,67 +1,67 @@
-Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com [209.85.160.175])
+Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com [209.85.160.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE6943403F8
-	for <audit@vger.kernel.org>; Tue,  1 Sep 2026 21:35:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A14D8331A6E
+	for <audit@vger.kernel.org>; Tue,  1 Sep 2026 21:35:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788298518; cv=none; b=g4+thEvPzyaarXsYgEdqvVjitZtZsWVqNwVVY6INnUKSuluZ+zFgEpTGkNYOnOD0Ui/xx0ul5dqUd8O5P3zi6gcVwsLHwD2jeXnNtVA0k03LgLMyYZt96byrvYPFmnt1CKbQa1rc1Bsvu+Eunr34fFuEWESLvp4xwEZQMXOsKv4=
+	t=1788298519; cv=none; b=EtRViIsp91c6Jn2RCWwBv/Q5PjHgR5dsLftQ3cskDx94Vl1Ldd86POexMdfDeI+DcTOFZA83mDaJ9I1ee+0v/I+c0xuaJYYqPUgx//wv/JbzwNnQuwE1rje6cGvULzcgNh4UyV1zxd+fir8AmYX2nhV9igs0WDCKW3Ua5O/HgzU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788298518; c=relaxed/simple;
-	bh=iSLp1IrSeiNNeBsrOLPLaCfMKFD7rzEjvmdP6CIih2A=;
+	s=arc-20240116; t=1788298519; c=relaxed/simple;
+	bh=mf9p58cMBVYfVcWyFSmmlKsO3JLi/Qf2gNci71PGb/Q=;
 	h=Date:Message-ID:MIME-Version:Content-Type:From:To:Cc:Subject:
-	 References:In-Reply-To; b=doHRoAmErBkzx57yc9hQvYvhl+lrCNwYIrhuEjcV5lYw/JWhDwDLktGtbXRwYxzyTFq9Rypjt58yTJBS8FxMGUM1ZsI5wWwsIIKgQkPXnh3zl5xfkDnAcJK7kgQK31s1AJXtzeLT5XjrhTs4Ek6nmRYmdeuwaK5Q71V69XdEPD4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=SXjBgpHk; arc=none smtp.client-ip=209.85.160.175
+	 References:In-Reply-To; b=cn9dxXrcuzYx1ZWWWEBYGEId09bO0zIZVjzsOmm5bxHXgTKYH5Lbfch6xK3+D7zPtf8ngT/Ui9446Um2aruu3GMHzjHs5fp8lawmSgsCcqGnzCDj4hmEaY+cCLls8DqQ359lDm36uwvJcHqOlbRSeKwOXzTyjSTTP7JOYy6m2Ek=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=aGexhyFK; arc=none smtp.client-ip=209.85.160.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="SXjBgpHk"
-Received: by mail-qt1-f175.google.com with SMTP id d75a77b69052e-52fa9c055b5so19912181cf.1
-        for <audit@vger.kernel.org>; Tue, 01 Sep 2026 14:35:15 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="aGexhyFK"
+Received: by mail-qt1-f169.google.com with SMTP id d75a77b69052e-52d5bfa4bafso3087281cf.3
+        for <audit@vger.kernel.org>; Tue, 01 Sep 2026 14:35:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1788298515; x=1788903315; darn=vger.kernel.org;
+        d=paul-moore.com; s=google; t=1788298516; x=1788903316; darn=vger.kernel.org;
         h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
          :content-type:mime-version:message-id:date:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=IE2LqMY6NUtGXuk1qbc18CY6EeLLZzRewObQtxCrnzU=;
-        b=SXjBgpHk0N2+jZwhGyhH/DweP9fsFDBsGihousgoKG1dxDF/JDAHCfvh4HbB45OO4W
-         +i3XMQlrNdNf49sCwmrwtPFP9G+blHuYebX6EPLXAdHUtk0HBsm6ldQkr8bZPPUE6Jpw
-         qvku+97mbMMYv0pc6nSIdoDJBOLmkkq1vb/108mpf91FscvJXvYNghUvf9gSZ1Y0YWvy
-         4vwH5RHoUBE5wmnOit6ydDNP5RdZvHcuKdzdJdAxBs5xAmijmA1xYvlGHCPJ5UgSVp19
-         qcRj1bTEdrkf/aTZ0T3odBKBVR8URnGSXnIrXU4XyLaB0MQncp1jgKfi3MWimZHx4OTo
-         E0uw==
+        bh=d8P1T9k9Q5xaHviJua4Ft5GkjAABFjDN/bQJ+wSyg+M=;
+        b=aGexhyFKgYHSASXCITREmV2dR2lRbRFa70mo/EeN2/uLg7RFlwTtV6aFA6UwRmVZEj
+         xultuzQBlVlMsih8jFMB99uEyiRyz+aL5agGDkjsqJm86LFpOCGR/Ki6h/pv8u4YWfaj
+         CbwRuNXDZVM+qjfgMuG2fNRGVkH97tEy7I+Y+544MV2Fhg5mMAFjW6mtvwQ9lV6Pv/Lb
+         9dYiRjM0P9tSvGPrnd11oD7VoFLJOqvioT8BGZDHHljgrXBzWqs8FDDjJItx1UMYEGYM
+         CJUCwhWI8CKe0DP9kb3smfepNpr3wKbJ5V4oY0V/sulKPPuTNLtu0/NS9vItAv9RZxQm
+         U5KQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788298515; x=1788903315;
+        d=1e100.net; s=20251104; t=1788298516; x=1788903316;
         h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
          :content-type:mime-version:message-id:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=IE2LqMY6NUtGXuk1qbc18CY6EeLLZzRewObQtxCrnzU=;
-        b=ICqxW/8pg3hjg8e6/BMHLtRArzQMF8r6cK3q/OVDpURwhdLGN9k29ahDgrm1UhFFmh
-         6Aszt4S6252krDgaDcnUO10ldH4P3JKezaVdTp17fHy8RFd6NKFiH5XOTruF97Eth2n6
-         ELfkRrACAatQDlLQJeGFx1Kbupp8HaLiqVHqcticklz4SNAuEli2cwTfrQ+zwps07pgQ
-         HE0wn76vu4O2698mO/tYzASmza7EQZZW3tPTMXL6G1e6kzoazuu/5ijtTsXCtRnu5Dt8
-         +BfddRoEgh7Y1Z7+P67yK7lhQAxVoP+5NW7CfFUuSuJYtHHKPDLRh39pBEDa7CtLyY0f
-         jN8w==
-X-Forwarded-Encrypted: i=1; AHgh+RoOBB52bYKGBTVx+d26wSLxgthAYfRsWezsIOrfACVzhptA5GqWiwGrm5ooe7IjKbqIsPQFjA==@vger.kernel.org
-X-Gm-Message-State: AFuF++lkNp3R6D2uFKNiEjgkTOxKPCDGRMJSMMZ83FMYbr2GiaMnAvZj
-	H0j0AXAl9QHi6AUR5BBqEZvknr01TUK2ApvTMymzhm/+wzyvJOWhSJpjs227cQNi1Q==
-X-Gm-Gg: AR+sD118vpZAxE3BhHSyec50xprSX76ifLpyJDC9thK4u/O5KiKWbgskAb9JndiFhT2
-	e5rNAbLUk3rmEzqM4KrI+fditQW7Otpjnk6reJmw1rOXTshi1bJlgwb6PJRrlMxO7ltKX2rrBmW
-	rcHmCqutlja+/NSx1UZhjaKD2Yd9qvTUSqirLBo6Q2169arLpiJQulRlnNO2VDjsuDhsTQ1CXd0
-	R4sCJKnc5VMyT/earR1aVcFUSAY35CPr+MUrOAO25EjUlyyIYoScsMkummxKZklxAtNeGy36X1a
-	nNiud4rTluENTzIBPksocC9jGVnUHtAcakCpicOMDT9PvMrVoL7JUbStarqwGTOiS+UzRlqwjxa
-	wByVTGsf2BjBqMeIBLpG2RK25g4SCZK2n8HM4NZG9E4cynET+UobT2OrstxUoL5D78yuEQS4a6f
-	66zVrb1pQMzWCkvaDVuT2gsQnnRPvaPYuog7duBsTg0woCAJ24Cn9ZE4PBYw9hyPJ4xnj7DS+U3
-	BeMLQf3j3Q6TiXC3xcrUruBC172f4USA8rHkCLODS3X
-X-Received: by 2002:a05:622a:2305:b0:517:c65c:4987 with SMTP id d75a77b69052e-5302543895emr138218971cf.22.1788298514613;
-        Tue, 01 Sep 2026 14:35:14 -0700 (PDT)
+        bh=d8P1T9k9Q5xaHviJua4Ft5GkjAABFjDN/bQJ+wSyg+M=;
+        b=gs6rHOSdDTAbRqmT7tLWhQOtC4Lm+B2FfV10ppNRL64kZRuNeFU/1MuKkEa4xNkhnX
+         xYyYRP/WdLS57FbUso3SVk1MWgi47xl1JRKXrvle3LgNqiuJ70DO6bb8J9ARtPo1V58/
+         CFA+cgqJUcOcZrKOEK/9V+PccGH3brjaHKT+fe/lYknfo/nlbHlVIyb1Xzo5KFJ0ZMRL
+         HTceIPDL+f3e+O6pkpi9M1eGz047qYMI0n0h4rT3wIGDWXE57pHw3YpJGV3F6jDTMX73
+         xfdkoFAKaj3n6Xd6foRj6KC3L3+WTR6rx7pgZX0f3Wb1KhfiXBfHjOPLCxadehIlfKaC
+         TwlQ==
+X-Forwarded-Encrypted: i=1; AHgh+Rqu0WwMKtp9IfByEA4at/rfCYo1qYkU77qVB4xkm9mSWdsdN2qpU2OK9p9X78dJdkAB4i/ZpQ==@vger.kernel.org
+X-Gm-Message-State: AFuF++nU2QARG5y8ExrMWrhMlNGKoU5yh7FGpTQdnOdD4bQxzT/zpDu4
+	NoQ/QR2BKB7EsHFEd9qXAkk6YlUyyZPj4uerkeg2/cYVF9cObkNS3rvUoerUghxKhA==
+X-Gm-Gg: AR+sD10V5nWGZ5mgC+GAe/vV5FvwJeUNqVmAO6DRDzFQAagd87ghdshTT2eWIweYsk4
+	ZaowE1SRBPRm4AQYZqq9Id9Pd2WKst/LvNhL+RI858ScezorbkZeNgjLRuLDpqpfg/zajR5YYdH
+	qTOia55TmWd4gVtohsg1M2kJaxYUcrHOBS01ZU59wKqqv3ri5br08+qgfnIcQMXwvR/HLYXynj8
+	cmrU//X4zcUiCCVrFJ2D6pa5maHNbEV8GFiYOEZO4t4jR8r4CVB2Pn4ev0kgKeAFFXxi1R0fYjB
+	7iqkf4RFQBuspywIiLMfv7WhS/6KUO1SUHRA/284DL7KEFzV7nbgbPsVu3UZq7HXgxctPK4pi8E
+	lHRp+oWP/Ognte/GQL56mlPxlIhinCad2n3Ab9569/AcZPS0ZMG/3HHFaBwdXv6kTkw539oMxca
+	QWWqEEmuFjoAY5eEvv8r3ssnTRgrHwYXXQrACZ8ja0c2ojm9LbCVm7fK2U+0EHtrgI83rlu0nRh
+	37Pt3Q+8Ig2F9soDGG59uRvNNsPzcSm7A==
+X-Received: by 2002:a05:622a:5144:b0:52f:4cd:13f6 with SMTP id d75a77b69052e-52fb93d50dcmr493029701cf.12.1788298516423;
+        Tue, 01 Sep 2026 14:35:16 -0700 (PDT)
 Received: from localhost (pool-71-126-255-178.bstnma.fios.verizon.net. [71.126.255.178])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-53032ff4e90sm5772091cf.2.2026.09.01.14.35.13
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-530331dc460sm5476011cf.18.2026.09.01.14.35.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Sep 2026 14:35:13 -0700 (PDT)
-Date: Tue, 01 Sep 2026 17:35:12 -0400
-Message-ID: <580b5af8293cea8dc0a13e044b52280c@paul-moore.com>
+        Tue, 01 Sep 2026 14:35:15 -0700 (PDT)
+Date: Tue, 01 Sep 2026 17:35:14 -0400
+Message-ID: <1e277c072e35ee68419976510ed4cc7d@paul-moore.com>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
@@ -74,44 +74,88 @@ X-Mailer: pstg-pwork:20260901_1121/pstg-lib:20260901_1604/pstg-pwork:20260901_11
 From: Paul Moore <paul@paul-moore.com>
 To: Stanislav Kinsburskii <skinsburskii@gmail.com>, Shuah Khan <shuah@kernel.org>, Eric Paris <eparis@redhat.com>, Al Viro <viro@zeniv.linux.org.uk>, Amy Griffis <amy.griffis@hp.com>
 Cc: Stanislav Kinsburskii <skinsburskii@gmail.com>, Frank Hofmann <hofmann@deshaw.com>, Noah Orlando <orlandon@deshaw.com>, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, audit@vger.kernel.org
-Subject: Re: [PATCH 1/3] selftests/audit: Add syscall overhead benchmark
-References: <20260806-audit-v1-1-ddd0d94ff0b6@gmail.com>
-In-Reply-To: <20260806-audit-v1-1-ddd0d94ff0b6@gmail.com>
+Subject: Re: [PATCH 2/3] audit: Fix filter rule accounting after automatic  removal
+References: <20260806-audit-v1-2-ddd0d94ff0b6@gmail.com>
+In-Reply-To: <20260806-audit-v1-2-ddd0d94ff0b6@gmail.com>
 
 On Aug  6, 2026 Stanislav Kinsburskii <skinsburskii@gmail.com> wrote:
 > 
-> Add a microbenchmark which repeatedly invokes getpid(2) and reports the
-> per-operation latency across multiple repetitions. The workload avoids
-> filesystem and other syscall-specific work so the fixed audit syscall
-> overhead remains visible.
+> The audit_n_rules and audit_signals counters are incremented when filter
+> rules are installed and decremented by the explicit rule deletion path.
+> Rules can also disappear when a watch or tree is removed, or when an LSM
+> rule cannot be reconstructed, but those paths do not update the counters.
 > 
-> The benchmark deliberately leaves audit policy management to the caller.
-> This permits comparisons with increasing numbers of unrelated exit rules
-> and with automatically removed watch or tree rules without modifying an
-> existing policy unexpectedly.
+> As a result, audit_n_rules can remain nonzero after the last applicable
+> rule has gone away, causing subsequent syscalls to allocate non-dummy
+> audit contexts unnecessarily. A stale audit_signals value similarly
+> causes unnecessary signal auditing work.
 > 
+> This can be reproduced for an inode watch with:
+> 
+>   mkdir /tmp/audit-n-rules-bench
+>   touch /tmp/audit-n-rules-bench/watched
+>   auditctl -w /tmp/audit-n-rules-bench/watched -p r \
+>            -k audit_n_rules_bench
+>   rm /tmp/audit-n-rules-bench/watched
+>   rmdir /tmp/audit-n-rules-bench
+> 
+> The rm updates the watch after its inode disappears, and the rmdir causes
+> audit_remove_parent_watches() to remove the rule. For an audit tree, the
+> kill_rules() path can be reproduced with:
+> 
+>   mkdir /tmp/audit-kill-rules
+>   auditctl -a always,exit -F arch=b64 \
+>            -F dir=/tmp/audit-kill-rules -F perm=r \
+>            -k audit_kill_rules_test
+>   rmdir /tmp/audit-kill-rules
+> 
+> In both cases, auditctl -l reports no rules after the directory is
+> removed. Run the following before installing the rule and again after it
+> has disappeared:
+> 
+>   audit_bench --iterations 10000000 --repetitions 10
+> 
+> For the inode watch, the same VM produced:
+> 
+>   no rules:
+>     median=38 mean=39 stddev=4 (10%) range=38..53 ns/op
+>   automatically removed, before this fix:
+>     median=55 mean=56 stddev=3 (5%) range=55..65 ns/op
+>   automatically removed, with this fix:
+>     median=38 mean=39 stddev=4 (10%) range=38..52 ns/op
+> 
+> For the audit tree, it produced:
+> 
+>   no rules:
+>     median=38 mean=39 stddev=4 (9%) range=38..52 ns/op
+>   automatically removed, before this fix:
+>     median=59 mean=60 stddev=2 (3%) range=59..67 ns/op
+>   automatically removed, with this fix:
+>     median=38 mean=39 stddev=4 (9%) range=38..52 ns/op
+> 
+> Reboot between the unpatched and patched tests because an already stale
+> counter cannot be repaired by deleting rules which are no longer present.
+> 
+> Factor the existing counter updates into common rule insertion and removal
+> helpers and call the removal helper from every automatic removal path. All
+> of these updates remain serialized by audit_filter_mutex.
+> 
+> Fixes: 471a5c7c8391 ("[PATCH] introduce audit rules counter")
+> Fixes: e54dc2431d74 ("[PATCH] audit signal recipients")
 > Signed-off-by: Stanislav Kinsburskii <skinsburskii@gmail.com>
 > ---
->  MAINTAINERS                                 |   1 +
->  tools/testing/selftests/Makefile            |   1 +
->  tools/testing/selftests/audit/.gitignore    |   2 +
->  tools/testing/selftests/audit/Makefile      |   9 ++
->  tools/testing/selftests/audit/README        |  30 ++++
->  tools/testing/selftests/audit/audit_bench.c | 227 ++++++++++++++++++++++++++++
->  6 files changed, 270 insertions(+)
+>  kernel/audit.h       |  5 +++
+>  kernel/audit_tree.c  |  1 +
+>  kernel/audit_watch.c |  2 ++
+>  kernel/auditfilter.c | 86 +++++++++++++++++++++++++---------------------------
+>  4 files changed, 50 insertions(+), 44 deletions(-)
 
-Thanks for this Stanislav, but I'm not certain that we want to merge this
-into the kernel and have this become the defacto standard for audit
-performance.  It's a simple, easy to understand test, but I worry that it
-might be too simplistic to properly characterize audit performance.
+This looks good to me.  I'm going to merge this into audit/dev, but I'm
+going to drop the "audit_bench" references from the commit description as
+I don't think we want that tool in the kernel sources right now.
 
-... and no, I'm sorry, but I don't have a better suggestion off the top
-of my head :)
-
-However, audit_bench might be useful as part of the manual_tests in the
-audit-testsuite?
-
- https://github.com/linux-audit/audit-testsuite
+Thanks Stanislav, both for finding the bug and providing a clean, elegant
+fix.
 
 --
 paul-moore.com
