@@ -1,67 +1,67 @@
-Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com [209.85.160.169])
+Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A14D8331A6E
-	for <audit@vger.kernel.org>; Tue,  1 Sep 2026 21:35:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE6F9395254
+	for <audit@vger.kernel.org>; Tue,  1 Sep 2026 21:35:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788298519; cv=none; b=EtRViIsp91c6Jn2RCWwBv/Q5PjHgR5dsLftQ3cskDx94Vl1Ldd86POexMdfDeI+DcTOFZA83mDaJ9I1ee+0v/I+c0xuaJYYqPUgx//wv/JbzwNnQuwE1rje6cGvULzcgNh4UyV1zxd+fir8AmYX2nhV9igs0WDCKW3Ua5O/HgzU=
+	t=1788298522; cv=none; b=WjZyuC5CqNK5krySsB3NXhDpQZAPe4CD+35Ax44ltIMhN2DG9OQjlZtDWsdHXiuR5CKJCw3VK9ZyRywymXe6oqC3GEfPljE5Oncdq4R16lvnf4m0MPt7Uea/t2SHv6jz5gFuqRCsKFuhQbafi96BijrXp6IP+OkIlLGRFJQV4xE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788298519; c=relaxed/simple;
-	bh=mf9p58cMBVYfVcWyFSmmlKsO3JLi/Qf2gNci71PGb/Q=;
+	s=arc-20240116; t=1788298522; c=relaxed/simple;
+	bh=NIl2SpJoXWgkNOAN+Yj632DNwtSCaFq/3Wl4BgGWVdI=;
 	h=Date:Message-ID:MIME-Version:Content-Type:From:To:Cc:Subject:
-	 References:In-Reply-To; b=cn9dxXrcuzYx1ZWWWEBYGEId09bO0zIZVjzsOmm5bxHXgTKYH5Lbfch6xK3+D7zPtf8ngT/Ui9446Um2aruu3GMHzjHs5fp8lawmSgsCcqGnzCDj4hmEaY+cCLls8DqQ359lDm36uwvJcHqOlbRSeKwOXzTyjSTTP7JOYy6m2Ek=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=aGexhyFK; arc=none smtp.client-ip=209.85.160.169
+	 References:In-Reply-To; b=PmWcKC/d/hpuRYbsPRV8LLcev6uWbyG35g+qBgA6ryJOXFPsXKnDsRePJ/VLMYaYoDedAjP2S9WRqfQG+E/K2luIuU1fOaOFH3I3IgkwaR9mNWBfO9K86sS+lGUyc6T4kU8pI7rxTILZ+F2duZqosQ7/kVNRvcXROqFQFhE0hJQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=TZTTbXNV; arc=none smtp.client-ip=209.85.160.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="aGexhyFK"
-Received: by mail-qt1-f169.google.com with SMTP id d75a77b69052e-52d5bfa4bafso3087281cf.3
-        for <audit@vger.kernel.org>; Tue, 01 Sep 2026 14:35:17 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="TZTTbXNV"
+Received: by mail-qt1-f180.google.com with SMTP id d75a77b69052e-52cd38ddcdfso2652251cf.3
+        for <audit@vger.kernel.org>; Tue, 01 Sep 2026 14:35:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1788298516; x=1788903316; darn=vger.kernel.org;
+        d=paul-moore.com; s=google; t=1788298519; x=1788903319; darn=vger.kernel.org;
         h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
          :content-type:mime-version:message-id:date:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=d8P1T9k9Q5xaHviJua4Ft5GkjAABFjDN/bQJ+wSyg+M=;
-        b=aGexhyFKgYHSASXCITREmV2dR2lRbRFa70mo/EeN2/uLg7RFlwTtV6aFA6UwRmVZEj
-         xultuzQBlVlMsih8jFMB99uEyiRyz+aL5agGDkjsqJm86LFpOCGR/Ki6h/pv8u4YWfaj
-         CbwRuNXDZVM+qjfgMuG2fNRGVkH97tEy7I+Y+544MV2Fhg5mMAFjW6mtvwQ9lV6Pv/Lb
-         9dYiRjM0P9tSvGPrnd11oD7VoFLJOqvioT8BGZDHHljgrXBzWqs8FDDjJItx1UMYEGYM
-         CJUCwhWI8CKe0DP9kb3smfepNpr3wKbJ5V4oY0V/sulKPPuTNLtu0/NS9vItAv9RZxQm
-         U5KQ==
+        bh=uGBMA70aQ29OFSgQVpxK2CgFIHiB2+n9s56OX+rPnLo=;
+        b=TZTTbXNV1GBoLhQzNVVFAqP51wY2bVecRAu/Yb72azxgkJAbxLMUH192k4QN5oijne
+         c8LcljnZk8CfGjLc8LXxRXMoH+ftB7q8IYCqm2BHDc8NdfWo9v/baQUyO/2TWbsTGeDp
+         lKg/Nkj6JWGN/xi3QnSWPoUabrw4IzZnTMglp9HYwZLlH/3d1bKhbeYj45o+3We0uiYE
+         2V+94SQzePAZCIFNT1puqsB75XZdpOvGqrPQx+ZcSsGnvctUdUhAp5PyEWauiwD+k/Iv
+         MQ1gO/PUOfPD34q063J68CmxhH5yppR/IwyWMVK7AfWK8nv8X/Yk3rpzyM2MYh1SiHr9
+         n9sA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788298516; x=1788903316;
+        d=1e100.net; s=20251104; t=1788298519; x=1788903319;
         h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
          :content-type:mime-version:message-id:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=d8P1T9k9Q5xaHviJua4Ft5GkjAABFjDN/bQJ+wSyg+M=;
-        b=gs6rHOSdDTAbRqmT7tLWhQOtC4Lm+B2FfV10ppNRL64kZRuNeFU/1MuKkEa4xNkhnX
-         xYyYRP/WdLS57FbUso3SVk1MWgi47xl1JRKXrvle3LgNqiuJ70DO6bb8J9ARtPo1V58/
-         CFA+cgqJUcOcZrKOEK/9V+PccGH3brjaHKT+fe/lYknfo/nlbHlVIyb1Xzo5KFJ0ZMRL
-         HTceIPDL+f3e+O6pkpi9M1eGz047qYMI0n0h4rT3wIGDWXE57pHw3YpJGV3F6jDTMX73
-         xfdkoFAKaj3n6Xd6foRj6KC3L3+WTR6rx7pgZX0f3Wb1KhfiXBfHjOPLCxadehIlfKaC
-         TwlQ==
-X-Forwarded-Encrypted: i=1; AHgh+Rqu0WwMKtp9IfByEA4at/rfCYo1qYkU77qVB4xkm9mSWdsdN2qpU2OK9p9X78dJdkAB4i/ZpQ==@vger.kernel.org
-X-Gm-Message-State: AFuF++nU2QARG5y8ExrMWrhMlNGKoU5yh7FGpTQdnOdD4bQxzT/zpDu4
-	NoQ/QR2BKB7EsHFEd9qXAkk6YlUyyZPj4uerkeg2/cYVF9cObkNS3rvUoerUghxKhA==
-X-Gm-Gg: AR+sD10V5nWGZ5mgC+GAe/vV5FvwJeUNqVmAO6DRDzFQAagd87ghdshTT2eWIweYsk4
-	ZaowE1SRBPRm4AQYZqq9Id9Pd2WKst/LvNhL+RI858ScezorbkZeNgjLRuLDpqpfg/zajR5YYdH
-	qTOia55TmWd4gVtohsg1M2kJaxYUcrHOBS01ZU59wKqqv3ri5br08+qgfnIcQMXwvR/HLYXynj8
-	cmrU//X4zcUiCCVrFJ2D6pa5maHNbEV8GFiYOEZO4t4jR8r4CVB2Pn4ev0kgKeAFFXxi1R0fYjB
-	7iqkf4RFQBuspywIiLMfv7WhS/6KUO1SUHRA/284DL7KEFzV7nbgbPsVu3UZq7HXgxctPK4pi8E
-	lHRp+oWP/Ognte/GQL56mlPxlIhinCad2n3Ab9569/AcZPS0ZMG/3HHFaBwdXv6kTkw539oMxca
-	QWWqEEmuFjoAY5eEvv8r3ssnTRgrHwYXXQrACZ8ja0c2ojm9LbCVm7fK2U+0EHtrgI83rlu0nRh
-	37Pt3Q+8Ig2F9soDGG59uRvNNsPzcSm7A==
-X-Received: by 2002:a05:622a:5144:b0:52f:4cd:13f6 with SMTP id d75a77b69052e-52fb93d50dcmr493029701cf.12.1788298516423;
-        Tue, 01 Sep 2026 14:35:16 -0700 (PDT)
+        bh=uGBMA70aQ29OFSgQVpxK2CgFIHiB2+n9s56OX+rPnLo=;
+        b=Y57EiKdxEjnU2F1jt/bRD08tBLKQFuldaJayzHisJOJYkJJ6sHTRLkppwzGoLj5Jru
+         TXLkosk39TJJZZJR0VLEF2lbIY044jZidh9lk6PjiT2bE9OX5ULbb98t/ZwHqW/zl2yG
+         CIF6xEobQAkgq187PB7LgU6FExAzuyrVVNZ/KKTQ4OGIQ8/Y3Jt4Mh2MPb0LbiM0RY58
+         83A8JFLDOGzDM9W0MBIgmLuMooNLzmZACZCUkENKDQ/UDHvND74vbVoMdeF1aojPVTsB
+         bzd/ODxLEbh3Z18vv/ifXZIO3QEXhVzDC6JfxRQHb+fBESiYZ5e1YaYMw1dHO9QeAS9l
+         1nig==
+X-Forwarded-Encrypted: i=1; AHgh+Rr31ssh1NdYuSInGzAGOj4lwQrLAsjp6xbvOnT69n6UogA5MAmYjhVW1pvSJSejDFKq9L+nFA==@vger.kernel.org
+X-Gm-Message-State: AFuF++n/Asfs3o267VW1wNhAZ1+5B99XYZmTW28LeZOIwNph+HXziupF
+	NN3pbVr2J/oFqi5T33KXBbceoEXiArw0ZwQA4rCS7x6KujRJ0+N55m1hr4F/ud/bYA==
+X-Gm-Gg: AR+sD113dFWhXfw1YkHQCNe4rymBreWt5ABgC81+Yuv7iKC0Lt5fwT6xyc/TixqL/t2
+	XHBdnNpSCd+fBbOPQdjMrlEx49XGlJIsVkpY8fHxZ79iOcfR4kCgrv+/hobk6UGiv5rAnEMa3fq
+	0sNqXeYrQue7t7kj+RfYZ3LQ3CGkXFCHL6GZtq2pZHFXTXQ8tSPE63085x09ZWn6DaEUFP6HUV4
+	mOsrWsITdkTSAYwnjYVQhb/XhO/mRGxNaoGebwPYHVFlRwFu2OHEjGx8ZWkKhVWA+LtgCR0WzRC
+	BZJHoKVH/sYjLm5pegGZo4iVY9rFRqqNuUS6Q7Rxg0sRM1mdyobXvyqW/MJC3lh9G+etoYqcZDI
+	pdYkCSLlmjI8/LFwfg+OX0xZJWMDUWJ+okU9HtumF7ZCcUsbpJaRD2JnHe20xP/FQniqhMy7Pgp
+	vV2o2sgvNM9psm1bvjCfeHZmPJb/xavwRRF1U8YCmimW1aNRR5jlBwjp/zqfPZjL07Z/LSJvGpe
+	M+s6R+CG6JwqbL9LmhuiYM3xaRaCGw6CwunSPsJs2ru
+X-Received: by 2002:a05:622a:259a:b0:52d:6afd:7db5 with SMTP id d75a77b69052e-53021c76193mr177282351cf.25.1788298519454;
+        Tue, 01 Sep 2026 14:35:19 -0700 (PDT)
 Received: from localhost (pool-71-126-255-178.bstnma.fios.verizon.net. [71.126.255.178])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-530331dc460sm5476011cf.18.2026.09.01.14.35.15
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-530331dc455sm5474491cf.15.2026.09.01.14.35.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Sep 2026 14:35:15 -0700 (PDT)
-Date: Tue, 01 Sep 2026 17:35:14 -0400
-Message-ID: <1e277c072e35ee68419976510ed4cc7d@paul-moore.com>
+        Tue, 01 Sep 2026 14:35:17 -0700 (PDT)
+Date: Tue, 01 Sep 2026 17:35:16 -0400
+Message-ID: <23b54475e31ed2c5248650d5aca830f5@paul-moore.com>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
@@ -74,88 +74,82 @@ X-Mailer: pstg-pwork:20260901_1121/pstg-lib:20260901_1604/pstg-pwork:20260901_11
 From: Paul Moore <paul@paul-moore.com>
 To: Stanislav Kinsburskii <skinsburskii@gmail.com>, Shuah Khan <shuah@kernel.org>, Eric Paris <eparis@redhat.com>, Al Viro <viro@zeniv.linux.org.uk>, Amy Griffis <amy.griffis@hp.com>
 Cc: Stanislav Kinsburskii <skinsburskii@gmail.com>, Frank Hofmann <hofmann@deshaw.com>, Noah Orlando <orlandon@deshaw.com>, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, audit@vger.kernel.org
-Subject: Re: [PATCH 2/3] audit: Fix filter rule accounting after automatic  removal
-References: <20260806-audit-v1-2-ddd0d94ff0b6@gmail.com>
-In-Reply-To: <20260806-audit-v1-2-ddd0d94ff0b6@gmail.com>
+Subject: Re: [PATCH 3/3] audit: Skip exit filtering for syscalls without rules
+References: <20260806-audit-v1-3-ddd0d94ff0b6@gmail.com>
+In-Reply-To: <20260806-audit-v1-3-ddd0d94ff0b6@gmail.com>
 
 On Aug  6, 2026 Stanislav Kinsburskii <skinsburskii@gmail.com> wrote:
 > 
-> The audit_n_rules and audit_signals counters are incremented when filter
-> rules are installed and decremented by the explicit rule deletion path.
-> Rules can also disappear when a watch or tree is removed, or when an LSM
-> rule cannot be reconstructed, but those paths do not update the counters.
+> Audit walks every exit filter rule for each audited syscall, even when no
+> rule contains the current syscall number. Policies with many unrelated
+> rules therefore add linear overhead to otherwise uninteresting syscalls.
 > 
-> As a result, audit_n_rules can remain nonzero after the last applicable
-> rule has gone away, causing subsequent syscalls to allocate non-dummy
-> audit contexts unnecessarily. A stale audit_signals value similarly
-> causes unnecessary signal auditing work.
+> Maintain a reference count for each syscall bit present in exit filter
+> rules and derive an aggregate interest mask. Update the mask through the
+> centralized rule lifecycle helpers, which cover explicit and automatic
+> rule removal. Use the mask as a lockless rejection test before entering
+> the exit filter RCU traversal.
 > 
-> This can be reproduced for an inode watch with:
+> The mask is architecture-independent. Syscall number overlap between
+> architectures can cause an unnecessary scan but cannot suppress a match.
 > 
->   mkdir /tmp/audit-n-rules-bench
->   touch /tmp/audit-n-rules-bench/watched
->   auditctl -w /tmp/audit-n-rules-bench/watched -p r \
->            -k audit_n_rules_bench
->   rm /tmp/audit-n-rules-bench/watched
->   rmdir /tmp/audit-n-rules-bench
+> The aggregate bit must be set before list_add_rcu() publishes a new rule.
+> Otherwise, a reader could observe the rule after publication while the
+> aggregate mask still rejects its syscall. Move audit_rule_account()
+> before the list insertion to provide this ordering. Rule removal already
+> uses the inverse safe ordering: it unlinks the rule before clearing the
+> aggregate bit, so a concurrent reader can only perform an unnecessary
+> scan, not miss a rule.
 > 
-> The rm updates the watch after its inode disappears, and the rmdir causes
-> audit_remove_parent_watches() to remove the rule. For an audit tree, the
-> kill_rules() path can be reproduced with:
+> To measure the effect, install increasing numbers of distinct statx rules
+> in a disposable VM and benchmark the unrelated getpid syscall after each
+> set is installed:
 > 
->   mkdir /tmp/audit-kill-rules
->   auditctl -a always,exit -F arch=b64 \
->            -F dir=/tmp/audit-kill-rules -F perm=r \
->            -k audit_kill_rules_test
->   rmdir /tmp/audit-kill-rules
+>   for nr_rules in 1 32 128 256; do
+>           auditctl -D
+>           for uid in $(seq 1 $nr_rules); do
+>                   auditctl -a always,exit -F arch=b64 -S statx \
+>                            -F uid=$uid
+>           done
+>           audit_bench
+>   done
 > 
-> In both cases, auditctl -l reports no rules after the directory is
-> removed. Run the following before installing the rule and again after it
-> has disappeared:
+> Without this change, the same unpinned VM produced:
 > 
->   audit_bench --iterations 10000000 --repetitions 10
+>   1 rule:
+>     median=55 ns/op
+>   32 rules:
+>     median=71 ns/op
+>   128 rules:
+>     median=428 ns/op
+>   256 rules:
+>     median=791 ns/op
 > 
-> For the inode watch, the same VM produced:
+> With this change, it produced:
 > 
->   no rules:
->     median=38 mean=39 stddev=4 (10%) range=38..53 ns/op
->   automatically removed, before this fix:
->     median=55 mean=56 stddev=3 (5%) range=55..65 ns/op
->   automatically removed, with this fix:
->     median=38 mean=39 stddev=4 (10%) range=38..52 ns/op
+>   1 rule:
+>     median=55 ns/op
+>   32 rules:
+>     median=55 ns/op
+>   128 rules:
+>     median=55 ns/op
+>   256 rules:
+>     median=55 ns/op
 > 
-> For the audit tree, it produced:
-> 
->   no rules:
->     median=38 mean=39 stddev=4 (9%) range=38..52 ns/op
->   automatically removed, before this fix:
->     median=59 mean=60 stddev=2 (3%) range=59..67 ns/op
->   automatically removed, with this fix:
->     median=38 mean=39 stddev=4 (9%) range=38..52 ns/op
-> 
-> Reboot between the unpatched and patched tests because an already stale
-> counter cannot be repaired by deleting rules which are no longer present.
-> 
-> Factor the existing counter updates into common rule insertion and removal
-> helpers and call the removal helper from every automatic removal path. All
-> of these updates remain serialized by audit_filter_mutex.
-> 
-> Fixes: 471a5c7c8391 ("[PATCH] introduce audit rules counter")
-> Fixes: e54dc2431d74 ("[PATCH] audit signal recipients")
 > Signed-off-by: Stanislav Kinsburskii <skinsburskii@gmail.com>
 > ---
->  kernel/audit.h       |  5 +++
->  kernel/audit_tree.c  |  1 +
->  kernel/audit_watch.c |  2 ++
->  kernel/auditfilter.c | 86 +++++++++++++++++++++++++---------------------------
->  4 files changed, 50 insertions(+), 44 deletions(-)
+>  kernel/audit.h       |  2 ++
+>  kernel/auditfilter.c | 56 +++++++++++++++++++++++++++++++++++++++++++++++++++-
+>  kernel/auditsc.c     | 13 ++++++++++++
+>  3 files changed, 70 insertions(+), 1 deletion(-)
 
-This looks good to me.  I'm going to merge this into audit/dev, but I'm
-going to drop the "audit_bench" references from the commit description as
-I don't think we want that tool in the kernel sources right now.
-
-Thanks Stanislav, both for finding the bug and providing a clean, elegant
-fix.
+We've had similar proposals in the past, and I'll say the same thing I've
+said in the past: I'm not certain that our answer to filter performance is
+to add additional complexity and filtering.  It may turn out that an
+approach like this is the only option, but I'd really like to see more
+effort put into improving a singular filter mechanism (either the current
+approach or a replacement design) before we start layering on additional
+complexity.
 
 --
 paul-moore.com
