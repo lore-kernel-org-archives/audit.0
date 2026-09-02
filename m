@@ -1,103 +1,134 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A3214A49BF;
-	Wed,  2 Sep 2026 14:58:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24CFB4A3841;
+	Wed,  2 Sep 2026 15:01:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788361119; cv=none; b=dMor4ddl6AdR4er+FasYHW8rJltrBwluicTPuN736WTJWkBVt0jwjXWW4EqXrsVxcyqz1qW6PvAvzNCrBETf34zXp9etZ490TFFGBvmINZUGDcW+a99/Cm92GZAKaI7ag3/zs4LOFun7i7D4qHkAeXq6GCqG4DTqf02uSD2nLDc=
+	t=1788361295; cv=none; b=lTYlJrt8MS0S7pzi2u0rJjxF37Y0E7Cxq+/VXTR/Ub9FJrozblLfu/ntH98BWV4pYUuLlvrUH4ondnUOwKaep79YUL+qJvWqLj8IMHOqlfd7h19eQyG6/NpN/cbnkDKUXxpL9eRa/zhy8Wq4RLeuxQcC8e1WzR1DXqIWrxLPEdA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788361119; c=relaxed/simple;
-	bh=oneO2iXbN7Xf+1E6gIblHvLu6qyv5j8qx0ghPvxyWwY=;
+	s=arc-20240116; t=1788361295; c=relaxed/simple;
+	bh=PdRUPgSmrJwqRJQac2lrmeUORSsVyRwXdt8wGhDcHW0=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=YBNxKl2jOSBz4niOhb1m9Zny+dRxIOtN0ubqSgcv9k/1pniZ6XZKunfnd066QTwz/bV7XLxwvJA4eK2cRcrMb9VIpP83z8aOlf0tRRssjxUQgqxHNdpll5Hu2TT0W6LfM+ticpvhHUJsedOxwbtdmJoY5sYuRnxhKkjG9Re1MFQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=S0FVULeC; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=GeWL5PTKuBEYSQcebyjzMpDyHYXuQS+Iz3416r29jxU8U18b3lma/RwAnzZyCbN9T5ngbMZTCNMFpzYW3Eoi26CmOpAHjexeME87feiKtFPhJSd2KuzH12bNSoxiT3qhoMubdnrs8lRI+7K1E5TjJt+en1e/VAQJhyhUHFHUATo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VJ3mcs2I; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="S0FVULeC"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47A671F000E9;
-	Wed,  2 Sep 2026 14:58:33 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VJ3mcs2I"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56B981F00ADB;
+	Wed,  2 Sep 2026 15:01:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788361113;
-	bh=srQXjSuYcY6jiB1RBHtTGlzsOfxGErP7FvzngYpm6Xs=;
+	s=k20260515; t=1788361290;
+	bh=9s2vojWJtLbhfmOLS5zWNM3UwyiUyE5a8nrQtLniIOU=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=S0FVULeCbBvmq+igY4f7xsitvK5aYpY4HXg/2TPbbvPVn1226U0JyeWqkWkfMkVz7
-	 vAInEZGfUw2mDYafQhkR/J3dSPzg5PI4we4VPkHXUz6L8LHBxJTYTv0ehXjG/u566l
-	 tJN4f+Oxyp5jYfRMzgOuC7ohrL8vqPi/xmg+sqpfcmh98dMnk0lWtA9DbyseEGkgZJ
-	 juUOPda9bVwGVPmRc9juL2CTCaj5AmHROwOEAcZvbBuETSOsbZ6RhK13Lzknmgvj1x
-	 VmpPhioEAEalFn63kys79OU+gqx06vYS81Z4s5M7wNts4M4h01F+yUdvsnM0V1aLJV
-	 m0gqUUZHo3rBw==
+	b=VJ3mcs2IK0pkb68W2M+cYHwAQ6b9apgeIIt5mLbZGuZMuZ8IhstDZiMcb81UXW6VF
+	 1lBRsKSqGpN4im8E+16WPo/Mv5X4n+cszbbg+Xw1d3JDCoVPL/1zMXs0fwADvcimWf
+	 /b+YlBFK4Z0ZeooZ0pf1hRKpZNdtPZpOL+WbObYif/VSdP31n9aYb1mx+CuCf+76IO
+	 sxZObb+N6jKaPw+xWpZaOi1ZHaIUs8lBu2ZqXVponcpBNaOGJMtyiRCWTBdhX38Cs/
+	 OsWyxUFT8/LlbmHRcx+jwFHzb5ip+hLxzjJpjyIih/b8yfEPRP1SXvKs5ubMM8WuX6
+	 4638gP4X6yy2g==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2 03/13] arm: pass pt_regs to audit_syscall_entry()
+Subject: Re: [PATCH v2 09/13] parisc: pass pt_regs to audit_syscall_entry()
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Ricardo Robaina" <rrobaina@redhat.com>
-Cc: audit@vger.kernel.org, bpf@vger.kernel.org
-In-Reply-To: <cae4a0a79178cf7d1b661c10ee2fa038fc6ebdea.1788351089.git.rrobaina@redhat.com>
+Cc: bpf@vger.kernel.org, audit@vger.kernel.org
+In-Reply-To: <83d9a03e1fa526aef9f2ecac704c118a156401d7.1788351089.git.rrobaina@redhat.com>
 References: <cover.1788351089.git.rrobaina@redhat.com>
- <cae4a0a79178cf7d1b661c10ee2fa038fc6ebdea.1788351089.git.rrobaina@redhat.com>
+ <83d9a03e1fa526aef9f2ecac704c118a156401d7.1788351089.git.rrobaina@redhat.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 02 Sep 2026 14:58:32 +0000
-Message-Id: <20260902145833.47A671F000E9@smtp.kernel.org>
+Date: Wed, 02 Sep 2026 15:01:29 +0000
+Message-Id: <20260902150130.56B981F00ADB@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
-- [High] The transition to using `syscall_get_arguments()` for audit loggin=
-g causes the first syscall argument to be read from `regs->ARM_ORIG_r0` ins=
-tead of `regs->ARM_r0`. This allows tracers to bypass audit logging by spoo=
-fing arguments, as the audit subsystem logs the unmodified argument while t=
-he kernel executes the modified one.
+
+New issues:
+- [High] Removal of explicit 32-bit masking for compat syscall arguments al=
+lows a ptracer to bypass audit filters and leaks upper 32 bits into audit l=
+ogs.
+
+Pre-existing issues:
+- [High] Seccomp evaluates unmasked 64-bit register values for 32-bit compa=
+t tasks, allowing bypass of reject filters.
 --
 
-commit 2a794057248ff5b9ad0444e2a1b1392a156db536
+commit 78cafbbd76943b4c2f06e1817363e637bd633afe
 Author: Ricardo Robaina <rrobaina@redhat.com>
 
-arm: pass pt_regs to audit_syscall_entry()
+parisc: pass pt_regs to audit_syscall_entry()
 
-This commit updates syscall_trace_enter() on ARM to pass the pt_regs
-structure directly to audit_syscall_entry() instead of individual arguments.
-The audit logging subsystem now extracts the arguments itself via
-syscall_get_arguments().
+This commit changes audit_syscall_entry() to take a pointer to pt_regs
+and extract the syscall arguments itself via syscall_get_arguments(). The
+individual argument registers are dropped from the call.
 
-> diff --git a/arch/arm/kernel/ptrace.c b/arch/arm/kernel/ptrace.c
-> index ed7a2a87a6707..e103ec2661cd4 100644
-> --- a/arch/arm/kernel/ptrace.c
-> +++ b/arch/arm/kernel/ptrace.c
-> @@ -868,8 +868,7 @@ asmlinkage int syscall_trace_enter(struct pt_regs *re=
-gs)
->  	if (test_thread_flag(TIF_SYSCALL_TRACEPOINT))
->  		trace_sys_enter(regs, scno);
+> diff --git a/arch/parisc/kernel/ptrace.c b/arch/parisc/kernel/ptrace.c
+> index 1d9e210702e1f..948e0cf29ba47 100644
+> --- a/arch/parisc/kernel/ptrace.c
+> +++ b/arch/parisc/kernel/ptrace.c
+
+[ ... ]
+
+> @@ -359,15 +359,10 @@ long do_syscall_trace_enter(struct pt_regs *regs)
 > =20
-> -	audit_syscall_entry(scno, regs->ARM_r0, regs->ARM_r1, regs->ARM_r2,
-> -			    regs->ARM_r3);
-> +	audit_syscall_entry(scno, regs);
+>  #ifdef CONFIG_64BIT
+>  	if (!is_compat_task())
+> -		audit_syscall_entry(regs->gr[20], regs->gr[26], regs->gr[25],
+> -				    regs->gr[24], regs->gr[23]);
+> +		audit_syscall_entry(regs->gr[20], regs);
+>  	else
+>  #endif
+> -		audit_syscall_entry(regs->gr[20] & 0xffffffff,
+> -			regs->gr[26] & 0xffffffff,
+> -			regs->gr[25] & 0xffffffff,
+> -			regs->gr[24] & 0xffffffff,
+> -			regs->gr[23] & 0xffffffff);
+> +		audit_syscall_entry(regs->gr[20] & 0xffffffff, regs);
 
 [Severity: High]
-Does this change allow tracers to bypass audit logging by spoofing syscall
-arguments?
+Does removing the explicit 32-bit masking for compat syscall arguments allow
+a ptracer to bypass audit filters?
 
-By delegating argument extraction to the helper, the first syscall argument
-is now extracted via syscall_get_arguments(), which reads from
-regs->ARM_ORIG_r0. The previous code directly passed regs->ARM_r0.
+Since audit_syscall_entry() now uses syscall_get_arguments() internally to
+extract the registers, and syscall_get_arguments() does not truncate the
+arguments to 32 bits on PARISC:
 
-If a user-space process intercepts the syscall at PTRACE_SYSCALL_ENTER and
-modifies the first argument via PTRACE_POKEUSR to write to regs->ARM_r0,
-the audit subsystem will log the unmodified argument from regs->ARM_ORIG_r0.
-However, the syscall dispatcher will subsequently reload r0 from
-regs->ARM_r0, causing the kernel to execute the modified argument while the
-benign one is logged.
+arch/parisc/include/asm/syscall.h:syscall_get_arguments() {
+	args[5] =3D regs->gr[21];
+	args[4] =3D regs->gr[22];
+	args[3] =3D regs->gr[23];
+	args[2] =3D regs->gr[24];
+	args[1] =3D regs->gr[25];
+	args[0] =3D regs->gr[26];
+}
 
-Can we ensure the audit subsystem logs the active argument that will
-actually be executed?
+An attacker in a 32-bit compat task could manipulate the upper 32 bits of
+syscall argument registers via ptrace. Audit would evaluate the unmasked
+64-bit values, while the syscall wrapper would truncate them to 32 bits,
+potentially leading to an evasion of security audit logging.
 
-> =20
->  	return scno;
->  }
+[Severity: High]
+This is a pre-existing issue, but does Seccomp also evaluate unmasked 64-bit
+register values for 32-bit compat tasks on PARISC?
+
+Seccomp relies on syscall_get_arguments() in populate_seccomp_data():
+
+kernel/seccomp.c:populate_seccomp_data() {
+	...
+	syscall_get_arguments(task, regs, args);
+	sd->args[0] =3D args[0];
+	sd->args[1] =3D args[1];
+	...
+}
+
+Because syscall_get_arguments() does not mask the upper 32 bits for compat
+tasks, could an attacker bypass Seccomp reject filters by injecting 64-bit
+values with garbage in the upper 32 bits before Seccomp evaluates them?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/cover.1788351089.gi=
-t.rrobaina@redhat.com?part=3D3
+t.rrobaina@redhat.com?part=3D9
