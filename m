@@ -1,128 +1,163 @@
-Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
+Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5F0646D0B6
-	for <audit@vger.kernel.org>; Thu,  3 Sep 2026 21:13:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.177
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788469988; cv=none; b=WoEampqmi1kSWJRwxlssfg+XMGztE5wn+xvhHn3dGR+69TkpYir4PLBOcrWHNNuxd6/EzhiJ0eVSTthE5fuZgqIErgJs5Cke9IQMk7Lmm6reHNNjdzAKL262m+H71Aty3RBEAlr9XDjJ13F8PyMxtT3OWr746nnDgmV2uYGvE28=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788469988; c=relaxed/simple;
-	bh=/SXNaYAzOtG1exBAfYMsRpUkcMovgrlxcT5oK0UNJoY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fzpKWz3odOJHyRUH1XAEfIiho/uTSU1jDICduOXFmK+1C66NW8tpIVTBHu+qff54ksHrJ3wP116xuDQo27jCLrwp/vJToRu02ZfZ7vXIGUj3zf10Kw2cvERFX6Mk9EPCV/TmJSHWFUT3/hTMhFDe4ExdzjZwfN+5QEGOoAyLxMU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=H30SvNco; arc=none smtp.client-ip=209.85.215.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DE463B71D4
+	for <audit@vger.kernel.org>; Fri,  4 Sep 2026 17:21:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.43
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1788542483; cv=pass; b=jnT6sFwc9Fad2Hau7ak4vMcBcXOqatPSVj/2WOGEJ4itX1QeXpdjexwfnx+T3Bg0O1GzXy1bGaRTYF/h98QdZj7+cgF1pYMYO2vgz/plQuWpJaRQ6jeaDmditRjfeOYvIJbaD1SyY2i1s8vZtzwNCqgSM+wB7orXz1UVEK9SkZg=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1788542483; c=relaxed/simple;
+	bh=AFNBiWCRpUcEoXNChHss1VconiHm4hB8qaeZxdrK+Dg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=AoKadHeCu3dKqD0o1ySfBucVLfF/z0EJkj7vSmKFgEEUZVD7Luvz+XzDa32V4TH16lZf1eP8GYy+wjY9lJf0HPRKmaZq8AMKgitn78gJpSu0P+mmQkLzYxaI9vi4P+Vmw6sY/HRXMLcRa82lDtjEy9RwBA/Un5ZWm4qdjm78L14=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=S+5ZMHHh; arc=pass smtp.client-ip=209.85.208.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="H30SvNco"
-Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-cc1c8d4a959so360188a12.3
-        for <audit@vger.kernel.org>; Thu, 03 Sep 2026 14:13:06 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="S+5ZMHHh"
+Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-6a68aaf4840so2892847a12.0
+        for <audit@vger.kernel.org>; Fri, 04 Sep 2026 10:21:21 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1788542480; cv=none;
+        d=google.com; s=arc-20260327;
+        b=EQ2ivPFGoOJNt2mFcKK+gV4S1Vi2j1nPOpUMjGFSkr4WKQ0BHfRazyOUBwVym3sEfq
+         k6GkzQCIakV7H2U0VgLKHuhr63cXNK5GWWBj2R592Vo9kfQsE3/aRMiWjXV4eKGNRV0e
+         8B4o3zbnNEnG2zaXLHmfvcHPUxllrW6ue32hKLycYckUYNsdmt0mLG/F5rJx0+sFiEli
+         RQ7MNEODg5wODfAw49iEuof03YmGG38Lqi39xoH41WrMSN+k9C1RvywqMCr8N1OMqZfD
+         V66sfIz2DA179lZTZ9LrmWXrlB/rPNKOT65RipgFfm9TSCGaQfNpzwKHbqUn40qSjDxm
+         GlUA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=xbP84TB5YSyUcPTlSRXVzwOJ5KiLCluO2L3qZFE4rqU=;
+        fh=0l4tQFhJK3eF5hPJi8SfGzTKPpJIhw/1toxPWgXQ7gI=;
+        b=dR+f9/Oq2KE2w8Ux0+MwrLHkF40+YPHOus+WuO/48T5kqnYpf9e5tRFd7JBlER+8zj
+         rbnj7YRN00QH5VlXs52bXEOuIHKWWNktnVSPouD75TSYmpWhxOf/ppWnKvxbXdA1Jrla
+         JlaeSU2xZOP2Up4ruYmqKQIKac18dkL5Y1G6wlUFRttbsNcazMTNbsPnXnXSsqMrDVb1
+         Mun0O2bHGEcM+b1KxFEL+dtq6kw20IxfT3EyXluiDM+S7Q78PaezrpBWBW16sFkN6X84
+         VlGpFoE23tK/0WGvm2ycS46tIcyn7plC5y1/cBZxYwNVbbRRO0SE3XcfGkC7aH+7kNQ2
+         97GA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788469986; x=1789074786; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+        d=gmail.com; s=20251104; t=1788542480; x=1789147280; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=/mj3IVRmoCFRi1EC9+dVyk39SNMUGyb4URbFkvdpey0=;
-        b=H30SvNcoJr0RF6gresCkpTwoVVzuNC0pjaGGpreHTSKfprQVVizSNpBk7PIJPoyGBr
-         y3ER69pQ4v1MFrHU3rL3JcMni/gf0wGTkGc8yQR9PlMvAWPg3voccltIbSSdrFBl0jqV
-         +ocsF0mphFV2DpehV1Cnvx7lNUHHfFmntxNrTUbKtnbWuGeXq/sJR8QEGIHcovlLh9Gz
-         GXMymmZo8C/RBUln+VbkpQszrTrTphj+5jD8gV2noZLFBymR1gu79WBMbiElzH1AuPTQ
-         EtisAgESzDsz1Uhs9Ahu6A+6XoGR6rwALRphtoqzuhCaK81fQwR+WEVnUUkygDJlbIbF
-         zSWw==
+        bh=xbP84TB5YSyUcPTlSRXVzwOJ5KiLCluO2L3qZFE4rqU=;
+        b=S+5ZMHHhfGjA+IdWmeugDDHgBwHG5bBYSPYfCEow+5chkn8MQle82UmWyVbxLiEN7d
+         ijcv6053WNTu2RqyJ6VR+Q1MSk4Vxz4n7ZKFRrjYrPqEbaWeUeae4OgCiLykWRLNUDRA
+         ZH/X93kZSKA1/wbKpcmxavHteq0Ow+JKUXYEkMsejbWI7AKmmLzp7rDEpD05dDMzdu05
+         qx2RS3AgstzLvoN8v5AUqAPOvMKc+nz/J8n2Lte3Wf5wq5bPQVeGs2cRbGv15hnp0TgY
+         EW5NlkkUE9iLPQcY1GiopKTuEm/IxQzvNCCThYHaycwvH5N4Y2kyLdCZ7Tyzs3tF5f6h
+         EH1w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788469986; x=1789074786;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
+        d=1e100.net; s=20251104; t=1788542480; x=1789147280;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=/mj3IVRmoCFRi1EC9+dVyk39SNMUGyb4URbFkvdpey0=;
-        b=E/NW9ooT644Yc6gBrqD1qEm6rbWjXAuo1T7EAzKujqYfnSnI4XDDMYgl0PHywfaLEP
-         U1RFVU48Q/LfLTw/roKFkm/rINj5TrSmvd4immjEYTJlahU3anqN3c6encx0VWAMm635
-         WTreC5r5bPl8RAQZB285KzL17Qn3bCqxphS+aVMqpecJBgkFxwiGJ6H3yu2IR+2HywBN
-         Y2qe15LUdVmqBgJDT1A3oDWeqe6Nv/+ewe88YRsbRSbC+Je796SPVkjnE0oTbwHTXBwZ
-         iSLzxDKWBVXr5EBr9GsmLrmleUGBlMHEs/icLjav5LvvNnc/WZ1+fgL4kvXL9hVExZ27
-         mKxg==
-X-Forwarded-Encrypted: i=1; AKwUvBz310YRmsKqmusra0WH2sU7NGac88A4NWCjxidfXapi2g9Gng8CivFt3SYAie6fJDO48YZung==@vger.kernel.org
-X-Gm-Message-State: AFuF++kAnomkx0oGjCu0XNWwnP67QeT1AhK8+9gAfrvfLE7lghorSG1M
-	nCNBTqyIAAR+TJtiqj+WguIwXYdeclOwu0RcNJbOqGTeTYvmCfVECSs9
-X-Gm-Gg: AYBFou3+PrIaLzVL3pmquN17/KG/K0FQzAVuadnq68BpybAOCBH5GEJlC7yFzqg39Lw
-	IkEz5l0q7jxRy9Kw029Gm8dtjCAzYkiCXyrarOkFbhbILOwe0vVMPASP4Ka9hsgL2gO8Dsd+LNb
-	e/bGXtrWM/rjFKm/UTXDYvaG7v6rQcQQGXcg7bB03oOsfxGOrKzP/SQDQaI8qP9ucDVKC8Kh3bu
-	+v2vRsOGBafksnVxjJLXK2N4I0b6QIVGzujRqF6VX+EXfNOvK/hgeupWGje7qGfb6HwzfLt7r2n
-	sjpNla7njvy+lIHppC/Lk1zZnYs9TR2L5sOmtVcWqulJcTuB+eIY4BBpq//QpxCcGFlS0ZKE+Mw
-	myBRI3XHbjGlNh6CkH1G41XWdpFTBBP4IzGPLONRPIL0+lGVVCsqQF58K++c7qTkGjh3Rsqq3Uv
-	xy2my26au8+IhKj1irVK2GF+QPShF15sVd2ZBYmj2pxFflbT2AOTDTnLIuwknClfvgV4Dn1PGsi
-	Mf9Ijo6FP7UQYEFw0daLuet8Bkefn6TgqwVBha2N80zFzE7jo71abM=
-X-Received: by 2002:a17:90b:2d0b:b0:398:c794:ca26 with SMTP id 98e67ed59e1d1-39b263167f7mr1956509a91.25.1788469985477;
-        Thu, 03 Sep 2026 14:13:05 -0700 (PDT)
-Received: from skinsburskii (c-98-225-44-182.hsd1.wa.comcast.net. [98.225.44.182])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39ae633be61sm3479083a91.1.2026.09.03.14.13.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Sep 2026 14:13:04 -0700 (PDT)
-Date: Thu, 3 Sep 2026 14:13:02 -0700
-From: Stanislav Kinsburskii <skinsburskii@gmail.com>
-To: Paul Moore <paul@paul-moore.com>
-Cc: Shuah Khan <shuah@kernel.org>, Eric Paris <eparis@redhat.com>,
-	Al Viro <viro@zeniv.linux.org.uk>, Amy Griffis <amy.griffis@hp.com>,
-	Frank Hofmann <hofmann@deshaw.com>,
-	Noah Orlando <orlandon@deshaw.com>, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, audit@vger.kernel.org
-Subject: Re: [PATCH 1/3] selftests/audit: Add syscall overhead benchmark
-Message-ID: <apni3p2JBQmc5IZQ@skinsburskii>
-References: <20260806-audit-v1-1-ddd0d94ff0b6@gmail.com>
- <580b5af8293cea8dc0a13e044b52280c@paul-moore.com>
+        bh=xbP84TB5YSyUcPTlSRXVzwOJ5KiLCluO2L3qZFE4rqU=;
+        b=d1cIWku8bHD3ocpEackzErb9NMXYVvM0mpMgsU1Q7KPk8WSu6EwVrD8Sl1C7qOlzLd
+         GMFIdyDtu1IbjiI2NUEuM3QUiwXxA9vuKoGzOhmvTIR3zjzkoB5EyBVV255Mn/Ht5o4i
+         wPIdy3HTfJOv/zVAkXIaexAjUXuTd3Fh1r+c0OvodQntgBzqitELVG7QZSBPrylQsufA
+         9Wu/+Fw3yT/Wbn4CePeV0z5tcpsdCMxOt0zK9+AwYqSphpHXOMqoXg6MxP+R6/OGfy9Y
+         CcfLTUAAeSZIxm8vHD+EKlSb8SAiHq4YehPpF1jjbjhAAc7iKDRBvU35G6Bcg8pbmoUK
+         4XPw==
+X-Gm-Message-State: AFuF++nbcJjG48mTeh0QW75mDNbufdQjanju6TlrUbZ+858AX5X5XNI/
+	dE0ZlOo5NO547X02W7yumvDAVWGI3SzA3bZir4PC47A7Y245bqhiYf0anApJ2cIJ4pcDQl7jxP+
+	WBfFCPnoGEx7Vs+hcOjUXzM0KvEZizpY=
+X-Gm-Gg: AYBFou1jIdu069Vv58hkXnc3ilU8QJmzZkTB3g9NPshs0ANJSqClgfpW/iVBS9Efs15
+	eOcOAXHYYKW70YDKM/quAm7jARroUqxw7auE91T+n9ggO7cBsPeUdFFwLDnWiALmojqjK75aM4L
+	P0yoCZOQT9vImy1nW2GmOLl1NPLBzXg2XVmhAEVEnbk9BRFTFxzy54PvWnLLlcXX5935LkvHde1
+	grBWJweHC7BTxAujUOF5+3B4Z2B6O34vgULhqpW/GSDOcczoaj+zM5HLr1O1727MPq24f5HV0Q0
+	qPtRxu5D6BtUl89GadieSWJS0Kaej6CQen9mIIgo3krOepMk9zeHaz0D8QbqdbpWqJp8++ZAOvD
+	zf/GoW2EO5bBy6rOiGwBdTBQoxu4IQSg=
+X-Received: by 2002:a05:6402:a252:20b0:6a6:9368:73a0 with SMTP id
+ 4fb4d7f45d1cf-6a696a73aa1mr4363499a12.6.1788542479338; Fri, 04 Sep 2026
+ 10:21:19 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <580b5af8293cea8dc0a13e044b52280c@paul-moore.com>
+References: <cover.1788351089.git.rrobaina@redhat.com> <4ada9fcbb93af8d5c1c9bfe2c83d94fc10bfe327.1788351089.git.rrobaina@redhat.com>
+In-Reply-To: <4ada9fcbb93af8d5c1c9bfe2c83d94fc10bfe327.1788351089.git.rrobaina@redhat.com>
+From: Magnus Lindholm <linmag7@gmail.com>
+Date: Fri, 4 Sep 2026 19:21:07 +0200
+X-Gm-Features: AcwNN1WpEQ0Y6eKbtA6wNzDHeYOBs1Tconhq7C15XjRhFKDXvjk4jMYrR9OFExk
+Message-ID: <CA+=Fv5T4826T2sd0Gbh-nfZsqcWK_phdBKy4BLWOvDTt92t5Eg@mail.gmail.com>
+Subject: Re: [PATCH v2 02/13] alpha: pass pt_regs to audit_syscall_entry()
+To: Ricardo Robaina <rrobaina@redhat.com>
+Cc: audit@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-csky@vger.kernel.org, linux-mips@vger.kernel.org, 
+	linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org, 
+	linux-sh@vger.kernel.org, sparclinux@vger.kernel.org, 
+	linux-um@lists.infradead.org, bpf@vger.kernel.org, paul@paul-moore.com, 
+	eparis@redhat.com, sgrubb@redhat.com, oleg@redhat.com, 
+	richard.henderson@linaro.org, mattst88@gmail.com, linux@armlinux.org.uk, 
+	catalin.marinas@arm.com, will@kernel.org, guoren@kernel.org, monstr@monstr.eu, 
+	tsbogend@alpha.franken.de, jonas@southpole.se, 
+	stefan.kristiansson@saunalahti.fi, shorne@gmail.com, 
+	James.Bottomley@hansenpartnership.com, deller@gmx.de, 
+	ysato@users.sourceforge.jp, dalias@libc.org, glaubitz@physik.fu-berlin.de, 
+	davem@davemloft.net, andreas@gaisler.com, richard@nod.at, 
+	anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net, chris@zankel.net, 
+	jcmvbkbc@gmail.com, tglx@kernel.org, peterz@infradead.org, luto@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Sep 01, 2026 at 05:35:12PM -0400, Paul Moore wrote:
-> On Aug  6, 2026 Stanislav Kinsburskii <skinsburskii@gmail.com> wrote:
-> > 
-> > Add a microbenchmark which repeatedly invokes getpid(2) and reports the
-> > per-operation latency across multiple repetitions. The workload avoids
-> > filesystem and other syscall-specific work so the fixed audit syscall
-> > overhead remains visible.
-> > 
-> > The benchmark deliberately leaves audit policy management to the caller.
-> > This permits comparisons with increasing numbers of unrelated exit rules
-> > and with automatically removed watch or tree rules without modifying an
-> > existing policy unexpectedly.
-> > 
-> > Signed-off-by: Stanislav Kinsburskii <skinsburskii@gmail.com>
-> > ---
-> >  MAINTAINERS                                 |   1 +
-> >  tools/testing/selftests/Makefile            |   1 +
-> >  tools/testing/selftests/audit/.gitignore    |   2 +
-> >  tools/testing/selftests/audit/Makefile      |   9 ++
-> >  tools/testing/selftests/audit/README        |  30 ++++
-> >  tools/testing/selftests/audit/audit_bench.c | 227 ++++++++++++++++++++++++++++
-> >  6 files changed, 270 insertions(+)
-> 
-> Thanks for this Stanislav, but I'm not certain that we want to merge this
-> into the kernel and have this become the defacto standard for audit
-> performance.  It's a simple, easy to understand test, but I worry that it
-> might be too simplistic to properly characterize audit performance.
-> 
-> ... and no, I'm sorry, but I don't have a better suggestion off the top
-> of my head :)
-> 
-> However, audit_bench might be useful as part of the manual_tests in the
-> audit-testsuite?
-> 
->  https://github.com/linux-audit/audit-testsuite
-> 
+Hi Ricardo,
 
-Sure, here is a PR: https://github.com/linux-audit/audit-testsuite/pull/129
-
-Thanks,
-Stanislav
-
+On Wed, Sep 2, 2026 at 4:44=E2=80=AFPM Ricardo Robaina <rrobaina@redhat.com=
+> wrote:
+>
+> audit_syscall_entry() now takes a pointer to pt_regs and extracts
+> the syscall arguments itself via syscall_get_arguments(). Drop the
+> individual argument registers from the call and pass regs instead.
+>
+> Signed-off-by: Ricardo Robaina <rrobaina@redhat.com>
+> ---
+>  arch/alpha/kernel/ptrace.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+>
+> diff --git a/arch/alpha/kernel/ptrace.c b/arch/alpha/kernel/ptrace.c
+> index fc8f6cedbb28..8a39c0473297 100644
+> --- a/arch/alpha/kernel/ptrace.c
+> +++ b/arch/alpha/kernel/ptrace.c
+> @@ -496,8 +496,7 @@ asmlinkage unsigned long syscall_trace_enter(void)
+>         }
+>
+>  #ifdef CONFIG_AUDITSYSCALL
+> -       audit_syscall_entry(syscall_get_nr(current, regs),
+> -               regs->r16, regs->r17, regs->r18, regs->r19);
+> +       audit_syscall_entry(syscall_get_nr(current, regs), regs);
+>  #endif
+>         return syscall_get_nr(current, regs);
+>  }
 > --
-> paul-moore.com
+> 2.55.0
+>
+This doesn't apply on top of my "alpha: enable GENERIC_ENTRY" series
+
+https://lore.kernel.org/linux-alpha/20260902184058.198679-1-linmag7@gmail.c=
+om/T/#t
+
+That series moves alpha's syscall entry onto the generic entry
+framework and removes syscall_trace_enter() and its direct
+audit_syscall_entry() call entirely - verified with git am against
+GENERIC_ENTRY applied, it fails at exactly this hunk.
+You don't need a replacement alpha patch, though. Once GENERIC_ENTRY
+lands, alpha's syscall entry goes through
+syscall_enter_from_user_mode_randomize_stack(), which already calls
+syscall_enter_audit() as part of the shared entry helpers
+(include/linux/entry-common.h). I applied patch 1/13 alone on top of
+GENERIC_ENTRY and confirmed alpha's entry path already routes through
+the updated __audit_syscall_entry() - no alpha-specific code needed.
+So for alpha, you can drop this patch in the next revision rather
+than rebase it.
+
+Regards
+Magnus
