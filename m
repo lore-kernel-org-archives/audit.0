@@ -1,163 +1,209 @@
-Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from sender4-op-o15.zoho.com (sender4-op-o15.zoho.com [136.143.188.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DE463B71D4
-	for <audit@vger.kernel.org>; Fri,  4 Sep 2026 17:21:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2C5C302146;
+	Sun,  6 Sep 2026 10:51:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.15
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788542483; cv=pass; b=jnT6sFwc9Fad2Hau7ak4vMcBcXOqatPSVj/2WOGEJ4itX1QeXpdjexwfnx+T3Bg0O1GzXy1bGaRTYF/h98QdZj7+cgF1pYMYO2vgz/plQuWpJaRQ6jeaDmditRjfeOYvIJbaD1SyY2i1s8vZtzwNCqgSM+wB7orXz1UVEK9SkZg=
+	t=1788691904; cv=pass; b=ufZWLrdjmcwgcjs/W5WI3Mz/lMkBpuq50JhHW/VwvWj4u9QPPRC7AyM5PtmowZjtDlxqYqWXoAEtCf80To5CKoWri+pV9lD3VsxMbHf21sYLoS4RsTPK3VXmEVorNdJXKwuEB3ImTncisiYzN78hGjMikGdwPiNTPyxy+/kerDM=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788542483; c=relaxed/simple;
-	bh=AFNBiWCRpUcEoXNChHss1VconiHm4hB8qaeZxdrK+Dg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=AoKadHeCu3dKqD0o1ySfBucVLfF/z0EJkj7vSmKFgEEUZVD7Luvz+XzDa32V4TH16lZf1eP8GYy+wjY9lJf0HPRKmaZq8AMKgitn78gJpSu0P+mmQkLzYxaI9vi4P+Vmw6sY/HRXMLcRa82lDtjEy9RwBA/Un5ZWm4qdjm78L14=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=S+5ZMHHh; arc=pass smtp.client-ip=209.85.208.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1788691904; c=relaxed/simple;
+	bh=5DEUFarM9EHefZ0wVYQQBuHqPXjSlIFqm4LAKK6cmFQ=;
+	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
+	 MIME-Version:Content-Type; b=axPeIBzikffWUg/f1juGA8pUU+fNLmZY+zhw5F1YL3KAOpTt4+GMD6/UiTlEEoKWlPJH0Sco4aR0RE1fZrVq2g6Yh7ZZQsePnALL9gpJwrZ7hBZByiEnIqPQcXQcJJfL1uDxfIfzZ7bUg9V911Q6eA+LNt/9qohVC7Vz00POVco=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.beauty; spf=pass smtp.mailfrom=linux.beauty; dkim=pass (1024-bit key) header.d=linux.beauty header.i=me@linux.beauty header.b=MrrdizyY; arc=pass smtp.client-ip=136.143.188.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.beauty
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.beauty
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="S+5ZMHHh"
-Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-6a68aaf4840so2892847a12.0
-        for <audit@vger.kernel.org>; Fri, 04 Sep 2026 10:21:21 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1788542480; cv=none;
-        d=google.com; s=arc-20260327;
-        b=EQ2ivPFGoOJNt2mFcKK+gV4S1Vi2j1nPOpUMjGFSkr4WKQ0BHfRazyOUBwVym3sEfq
-         k6GkzQCIakV7H2U0VgLKHuhr63cXNK5GWWBj2R592Vo9kfQsE3/aRMiWjXV4eKGNRV0e
-         8B4o3zbnNEnG2zaXLHmfvcHPUxllrW6ue32hKLycYckUYNsdmt0mLG/F5rJx0+sFiEli
-         RQ7MNEODg5wODfAw49iEuof03YmGG38Lqi39xoH41WrMSN+k9C1RvywqMCr8N1OMqZfD
-         V66sfIz2DA179lZTZ9LrmWXrlB/rPNKOT65RipgFfm9TSCGaQfNpzwKHbqUn40qSjDxm
-         GlUA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=xbP84TB5YSyUcPTlSRXVzwOJ5KiLCluO2L3qZFE4rqU=;
-        fh=0l4tQFhJK3eF5hPJi8SfGzTKPpJIhw/1toxPWgXQ7gI=;
-        b=dR+f9/Oq2KE2w8Ux0+MwrLHkF40+YPHOus+WuO/48T5kqnYpf9e5tRFd7JBlER+8zj
-         rbnj7YRN00QH5VlXs52bXEOuIHKWWNktnVSPouD75TSYmpWhxOf/ppWnKvxbXdA1Jrla
-         JlaeSU2xZOP2Up4ruYmqKQIKac18dkL5Y1G6wlUFRttbsNcazMTNbsPnXnXSsqMrDVb1
-         Mun0O2bHGEcM+b1KxFEL+dtq6kw20IxfT3EyXluiDM+S7Q78PaezrpBWBW16sFkN6X84
-         VlGpFoE23tK/0WGvm2ycS46tIcyn7plC5y1/cBZxYwNVbbRRO0SE3XcfGkC7aH+7kNQ2
-         97GA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788542480; x=1789147280; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=xbP84TB5YSyUcPTlSRXVzwOJ5KiLCluO2L3qZFE4rqU=;
-        b=S+5ZMHHhfGjA+IdWmeugDDHgBwHG5bBYSPYfCEow+5chkn8MQle82UmWyVbxLiEN7d
-         ijcv6053WNTu2RqyJ6VR+Q1MSk4Vxz4n7ZKFRrjYrPqEbaWeUeae4OgCiLykWRLNUDRA
-         ZH/X93kZSKA1/wbKpcmxavHteq0Ow+JKUXYEkMsejbWI7AKmmLzp7rDEpD05dDMzdu05
-         qx2RS3AgstzLvoN8v5AUqAPOvMKc+nz/J8n2Lte3Wf5wq5bPQVeGs2cRbGv15hnp0TgY
-         EW5NlkkUE9iLPQcY1GiopKTuEm/IxQzvNCCThYHaycwvH5N4Y2kyLdCZ7Tyzs3tF5f6h
-         EH1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788542480; x=1789147280;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=xbP84TB5YSyUcPTlSRXVzwOJ5KiLCluO2L3qZFE4rqU=;
-        b=d1cIWku8bHD3ocpEackzErb9NMXYVvM0mpMgsU1Q7KPk8WSu6EwVrD8Sl1C7qOlzLd
-         GMFIdyDtu1IbjiI2NUEuM3QUiwXxA9vuKoGzOhmvTIR3zjzkoB5EyBVV255Mn/Ht5o4i
-         wPIdy3HTfJOv/zVAkXIaexAjUXuTd3Fh1r+c0OvodQntgBzqitELVG7QZSBPrylQsufA
-         9Wu/+Fw3yT/Wbn4CePeV0z5tcpsdCMxOt0zK9+AwYqSphpHXOMqoXg6MxP+R6/OGfy9Y
-         CcfLTUAAeSZIxm8vHD+EKlSb8SAiHq4YehPpF1jjbjhAAc7iKDRBvU35G6Bcg8pbmoUK
-         4XPw==
-X-Gm-Message-State: AFuF++nbcJjG48mTeh0QW75mDNbufdQjanju6TlrUbZ+858AX5X5XNI/
-	dE0ZlOo5NO547X02W7yumvDAVWGI3SzA3bZir4PC47A7Y245bqhiYf0anApJ2cIJ4pcDQl7jxP+
-	WBfFCPnoGEx7Vs+hcOjUXzM0KvEZizpY=
-X-Gm-Gg: AYBFou1jIdu069Vv58hkXnc3ilU8QJmzZkTB3g9NPshs0ANJSqClgfpW/iVBS9Efs15
-	eOcOAXHYYKW70YDKM/quAm7jARroUqxw7auE91T+n9ggO7cBsPeUdFFwLDnWiALmojqjK75aM4L
-	P0yoCZOQT9vImy1nW2GmOLl1NPLBzXg2XVmhAEVEnbk9BRFTFxzy54PvWnLLlcXX5935LkvHde1
-	grBWJweHC7BTxAujUOF5+3B4Z2B6O34vgULhqpW/GSDOcczoaj+zM5HLr1O1727MPq24f5HV0Q0
-	qPtRxu5D6BtUl89GadieSWJS0Kaej6CQen9mIIgo3krOepMk9zeHaz0D8QbqdbpWqJp8++ZAOvD
-	zf/GoW2EO5bBy6rOiGwBdTBQoxu4IQSg=
-X-Received: by 2002:a05:6402:a252:20b0:6a6:9368:73a0 with SMTP id
- 4fb4d7f45d1cf-6a696a73aa1mr4363499a12.6.1788542479338; Fri, 04 Sep 2026
- 10:21:19 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.beauty header.i=me@linux.beauty header.b="MrrdizyY"
+ARC-Seal: i=1; a=rsa-sha256; t=1788691854; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=HcHv7QGeAJiTzwkPsLHQtIHDXg+2BOTsRnQz63gL5tKUhmSrb+xsES5fvihLNwX7fRBkNlp/y2e9XWkSUnGxybGoddpScOdoipvFHHNsogDA+nnOriuvZFh9U48Js69etl/8831j0h6BBlQ8Ohq8Jh76aQHkt9reQR+fv2vkO2s=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1788691854; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=rBoSHGzWKBhSuGS8r2av+j/7qxpuVCAqAJc8a/E78no=; 
+	b=YpSRvGr0ZzH6qrZ+qbq04ewCgD+HEWhzNGG5niJ8ZdAMrLyqvIClzi2u9fd0xcMGYavMl4X4lNM48aeWNvgiCS8+0OnLSmc4E1FhO3heka1AsDUf6fqFCNKOi6haJEK8WO7mWQUYMKKWpc516Mfn/6aW5rukRx+vHQ8vygDeSys=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=linux.beauty;
+	spf=pass  smtp.mailfrom=me@linux.beauty;
+	dmarc=pass header.from=<me@linux.beauty>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1788691854;
+	s=zmail; d=linux.beauty; i=me@linux.beauty;
+	h=Date:Date:From:From:To:To:Cc:Cc:Message-ID:In-Reply-To:Subject:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+	bh=rBoSHGzWKBhSuGS8r2av+j/7qxpuVCAqAJc8a/E78no=;
+	b=MrrdizyYZV3Ev0Xkg+kB7NUWS6PN14cITmMXKJ/oZJt2nUbvveceskVWxdh63bKK
+	XGTSGzsGkaH5x094cI7PomrPqnxP47UUqtkux5UkkWnBVmwMPqaEkZCLosN/1nK4l0k
+	ajHvJCfYOrDP3LmLFinwkZUG/4RlhaUdwQ6aP/5U=
+Received: from mail.zoho.com by mx.zohomail.com
+	with SMTP id 1788691853878565.2585404132941; Sun, 6 Sep 2026 03:50:53 -0700 (PDT)
+Received: from mail.zoho.com by mx.zohomail.com
+	with SMTP id 1788691851513989.1054873609904; Sun, 6 Sep 2026 03:50:51 -0700 (PDT)
+Date: Sun, 06 Sep 2026 18:50:51 +0800
+From: Li Chen <me@linux.beauty>
+To: "Mateusz Guzik" <mjguzik@gmail.com>
+Cc: "Justin Suess" <utilityemal77@gmail.com>,
+	"Christian Brauner" <brauner@kernel.org>,
+	"Kees Cook" <kees@kernel.org>,
+	"Gabriel Krisman Bertazi" <krisman@kernel.org>,
+	"Josh Triplett" <josh@joshtriplett.org>,
+	"Andy Lutomirski" <luto@kernel.org>,
+	"John Ericson" <mail@johnericson.me>,
+	"Jonathan Corbet" <corbet@lwn.net>, "Shuah Khan" <shuah@kernel.org>,
+	"Arnd Bergmann" <arnd@arndb.de>, "Oleg Nesterov" <oleg@redhat.com>,
+	"Andrew Morton" <akpm@linux-foundation.org>,
+	"Paul Moore" <paul@paul-moore.com>, "Eric Paris" <eparis@redhat.com>,
+	=?UTF-8?Q?=22Micka=C3=ABl_Sala=C3=BCn=22?= <mic@digikod.net>,
+	=?UTF-8?Q?=22G=C3=BCnther_Noack=22?= <gnoack@google.com>,
+	"Alexander Viro" <viro@zeniv.linux.org.uk>,
+	"Jan Kara" <jack@suse.cz>, "linux-api" <linux-api@vger.kernel.org>,
+	"linux-fsdevel" <linux-fsdevel@vger.kernel.org>,
+	"linux-kernel" <linux-kernel@vger.kernel.org>,
+	"linux-kselftest" <linux-kselftest@vger.kernel.org>,
+	"linux-doc" <linux-doc@vger.kernel.org>,
+	"audit" <audit@vger.kernel.org>,
+	"linux-security-module" <linux-security-module@vger.kernel.org>,
+	"linux-arch" <linux-arch@vger.kernel.org>,
+	"linux-mm" <linux-mm@kvack.org>
+Message-ID: <1a07657a8e1.4ebd8dda3414368.7718440407238274005@linux.beauty>
+In-Reply-To: <CAGudoHGoOr8rvhSQK+HQp7LmNyE9vP=xTok9eA1ZbV7uaVnMEg@mail.gmail.com>
+References: <cover.1784204592.git.me@linux.beauty> <anJE8SfBLtkh6QSa@zenbox> <1a01795b07a.1f456216580426.3401229391386650127@linux.beauty> <CAGudoHGoOr8rvhSQK+HQp7LmNyE9vP=xTok9eA1ZbV7uaVnMEg@mail.gmail.com>
+Subject: Re: [RFC PATCH 00/24] pidfd: add a minimal process spawn builder
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1788351089.git.rrobaina@redhat.com> <4ada9fcbb93af8d5c1c9bfe2c83d94fc10bfe327.1788351089.git.rrobaina@redhat.com>
-In-Reply-To: <4ada9fcbb93af8d5c1c9bfe2c83d94fc10bfe327.1788351089.git.rrobaina@redhat.com>
-From: Magnus Lindholm <linmag7@gmail.com>
-Date: Fri, 4 Sep 2026 19:21:07 +0200
-X-Gm-Features: AcwNN1WpEQ0Y6eKbtA6wNzDHeYOBs1Tconhq7C15XjRhFKDXvjk4jMYrR9OFExk
-Message-ID: <CA+=Fv5T4826T2sd0Gbh-nfZsqcWK_phdBKy4BLWOvDTt92t5Eg@mail.gmail.com>
-Subject: Re: [PATCH v2 02/13] alpha: pass pt_regs to audit_syscall_entry()
-To: Ricardo Robaina <rrobaina@redhat.com>
-Cc: audit@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-csky@vger.kernel.org, linux-mips@vger.kernel.org, 
-	linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org, 
-	linux-sh@vger.kernel.org, sparclinux@vger.kernel.org, 
-	linux-um@lists.infradead.org, bpf@vger.kernel.org, paul@paul-moore.com, 
-	eparis@redhat.com, sgrubb@redhat.com, oleg@redhat.com, 
-	richard.henderson@linaro.org, mattst88@gmail.com, linux@armlinux.org.uk, 
-	catalin.marinas@arm.com, will@kernel.org, guoren@kernel.org, monstr@monstr.eu, 
-	tsbogend@alpha.franken.de, jonas@southpole.se, 
-	stefan.kristiansson@saunalahti.fi, shorne@gmail.com, 
-	James.Bottomley@hansenpartnership.com, deller@gmx.de, 
-	ysato@users.sourceforge.jp, dalias@libc.org, glaubitz@physik.fu-berlin.de, 
-	davem@davemloft.net, andreas@gaisler.com, richard@nod.at, 
-	anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net, chris@zankel.net, 
-	jcmvbkbc@gmail.com, tglx@kernel.org, peterz@infradead.org, luto@kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7bit
+Importance: Medium
+User-Agent: Zoho Mail
+X-Mailer: Zoho Mail
 
-Hi Ricardo,
+Hi Mateusz,
 
-On Wed, Sep 2, 2026 at 4:44=E2=80=AFPM Ricardo Robaina <rrobaina@redhat.com=
-> wrote:
->
-> audit_syscall_entry() now takes a pointer to pt_regs and extracts
-> the syscall arguments itself via syscall_get_arguments(). Drop the
-> individual argument registers from the call and pass regs instead.
->
-> Signed-off-by: Ricardo Robaina <rrobaina@redhat.com>
-> ---
->  arch/alpha/kernel/ptrace.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
->
-> diff --git a/arch/alpha/kernel/ptrace.c b/arch/alpha/kernel/ptrace.c
-> index fc8f6cedbb28..8a39c0473297 100644
-> --- a/arch/alpha/kernel/ptrace.c
-> +++ b/arch/alpha/kernel/ptrace.c
-> @@ -496,8 +496,7 @@ asmlinkage unsigned long syscall_trace_enter(void)
->         }
->
->  #ifdef CONFIG_AUDITSYSCALL
-> -       audit_syscall_entry(syscall_get_nr(current, regs),
-> -               regs->r16, regs->r17, regs->r18, regs->r19);
-> +       audit_syscall_entry(syscall_get_nr(current, regs), regs);
->  #endif
->         return syscall_get_nr(current, regs);
->  }
-> --
-> 2.55.0
->
-This doesn't apply on top of my "alpha: enable GENERIC_ENTRY" series
+> First and a foremost apologies for radio silence, I got really busy
+> with other stuff.
 
-https://lore.kernel.org/linux-alpha/20260902184058.198679-1-linmag7@gmail.c=
-om/T/#t
+Thanks for making time to write such a detailed reply despite being busy
+with other work. Sorry for taking so long to get back to you.
 
-That series moves alpha's syscall entry onto the generic entry
-framework and removes syscall_trace_enter() and its direct
-audit_syscall_entry() call entirely - verified with git am against
-GENERIC_ENTRY applied, it fails at exactly this hunk.
-You don't need a replacement alpha patch, though. Once GENERIC_ENTRY
-lands, alpha's syscall entry goes through
-syscall_enter_from_user_mode_randomize_stack(), which already calls
-syscall_enter_audit() as part of the shared entry helpers
-(include/linux/entry-common.h). I applied patch 1/13 alone on top of
-GENERIC_ENTRY and confirmed alpha's entry path already routes through
-the updated __audit_syscall_entry() - no alpha-specific code needed.
-So for alpha, you can drop this patch in the next revision rather
-than rebase it.
+> I don't understand what race is supposed to be addressed either as
+> none of the setup depends on the content binary.
 
-Regards
-Magnus
+You're right that none of the setup depends on an earlier check of
+the executable. My earlier reply mixed up two different requirements:
+executing whatever a pathname resolves to at exec time, and executing
+a particular file selected earlier.
+
+The posted RFC does the former. It stores the pathname without looking
+up or inspecting the executable during configuration.
+
+The caller-side race I had in mind was this:
+
+caller                  another process        child
+    |                           |                  |
+    | inspect file A via path   |                  |
+    | configure builder         |                  |
+    |                           | replace path     |
+    |                           | with file B      |
+    | spawn_run()               |                  |
+    |                           |      lookup -> B |
+    |                           |      exec B      |
+
+This matters if the caller expects the file it inspected to be the
+one executed. Opening A first, inspecting it through that fd, and
+using the same fd for execution avoids the pathname substitution.
+The fd pins the file's identity, not immutable contents.
+
+> Regardless I don't think this is going to fly as it directly shafts
+> NUMA setups. What's needed is a path to the binary + the PATH
+> envifornment variable or a collection of paths to try out.
+
+I went back to the spawn_template discussion and realized that you had
+already raised these NUMA concerns there, including child-side lookup,
+PATH search, and target-node allocation. Sorry, I should have connected
+your current comment with that earlier explanation.
+
+> At minimum this will allocate a dentry and an inode for usr, bin and
+> coolprog itself.
+>
+> Afterwards any path lookup going through usr in that that container
+> will have to fetch memory from a non-local node to traverse it, same
+> thing for the bin subdirectory.
+>
+> This is a self-induced problem when using a fd.
+
+I see how opening the executable in the parent can populate cold
+filesystem metadata on the parent's node, even though the child will
+run on a different node. Making an executable fd mandatory would
+force that early lookup on callers who could otherwise leave it
+to the child.
+
+> A well-known exec-heavy workload where this is fine is compilation.
+> Any big project will do, to give you one trivial example, make -j
+> $BIGNUM modules in the Linux kernel directory.
+>
+> [...]
+>
+> The stock kernel with the fork
+> + exec machinery is doing a shitty job here, but the new mechanism can
+> assure process-specific allocation to come form the target node as
+> long as the scheduler does not mess up.
+
+The compilation example helps too, and this matters even without explicit
+affinity. Moving lookup into the child does not by itself address the
+initial per-task allocations.
+
+> 1. copy in whatever data it needs from userspace
+> 2. if no affinity is specified, ask the scheduler: assuming something
+> forks now, where is it going to run? the answer would be speculative
+> ofc
+> 3. to the minimum allocations needed (task_struct etc.) while passing
+> the node number from above
+> 4. have the newly spawned task handle everything else
+
+I'll look into using the scheduler's speculative placement for those
+initial allocations, then leaving the remaining work to the child
+where it actually runs.
+
+> In the real world userspace notoriously performs failed execs as it
+> makes its way through dirs in provided in PATH, and while you can
+> patch select programs all you want, the mechanism will have to account
+> for it.
+>
+> [...]
+>
+> This in particular means that a failed exec would be very expensive,
+> as it would go through task creation and teardown. Meaning the child
+> needs to be able to figure out where to binary to execute is. And
+> user-visible part has to account for it from the get-go.
+
+Your point about failed execs during PATH search makes sense too.
+Creating and tearing down a task for each candidate would be wasteful.
+I plan to have libc build a list of candidate paths without doing any
+filesystem lookup, and pass that list to the kernel. The child would
+apply its setup once, then try the candidates in order, continuing
+after recoverable exec failures in the same task.
+
+That keeps PATH parsing in libc and lookup in the child. Relative paths
+would stay relative, so they resolve against the child's cwd after file
+actions. A single pathname would just be a one-entry list. This needs
+interface support, and I'll need to work through the exec cleanup and
+error handling to preserve the expected posix_spawnp() behavior.
+
+I'm still unsure whether supporting both modes is a good interface
+design. An fd option seems useful for callers that need to execute
+the same file they opened earlier, while child-side pathname lookup
+would avoid forcing that early lookup on everyone. I'm leaning
+towards keeping both, but haven't settled on that yet.
+
+> I'm going to write more after I go through the patchset, should be next week.
+
+Thanks again for taking the time to explain this. I look forward to
+your further comments.
+
+Regards,
+Li
+
+
