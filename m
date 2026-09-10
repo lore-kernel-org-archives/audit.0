@@ -1,141 +1,69 @@
-Received: from smtp-190a.mail.infomaniak.ch (smtp-190a.mail.infomaniak.ch [185.125.25.10])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 327C949BD8A
-	for <audit@vger.kernel.org>; Thu, 10 Sep 2026 14:55:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.25.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69A384A5C46;
+	Thu, 10 Sep 2026 14:56:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789052121; cv=none; b=E5NO38/9OLvSLvNdAlq+IZiBn7fyjcS5MQ6AnBlOxHUiXMk7knaKP6W1HXoyVj2QjCFk4IoVrV2JNk5/iAs58GVWLNiUTM2A8LQbI50IzEha7y6MGap8Tpisic48a/PjWvH5AlrymzNpql74osF9HmQEE1hMBt8kZg5IPag9nG4=
+	t=1789052190; cv=none; b=KfdwoNdsocUwAznotIjj7uJ8LBc5zgamXyJ6iK0UWcEZPN7dKkZOhzsq+qX4W2f413tiNurpadblei4Hra7LAFXjiw1FLA29KOPCxVGo7E3XRoD5AxltHKQpIn1dtBnk6SR4IOrxoNLYFZpF9DPjL2KKqgNF91Bdmc/ydP5l9Ik=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789052121; c=relaxed/simple;
-	bh=YM7KzRMlWzqVl+WNhTeX/beK1tx3PR9D3e13J7EMLag=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Ogts9IlGGTSjm4N8Z0kyQo7l2nn1T2iu80Wxr3A946uodwsQV7lbBgi1I0I0FfS9ffvGt9ClGmzvJL4BEatrwx8WOD6f1Ib8oyL1Fe+7S4VuiSmwCyuXRrHXJuzTIfaJDlleIbxJRIJCL/XkBaGUHRFx1azuN4xDD8h+Ol/EpBs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=f1e3VNLJ; arc=none smtp.client-ip=185.125.25.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
+	s=arc-20240116; t=1789052190; c=relaxed/simple;
+	bh=0pUYtRp+pM18dDAxa4bQ2fRwlyVlsEFL2je8jUJCxys=;
+	h=From:Subject:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=ljwGddMFeUiArWFOLxVP5wh/LMUifHH9aib+l3i+8w2Mo9HUu4epdiEVggNFy2GSwfDIRX8GWZVSoURnlUUWjIm16/7HTcOqiW5QPc8QSvA9tpV7eNvWJw1rXshpFX4EqmLDIQ+Ja2XvX4Tvt1Yx2N3iwoom5PS6nISRMD2wFcg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QNlDZ922; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="f1e3VNLJ"
-Received: from smtp-3-0000.mail.infomaniak.ch (smtp-3-0000.mail.infomaniak.ch [10.4.36.107])
-	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4hggXw2RBFzmrX;
-	Thu, 10 Sep 2026 16:48:48 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
-	s=20191114; t=1789051728;
-	bh=PnKpu1050wzCRAg3LYWxdRTHOUPJgvegLDYPC+bThGQ=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=f1e3VNLJ7N3LlZyvTOyb2VNO6dOroPNlZnToaMHmjke5E6unPEIQJYN2yFu7d6sDG
-	 SYqLj83UwZwLD9ebThu966waz8Z63JiHWOQV4rGdJdwgkO760wiC/tCK2L71ZmxL1K
-	 s2jHEhdsIyf2Uuv/sjFQzBy2JMZuioYSyiySIzwY=
-Received: from unknown by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4hggXv1qDzzN5S;
-	Thu, 10 Sep 2026 16:48:47 +0200 (CEST)
-From: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
-To: Paul Moore <paul@paul-moore.com>
-Cc: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
-	=?UTF-8?q?G=C3=BCnther=20Noack?= <gnoack@google.com>,
-	Jeff Vander Stoep <jeffv@google.com>,
-	Nick Kralevich <nnk@google.com>,
-	Ondrej Mosnacek <omosnace@redhat.com>,
-	"Serge E . Hallyn" <serge@hallyn.com>,
-	Stephen Smalley <stephen.smalley.work@gmail.com>,
-	audit@vger.kernel.org,
-	kernel-team@cloudflare.com,
-	linux-kernel@vger.kernel.org,
-	linux-security-module@vger.kernel.org,
-	selinux@vger.kernel.org,
-	stable@vger.kernel.org
-Subject: [PATCH v1 1/2] lsm: Preserve full ioctl commands in audit records
-Date: Thu, 10 Sep 2026 16:48:33 +0200
-Message-ID: <20260910144837.381855-2-mic@digikod.net>
-In-Reply-To: <20260910144837.381855-1-mic@digikod.net>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QNlDZ922"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F04EC1F000FF;
+	Thu, 10 Sep 2026 14:56:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1789052189;
+	bh=MvNHyev7SRTvBYUJxdzf/DazxihAQ73jeT0XMNLGSJA=;
+	h=From:Subject:Reply-To:Cc:In-Reply-To:References:Date;
+	b=QNlDZ922+QtY45wce6OD7aQlS6Kowh7fMjCOfYDMKTh/+LBkE4oTErcFBeVONrBWK
+	 Xf75ZCWWUkrp61T3lKkDwLrVIVhrpxfDDy1F2iQFKd0Aw8i3CrEJwm27kWJYZ/Qiq4
+	 ww4xuMu7ph8BLRyRnu3mv1twRlVMKLuuQm79zB1cAh9RhvPrLkU1rnm1lbxiR/gCd+
+	 +FqElqjsvj4CEPAos46YzrsP2g8Cz7HnG3Kg6dRhUVI42rXu+9wBoIzrh3v2pqhjDb
+	 Rh8421UnynJlXE7VDPH23BJ7V3j8rF1yPHAY4d+fp1EpvZddRf2zijUuC7idLkYAgM
+	 gkIk3BxNvebKw==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v1 1/2] lsm: Preserve full ioctl commands in audit
+ records
+Reply-To: sashiko-reviews@lists.linux.dev
+Cc: selinux@vger.kernel.org, audit@vger.kernel.org
+In-Reply-To: <20260910144837.381855-2-mic@digikod.net>
 References: <20260910144837.381855-1-mic@digikod.net>
+ <20260910144837.381855-2-mic@digikod.net>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 10 Sep 2026 14:56:28 +0000
+Message-Id: <20260910145628.F04EC1F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Infomaniak-Routing: alpha
 
-Ioctl commands are unsigned int values, with their encoded direction and
-size in the upper 16 bits.  However, struct lsm_ioctlop_audit keeps only
-a u16, and the common audit formatter uses %hx.  This logs 0xc00ffeee as
-0xfeee and makes distinct commands with matching low 16 bits
-indistinguishable.
+> Ioctl commands are unsigned int values, with their encoded direction and
+> size in the upper 16 bits.  However, struct lsm_ioctlop_audit keeps only
+> a u16, and the common audit formatter uses %hx.  This logs 0xc00ffeee as
+> 0xfeee and makes distinct commands with matching low 16 bits
+> indistinguishable.
+>=20
+> Change cmd to unsigned int and use %x.  Pass the full command through
+> ioctl_has_perm() as well.  Its driver and xperm values remain u8 values
+> derived from the same low 16 bits, so SELinux enforcement does not
+> change.  Commands that fit in 16 bits keep the same audit text.
+>=20
+> Cc: Jeff Vander Stoep <jeffv@google.com>
+> Cc: Paul Moore <paul@paul-moore.com>
+> Cc: stable@vger.kernel.org
+> Fixes: 671a2781ff01 ("security: add ioctl specific auditing to lsm_audit")
+> Signed-off-by: Micka=C3=ABl Sala=C3=BCn <mic@digikod.net>
 
-Change cmd to unsigned int and use %x.  Pass the full command through
-ioctl_has_perm() as well.  Its driver and xperm values remain u8 values
-derived from the same low 16 bits, so SELinux enforcement does not
-change.  Commands that fit in 16 bits keep the same audit text.
+Sashiko has reviewed this patch and found no issues. It looks great!
 
-Cc: Jeff Vander Stoep <jeffv@google.com>
-Cc: Paul Moore <paul@paul-moore.com>
-Cc: stable@vger.kernel.org
-Fixes: 671a2781ff01 ("security: add ioctl specific auditing to lsm_audit")
-Signed-off-by: Mickaël Salaün <mic@digikod.net>
----
- include/linux/lsm_audit.h | 2 +-
- security/lsm_audit.c      | 2 +-
- security/selinux/hooks.c  | 6 +++---
- 3 files changed, 5 insertions(+), 5 deletions(-)
-
-diff --git a/include/linux/lsm_audit.h b/include/linux/lsm_audit.h
-index 584db296e43b..fc68ca94f05a 100644
---- a/include/linux/lsm_audit.h
-+++ b/include/linux/lsm_audit.h
-@@ -44,7 +44,7 @@ struct lsm_network_audit {
- 
- struct lsm_ioctlop_audit {
- 	struct path path;
--	u16 cmd;
-+	unsigned int cmd;
- };
- 
- struct lsm_ibpkey_audit {
-diff --git a/security/lsm_audit.c b/security/lsm_audit.c
-index 737f5a263a8f..a7891a75d0aa 100644
---- a/security/lsm_audit.c
-+++ b/security/lsm_audit.c
-@@ -231,7 +231,7 @@ void audit_log_lsm_data(struct audit_buffer *ab,
- 			audit_log_format(ab, " ino=%llu", inode->i_ino);
- 		}
- 
--		audit_log_format(ab, " ioctlcmd=0x%hx", a->u.op->cmd);
-+		audit_log_format(ab, " ioctlcmd=0x%x", a->u.op->cmd);
- 		break;
- 	}
- 	case LSM_AUDIT_DATA_DENTRY: {
-diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
-index 035aaf113d1d..e3eaa3141d91 100644
---- a/security/selinux/hooks.c
-+++ b/security/selinux/hooks.c
-@@ -3859,7 +3859,7 @@ static int selinux_backing_file_alloc(struct file *backing_file,
-  * operation to an inode.
-  */
- static int ioctl_has_perm(const struct cred *cred, struct file *file,
--		u32 requested, u16 cmd)
-+		u32 requested, unsigned int cmd)
- {
- 	struct common_audit_data ad;
- 	struct file_security_struct *fsec = selinux_file(file);
-@@ -3930,14 +3930,14 @@ static int selinux_file_ioctl(struct file *file, unsigned int cmd,
- 	case FIOCLEX:
- 	case FIONCLEX:
- 		if (!selinux_policycap_ioctl_skip_cloexec())
--			error = ioctl_has_perm(cred, file, FILE__IOCTL, (u16) cmd);
-+			error = ioctl_has_perm(cred, file, FILE__IOCTL, cmd);
- 		break;
- 
- 	/* default case assumes that the command will go
- 	 * to the file's ioctl() function.
- 	 */
- 	default:
--		error = ioctl_has_perm(cred, file, FILE__IOCTL, (u16) cmd);
-+		error = ioctl_has_perm(cred, file, FILE__IOCTL, cmd);
- 	}
- 	return error;
- }
--- 
-2.55.0
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260910144837.3818=
+55-1-mic@digikod.net?part=3D1
 
