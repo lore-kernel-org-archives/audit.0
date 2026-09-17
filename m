@@ -1,81 +1,80 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71CC33D9DA8
-	for <audit@vger.kernel.org>; Thu, 17 Sep 2026 16:45:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8CB6517BCD
+	for <audit@vger.kernel.org>; Thu, 17 Sep 2026 16:46:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789663545; cv=none; b=bHeDZouMD0gxN7e0nLU/ddI8Z+UfAXcpb3JGbwWYxICtPqzizjZcaCmEMikfk6f1GtHYfUGO629as8VJCp4KOlGwB9/FsKcqfhTIbpVtexcsJE/T2gl25luPYJlfuZpBFS0KPaBnNvrwQzpMvnxOvC8XibFGq141N+w5ofvIxzM=
+	t=1789663590; cv=none; b=X1IS48ko9i0MaMnugMRCeGXqOFgRzJryz26sdCzHnkromMxH9PijwIbuUHVp50+kVP7H4CcV9VuWViK9wOILw47VlddVsJDHzkdTolHyHPiu8eGYXs4HRBV9zObeyWTyBGksgNjHQo3aWvZ5baezaVa+SUohma+i7WytoGj/RrE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789663545; c=relaxed/simple;
-	bh=+630pigSMSS7M9ZUHGZahv99vJocnRD12hmvq4Q58Tc=;
+	s=arc-20240116; t=1789663590; c=relaxed/simple;
+	bh=eYYWM3K0Z9Uro9HwA9hQ8je2naly/JqA+zNhzp9DrpU=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Ac4ubz4idB6k4LovjIN2axXB9t9EH1oze8dM+cgaMTC8H+PpndZWFnjfVPVZbJX0sWiPDbxnMSiV1WSIguuduebijj15bjecw3025vDEfbEY5k6UI+BzfH3dgBw/Iahlo113IibpYln4G9nMWM7wyPiUTF8tzXpvU7srX+iBvio=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=CyrM7Ztw; arc=none smtp.client-ip=170.10.129.124
+	 To:Cc:Content-Type; b=MH6OqKojdnol3KLhaMfXHB2jb0tJ8FopTxumwUYhTZXcR3q7MftObEf3Tyw7uGybJTFw2Od8PS7SCP5Kgy54heL2v4BsSMDVlhViaqEB9jMESJO+yrot5tBAXSEXOAuCnHQYS4tbVTeDE1bAUFiAJrYWeCBoX9TAtlm9y/ab8J4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=N9lWqdLX; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="CyrM7Ztw"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="N9lWqdLX"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1789663542;
+	s=mimecast20190719; t=1789663587;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=wFVtn7TG6f4mxtK33dq+a4hRgCkKck590tubt0IqX6w=;
-	b=CyrM7ZtwkvEOsH+p+5tNZVf4lxQmhe/Zw0oSBeCOzwA6RnSFkWHUle6ZkCMFZRfcjiCYZZ
-	q2wGn5aGI+i0FtGEjuwu+KVULDhMfz9FAUqvkENziQTsyshUPZuxHIO6t19CytoJN09efY
-	UHH1isDGPCcKRsC79EUNISUZmWJc/Xs=
+	bh=wJkyJ4XReVojvgclcE9i/BeATq3QWWN8a1a2t1DdhcM=;
+	b=N9lWqdLXj8LH/ThSIM+UCGG3PsWpXKluzUPVGEh1YVob8MZcUOGDATI6IraObPWjlZR83h
+	srvFZuPvdhVz2CmogGHXp7Lo2FRCYZDrgkqlNvIQUj2myM4GSVskOqMATfhwtMKZzj7OSV
+	bMIT0DTAv/VBthhGlrlwSzj3TjHICCc=
 Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
  [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-43-fS_eg56iNF6P3jRiAPiU8Q-1; Thu, 17 Sep 2026 12:45:41 -0400
-X-MC-Unique: fS_eg56iNF6P3jRiAPiU8Q-1
-X-Mimecast-MFC-AGG-ID: fS_eg56iNF6P3jRiAPiU8Q_1789663540
-Received: by mail-ej1-f70.google.com with SMTP id a640c23a62f3a-c295b027ee0so120701566b.0
-        for <audit@vger.kernel.org>; Thu, 17 Sep 2026 09:45:40 -0700 (PDT)
+ us-mta-689-wm3mh0VqM-y0T7fiiJ6vGw-1; Thu, 17 Sep 2026 12:46:26 -0400
+X-MC-Unique: wm3mh0VqM-y0T7fiiJ6vGw-1
+X-Mimecast-MFC-AGG-ID: wm3mh0VqM-y0T7fiiJ6vGw_1789663586
+Received: by mail-ej1-f70.google.com with SMTP id a640c23a62f3a-c294ae16988so134589466b.0
+        for <audit@vger.kernel.org>; Thu, 17 Sep 2026 09:46:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789663540; x=1790268340;
+        d=1e100.net; s=20260707; t=1789663585; x=1790268385;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=wFVtn7TG6f4mxtK33dq+a4hRgCkKck590tubt0IqX6w=;
-        b=lMuge1leoxXcfb0naxzLdQq3XQ7PYBlhb4iSz4CEtpYBqCBMRKXxy9JmpdVKiMTIax
-         HhNvd5MtY76qtR5nBdN7cooXmS+XnCeqfHhBFE63l1+vGeMfKSQ2djTLxz4pHg4w7+wS
-         n043XCvfVdo6TiiYpp7u9LgkGaBm8XsCWPfnx5f4EMoBkY/YoP2tIkpV5nkoeIVxpvLB
-         8COReR0x2MCi9Wa/mNqrsttd00BQ5egoD35KS8e+Hv093XJN/n7dGApVTC4BCbF5OpNS
-         32EHaM9kJxqx6teD7aI7c5ceLHCxqD1rA+zCoHVrl6XxonB2CGEA6Mx0SBWiSeasoM8B
-         6flQ==
-X-Gm-Message-State: AFuF++koSmuNEqfosbkz7+Le9eTI0KSu+yVuVlz/7JeWnfJgLie2niq/
-	fbz/47K6AVsUVaKWRfw2JkqTjT07G955zuk2GugrmSsYN3+hFN+RjofPLggBBzaZwmJzfOdVH+d
-	uu8p21cmcsESgkwo0mHm4WBT6SCeS5nHtPCXpilGUCUgu+PLvyGWc+9rZ0zMeHEUpxQ9zGWK6Hy
-	yCIc2ka907+X/WWzl+YaO1Hv68Xw1q/VQ=
-X-Gm-Gg: AYBFou2LvZYofwCjGYj4vXkGx6/cFkxESUUKVuA+BA5BQBENXqvSU8eLBl57Gj6SbQw
-	RaW+KjdDb4GEpnNuwqMMQMQuvhOJXU0fC6lBoGncadUZa/79UWi23yQU4Nx160J+R07Un5/7Ahu
-	Pysv81feuo7rAgsUrnGO0MtrTkXY2esq8vVRu8lue5/NeC37N4+V+jfvpoyfXAR8U6RwA4bHsrS
-	U99RxkO1a2y02Fpbny7jSyGS/P+36IxhVu+K8ZmjPMiARwiztDQlZ6CfJSQ4YZJnCxF2pU2yCOU
-	ujw=
-X-Received: by 2002:a17:907:9603:b0:c29:f5d5:5a9b with SMTP id a640c23a62f3a-c29f5d56177mr278872466b.37.1789663539833;
-        Thu, 17 Sep 2026 09:45:39 -0700 (PDT)
-X-Received: by 2002:a17:907:9603:b0:c29:f5d5:5a9b with SMTP id
- a640c23a62f3a-c29f5d56177mr278866966b.37.1789663539386; Thu, 17 Sep 2026
- 09:45:39 -0700 (PDT)
+        bh=wJkyJ4XReVojvgclcE9i/BeATq3QWWN8a1a2t1DdhcM=;
+        b=VYoVpIPOMp0URoGCKG3QJ2ncUK6/LA3wNYwfOutvvRv1TAq3DTC57+yH19uU8ZxNha
+         HdWFZY6r60v+3R/PX1BamfOcPoJzbpaIt7y8wbdNp4ASoZ223+VmzKcSENeDEevPUm+n
+         G5fRSI1xPXMshOShFKSeRZJyH8Ijfm987/pz4vFd7Obd4U2D+DUqVCyJmaYkq32HCDi3
+         5UQTAuU9VKXnMDFQeafpfFORvPBB7P3nWFIhCp8U5zcL2fAGHzrOxX+YCNjwwnxPEoY1
+         1qgC4e6+9mKdBUqwectFl/FrhsAdKjVgX5Dnm3eENC18YlSbopk5r8DHqCq/JSvfjUYS
+         lglQ==
+X-Gm-Message-State: AFuF++ksLV8McdugEULZdmCaZK7I6kJducXr54ISRV1gn0O2XC5RdmLR
+	VaJD4BfOfy1zvGqEsfGWxY3rmRBs1gzPTcwV+iLag1DAMC/7XA/FNzl1mMjzUIhEgHMIgY59xOO
+	rJ4lv+D6mQzF5AGD/oDoYi2DsdhQTc+0EETofVIBp/Ow+K45mQIW6GIh7C40h9LhmS6fGZZrWZA
+	j12I3KBPDIcLod4Ey7XzyIaFZQJCTtSAM=
+X-Gm-Gg: AYBFou0hJm4FQDQfDRAK+veH/+KzUtIUG/7vaVANFHjYq860qZiEHkGtVEJb4m/3fC+
+	lPrgJhzA5QPfXZpIUsyPXjzmO0ddWL+qc1lBRpO1J1sCAgy32m7KFrRjjtn1S03QT9L7c95G3do
+	SXCSbjso8V62EQVkkJ6S+GiRWOPR7k9q18dWtp0fhJybKCfn2qSKWt9kOzQKnZmG1tAW4VdR0WG
+	WsxfWJBRNO6GEhcv0/IYxzlUDARmIOhrFs1B6g9YA2mUPX5WLeB+IVaJBkbQSyf+8Z1ijmy9iUi
+	qPY=
+X-Received: by 2002:a17:906:4fc5:b0:c26:19de:9ad2 with SMTP id a640c23a62f3a-c29e53184f0mr504525366b.42.1789663585463;
+        Thu, 17 Sep 2026 09:46:25 -0700 (PDT)
+X-Received: by 2002:a17:906:4fc5:b0:c26:19de:9ad2 with SMTP id
+ a640c23a62f3a-c29e53184f0mr504523266b.42.1789663585091; Thu, 17 Sep 2026
+ 09:46:25 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1788351089.git.rrobaina@redhat.com> <b30076994d49fa393251c836b5a57a725f218572.1788351089.git.rrobaina@redhat.com>
- <apkuGoWQwLJ7AcUC@willie-the-truck>
-In-Reply-To: <apkuGoWQwLJ7AcUC@willie-the-truck>
+References: <cover.1788351089.git.rrobaina@redhat.com> <b4ab47d2551d090520b4fa81a884b5988b9655c7.1788351089.git.rrobaina@redhat.com>
+ <apkuNj1paR_GO3x9@willie-the-truck>
+In-Reply-To: <apkuNj1paR_GO3x9@willie-the-truck>
 From: Ricardo Robaina <rrobaina@redhat.com>
-Date: Thu, 17 Sep 2026 13:45:27 -0300
-X-Gm-Features: AcwNN1VE92GuCfaSbB45oDCoyv2ZqeewbUd4A5IjqOoYsq0pANwtPdd_-Sv6Jfw
-Message-ID: <CAABTaaA7ZbfLxaQvTegaE9prKUPAu5fbfVt5wiaSZK=ohhjL1Q@mail.gmail.com>
-Subject: Re: [PATCH v2 01/13] audit: log all six syscall arguments in the
- SYSCALL record
+Date: Thu, 17 Sep 2026 13:46:11 -0300
+X-Gm-Features: AcwNN1UTQywdGW9xqj12KwNHAYLGfDNNso402GZvP3WcYYwXGdDJ7Oiz7qML_cg
+Message-ID: <CAABTaaCoNztwDUA-HPp4LaikxL4dxk-1bvCCpoZEGD4rnds1oA@mail.gmail.com>
+Subject: Re: [PATCH v2 04/13] arm64: pass pt_regs to audit_syscall_entry()
 To: Will Deacon <will@kernel.org>
 Cc: audit@vger.kernel.org, linux-kernel@vger.kernel.org, 
 	linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
@@ -94,100 +93,44 @@ Cc: audit@vger.kernel.org, linux-kernel@vger.kernel.org,
 	anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net, chris@zankel.net, 
 	jcmvbkbc@gmail.com, tglx@kernel.org, peterz@infradead.org, luto@kernel.org
 X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: e4KZEyz6tGU2hxU3U0ZCLGyj-JnywqTSP4RP5747m4o_1789663540
+X-Mimecast-MFC-PROC-ID: CIQHMlosF1ptqVXDleRVZse8HKEQxq4eYA9kR3qgjtU_1789663586
 X-Mimecast-Originator: redhat.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
 On Thu, Sep 3, 2026 at 5:22=E2=80=AFAM Will Deacon <will@kernel.org> wrote:
 >
-> On Wed, Sep 02, 2026 at 11:43:34AM -0300, Ricardo Robaina wrote:
-> > The SYSCALL record currently logs only four of the six syscall
-> > arguments (a0-a3). The remaining two are captured but silently
-> > discarded before reaching the audit context. This leads to the
-> > need for auxiliary records when audit-relevant data lands in the
-> > 5th or 6th argument of a syscall.
+> On Wed, Sep 02, 2026 at 11:43:37AM -0300, Ricardo Robaina wrote:
+> > audit_syscall_entry() now takes a pointer to pt_regs and extracts
+> > the syscall arguments itself via syscall_get_arguments(). Drop the
+> > individual argument registers from the call and pass regs instead.
 > >
-> > Extend the SYSCALL record to log all six arguments, by adding
-> > arguments a4 and a5 (5th and 6th syscall arguments respectively)
-> > inline within the existing record. Also add the two new args to
-> > the audit rules switch case, so audit rules can filter on them.
-> >
-> > Rather than plumbing two more register arguments through every
-> > architecture's syscall entry path, change __audit_syscall_entry()
-> > to take a pointer to pt_regs and use syscall_get_arguments() to
-> > retrieve all six arguments.
-> >
-> >  audit-testsuite# make test
-> >  audit-testsuite# ausearch -i -m SYSCALL
-> >  ...
-> >  type=3DSYSCALL ... syscall=3Dsendto success=3Dyes exit=3D1088 a0=3D0x4
-> >   a1=3D0x7ffe43518b60 a2=3D0x440 a3=3D0x0 a4=3D7ffe43518b4c a5=3Dc
-> >  type=3DSYSCALL ... syscall=3Dopenat2 success=3Dyes exit=3D4 a0=3D0x3
-> >   a1=3D0x7fffc74692c8 a2=3D0x7fffc7467390 a3=3D0x18 a4=3D0 a5=3D7fffc74=
-674f8
-> >  type=3DSYSCALL ... syscall=3Dopenat success=3Dyes exit=3D3 a0=3DAT_FDC=
-WD
-> >   a1=3D0x557ced4141a2 a2=3DO_RDWR|O_NONBLOCK a3=3D0x0 a4=3D0 a5=3D0
-> >  ...
-> >
-> > Suggested-by: Will Deacon <will@kernel.org>
-> > Link: https://lore.kernel.org/audit/CAHC9VhSjEt_-Bsra4AEqWv+Daw5Ff=3Dgq=
-y7dX4Ah11RVhdyCBUQ@mail.gmail.com/T/#t
 > > Signed-off-by: Ricardo Robaina <rrobaina@redhat.com>
 > > ---
-> >  include/linux/audit.h         | 13 ++++---------
-> >  include/uapi/linux/audit.h    |  2 ++
-> >  kernel/audit.h                |  2 +-
-> >  kernel/auditfilter.c          |  2 ++
-> >  kernel/auditsc.c              | 19 ++++++++-----------
-> >  kernel/entry/syscall-common.c |  4 +---
-> >  6 files changed, 18 insertions(+), 24 deletions(-)
+> >  arch/arm64/kernel/ptrace.c | 3 +--
+> >  1 file changed, 1 insertion(+), 2 deletions(-)
 > >
-> > diff --git a/include/linux/audit.h b/include/linux/audit.h
-> > index 45abb3722d30..9ce5962bc537 100644
-> > --- a/include/linux/audit.h
-> > +++ b/include/linux/audit.h
-> > @@ -323,8 +323,7 @@ extern int  audit_alloc(struct task_struct *task);
-> >  extern void __audit_free(struct task_struct *task);
-> >  extern void __audit_uring_entry(u8 op);
-> >  extern void __audit_uring_exit(int success, long code);
-> > -extern void __audit_syscall_entry(int major, unsigned long a0, unsigne=
-d long a1,
-> > -                               unsigned long a2, unsigned long a3);
-> > +extern void __audit_syscall_entry(int major, struct pt_regs *regs);
-> >  extern void __audit_syscall_exit(int ret_success, long ret_value);
-> >  extern void __audit_getname(struct filename *name);
-> >  extern void __audit_inode(struct filename *name, const struct dentry *=
-dentry,
-> > @@ -373,12 +372,10 @@ static inline void audit_uring_exit(int success, =
-long code)
-> >       if (unlikely(audit_context()))
-> >               __audit_uring_exit(success, code);
-> >  }
-> > -static inline void audit_syscall_entry(int major, unsigned long a0,
-> > -                                    unsigned long a1, unsigned long a2=
+> > diff --git a/arch/arm64/kernel/ptrace.c b/arch/arm64/kernel/ptrace.c
+> > index f743cbec1c3a..65532b2a8cd4 100644
+> > --- a/arch/arm64/kernel/ptrace.c
+> > +++ b/arch/arm64/kernel/ptrace.c
+> > @@ -2476,8 +2476,7 @@ int syscall_trace_enter(struct pt_regs *regs)
+> >       if (test_thread_flag(TIF_SYSCALL_TRACEPOINT))
+> >               trace_sys_enter(regs, regs->syscallno);
+> >
+> > -     audit_syscall_entry(regs->syscallno, regs->orig_x0, regs->regs[1]=
 ,
-> > -                                    unsigned long a3)
-> > +static inline void audit_syscall_entry(int major, struct pt_regs *regs=
-)
-> >  {
-> >       if (unlikely(audit_context()))
-> > -             __audit_syscall_entry(major, a0, a1, a2, a3);
-> > +             __audit_syscall_entry(major, regs);
-> >  }
+> > -                         regs->regs[2], regs->regs[3]);
+> > +     audit_syscall_entry(regs->syscallno, regs);
 >
-> Won't this (temporarily) break the build? Maybe you need to introduce a
-> new helper e.g. audit_syscall_entry_regs(), then convert everybody over
-> to that, then rename it to audit_syscall_entry() at the end to keep the
-> series bisectable.
+> Acked-by: Will Deacon <will@kernel.org>
+>
+> Thanks for doing this.
 >
 > Will
 >
 
-Yes, you're right Will. Thanks for your suggestion I'll do that in the
-next version.
+Thanks, Will!
 
-Thanks!
 -Ricardo
 
