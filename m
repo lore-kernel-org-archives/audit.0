@@ -1,198 +1,193 @@
-Received: from mail-qk2-f12.google.com (mail-qk2-f12.google.com [74.125.230.204])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 270445038FC
-	for <audit@vger.kernel.org>; Thu, 17 Sep 2026 16:10:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.230.204
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71CC33D9DA8
+	for <audit@vger.kernel.org>; Thu, 17 Sep 2026 16:45:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789661412; cv=none; b=cG5xkJMfaKpWHVe9Cdxshy8oOO/dIziByqoWaHmV0DF/3R6DHGqfofemIL0a2AR2sHtAR4yc43EFt0Rp+5Q+kKokVHLJCHdhT0TrZLHn4aWNVEsoP13OookdozmiDrtnqyLuz2eMDMsbsNPh875MNd2WK5+2bPdnjbqaqIfrfRw=
+	t=1789663545; cv=none; b=bHeDZouMD0gxN7e0nLU/ddI8Z+UfAXcpb3JGbwWYxICtPqzizjZcaCmEMikfk6f1GtHYfUGO629as8VJCp4KOlGwB9/FsKcqfhTIbpVtexcsJE/T2gl25luPYJlfuZpBFS0KPaBnNvrwQzpMvnxOvC8XibFGq141N+w5ofvIxzM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789661412; c=relaxed/simple;
-	bh=EjPvWnSaCenx04HB+kr2d3cFNBadfJup92wCJonnztI=;
-	h=From:To:CC:Date:Message-ID:In-Reply-To:References:Subject:
-	 MIME-Version:Content-Type; b=VYea1fnN+HDdf8XKSYWyxfgKFzs01r7tQKFpsgQtsUPlnfp2dmDtJFxGA7I3+UOWd7HBLaWmDBVmlhnlVue7SSi3fy90a7XCU4Fd9R4xn47bpEzFTMdN4rMtBN0wYAQDZeu5Aq3nO5E+SXZRmbjyxAP/Ao8pAj4BkHhQGf2eRRA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=IYqhOyh4; arc=none smtp.client-ip=74.125.230.204
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+	s=arc-20240116; t=1789663545; c=relaxed/simple;
+	bh=+630pigSMSS7M9ZUHGZahv99vJocnRD12hmvq4Q58Tc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Ac4ubz4idB6k4LovjIN2axXB9t9EH1oze8dM+cgaMTC8H+PpndZWFnjfVPVZbJX0sWiPDbxnMSiV1WSIguuduebijj15bjecw3025vDEfbEY5k6UI+BzfH3dgBw/Iahlo113IibpYln4G9nMWM7wyPiUTF8tzXpvU7srX+iBvio=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=CyrM7Ztw; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="IYqhOyh4"
-Received: by mail-qk2-f12.google.com with SMTP id d75a77b69052e-52fb769ca02so10690411cf.0
-        for <audit@vger.kernel.org>; Thu, 17 Sep 2026 09:10:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1789661410; x=1790266210; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:subject
-         :user-agent:references:in-reply-to:message-id:date:cc:to:from:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=PovAW1yhJdf58+Zr5M8cxohYcmOHlAy4fb+9VSn+dn0=;
-        b=IYqhOyh4iEzwY31dUqnG972l3DXjMjTFon/MwR5BVmJMv1orgySb/VZoXrxxr4iMDY
-         jtluvY4F1Og8Gvu7y/endVOHvwJT3gwUdWRaiJCq/h8K/LZpJyz8QOHA6YUaxt0YZY+s
-         dAjg214Wy2bP0e3UY0SYcFCnRZVmeBAaGMpd8R3ZE0YRnLaZ4996R0v2MY8EzM5W4a/o
-         BK2/oMvk1OVgoTdV6QmxnyUenRMX0HnxKjGhYS1Rjz/JLYSuskxJpvLBmNOBzCsX0a0W
-         eTnFk/zPH4RVyJgC7dXgGA9jcFVyN7ns+vlgWMBH5y5IX20VPY7McxY7zKeGzfCeI4if
-         wHyA==
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="CyrM7Ztw"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1789663542;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=wFVtn7TG6f4mxtK33dq+a4hRgCkKck590tubt0IqX6w=;
+	b=CyrM7ZtwkvEOsH+p+5tNZVf4lxQmhe/Zw0oSBeCOzwA6RnSFkWHUle6ZkCMFZRfcjiCYZZ
+	q2wGn5aGI+i0FtGEjuwu+KVULDhMfz9FAUqvkENziQTsyshUPZuxHIO6t19CytoJN09efY
+	UHH1isDGPCcKRsC79EUNISUZmWJc/Xs=
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
+ [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-43-fS_eg56iNF6P3jRiAPiU8Q-1; Thu, 17 Sep 2026 12:45:41 -0400
+X-MC-Unique: fS_eg56iNF6P3jRiAPiU8Q-1
+X-Mimecast-MFC-AGG-ID: fS_eg56iNF6P3jRiAPiU8Q_1789663540
+Received: by mail-ej1-f70.google.com with SMTP id a640c23a62f3a-c295b027ee0so120701566b.0
+        for <audit@vger.kernel.org>; Thu, 17 Sep 2026 09:45:40 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789661410; x=1790266210;
-        h=content-transfer-encoding:content-type:mime-version:subject
-         :user-agent:references:in-reply-to:message-id:date:cc:to:from
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=PovAW1yhJdf58+Zr5M8cxohYcmOHlAy4fb+9VSn+dn0=;
-        b=cI7hOP6hW8DwS+mch902wkFEg74yKRDFVMhIQjo2walcB34gY8dp8V1rf7lnKJ4Rfa
-         7Vjav/8Tkr7+HoS6yFGOsJm1elrOUARmwgZmTlOQovuCpjYBjlQcBp2poKCVFTtYjt3Z
-         C2jEVm6iJH2w+Q8FYKRmz18Z6PItWDS+tiNZA4fBEt76DHqi3rqL64NBOyvqVYjU6cmQ
-         FtKx1yB1fTFhIcdIEo6xwIjbFkYrLzUehQ6yuLwMjHHknTRKofQ6Rk+4RJl/IaAVLgOj
-         Gv8bQ4AAzwJLA65TbCG/ICO+0LpR4kVxVBYBTIrh++kOKyZeujw3JO1c3E+czvwmRkSx
-         +hxg==
-X-Forwarded-Encrypted: i=1; AKwUvBycO78McIn2K20mD6Id6cFcy4ra3dZslZNnSvynT9GfHJplWz/jCGANfpd5vE2C1zElY7JgTA==@vger.kernel.org
-X-Gm-Message-State: AFuF++k1qYfbT2GmCMEPChCYxy8vdmH9ausFIJgq3vp/g7PPWhcX2UDM
-	ejGRZnMKr12WqdtIflGBr5mJoOhKRW/XV3nTrJvM5kpqJyU/Ob6+2YCza4MNg+JNlA==
-X-Gm-Gg: AYBFou02eZZhVkyTyV1wYkmW/m0JK6uZ34rvRMT3at5L8HGvo5+3G8TQ0uqeQb4JaDb
-	pwwCva7Kssbrrwl+pmY+IzV0wUWgFhJEVJCVkeJ9YGOz55JOu88W0ynkj3uA2BNg8dGUbpr7Io7
-	2DdzEdOeqt/YWxCbkcqE/wDD7z2bGbKZqzx1iZVAaTyoe2zxesP2MNUhXHB60j3jRgbahYGj5fE
-	rAXvWZQLDTZGPdcmz0WnaYXQkKNuScWGkQE07Z5O9zn2jmCy9GERHlLUl5FpKNHyZnOq3glESpJ
-	k0/6a3wjQXBszvAqc3uDRfOiWmDZ05ybt8fnSchB+oPuDz53BO4A/fXadOUDC2rNKmyyyTLtRdI
-	N7ZkM5sNxYL5+TxrCyQo8MDDMV7eT+2ptgo+4vk7xdaXIkdB/lQU7xTX7rEL97dPgIox9wAKzJU
-	72UrtalxIekULdcSjhPOkrCV+PLGlwbKlj75ZzQ2EWH3l53cc4VKXr0cCtYq32ZfxKv3dy8XLa9
-	pPvb9PWETD15DyI83nfBGGYZAyOmJrSzh31Ijkb
-X-Received: by 2002:ac8:7d44:0:b0:52f:b1b6:a4aa with SMTP id d75a77b69052e-5327edf9c51mr125939161cf.4.1789661409717;
-        Thu, 17 Sep 2026 09:10:09 -0700 (PDT)
-Received: from [10.99.118.151] ([72.159.227.1])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-532620dc734sm54943111cf.30.2026.09.17.09.10.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Sep 2026 09:10:08 -0700 (PDT)
-From: Paul Moore <paul@paul-moore.com>
-To: Daniel Borkmann <daniel@iogearbox.net>, Venkat Rao Bagalkote <venkat88@linux.ibm.com>, bpf <bpf@vger.kernel.org>, "linuxppc-dev" <linuxppc-dev@lists.ozlabs.org>, <audit@vger.kernel.org>
-CC: Madhavan Srinivasan <maddy@linux.ibm.com>, Shrikanth Hegde <sshegde@linux.ibm.com>, Ritesh Harjani <riteshh@linux.ibm.com>, Hari Bathini <hbathini@linux.ibm.com>, Saket Kumar Bhaskar <skb99@linux.ibm.com>, Alexei Starovoitov <ast@kernel.org>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, <yonghong.song@linux.dev>, <tglx@kernel.org>, <rrobaina@redhat.com>
-Date: Thu, 17 Sep 2026 12:10:06 -0400
-Message-ID: <1a0b021e330.2843.85c95baa4474aabc7814e68940a78392@paul-moore.com>
-In-Reply-To: <1a0b01e5cd8.2843.85c95baa4474aabc7814e68940a78392@paul-moore.com>
-References: <ff563467-0bab-43ec-a46c-a4167bc12473@linux.ibm.com>
- <73701ffd-213e-4842-8b40-f719c1eeaed4@iogearbox.net>
- <1a0b01e5cd8.2843.85c95baa4474aabc7814e68940a78392@paul-moore.com>
-User-Agent: AquaMail/2.7.0 (build: 200700061)
-Subject: Re: [BUG] audit/powerpc: WARNING at kernel/auditsc.c:1995 (__audit_syscall_entry) during BPF kselftests (test_progs)
+        d=1e100.net; s=20260707; t=1789663540; x=1790268340;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=wFVtn7TG6f4mxtK33dq+a4hRgCkKck590tubt0IqX6w=;
+        b=lMuge1leoxXcfb0naxzLdQq3XQ7PYBlhb4iSz4CEtpYBqCBMRKXxy9JmpdVKiMTIax
+         HhNvd5MtY76qtR5nBdN7cooXmS+XnCeqfHhBFE63l1+vGeMfKSQ2djTLxz4pHg4w7+wS
+         n043XCvfVdo6TiiYpp7u9LgkGaBm8XsCWPfnx5f4EMoBkY/YoP2tIkpV5nkoeIVxpvLB
+         8COReR0x2MCi9Wa/mNqrsttd00BQ5egoD35KS8e+Hv093XJN/n7dGApVTC4BCbF5OpNS
+         32EHaM9kJxqx6teD7aI7c5ceLHCxqD1rA+zCoHVrl6XxonB2CGEA6Mx0SBWiSeasoM8B
+         6flQ==
+X-Gm-Message-State: AFuF++koSmuNEqfosbkz7+Le9eTI0KSu+yVuVlz/7JeWnfJgLie2niq/
+	fbz/47K6AVsUVaKWRfw2JkqTjT07G955zuk2GugrmSsYN3+hFN+RjofPLggBBzaZwmJzfOdVH+d
+	uu8p21cmcsESgkwo0mHm4WBT6SCeS5nHtPCXpilGUCUgu+PLvyGWc+9rZ0zMeHEUpxQ9zGWK6Hy
+	yCIc2ka907+X/WWzl+YaO1Hv68Xw1q/VQ=
+X-Gm-Gg: AYBFou2LvZYofwCjGYj4vXkGx6/cFkxESUUKVuA+BA5BQBENXqvSU8eLBl57Gj6SbQw
+	RaW+KjdDb4GEpnNuwqMMQMQuvhOJXU0fC6lBoGncadUZa/79UWi23yQU4Nx160J+R07Un5/7Ahu
+	Pysv81feuo7rAgsUrnGO0MtrTkXY2esq8vVRu8lue5/NeC37N4+V+jfvpoyfXAR8U6RwA4bHsrS
+	U99RxkO1a2y02Fpbny7jSyGS/P+36IxhVu+K8ZmjPMiARwiztDQlZ6CfJSQ4YZJnCxF2pU2yCOU
+	ujw=
+X-Received: by 2002:a17:907:9603:b0:c29:f5d5:5a9b with SMTP id a640c23a62f3a-c29f5d56177mr278872466b.37.1789663539833;
+        Thu, 17 Sep 2026 09:45:39 -0700 (PDT)
+X-Received: by 2002:a17:907:9603:b0:c29:f5d5:5a9b with SMTP id
+ a640c23a62f3a-c29f5d56177mr278866966b.37.1789663539386; Thu, 17 Sep 2026
+ 09:45:39 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; format=flowed; charset="us-ascii"
-Content-Transfer-Encoding: 8bit
+References: <cover.1788351089.git.rrobaina@redhat.com> <b30076994d49fa393251c836b5a57a725f218572.1788351089.git.rrobaina@redhat.com>
+ <apkuGoWQwLJ7AcUC@willie-the-truck>
+In-Reply-To: <apkuGoWQwLJ7AcUC@willie-the-truck>
+From: Ricardo Robaina <rrobaina@redhat.com>
+Date: Thu, 17 Sep 2026 13:45:27 -0300
+X-Gm-Features: AcwNN1VE92GuCfaSbB45oDCoyv2ZqeewbUd4A5IjqOoYsq0pANwtPdd_-Sv6Jfw
+Message-ID: <CAABTaaA7ZbfLxaQvTegaE9prKUPAu5fbfVt5wiaSZK=ohhjL1Q@mail.gmail.com>
+Subject: Re: [PATCH v2 01/13] audit: log all six syscall arguments in the
+ SYSCALL record
+To: Will Deacon <will@kernel.org>
+Cc: audit@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-csky@vger.kernel.org, linux-mips@vger.kernel.org, 
+	linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org, 
+	linux-sh@vger.kernel.org, sparclinux@vger.kernel.org, 
+	linux-um@lists.infradead.org, bpf@vger.kernel.org, paul@paul-moore.com, 
+	eparis@redhat.com, sgrubb@redhat.com, oleg@redhat.com, 
+	richard.henderson@linaro.org, mattst88@gmail.com, linmag7@gmail.com, 
+	linux@armlinux.org.uk, catalin.marinas@arm.com, guoren@kernel.org, 
+	monstr@monstr.eu, tsbogend@alpha.franken.de, jonas@southpole.se, 
+	stefan.kristiansson@saunalahti.fi, shorne@gmail.com, 
+	James.Bottomley@hansenpartnership.com, deller@gmx.de, 
+	ysato@users.sourceforge.jp, dalias@libc.org, glaubitz@physik.fu-berlin.de, 
+	davem@davemloft.net, andreas@gaisler.com, richard@nod.at, 
+	anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net, chris@zankel.net, 
+	jcmvbkbc@gmail.com, tglx@kernel.org, peterz@infradead.org, luto@kernel.org
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: e4KZEyz6tGU2hxU3U0ZCLGyj-JnywqTSP4RP5747m4o_1789663540
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-[NOTE: correcting the audit mailing list address to audit@vger ...]
+On Thu, Sep 3, 2026 at 5:22=E2=80=AFAM Will Deacon <will@kernel.org> wrote:
+>
+> On Wed, Sep 02, 2026 at 11:43:34AM -0300, Ricardo Robaina wrote:
+> > The SYSCALL record currently logs only four of the six syscall
+> > arguments (a0-a3). The remaining two are captured but silently
+> > discarded before reaching the audit context. This leads to the
+> > need for auxiliary records when audit-relevant data lands in the
+> > 5th or 6th argument of a syscall.
+> >
+> > Extend the SYSCALL record to log all six arguments, by adding
+> > arguments a4 and a5 (5th and 6th syscall arguments respectively)
+> > inline within the existing record. Also add the two new args to
+> > the audit rules switch case, so audit rules can filter on them.
+> >
+> > Rather than plumbing two more register arguments through every
+> > architecture's syscall entry path, change __audit_syscall_entry()
+> > to take a pointer to pt_regs and use syscall_get_arguments() to
+> > retrieve all six arguments.
+> >
+> >  audit-testsuite# make test
+> >  audit-testsuite# ausearch -i -m SYSCALL
+> >  ...
+> >  type=3DSYSCALL ... syscall=3Dsendto success=3Dyes exit=3D1088 a0=3D0x4
+> >   a1=3D0x7ffe43518b60 a2=3D0x440 a3=3D0x0 a4=3D7ffe43518b4c a5=3Dc
+> >  type=3DSYSCALL ... syscall=3Dopenat2 success=3Dyes exit=3D4 a0=3D0x3
+> >   a1=3D0x7fffc74692c8 a2=3D0x7fffc7467390 a3=3D0x18 a4=3D0 a5=3D7fffc74=
+674f8
+> >  type=3DSYSCALL ... syscall=3Dopenat success=3Dyes exit=3D3 a0=3DAT_FDC=
+WD
+> >   a1=3D0x557ced4141a2 a2=3DO_RDWR|O_NONBLOCK a3=3D0x0 a4=3D0 a5=3D0
+> >  ...
+> >
+> > Suggested-by: Will Deacon <will@kernel.org>
+> > Link: https://lore.kernel.org/audit/CAHC9VhSjEt_-Bsra4AEqWv+Daw5Ff=3Dgq=
+y7dX4Ah11RVhdyCBUQ@mail.gmail.com/T/#t
+> > Signed-off-by: Ricardo Robaina <rrobaina@redhat.com>
+> > ---
+> >  include/linux/audit.h         | 13 ++++---------
+> >  include/uapi/linux/audit.h    |  2 ++
+> >  kernel/audit.h                |  2 +-
+> >  kernel/auditfilter.c          |  2 ++
+> >  kernel/auditsc.c              | 19 ++++++++-----------
+> >  kernel/entry/syscall-common.c |  4 +---
+> >  6 files changed, 18 insertions(+), 24 deletions(-)
+> >
+> > diff --git a/include/linux/audit.h b/include/linux/audit.h
+> > index 45abb3722d30..9ce5962bc537 100644
+> > --- a/include/linux/audit.h
+> > +++ b/include/linux/audit.h
+> > @@ -323,8 +323,7 @@ extern int  audit_alloc(struct task_struct *task);
+> >  extern void __audit_free(struct task_struct *task);
+> >  extern void __audit_uring_entry(u8 op);
+> >  extern void __audit_uring_exit(int success, long code);
+> > -extern void __audit_syscall_entry(int major, unsigned long a0, unsigne=
+d long a1,
+> > -                               unsigned long a2, unsigned long a3);
+> > +extern void __audit_syscall_entry(int major, struct pt_regs *regs);
+> >  extern void __audit_syscall_exit(int ret_success, long ret_value);
+> >  extern void __audit_getname(struct filename *name);
+> >  extern void __audit_inode(struct filename *name, const struct dentry *=
+dentry,
+> > @@ -373,12 +372,10 @@ static inline void audit_uring_exit(int success, =
+long code)
+> >       if (unlikely(audit_context()))
+> >               __audit_uring_exit(success, code);
+> >  }
+> > -static inline void audit_syscall_entry(int major, unsigned long a0,
+> > -                                    unsigned long a1, unsigned long a2=
+,
+> > -                                    unsigned long a3)
+> > +static inline void audit_syscall_entry(int major, struct pt_regs *regs=
+)
+> >  {
+> >       if (unlikely(audit_context()))
+> > -             __audit_syscall_entry(major, a0, a1, a2, a3);
+> > +             __audit_syscall_entry(major, regs);
+> >  }
+>
+> Won't this (temporarily) break the build? Maybe you need to introduce a
+> new helper e.g. audit_syscall_entry_regs(), then convert everybody over
+> to that, then rename it to audit_syscall_entry() at the end to keep the
+> series bisectable.
+>
+> Will
+>
 
-On September 17, 2026 12:06:18 PM Paul Moore <paul@paul-moore.com> wrote:
-> On September 17, 2026 10:03:59 AM Daniel Borkmann <daniel@iogearbox.net> wrote:
->> Hi Venkat,
->>
->> On 9/17/26 3:01 PM, Venkat Rao Bagalkote wrote:
->>> Hi all,
->>>
->>> IBM CI has reported a kernel warning triggered in __audit_syscall_entry()
->>> on a PowerPC 64 (ppc64le, POWER9 pSeries guest) system while running the
->>> BPF kselftest suite (test_progs).
->>>
->>> Environment:
->>>
->>>
->>> Kernel version: 7.3.0-rc3-g238650ef6c7c (PREEMPT)
->>> Architecture: ppc64le (POWER9 - IBM,8375-42A pSeries / phyp)
->>> Workload: BPF selftests (tools/testing/selftests/bpf/test_progs)
->>>
->>>
->>> Problem Description:
->>>
->>>
->>> During syscall entry processing (system_call_exception ->
->>> syscall_enter_audit -> __audit_syscall_entry), the kernel hit
->>> WARN_ON(context->context != AUDIT_CTX_UNUSED) at kernel/auditsc.c:1995,
->>> indicating that the task's audit context was not reset to AUDIT_CTX_UNUSED
->>> prior to entering the new syscall.
->>
->> Hm, based on the trace feels somewhat unrelated to bpf, but were you able
->> to bisect in
->> case it can be reliably reproduced? Which tree is this, linux-next or
->> bpf/bpf-next?
->
-> Thanks for the report Venkat.
->
-> Unfortunately due to some unexpected family medical issues I'm not able to
-> look into this very closely at the moment (triaging mail on my phone), but
-> the related audit code has been fairly stable lately so it seems a bit odd.
->
-> I do know that Thomas Gleixner (CC'd) did some work recently on the syscall
-> entry code (audit related commit below), perhaps that may be a place to start?
->
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=6f25517010ddd3f8080d7e06b9b1cb1b64b73772
->
-> FWIW, I haven't seen this in any of my testing on x86 or ARM, have you seen
-> this on other arches besides Power? Also, as Daniel already mentioned, more
-> information on the tree would be helpful.
->
-> While I don't have access to a Power system, I'm CC'ing Ricardo Robaina who
-> also works at IBM/RH and has experience with the audit kernel code. If this
-> appears to be specific to Power, he might be a good resource to help
-> diagnose and develop a patch.
->
->>
->>> Trace:
->>>
->>>
->>> [ 1371.387510] ------------[ cut here ]------------
->>> [ 1371.387528] WARNING: kernel/auditsc.c:1995 at
->>> __audit_syscall_entry+0x50/0x1b0, CPU#17: test_progs/49616
->>> [ 1371.387539] Modules linked in: dm_verity(E) dm_bufio(E) reed_solomon(E)
->>> livepatch_sample(EK) tun(E) vrf(E) 8021q(E) garp(E) mrp(E) stp(E) llc(E)
->>> veth(E) bonding(E) tls(E) rfkill(E) nft_fib_inet(E) nft_fib_ipv4(E)
->>> nft_fib_ipv6(E) nft_fib(E) nft_reject_inet(E) nf_reject_ipv4(E)
->>> nf_reject_ipv6(E) nft_reject(E) nft_ct(E) nft_chain_nat(E) hvcs(E)
->>> hvcserver(E) pseries_rng(E) vmx_crypto(E) sg(E) drm(E) fuse(E)
->>> drm_panel_orientation_quirks(E) xfs(E) sr_mod(E) nvme_tcp(E) sd_mod(E)
->>> cdrom(E) nvme_fabrics(E) nvme_core(E) ibmvscsi(E) ibmveth(E)
->>> scsi_transport_srp(E) dm_mirror(E) dm_region_hash(E) dm_log(E) dm_mod(E)
->>> [last unloaded: bpf_test_modorder_x(OE)]
->>> [ 1371.387607] CPU: 17 UID: 0 PID: 49616 Comm: test_progs Tainted: G
->>> OE K     7.3.0-rc3-g238650ef6c7c #1 PREEMPT
->>> [ 1371.387616] Tainted: [O]=OOT_MODULE, [E]=UNSIGNED_MODULE, [K]=LIVEPATCH
->>> [ 1371.387620] Hardware name: IBM,8375-42A POWER9 (architected) 0x4e0202
->>> 0xf000005 of:IBM,FW950.80 (VL950_131) hv:phyp pSeries
->>> [ 1371.387626] NIP:  c0000000003e70d0 LR: c000000000352080 CTR:
->>> c00000000000cf00
->>> [ 1371.387631] REGS: c00000000beafaa0 TRAP: 0700   Tainted: G      OE K
->>> (7.3.0-rc3-g238650ef6c7c)
->>> [ 1371.387637] MSR:  8000000000029033 <SF,EE,ME,IR,DR,RI,LE>  CR: 48002824
->>> XER: 20040084
->>> [ 1371.387650] CFAR: c00000000035207c IRQMASK: 0
->>>       GPR00: c000000000034958 c00000000beafd40 c0000000020eb200 c0000000345f4800
->>>       GPR04: 00007fffe2a31184 0000000000000081 000000007fffffff 0000000000000000
->>>       GPR08: 0000000000000000 0000000000000001 0000000000000001 00000000000000dd
->>>       GPR12: 0000000000000000 c00000002e99b300 0000000000000000 0000000000000000
->>>       GPR16: 0000000000000000 0000000000000000 0000000000000000 0000000000000000
->>>       GPR20: 0000000000000000 0000000000000000 0000000000000000 0000000000000000
->>>       GPR24: 0000000000000000 0000000000000000 0000000000000000 c0000000345f4800
->>>       GPR28: 0000000000000000 00000000000000dd 00000000000000dd c000000138e0c000
->>> [ 1371.387710] NIP [c0000000003e70d0] __audit_syscall_entry+0x50/0x1b0
->>> [ 1371.387715] LR [c000000000352080] syscall_enter_audit+0x90/0xd0
->>> [ 1371.387722] Call Trace:
->>> [ 1371.387725] [c00000000beafd40] [c000000000937050]
->>> selinux_task_getpgid+0x80/0xa0 (unreliable)
->>> [ 1371.387735] [c00000000beafda0] [c00000000beafde0] 0xc00000000beafde0
->>> [ 1371.387741] [c00000000beafe00] [c000000000034958]
->>> system_call_exception+0x448/0x480
->>> [ 1371.387749] [c00000000beafe50] [c00000000000d05c]
->>> system_call_vectored_common+0x15c/0x2ec
->>> [ 1371.387757] ---- interrupt: 3000 at 0x7fffab74cbf0
->>>
->>>
->>> Please let me know if additional logs, config, or repro details are needed.
->>>
->>> Regards,
->>>
->>> Venkat.
+Yes, you're right Will. Thanks for your suggestion I'll do that in the
+next version.
 
---
-paul-moore.com
-
-
+Thanks!
+-Ricardo
 
