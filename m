@@ -1,141 +1,60 @@
-Received: from server02.seltendoof.de (server02.seltendoof.de [168.119.48.163])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57F1159D628
-	for <audit@vger.kernel.org>; Thu, 17 Sep 2026 14:40:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=168.119.48.163
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79BC94DD3C9
+	for <audit@vger.kernel.org>; Thu, 17 Sep 2026 14:45:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789656041; cv=none; b=nnHqjiMZKEniEWiucJgi0mQZIr/KhBc7Wl6fshfQpUi99tPfYHs1FrSDEVLQU8WYZ6qtSb09E8gpUEbdg19nE3n2DEFRyyLBpSTqRpJ3P8B7E9xpbPTW+rKNQ3pn3W/zlldqGJseybQBVLFf92W5O40n7qn0dfRW5uDghwTNPEQ=
+	t=1789656317; cv=none; b=JyeRG86OmhpUz09g/d9f1xlJayxTgD/dNHQxV1out451nKr4rLwWNgYZ5MgRWIzTi2J4tgWSXtxMyjuTDNJw0rnmHzt0RdudAUBmA0TfjNoxs/gk9y/E4+6VbN8Li6tTR4k6l/P/Od/7v/2QrXH2gm914B18ptYZ7rgjPl5MUAg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789656041; c=relaxed/simple;
-	bh=pk8WLMn53075doP6kt9Vb20wCZEhNKzH9OgPmH3M84k=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=q5TOyjxj6cvqr6mtFPpRUbW0iVX03iAIQtFToVYSGt0SR9DW4Jk9qzf6ltynkuzFzcEYgk9E3+KOgxZ3mMqY+JI3QZ7kq4fksz4zEi7I1MbXUXmUySFkLGhZ8TSdXbMQpHpaqO3gvsq3C4/TEATPfz6/GidTEb+kkiSFwCAfvDA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=seltendoof.de; spf=pass smtp.mailfrom=seltendoof.de; dkim=pass (2048-bit key) header.d=seltendoof.de header.i=@seltendoof.de header.b=t45AnhBH; arc=none smtp.client-ip=168.119.48.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=seltendoof.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=seltendoof.de
+	s=arc-20240116; t=1789656317; c=relaxed/simple;
+	bh=iUa0emxGIM3scHFdf+3ANUJV9iHbu/nP+00F/RwZ598=;
+	h=From:Subject:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=UcXlAvnQOfro+K/5Fldu9DUhyT3mG65Knnjh/50xfYpfanQcEwBOwWiQGKDSWjmjB+AABnSt/qlrCETAdTmQtKbeLtEmiAV53u8Z70Ag69mvOLkURPnUF8hh7p2sdCM9fM2b8IlV0NvmNsSS+ce/tcF8Y6cgmyyySjQ00wyy0LI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MF27/a9b; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=seltendoof.de header.i=@seltendoof.de header.b="t45AnhBH"
-From: =?UTF-8?q?Christian=20G=C3=B6ttsche?= <cgoettsche@seltendoof.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seltendoof.de;
-	s=2023072701; t=1789656023;
-	h=from:from:reply-to:reply-to:subject:subject:date:date:
-	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-	 content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=4e6uikrgAGkZIIEpWfUoMeZBXfI608xl3cC+bL0ysVc=;
-	b=t45AnhBHo2IEckk3ivRvecDBEGd5xMa92x8bpo24DIemvLQbLY9Te7XlxzLR3CE/8F6+pb
-	7vEAKWKqpf41VLq1HHhsCV7qqbyZzJVLgIDNdlejXZ/+EOgfiNzyFo8TSiJq50+p35AJ0i
-	lUTE2B1f4X9/1lS18Kn0WwbgTcCwLkcNxmzSwGg5zDOADn90OWO7OCf/L1Kjpw8fC/3itq
-	yPYWig8bOIbrNcj/Lfq/LDZAaMQXHzRM/moAoZfc6lIsU22U7L07tlJ7uk+0SeH18NY1nq
-	Q0uitmG8R6DCiFGsWxO7WVF4iTL5k6d7OvpbMhd0l4KeZSMRLW0W6MjV25QwhQ==
-To: audit@vger.kernel.org
-Cc: Paul Moore <paul@paul-moore.com>,
-	Eric Paris <eparis@redhat.com>,
-	=?UTF-8?q?Christian=20G=C3=B6ttsche?= <cgzones@googlemail.com>
-Subject: [RFC PATCH 4/4] audit: retain file paths for descriptor PATH records
-Date: Thu, 17 Sep 2026 16:39:48 +0200
-Message-ID: <20260917143948.106603-4-cgoettsche@seltendoof.de>
-In-Reply-To: <20260917143948.106603-1-cgoettsche@seltendoof.de>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MF27/a9b"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71A691F000FF
+	for <audit@vger.kernel.org>; Thu, 17 Sep 2026 14:45:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1789656307;
+	bh=iUa0emxGIM3scHFdf+3ANUJV9iHbu/nP+00F/RwZ598=;
+	h=From:Subject:Reply-To:Cc:In-Reply-To:References:Date;
+	b=MF27/a9bQKfkRRqEt5oT1n5OJBzLVH6e+6kDExVNVMv1aDbbWd53EKcxPqlRX4fvx
+	 lVp2Hg5WZtpuSoyb5V0hStOce058DurUzHG/bvyw5ftnu4P4+T2GlJ2Qamx1EDqPIK
+	 jEagM+gtnAFI1oJjmvAWdHGcN04tdSkGpiL87nKq6FxmLoKcazQJFDd8S8wz7rSzT8
+	 fI7YH7IsPTlfh4iEWrPgKC993vjz5uOWDsq7PdqGk5n+k4FBuR/JUaMwreXZYNXIYF
+	 d+ip5iAZeLs+DVT1oMCl9JIo9va/5N9H4alWZn0XfKiYqP8ZI46kMh4SyXQvvaLSwM
+	 bR/gstpyoVLaQ==
+From: sashiko-bot@kernel.org
+Subject: Re: [RFC PATCH 3/4] audit: return the collected inode entry from a
+ private helper
+Reply-To: sashiko-reviews@lists.linux.dev
+Cc: audit@vger.kernel.org
+In-Reply-To: <20260917143948.106603-3-cgoettsche@seltendoof.de>
 References: <20260917143948.106603-1-cgoettsche@seltendoof.de>
-Reply-To: cgzones@googlemail.com
+ <20260917143948.106603-3-cgoettsche@seltendoof.de>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 17 Sep 2026 14:45:06 +0000
+Message-Id: <20260917144507.71A691F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
 
-From: Christian Göttsche <cgzones@googlemail.com>
+> From: Christian G=C3=B6ttsche <cgzones@googlemail.com>
+>=20
+> Keep the __audit_inode() interface and collection behavior unchanged.
+> Return the selected entry, or NULL when collection is skipped or fails,
+> so audit_file() can attach descriptor-specific information reliably.
+>=20
+> Signed-off-by: Christian G=C3=B6ttsche <cgzones@googlemail.com>
 
-fchown() and the other audit_file() callers collect inode metadata but
-emit name=(null), even though file->f_path is available.
+Sashiko has reviewed this patch and found no issues. It looks great!
 
-Retain the path with balanced dentry and mount references, and use the
-existing audit_log_d_path() formatter when no filename was collected.
-Release references on context cleanup and entry reuse. Filesystem
-exclusions continue to skip entry creation.
-
-The name reflects d_path() at event emission: concurrent renames and
-unlinks can affect it. Original lookup names retain precedence.
-
-This adds sizeof(struct path) to each audit_names. With the preceding
-capability and layout changes, audit_context grows from 880 to 960 bytes
-on the tested x86_64 SELinux configuration and remains in the 1 KiB
-kmalloc class. Other LSM configurations can have different object sizes.
-
-Signed-off-by: Christian Göttsche <cgzones@googlemail.com>
----
- kernel/audit.h   |  1 +
- kernel/auditsc.c | 19 +++++++++++++++++--
- 2 files changed, 18 insertions(+), 2 deletions(-)
-
-diff --git a/kernel/audit.h b/kernel/audit.h
-index bd798f8553a0..ef8d25af18c8 100644
---- a/kernel/audit.h
-+++ b/kernel/audit.h
-@@ -76,6 +76,7 @@ struct audit_names {
- 	struct list_head	list;		/* audit_context->names_list */
- 
- 	struct filename		*name;
-+	struct path		fd_path;	/* owned audit_file() fallback */
- 	u64			ino;
- 	struct lsm_prop		oprop;
- 	dev_t			dev;
-diff --git a/kernel/auditsc.c b/kernel/auditsc.c
-index b14765cdd56f..3d2f130bc0f8 100644
---- a/kernel/auditsc.c
-+++ b/kernel/auditsc.c
-@@ -935,6 +935,7 @@ static inline void audit_free_names(struct audit_context *context)
- 		list_del(&n->list);
- 		if (n->name)
- 			putname(n->name);
-+		path_put(&n->fd_path);
- 		if (n->should_free)
- 			kfree(n);
- 	}
-@@ -1530,7 +1531,9 @@ static void audit_log_name(struct audit_context *context, struct audit_names *n,
- 			audit_log_n_untrustedstring(ab, n->name->name,
- 						    n->name_len);
- 		}
--	} else
-+	} else if (n->fd_path.dentry)
-+		audit_log_d_path(ab, " name=", &n->fd_path);
-+	else
- 		audit_log_format(ab, " name=(null)");
- 
- 	if (n->ino != AUDIT_INO_UNSET)
-@@ -2222,6 +2225,10 @@ static void audit_copy_inode(struct audit_names *name,
- 			     const struct dentry *dentry,
- 			     struct inode *inode, unsigned int flags)
- {
-+	/* An entry can be reused for a different lookup or object. */
-+	path_put(&name->fd_path);
-+	name->fd_path = (struct path) { };
-+
- 	name->ino   = inode->i_ino;
- 	name->dev   = inode->i_sb->s_dev;
- 	name->mode  = inode->i_mode;
-@@ -2358,7 +2365,15 @@ void __audit_inode(struct filename *name, const struct dentry *dentry,
- 
- void __audit_file(const struct file *file)
- {
--	__audit_inode(NULL, file->f_path.dentry, 0);
-+	struct audit_names *n;
-+
-+	n = audit_inode_entry(NULL, file->f_path.dentry, 0);
-+	if (!n)
-+		return;
-+
-+	/* Resolve at event emission, so renames and unlinks can affect the name. */
-+	n->fd_path = file->f_path;
-+	path_get(&n->fd_path);
- }
- 
- /**
--- 
-2.55.0
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260917143948.1066=
+03-1-cgoettsche@seltendoof.de?part=3D3
 
