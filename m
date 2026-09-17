@@ -1,42 +1,42 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A8983988E3
-	for <audit@vger.kernel.org>; Thu, 17 Sep 2026 14:49:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D554394785
+	for <audit@vger.kernel.org>; Thu, 17 Sep 2026 14:50:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789656596; cv=none; b=Sh9TurAILcfzwAoqSQmQfqgVIsSHIJW9sElmAMO+4sYeLsHMQxL2TYYpYL3cznK4kskKTWa2PFxcTLDZNy6jqSIXwM6+h7LEkWOqn4gSeLKblItPzw3MfcCOJDwT3QaOW//IJI0mv4w8iICvt4vAdsGyD7T/nk3XcWYQhlItFeg=
+	t=1789656661; cv=none; b=ZpFX6XSFSFVDmHJcTfEip4Z7tYWDL0KcWVPMSXm+aVoyPAW160CIuWxpDNPht8Pe5XU4BdLLRVjkv6FTKrnMpJHJ4Qi5sL5hH+SkQLOQxOMWl4G7CfkwowOBCJ5z+/dUFdqzzVyRf/rkVQ53tgmfl5iRU7gkRTOBMBJKC7ctlxA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789656596; c=relaxed/simple;
-	bh=HLrm94cXHC0sRpLD8u/fXztRqob6aWOEprm3VWr9kMA=;
+	s=arc-20240116; t=1789656661; c=relaxed/simple;
+	bh=Ld4Dqf5/QUVAkHnEBng3HZ/QCbOlJM4U/sUOrjOitLo=;
 	h=From:Subject:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=Kgrme+qYINJd4TZpMsI2rhz95p//KZQo3BM8LlBJBuKR3JF7Ktvw1YWtdHKKrvrTRQnYwWYHH3z91Mb0K2xdVqolxQNLLvsjKsvTVL0tIdKzuVB6e/3rNhh2xhfAO3WXYsisTL4FfTkvSHKW376clHa0XQE6XCL1sVJ+WeD2l+4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VKT71I97; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=eT6R+nuQJaDyhOQtOx4DQexe80N2dwSkztJnfvp6ggJ8K5nzgYEnywgZcVeaF+18lveVjHrTs7ys2PwZpNfZUdpQrEahAAweVWtb1L+pXnYCXyBTI7CafDcY6kiAtpmi7nUO3b6TLKPomp8ZowTmJskU3RKYrDN8j3vzXC96JbI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hl8Eknox; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VKT71I97"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15C5F1F000FF
-	for <audit@vger.kernel.org>; Thu, 17 Sep 2026 14:49:42 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hl8Eknox"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C358C1F000FF
+	for <audit@vger.kernel.org>; Thu, 17 Sep 2026 14:50:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789656582;
-	bh=HLrm94cXHC0sRpLD8u/fXztRqob6aWOEprm3VWr9kMA=;
+	s=k20260515; t=1789656652;
+	bh=Ld4Dqf5/QUVAkHnEBng3HZ/QCbOlJM4U/sUOrjOitLo=;
 	h=From:Subject:Reply-To:Cc:In-Reply-To:References:Date;
-	b=VKT71I97BM8HAgEIXgQ4yST7Lbb+/aUXNd3b5S9vxo1yRKpfu3fF5MJqEXMgbJcxN
-	 RTnpXoVo8sp43cAthjtbGQipFAcoFNxGHpNojit+jN+BSQ5/jgw61Ow0ujkH926DUv
-	 FWwQKOuGgCknGkNbvtvflWs/9eW14ptrcGdoxFg5xJxkEw61AX0lFvhaJvYwk0sCPD
-	 cvKGEza4YD/twcC3vEEfWQLmuvASUVDtM7NF5C/u0hAE8Pk3S44DmQiNfvp+ErL8Mi
-	 g7qtIBm5Fd6OsrX8fBfwiJacqht6KGI6d70MatkwppSRPKZmrv+/ox5jXZ+6ozx/La
-	 0TzPOvnhQ5KWA==
+	b=hl8EknoxxL3X9H7mac9Tox21/uRfzouAoS/D4a0Yy+AgLQYDiLGUuD4mnerR+AAoq
+	 GKvDZK6TZOD15tW0mFKqazUNkIJHI7GzWvF952os067s0/YIBzlQpGIpyLtUL0XN3E
+	 gQPZ1bdbAQSXgA2T//YVjhhzP8uoydn5P0K/iyMVrhi660MP+jbYtXNVYVfJz68Rc8
+	 MGKN72F2g/38xpeXV/k1mHJSzxe5ca4sjLRsbOjJRVvwO8JcM5xNsPRT/0FL0/zi+2
+	 FFHaL+/E4FoM4l8VHUsq+ptl49uRhIWPgIAjLkwI3w2YuhAfLb4TeMh53+LNbFn5+0
+	 aqTmMtxko7oFg==
 From: sashiko-bot@kernel.org
-Subject: Re: [RFC PATCH 2/4] audit: compact name entries and context fields
+Subject: Re: [RFC PATCH 1/4] audit: separate file and process capability
+ storage
 Reply-To: sashiko-reviews@lists.linux.dev
 Cc: audit@vger.kernel.org
-In-Reply-To: <20260917143948.106603-2-cgoettsche@seltendoof.de>
+In-Reply-To: <20260917143948.106603-1-cgoettsche@seltendoof.de>
 References: <20260917143948.106603-1-cgoettsche@seltendoof.de>
- <20260917143948.106603-2-cgoettsche@seltendoof.de>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Thu, 17 Sep 2026 14:49:41 +0000
-Message-Id: <20260917144942.15C5F1F000FF@smtp.kernel.org>
+Date: Thu, 17 Sep 2026 14:50:52 +0000
+Message-Id: <20260917145052.C358C1F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
@@ -45,22 +45,16 @@ List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 
 > From: Christian G=C3=B6ttsche <cgzones@googlemail.com>
 >=20
-> Group aligned name fields and small scalar fields to remove padding. Keep
-> file capabilities last so they do not separate inode and pathname metadat=
-a.
-> Store the per-name file capability revision in s16: it must represent both
-> the eight-bit on-disk revision and the -1 AUDIT_INODE_NOEVAL sentinel. Ke=
-ep
-> the existing formatter and its unknown-capability output unchanged.
+> File capabilities need permitted and inheritable sets, an effective flag,
+> and a root UID. Process capabilities need four full capability sets but
+> neither a file effective flag nor a root UID. Give file capabilities their
+> own type instead of storing both representations in audit_cap_data.
 >=20
-> Move name_count beside return_valid to remove two alignment holes, and
-> place personality before the task credential scalars. Preserve the first
-> int dummy member required by audit_dummy_context(), all five embedded name
-> slots, and the existing allocation and reference lifetimes.
->=20
-> On x86_64 with SELinux this reduces audit_context from 928 to 880 bytes,
-> leaving room for descriptor paths while staying below 1 KiB. On the tested
-> arm64 configuration without property-bearing LSMs it falls to 872 bytes.
+> This reduces each preallocated audit_names entry by 16 bytes on the tested
+> 64-bit configurations, saving 80 bytes per audit context. The BPRM
+> capability auxiliary object also shrinks from 144 to 112 bytes. Retain all
+> logged fields, including file root IDs and process ambient capabilities;
+> record formats and collection behavior are unchanged.
 >=20
 > Signed-off-by: Christian G=C3=B6ttsche <cgzones@googlemail.com>
 
@@ -68,5 +62,5 @@ Sashiko has reviewed this patch and found no issues. It looks great!
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260917143948.1066=
-03-1-cgoettsche@seltendoof.de?part=3D2
+03-1-cgoettsche@seltendoof.de?part=3D1
 
