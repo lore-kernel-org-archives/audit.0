@@ -1,286 +1,110 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from oss.cyber.gouv.fr (oss.cyber.gouv.fr [51.159.188.251])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D30122F388
-	for <audit@vger.kernel.org>; Fri, 18 Sep 2026 12:53:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D35FD41A918;
+	Mon, 21 Sep 2026 20:00:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=51.159.188.251
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789736025; cv=none; b=feOIOwNtPI4Qp281j6x2HSabPOlW6HsbM1ASAVCSd+QUT4y7X5x8b1OZWvdTjr5gGAnmPgb5esNRj4KnWNEl7zCXlcUzFO78wa4pJQCCaef7iCbOI5xxFEjHZSdXiNTSUKQFrgVIlua2l7wsuqlfQz1fl0TCICFYH5de6Iub4eQ=
+	t=1790020823; cv=none; b=ty9bWBzaiWoOnRAqCG+BuyoWG69/5OQ2TLfKtA1V9nR/AhkMiraphlIrynhfmwNpaKGMVIEad9/PcAWsWH+l6qFG0MOYLuKHI3cemNS+L5ns/zFHM7/cmmO84RdjSNMomxZFVkOO5mQuDA+7db9rgnpzXXL29naH655hOGwELNw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789736025; c=relaxed/simple;
-	bh=g0xGWJcbRsZZHFalhoUE0XSvg2wVGfujRaCvlxyJNMQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=e4qiC4Zmi5w5NKPV2A7VKTfFnsRBvy91GMSfmK5gZHrT/hd+pLLs7Rt8d6vFHyev0u9X5zbA62mQoPzfp4+9YX728VMwPzcm5ZYbQR1AX7IFT679SxgGlfyEsRXw3HpaSXwD0xHQiGG0J2shKiAM7lwqMu3xcFB97lCnN8l5Lbc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=V1HFd/51; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1790020823; c=relaxed/simple;
+	bh=CcU4GBwyYWo0Jw8qCVnLuLYztqeFikHwQvXY+iDLvfs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=D+3Y2obywWFH0anmcSXzt3QuS6sLTj2ygTXIG92QGyta/LCUMijd8IwtHUCZKh+6KbfHj6yKl83F8pq691C74xNuqN8jJWIBobsCgeEc1H7yTeuCsNdxEDygXpCCvtcBrHVSn9GFKwwk3HBbFfwtsfcO+dMfEvQ8Ef7iFRaUIDw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.cyber.gouv.fr; spf=pass smtp.mailfrom=oss.cyber.gouv.fr; dkim=pass (2048-bit key) header.d=oss.cyber.gouv.fr header.i=@oss.cyber.gouv.fr header.b=ppwywcF0; arc=none smtp.client-ip=51.159.188.251
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.cyber.gouv.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.cyber.gouv.fr
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="V1HFd/51"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1789736022;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=gUqRO/qJNQsB7yIcuX23hH9gNKvjys5G72B/a/hJXMQ=;
-	b=V1HFd/51a0wsA8SY3QwuhH1uLlqf0qhcHJy8HGj2mfPwbu470iT3iSHtEPSBwzJFssTQt9
-	vk97GwjofG56KGc09p3ySYtvI/t/4oHQq6Miv2ApaaGOF/s+TN78xaKmr5g8DlTd09IWmZ
-	NMBMWxjq8bhNxuCZ2DFza8eA++UZJSI=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-562-NtV7OPHAO7i176aX6n5CCw-1; Fri, 18 Sep 2026 08:53:41 -0400
-X-MC-Unique: NtV7OPHAO7i176aX6n5CCw-1
-X-Mimecast-MFC-AGG-ID: NtV7OPHAO7i176aX6n5CCw_1789736020
-Received: by mail-ej1-f69.google.com with SMTP id a640c23a62f3a-c293e604f0eso68151266b.3
-        for <audit@vger.kernel.org>; Fri, 18 Sep 2026 05:53:41 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789736020; x=1790340820;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=gUqRO/qJNQsB7yIcuX23hH9gNKvjys5G72B/a/hJXMQ=;
-        b=grQP7k62vR5vRjcGwDu223EGXna16HioBLuD4zcoicY4puTl6kw33jR+1zTwqPcwXb
-         Kdrxu+33okWr3v3IBseSndyAqFHp/YLHfSRCSQBU0EifWzzh1hTHl6+SNoJ8EYp4pfn4
-         W4JF87+9vXEw8oIhMS3snkMoosL/Af++3oZ/UgI5HVigqZMWnW2vUqaRebSCnNYMyi/B
-         3plrhidVliM8lpua7sPFinn+GUh6GIRNo3d88KwSdb15KfEGig2wgVmPaSrnPLyY5Udv
-         DRVqxSSdtslY5EGJrSvzfe6pUV5bprHNMX0Vw/5LyOvZkEWYOTYGtV2HzRP3bcpUJElj
-         0gfg==
-X-Forwarded-Encrypted: i=1; AKwUvBz8QhwZlfv542t+7VB/i0st56Eai9l9KoSA1FpeyNc0VN2EQLRPEY5n1VHxdwKWSiqttroR1A==@vger.kernel.org
-X-Gm-Message-State: AFuF++nSru6SwidYoHmILJ29pS1Wch5ADk8pjl8Br8O/O5XNk5+gmm9b
-	3taUMegRRK5bdFAs7oc/QmD0PeKLavxhbNxhN/Vqdvn3Z9Qy7TESB+ZihhwZanh5Pu9rmZfm5VO
-	4xwxJU0k1EuG5KD6h0jBxrrrOPvS007l9uDZJYNC5MboWECwhM6KHzaoHGE2yteU7cYQ3YHL58u
-	FQgHsuvTzW69yOh0iAcGqW8/0CKvR9mvA=
-X-Gm-Gg: AYBFou0E3QmYwhPAxa0oKtfl2feoo+vOck/38gZ8085AooSZbrumR7wdQHE6NvjjJl9
-	CDmm6AV0Ho8/b5AiNpC+yoVkeqGA2leO+UXwnbelxbMobp/5xFNh5Hk+V14QxZsbN3hKQQ6Cj5g
-	xwfwM869R6HAvr40gSS47lRaIrsyHa37dcJbaojeB/YacPOAKcoXfnlyO4edeDYEzbpvESL7Sjq
-	qszzAC6cGsmOE4s0IJaWuIgV24eQyS+y+pgmqxSVyuiuuUMrvXN/sOYllNjRDa5/ApFflvbWY9B
-	GnM=
-X-Received: by 2002:a17:907:72cc:b0:c25:8c74:71e6 with SMTP id a640c23a62f3a-c2a1569a530mr277250266b.10.1789736020298;
-        Fri, 18 Sep 2026 05:53:40 -0700 (PDT)
-X-Received: by 2002:a17:907:72cc:b0:c25:8c74:71e6 with SMTP id
- a640c23a62f3a-c2a1569a530mr277247366b.10.1789736019888; Fri, 18 Sep 2026
- 05:53:39 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=oss.cyber.gouv.fr header.i=@oss.cyber.gouv.fr header.b="ppwywcF0"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=oss.cyber.gouv.fr; s=default; h=Content-Transfer-Encoding:Content-Type:
+	MIME-Version:Message-ID:Date:Subject:Cc:To:From:Reply-To:Sender:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:In-Reply-To:References;
+	bh=qPqAC8XIUQNSGAn1Xl0hkf8IfjOPmNZSVQTEu+4E3qc=; b=ppwywcF00VFv/6G5rc+Rg9RvSS
+	C06QTg2vr704qKcNHlum4hn7hK/c3sbO7yaGVe7/72riaZXwIsCZ9p7NGyVh0j8E1W4TIc983PA1f
+	4iR5aKEjP6iCGmS2mkon0LrfQ7isb49hvz2qQb2/PCd8bEF6Dk03VkLz32kPGQTxcxydP1wmjszgj
+	CPfWAGDyFsFreX441GAN1u+elq5CLnwQo2TopsHxcasriet9QOlzGvkZRxkcT1QrXmVuB8Zou85b6
+	H96f8W2Yo+iE2lqA+tnAKSKF8Wm9lBN+ZVTDUMXqhbhrSPK2aoSfyOhpzhGe5kZuXDmP3g4zQKv2a
+	LR2g+qYg==;
+Received: from [151.115.150.205] (port=53318 helo=gepetto..)
+	by pf-012.whm.fr-par.scw.cloud with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.100)
+	(envelope-from <Jeremy.Jean@oss.cyber.gouv.fr>)
+	id 1x8kBW-00000002ZZA-1zWc;
+	Mon, 21 Sep 2026 22:00:18 +0200
+From: =?UTF-8?q?J=C3=A9r=C3=A9my=20Jean?= <Jeremy.Jean@oss.cyber.gouv.fr>
+To: Paul Moore <paul@paul-moore.com>,
+	Eric Paris <eparis@redhat.com>
+Cc: audit@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	=?UTF-8?q?J=C3=A9r=C3=A9my=20Jean?= <Jeremy.Jean@oss.cyber.gouv.fr>
+Subject: [PATCH] audit: fix exe mark UAF in kill_rules()
+Date: Mon, 21 Sep 2026 19:59:22 +0000
+Message-ID: <20260921195921.4174830-2-Jeremy.Jean@oss.cyber.gouv.fr>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <ff563467-0bab-43ec-a46c-a4167bc12473@linux.ibm.com>
- <73701ffd-213e-4842-8b40-f719c1eeaed4@iogearbox.net> <1a0b01e5cd8.2843.85c95baa4474aabc7814e68940a78392@paul-moore.com>
- <1a0b021e330.2843.85c95baa4474aabc7814e68940a78392@paul-moore.com> <D5655235-89A8-43EF-8DC4-9DCE6FBC387C@linux.ibm.com>
-In-Reply-To: <D5655235-89A8-43EF-8DC4-9DCE6FBC387C@linux.ibm.com>
-From: Ricardo Robaina <rrobaina@redhat.com>
-Date: Fri, 18 Sep 2026 09:53:28 -0300
-X-Gm-Features: AcwNN1WCd2sEcqEKVCjkhdhtXdMEs14eyYo-vHbnVxc45osvsgf1ffcS0sP15O8
-Message-ID: <CAABTaaB4j+Gr2-7vti6unCqKoRfYa9Cs22NH3HpxJo14r5jKcA@mail.gmail.com>
-Subject: Re: [BUG] audit/powerpc: WARNING at kernel/auditsc.c:1995
- (__audit_syscall_entry) during BPF kselftests (test_progs)
-To: Venkat <venkat88@linux.ibm.com>
-Cc: Paul Moore <paul@paul-moore.com>, Daniel Borkmann <daniel@iogearbox.net>, bpf <bpf@vger.kernel.org>, 
-	linuxppc-dev <linuxppc-dev@lists.ozlabs.org>, audit@vger.kernel.org, 
-	Madhavan Srinivasan <maddy@linux.ibm.com>, Shrikanth Hegde <sshegde@linux.ibm.com>, 
-	Ritesh Harjani <riteshh@linux.ibm.com>, Hari Bathini <hbathini@linux.ibm.com>, 
-	Saket Kumar Bhaskar <skb99@linux.ibm.com>, Alexei Starovoitov <ast@kernel.org>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, andrii@kernel.org, Eduard Zingerman <eddyz87@gmail.com>, 
-	yonghong.song@linux.dev, tglx@kernel.org
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: U9XLSWb1SzF2douh7e8P5LV-MZ8Dh2anrHPndnVED3g_1789736020
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - pf-012.whm.fr-par.scw.cloud
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - oss.cyber.gouv.fr
+X-Get-Message-Sender-Via: pf-012.whm.fr-par.scw.cloud: authenticated_id: jeremy.jean@oss.cyber.gouv.fr
+X-Authenticated-Sender: pf-012.whm.fr-par.scw.cloud: jeremy.jean@oss.cyber.gouv.fr
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
 
-On Fri, Sep 18, 2026 at 4:42=E2=80=AFAM Venkat <venkat88@linux.ibm.com> wro=
-te:
->
-> Hi Daniel, Paul
->
-> Hope all is well with your family, Paul, please take care.
->
-> > On 17 Sep 2026, at 9:40=E2=80=AFPM, Paul Moore <paul@paul-moore.com> wr=
-ote:
-> >
-> > [NOTE: correcting the audit mailing list address to audit@vger ...]
-> >
-> > On September 17, 2026 12:06:18 PM Paul Moore <paul@paul-moore.com> wrot=
-e:
-> >> On September 17, 2026 10:03:59 AM Daniel Borkmann <daniel@iogearbox.ne=
-t> wrote:
-> >>> Hi Venkat,
-> >>>
-> >>> On 9/17/26 3:01 PM, Venkat Rao Bagalkote wrote:
-> >>>> Hi all,
-> >>>>
-> >>>> IBM CI has reported a kernel warning triggered in __audit_syscall_en=
-try()
-> >>>> on a PowerPC 64 (ppc64le, POWER9 pSeries guest) system while running=
- the
-> >>>> BPF kselftest suite (test_progs).
-> >>>>
-> >>>> Environment:
-> >>>>
-> >>>>
-> >>>> Kernel version: 7.3.0-rc3-g238650ef6c7c (PREEMPT)
-> >>>> Architecture: ppc64le (POWER9 - IBM,8375-42A pSeries / phyp)
-> >>>> Workload: BPF selftests (tools/testing/selftests/bpf/test_progs)
-> >>>>
-> >>>>
-> >>>> Problem Description:
-> >>>>
-> >>>>
-> >>>> During syscall entry processing (system_call_exception ->
-> >>>> syscall_enter_audit -> __audit_syscall_entry), the kernel hit
-> >>>> WARN_ON(context->context !=3D AUDIT_CTX_UNUSED) at kernel/auditsc.c:=
-1995,
-> >>>> indicating that the task's audit context was not reset to AUDIT_CTX_=
-UNUSED
-> >>>> prior to entering the new syscall.
-> >>>
-> >>> Hm, based on the trace feels somewhat unrelated to bpf, but were you =
-able
-> >>> to bisect in
-> >>> case it can be reliably reproduced? Which tree is this, linux-next or
-> >>> bpf/bpf-next?
->
-> This was tested on the mainline Linux tree (Linus' tree, commit 238650ef6=
-c7c).
->
-> Regarding bisection and reproducibility: the warning does not reproduce w=
-hen running individual tests in isolation (e.g. running kfunc_module_order =
-alone is clean). It is only observed intermittently during the full BPF sel=
-ftests suite run (test_progs / test_progs-no_alu32), so I haven't been able=
- to bisect it to a specific commit yet.
->
-> >>
-> >> Thanks for the report Venkat.
-> >>
-> >> Unfortunately due to some unexpected family medical issues I'm not abl=
-e to
-> >> look into this very closely at the moment (triaging mail on my phone),=
- but
-> >> the related audit code has been fairly stable lately so it seems a bit=
- odd.
-> >>
-> >> I do know that Thomas Gleixner (CC'd) did some work recently on the sy=
-scall
-> >> entry code (audit related commit below), perhaps that may be a place t=
-o start?
-> >>
-> >> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/com=
-mit/?id=3D6f25517010ddd3f8080d7e06b9b1cb1b64b73772
-> >>
-> >> FWIW, I haven't seen this in any of my testing on x86 or ARM, have you=
- seen
-> >> this on other arches besides Power? Also, as Daniel already mentioned,=
- more
-> >> information on the tree would be helpful.
->
-> We have only tested and observed this on PowerPC (ppc64le, POWER9 pSeries=
- guest).
->
-> Attached is the .config file.
->
->
-> Regards,
-> Venkat.
-> >>
-> >> While I don't have access to a Power system, I'm CC'ing Ricardo Robain=
-a who
-> >> also works at IBM/RH and has experience with the audit kernel code. If=
- this
-> >> appears to be specific to Power, he might be a good resource to help
-> >> diagnose and develop a patch.
-> >>
-> >>>
-> >>>> Trace:
-> >>>>
-> >>>>
-> >>>> [ 1371.387510] ------------[ cut here ]------------
-> >>>> [ 1371.387528] WARNING: kernel/auditsc.c:1995 at
-> >>>> __audit_syscall_entry+0x50/0x1b0, CPU#17: test_progs/49616
-> >>>> [ 1371.387539] Modules linked in: dm_verity(E) dm_bufio(E) reed_solo=
-mon(E)
-> >>>> livepatch_sample(EK) tun(E) vrf(E) 8021q(E) garp(E) mrp(E) stp(E) ll=
-c(E)
-> >>>> veth(E) bonding(E) tls(E) rfkill(E) nft_fib_inet(E) nft_fib_ipv4(E)
-> >>>> nft_fib_ipv6(E) nft_fib(E) nft_reject_inet(E) nf_reject_ipv4(E)
-> >>>> nf_reject_ipv6(E) nft_reject(E) nft_ct(E) nft_chain_nat(E) hvcs(E)
-> >>>> hvcserver(E) pseries_rng(E) vmx_crypto(E) sg(E) drm(E) fuse(E)
-> >>>> drm_panel_orientation_quirks(E) xfs(E) sr_mod(E) nvme_tcp(E) sd_mod(=
-E)
-> >>>> cdrom(E) nvme_fabrics(E) nvme_core(E) ibmvscsi(E) ibmveth(E)
-> >>>> scsi_transport_srp(E) dm_mirror(E) dm_region_hash(E) dm_log(E) dm_mo=
-d(E)
-> >>>> [last unloaded: bpf_test_modorder_x(OE)]
-> >>>> [ 1371.387607] CPU: 17 UID: 0 PID: 49616 Comm: test_progs Tainted: G
-> >>>> OE K     7.3.0-rc3-g238650ef6c7c #1 PREEMPT
-> >>>> [ 1371.387616] Tainted: [O]=3DOOT_MODULE, [E]=3DUNSIGNED_MODULE, [K]=
-=3DLIVEPATCH
-> >>>> [ 1371.387620] Hardware name: IBM,8375-42A POWER9 (architected) 0x4e=
-0202
-> >>>> 0xf000005 of:IBM,FW950.80 (VL950_131) hv:phyp pSeries
-> >>>> [ 1371.387626] NIP:  c0000000003e70d0 LR: c000000000352080 CTR:
-> >>>> c00000000000cf00
-> >>>> [ 1371.387631] REGS: c00000000beafaa0 TRAP: 0700   Tainted: G      O=
-E K
-> >>>> (7.3.0-rc3-g238650ef6c7c)
-> >>>> [ 1371.387637] MSR:  8000000000029033 <SF,EE,ME,IR,DR,RI,LE>  CR: 48=
-002824
-> >>>> XER: 20040084
-> >>>> [ 1371.387650] CFAR: c00000000035207c IRQMASK: 0
-> >>>>      GPR00: c000000000034958 c00000000beafd40 c0000000020eb200 c0000=
-000345f4800
-> >>>>      GPR04: 00007fffe2a31184 0000000000000081 000000007fffffff 00000=
-00000000000
-> >>>>      GPR08: 0000000000000000 0000000000000001 0000000000000001 00000=
-000000000dd
-> >>>>      GPR12: 0000000000000000 c00000002e99b300 0000000000000000 00000=
-00000000000
-> >>>>      GPR16: 0000000000000000 0000000000000000 0000000000000000 00000=
-00000000000
-> >>>>      GPR20: 0000000000000000 0000000000000000 0000000000000000 00000=
-00000000000
-> >>>>      GPR24: 0000000000000000 0000000000000000 0000000000000000 c0000=
-000345f4800
-> >>>>      GPR28: 0000000000000000 00000000000000dd 00000000000000dd c0000=
-00138e0c000
-> >>>> [ 1371.387710] NIP [c0000000003e70d0] __audit_syscall_entry+0x50/0x1=
-b0
-> >>>> [ 1371.387715] LR [c000000000352080] syscall_enter_audit+0x90/0xd0
-> >>>> [ 1371.387722] Call Trace:
-> >>>> [ 1371.387725] [c00000000beafd40] [c000000000937050]
-> >>>> selinux_task_getpgid+0x80/0xa0 (unreliable)
-> >>>> [ 1371.387735] [c00000000beafda0] [c00000000beafde0] 0xc00000000beaf=
-de0
-> >>>> [ 1371.387741] [c00000000beafe00] [c000000000034958]
-> >>>> system_call_exception+0x448/0x480
-> >>>> [ 1371.387749] [c00000000beafe50] [c00000000000d05c]
-> >>>> system_call_vectored_common+0x15c/0x2ec
-> >>>> [ 1371.387757] ---- interrupt: 3000 at 0x7fffab74cbf0
-> >>>>
-> >>>>
-> >>>> Please let me know if additional logs, config, or repro details are =
-needed.
-> >>>>
-> >>>> Regards,
-> >>>>
-> >>>> Venkat.
-> >
-> > --
-> > paul-moore.com
-> >
-> >
-> >
->
-Hello eveyone!
+kill_rules() removes mixed AUDIT_DIR and AUDIT_EXE rules when an audit
+tree is pruned. It drops entry->rule.exe before removing the rule from
+the RCU-visible filter lists.
 
-Thanks for looping me in, Paul and for sharing more details, Venkat.
+After a rule has been installed with AUDIT_ADD_RULE, which requires
+CAP_AUDIT_CONTROL, removing or moving the watched directory can race
+with another task that is still evaluating the rule. In that case,
+fsnotify can free the executable mark before the reader reaches
+audit_mark_compare(), causing a use-after-free.
 
-At first glance it seems that the audit_context, for some reason, has
-not been cleared. I'll reserve a ppc64le machine and look into this
-over the next week.
+KASAN reports:
 
--Ricardo
+    BUG: KASAN: slab-use-after-free in audit_mark_compare+0x8d/0xa0
+
+Remove the rule from the RCU-visible filter lists first, wait for a grace
+period, and only then drop the executable mark. audit_del_rule() already
+uses this ordering.
+
+Fixes: 34d99af52ad4 ("audit: implement audit by executable")
+Assisted-by: Codex:gpt-5
+Signed-off-by: Jérémy Jean <Jeremy.Jean@oss.cyber.gouv.fr>
+---
+ kernel/audit_tree.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/kernel/audit_tree.c b/kernel/audit_tree.c
+index 1ed19b7..864a58b 100644
+--- a/kernel/audit_tree.c
++++ b/kernel/audit_tree.c
+@@ -553,11 +553,12 @@ static void kill_rules(struct audit_context *context, struct audit_tree *tree)
+ 		if (rule->tree) {
+ 			/* not a half-baked one */
+ 			audit_tree_log_remove_rule(context, rule);
+-			if (entry->rule.exe)
+-				audit_remove_mark(entry->rule.exe);
+ 			rule->tree = NULL;
+ 			list_del_rcu(&entry->list);
+ 			list_del(&entry->rule.list);
++			synchronize_rcu();
++			if (entry->rule.exe)
++				audit_remove_mark(entry->rule.exe);
+ 			call_rcu(&entry->rcu, audit_free_rule_rcu);
+ 		}
+ 	}
+-- 
+2.47.3
 
