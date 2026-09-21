@@ -1,110 +1,105 @@
-Received: from oss.cyber.gouv.fr (oss.cyber.gouv.fr [51.159.188.251])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D35FD41A918;
-	Mon, 21 Sep 2026 20:00:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=51.159.188.251
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 520003B841C
+	for <audit@vger.kernel.org>; Mon, 21 Sep 2026 20:15:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790020823; cv=none; b=ty9bWBzaiWoOnRAqCG+BuyoWG69/5OQ2TLfKtA1V9nR/AhkMiraphlIrynhfmwNpaKGMVIEad9/PcAWsWH+l6qFG0MOYLuKHI3cemNS+L5ns/zFHM7/cmmO84RdjSNMomxZFVkOO5mQuDA+7db9rgnpzXXL29naH655hOGwELNw=
+	t=1790021707; cv=none; b=QoiTWlpdftdogazgvpjg/s+fN+eXH1XgLKg9lyhB4tYmvWKGkUI8sL7aO3OxWvQSXHcYnu2XZytK6/Cc0gOmyAfOivtIKUZ3rQpuSCf5VPeWsQ7nuQOQKwMil2zbiCUNWsEVR+luhIdBjdT7K6QETTGpIKoNvWLvG+XfnJX5f6w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790020823; c=relaxed/simple;
-	bh=CcU4GBwyYWo0Jw8qCVnLuLYztqeFikHwQvXY+iDLvfs=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=D+3Y2obywWFH0anmcSXzt3QuS6sLTj2ygTXIG92QGyta/LCUMijd8IwtHUCZKh+6KbfHj6yKl83F8pq691C74xNuqN8jJWIBobsCgeEc1H7yTeuCsNdxEDygXpCCvtcBrHVSn9GFKwwk3HBbFfwtsfcO+dMfEvQ8Ef7iFRaUIDw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.cyber.gouv.fr; spf=pass smtp.mailfrom=oss.cyber.gouv.fr; dkim=pass (2048-bit key) header.d=oss.cyber.gouv.fr header.i=@oss.cyber.gouv.fr header.b=ppwywcF0; arc=none smtp.client-ip=51.159.188.251
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.cyber.gouv.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.cyber.gouv.fr
+	s=arc-20240116; t=1790021707; c=relaxed/simple;
+	bh=36TLukI4+Usr4x1pL4gpUX17iKm1tizpN/cgG321VBQ=;
+	h=From:Subject:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=ULBL+mqUdUr69Vn0ajdJAhIwga5wWjSP58C2FgoyVcbyeCpAiVKYHXLtGyzcf6jE+JXkQwVEuixSNAPkj7CoiyBlvnZ37ZIf4v4Q2t8jc70Q0U8W6gCiLI6bqZVSxTySUwMocXi/7dXZNwq1m0Ab/ZGnTWQMUTrCCvvvaIPCTJo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lTmah4KW; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oss.cyber.gouv.fr header.i=@oss.cyber.gouv.fr header.b="ppwywcF0"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=oss.cyber.gouv.fr; s=default; h=Content-Transfer-Encoding:Content-Type:
-	MIME-Version:Message-ID:Date:Subject:Cc:To:From:Reply-To:Sender:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:In-Reply-To:References;
-	bh=qPqAC8XIUQNSGAn1Xl0hkf8IfjOPmNZSVQTEu+4E3qc=; b=ppwywcF00VFv/6G5rc+Rg9RvSS
-	C06QTg2vr704qKcNHlum4hn7hK/c3sbO7yaGVe7/72riaZXwIsCZ9p7NGyVh0j8E1W4TIc983PA1f
-	4iR5aKEjP6iCGmS2mkon0LrfQ7isb49hvz2qQb2/PCd8bEF6Dk03VkLz32kPGQTxcxydP1wmjszgj
-	CPfWAGDyFsFreX441GAN1u+elq5CLnwQo2TopsHxcasriet9QOlzGvkZRxkcT1QrXmVuB8Zou85b6
-	H96f8W2Yo+iE2lqA+tnAKSKF8Wm9lBN+ZVTDUMXqhbhrSPK2aoSfyOhpzhGe5kZuXDmP3g4zQKv2a
-	LR2g+qYg==;
-Received: from [151.115.150.205] (port=53318 helo=gepetto..)
-	by pf-012.whm.fr-par.scw.cloud with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.100)
-	(envelope-from <Jeremy.Jean@oss.cyber.gouv.fr>)
-	id 1x8kBW-00000002ZZA-1zWc;
-	Mon, 21 Sep 2026 22:00:18 +0200
-From: =?UTF-8?q?J=C3=A9r=C3=A9my=20Jean?= <Jeremy.Jean@oss.cyber.gouv.fr>
-To: Paul Moore <paul@paul-moore.com>,
-	Eric Paris <eparis@redhat.com>
-Cc: audit@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	=?UTF-8?q?J=C3=A9r=C3=A9my=20Jean?= <Jeremy.Jean@oss.cyber.gouv.fr>
-Subject: [PATCH] audit: fix exe mark UAF in kill_rules()
-Date: Mon, 21 Sep 2026 19:59:22 +0000
-Message-ID: <20260921195921.4174830-2-Jeremy.Jean@oss.cyber.gouv.fr>
-X-Mailer: git-send-email 2.47.3
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lTmah4KW"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A121F1F000FF
+	for <audit@vger.kernel.org>; Mon, 21 Sep 2026 20:15:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790021705;
+	bh=w/idy2huDlNlNK4G2+8SsKydbuNFw0iUCK8YbPujx9U=;
+	h=From:Subject:Reply-To:Cc:In-Reply-To:References:Date;
+	b=lTmah4KW8rr6VA6V5mJ9CFsdqonBWyB8ioRDafPTpbqsOnONHIwo4YbIzYtoyquYC
+	 nMGk39AlPIFtuVsSVoO67pGewetwM62WKsBqWuo2FcCknkd0TGnSyf38TSOamUljEq
+	 M5TFNGZnjeZvP3/MHAlPySNsyV6UcLMuZqab6c7JXx0Etljqh23ENuqu90fsavh8/Y
+	 1RTDHXzldstbYt878HKFhGSQnVoPMokQOxHVVmoqoyupQGHSqKmx8jinZ2UneWH6jI
+	 3OF6JiI3lMo53iuaknnBCR1bD6GK1EKrywltiOHllCO9eF7xvt9AWJTrL70/ZqeItZ
+	 aXfZRmLPOBXPA==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH] audit: fix exe mark UAF in kill_rules()
+Reply-To: sashiko-reviews@lists.linux.dev
+Cc: audit@vger.kernel.org
+In-Reply-To: <20260921195921.4174830-2-Jeremy.Jean@oss.cyber.gouv.fr>
+References: <20260921195921.4174830-2-Jeremy.Jean@oss.cyber.gouv.fr>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Mon, 21 Sep 2026 20:15:05 +0000
+Message-Id: <20260921201505.A121F1F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - pf-012.whm.fr-par.scw.cloud
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - oss.cyber.gouv.fr
-X-Get-Message-Sender-Via: pf-012.whm.fr-par.scw.cloud: authenticated_id: jeremy.jean@oss.cyber.gouv.fr
-X-Authenticated-Sender: pf-012.whm.fr-par.scw.cloud: jeremy.jean@oss.cyber.gouv.fr
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
 
-kill_rules() removes mixed AUDIT_DIR and AUDIT_EXE rules when an audit
-tree is pruned. It drops entry->rule.exe before removing the rule from
-the RCU-visible filter lists.
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [High] audit: O(N) synchronize_rcu() inside kill_rules() loop
+--
 
-After a rule has been installed with AUDIT_ADD_RULE, which requires
-CAP_AUDIT_CONTROL, removing or moving the watched directory can race
-with another task that is still evaluating the rule. In that case,
-fsnotify can free the executable mark before the reader reaches
-audit_mark_compare(), causing a use-after-free.
+commit b7d5542dc56408775e37d42010c82f61694ec4f9
+Author: J=C3=A9r=C3=A9my Jean <Jeremy.Jean@oss.cyber.gouv.fr>
 
-KASAN reports:
+audit: fix exe mark UAF in kill_rules()
 
-    BUG: KASAN: slab-use-after-free in audit_mark_compare+0x8d/0xa0
+This commit addresses a use-after-free when an audit tree is pruned by
+reordering the removal of the executable mark after the rule is removed
+from the rcu-visible list. It introduces a synchronize_rcu() call before
+dropping the executable mark.
 
-Remove the rule from the RCU-visible filter lists first, wait for a grace
-period, and only then drop the executable mark. audit_del_rule() already
-uses this ordering.
+> diff --git a/kernel/audit_tree.c b/kernel/audit_tree.c
+> index 1ed19b7759129..864a58b6e2caf 100644
+> --- a/kernel/audit_tree.c
+> +++ b/kernel/audit_tree.c
+> @@ -553,11 +553,12 @@ static void kill_rules(struct audit_context *contex=
+t, struct audit_tree *tree)
+>  		if (rule->tree) {
+>  			/* not a half-baked one */
+>  			audit_tree_log_remove_rule(context, rule);
+> -			if (entry->rule.exe)
+> -				audit_remove_mark(entry->rule.exe);
+>  			rule->tree =3D NULL;
+>  			list_del_rcu(&entry->list);
+>  			list_del(&entry->rule.list);
+> +			synchronize_rcu();
 
-Fixes: 34d99af52ad4 ("audit: implement audit by executable")
-Assisted-by: Codex:gpt-5
-Signed-off-by: Jérémy Jean <Jeremy.Jean@oss.cyber.gouv.fr>
----
- kernel/audit_tree.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+[Severity: High]
+Does this code introduce a regression by calling synchronize_rcu() inside
+the list_for_each_entry_safe() loop in kill_rules()?
 
-diff --git a/kernel/audit_tree.c b/kernel/audit_tree.c
-index 1ed19b7..864a58b 100644
---- a/kernel/audit_tree.c
-+++ b/kernel/audit_tree.c
-@@ -553,11 +553,12 @@ static void kill_rules(struct audit_context *context, struct audit_tree *tree)
- 		if (rule->tree) {
- 			/* not a half-baked one */
- 			audit_tree_log_remove_rule(context, rule);
--			if (entry->rule.exe)
--				audit_remove_mark(entry->rule.exe);
- 			rule->tree = NULL;
- 			list_del_rcu(&entry->list);
- 			list_del(&entry->rule.list);
-+			synchronize_rcu();
-+			if (entry->rule.exe)
-+				audit_remove_mark(entry->rule.exe);
- 			call_rcu(&entry->rcu, audit_free_rule_rcu);
- 		}
- 	}
--- 
-2.47.3
+Executing synchronize_rcu() inside a list iteration loop causes sequential
+grace period waits for every rule being removed. Each wait typically takes
+10 to 30 milliseconds. If an audit tree has many rules, this loop could
+block the executing thread for seconds or even minutes.
 
+Since kill_rules() is called with the global audit_filter_mutex held (and
+often audit_cmd_mutex via audit_ctl_lock()), this prolonged lock-holding
+blocks any other process attempting to acquire audit mutexes.
+
+Because unprivileged users can trigger the deletion of watched directories,
+could this result in a local denial of service and hung task panics?
+
+Would it be safer to batch this operation by removing all rules from the
+rcu list into a local list first, executing a single synchronize_rcu()
+outside the loop, and then iterating the local list to remove the marks
+and schedule freeing?
+
+> +			if (entry->rule.exe)
+> +				audit_remove_mark(entry->rule.exe);
+>  			call_rcu(&entry->rcu, audit_free_rule_rcu);
+>  		}
+>  	}
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260921195921.4174=
+830-2-Jeremy.Jean@oss.cyber.gouv.fr?part=3D1
