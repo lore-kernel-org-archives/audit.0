@@ -1,239 +1,231 @@
-Received: from mail.mainlining.org (mail.mainlining.org [5.75.144.95])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 024823D348C;
-	Tue, 22 Sep 2026 15:09:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=5.75.144.95
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA7E049F10F
+	for <audit@vger.kernel.org>; Tue, 22 Sep 2026 19:21:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790089758; cv=none; b=LU9eGoSz89KWKTLT8RVIf54fa8FZBMB+k4HHN9FJkKd2fUosRWOvSUZHvdCTNHlry5qhgfZZPM0ZTiNa6r2sc5CaRG4RkSs2VlR6ROWplocOn8Y4pp7cLiUuBULeItpwztkhIhCaPg//CkOolV6xhAq5V4XGKR5ZlqPqFs3Sg4c=
+	t=1790104863; cv=none; b=RB53H7gk7nGXc9WC3VUlvK1tSATavm+mmIiJx5uhg7+4LHmn4zp1dM3l4rLOusHEnrtUccA7agN80dLiPUkyUCu8j/olD44K4RWnHYUzSKS41yTLaEn3h5uexURijX3xBlxC5Zesbf1VJCFhPx9kb8fl8FFOXoJwX4mIAgxQTJ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790089758; c=relaxed/simple;
-	bh=tQZ6+lpotfNYppShc26CXimpNOk/SKRnqms9adBfFfs=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
-	 MIME-Version:Content-Type; b=uQdXvifIdhJAoTir1M9eaZgutmx9zQCG7W7W/5GKz5dAAVfzNh4Ke4N0Zr95swia5ll+9TYNCeapCqwOzcf3lAXKA1Mas0NfQIDaK14utqUi0TfYWwEZFEPQ8r/YAbyiqEp93bzNMlIJp07K8gyAiTWyA6pVtrCumpv9Ax5pAvw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mainlining.org; spf=pass smtp.mailfrom=mainlining.org; dkim=pass (2048-bit key) header.d=mainlining.org header.i=@mainlining.org header.b=i1L8vno+; dkim=permerror (0-bit key) header.d=mainlining.org header.i=@mainlining.org header.b=yFJXcWla; arc=none smtp.client-ip=5.75.144.95
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mainlining.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mainlining.org
+	s=arc-20240116; t=1790104863; c=relaxed/simple;
+	bh=HNLThOlE1asNKxutytllN747m0edkEmIk81s1jcMJjY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:content-type; b=vBeT2DEdbCsnqMQXBdaMdXA9+dwbxUf48ntgOWwQ36WkymBo8wTs82uVcOARoIfCPCFD9TVG6sf3YK/2Mr4Qi0v+EXd0gv7Cme0MemDYdN9Lu/0wBcFZG/zCxgPdds5iuJ43rMPR/xSj7KVycJomeQqBYswG6lDFWejVLTSrNT8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=DUGvYlHh; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mainlining.org header.i=@mainlining.org header.b="i1L8vno+";
-	dkim=permerror (0-bit key) header.d=mainlining.org header.i=@mainlining.org header.b="yFJXcWla"
-DKIM-Signature: v=1; a=rsa-sha256; s=202507r; d=mainlining.org; c=relaxed/relaxed;
-	h=Message-ID:Subject:To:From:Date; t=1790089707; bh=D4AtkvFA3il1JL3usmeC6+p
-	lRFcaroVqvV8OHCek2OA=; b=i1L8vno+jsevWvLrpPZQPORFU85T6H3zKpuT+aJWvlIxFdSNLK
-	asexkUvA2mHcLROZde6tJqeA3cYkj3JPjk6O9yPydCyRmrnkD4HnWyk1nTTfFiJJ+SHFA52Affz
-	55UxyQw1tExC1W+HOAhHXZsLyN4R7GVuFEK5BhrCpIuX3Q49gfL7nnhIjJpIIhE+f1hAtaoH1n4
-	GM/2x1fL2VlTDAF3PKEQmJyG0N2q3FwGC1pbYFJptSI1iigL+OI6hVn5E+eIYtEKu6QwLHjGyPu
-	uOv6kiAZQkOjmvfUYMW++klMRk20UpjdbMJgaE+okkwL0j/a59tj4+zVVo9a/tVhMig==;
-DKIM-Signature: v=1; a=ed25519-sha256; s=202507e; d=mainlining.org; c=relaxed/relaxed;
-	h=Message-ID:Subject:To:From:Date; t=1790089707; bh=D4AtkvFA3il1JL3usmeC6+p
-	lRFcaroVqvV8OHCek2OA=; b=yFJXcWlaPIcdob9Dydhu9NF41g3sR0zuoNihw9E7/EiHNnyF75
-	gOPpxAMDa/3Lk04+t4uWH/lDe7sBLBkYPTCA==;
-Date: Tue, 22 Sep 2026 16:08:28 +0100
-From: Bradley Morgan <brads@mainlining.org>
-To: =?ISO-8859-1?Q?J=E9r=E9my_Jean?= <jeremy.jean@oss.cyber.gouv.fr>,
- Ricardo Robaina <rrobaina@redhat.com>
-CC: Paul Moore <paul@paul-moore.com>, Eric Paris <eparis@redhat.com>,
- audit@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] audit: fix exe mark UAF in kill_rules()
-In-Reply-To: <e4872a4b49c279e792adb228281d1513@oss.cyber.gouv.fr>
-References: <20260921195921.4174830-2-Jeremy.Jean@oss.cyber.gouv.fr> <CAABTaaC+vZmvg6s26oaYzkmnEvR42ZYcXutKfVNAa8VsK5ApDw@mail.gmail.com> <e4872a4b49c279e792adb228281d1513@oss.cyber.gouv.fr>
-Message-ID: <EFB280AE-6333-4F17-A9CE-45D8B2C1C64E@mainlining.org>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="DUGvYlHh"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1790104860;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=kEUEdL6PQ0y4Z2Ibs3e9Oc0v1TI6Cd/Tg+0kQahnhZg=;
+	b=DUGvYlHh2iFS+ExHNKIWGc7TvifDLkx6YAQEp1jT3eVbgKZhv2e5gzj2KMv7NGARi/vwX/
+	5KX1IEZSPAzzS9ds78mBdrz1o5GGAyd3qFsmAjaoViI388IbOkFeyyaa0HsTiFRBTBbbUY
+	XF4h82VqkhCqZUBjja82rpBQIhtB9Wo=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-546--qBL0tg0PMOQ1u-kgEOasQ-1; Tue,
+ 22 Sep 2026 15:20:56 -0400
+X-MC-Unique: -qBL0tg0PMOQ1u-kgEOasQ-1
+X-Mimecast-MFC-AGG-ID: -qBL0tg0PMOQ1u-kgEOasQ_1790104852
+Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 5E30618011F0;
+	Tue, 22 Sep 2026 19:20:47 +0000 (UTC)
+Received: from wsxc.redhat.corp (headnet04.pony-001.prod.iad2.dc.redhat.com [10.2.32.116])
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id F291530001B9;
+	Tue, 22 Sep 2026 19:20:23 +0000 (UTC)
+From: Ricardo Robaina <rrobaina@redhat.com>
+To: audit@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-alpha@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-csky@vger.kernel.org,
+	linux-mips@vger.kernel.org,
+	linux-openrisc@vger.kernel.org,
+	linux-parisc@vger.kernel.org,
+	linux-sh@vger.kernel.org,
+	sparclinux@vger.kernel.org,
+	linux-um@lists.infradead.org,
+	bpf@vger.kernel.org
+Cc: paul@paul-moore.com,
+	eparis@redhat.com,
+	sgrubb@redhat.com,
+	oleg@redhat.com,
+	richard.henderson@linaro.org,
+	mattst88@gmail.com,
+	linmag7@gmail.com,
+	linux@armlinux.org.uk,
+	catalin.marinas@arm.com,
+	will@kernel.org,
+	guoren@kernel.org,
+	monstr@monstr.eu,
+	tsbogend@alpha.franken.de,
+	jonas@southpole.se,
+	stefan.kristiansson@saunalahti.fi,
+	shorne@gmail.com,
+	James.Bottomley@HansenPartnership.com,
+	deller@gmx.de,
+	ysato@users.sourceforge.jp,
+	dalias@libc.org,
+	glaubitz@physik.fu-berlin.de,
+	davem@davemloft.net,
+	andreas@gaisler.com,
+	richard@nod.at,
+	anton.ivanov@cambridgegreys.com,
+	johannes@sipsolutions.net,
+	chris@zankel.net,
+	jcmvbkbc@gmail.com,
+	tglx@kernel.org,
+	peterz@infradead.org,
+	luto@kernel.org,
+	Ricardo Robaina <rrobaina@redhat.com>
+Subject: [PATCH v3 00/14] audit: log all six syscall arguments in the SYSCALL record
+Date: Tue, 22 Sep 2026 16:19:52 -0300
+Message-ID: <cover.1790088067.git.rrobaina@redhat.com>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
+X-Mimecast-MFC-PROC-ID: u5-AjTDm3fSRPW-bLVD7enGGnhJwYXwVR_VicePhOnY_1790104852
+X-Mimecast-Originator: redhat.com
 Content-Transfer-Encoding: 8bit
+content-type: text/plain; charset="US-ASCII"; x-default=true
 
-On 22 September 2026 14:46:55 BST, "Jérémy Jean"
-<jeremy.jean@oss.cyber.gouv.fr> wrote:
->On 2026-09-22 13:26, Ricardo Robaina wrote:
->> On Mon, Sep 21, 2026 at 5:07 PM Jérémy Jean
->> <Jeremy.Jean@oss.cyber.gouv.fr> wrote:
->>> 
->>> kill_rules() removes mixed AUDIT_DIR and AUDIT_EXE rules when an audit
->>> tree is pruned. It drops entry->rule.exe before removing the rule from
->>> the RCU-visible filter lists.
->>> 
->>> After a rule has been installed with AUDIT_ADD_RULE, which requires
->>> CAP_AUDIT_CONTROL, removing or moving the watched directory can race
->>> with another task that is still evaluating the rule. In that case,
->>> fsnotify can free the executable mark before the reader reaches
->>> audit_mark_compare(), causing a use-after-free.
->>> 
->>> KASAN reports:
->>> 
->>>     BUG: KASAN: slab-use-after-free in audit_mark_compare+0x8d/0xa0
->>> 
->>> Remove the rule from the RCU-visible filter lists first, wait for a
->grace
->>> period, and only then drop the executable mark. audit_del_rule()
->already
->>> uses this ordering.
->>> 
->>> Fixes: 34d99af52ad4 ("audit: implement audit by executable")
->>> Assisted-by: Codex:gpt-5
->>> Signed-off-by: Jérémy Jean <Jeremy.Jean@oss.cyber.gouv.fr>
->>> ---
->>>  kernel/audit_tree.c | 5 +++--
->>>  1 file changed, 3 insertions(+), 2 deletions(-)
->>> 
->>> diff --git a/kernel/audit_tree.c b/kernel/audit_tree.c
->>> index 1ed19b7..864a58b 100644
->>> --- a/kernel/audit_tree.c
->>> +++ b/kernel/audit_tree.c
->>> @@ -553,11 +553,12 @@ static void kill_rules(struct audit_context
->*context, struct audit_tree *tree)
->>>                 if (rule->tree) {
->>>                         /* not a half-baked one */
->>>                         audit_tree_log_remove_rule(context, rule);
->>> -                       if (entry->rule.exe)
->>> -                               audit_remove_mark(entry->rule.exe);
->>>                         rule->tree = NULL;
->>>                         list_del_rcu(&entry->list);
->>>                         list_del(&entry->rule.list);
->>> +                       synchronize_rcu();
->>> +                       if (entry->rule.exe)
->>> +                               audit_remove_mark(entry->rule.exe);
->>>                         call_rcu(&entry->rcu, audit_free_rule_rcu);
->>>                 }
->>>         }
->>> --
->>> 2.47.3
->>> 
->>> 
->> 
->> Hi Jérémy,
->> 
->> Thanks for troubleshooting and fixing this bug.
->> 
->> sashiko's review makes sense, though: synchronize_rcu() inside the
->> loop waits a full grace period per rule, and kill_rules() runs with
->> audit_filter_mutex held, so a tree with many rules stalls other audit
->> config operations. Below is an untested suggestion to use a single
->> grace period instead.
->> 
->> diff --git a/kernel/audit_tree.c b/kernel/audit_tree.c
->> index 1ed19b775912..5a3d7c7ba5ce 100644
->> --- a/kernel/audit_tree.c
->> +++ b/kernel/audit_tree.c
->> @@ -549,18 +549,30 @@ static void kill_rules(struct audit_context
->> *context, struct audit_tree *tree)
->>         list_for_each_entry_safe(rule, next, &tree->rules, rlist) {
->>                 entry = container_of(rule, struct audit_entry, rule);
->> 
->> -               list_del_init(&rule->rlist);
->>                 if (rule->tree) {
->>                         /* not a half-baked one */
->>                         audit_tree_log_remove_rule(context, rule);
->> -                       if (entry->rule.exe)
->> -                               audit_remove_mark(entry->rule.exe);
->>                         rule->tree = NULL;
->>                         list_del_rcu(&entry->list);
->>                         list_del(&entry->rule.list);
->> -                       call_rcu(&entry->rcu, audit_free_rule_rcu);
->> +               } else {
->> +                       list_del_init(&rule->rlist);
->>                 }
->>         }
->> +
->> +       if (list_empty(&tree->rules))
->> +               return;
->> +
->> +       synchronize_rcu();
->> +
->> +       list_for_each_entry_safe(rule, next, &tree->rules, rlist) {
->> +               entry = container_of(rule, struct audit_entry, rule);
->> +
->> +               list_del_init(&rule->rlist);
->> +               if (entry->rule.exe)
->> +                       audit_remove_mark(entry->rule.exe);
->> +               call_rcu(&entry->rcu, audit_free_rule_rcu);
->> +       }
->>  }
->> 
->>  /*
->
->Hello Ricardo,
->
->Many thanks for your nice and constructive answer.
->
->Indeed, sashiko's review makes sense and your suggested v2 is a good fix.
->I have replayed my reproducer to ensure that it indeeds fix the reported
->bug.
->
->However, I wonder whether the wait should still happen in the case where
->all removed rules have rule->exe == NULL. Doesn't call_rcu() already
->free (kernel/auditfilter.c:96)?  If yes, could we skip synchronize_rcu()
->in
->that case? If this question is valid, how about this fix based on yours,
->which
->simply adds a bool to detect whether synchronize_rcu() should be called.
->
->If you think this addition is good, I can send a v2 with that.
->
->diff --git a/kernel/audit_tree.c b/kernel/audit_tree.c
->index 1ed19b775912..e2cd27b17590 100644
->--- a/kernel/audit_tree.c
->+++ b/kernel/audit_tree.c
->@@ -545,22 +545,38 @@ static void kill_rules(struct audit_context *context, struct audit_tree *tree)
-> {
->        struct audit_krule *rule, *next;
->        struct audit_entry *entry;
->+       bool need_sync = false;
->
->        list_for_each_entry_safe(rule, next, &tree->rules, rlist) {
->                entry = container_of(rule, struct audit_entry, rule);
->
->-               list_del_init(&rule->rlist);
->                if (rule->tree) {
->                        /* not a half-baked one */
->                        audit_tree_log_remove_rule(context, rule);
->-                       if (entry->rule.exe)
->-                               audit_remove_mark(entry->rule.exe);
->                        rule->tree = NULL;
->                        list_del_rcu(&entry->list);
->                        list_del(&entry->rule.list);
->-                       call_rcu(&entry->rcu, audit_free_rule_rcu);
->+                       if (rule->exe)
->+                               need_sync = true;
->+               } else {
->+                       list_del_init(&rule->rlist);
->                }
->        }
->+
->+       if (list_empty(&tree->rules))
->+               return;
->+
->+       if (need_sync)
->+               synchronize_rcu();
->+
->+       list_for_each_entry_safe(rule, next, &tree->rules, rlist) {
->+               entry = container_of(rule, struct audit_entry, rule);
->+
->+               list_del_init(&rule->rlist);
->+               if (entry->rule.exe)
->+                       audit_remove_mark(entry->rule.exe);
->+               call_rcu(&entry->rcu, audit_free_rule_rcu);
->+       }
-> }
->
-> /*
+The SYSCALL record currently logs only four of the six syscall
+arguments (a0-a3), silently discarding the remaining two. This
+leads to the need for auxiliary records when audit-relevant
+data lands in the 5th or 6th argument of a syscall.
 
-LGTM!
+This series extends the SYSCALL record to log all six arguments,
+by adding arguments a4 and a5 inline within the existing record.
 
-Reviewed-by: Bradley Morgan <brads@mainlining.org>
+Rather than plumbing two more argument registers through every
+architecture's syscall entry path, audit_syscall_entry() now takes a
+struct pt_regs * and retrieves all six arguments itself via
+syscall_get_arguments(); the per-arch patches simply pass regs. The two
+new arguments are also wired into the audit filter, so rules can match
+on a4 and a5.
 
+To keep the series bisectable, the new pt_regs-based helpers are added
+first (patch 1), each architecture is converted one per patch, and the
+final patch removes the legacy argument-register helpers and renames the
+new ones back to audit_syscall_entry(). Every commit builds on its own.
 
-What do you reckon Ricardo?
+The audit testsuite runs successfully:
 
+ # make test
+ make -C tests test
+ Running as   user    root
+        with context unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023
+        on   system  Fedora
 
->
->Regards,
->Jérémy
+ amcast_joinpart/test ................. ok
+ backlog_wait_time_actual_reset/test .. ok
+ bpf/test ............................. ok
+ coredump/test ........................ ok
+ exec_execve/test ..................... ok
+ exec_name/test ....................... ok
+ fanotify/test ........................ ok
+ field_compare/test ................... ok
+ file_create/test ..................... ok
+ file_delete/test ..................... ok
+ file_permission/test ................. ok
+ file_rename/test ..................... ok
+ filter_device/test ................... ok
+ filter_exclude/test .................. ok
+ filter_exit/test ..................... ok
+ filter_inode/test .................... ok
+ filter_saddr_fam/test ................ ok
+ filter_sessionid/test ................ ok
+ io_uring/test ........................ ok
+ login_tty/test ....................... ok
+ lost_reset/test ...................... ok
+ netfilter_pkt/test ................... ok
+ signal/test .......................... ok
+ syscalls_file/test ................... ok
+ syscall_module/test .................. ok
+ syscall_socketcall/test .............. ok
+ time_change/test ..................... ok
+ user_msg/test ........................ ok
+ All tests successful.
+ Result: PASS
 
---- Thanks!
-"I'm not a very positive person" - Linus torvalds
+Changes in v3:
+- Make the series bisectable, as requested by Will Deacon. Rather
+  than changing __audit_syscall_entry()'s signature in place (which
+  broke the build between the core patch and the per-arch conversions),
+  patch 1 now adds audit_syscall_entry_regs()/__audit_syscall_entry_regs()
+  alongside the existing helpers. The per-arch patches switch to the new
+  helpers, and the final patch removes the legacy helpers and renames
+  the new ones back to audit_syscall_entry().
+- Drop the alpha conversion patch. Per Magnus Lindholm, alpha is
+  being moved onto the generic entry framework, which removes its
+  private syscall_trace_enter() and routes syscall auditing through
+  syscall_enter_audit(); no alpha-specific change is needed once that
+  series lands. This series should therefore be applied on top of it.
+- Add "parisc: mask compat syscall arguments in syscall_get_arguments()"
+  (new patch 8). Moving argument retrieval into syscall_get_arguments()
+  would otherwise drop the low-32-bit masking parisc previously did
+  inline in its compat audit path, exposing the upper 32 bits of the
+  argument registers to audit (and seccomp) for 32-bit tasks. Mask in
+  the helper instead, before the parisc conversion, so the series stays
+  correct and bisectable.
+
+Changes in v2:
+- Rework the core change per Will Deacon's suggestion: instead of
+  plumbing all six arguments through every architecture's syscall
+  entry path, __audit_syscall_entry() now takes a struct pt_regs *
+  and retrieves the arguments itself via syscall_get_arguments().
+- Per-arch patches now simply pass regs instead of the individual
+  argument registers.
+- Fetch the arguments directly into context->argv, dropping the
+  temporary array.
+
+Ricardo Robaina (14):
+  audit: log all six syscall arguments in the SYSCALL record
+  arm: pass pt_regs to audit_syscall_entry()
+  arm64: pass pt_regs to audit_syscall_entry()
+  csky: pass pt_regs to audit_syscall_entry()
+  microblaze: pass pt_regs to audit_syscall_entry()
+  mips: pass pt_regs to audit_syscall_entry()
+  openrisc: pass pt_regs to audit_syscall_entry()
+  parisc: mask compat syscall arguments in syscall_get_arguments()
+  parisc: pass pt_regs to audit_syscall_entry()
+  sh: pass pt_regs to audit_syscall_entry()
+  sparc64: pass pt_regs to audit_syscall_entry()
+  um: pass pt_regs to audit_syscall_entry()
+  xtensa: pass pt_regs to audit_syscall_entry()
+  audit: rename audit_syscall_entry_regs() to audit_syscall_entry()
+
+ arch/arm/kernel/ptrace.c          |  3 +--
+ arch/arm64/kernel/ptrace.c        |  3 +--
+ arch/csky/kernel/ptrace.c         |  2 +-
+ arch/microblaze/kernel/ptrace.c   |  2 +-
+ arch/mips/kernel/ptrace.c         |  4 +---
+ arch/openrisc/kernel/ptrace.c     |  3 +--
+ arch/parisc/include/asm/syscall.h | 18 ++++++++++++------
+ arch/parisc/kernel/ptrace.c       |  9 ++-------
+ arch/sh/kernel/ptrace_32.c        |  3 +--
+ arch/sparc/kernel/ptrace_64.c     |  4 +---
+ arch/um/kernel/ptrace.c           |  6 +-----
+ arch/xtensa/kernel/ptrace.c       |  4 +---
+ include/linux/audit.h             | 13 ++++---------
+ include/uapi/linux/audit.h        |  2 ++
+ kernel/audit.h                    |  2 +-
+ kernel/auditfilter.c              |  2 ++
+ kernel/auditsc.c                  | 19 ++++++++-----------
+ kernel/entry/syscall-common.c     |  4 +---
+ 18 files changed, 42 insertions(+), 61 deletions(-)
+
+-- 
+2.55.0
+
