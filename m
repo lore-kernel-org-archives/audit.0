@@ -1,74 +1,109 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16CD04E9C2B
-	for <audit@vger.kernel.org>; Tue, 22 Sep 2026 20:38:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 788FF49EC5A
+	for <audit@vger.kernel.org>; Wed, 23 Sep 2026 11:30:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790109542; cv=none; b=O+stIjXMogPgnjmaqXYrGdPaqs7lI+VmcLNhh6bu3CQmbLunMKWPVhqqiZRMnm1aVAqo3HH4p9S6gnJoDB2VzFHB2o+6zBO7ylHQh/7TF5yR1K4VnkVKxsNjVVqeZjqRrw4ZTy2eFfO1bUJeHGbTmjfFKZlVyU7oXk+QOnqQUfI=
+	t=1790163009; cv=none; b=tzGC0mABCIXDQUK6a9vFp2i8y+f+zPWNL4TCOMNyQlEoTeJzXUhu/tF+NW/cSzyp/mDTmnZKZJiFNBQX34JNTLYzp6sVOX7JVALHXh0bB6S1kx2dw1/qtxtNXOHzfFvyhj/yIeUVOW290LEUnSGXoHKrhq5Ei456JslQufgfnx8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790109542; c=relaxed/simple;
-	bh=WyQU9QHk9Vz1mf2VJpYagBx20vwUZvluC6tqmcYWsPM=;
-	h=From:Subject:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=cMyu4aCtfplwXYnKA5f8aEiI5HQm33F9MXXiDCfvsYxH2+nUzE/aMz0GJnlo+RdgLJ7ifrFIAl/sDw2ISkdS8r9LvGPZLPr0Zj9Kc9f+ngDvcQMLg0MEm7Pd2q6RnWTeUq79lYG/h65axULDlzDW2wRVy5nJYkVjcKth6xwOXOw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Rbgq7qrm; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790163009; c=relaxed/simple;
+	bh=AYhacAIOU9DfNtEKQcLBl4WUi74t7QonBaw7zJRbTMw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 In-Reply-To:Content-Type:Content-Disposition; b=e4m6TjQJgOJZ/wc8MBUxG91AhqMZURZ5X8c2H6zW8MxzdnFSGhYkHscIKx+qXQ7iW3sp1mcWpVrrEXXJsvMJ3XrtiIp//oW41HtOuVLhPR9Jpq1Vgjics79ieO52hEXo3OOGWMCkq/Ym7KKVZmIrJX6/u193GHmTIru+1AWjsoU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=bIPJpYp8; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Rbgq7qrm"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CAE491F0089B
-	for <audit@vger.kernel.org>; Tue, 22 Sep 2026 20:38:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790109534;
-	bh=Kzyhfe8ISQzgOBwn4/hNdwzWRRlNdqiVheDG+SxdAu4=;
-	h=From:Subject:Reply-To:Cc:In-Reply-To:References:Date;
-	b=Rbgq7qrmBRfNglWCI7oEgYjxtlM4GbejwVMN7ZyDSOtCvcO6hg81gkX0oaZyJGejB
-	 7ydEIta3vgQ1Qw8A6WMjcH/MUBU3aD2Cg8USXnP6gbLqOCiI519vEA6SWeb1Jp2iuC
-	 VUh+7cQsU2INHNTn3/1Wp8wJOej5zaDyksswnhrldScg1RtboIYH+cpqEz3uhv2vLw
-	 pOe7SFbDOdeAQlZWqll3Ty8jsgAEt1/aBi8UpIVEs/lUFPPS0OLoQDgPdvJXZgxjXZ
-	 TZIvjejGX2fs0nq0OKV+mSsV0TCiewuwObG6tOdq/xgXvRMtrj97HyLEJdYbc/4Zj9
-	 +VFPR9B+S0/zw==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2] audit: fix exe mark UAF in kill_rules()
-Reply-To: sashiko-reviews@lists.linux.dev
-Cc: audit@vger.kernel.org
-In-Reply-To: <20260922202734.1344770-2-Jeremy.Jean@oss.cyber.gouv.fr>
-References: <20260922202734.1344770-2-Jeremy.Jean@oss.cyber.gouv.fr>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 22 Sep 2026 20:38:54 +0000
-Message-Id: <20260922203854.CAE491F0089B@smtp.kernel.org>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="bIPJpYp8"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1790162997;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=AYhacAIOU9DfNtEKQcLBl4WUi74t7QonBaw7zJRbTMw=;
+	b=bIPJpYp8SAvjpZ0hLmxcgWBBZD4aKLNw4pyzFJp9H04E6JcBVDr8Ik0Gd8/7ua43hTSnBm
+	LA8r6ianIPOgrDVM9CWa+jOYuHNfiLKVKgAgDgOt+V8YdaFOTJafSGFIO7Zw5ToKEexGA3
+	SWZ8EpsuhfvGyCWS0WAOHYt6kD5YIOA=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-363-gooFaoLZMMuKAK_dogOFiQ-1; Wed,
+ 23 Sep 2026 07:29:53 -0400
+X-MC-Unique: gooFaoLZMMuKAK_dogOFiQ-1
+X-Mimecast-MFC-AGG-ID: gooFaoLZMMuKAK_dogOFiQ_1790162988
+Received: from mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.95])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 8D61E1955F14;
+	Wed, 23 Sep 2026 11:29:44 +0000 (UTC)
+Received: from fedora (headnet05.pony-001.prod.iad2.dc.redhat.com [10.2.32.117])
+	by mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with SMTP id 27F2A418;
+	Wed, 23 Sep 2026 11:29:29 +0000 (UTC)
+Received: by fedora (nbSMTP-1.00) for uid 1000
+	oleg@redhat.com; Wed, 23 Sep 2026 13:29:44 +0200 (CEST)
+Date: Wed, 23 Sep 2026 13:29:28 +0200
+From: Oleg Nesterov <oleg@redhat.com>
+To: Ricardo Robaina <rrobaina@redhat.com>
+Cc: audit@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-csky@vger.kernel.org, linux-mips@vger.kernel.org,
+	linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org,
+	linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+	linux-um@lists.infradead.org, bpf@vger.kernel.org,
+	paul@paul-moore.com, eparis@redhat.com, sgrubb@redhat.com,
+	richard.henderson@linaro.org, mattst88@gmail.com, linmag7@gmail.com,
+	linux@armlinux.org.uk, catalin.marinas@arm.com, will@kernel.org,
+	guoren@kernel.org, monstr@monstr.eu, tsbogend@alpha.franken.de,
+	jonas@southpole.se, stefan.kristiansson@saunalahti.fi,
+	shorne@gmail.com, James.Bottomley@hansenpartnership.com,
+	deller@gmx.de, ysato@users.sourceforge.jp, dalias@libc.org,
+	glaubitz@physik.fu-berlin.de, davem@davemloft.net,
+	andreas@gaisler.com, richard@nod.at,
+	anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net,
+	chris@zankel.net, jcmvbkbc@gmail.com, tglx@kernel.org,
+	peterz@infradead.org, luto@kernel.org
+Subject: Re: [PATCH v3 01/14] audit: log all six syscall arguments in the
+ SYSCALL record
+Message-ID: <arO4GNT_5wNEYsCO@redhat.com>
+References: <cover.1790088067.git.rrobaina@redhat.com>
+ <855572d1b7461e7f258547be0f11c74029755110.1790088067.git.rrobaina@redhat.com>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+In-Reply-To: <855572d1b7461e7f258547be0f11c74029755110.1790088067.git.rrobaina@redhat.com>
+X-Scanned-By: MIMEDefang 3.6 on 10.30.177.95
+X-Mimecast-MFC-PROC-ID: 7Qb18uXH51oma830obN9eXyxHtls5HPs4BCW6J6vy1U_1790162988
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-> kill_rules() removes mixed AUDIT_DIR and AUDIT_EXE rules when an audit
-> tree is pruned. It drops entry->rule.exe before removing the rule from
-> the RCU-visible filter lists.
->=20
-> After a rule has been installed with AUDIT_ADD_RULE, which requires
-> CAP_AUDIT_CONTROL, removing the watched directory can race with another
-> task that is still evaluating the rule. In that case, fsnotify can free
-> the executable mark before the reader reaches audit_mark_compare(),
-> causing a use-after-free.
->=20
-> KASAN reports:
->=20
->     BUG: KASAN: slab-use-after-free in audit_mark_compare+0x8d/0xa0
->=20
-> Unlink the published rules from the RCU-visible lists and retain them
-> on tree->rules for cleanup. If any rule has an executable mark, wait for
-> a single RCU grace period before removing the marks and scheduling the
-> entries for freeing. Otherwise, call_rcu() already provides the required
-> deferred freeing without a synchronous wait.
->=20
-> Fixes: 34d99af52ad4 ("audit: implement audit by executable")
-> Assisted-by: Codex:gpt-5
-> Signed-off-by: J=C3=A9r=C3=A9my Jean <Jeremy.Jean@oss.cyber.gouv.fr>
+On 09/22, Ricardo Robaina wrote:
+>
+> The SYSCALL record currently logs only four of the six syscall
+> arguments (a0-a3). The remaining two are captured but silently
+> discarded before reaching the audit context. This leads to the
+> need for auxiliary records when audit-relevant data lands in the
+> 5th or 6th argument of a syscall.
+>
+> Extend the SYSCALL record to log all six arguments, by adding
+> arguments a4 and a5 (5th and 6th syscall arguments respectively)
+> inline within the existing record. Also add the two new args to
+> the audit rules switch case, so audit rules can filter on them.
+>
+> Rather than plumbing two more register arguments through every
+> architecture's syscall entry path, retrieve the arguments from
+> pt_regs via syscall_get_arguments(). To keep the series bisectable,
+> add new helpers audit_syscall_entry_regs() and
+> __audit_syscall_entry_regs() that take a pointer to pt_regs, rather
+> than modifying the existing ones in place. Later patches convert
+> each architecture over to the new helpers, and a final patch removes
+> the legacy helpers and renames the new ones back to the original
+> naming.
 
-Sashiko has reviewed this patch and found no issues. It looks great!
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260922202734.1344=
-770-2-Jeremy.Jean@oss.cyber.gouv.fr?part=3D1
+Reviewed-by: Oleg Nesterov <oleg@redhat.com>
 
