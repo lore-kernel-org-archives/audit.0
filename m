@@ -1,106 +1,228 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A762749F115
-	for <audit@vger.kernel.org>; Wed, 23 Sep 2026 11:30:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 198284F390F
+	for <audit@vger.kernel.org>; Wed, 23 Sep 2026 11:55:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790163051; cv=none; b=fjJ2Xg0LiEF7z2QmcerdNpiX/eZADh6UobhCXMAXvd5A90SonyfKeQUx/dbvTgbErHW4peXP14SE8xSKjqC7EZUtwd85GggnNYeN1MgSGka/c+E+KeaqQ0CsmAgf0clZAm70DH+KfBTwgr8J+9cTG8RN6mWYUpdCAuXyyHfRD3A=
+	t=1790164548; cv=none; b=jYNUfkffUyESIGj8yzQ9Fqq4fC9I0yeoyZE/oKoBMSDXPILGzsTHJOg5nV9e3/r+q+qBBvhfEhZm3UxtZgA5AZqN7xc1RbjyHIeZFtgNmdqetYqkE1p6hB89gApHjNYEDTsqUZQ3VIeBwF0SRBs6mPFm/tZEmkLhZNqryNdPU9Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790163051; c=relaxed/simple;
-	bh=xqQ+NYvyXWCfjlyvjvxmg1kCwOY0kqb1jeO3C2JsWsM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 In-Reply-To:Content-Type:Content-Disposition; b=TKOWc3V0Lp4A/eNY3hhnVdW/QbiFW9RL8OKiNfcdFGhGQ7iWKLe+x7kfjZT6XERWyZOBKo6ocQ2MoHo17TAiWtzLYiBGOa0SXbW6F/KbplsS4jf4U6v9yB1fiHGWffztHfN16faCeJdpUo/2twZwbJSX0jtYQPGeBhRiyHUgZ+w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ilWfCRuY; arc=none smtp.client-ip=170.10.133.124
+	s=arc-20240116; t=1790164548; c=relaxed/simple;
+	bh=VZdhg/2WWxj23TMQOLxv2EYnD9sVykx5dWuo8oKJNGo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=IOEviBrzrgsZ0yQs8i9YRiWbpUE771TFUrVlO1a7nXaCTQtmmj+YTu0ujjV4IZd3dMMI3KpZ6rUExF1FC0Efw7MXYscYOm0f1OLf8QlP0tFm5q1YDdcPYmhcosDfuNH6qhXHVeEekoZR9Xxk81YYd1J+BuDbp04Kjz1g50Ieops=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=dPJXw+GN; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ilWfCRuY"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="dPJXw+GN"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1790163038;
+	s=mimecast20190719; t=1790164526;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=xqQ+NYvyXWCfjlyvjvxmg1kCwOY0kqb1jeO3C2JsWsM=;
-	b=ilWfCRuYtXMvgSkRooIx/ow7Zpr+D2CXd2ZCGUz2whCWl6Z+CCA+dbQCpAgc33P2HHFmTV
-	WPOYSszPNxOgPG5+MOw0RKZadnu5TcQTiamDIl5MCAEFgQRssjkawiuXkLWwzClq97O2xu
-	r+x3rubNQNBxf05lfCxxGk+HbSkHjps=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-330-hU8g012GMpKeOZhxZhxwBw-1; Wed,
- 23 Sep 2026 07:30:34 -0400
-X-MC-Unique: hU8g012GMpKeOZhxZhxwBw-1
-X-Mimecast-MFC-AGG-ID: hU8g012GMpKeOZhxZhxwBw_1790163029
-Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id D1EA81955E8C;
-	Wed, 23 Sep 2026 11:30:26 +0000 (UTC)
-Received: from fedora (headnet05.pony-001.prod.iad2.dc.redhat.com [10.2.32.117])
-	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with SMTP id 9573118002B6;
-	Wed, 23 Sep 2026 11:30:13 +0000 (UTC)
-Received: by fedora (nbSMTP-1.00) for uid 1000
-	oleg@redhat.com; Wed, 23 Sep 2026 13:30:26 +0200 (CEST)
-Date: Wed, 23 Sep 2026 13:30:12 +0200
-From: Oleg Nesterov <oleg@redhat.com>
-To: Ricardo Robaina <rrobaina@redhat.com>
-Cc: audit@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-csky@vger.kernel.org, linux-mips@vger.kernel.org,
-	linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org,
-	linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-	linux-um@lists.infradead.org, bpf@vger.kernel.org,
-	paul@paul-moore.com, eparis@redhat.com, sgrubb@redhat.com,
-	richard.henderson@linaro.org, mattst88@gmail.com, linmag7@gmail.com,
-	linux@armlinux.org.uk, catalin.marinas@arm.com, will@kernel.org,
-	guoren@kernel.org, monstr@monstr.eu, tsbogend@alpha.franken.de,
-	jonas@southpole.se, stefan.kristiansson@saunalahti.fi,
-	shorne@gmail.com, James.Bottomley@hansenpartnership.com,
-	deller@gmx.de, ysato@users.sourceforge.jp, dalias@libc.org,
-	glaubitz@physik.fu-berlin.de, davem@davemloft.net,
-	andreas@gaisler.com, richard@nod.at,
-	anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net,
-	chris@zankel.net, jcmvbkbc@gmail.com, tglx@kernel.org,
-	peterz@infradead.org, luto@kernel.org
-Subject: Re: [PATCH v3 14/14] audit: rename audit_syscall_entry_regs() to
- audit_syscall_entry()
-Message-ID: <arO4RArEfB5HJqR-@redhat.com>
-References: <cover.1790088067.git.rrobaina@redhat.com>
- <0bb32d256099870f3f9ca2632cccf58538f882ed.1790088067.git.rrobaina@redhat.com>
+	bh=wfFWfiDFRsRocPK6MajUZe1PhNrKZn5zM8GQiGakpDQ=;
+	b=dPJXw+GNaO0dRiRaG7sq1P0qAC5lGJ/Lt9+9aLUgT1UnD7G5rBrVw/Kh5lGF6TH3Oyr67p
+	l35UL37RfRCiZ7eE00jftcNUwbAFJ4queqFqIxBe70WttlQ1Uqad6txMhPTvo3I1t6xCwJ
+	OXcxc59IdGLbrtDtBfaIPQEZaW0wTXA=
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
+ [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-250-lwB5BeZBOZGKCUyVp_exAg-1; Wed, 23 Sep 2026 07:55:24 -0400
+X-MC-Unique: lwB5BeZBOZGKCUyVp_exAg-1
+X-Mimecast-MFC-AGG-ID: lwB5BeZBOZGKCUyVp_exAg_1790164524
+Received: by mail-ej1-f69.google.com with SMTP id a640c23a62f3a-c2945f5e851so62711466b.1
+        for <audit@vger.kernel.org>; Wed, 23 Sep 2026 04:55:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790164523; x=1790769323;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=wfFWfiDFRsRocPK6MajUZe1PhNrKZn5zM8GQiGakpDQ=;
+        b=RVHzGg4SXS3m17Gypqungf2mh3fWvHdaHrOzgdLFUzUsnRwHd1q5DXeJP0cjHMTHBY
+         wkaEQ42kE6x1HGTf1oX81ab7fNe0JH4gTwwnuRW2mG/BRV8y4gb4zOGCQnj+Pet/sKQy
+         BFWJFiHXW45+/DQPgrxG3CCaRsIV8nPsd4xwMvUFkCaKsnvxw7GErpic06eYj6CFU80E
+         FM/frt74Qsz24PAw2juzki3uBRiJmBQF2xKh7F3XUgP30FiTQIF8Iqx2LRq5EURcvp1F
+         OhpwaIzrjHRQycfngKjn7BCd8khwCAmokk5A78lV6nluZXmzgqLiecdWorXzTsu+0pxy
+         sONQ==
+X-Forwarded-Encrypted: i=1; AKwUvBwQSG6+HadJwER46K6yFRDzOs2doVswIzP9NA6sQmYiDt1vzspQQ95jyKKrWNiTxIRqHMivZA==@vger.kernel.org
+X-Gm-Message-State: AFuF++k2bEJ7H8a8XGSLTUSDiEtSSTbpUA+AMkkDCf1x63gdf+q6r5HQ
+	vlSGrMntqMvLseQQTFodBSy6I0M734UNSqhvHEptQayD4KR5oyS5slCmdbExC1j0mRmLv5ee1td
+	tM8Qxi1qhxm9trSHP5brmTi59oMks5wnvls/6UMSvh2qw3Sz/GbAEL6J/rtC3pr9OYa3Cc8QKbe
+	hVjPkOae7k62sJuIMDaWaq7hy9SHTnRX0=
+X-Gm-Gg: AYBFou3pZd57G88pvfmQNrttSM96moPZamNFdZ1LW7/pjKd5k8GwuatwbRN7RXPO2TL
+	/e4GvCoIepeR04T60QLmnMSPtgHhdwYvuyuR02yAUloapDu4IOYwCfajbM6zYgacsBuuE2sTWr2
+	AwQ+hP5M9jUwf0YOgttO7YNovnPZgDvUO9gUogJGafq4FG8kM937QR8vrKImMpapk/SRCId68VL
+	36+hPKxWW+m2p1/tabo+Ar1mRs+3HS2Z5OZZPtezL0n0dw24BNiXVsDhe3n5hQDbTFnd3DHFkvO
+	tjk=
+X-Received: by 2002:a17:907:6d28:b0:c28:fb3f:fe20 with SMTP id a640c23a62f3a-c2aadf9f210mr198480666b.30.1790164523630;
+        Wed, 23 Sep 2026 04:55:23 -0700 (PDT)
+X-Received: by 2002:a17:907:6d28:b0:c28:fb3f:fe20 with SMTP id
+ a640c23a62f3a-c2aadf9f210mr198478466b.30.1790164523216; Wed, 23 Sep 2026
+ 04:55:23 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <0bb32d256099870f3f9ca2632cccf58538f882ed.1790088067.git.rrobaina@redhat.com>
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
-X-Mimecast-MFC-PROC-ID: Lmy6oVJMw8MUj7RaLeDytAXPyvR1JD9Q-KZnZn0T6pE_1790163029
+References: <20260922202734.1344770-2-Jeremy.Jean@oss.cyber.gouv.fr>
+In-Reply-To: <20260922202734.1344770-2-Jeremy.Jean@oss.cyber.gouv.fr>
+From: Ricardo Robaina <rrobaina@redhat.com>
+Date: Wed, 23 Sep 2026 08:55:12 -0300
+X-Gm-Features: AclHuK-nUTKQQ2wWEAK3vYcbaNjq3pmLpdcICbfm-hJLNCAdjoG-ETE2fFTin9k
+Message-ID: <CAABTaaD_DA+=ywGNnZzJeXnwonh_=Abq8dThprJFQpM7Lc6eGg@mail.gmail.com>
+Subject: Re: [PATCH v2] audit: fix exe mark UAF in kill_rules()
+To: =?UTF-8?B?SsOpcsOpbXkgSmVhbg==?= <Jeremy.Jean@oss.cyber.gouv.fr>
+Cc: Paul Moore <paul@paul-moore.com>, Eric Paris <eparis@redhat.com>, brads@mainlining.org, 
+	audit@vger.kernel.org, linux-kernel@vger.kernel.org
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: zKE-zZV8Fh9b_LmIsk3hVc0bX7JtvUPkWo9DV3qzcyM_1790164524
 X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 09/22, Ricardo Robaina wrote:
+On Tue, Sep 22, 2026 at 5:34=E2=80=AFPM J=C3=A9r=C3=A9my Jean
+<Jeremy.Jean@oss.cyber.gouv.fr> wrote:
 >
-> Now that every architecture has been converted to the pt_regs-based
-> audit_syscall_entry_regs(), the legacy audit_syscall_entry() and
-> __audit_syscall_entry() helpers that took the individual syscall
-> argument registers (a0-a3) no longer have any callers.
+> kill_rules() removes mixed AUDIT_DIR and AUDIT_EXE rules when an audit
+> tree is pruned. It drops entry->rule.exe before removing the rule from
+> the RCU-visible filter lists.
 >
-> Remove those legacy helpers and rename audit_syscall_entry_regs() and
-> __audit_syscall_entry_regs() back to audit_syscall_entry() and
-> __audit_syscall_entry(), restoring the original naming.
+> After a rule has been installed with AUDIT_ADD_RULE, which requires
+> CAP_AUDIT_CONTROL, removing the watched directory can race with another
+> task that is still evaluating the rule. In that case, fsnotify can free
+> the executable mark before the reader reaches audit_mark_compare(),
+> causing a use-after-free.
 >
-> The _regs variants were introduced separately, and the architectures
-> converted one per patch, specifically so this final rename is the only
-> step that removes the old prototype. That keeps the series bisectable:
-> every commit builds, and no caller is ever left referencing a helper
-> that has been removed.
+> KASAN reports:
 >
-> Suggested-by: Will Deacon <will@kernel.org>
-> Signed-off-by: Ricardo Robaina <rrobaina@redhat.com>
+>     BUG: KASAN: slab-use-after-free in audit_mark_compare+0x8d/0xa0
+>
+> Unlink the published rules from the RCU-visible lists and retain them
+> on tree->rules for cleanup. If any rule has an executable mark, wait for
+> a single RCU grace period before removing the marks and scheduling the
+> entries for freeing. Otherwise, call_rcu() already provides the required
+> deferred freeing without a synchronous wait.
+>
+> Fixes: 34d99af52ad4 ("audit: implement audit by executable")
+> Assisted-by: Codex:gpt-5
+> Signed-off-by: J=C3=A9r=C3=A9my Jean <Jeremy.Jean@oss.cyber.gouv.fr>
 
-Reviewed-by: Oleg Nesterov <oleg@redhat.com>
+Looks good to me. I've checked that audit-testsuite passes cleanly.
+
+Reviewed-by: Ricardo Robaina <rrobaina@redhat.com>
+Tested-by: Ricardo Robaina <rrobaina@redhat.com>
+
+# uname -r
+7.3.0-rc4+
+
+# make test
+make -C tests test
+Running as   user    root
+        with context unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023
+        on   system  Fedora
+
+amcast_joinpart/test ................. ok
+backlog_wait_time_actual_reset/test .. ok
+bpf/test ............................. ok
+coredump/test ........................ ok
+exec_execve/test ..................... ok
+exec_name/test ....................... ok
+fanotify/test ........................ ok
+field_compare/test ................... ok
+file_create/test ..................... ok
+file_delete/test ..................... ok
+file_permission/test ................. ok
+file_rename/test ..................... ok
+filter_device/test ................... ok
+filter_exclude/test .................. ok
+filter_exit/test ..................... ok
+filter_inode/test .................... ok
+filter_saddr_fam/test ................ ok
+filter_sessionid/test ................ ok
+io_uring/test ........................ ok
+login_tty/test ....................... ok
+lost_reset/test ...................... ok
+netfilter_pkt/test ................... ok
+signal/test .......................... ok
+syscalls_file/test ................... ok
+syscall_module/test .................. ok
+syscall_socketcall/test .............. ok
+time_change/test ..................... ok
+user_msg/test ........................ ok
+All tests successful.
+Files=3D28, Tests=3D303, 69 wallclock secs ( 0.08 usr  0.03 sys + 36.64
+cusr  1.87 csys =3D 38.62 CPU)
+Result: PASS
+
+
+> ---
+>
+> v2: Address Sashiko's review with Ricardo Robaina's improved patch:
+> - Batch executable-mark teardown behind one synchronize_rcu() after
+>   unlinking all rules, instead of waiting once per rule under the audit
+>   mutexes.
+> - Skip the synchronous wait when none of the removed rules has an
+>   executable mark.
+>
+> v1: https://lore.kernel.org/all/20260921195921.4174830-2-Jeremy.Jean@oss.=
+cyber.gouv.fr/
+>
+>  kernel/audit_tree.c | 24 ++++++++++++++++++++----
+>  1 file changed, 20 insertions(+), 4 deletions(-)
+>
+> diff --git a/kernel/audit_tree.c b/kernel/audit_tree.c
+> index 1ed19b775912..f2e81be8265e 100644
+> --- a/kernel/audit_tree.c
+> +++ b/kernel/audit_tree.c
+> @@ -545,22 +545,38 @@ static void kill_rules(struct audit_context *contex=
+t, struct audit_tree *tree)
+>  {
+>         struct audit_krule *rule, *next;
+>         struct audit_entry *entry;
+> +       bool need_sync =3D false;
+>
+>         list_for_each_entry_safe(rule, next, &tree->rules, rlist) {
+>                 entry =3D container_of(rule, struct audit_entry, rule);
+>
+> -               list_del_init(&rule->rlist);
+>                 if (rule->tree) {
+>                         /* not a half-baked one */
+>                         audit_tree_log_remove_rule(context, rule);
+> -                       if (entry->rule.exe)
+> -                               audit_remove_mark(entry->rule.exe);
+>                         rule->tree =3D NULL;
+>                         list_del_rcu(&entry->list);
+>                         list_del(&entry->rule.list);
+> -                       call_rcu(&entry->rcu, audit_free_rule_rcu);
+> +                       if (entry->rule.exe)
+> +                               need_sync =3D true;
+> +               } else {
+> +                       list_del_init(&rule->rlist);
+>                 }
+>         }
+> +
+> +       if (list_empty(&tree->rules))
+> +               return;
+> +
+> +       if (need_sync)
+> +               synchronize_rcu();
+> +
+> +       list_for_each_entry_safe(rule, next, &tree->rules, rlist) {
+> +               entry =3D container_of(rule, struct audit_entry, rule);
+> +
+> +               list_del_init(&rule->rlist);
+> +               if (entry->rule.exe)
+> +                       audit_remove_mark(entry->rule.exe);
+> +               call_rcu(&entry->rcu, audit_free_rule_rcu);
+> +       }
+>  }
+>
+>  /*
+>
+
+--Ricardo
 
