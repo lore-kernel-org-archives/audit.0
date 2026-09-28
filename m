@@ -1,67 +1,68 @@
-Received: from mail-qk2-f40.google.com (mail-qk2-f40.google.com [74.125.230.232])
+Received: from mail-qv2-f41.google.com (mail-qv2-f41.google.com [74.125.230.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C20D4FD296
-	for <audit@vger.kernel.org>; Mon, 28 Sep 2026 22:10:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.230.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAEAA50279B
+	for <audit@vger.kernel.org>; Mon, 28 Sep 2026 22:10:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.230.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790633453; cv=none; b=qzyTqjXXUuuWkuTz630x/0TiXED9Yg7bg1nkGc46SPHn2QsH87QIF74FbcMkv0lzTV/HTNLkDQReOZ4CL+uqS56KkT1NJLhnnY19SAiP4sdjEMT8spw+h9U6v0eTB/B0jbKJiUQYhhu0ii/g4YTJ6RjuCl66/4Gxo0XClh7stiM=
+	t=1790633455; cv=none; b=aRjWLepD4F/3K+G7VTLHoic10XK9nRtmiAHOAyC+JwIMMME0svRJAAgKmu4prb1JUNmtum8Vb0Ui4AhNmGPiSRFEOO9MV2sVqOmPai0QLL+hLnLIfsbLAJMJzfhKz/FF/L0uw8CEawfDsOzoYds8wVfAqpyeTNgUvIS4F5zHNBw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790633453; c=relaxed/simple;
-	bh=QooAY1siAwsN15o9+GREbxzZjlBJ/O4cq663yU3H/5k=;
+	s=arc-20240116; t=1790633455; c=relaxed/simple;
+	bh=B2uuJ2tb6UVo65EPVK7+jnV8vWjWZQPk68SmhF2KuLk=;
 	h=Date:Message-ID:MIME-Version:Content-Type:From:To:Cc:Subject:
-	 References:In-Reply-To; b=UNbJFtizpFyjzmPgIy/sGFClRGBObzGyRa7wFEU2o1Bv4104FdO9kaTEV4Stqt2X8ehYTYyM1zpqx43vzJ8eGZDtdKUJG2X77isgrD7ncBLqhWXuVHfoSX4q8MpWUqJfQCVj+s50xRZPAm2II04b7p2vT4GC/N/tvYt9qiVqWBQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=Czhyit0+; arc=none smtp.client-ip=74.125.230.232
+	 References:In-Reply-To; b=g2J+9s1fNjpRV1AGrl2cE2lKQvXqFJgmRjHQ5eziAsvaRIDyLxvjUdejKz7Wz50GgFSBUrqQzIWGrk0BU9XJLRMk7QuZqDH6YPbSkuDfZ75TITnnTt2nxH9XfT/tYy/X8JDG73vXOsrshP2cqpuTad3Oph3T21yNsdqpucxtCwg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=IHM6xMgX; arc=none smtp.client-ip=74.125.230.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="Czhyit0+"
-Received: by mail-qk2-f40.google.com with SMTP id af79cd13be357-93c5ce9914dso248843085a.0
-        for <audit@vger.kernel.org>; Mon, 28 Sep 2026 15:10:51 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="IHM6xMgX"
+Received: by mail-qv2-f41.google.com with SMTP id 6a1803df08f44-91784fbb60dso3691156d6.1
+        for <audit@vger.kernel.org>; Mon, 28 Sep 2026 15:10:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1790633451; x=1791238251; darn=vger.kernel.org;
+        d=paul-moore.com; s=google; t=1790633452; x=1791238252; darn=vger.kernel.org;
         h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
          :content-type:mime-version:message-id:date:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=2vQV5QojyPdN6nr2Psqr9eEvXu44kh+eEAXlGSd+RVI=;
-        b=Czhyit0+2VNxhrbeyv3eDaR8bqUfCcS9/92bpzT4wGZLX/DsfF2sf44yT2eTSK8wFi
-         5GcrM7GuKz+M1WF5nZ6qf5udC4ga3hIiGJoOn9LnAMBPAAqc01ZxDKXjECa6ew3ImgfK
-         C2x/OFoGl2/4KisO7Nl/MGLlKm2eJLaYAUyiMXEhsgB5nh4g6mUoxUPvnEK00kaAaGpg
-         O37VGRcLw4IwWKFdgWdBH9ycTXFrRg5THaVPSZ3jzo5E5JHA8kGglczuaM1aDitDxGtB
-         q5Glrv4LTjEVTA4CCBLY7ySA3nGI7H/KrCO0SrhA4NZWRK5EW3zjmyk5TZD6Sq8Kqz6R
-         My0A==
+        bh=ld93k1mz7prrBKJ8jJcBuGZZs7khQYzy5aYM/AzqGEE=;
+        b=IHM6xMgXYX6LxUpey63uuklGK3TneiMD0Y724GtzZ509hA9QedN6IlSWu5GU/uuO4K
+         4Q2d3/01hEbUojbLaMDlJ3jNkJW08i8iFu0z0c+Npphe0X+7bLZgjZiQWlfoeCO9NFgb
+         pECOtLDdfIZ0bdj9fdj+QXKoBHfq3gVPVhrHafxER7EdpZN/vzmnHrfwLkb6IRZjo68z
+         xxkX8MS538oInnScIS2BzXMB9uH6K9V69MYmJ95qL5uBv1Mw/A3NTj6nYScSFvKqUDPG
+         +LC46TyPmL7xyf6c694SmbUkOCv7qZ7PnJMY9SBjOP/iia/gmU4JSR+U9DZL94sukyLw
+         HGEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790633451; x=1791238251;
+        d=1e100.net; s=20260707; t=1790633452; x=1791238252;
         h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
          :content-type:mime-version:message-id:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=2vQV5QojyPdN6nr2Psqr9eEvXu44kh+eEAXlGSd+RVI=;
-        b=gSmArt2b6y0ZWMAj1M/3WbcFoIxP0OL7h4HcpUkVR2dAf8c/edgnE2sfN/n3bHzcK4
-         ueZtd9y9z23134lqQRPR1awah0Wp0LxA3jx/d4tt8vvF0S3M0kTL7gScgPsjhdkM/t7v
-         X7Tso91VDzg8N3k8K+H/NDaJY5kH7AYdj2uy/9ts0iTlgkzoY2VZAKSPD81nH6e2Jmuu
-         pPuIliCIvj9yiCpe4KJ/o1BOVoYREfjMlczygZtNMBPkhSZq5/2tcl+z/Dm2bj+opDRR
-         mqeQU1Q6tiNgAv1ehbZJncGmdj2mmMX20XbzKl7IS1rF6cVKqOuvzk/UOiFEtUJTdSFX
-         gJWQ==
-X-Forwarded-Encrypted: i=1; AKwUvBzWXh93gcq/K/qBIcDNfz/QSP00kW6/bh+i90lBNtu2jP3G56+Y+2q3Ves7XfYZ8TYY1fReKw==@vger.kernel.org
-X-Gm-Message-State: AFuF++m/aOqGVQXoAyR8WJRDvd8CfSqjCyLEzGx1ECDwUixZAOYNh7Ah
-	JbPZ8WI2d2AN/IvMGOdE0GN3cUZlK17Qe2R7srYBZfh83tc6hqjvXJPquaucYfC9Aw==
-X-Gm-Gg: AYBFou1y70CS92yvln5V3ve59uKIpSSjFqp3eKciA5OCH6mN6oofm7+7Hs41ID26oqq
-	r1nn+0pk4jZvKvJx3P8GvLShrfaPxolankxZtq7ZJ9yRnajNPEp1/uobHc0f3umiVlKF2Ujai6u
-	lj0lNV9tnCZfGkwfEv12zEMPFu2c5pcUvbmtgDZzFYlhM0I5+domTa6bRm/L0zlqZZkVJUy8Ssl
-	2KtqWrgbaAxQpdGfULwzfy5FPlfnymxI0l4+1FnsMyo8hH256EVSgdIEOfApOtWblDj3Zn+TW55
-	p1yfPNohaMn/jskNC0XhuZCRN9h07mVlcSzXq1G1BaamOHPF1gYbrAIXfqTAmwKZ1cAFVQptd1y
-	Sb/xTECSr4O9jzgXjZk4ZdcCYH+AnCh4z0L4hmuV6uZqGiMUZDtVZFPPzIDDWwrs1u6kQrjzRNJ
-	FprsdeGnO1p4/ramk96/aI8nQuTWaqNQaLyMhZ7U6da6DzzMp0dec3C0y4jJvS/rzRYy4WalM3P
-	YYf2+Tw72tHr7GGWBMZrOZ09q7T9N5MSlmcfxLkmCICIalnq+uhBBVwKsdCgSoZ/JdOl1fhvgs=
-X-Received: by 2002:a05:620a:880a:b0:939:b55a:3c7 with SMTP id af79cd13be357-93c43ca4152mr2227270285a.41.1790633450907;
-        Mon, 28 Sep 2026 15:10:50 -0700 (PDT)
+        bh=ld93k1mz7prrBKJ8jJcBuGZZs7khQYzy5aYM/AzqGEE=;
+        b=gWz1rHK56/SFrvhc/FfKDQtwWUKiSTBlmNgV5QyQRed/GHNZe1q18MivFsjMuX6eEd
+         gUUIkx2TDD5KbxEBvD9uUb42DezIrxB5vNeHdFjiyHvGqKfa18i4N9c/zQQMgqlzoZHn
+         RRlNBVecq78krO8ds+8ug4HgD2VAtY4uGUyv/pc+UNV0vQdmvTQaa8+GB17q6vnd33qG
+         OOBrISYclSk/vKYnfXqQiySe8QtESiq5vLoi7ayVw0SfB3r4L9nCxmn3EyeY/4vmrfZv
+         7EQIWs5cWMwnQJ5VE9RU8IpBzSXAitqIYiwBE4yJXkUr/W+kewOxY8W5B4cZ+SbaxW3O
+         Papw==
+X-Forwarded-Encrypted: i=1; AKwUvBxHfcf32Aq9efffxLixnCFWpE9cqVcDux7MiXvSyzQb9pDs3yV2w2fBWDvVdE+bvRkewjpA7w==@vger.kernel.org
+X-Gm-Message-State: AFuF++lYMe3iiyFXYbFC9xvKMHIMPuvHcFkZZljulfWcBzYmvxiin6Nw
+	rWwXJ0ToYkuQx3eX2yFVIgEGeLgMjBTO8PiyafCUST77YF0KF1DEbNJyRZV+NzJFEA==
+X-Gm-Gg: AYBFou2BB1txhpknfiXp3A/PCXIZ2PQDMb4K46Lap5FNN7dcdJiH0wwtKV12ePuza7B
+	KCMyVEU92Ez/dy9oj5hWlR2Rl2Hx3qLhyF9mNV/qzglFgspywqnIRz6MF9/reDjpYjAgRmIC6eY
+	p+yxl4FODxFRbfxXx3gzaiVdFuAsi0mBrOk7EBYLFeTPLwd1uql8Gy4+QUu9h97LmrBMELnMVHH
+	zu9W263thg6Qpm/SuSehYqtGH14amLsNe8vDWVHBiAFT9ReYOm4UKJ/yL/DdE0FBe6Ji0JsUWbv
+	ZIKmCPksPOnjAvwdE+VHz4maeoCoKpTOdyUQ7Sfyygbm7O9wn/P4+v/TXO80sbE1ImH9OdejKBf
+	aoceupqPYU2eDw1xTDYqNgC8CPXCEnioGp8I5YFrVgBfric8j7WZQaohe97rWQW+B1qnl96Hkkp
+	VPLwVRxdYTdFtozYykgP1MMKtrS3fx/S2aWb2bCWzC6clmGBBY08Ztjhe4n+MEI9dncKIC6rNWh
+	AMNO5rNknAcdyS8jSJ3ZHcaHz3RczRGrwWBsWR1jyPh/OZge2xl+ieiqTo23jDnR87UnCp+Jeyy
+	qlA5tEbbvw==
+X-Received: by 2002:a05:6214:53c7:b0:914:4efc:9b8 with SMTP id 6a1803df08f44-9144efc0ba5mr147070126d6.42.1790633452268;
+        Mon, 28 Sep 2026 15:10:52 -0700 (PDT)
 Received: from localhost (pool-71-126-255-178.bstnma.fios.verizon.net. [71.126.255.178])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-91786d7d759sm3653006d6.42.2026.09.28.15.10.49
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-91444d9959csm68163636d6.10.2026.09.28.15.10.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Sep 2026 15:10:49 -0700 (PDT)
-Date: Mon, 28 Sep 2026 18:10:48 -0400
-Message-ID: <8e27baf768abfacaad921326afc85e2d@paul-moore.com>
+        Mon, 28 Sep 2026 15:10:51 -0700 (PDT)
+Date: Mon, 28 Sep 2026 18:10:51 -0400
+Message-ID: <cf63164d7934f3e0c2ab5f4b5c00e494@paul-moore.com>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
@@ -74,32 +75,114 @@ X-Mailer: pstg-pwork:20260928_1559/pstg-lib:20260927_2151/pstg-pwork:20260928_15
 From: Paul Moore <paul@paul-moore.com>
 To: =?UTF-8?q?Christian=20G=C3=B6ttsche?= <cgoettsche@seltendoof.de>, audit@vger.kernel.org
 Cc: Eric Paris <eparis@redhat.com>, =?UTF-8?q?Christian=20G=C3=B6ttsche?= <cgzones@googlemail.com>
-Subject: Re: [PATCH RFC 1/4] audit: separate file and process capability  storage
-References: <20260917143948.106603-1-cgoettsche@seltendoof.de>
-In-Reply-To: <20260917143948.106603-1-cgoettsche@seltendoof.de>
+Subject: Re: [PATCH RFC 2/4] audit: compact name entries and context fields
+References: <20260917143948.106603-2-cgoettsche@seltendoof.de>
+In-Reply-To: <20260917143948.106603-2-cgoettsche@seltendoof.de>
 
 On Sep 17, 2026 =?UTF-8?q?Christian=20G=C3=B6ttsche?= <cgoettsche@seltendoof.de> wrote:
 > 
-> File capabilities need permitted and inheritable sets, an effective flag,
-> and a root UID. Process capabilities need four full capability sets but
-> neither a file effective flag nor a root UID. Give file capabilities their
-> own type instead of storing both representations in audit_cap_data.
+> Group aligned name fields and small scalar fields to remove padding. Keep
+> file capabilities last so they do not separate inode and pathname metadata.
+> Store the per-name file capability revision in s16: it must represent both
+> the eight-bit on-disk revision and the -1 AUDIT_INODE_NOEVAL sentinel. Keep
+> the existing formatter and its unknown-capability output unchanged.
 > 
-> This reduces each preallocated audit_names entry by 16 bytes on the tested
-> 64-bit configurations, saving 80 bytes per audit context. The BPRM
-> capability auxiliary object also shrinks from 144 to 112 bytes. Retain all
-> logged fields, including file root IDs and process ambient capabilities;
-> record formats and collection behavior are unchanged.
+> Move name_count beside return_valid to remove two alignment holes, and
+> place personality before the task credential scalars. Preserve the first
+> int dummy member required by audit_dummy_context(), all five embedded name
+> slots, and the existing allocation and reference lifetimes.
+> 
+> On x86_64 with SELinux this reduces audit_context from 928 to 880 bytes,
+> leaving room for descriptor paths while staying below 1 KiB. On the tested
+> arm64 configuration without property-bearing LSMs it falls to 872 bytes.
 > 
 > Signed-off-by: Christian Göttsche <cgzones@googlemail.com>
 > ---
->  kernel/audit.h   | 15 +++++++++------
->  kernel/auditsc.c |  2 +-
->  2 files changed, 10 insertions(+), 7 deletions(-)
+>  kernel/audit.h | 17 ++++++++---------
+>  1 file changed, 8 insertions(+), 9 deletions(-)
+> 
+> diff --git a/kernel/audit.h b/kernel/audit.h
+> index 7640d2c0fba4..bd798f8553a0 100644
+> --- a/kernel/audit.h
+> +++ b/kernel/audit.h
+> @@ -76,18 +76,16 @@ struct audit_names {
+>  	struct list_head	list;		/* audit_context->names_list */
+>  
+>  	struct filename		*name;
+> -	int			name_len;	/* number of chars to log */
+> -	bool			hidden;		/* don't log this record */
+> -
+>  	u64			ino;
+> +	struct lsm_prop		oprop;
+>  	dev_t			dev;
+> -	umode_t			mode;
+>  	kuid_t			uid;
+>  	kgid_t			gid;
+>  	dev_t			rdev;
+> -	struct lsm_prop		oprop;
+> -	struct audit_file_caps	fcap;
+> -	unsigned int		fcap_ver;
+> +	int			name_len;	/* number of chars to log */
+> +	s16			fcap_ver;	/* 8-bit revision, or -1 for NOEVAL */
 
-Nice :)
+Should we also change the fcap_ver in audit_aux_data_bprm_fcaps?
 
-Merged into audit/dev, thanks!
+> +	umode_t			mode;
+> +	bool			hidden;		/* don't log this record */
+>  	unsigned char		type;		/* record type */
+>  	/*
+>  	 * This was an allocated audit_names and not from the array of
+> @@ -95,6 +93,7 @@ struct audit_names {
+>  	 * should be freed on syscall exit.
+>  	 */
+>  	bool			should_free;
+> +	struct audit_file_caps	fcap;
+>  };
+
+I understand why you moved the fields as you did, but is there any way
+we can keep name adjacent to name_len and fcap adjacent to fcap_ver?
+Splitting them makes the structure layout awkward to read.
+
+You would need to check that this is safe, but if it helps we could
+probably change name_len to a shorter type as PATH_MAX is only 4k and
+that limit is part of the UAPI so it isn't easily changed.
+
+>  struct audit_proctitle {
+> @@ -124,6 +123,7 @@ struct audit_context {
+>  	long		    return_code;/* syscall return code */
+>  	u64		    prio;
+>  	int		    return_valid; /* return code is valid */
+> +	int		    name_count; /* total records in names_list */
+
+I think it would look better to move this below the comment that is
+directly below it so it remains adjacent to audit_names.  This shouldn't
+affect the struct padding/packing.
+
+>  	/*
+>  	 * The names_list is the list of all audit_names collected during this
+>  	 * syscall.  The first AUDIT_NAMES entries in the names_list will
+> @@ -133,7 +133,6 @@ struct audit_context {
+>  	 * by running the names_list.
+>  	 */
+>  	struct audit_names  preallocated_names[AUDIT_NAMES];
+> -	int		    name_count; /* total records in names_list */
+>  	struct list_head    names_list;	/* struct audit_names->list anchor */
+>  	char		    *filterkey;	/* key for rule that triggered record */
+>  	struct path	    pwd;
+> @@ -142,10 +141,10 @@ struct audit_context {
+>  	struct sockaddr_storage *sockaddr;
+>  	size_t sockaddr_len;
+>  	/* Save things to print about task_struct */
+> +	unsigned long	    personality;
+>  	pid_t		    ppid;
+>  	kuid_t		    uid, euid, suid, fsuid;
+>  	kgid_t		    gid, egid, sgid, fsgid;
+> -	unsigned long	    personality;
+>  	int		    arch;
+>  
+>  	pid_t		    target_pid;
+> -- 
+> 2.55.0
 
 --
 paul-moore.com
