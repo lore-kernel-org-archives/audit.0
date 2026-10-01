@@ -1,159 +1,163 @@
-Received: from mail-pz2-f41.google.com (mail-pz2-f41.google.com [74.125.228.41])
+Received: from mail-pj2-f38.google.com (mail-pj2-f38.google.com [74.125.227.166])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 238EC531AEB
-	for <audit@vger.kernel.org>; Thu,  1 Oct 2026 21:06:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.228.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACC463537CD
+	for <audit@vger.kernel.org>; Thu,  1 Oct 2026 21:47:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.227.166
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790888770; cv=pass; b=YRxuR/K2KuYaBrQD5+iVe7Guy0t7C5kJ87+7GYj3tzLm+NlBX5KKA64M3wp7EYEZoK5Xi80Cih8rRjePRg0Y3nISxeSq2mFLU5u2EFp+q/wzJ7xuF9BDqoKza8X8B4KFlEWIr5atf1kjeAH0eacBNh9I11kShpmliqNE7FMrKEM=
+	t=1790891277; cv=pass; b=hnvRKPziKidXEbfdqh0xKMf9bZYfn7zBEWOOaytgmtPi3r0xJb+1PE7bH8mi25Lqpbdvs+1UeexpbhVB/IEkZol9TTu2BuS1IssOvblhxGx+452iaMSbwFCqMU5PkXPm9zpHpYUUp+tr8jXPP3+T1P27GMekDRGkCuVzt6vsa78=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790888770; c=relaxed/simple;
-	bh=xN21QYy0yGgz2sHT1nXnC/21nVEwjhkQB04Hg4E+rW8=;
+	s=arc-20240116; t=1790891277; c=relaxed/simple;
+	bh=d81F2c81bYjapD3k7WPL8vQXWEIZxtjRqd5WKOeB6G4=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=gS1vU7pgRkPlQNV8/g8Hmv+5eixlw8nyt6qDEmTV5ldFfn0yYKOT05YGnCzKE9IzeUMTjuHDMo4yDTMPztYzHtdX/eIl663LxKVW2F9vw+xxtqZEyFZNjBEtMt842/uyeW3n4J9t/yZURdnlfZ0LMj4i8HHq83Za9SQnbaNucW4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=CAwV36pr; arc=pass smtp.client-ip=74.125.228.41
+	 To:Cc:Content-Type; b=Wh28qC/oa8u4vMYjlSlz7AUwPD2wMlp25axhgSjJHJLzmI3REaNfKS27OR1y+UesTFAAkpTiuTJxyOcpjktNqNQlQ3XuyriRssir6Cdd9sc2AtDvQ+2ngKJ5OwqvjywxpaLNsgYtyKYUpQ5DSy87J22hNAxtpyylwYZ/GELF8fg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=YfKHNuZC; arc=pass smtp.client-ip=74.125.227.166
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="CAwV36pr"
-Received: by mail-pz2-f41.google.com with SMTP id d2e1a72fcca58-8633a38df87so3047620b3a.2
-        for <audit@vger.kernel.org>; Thu, 01 Oct 2026 14:06:07 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1790888767; cv=none;
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="YfKHNuZC"
+Received: by mail-pj2-f38.google.com with SMTP id 98e67ed59e1d1-3a4c6bfce73so1693834a91.1
+        for <audit@vger.kernel.org>; Thu, 01 Oct 2026 14:47:55 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1790891275; cv=none;
         d=google.com; s=arc-20260327;
-        b=GLdFGHy8gJ4r5GeTUAc4OhQfd4YV9NSU41BuF4UsdoIAk/vZnzkNj6PaBOL23gZO+r
-         DGXeS2ssEJ+wof/kmedEyAWYvN4hhjZ3XMu58T7oSsLtFwBXEHDOf8F4HLRIQghWL+be
-         sYiRZkGK83UxWfyZX4+/v+NYZx6ldzvfmZQaCopRLstWgyYxD695ToZYusl2wsjH6Kdw
-         4aIBLAhBU9L0yCDZ7nNrO6OZWiHJpWAwQXg9MSXBznukMTHAyaFVW1wVRLx/FNYVW9IY
-         EXveLW1ns0P7tqxSJ+MleUq6nSLcsEXCNOBuU4Dqw/O5RRxuxh3sIOl3oNaY3ovhbCFn
-         xnzw==
+        b=Ncb8rArUQw0TvglFS59ZWxA1oh2tBTnvjUddNOspPJuL+RjojSQ6kUM6HnpFKH3O1H
+         wHMudjWQfTDWwPLk8MN4ckuyWpqQGInLor0TbaW6EtQtoM0v67atGqoz39zI6vC0YJFw
+         huGyt6jV3mqOyx1JUZcYJn13NvrvCAVp6g2exd2Fv9F5O6brwAKIoZpdkPgBRiatNJiK
+         q6A+QEeY5xoETSxuF+d+C3G5mu/aDDmfF2YXSedUBkmkNTZ8XqhSU0uPZc2KpezHyL0x
+         I0naB3TtG7Or+Xvp5Kqu2RYXBjq2OkOgZeNLTWuzIIowIloKpU5VlUDr/LfgrJUBaYJ+
+         z1LQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=zQjpYhlPNUCc8b2PKOBh4ENa5gh7HULkWsy4SYnLXSM=;
-        fh=b8NH310RuesssRCaAmnBQdPTqvz9avNnbX9wpmAPCkU=;
-        b=A4ACRTI18/vY022hnuUzW+VKzkcdjEXiMyPKm798AsDwPyXTgG4w6PCXS3zPUQFq7w
-         2zmTd/Vi3EWaKu/md4K8a61PuHZjDOMp1cbqnn6SAShpAp/TDiQZ11ssVWo8BobjyUv0
-         ziJAUPzrjSXOP8X/IWElp0UdH429myhLaHHacFLs4jlQNPxkZbQyivKELML5696nBWf0
-         H00RvVHMex9k+0CJJsa/sB/3ID9qDp8sqrIRKhP4jeT5WpOC2APiiteQTGPqZBEq8U/0
-         1tWLhMqbr/F6TALJWpBJsOKJCcpyjJw477xwUMLH6SY/hgJILQy13jMjpOf7u74LJCG5
-         DL9w==;
+        bh=KauvhA+qJPgpodeex7vmZyoN1DAskKF7lJ/Kn7XSSQM=;
+        fh=QBUvzydCXueJShwRyJoac18uuPW74t4ds85BWLuyne0=;
+        b=G4/L5CMuuIwYNCDm5mIZY6CeJK02abcor0qsyaaw51JKVmapahkEQ/iStLRBl8Ahft
+         es002gwNIthlfZfzro/23tRZX5BkaHTU4g+L4G29pzC3Ok41SGUBQPkKX+H/I6+b8C2C
+         1Z72LIwbakCDBezNpt54iqjVLEPB9X0C1PMbtSSC/cZG6uZE9IQhHaLm+dh/toqtlEGK
+         ZjygFS5ugMzXYK7AxScIAJNC05FeJcbz1uzLsPgpc+DrfjJaoAIPNGf9H6mNIax6a9wY
+         DXihlo8Ntfm57MYW9YdV239zMDyaa8GjVkMO31kqQdZtVqSG6LSKVQGaaiWMf2is5/ne
+         fjVg==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1790888767; x=1791493567; darn=vger.kernel.org;
+        d=paul-moore.com; s=google; t=1790891275; x=1791496075; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=zQjpYhlPNUCc8b2PKOBh4ENa5gh7HULkWsy4SYnLXSM=;
-        b=CAwV36prXHOZw2NRE+aSACbPdDsBf2SHqbBYA6oNTHRxcIGcOyC/CJqkRH7LJRevOZ
-         ClcJMU2t93f7XmqqwruK0c5ZXJiXQfI/+n+w9nHyb4EcEh0EZTu11pUBC9xzrVuOqKBT
-         YsV75j7RrnJU55Z+JqH44vXWfdCbI4I+NCB8980IdTgu7vzPMxHvgU+uCw/+FxPpgY0h
-         63X1M3w+g/hILuWVI8qWSFmlSwv2NKZwGdJ2DwWfYsxtFTA/lG+C3YADiA4myoIGj7HP
-         Z1Ev8yhuTUNqN+BrgGDh8F6GLVD0gbmqkkcnf9FOFy5sLyuxAa1XjcNkIrhbHMfk8YG5
-         z0BA==
+        bh=KauvhA+qJPgpodeex7vmZyoN1DAskKF7lJ/Kn7XSSQM=;
+        b=YfKHNuZC6znxJ8GyWnWe8JgDizgQPUkVRoDUOzw3lldWtu5kwqMw0vOmCU6aaiyesT
+         q1BMzkxTVC44JgPuoD5J1RhAXqP0GPNtrsHHwIjMLcfzG6/7QeMzyF7Aiheero+qAbnv
+         DBBR7Z2RMMjb4IXU/f+3mALUB02lj/AO0pO7XoA5p0CP00LvTOS3CJQenpV3/0QBjSna
+         iJuiS3x24akWyilsGi6sWJNe8dP4MYk1WAtBnoajjQPf4U87lh+JDfYBtBnVWdWStHI5
+         4o/yOfB+BryLlmVdU7Eit0c+txe37hF/iVQqp1AfdhYPbiGQA0oGHKVHpiEaqTGnIlJT
+         fEsg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790888767; x=1791493567;
+        d=1e100.net; s=20260707; t=1790891275; x=1791496075;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=zQjpYhlPNUCc8b2PKOBh4ENa5gh7HULkWsy4SYnLXSM=;
-        b=eC9/wOJrwCSN83iOmZ/5QDgx9gdgzVyf4Qco6m6DhQmTsqq8BtkipDZDlxXy+jUZs4
-         j25RkiGBpyDVdZsSP+90SD2Q0XE/48oMysrCehES2hR5zZvwZP0JUFJbyaV+pMhsOtmZ
-         2LgbYRXZORz7qCqJChq9LIPO5UfTxvqeN3knzvB8erX9hroO6kP+9ep/S4WACjN2UJ7L
-         uNA6AKQ6tNIURnpIVNZU3asi+JYd5u2egXU8/AvGgQQc72Gk87zPr0So1kdYjwTi7Nma
-         srJQjGjgIxsWilrT0/aNTAxsxvjCx7kt3oOCdF8n1Kev3FtWkC7btwbnyfyjtUZXmJOx
-         fQag==
-X-Gm-Message-State: AFuF++neBe0IAua4Y4dbr4RJcW0W2lWr4UuDv1Px+dUjzCePR6ns+Smt
-	r7yvlSd/VJJ6VujaE4WjNaCNrjLv3ZJ4RipwJSUjpGYcomS1HKRI1CU3no1Ihm/dNYRzBjVrqIJ
-	W/NJxRYBuetgzLKRLK8Rv/7yoOeepYyrmajx+BoAB
-X-Gm-Gg: AYBFou31kKZqorAXVxqLnTIYQbL3uVgh4ycQ3BImvJE7h4qBkRZvsRluoEHF4I81hpn
-	azyfJvLGMwQl5/INSk/p/9AHU519ulL4sQCBhIkTEfVEYsKug8GGybd8m1QsA4q/gHNf6vseF3E
-	oA7gKtpHD51ClDA0HqGbdHAdUaFH4f7SUwS/ks5idAbWD0hyqlPA9Ufnw+yjoeopp6W7145zPjX
-	KIIE6oJwUB4NjabA1wk9RW8tANdrIO6QGD+OvA3Fmj+Jyv0z5HrDoIus5H2/WPhE2tDQFmHmyS9
-	6Z1Bc6B+iuy6yUTI+pfHfXC7ZFsJ+rxfeN1pcj3ps6F/92AIt7zYjWELGVTEa9jaqIT5tgJHsRc
-	UDbKCj7z4EXmD
-X-Received: by 2002:a05:6a00:1254:b0:881:5dcb:400e with SMTP id
- d2e1a72fcca58-88af6d24f34mr727169b3a.56.1790888767004; Thu, 01 Oct 2026
- 14:06:07 -0700 (PDT)
+        bh=KauvhA+qJPgpodeex7vmZyoN1DAskKF7lJ/Kn7XSSQM=;
+        b=DawQ5jsprxre7em2B6ekd5eSzzSDlsj7xpf9VmduUDnUSNynEOsx3LnRqH4vnT71ot
+         lrgAAOTgtuF8KHfBu+ErjdJHF0+Y/M3wg/e6WbXsni466CJ6jMC8TGXTObuRiX6bmXTM
+         W5IpdpGu6ksJnrO1eTdxRjHo6KW40jlWvTVC+U9abH0o7B+l2AE/XKZJVikEMLJkzWq9
+         8skWKvKPoE2SSk13gxeekvK1cwz7VoSmhPy08Zm5ETz6MEg0XuIdWytUkIG33DMnfDV7
+         dypOw6tZl4YFW7ltSLmfO5sR7tKsZvUh18AdlJTxgdQFrKUH2XTybU7qI9oeEEf30w9I
+         xyJA==
+X-Gm-Message-State: AFq9FYIa1G8gCe1CKB97aTjd06YOQCnKbhskFX65y5v7vcnk0oJ+t215
+	5QIVW8XfnSUhBc8o/81miTI11Hywj3bstrpUBRXgfBsp1l7OlpR0/ChhYkDHPxRHJhTahwGdFLh
+	ZlIPSjwrOgCKSHNzelgF7l829oPNSNHPhU8T5IrtKBIJ6ThydpK5z4g==
+X-Gm-Gg: AYBFou3GyfDKITFF6FSF4mGit+jYunWNNiyE9kpaiB5Z+DXKnZw3Wld4A9gZv9L1fMv
+	99C657DDHrxmMHqFdw4PKLmO+nMwXhPzFsBxpja1v2W7umRxEakfNlhleNyJVY9BkZlH1AacQX7
+	TnsaGqsR8JkDCGu89eemDB58Ze8wUC7/9tjEc69Jc++qgSN79SAJCesfUw8whMLNkj97YtMnnTQ
+	Dkn4ZLdRSsRHu0vV5l2qXHWdROz8dumEd4X7iO3r6zk3kvCcB39tpNUPMYMGtvgAbM+ZDspoFSj
+	Hh+kpOBdagNlAwP2edOn3F/uyR3fgl3b91ruVJldgxHASQ5ZltVMfNYSsGKZZM8cjrdTx3f+X8t
+	MkHZ/pXU9NLw=
+X-Received: by 2002:a17:90b:564e:b0:39e:6c69:9b8e with SMTP id
+ 98e67ed59e1d1-3a6cec99dc2mr726236a91.51.1790891274847; Thu, 01 Oct 2026
+ 14:47:54 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1790088067.git.rrobaina@redhat.com>
-In-Reply-To: <cover.1790088067.git.rrobaina@redhat.com>
+References: <cover.1790088067.git.rrobaina@redhat.com> <619ddff49b82e8e494c96dc749c8c5114d6df07f.1790088067.git.rrobaina@redhat.com>
+ <20260922193914.8B2931F00893@smtp.kernel.org>
+In-Reply-To: <20260922193914.8B2931F00893@smtp.kernel.org>
 From: Paul Moore <paul@paul-moore.com>
-Date: Thu, 1 Oct 2026 17:05:54 -0400
-X-Gm-Features: AclHuK923qNeclwyxHc-N96rTW9f--kU_8IWc_3FVDcJfFTXqnWMr4asd_Mjppw
-Message-ID: <CAHC9VhQ=FFYVNmQdiMsqg+5KDDrSC3SZS+H2=r_GkhfwQox8tg@mail.gmail.com>
-Subject: Re: [PATCH v3 00/14] audit: log all six syscall arguments in the
- SYSCALL record
+Date: Thu, 1 Oct 2026 17:47:43 -0400
+X-Gm-Features: AclHuK_mIN0Kw-dk5gBcCPt6ok1Ynnrre-1UVDMSPHKzp364dhOZkLi8WzPdmFc
+Message-ID: <CAHC9VhRn7BKVnOm5yOpNRxb+zkuz1GaOMUb9NXXd6Bg1kDzAhA@mail.gmail.com>
+Subject: Re: [PATCH v3 02/14] arm: pass pt_regs to audit_syscall_entry()
 To: Ricardo Robaina <rrobaina@redhat.com>
-Cc: audit@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-csky@vger.kernel.org, linux-mips@vger.kernel.org, 
-	linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org, 
-	linux-sh@vger.kernel.org, sparclinux@vger.kernel.org, 
-	linux-um@lists.infradead.org, bpf@vger.kernel.org, eparis@redhat.com, 
-	sgrubb@redhat.com, oleg@redhat.com, richard.henderson@linaro.org, 
-	mattst88@gmail.com, linmag7@gmail.com, linux@armlinux.org.uk, 
-	catalin.marinas@arm.com, will@kernel.org, guoren@kernel.org, monstr@monstr.eu, 
-	tsbogend@alpha.franken.de, jonas@southpole.se, 
-	stefan.kristiansson@saunalahti.fi, shorne@gmail.com, 
-	James.Bottomley@hansenpartnership.com, deller@gmx.de, 
-	ysato@users.sourceforge.jp, dalias@libc.org, glaubitz@physik.fu-berlin.de, 
-	davem@davemloft.net, andreas@gaisler.com, richard@nod.at, 
-	anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net, chris@zankel.net, 
-	jcmvbkbc@gmail.com, tglx@kernel.org, peterz@infradead.org, luto@kernel.org
+Cc: audit@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Sep 22, 2026 at 3:21=E2=80=AFPM Ricardo Robaina <rrobaina@redhat.co=
-m> wrote:
+On Tue, Sep 22, 2026 at 3:39=E2=80=AFPM <sashiko-bot@kernel.org> wrote:
 >
-> The SYSCALL record currently logs only four of the six syscall
-> arguments (a0-a3), silently discarding the remaining two. This
-> leads to the need for auxiliary records when audit-relevant
-> data lands in the 5th or 6th argument of a syscall.
+> Thank you for your contribution! Sashiko AI review found 1 potential issu=
+e(s) to consider:
+> - [High] arm/audit: audit bypass via ptrace syscall argument spoofing
+> --
 >
-> This series extends the SYSCALL record to log all six arguments,
-> by adding arguments a4 and a5 inline within the existing record.
+> commit 28f5bb87ea29cfbc21629b2a96c32dff55652268
+> Author: Ricardo Robaina <rrobaina@redhat.com>
+>
+> arm: pass pt_regs to audit_syscall_entry()
+>
+> audit_syscall_entry() now takes a pointer to pt_regs and extracts
+> the syscall arguments itself via syscall_get_arguments(). Drop the
+> individual argument registers from the call and pass regs instead.
+>
+> > diff --git a/arch/arm/kernel/ptrace.c b/arch/arm/kernel/ptrace.c
+> > index ed7a2a87a6707..3c5d7fd733ec1 100644
+> > --- a/arch/arm/kernel/ptrace.c
+> > +++ b/arch/arm/kernel/ptrace.c
+> > @@ -868,8 +868,7 @@ asmlinkage int syscall_trace_enter(struct pt_regs *=
+regs)
+> >       if (test_thread_flag(TIF_SYSCALL_TRACEPOINT))
+> >               trace_sys_enter(regs, scno);
+> >
+> > -     audit_syscall_entry(scno, regs->ARM_r0, regs->ARM_r1, regs->ARM_r=
+2,
+> > -                         regs->ARM_r3);
+> > +     audit_syscall_entry_regs(scno, regs);
+>
+> [Severity: High]
+> Does this change introduce an audit bypass via ptrace syscall argument sp=
+oofing?
+>
+> By switching to audit_syscall_entry_regs(), argument extraction is now
+> delegated to syscall_get_arguments(), which reads the first syscall argum=
+ent
+> from regs->ARM_ORIG_r0:
+>
+> arch/arm/include/asm/syscall.h:syscall_get_arguments() {
+>     ...
+>     args[0] =3D regs->ARM_ORIG_r0;
+>     ...
+> }
+>
+> If a tracer intercepts execution using PTRACE_SYSCALL_ENTER and modifies
+> the first syscall argument via PTRACE_POKEUSER on ARM_r0, regs->ARM_r0 ge=
+ts
+> updated but regs->ARM_ORIG_r0 remains unchanged.
+>
+> Because of this change, audit will now log the original argument from
+> ARM_ORIG_r0. However, when execution resumes, the system call will execut=
+e
+> using the modified argument from ARM_r0.
+>
+> Could this allow a tracer to execute a modified payload while the audit
+> subsystem logs a different, benign one?
 
-Thanks Ricardo, this looks great!
-
-There are a few things in some of the individual patches which I reply
-to in a minute, but there are a couple of "global" things that I
-wanted to mention:
-
-* As pointed out by Sashiko, when you were converting all of the
-arches, it looks like you missed alpha.  I took a quick look and it
-appears that it should be a pretty straightforward conversion like
-most of the others.
-
-* We need to get ACKs from all the various arch maintainers.  Aside
-from the parisc changes all of your arch specific patches are trivial
-(and cleaner than the existing code IMO) so I don't expect anyone to
-complain, but getting ACKs will likely take some time.  Even the
-parisc patches aren't that bad, and arguably they fix a problem for
-seccomp so that should make asking for ACKs easier :)
-
-Since I expect chasing down all the various maintainers for ACKs will
-take a little while, and I'd like to start getting this patchset some
-basic testing, I'm going to merge it into dev-staging now.  While the
-dev-staging branch doesn't feed into linux-next (this isn't likely to
-land in the next merge window) it is one of the branches that gets
-tested automatically and included in my kernel-secnext RPM builds.
-This also means you won't need to worry about keeping this patchset
-up-to-date with rebasing, as I rebase dev-staging as needed (it
-intentionally isn't a stable branch).  Going forward, if there are any
-minor changes to this patchset, e.g. a few line change in one of two
-patches, please just send a fixup patchset based against
-audit/dev-staging and I'll squash it into the relevant patch in the
-series.  However, in the unlikely event that a major rewrite is
-needed, just send a new patchset ... but I'll be very surprised if
-that happens here :)
+From an audit perspective I guess one could make arguments for both
+cases being correct.  In one case you are logging what the user
+actually intended; in the other you are logging what is actually being
+executed.  However, barring a deep dive into some requirement list, I
+think the best thing to do is to match the current behavior.
 
 --=20
 paul-moore.com
