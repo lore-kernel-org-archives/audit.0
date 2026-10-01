@@ -1,103 +1,63 @@
-Received: from mail-qk2-f39.google.com (mail-qk2-f39.google.com [74.125.230.231])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44A9936308F
-	for <audit@vger.kernel.org>; Thu,  1 Oct 2026 01:36:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.230.231
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3679335E1BA;
+	Thu,  1 Oct 2026 16:25:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790818573; cv=none; b=Y6EBCIlO7fNSITCDfBRNkaiV+rpjRx4KUHc5MXoexdQ1XtkMkCMYwtn2wt2xm8FgSPWeaMf91GldjGv0cwzf2qA2wgGGMF+lucx1Kc+dc25Vv2SiwFhW1ganppQ7q+4O74eaVK2pEnxmRyn/uV8XS2bgty/yeSiHZg93vc5O2GU=
+	t=1790871913; cv=none; b=USpMzMhyWioZFfGhIJB3IeHEUtm5Q7BH3hV18py4gWFUh9+90jnOGuQ75SFJFNEaPBBU8V7b5ME6yaD03wyjt7Kd5kYS7NKBJNK8dehGii0Fza1woh+QQXYWn6pVQsv8LqoJhXs/R4TJ3ctyKC0TRVf/bZaXpdq3+eyzDnGNVm0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790818573; c=relaxed/simple;
-	bh=iLdqu+Ue4IoF3oJ7laKVZUnu6AmDbLf/d6lZ2bT8QRc=;
-	h=Date:Message-ID:From:To:Cc:Subject; b=XBuo44IG/jmjKwzmKL1KaR2r0dZ/tm++Xje0U/1aR4l73A6ciEsao5hWDxs2Tj5l0xTnNIUHpBfsLmbdg8ylMg4YKQ1czORhI4rbQu58oSTr8TfuafENsA4a3S5Lq+XWgsPJxlDRnAh3mZt2CzhS6f/f8Pi+broR/YvfbNBO5yc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=eKAgWwx3; arc=none smtp.client-ip=74.125.230.231
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+	s=arc-20240116; t=1790871913; c=relaxed/simple;
+	bh=2pMKX4BZ6CNM50s/NAP/Vt5caM+tDn5GBe96zp7ecek=;
+	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=MHeQXSLtXaocVihbb27pOQxd7GZxAe7bWTDt9ixo/04Bc+dLuIdb05hvWwRpqrMo9bNFOLsTYH7d1isuWnfFeFAWIjh/80jYcqv5FjaDQQt3n6LRZd2rptiaE3siQ5Bui0VN3rVdZt5PLRZw9SmHhlAKvFDMmuIgo4CxQcS75DE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GJSsFBsk; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="eKAgWwx3"
-Received: by mail-qk2-f39.google.com with SMTP id af79cd13be357-93c67dc38f4so231212285a.0
-        for <audit@vger.kernel.org>; Wed, 30 Sep 2026 18:36:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1790818571; x=1791423371; darn=vger.kernel.org;
-        h=subject:cc:to:from:message-id:date:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=B9UI6oGE1TK11TaDQg6HshpZ2UDiz++aB74YJjIRaBc=;
-        b=eKAgWwx3Qi6hcF5thFFlJotvOsg+HGGN5NbvW9Bku6m1s42EK2Srhkcc1pAHlaODOq
-         IARjLEsnSthRNjbm0AJmGbR2sENvVG+hR+PpdHCXcQRCMJDqNBhsgwdi0ur+gyaDHj+n
-         giATvyZRog97naYQ330JOupRbIFbjO9+A0/+b5d6fl/leir/fAF+I3QRg8bha+bjim4M
-         IoZp0TRWKhjGrCFsHllyxHHf24o7pP+YpZoONY5VdGeL/sgYUJsxniIeU2MOaBeffGef
-         isCpwZ7bLG0Ru8pCZSLN8DXFtT588KvjfjkRGvAKXEbuC7ugs4VetQ0BJAMHVI23DKIq
-         0RcA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790818571; x=1791423371;
-        h=subject:cc:to:from:message-id:date:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=B9UI6oGE1TK11TaDQg6HshpZ2UDiz++aB74YJjIRaBc=;
-        b=pEhYgIuTX8shllhKZUE+AhWzOCZAlLeVzsNEqvWOKjVXU+9sDC3vNDDgrSOZ4rp0qN
-         jHNGDGmVRHBoxYDI5ZgWKyqAiQEsgzrGjy5yR3gTFatRwCIQBUoKK8OAjjb01aatGDmM
-         WsTWoSTHBFU8hmDOo1GmdUpBbZeNhxWsuHGO6IeR2FlirHy8NzJn4iwP7pqmr6/uKGxv
-         USZz/KnDlL0tLbCeMttgcTW514CxiH9bvu1vdf4bzRUBNqaeFYMI86Cdw5uj9xuO6juS
-         PI/nplLcO/x92Z1asI3ErVdteIc4EUSH2J0KVSNTgOEyc5tPzrsRBHKduC/dYW7R7RBs
-         yNjA==
-X-Gm-Message-State: AFuF++mMZhwuhfzBEw+4sOybdPxUPoJ8+sZjohC7tGffmyajXGrTMSje
-	fmWmRyjJQ4hY8SNDyqkwQdRR4kSUAaPtYAegxcQhb2sBZPDDBC+Opg9jqOhjp4Azjgcvds3kKcn
-	abnXaYw==
-X-Gm-Gg: AYBFou0mVSf83R565D3ci/C30LBN6/kvxFRCIgZy6NcA9W7tqG9DJp+FTe37y0iFISX
-	HD9BFgMdNCVXIu1Cr0MsjgW5FK9LcQafaf22krvXTrCA1uYpwu3Ys1OAMXHn3Jn1TqaFlsy6m5o
-	2f1/oxOUoRToGCCWb1wBvGjjUSXFUun3zth0kuxI9rizP9HPl1g2S8o1zNWL8FxOb9hSu2knxzp
-	YdxLdlzIPiTaYcemSnI72nyAVTX4WsZcgtiMdAGh7bit9dlmMuDyxnAmXjYzuWCjPuN9lp8bVE7
-	p149f3Mk89R6OIkvlss80beY3wrqzMCq2v8BmRJEErCABu+ceDdMdyCmKDIxBAetPeDXfnAWKgV
-	a8K2MrMmAkLD6KV+5SpbXTBprB2v+biZyGtFd4RX8Ff9ov7CabaUCtWSqIwBnHFAdFTrdyhIW7m
-	VmE9wAqDaICn8bf1lRFSLNJ9tRVTLBv0b7Oncuql96MNcT7a3cSdOH09//6I5lmtLf8s7Lqa5IR
-	rXGKNChwUuJMQ4MfTpgKYPI+2vtIEYbNhR53+NHr6lmnwIhPAEiMhFPicIeBqbWKHuao/SWHlY=
-X-Received: by 2002:a05:620a:2806:b0:939:fb9b:2b4b with SMTP id af79cd13be357-93cb563af87mr286730985a.5.1790818570844;
-        Wed, 30 Sep 2026 18:36:10 -0700 (PDT)
-Received: from localhost (pool-71-126-255-178.bstnma.fios.verizon.net. [71.126.255.178])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-93cb64eb59esm101530885a.22.2026.09.30.18.36.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Sep 2026 18:36:10 -0700 (PDT)
-Date: Wed, 30 Sep 2026 21:36:09 -0400
-Message-ID: <ff3a2b285345da0c7aaece963e136aa9@paul-moore.com>
-From: Paul Moore <paul@paul-moore.com>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: audit@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] audit/audit-pr-20260930
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GJSsFBsk"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2DD01F00898;
+	Thu,  1 Oct 2026 16:25:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790871911;
+	bh=P3MIqRDFiYl7vH7tu8gaJ3m/JlpON5bUYXEWJIlcJs4=;
+	h=Subject:From:In-Reply-To:References:Date:To:Cc;
+	b=GJSsFBskkrqyRkkbuOOnVGk47SaP4yHBvGWwzUCm8vWXvFhMurl3lWt68CRexZS8q
+	 EXM1AYvWGo/0rB5T1FVxcjIuvOzQnbUu9UXeEsKWANLJ0Ph2wz2S37mE2sNrjLhH+g
+	 qgq+HXdhf9R08PiHEyvir0mLTVZDzD19ZIzeXOdyF47780cYLQ4zhQHMGimaeHU/Vy
+	 +i+J0oZ0TcMV08SuryEPsaIrC7ux9Hbstg9HbrBLqzZ8NKVdVtmun0XCt4zT+HK5u5
+	 Ch6APyWgL0bmlWeDAdhsq/8LeG74ZcVlYc/nCI2yKnzoAlE8bNE8ZsS/eff6ZfMwSo
+	 mluwvEieZbZIQ==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id B5A023811960;
+	Thu,  1 Oct 2026 16:25:11 +0000 (UTC)
+Subject: Re: [GIT PULL] audit/audit-pr-20260930
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <ff3a2b285345da0c7aaece963e136aa9@paul-moore.com>
+References: <ff3a2b285345da0c7aaece963e136aa9@paul-moore.com>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <ff3a2b285345da0c7aaece963e136aa9@paul-moore.com>
+X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/audit.git tags/audit-pr-20260930
+X-PR-Tracked-Commit-Id: aa650d87a498844060eecb1d336f4d46f4d1b0b3
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 5cd9813d848d6565f0ca7825a8405c4e48441cf9
+Message-Id: <179087191025.2557118.9688519629265531042.pr-tracker-bot@kernel.org>
+Date: Thu, 01 Oct 2026 16:25:10 +0000
+To: Paul Moore <paul@paul-moore.com>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, audit@vger.kernel.org, linux-kernel@vger.kernel.org
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 
-Linus,
+The pull request you sent on Wed, 30 Sep 2026 21:36:09 -0400:
 
-A single audit fix for Linux v7.3-rcX to fix a potential UAF error
-in some audit filter configurations.
+> https://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/audit.git tags/audit-pr-20260930
 
-Paul
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/5cd9813d848d6565f0ca7825a8405c4e48441cf9
 
---
-The following changes since commit cee9395acd8043be0644b25c34bfa86623f2b935:
+Thank you!
 
-  Linux 7.3-rc1 (2026-08-30 13:34:40 -0700)
-
-are available in the Git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/audit.git
-    tags/audit-pr-20260930
-
-for you to fetch changes up to aa650d87a498844060eecb1d336f4d46f4d1b0b3:
-
-  audit: fix exe mark UAF in kill_rules() (2026-09-25 16:18:51 -0400)
-
-----------------------------------------------------------------
-audit/stable-7.3 PR 20260930
-----------------------------------------------------------------
-
-Jérémy Jean (1):
-      audit: fix exe mark UAF in kill_rules()
-
- kernel/audit_tree.c |   36 ++++++++++++++++++++++++++----------
- 1 file changed, 26 insertions(+), 10 deletions(-)
-
---
-paul-moore.com
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
