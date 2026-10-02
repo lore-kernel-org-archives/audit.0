@@ -1,136 +1,61 @@
-Received: from mail-pj2-f40.google.com (mail-pj2-f40.google.com [74.125.227.168])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 792951C84CB
-	for <audit@vger.kernel.org>; Fri,  2 Oct 2026 01:17:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.168
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4DF0476041
+	for <audit@vger.kernel.org>; Fri,  2 Oct 2026 09:14:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790903837; cv=none; b=Mdd147qvdFeJDTWBY2pZmPUEVM7zN4/EWm+LlqU8I3JlNqZ087NdC2e9+ySSxXCcytAFtNisGORKcCN98ZnsKmh7rmv9qXpPWCDJ9lkgASSVUyVZfpfcPsWxqvimKrxjYW+biWJCNEQIeuUvLl8sNUX0npEGkSF636BszScDBlk=
+	t=1790932468; cv=none; b=aoUUDEPXLH+2y1joZDA8oolJaM6nl7JfAdGQLexw0z0uvvxYhyrVi7jxC8ubR4dB97BnCIJPWkOsRZYU1IMNSYClFKtTK6zcbov2Ny6DxXxCu478krq12mL0s+VzAgJwlzz1mxJquDUD+UNKdznEfRjZ/Zn5uzBP4VPPUfwf9so=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790903837; c=relaxed/simple;
-	bh=EUQpMp+HuBObEek7Ult8oxgw73nO1dLMx1OkhJCL4sk=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=jTXgWr2j8UAMZxIO6l6Nhj69DAIrTCi+ZfM8TZ9+Y1kQsjHTdj/xt2qxXS+/gOrR8clI3yBTkIowjj+2VfSJmJzSx220xLFFbhQZwmiz4IeKrad8vJo4uuEKaruLfo9GrTuzMJX8JLeAAmDu0eu3SjUhy1f9WamfhkFJSm/Q4tA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=p8vPwnXj; arc=none smtp.client-ip=74.125.227.168
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1790932468; c=relaxed/simple;
+	bh=wXmun5MOZS1EWSv2nmlPO4NTuV5gilXl44YPsdg3tMg=;
+	h=From:Subject:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=mT0JzbDujU+2DJ9Cw9YlIYdMZ7vO4RP4XA8hvifoP03hP6BLJBtXeSBjMVgx+xqkFShI5RAmFbsOdZTzjaLSTqZGyRO1B6XJS4SecsjoGsF83H2R7mmh9pYnAlPc81VcgZWuWEzTuqD3S345hEfN81+Uid8CQcluU0GpcEYMHMs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HqgZvgDE; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="p8vPwnXj"
-Received: by mail-pj2-f40.google.com with SMTP id 98e67ed59e1d1-3a0f64df6a6so3241022a91.3
-        for <audit@vger.kernel.org>; Thu, 01 Oct 2026 18:17:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790903836; x=1791508636; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=Oq9HxvdSXBzAJf/nprhhibhJaAVoDfA7xrnhjl8vR10=;
-        b=p8vPwnXjPrkSFLPbf/KpCraKLe+44qdSEOEaBDSmP/P5a2i3b65lJNs+W7vMzw0fB5
-         wA/OQyUY3rvmlRUx0AQg8cek7rC1VrVD96WU6KV+3aOMbvUMvhXqptKNuKhkCg3KZab2
-         LWCcFWRFUiwYslVQ+RbfIopeAhAgkXAhyNaru73RGC5+QD02rlMLYbg9Jn9Bxnqgt8ZU
-         IKMybKWVkfjiY+lgTI9PESiiKA47uVGhyaJh5t7beyZLL8UCyVuX8bsw4qUiUgCYXNmK
-         a/Ut4vV012L1nTOIf/X7iFtomZ6NyuxpXKXZL+BfeqMpuqvDersRohoJeUcAWJ2T7yRi
-         33bg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790903836; x=1791508636;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=Oq9HxvdSXBzAJf/nprhhibhJaAVoDfA7xrnhjl8vR10=;
-        b=SZpY66qNZMkPnxxjCjCHw282at5MRowQpx5Ah0TRlldB9GEiUUEuJvADX7BoufLinX
-         Ykd5/ZmPe36/0BJod7uPHcFx/z7uSZeF1pH55Y16dG73KRHA4m/Z3u6LVg/+B73EP3GI
-         nfGBnF8MgAZ/IMvKXCSG5JAFiFHdbH1YLCtlKb5iSr3Rjo7cFWh7vdpk4BiStAq9ALPp
-         xxrAmKf7kTZY9+FlOn1NGQwAKacxOZCx1VD+EwQHtQ9xbGAbYl/cVuTVHpDWmjRi2xT5
-         ess4/92qVD1QhvzS5FRExms7NxFJBE6oJdeA93GwLPztpR17/UDQVNUzmDi6lwdyEejN
-         yA6A==
-X-Gm-Message-State: AFq9FYLUe1nBobUNk7HvqvR2iMUq56m4tg4x22XJs27Cq2ajcKttgzDa
-	ZdYJSWb6XVKh9wM1xpQOPoBUslcHBIdPqQyl2iRJrR/E1n9qMmB0o3ZTNNavUyQ6
-X-Gm-Gg: AYBFou308x4bAor/kWFl22mvosj07MW48pf0BfKb0U9QWSfPBASUDq8SQHM9DvWr/xa
-	6+ZGmE7DD/xISVVDOa2x1N2Tsg7sFYVk71O3dS95+4gVJNcVGQfp/P+BRTc8+GLY2+naSsvIUFr
-	0AGT5Qh0mo+ZJZ2YWuczBhTvlrpGsomTJaSZxU5JgFvb2ewtIlKAnwytzFrlfLjCVrX4c7i15Q+
-	PPifQnZJMYzHw6JsU4GWMuCrGXtWcOOInhglTbXk8j4MrmJITuOMuogkqBdYYBpoENEtXEcYasb
-	wwQqbNIb3QX+iyYP1w0H+zwFddGKTQoEOJXGFgdjXZtx6f8OVg+2Oy5NmjwSmuBVr9HNA0LfezW
-	gnn89XCGQV5hJ3wNP8Err3XNpmGerEGLSHJjWEcXpCzQQLFnJMb/y8O2hfyHOrFE9Q/EbBMkHjb
-	6a+CSsrutVVjP82M2bVoOymYmwyB/n7leokPK9oGDs2srqwJphke2fToZFOtQ5NWXaMNFaYg==
-X-Received: by 2002:a17:90b:52:b0:3a4:97ea:f0da with SMTP id 98e67ed59e1d1-3a6cec1421emr1084529a91.17.1790903835882;
-        Thu, 01 Oct 2026 18:17:15 -0700 (PDT)
-Received: from kdev.. ([108.180.130.139])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a6ccc92646sm1564066a91.1.2026.10.01.18.17.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Oct 2026 18:17:15 -0700 (PDT)
-From: Babanpreet Singh <bbnpreetsingh@gmail.com>
-To: Paul Moore <paul@paul-moore.com>,
-	Eric Paris <eparis@redhat.com>
-Cc: audit@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Babanpreet Singh <bbnpreetsingh@gmail.com>,
-	syzbot+39b8fea0641107a1ccee@syzkaller.appspotmail.com
-Subject: [PATCH] audit: annotate the lockless read of the audit control lock owner
-Date: Fri,  2 Oct 2026 01:17:12 +0000
-Message-ID: <20261002011712.7-1-bbnpreetsingh@gmail.com>
-X-Mailer: git-send-email 2.47.3
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HqgZvgDE"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88E611F0089A
+	for <audit@vger.kernel.org>; Fri,  2 Oct 2026 09:14:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790932467;
+	bh=wXmun5MOZS1EWSv2nmlPO4NTuV5gilXl44YPsdg3tMg=;
+	h=From:Subject:Reply-To:Cc:In-Reply-To:References:Date;
+	b=HqgZvgDE7zYC7HHMz7udmGlGwEw1T1/efrLlrHUXPxcEo1Cl+UYiH9d9KRzpcDacs
+	 Lidjzwx90DufrOTvczJe/8ey+lgGTu88WCg1YJHhZYyIN+hIorwXsIYfKUxqOgu6G4
+	 Q81ZaOigvPWG5vWVjaGK6/UzotgfL6HfRv6qWG8/16PeqbWPi5TXJsdexuauhtyBvC
+	 agaZqaB9jEQ35dA/zOksaTa7Wn/Pie5rJH1qDve712DHPAHpgvr4xmLm/Z8Sem+drB
+	 nqxm0V1LFulvZaNUyt7zeX37ehuVCmd7/iPYwBW6VVCm28TKOHiPIRX2B3w3c0Ms1N
+	 pDYmcGi4wSgyg==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH] audit: annotate the lockless read of the audit control
+ lock owner
+Reply-To: sashiko-reviews@lists.linux.dev
+Cc: audit@vger.kernel.org
+In-Reply-To: <20261002011712.7-1-bbnpreetsingh@gmail.com>
+References: <20261002011712.7-1-bbnpreetsingh@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Fri, 02 Oct 2026 09:14:27 +0000
+Message-Id: <20261002091427.88E611F0089A@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-audit_ctl_owner_current() reads the lock owner without taking the lock
-and KCSAN complains about it. Only the current task can store itself as
-owner, so the check can't give a wrong answer. Mark the accesses with
-READ_ONCE() and WRITE_ONCE().
+> audit_ctl_owner_current() reads the lock owner without taking the lock
+> and KCSAN complains about it. Only the current task can store itself as
+> owner, so the check can't give a wrong answer. Mark the accesses with
+> READ_ONCE() and WRITE_ONCE().
+>=20
+> Reported-by: syzbot+39b8fea0641107a1ccee@syzkaller.appspotmail.com
+> Closes: https://syzkaller.appspot.com/bug?extid=3D39b8fea0641107a1ccee
+> Assisted-by: Claude:claude-opus-5-5
+> Signed-off-by: Babanpreet Singh <bbnpreetsingh@gmail.com>
 
-Reported-by: syzbot+39b8fea0641107a1ccee@syzkaller.appspotmail.com
-Closes: https://syzkaller.appspot.com/bug?extid=39b8fea0641107a1ccee
-Assisted-by: Claude:claude-opus-5-5
-Signed-off-by: Babanpreet Singh <bbnpreetsingh@gmail.com>
----
-Paul, you looked at this race in 2022 and asked whether READ_ONCE()
-was worth it and what it would cost:
-https://lore.kernel.org/all/CAHC9VhTXNPWBDRoPcz-Jw=f+NNAEhxbh-ySc56CUd-ZbuboW5w@mail.gmail.com/
-Compile tested only (gcc and the KCSAN instrumentation diff); I could
-not reproduce the race in QEMU.
+Sashiko has reviewed this patch and found no issues. It looks great!
 
- kernel/audit.c | 11 ++++++++---
- 1 file changed, 8 insertions(+), 3 deletions(-)
-
-diff --git a/kernel/audit.c b/kernel/audit.c
-index 631d6d4a23cfd..f8c43ac6d5b82 100644
---- a/kernel/audit.c
-+++ b/kernel/audit.c
-@@ -247,7 +247,7 @@ int auditd_test_task(struct task_struct *task)
- void audit_ctl_lock(void)
- {
- 	mutex_lock(&audit_cmd_mutex.lock);
--	audit_cmd_mutex.owner = current;
-+	WRITE_ONCE(audit_cmd_mutex.owner, current);
- }
- 
- /**
-@@ -255,7 +255,7 @@ void audit_ctl_lock(void)
-  */
- void audit_ctl_unlock(void)
- {
--	audit_cmd_mutex.owner = NULL;
-+	WRITE_ONCE(audit_cmd_mutex.owner, NULL);
- 	mutex_unlock(&audit_cmd_mutex.lock);
- }
- 
-@@ -268,7 +268,12 @@ void audit_ctl_unlock(void)
-  */
- static bool audit_ctl_owner_current(void)
- {
--	return (current == audit_cmd_mutex.owner);
-+	/*
-+	 * Lockless read: the owner can only equal current if current set
-+	 * it, so another task changing the owner concurrently can never
-+	 * make this return the wrong answer.
-+	 */
-+	return (current == READ_ONCE(audit_cmd_mutex.owner));
- }
- 
- /**
-
-base-commit: a8bdcf944504980635c2069b4a4cfcf677b09bbb
--- 
-2.43.0
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261002011712.7-1-=
+bbnpreetsingh@gmail.com?part=3D1
 
