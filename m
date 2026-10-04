@@ -1,152 +1,139 @@
-Received: from mail-pz2-f41.google.com (mail-pz2-f41.google.com [74.125.228.41])
+Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E519E4BEE45
-	for <audit@vger.kernel.org>; Fri,  2 Oct 2026 14:44:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.228.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E830A2253FC
+	for <audit@vger.kernel.org>; Sun,  4 Oct 2026 13:18:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.181
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790952294; cv=pass; b=AijEfLtalPG2/YJedIPNjlDRcva9lJwobPY+mqvqT4SQykgSMnrtUvRNkVur4/ooKSCNfJAPoZNlAQwshPb+DtQuOP0DTlIQDY9Py9snSmYgfUTxgrZCh70Dr79PQhDk64EDKWyE6Tjw8zKZAzJsJ61hYJNpbO5ADiFmhVMXPzU=
+	t=1791119887; cv=pass; b=hXhyutgn/MrjJ0Swvu8+2n2WJv5dtgm1lhU0V7DNGrBvHvzitZn9DqMaOf8YHyiu8HW7R6Y8mu3gDoTcHtRQ+YtQpUQgdvdEctEpShlh+FsL1cYrp6M2OGMDCyr4f5q0aoum8oqELZBhqOdAFgKWo+NY3uXl61cI79JryTm+i3o=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790952294; c=relaxed/simple;
-	bh=u8PLXXSTY0IAoYfBBSIw6bMv8+76hBg9C/vfZ4dsutk=;
+	s=arc-20240116; t=1791119887; c=relaxed/simple;
+	bh=kYFPIdi5qIwk5fFvla5ev9INmB4S2FDhesXe326Sjh8=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=kvk1rlSAmwnOXGIRBp8ANapoj0PjCG8ARdL+tWzMny3U2Ioag80OBuRqc0VSKf1u9R2cjibSYzdChknrtoJKLkVGJ4g+hBQYy2wN0qwss0E6MXc56YL0hyKHDkTK2k5nhSYsVwhc896A9Qtzb0AyDtAEXXr+ukF8zzLFYql9Arw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=YirReEQx; arc=pass smtp.client-ip=74.125.228.41
+	 To:Cc:Content-Type; b=SgpibkWEagizWCqjOscGMlCnST/Hh5kkqMG3iZvdMtQxbVwAGyQ2haHIVVntSiOqb6mSnquiXcxZcopnBP69py08vjD6iosyHbWYt/KN+qL6zqH99zSLG73dwyQ4F9LuKGGT9s39hhjfx6OwLsIu3YxIScghVB8f6fyjUFtYw2w=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=ewifg35h; arc=pass smtp.client-ip=209.85.210.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="YirReEQx"
-Received: by mail-pz2-f41.google.com with SMTP id d2e1a72fcca58-88b4eaccebcso661103b3a.3
-        for <audit@vger.kernel.org>; Fri, 02 Oct 2026 07:44:42 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1790952280; cv=none;
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="ewifg35h"
+Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-885cd98d226so92273b3a.1
+        for <audit@vger.kernel.org>; Sun, 04 Oct 2026 06:18:05 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1791119885; cv=none;
         d=google.com; s=arc-20260327;
-        b=SlYUOt1fPAqTRqe7jbJSCO+Kh278tjgON3eTr/V2LFdFyFMPltpmo7s30fg0soyrcA
-         NdA/iiTcoAQP0+4GZXzW8i7WtxLehi8oL3cdWrNsLNSt270xgdeAzghRH8WBZlV8zsDl
-         diPc4GDuTybS4nB4MqT2kBRaVAKgMgEFGAZySrjkdeqLnD3edT6I+w7MSABjQigRO8f7
-         /Btc884EYpPVN6am12i7tNfAEhC7wQ9Vdw2MB8aQjKg9pqtDofP+QzY22T1DRikwD3F4
-         nVQekyxMMtIKPrETIEX1Hc+A8PBPedeRe1seqBB7dUD7TQBiEV08v5xHiJ3u4guzFQXo
-         qLaA==
+        b=SQ96Dhr4ADsA7sfO/8VbVXDzphi2YpJTomsnzhfrnuXLQprPA643BH+Z2vcyrHYAqA
+         Zxb/TwUGGxuBfHUsQKdP5wH1F042+GSlzNE+AApOO0wsn7m7j31Yza3+7SbOcRmoM02R
+         FD2xC47PZkQxReu27c2jYHOT/Vx+cvg5yjp4f5LysLTY0oQvPvukQzRB6NI/MDVsb7aW
+         6GuwyhGSNAEM/rGA0hm/QyzdADMwDohUsy2V508ROUFaBCEETrAjI+Kwid/xKHiXeAyy
+         iPBRulmSlh9lOXIUVYx2NML+S2wVxt/m0+Mz+8Yc6+yXMchMoDEuV/9346gQQB6sGq/x
+         YjIA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=LF2SkzXE6JWvXRVUQA23kKIKoZzi1sawVkhqirTYitw=;
-        fh=HA9TW2Nbs1+wUjnWozkvFfouysfnx6t3bmk3U4mrXSc=;
-        b=Rgua7mx/40lEEXqt3B78oK+/bHDpO/yZBvWEc0XQH2q/dnMV12SU0gQM+a2W7a9oj4
-         vhG0sO24k+7k6fyDycD1e77IC5ntCvJQaEN3F1mpsjfd9OFqZQZETeQEQbxZhZ9dG20w
-         VymVoqxuMCU3CYeW/OE4CrqJeU2VUx89KiZvboGJufFlFU7U5FCOOdTdtBmuAUfJgBVp
-         vaj81S/egoU3TsvuItuvpBj9Hlwl/AQxBova+GpzXyBVeRp/BGRwD6PIKJg639BiMzHr
-         2gN8bxmI4vItRaE95gT9z6uFipJmL6qM9rN0/HMqnwcJFVEcZO4Ff3MttXE5ZG5os7qM
-         8POw==;
+        bh=iqK29hcraqSjkwKPoayt4W5plvnH9pNitz/JPZ6I+94=;
+        fh=Dxot/vllrm/vedAdIrszyrememcchXIWGKV9R0KL9dk=;
+        b=edPU2zGTK2xbyj/wyOsINNQ4im8718FepM+qCtqNw4B7bodZ4NQHCOwIAAKED+4yTP
+         Osvlz0ySzHmcCCoZqUlEPx8sB3G97m0Dxf5p8BJcki90I2+OCAxvoJTQUUhu4HzdHZoX
+         WHExyPc4oYzYscWUzisPhRXjpfcYSTQBYqZNrqPqzKavRaP2PC7v/U7FpsjLpVblbTv7
+         Ulb4S1X4lqI+y/vwEKcW1XJl8hPpb3Emh+w7pNaeXEwnCimRcFHtYwXGLsbWR9XNRj4L
+         pqTYwEhDzPUdLJzO1BALGtEWZI28Pe3HPC77TYclWJgDi2mZZSuqmP49XXudJMweLRT/
+         YN8w==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1790952280; x=1791557080; darn=vger.kernel.org;
+        d=paul-moore.com; s=google; t=1791119885; x=1791724685; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=LF2SkzXE6JWvXRVUQA23kKIKoZzi1sawVkhqirTYitw=;
-        b=YirReEQx1ThnPjw0CX+tXJuIWYyItcf7lJD7IqchT69lnVBeErf45noRgqfqXFzrdn
-         5eDkzjkI9YVy3JlBSzoqssVovB71mju9X0Z7EY7AcHUF6Zm2nAJX6+YdxvemTtIePYMg
-         RaNMkT872HaWrFXgulqOoVIogHC/0hImmf1n1k9iPCuaPxEqjWgqll6+Urcfm7ezqagU
-         XCRUQnJFdkjec+l05eg/oqh/CUQxQsS7zZaKyO2K+PLDt2NYL85d+bq1XJKVoxK3OMMv
-         5iAhXboFoa5KZzufMTny1/R3jBlizRHs7lZd2mkJbkBwAkDDlb1Qs5KXm0zrcbY7kJqR
-         OfRg==
+        bh=iqK29hcraqSjkwKPoayt4W5plvnH9pNitz/JPZ6I+94=;
+        b=ewifg35hKNmJo7++/l6XBeGLxab3+vtVPZngOj+k5KRUjKjiq8Z8+GJs9qmVkSTsrc
+         ifyXUqwSftzmJzFTgA/W/VlRQEM5ncCLeRv0/8yV/GlzfjLKnXsXVwp2vwIyfnoa44y6
+         oYHnPfGHs9PpROzwgyHINRGGZJKHky4TxXmeEKNRbdq2mU37cfKRpz2Q+CBfW1BDUzo3
+         wy+gIbvlRDWJQ35xharx0Qwwk0j51+dZbFvmljKQXDDToBUWxGbpJum5imAtoRAwlbeY
+         MF+0nXQNJocCXY9CFKvl9CEx50parfa35sbNYugCRSvU1M2uFw5waw4/Hv1/tP1ykCN/
+         2kdQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790952280; x=1791557080;
+        d=1e100.net; s=20260707; t=1791119885; x=1791724685;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=LF2SkzXE6JWvXRVUQA23kKIKoZzi1sawVkhqirTYitw=;
-        b=1TfrhH3lXoP9rzdMLVjSsu3ec7eyMVmZ+xQ1YOgV/Img1qpdYgEWpv88gcQvl4KCPA
-         CM+Zj2t1tCoq5vIKw7UiGGqAqKaB87NANoU+jJjXGLKFHcjMi2uuEy22c4/ddd4lqM0y
-         Rnvtk/+ogz1VGGzZSr6avEBjvixahqnFqozsVudSqIlmwFiL9dI4mBM2x+8CJ4XrX4YW
-         Trxa9xKyNjhrAkA960Czy5w7CPeBWopBHUI42oq6u8r4ECnomgxZj/5FTXt7tj6NHecj
-         RmZidBh+lRSDmhcgG/1ZK6FaAVS7GWx/b7ItWr1bniMXGZ+8dkZSazFo4ezAonHhDAa8
-         cCog==
-X-Forwarded-Encrypted: i=1; AKwUvByVIPl61xH4lw3T7bryeGwEFFPvpaInTUu+gn8+T70mDxH5JnT1qZvVMDWRBaKlaO2b9r1YNA==@vger.kernel.org
-X-Gm-Message-State: AFuF++m+uNYCCtpnBcdOwIvHRLBhoBXVv0XHV19Y5U9d1tVll+vs96CE
-	8r7pXB69n5HNiWXKEqQ3h3M7PMkvDp5XiG2JbVJRF+3DXIzm9u7TLpH4vizH+SpAudky03iq7AA
-	oUsifjW3pq+pCfE7RGJKR6DQsyi6GT9g/CFkyDIwC
-X-Gm-Gg: AYBFou2BbLKlA6+knxwiZurR2M091+H6uVPliW5U/a+9ATvygGUY4UdRGAtTNqIJofL
-	IVg9qoN+EFf8j6eq3PofEp6CNn2Nut5HdpGhiJh9eknheON3b/cNF7iOjk0LnsZ/BAAcZ6z7Wt+
-	vANrR+ZEaMy0IaoEZzrnmdMbkw2b6ueTYq1hoCCFL4kvEZj6D2euxxWYRVUGjBgIZ+/N4aSltNx
-	k0DGf0rA4klJ+7v2eHmPuqpD7kRwzDC3ko5X7qx2R1XAi/ueO2hsndSzSHCqMyKp87uMB/Q1m01
-	VSGnaA0Gqd3WHamuvXZedVJoKO4CPlqssAOb9oavBf6oM8HjflVURSbZp+61LmoJaK3qevDshu8
-	cOZkPNPGLxsI=
-X-Received: by 2002:a05:6a00:1785:b0:882:23ce:f515 with SMTP id
- d2e1a72fcca58-88af8080910mr2973393b3a.33.1790952280636; Fri, 02 Oct 2026
- 07:44:40 -0700 (PDT)
+        bh=iqK29hcraqSjkwKPoayt4W5plvnH9pNitz/JPZ6I+94=;
+        b=rtggJsBoOKt9/acfuCxY7RT7ZYgrQRq8+Wh74BCp3gPt4RuLpRaT46dh6j0uTLX7MM
+         8OQrg+n933/3EJPH5he7cttsNIGvDUvAsODpn6MjuvQ7sXRMFCR29I6iHLfFUb4sNflw
+         xIaC+hmlVNZyBQmxdjUOrQ07oX+ChNU4836iz66P5WE5gFoGYcrJjklpngiKSahTIHDs
+         IKtRpfPNvubxVTA7LelvjC1dA4kSQtZfyw5cFEjfoez/RAgzD9K1uhzqjtHIzzaJxLEq
+         zNdM0MytoUSYuli9PnhtwlVmJ2vSpDsKd4WDMwIESlOxp2gFY1+G7puPewh3E6kYMfg2
+         hu+A==
+X-Forwarded-Encrypted: i=1; AKwUvBw5Ii5hfPH6wjUujNL2p8wWG89MvYEUtgZFFs6aSgKa4rtZQN4CAVMM95p1YD7u49Z0a+YcLA==@vger.kernel.org
+X-Gm-Message-State: AFuF++ndxKq8NxCbcQOm6rUytryRQCGfOk3lWbdRuJAS+sSuCRXNaIf3
+	8m/qY7qW206XYEACpzwTz2DjvckvGQoBNysMLUeuektBhWIXfga2lFWDc2MTmi/88Ch6rvj4a7X
+	vI/ZqTMNLM6y6OZeg+P1Khnr3L+r3QzB9aHXuBsmL
+X-Gm-Gg: AYBFou02YBR7Wo5R54t43S2NlTA5wXRpTpXgGbwa1m4Ft2yHrD3vE75gN+k1ehLWVDO
+	DG3qcZcDlwTvKPmVywhklBTwWN9Nub7yaQR//Z0nhCNY9P8cGAcksc7BXNIkVwGHG8VYgbBl1gb
+	f8Dq25c1ib543SfZq4Qdh/n5q3lmGKG6aFcwx7e8doKd8Il0gGRwlLPKtdtwzQo8pgxHiGpmdMn
+	sKI8PodqO+J+Z4uyVjekFtSfd2reeAl7IoBgR2wfM67l3AtpwqdarhciK8Iivfn+/xgM1jgZ/MR
+	KG8CLV1EcG14R+TPJXdag81GR+GUPgCj+Wr30RhD8FTgt38ZeMirFSSCJVeTTYnXK+aEgGI5IJB
+	PTaXMJ12CEGw=
+X-Received: by 2002:a05:6a00:a0f:b0:880:7f48:5f07 with SMTP id
+ d2e1a72fcca58-887fb5cadf3mr7829367b3a.6.1791119885275; Sun, 04 Oct 2026
+ 06:18:05 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20261002011712.7-1-bbnpreetsingh@gmail.com>
-In-Reply-To: <20261002011712.7-1-bbnpreetsingh@gmail.com>
+References: <20260703122548.1623981-2-rrobaina@redhat.com> <alaO+HZ7qJ1Iv9SP@madcap2.tricolour.ca>
+In-Reply-To: <alaO+HZ7qJ1Iv9SP@madcap2.tricolour.ca>
 From: Paul Moore <paul@paul-moore.com>
-Date: Fri, 2 Oct 2026 10:44:29 -0400
-X-Gm-Features: AclHuK9ayOqkrUXBAC_GcZ2eCbisR0JLLAs-LuRc-nBc_JmcBaIHgMmt3iLarik
-Message-ID: <CAHC9VhTgs-ZXwagRC9gscGT1BqkrH63us1wLQCvnvmrALijj4w@mail.gmail.com>
-Subject: Re: [PATCH] audit: annotate the lockless read of the audit control
- lock owner
-To: Babanpreet Singh <bbnpreetsingh@gmail.com>
-Cc: Eric Paris <eparis@redhat.com>, audit@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	syzbot+39b8fea0641107a1ccee@syzkaller.appspotmail.com
+Date: Sun, 4 Oct 2026 09:17:53 -0400
+X-Gm-Features: AclHuK93CXILhWqVoyyCiJV7kNi7hXkohGtKrcJ5HI3-Ast7QrPAddVZAM79UGo
+Message-ID: <CAHC9VhSosDsvCZyq0yY3Y61r5Od52WJecqcEjrT7XGkpyBi-xQ@mail.gmail.com>
+Subject: Re: [PATCH v2] audit: add FSOPEN record to log filesystem name
+To: Richard Guy Briggs <rgb@redhat.com>
+Cc: Ricardo Robaina <rrobaina@redhat.com>, audit@vger.kernel.org, 
+	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	eparis@redhat.com, viro@zeniv.linux.org.uk, brauner@kernel.org, jack@suse.cz
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Oct 1, 2026 at 9:17=E2=80=AFPM Babanpreet Singh <bbnpreetsingh@gmai=
-l.com> wrote:
+On Tue, Jul 14, 2026 at 3:33=E2=80=AFPM Richard Guy Briggs <rgb@redhat.com>=
+ wrote:
+> On 2026-07-03 09:25, Ricardo Robaina wrote:
+> > Modern mount tools (util-linux >=3D 2.39.1) use the new mount API
+> > (fsopen, fsconfig, fsmount, move_mount) instead of the legacy mount(2)
+> > syscall. The generic SYSCALL audit record logs the fsopen syscall but
+> > does not capture the filesystem name string, creating an audit gap for
+> > filesystem mount operations.
+> >
+> > Add an FSOPEN auxiliary record that logs the dereferenced filesystem
+> > name string passed to fsopen(2).
+> >
+> >   type=3DSYSCALL ... : arch=3Dx86_64 syscall=3Dfsopen ... a1=3DFSOPEN_C=
+LOEXEC
+> >   type=3DFSOPEN  ... : fs_name=3D"tmpfs"
+> >
+> > Link: https://github.com/linux-audit/audit-kernel/issues/152
+> > Signed-off-by: Ricardo Robaina <rrobaina@redhat.com>
 >
-> audit_ctl_owner_current() reads the lock owner without taking the lock
-> and KCSAN complains about it. Only the current task can store itself as
-> owner, so the check can't give a wrong answer. Mark the accesses with
-> READ_ONCE() and WRITE_ONCE().
+> Reviewed-by: Richard Guy Briggs <rgb@redhat.com>
 >
-> Reported-by: syzbot+39b8fea0641107a1ccee@syzkaller.appspotmail.com
-> Closes: https://syzkaller.appspot.com/bug?extid=3D39b8fea0641107a1ccee
-> Assisted-by: Claude:claude-opus-5-5
-> Signed-off-by: Babanpreet Singh <bbnpreetsingh@gmail.com>
-> ---
-> Paul, you looked at this race in 2022 and asked whether READ_ONCE()
-> was worth it and what it would cost:
-> https://lore.kernel.org/all/CAHC9VhTXNPWBDRoPcz-Jw=3Df+NNAEhxbh-ySc56CUd-=
-ZbuboW5w@mail.gmail.com/
-> Compile tested only (gcc and the KCSAN instrumentation diff); I could
-> not reproduce the race in QEMU.
->
->  kernel/audit.c | 11 ++++++++---
->  1 file changed, 8 insertions(+), 3 deletions(-)
+> > ---
+> > Changes in v2:
+> > - Better placement of audit_log_fsopen() call to avoid UAF.
+> >
+> >  fs/fsopen.c                |  3 +++
+> >  include/linux/audit.h      | 10 ++++++++++
+> >  include/uapi/linux/audit.h |  1 +
+> >  kernel/auditsc.c           | 13 +++++++++++++
+> >  4 files changed, 27 insertions(+)
 
-Thanks for the patch.
+My apologies, this patch fell between the cracks, but it looks good to me.
 
-I stand by my previous comments, but given the current state of LLM
-assisted reporting and submissions it's probably worth making the
-change.  I would like to see one small change, see below ...
-
-> diff --git a/kernel/audit.c b/kernel/audit.c
-> index 631d6d4a23cfd..f8c43ac6d5b82 100644
-> --- a/kernel/audit.c
-> +++ b/kernel/audit.c
-> @@ -268,7 +268,12 @@ void audit_ctl_unlock(void)
->   */
->  static bool audit_ctl_owner_current(void)
->  {
-> -       return (current =3D=3D audit_cmd_mutex.owner);
-> +       /*
-> +        * Lockless read: the owner can only equal current if current set
-> +        * it, so another task changing the owner concurrently can never
-> +        * make this return the wrong answer.
-> +        */
-
-This code is fairly easy to understand so I don't believe this comment
-is necessary or adds any value, please drop this commment and
-resubmit.
-
-> +       return (current =3D=3D READ_ONCE(audit_cmd_mutex.owner));
->  }
+As this patch touches both the audit and VFS code, I've merged this
+via a topic branch in the audit tree, topic-7.3-audit_fsopen.  The
+branch will remain static and it will be included in the audit/next
+branch as well as the audit PR for the upcoming merge window.
 
 --=20
 paul-moore.com
