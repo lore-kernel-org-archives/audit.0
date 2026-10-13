@@ -1,166 +1,140 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C95214EDCD9
-	for <audit@vger.kernel.org>; Tue, 13 Oct 2026 12:36:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 169104FC8E6
+	for <audit@vger.kernel.org>; Tue, 13 Oct 2026 12:40:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791894965; cv=none; b=q2Dy2YdtqfpcV79uOi6vuN3kflK79U5urmGD6CpxIHgE+01Wsdn/j5bBwfdpv/kXJ5sQ9byN7/dh30DYx2bi+sTiOkmC0Si6emKJORoMqw9um0fJ5KdYhcykqtDAVNzm1YjIeZRwiNcEXsAWddeKcl9ViSyei+ESiMpJ8u0JP20=
+	t=1791895259; cv=none; b=EPSk1otENJKEa8SaLeT7uMXPkiNymbvSEAyhR3uvg9oeXHAM4kLah6mbQmp/gGPrufnWSGSBVjYAomOPYRVjZLWJnGXwtu1+r6qmAt8vkyqP3P4Xel9auR70K1syuIxULDHNwriA8NtOS4e0wY6g21X6WjochsGCYTufR/ms/UM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791894965; c=relaxed/simple;
-	bh=KJz0ljhpxQV0dxuLmyAZzCH6KN1a+1DHS+L2+lDvs9U=;
+	s=arc-20240116; t=1791895259; c=relaxed/simple;
+	bh=+6HbdvXz6pDwyHoZBHfAtbCp8mco+tVTkhaG46/uc+o=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=TnVQko9QfJmpHmxuzdC2YgudwNtvpSTz55XN2bEk+IEyfOvgVDr9aOqlifsYw4qfbxmFCtyatZO7hjQE2THLkgoyznxL5y7/g/2xFmm8Y0OKMkrt8vtr7TH7fGT4cvXMqXb7X67kjhrK7PLh4HNzBN60t8cwb3rFP6L300Wjg1M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=dfwSn7zu; arc=none smtp.client-ip=170.10.133.124
+	 To:Cc:Content-Type; b=fdppTYEEQB/Zv1wVWDmRXJPe859T8idc3WZMqb0U0jiDeRuFofzfesQFIDnaIHA18HZJQADKq8DU59EkuRVIKYVtfLMlA+ctPAb1qNf3TBpRTBxU3pkhsHwd0x8gyKpIt/ICqplhWWDMixr/DBNNGvU5adIKIVlJG2qv3xSCVug=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=eX7cpyuY; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="dfwSn7zu"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="eX7cpyuY"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1791894962;
+	s=mimecast20190719; t=1791895257;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=ooKLa1R3KGvywNv1R+3CFpG+InkWtGBVvbQRUtpRSf4=;
-	b=dfwSn7zuZu81ewqBOOFI/l9xBxfYJhLUcFdAPbnSmoghiBOkFiERe/7H8aC8j/8PUFnFxh
-	hUEDo/0FrspbXA/QllExBFUWPEDUX14/KIH1NCYfGCUalH8BbQhjiAXAvmcIhVnRttbg9R
-	J1fIDjF29+kS3QGm0E5Cg8ZicDZJ6dY=
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
- [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=8VPWzp7oBCAkGHJlAcxMxO63noDeryK10tEP324EHX0=;
+	b=eX7cpyuYU+800b53xk5/JJvs4mNy3MZpdkXj6YIC+IAX2xZclxRr52d0zQIWVOB3csDtAq
+	jzyYNBKJIWLON9EFsiUuUa9+TIQKFWIjpVWfNI+ziU38uW1jBnXAfcLHegG0yVXcUVQy6t
+	Kle4h9EUeLii6ZckMl+9rSabH/pkndA=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-478-ewgYRluCMzijLDYAt8ssyg-1; Tue, 13 Oct 2026 12:36:01 +0000
-X-MC-Unique: ewgYRluCMzijLDYAt8ssyg-1
-X-Mimecast-MFC-AGG-ID: ewgYRluCMzijLDYAt8ssyg_1791894960
-Received: by mail-ej1-f71.google.com with SMTP id a640c23a62f3a-c2e1db672ebso332407266b.0
-        for <audit@vger.kernel.org>; Tue, 13 Oct 2026 05:36:01 -0700 (PDT)
+ us-mta-696-PE1yZISiMNuULdNAvqoX1Q-1; Tue, 13 Oct 2026 12:40:55 +0000
+X-MC-Unique: PE1yZISiMNuULdNAvqoX1Q-1
+X-Mimecast-MFC-AGG-ID: PE1yZISiMNuULdNAvqoX1Q_1791895255
+Received: by mail-ej1-f72.google.com with SMTP id a640c23a62f3a-c2942fa0995so305722366b.1
+        for <audit@vger.kernel.org>; Tue, 13 Oct 2026 05:40:55 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791894960; x=1792499760;
+        d=1e100.net; s=20260707; t=1791895255; x=1792500055;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=ooKLa1R3KGvywNv1R+3CFpG+InkWtGBVvbQRUtpRSf4=;
-        b=U89JdB3J9rBj3nG1+UKVixP7JU9J1X6JAHjzC37rNw3P/e2+DocPPcFGn68CWUeTXE
-         1D/u9cBst1MVuo2V9dUFMEDWuS/xx3PR5WY5EdfuydWACF6B3jRulJcBuAKFKx3oRkGc
-         y5SawLNkNinwsXzIB9yCxdmqYIxI/f5yR+VQDGHfjC+DeZwMwd/64mc3gxS6zvTa8a5L
-         nLxzcDK0b/zwpDJF6GvngC6MfpvAmTWvAeTh92eW1iOdN2ew+8YAc/z/hiqtIQCtaDGj
-         7sGv4ViGLouSaSmJJX5V5BCCH3JmH8htm+6ylq8yKRZFNVb1NkX3yQDzR4eppGh0zZC5
-         6cPA==
-X-Gm-Message-State: AFq9FYIAOwKRp5JIFKdWH4LKM4bi8AURhSQdCVQSlQIb7C5zjYLj98Bm
-	LQzi+s3epNHtas96MqE4COs786MOkdA+4h80epYnSgN+sBr6E3f54mPZr++T87KxPjKmnGNBYNg
-	TQmqlJfgW6aIrEM01gqJoo8nLNY9pxtfHjgri9DIXC6Qh8LsqiWJ5MADXfTS+zfeuDoDu7fjdEq
-	ei0YGTuHqSiENwNZn+imOebwl1wix63Zo=
-X-Gm-Gg: AYBFou05msg6LW8JdBX+F9PKb1hfm0DX5Gd0gn1DsvG16jvYrjSwT4SVN+TTWsq0V0O
-	KNMg6dwpt2ps/T65hmqt7NastR/ekDNB2fwjoR/0LPQAPxq9rHmYrttHI3Eflh+7CylGx0OTOA4
-	iW6euNsNrQ9ynpywMUMVzqfdp46Xihcp/C5fgGe9v8DKsSHvI2hdgfCvoR71qA2u9z5txB3QPpw
-	rilzv82wAOPaDOgxD428qpJlgvTsMZzsLmjx1JFRi7Y7PxzBU32JjcC49JeQvjfJ6La7Qq0m0H5
-	/DI=
-X-Received: by 2002:a17:907:7b8a:b0:c2e:1b4d:e9e9 with SMTP id a640c23a62f3a-c31a9f6ade4mr1135545766b.30.1791894960282;
-        Tue, 13 Oct 2026 05:36:00 -0700 (PDT)
-X-Received: by 2002:a17:907:7b8a:b0:c2e:1b4d:e9e9 with SMTP id
- a640c23a62f3a-c31a9f6ade4mr1135542366b.30.1791894959880; Tue, 13 Oct 2026
- 05:35:59 -0700 (PDT)
+        bh=8VPWzp7oBCAkGHJlAcxMxO63noDeryK10tEP324EHX0=;
+        b=Jo0NF6/nLALNiKB81cZeWl2CowNLmmXFLabjm8GYmZxm7xzcYvVt9q1wVIwxKx52f0
+         wl2g+jElyYz0Cwavgr7iA0oSR2dGhoMKY9YzGfWTu7q6AW18nzpkR9meEJp2DRlsFB4m
+         FuyWKvOWjXSONohKGdbkB0niIoj3jVZcV+t+noTJOOOkt5XK/FIkXckE7eT6rKEDhbgR
+         SaUehY22kJjKQP2yByluQi5pvPZFoYH1qk+inTIs7G9fgoseTUNoN0t26XNA+u9HqNs2
+         O9mJidtY/EdFxAzi3+IK/l6OmRL4u+60EXrh+HyW+2Y/ZRVBf5yYIKYQ7In4qJHJ6gvp
+         Mj8w==
+X-Forwarded-Encrypted: i=1; AKwUvBy4Aic6n0UyMFaoiuMNQumpZlUxoP12kfu/xz2IYD97HkjhOI6A25yic4i+AWKq1L3rpttdqw==@vger.kernel.org
+X-Gm-Message-State: AFq9FYJ+fu0tg+1aQO3R+4dM+H7w2SKjKkmRfLNrgc/NbzMSYM0WkSM9
+	32PIQVQ49WWVyIV8ref4ioRzIjhypXu3VIYn/Y8zmLrM7EsUfnwx/y4uv1RKe3UKEaEUwioYIQ1
+	PZYA9pnQ25E0Z8JHQ1ebtgRE8FNSyvTi7EJ6tHq6t2DrJzXt4+sKniPORBI8QoNTTDWVuUscZeC
+	wIU1jomKStIm/BjO+hROFUuEamYe4MWfA=
+X-Gm-Gg: AYBFou1u8OHYpDtCS0USyZWz2B37KoM6WqiNNIkJIeGIOHZBbSH9KLECxLRzGpLXIBf
+	dFKPSR+0HqIG7DUyZtDcD6XKpp49UKtdWH4S9yb0ZJevuP4vy7vd8OSgsQOXUdrO3npTQGoWT/Q
+	2IwFXCxv/j1fixFnWHKp1yRtnTkQsnbaxpX434LhuxZ8ZX9iURt0I/MnX7L4jYWy6Xu/UAr0BAc
+	7m7dgLpmWvFy2U9+yy9ZJlokDSH8SiHZmVHouT5DpZAuUjaL29ZTceYYMNprPhWq0PItBFryRKt
+	J3s=
+X-Received: by 2002:a17:907:e00e:10b0:c33:923b:ad66 with SMTP id a640c23a62f3a-c33923bd1damr460789966b.43.1791895254788;
+        Tue, 13 Oct 2026 05:40:54 -0700 (PDT)
+X-Received: by 2002:a17:907:e00e:10b0:c33:923b:ad66 with SMTP id
+ a640c23a62f3a-c33923bd1damr460788666b.43.1791895254469; Tue, 13 Oct 2026
+ 05:40:54 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1790088067.git.rrobaina@redhat.com> <CAHC9VhQ=FFYVNmQdiMsqg+5KDDrSC3SZS+H2=r_GkhfwQox8tg@mail.gmail.com>
-In-Reply-To: <CAHC9VhQ=FFYVNmQdiMsqg+5KDDrSC3SZS+H2=r_GkhfwQox8tg@mail.gmail.com>
+References: <20260703122548.1623981-2-rrobaina@redhat.com> <alaO+HZ7qJ1Iv9SP@madcap2.tricolour.ca>
+ <CAHC9VhSosDsvCZyq0yY3Y61r5Od52WJecqcEjrT7XGkpyBi-xQ@mail.gmail.com>
+In-Reply-To: <CAHC9VhSosDsvCZyq0yY3Y61r5Od52WJecqcEjrT7XGkpyBi-xQ@mail.gmail.com>
 From: Ricardo Robaina <rrobaina@redhat.com>
-Date: Tue, 13 Oct 2026 09:35:48 -0300
-X-Gm-Features: AclHuK-0QABZ6yrPwALI3VDGc1f2HfQWIB06SZ96BvTfEuUJkskwg4GU5NbIk1c
-Message-ID: <CAABTaaBL=TScs8Qqu3b8F6KZPGMyvwy6cBC3teDaBL6MGMucNg@mail.gmail.com>
-Subject: Re: [PATCH v3 00/14] audit: log all six syscall arguments in the
- SYSCALL record
+Date: Tue, 13 Oct 2026 09:40:42 -0300
+X-Gm-Features: AclHuK_BqgHG9szdxsfF_J8_QomlYVv7uojh01Rda0mXNc18M6GONX950OFpYpA
+Message-ID: <CAABTaaCj2Bap_w7mESYhPgT1njd1rQh6kB0HFnnSiMW40SCNUQ@mail.gmail.com>
+Subject: Re: [PATCH v2] audit: add FSOPEN record to log filesystem name
 To: Paul Moore <paul@paul-moore.com>
-Cc: audit@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-csky@vger.kernel.org, linux-mips@vger.kernel.org, 
-	linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org, 
-	linux-sh@vger.kernel.org, sparclinux@vger.kernel.org, 
-	linux-um@lists.infradead.org, bpf@vger.kernel.org, eparis@redhat.com, 
-	sgrubb@redhat.com, oleg@redhat.com, richard.henderson@linaro.org, 
-	mattst88@gmail.com, linmag7@gmail.com, linux@armlinux.org.uk, 
-	catalin.marinas@arm.com, will@kernel.org, guoren@kernel.org, monstr@monstr.eu, 
-	tsbogend@alpha.franken.de, jonas@southpole.se, 
-	stefan.kristiansson@saunalahti.fi, shorne@gmail.com, 
-	James.Bottomley@hansenpartnership.com, deller@gmx.de, 
-	ysato@users.sourceforge.jp, dalias@libc.org, glaubitz@physik.fu-berlin.de, 
-	davem@davemloft.net, andreas@gaisler.com, richard@nod.at, 
-	anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net, chris@zankel.net, 
-	jcmvbkbc@gmail.com, tglx@kernel.org, peterz@infradead.org, luto@kernel.org
+Cc: Richard Guy Briggs <rgb@redhat.com>, audit@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, eparis@redhat.com, viro@zeniv.linux.org.uk, 
+	brauner@kernel.org, jack@suse.cz
 X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: A3EcPbPeV2n5h1AvinrCv_hGd8brafnh52YG1lG7Ie0_1791894960
+X-Mimecast-MFC-PROC-ID: viafmvfFTftJyKBA3mwnL0fXG5rkOZXqtJC3qx2blyw_1791895255
 X-Mimecast-Originator: redhat.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Oct 1, 2026 at 6:06=E2=80=AFPM Paul Moore <paul@paul-moore.com> wro=
-te:
+On Sun, Oct 4, 2026 at 10:18=E2=80=AFAM Paul Moore <paul@paul-moore.com> wr=
+ote:
 >
-> On Tue, Sep 22, 2026 at 3:21=E2=80=AFPM Ricardo Robaina <rrobaina@redhat.=
-com> wrote:
+> On Tue, Jul 14, 2026 at 3:33=E2=80=AFPM Richard Guy Briggs <rgb@redhat.co=
+m> wrote:
+> > On 2026-07-03 09:25, Ricardo Robaina wrote:
+> > > Modern mount tools (util-linux >=3D 2.39.1) use the new mount API
+> > > (fsopen, fsconfig, fsmount, move_mount) instead of the legacy mount(2=
+)
+> > > syscall. The generic SYSCALL audit record logs the fsopen syscall but
+> > > does not capture the filesystem name string, creating an audit gap fo=
+r
+> > > filesystem mount operations.
+> > >
+> > > Add an FSOPEN auxiliary record that logs the dereferenced filesystem
+> > > name string passed to fsopen(2).
+> > >
+> > >   type=3DSYSCALL ... : arch=3Dx86_64 syscall=3Dfsopen ... a1=3DFSOPEN=
+_CLOEXEC
+> > >   type=3DFSOPEN  ... : fs_name=3D"tmpfs"
+> > >
+> > > Link: https://github.com/linux-audit/audit-kernel/issues/152
+> > > Signed-off-by: Ricardo Robaina <rrobaina@redhat.com>
 > >
-> > The SYSCALL record currently logs only four of the six syscall
-> > arguments (a0-a3), silently discarding the remaining two. This
-> > leads to the need for auxiliary records when audit-relevant
-> > data lands in the 5th or 6th argument of a syscall.
+> > Reviewed-by: Richard Guy Briggs <rgb@redhat.com>
 > >
-> > This series extends the SYSCALL record to log all six arguments,
-> > by adding arguments a4 and a5 inline within the existing record.
+> > > ---
+> > > Changes in v2:
+> > > - Better placement of audit_log_fsopen() call to avoid UAF.
+> > >
+> > >  fs/fsopen.c                |  3 +++
+> > >  include/linux/audit.h      | 10 ++++++++++
+> > >  include/uapi/linux/audit.h |  1 +
+> > >  kernel/auditsc.c           | 13 +++++++++++++
+> > >  4 files changed, 27 insertions(+)
 >
-> Thanks Ricardo, this looks great!
-
-Thanks, Paul!
-
+> My apologies, this patch fell between the cracks, but it looks good to me=
+.
 >
-> There are a few things in some of the individual patches which I reply
-> to in a minute, but there are a couple of "global" things that I
-> wanted to mention:
->
-> * As pointed out by Sashiko, when you were converting all of the
-> arches, it looks like you missed alpha.  I took a quick look and it
-> appears that it should be a pretty straightforward conversion like
-> most of the others.
-
-I've actually dropped the alpha patch as per Magnus's request [1].
-
-[1] https://lore.kernel.org/audit/CA+=3DFv5T4826T2sd0Gbh-nfZsqcWK_phdBKy4BL=
-WOvDTt92t5Eg@mail.gmail.com/
-
->
-> * We need to get ACKs from all the various arch maintainers.  Aside
-> from the parisc changes all of your arch specific patches are trivial
-> (and cleaner than the existing code IMO) so I don't expect anyone to
-> complain, but getting ACKs will likely take some time.  Even the
-> parisc patches aren't that bad, and arguably they fix a problem for
-> seccomp so that should make asking for ACKs easier :)
->
-> Since I expect chasing down all the various maintainers for ACKs will
-> take a little while, and I'd like to start getting this patchset some
-> basic testing, I'm going to merge it into dev-staging now.  While the
-> dev-staging branch doesn't feed into linux-next (this isn't likely to
-> land in the next merge window) it is one of the branches that gets
-> tested automatically and included in my kernel-secnext RPM builds.
-> This also means you won't need to worry about keeping this patchset
-> up-to-date with rebasing, as I rebase dev-staging as needed (it
-> intentionally isn't a stable branch).  Going forward, if there are any
-> minor changes to this patchset, e.g. a few line change in one of two
-> patches, please just send a fixup patchset based against
-> audit/dev-staging and I'll squash it into the relevant patch in the
-> series.  However, in the unlikely event that a major rewrite is
-> needed, just send a new patchset ... but I'll be very surprised if
-> that happens here :)
-
-Sounds good!
-
+> As this patch touches both the audit and VFS code, I've merged this
+> via a topic branch in the audit tree, topic-7.3-audit_fsopen.  The
+> branch will remain static and it will be included in the audit/next
+> branch as well as the audit PR for the upcoming merge window.
 >
 > --
 > paul-moore.com
 >
+
+Thanks, Paul!
 
 -Ricardo
 
