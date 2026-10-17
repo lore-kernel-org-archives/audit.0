@@ -1,140 +1,157 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f177.google.com (mail-qk1-f177.google.com [209.85.222.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 169104FC8E6
-	for <audit@vger.kernel.org>; Tue, 13 Oct 2026 12:40:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F7253C0634
+	for <audit@vger.kernel.org>; Sat, 17 Oct 2026 03:00:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791895259; cv=none; b=EPSk1otENJKEa8SaLeT7uMXPkiNymbvSEAyhR3uvg9oeXHAM4kLah6mbQmp/gGPrufnWSGSBVjYAomOPYRVjZLWJnGXwtu1+r6qmAt8vkyqP3P4Xel9auR70K1syuIxULDHNwriA8NtOS4e0wY6g21X6WjochsGCYTufR/ms/UM=
+	t=1792206009; cv=none; b=oU8wbBt0g5tQ6ViCZwepPplqcW4Q9Rqd4Py8YGb0wfuIB+PzRIUVGEfS/LFMEYZ2TLJiRO/jUs/Hsg5hT0LdkiKRZA+W8fcPKioBR8fgGl+24ZUqY13J85XmyuSUoCSiCpRY/38FiysBt5sC9Wqu9akd6r7txXPhyFz22Btqbys=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791895259; c=relaxed/simple;
-	bh=+6HbdvXz6pDwyHoZBHfAtbCp8mco+tVTkhaG46/uc+o=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=fdppTYEEQB/Zv1wVWDmRXJPe859T8idc3WZMqb0U0jiDeRuFofzfesQFIDnaIHA18HZJQADKq8DU59EkuRVIKYVtfLMlA+ctPAb1qNf3TBpRTBxU3pkhsHwd0x8gyKpIt/ICqplhWWDMixr/DBNNGvU5adIKIVlJG2qv3xSCVug=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=eX7cpyuY; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1792206009; c=relaxed/simple;
+	bh=XKZ636C+0wZF282LG7kK4JTGRRg5tviYpbDi0A8qZDo=;
+	h=Date:Message-ID:From:To:Cc:Subject; b=ffbYL3uUiQ7+6Sc3QVkCX1rbWLJZwaovk0/DnI5frx0Ksb1tGDAqjIpqmrUAX3/Ltm4Ygd4q4kNFElUusIbcV1jxGJUi5CRi4rwlcpzRrkrVxBQbBnz5At9Uyvu+Bp0LSB3lhnT0OfBDkNOMYtlg1YQ6KF2Vcx7TabJOC23usww=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=N5ToaYPI; arc=none smtp.client-ip=209.85.222.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="eX7cpyuY"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1791895257;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=8VPWzp7oBCAkGHJlAcxMxO63noDeryK10tEP324EHX0=;
-	b=eX7cpyuYU+800b53xk5/JJvs4mNy3MZpdkXj6YIC+IAX2xZclxRr52d0zQIWVOB3csDtAq
-	jzyYNBKJIWLON9EFsiUuUa9+TIQKFWIjpVWfNI+ziU38uW1jBnXAfcLHegG0yVXcUVQy6t
-	Kle4h9EUeLii6ZckMl+9rSabH/pkndA=
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
- [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-696-PE1yZISiMNuULdNAvqoX1Q-1; Tue, 13 Oct 2026 12:40:55 +0000
-X-MC-Unique: PE1yZISiMNuULdNAvqoX1Q-1
-X-Mimecast-MFC-AGG-ID: PE1yZISiMNuULdNAvqoX1Q_1791895255
-Received: by mail-ej1-f72.google.com with SMTP id a640c23a62f3a-c2942fa0995so305722366b.1
-        for <audit@vger.kernel.org>; Tue, 13 Oct 2026 05:40:55 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="N5ToaYPI"
+Received: by mail-qk1-f177.google.com with SMTP id af79cd13be357-93efc0452b5so33343185a.0
+        for <audit@vger.kernel.org>; Fri, 16 Oct 2026 20:00:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1792206000; x=1792810800; darn=vger.kernel.org;
+        h=subject:cc:to:from:message-id:date:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=69p2wdFQwE6sYgQUmJukW/ziWDawqkeq3jAApKFhQsc=;
+        b=N5ToaYPIwJJh3D9MNF/JHT+nTNn5KSod1OTqgifkNA5YnahST4QqvUmOK7XEhK8GEX
+         x/5v5eA+GZ1Cy7fnNaAQfOUx2ff/ALgJtFiuXV4AFfxlGLOswG8AKIlsut8Lp4R9rA7s
+         rPri5Z4NAZAE6nLafdKJkfTeTfdfqaNuwLfbJvnXyERvcXcYatsRe0E5xfO1M3eo77vt
+         iOVLhEeh0sbgc1aR6Px+Q6RIvDjx/0r3Bz4FWRtFmMMmbf4reqIpSv378ZR2LyqHVtG1
+         e03IFC2U6epmGy0p59XdmrGgm1c7tDq+P6jXI3wD2MTCY6vdN9gQk3X2UY2s+9/pKRqE
+         puSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791895255; x=1792500055;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=8VPWzp7oBCAkGHJlAcxMxO63noDeryK10tEP324EHX0=;
-        b=Jo0NF6/nLALNiKB81cZeWl2CowNLmmXFLabjm8GYmZxm7xzcYvVt9q1wVIwxKx52f0
-         wl2g+jElyYz0Cwavgr7iA0oSR2dGhoMKY9YzGfWTu7q6AW18nzpkR9meEJp2DRlsFB4m
-         FuyWKvOWjXSONohKGdbkB0niIoj3jVZcV+t+noTJOOOkt5XK/FIkXckE7eT6rKEDhbgR
-         SaUehY22kJjKQP2yByluQi5pvPZFoYH1qk+inTIs7G9fgoseTUNoN0t26XNA+u9HqNs2
-         O9mJidtY/EdFxAzi3+IK/l6OmRL4u+60EXrh+HyW+2Y/ZRVBf5yYIKYQ7In4qJHJ6gvp
-         Mj8w==
-X-Forwarded-Encrypted: i=1; AKwUvBy4Aic6n0UyMFaoiuMNQumpZlUxoP12kfu/xz2IYD97HkjhOI6A25yic4i+AWKq1L3rpttdqw==@vger.kernel.org
-X-Gm-Message-State: AFq9FYJ+fu0tg+1aQO3R+4dM+H7w2SKjKkmRfLNrgc/NbzMSYM0WkSM9
-	32PIQVQ49WWVyIV8ref4ioRzIjhypXu3VIYn/Y8zmLrM7EsUfnwx/y4uv1RKe3UKEaEUwioYIQ1
-	PZYA9pnQ25E0Z8JHQ1ebtgRE8FNSyvTi7EJ6tHq6t2DrJzXt4+sKniPORBI8QoNTTDWVuUscZeC
-	wIU1jomKStIm/BjO+hROFUuEamYe4MWfA=
-X-Gm-Gg: AYBFou1u8OHYpDtCS0USyZWz2B37KoM6WqiNNIkJIeGIOHZBbSH9KLECxLRzGpLXIBf
-	dFKPSR+0HqIG7DUyZtDcD6XKpp49UKtdWH4S9yb0ZJevuP4vy7vd8OSgsQOXUdrO3npTQGoWT/Q
-	2IwFXCxv/j1fixFnWHKp1yRtnTkQsnbaxpX434LhuxZ8ZX9iURt0I/MnX7L4jYWy6Xu/UAr0BAc
-	7m7dgLpmWvFy2U9+yy9ZJlokDSH8SiHZmVHouT5DpZAuUjaL29ZTceYYMNprPhWq0PItBFryRKt
-	J3s=
-X-Received: by 2002:a17:907:e00e:10b0:c33:923b:ad66 with SMTP id a640c23a62f3a-c33923bd1damr460789966b.43.1791895254788;
-        Tue, 13 Oct 2026 05:40:54 -0700 (PDT)
-X-Received: by 2002:a17:907:e00e:10b0:c33:923b:ad66 with SMTP id
- a640c23a62f3a-c33923bd1damr460788666b.43.1791895254469; Tue, 13 Oct 2026
- 05:40:54 -0700 (PDT)
+        d=1e100.net; s=20260707; t=1792206000; x=1792810800;
+        h=subject:cc:to:from:message-id:date:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=69p2wdFQwE6sYgQUmJukW/ziWDawqkeq3jAApKFhQsc=;
+        b=p/EnUyArT578Nkx63aXKBzCQ/dfPWkf0K2b2/jtYrMDZU7GBibuCjkzzesqkGfWBAg
+         4Mk8nFPfgvdUKsp45YVPwgGOlLbbkFvId2EZSIIUWV7mrcdI3PP+pHDynf9zbkpBy0hn
+         WN+8erFgqWoU/H2kLkWx4yQ+1MXLQHDU9sE/sBiQaj0FRurc/Jz2PMIpfK+IsKQSH5MH
+         M/RGYJ2E1ifWH2l1hgSY/MwotBzrWUKL+CDfk4vU3YiXVIGgHi9hKy1Njx2+wyqqzg+c
+         5ToEzC5Jb0eQdSh8KDbcSOQPFo0GUIUkwVoun/GqfBadFwukaDiH4pTki/pjAVvJbpXs
+         mBNA==
+X-Gm-Message-State: AFq9FYK4aCpI78ViuatZfboUZR97oDACuWsPNU8ci6BI/EpYCTK1Ruyu
+	amh7eoBajjNQ29j3jqNPhSdTsqt/AQPGOUP/U8G7BtM13m9t6OreznUroPqHPl2I2IUe+sEkmXy
+	oZQQX9g==
+X-Gm-Gg: AYBFou2+MdUlPAf87zQ/Xj4hKXbbTCA4Kj2RA6oDpoyM3pz0SWSknguHytVlyXLXFRS
+	I1wq8Af5CJpzRKgFz02pqzTdq91hZX+GbcWuKX27RGqWVvOBOwlkd8d5GTS3v6DZBMkqeYNy2ow
+	yuZ//e+uY3q17vb3QueO9mQtQhrfPRZSXmsnGVZutobAVt+JiWBXQYKfYBJ85QHOUXnrmocHKj/
+	exKm8I+6c8UlcM4uysTPrsxYiPob/EgALW6rf2WBZPCZNd6WdmzbA4RlYa+KDILXqjR46ILkDU0
+	yh8ezuVAuTgKSOFZfiE5DcObLlvJFuP/B7GILLTtJ3Aq8Q+yFirZ9buQQi1dt1IKGEdj/GAQMMq
+	9/uhtRL+guXC38Au5voWXn/sJnhwXQBolqWZZHSI/poB4Vegl6n8pIwr+59hTdG35bU0SAIWI7q
+	0TbrQ2h8vUldxLNEBzn8j06QgP+CSzPDVsg6vn+4b9hF0yTh+zPd9RkRK+t+92fy8cN6c7FpHpi
+	v5KePC62+Pp0thffWptKSvmPEWiDyWrjS0Z/pXfDFHL34zh5athHa8qRgtcv+LYL2zMbzSpm94=
+X-Received: by 2002:a05:620a:4395:b0:93a:2611:270f with SMTP id af79cd13be357-93f29cc7d03mr292326485a.13.1792206000328;
+        Fri, 16 Oct 2026 20:00:00 -0700 (PDT)
+Received: from localhost (pool-71-126-255-178.bstnma.fios.verizon.net. [71.126.255.178])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-93f1a16c21esm364494685a.16.2026.10.16.19.59.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Oct 2026 19:59:59 -0700 (PDT)
+Date: Fri, 16 Oct 2026 22:59:58 -0400
+Message-ID: <58518dd02336a6018abb7fb8b34f5212@paul-moore.com>
+From: Paul Moore <paul@paul-moore.com>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: audit@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] audit/audit-pr-20261016
 Precedence: bulk
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20260703122548.1623981-2-rrobaina@redhat.com> <alaO+HZ7qJ1Iv9SP@madcap2.tricolour.ca>
- <CAHC9VhSosDsvCZyq0yY3Y61r5Od52WJecqcEjrT7XGkpyBi-xQ@mail.gmail.com>
-In-Reply-To: <CAHC9VhSosDsvCZyq0yY3Y61r5Od52WJecqcEjrT7XGkpyBi-xQ@mail.gmail.com>
-From: Ricardo Robaina <rrobaina@redhat.com>
-Date: Tue, 13 Oct 2026 09:40:42 -0300
-X-Gm-Features: AclHuK_BqgHG9szdxsfF_J8_QomlYVv7uojh01Rda0mXNc18M6GONX950OFpYpA
-Message-ID: <CAABTaaCj2Bap_w7mESYhPgT1njd1rQh6kB0HFnnSiMW40SCNUQ@mail.gmail.com>
-Subject: Re: [PATCH v2] audit: add FSOPEN record to log filesystem name
-To: Paul Moore <paul@paul-moore.com>
-Cc: Richard Guy Briggs <rgb@redhat.com>, audit@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, eparis@redhat.com, viro@zeniv.linux.org.uk, 
-	brauner@kernel.org, jack@suse.cz
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: viafmvfFTftJyKBA3mwnL0fXG5rkOZXqtJC3qx2blyw_1791895255
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Sun, Oct 4, 2026 at 10:18=E2=80=AFAM Paul Moore <paul@paul-moore.com> wr=
-ote:
->
-> On Tue, Jul 14, 2026 at 3:33=E2=80=AFPM Richard Guy Briggs <rgb@redhat.co=
-m> wrote:
-> > On 2026-07-03 09:25, Ricardo Robaina wrote:
-> > > Modern mount tools (util-linux >=3D 2.39.1) use the new mount API
-> > > (fsopen, fsconfig, fsmount, move_mount) instead of the legacy mount(2=
-)
-> > > syscall. The generic SYSCALL audit record logs the fsopen syscall but
-> > > does not capture the filesystem name string, creating an audit gap fo=
-r
-> > > filesystem mount operations.
-> > >
-> > > Add an FSOPEN auxiliary record that logs the dereferenced filesystem
-> > > name string passed to fsopen(2).
-> > >
-> > >   type=3DSYSCALL ... : arch=3Dx86_64 syscall=3Dfsopen ... a1=3DFSOPEN=
-_CLOEXEC
-> > >   type=3DFSOPEN  ... : fs_name=3D"tmpfs"
-> > >
-> > > Link: https://github.com/linux-audit/audit-kernel/issues/152
-> > > Signed-off-by: Ricardo Robaina <rrobaina@redhat.com>
-> >
-> > Reviewed-by: Richard Guy Briggs <rgb@redhat.com>
-> >
-> > > ---
-> > > Changes in v2:
-> > > - Better placement of audit_log_fsopen() call to avoid UAF.
-> > >
-> > >  fs/fsopen.c                |  3 +++
-> > >  include/linux/audit.h      | 10 ++++++++++
-> > >  include/uapi/linux/audit.h |  1 +
-> > >  kernel/auditsc.c           | 13 +++++++++++++
-> > >  4 files changed, 27 insertions(+)
->
-> My apologies, this patch fell between the cracks, but it looks good to me=
-.
->
-> As this patch touches both the audit and VFS code, I've merged this
-> via a topic branch in the audit tree, topic-7.3-audit_fsopen.  The
-> branch will remain static and it will be included in the audit/next
-> branch as well as the audit PR for the upcoming merge window.
->
-> --
-> paul-moore.com
->
+Linus,
 
-Thanks, Paul!
+Six audit patches for the Linux v7.4 merge window:
 
--Ricardo
+- Fix the accounting of audit filter rule additions and removals
 
+Tracking audit filter rules is important as their presence can trigger
+additional processing.  Unfortunately, the existing code did not properly
+track the removal of filter rules, resulting in some cases where
+additional processing was done when none was required.  This pull
+request not only corrects the accounting problems, but also provides
+a cleaner API for tracking audit filter rule additions and removals.
+
+- Add a FSOPEN record to log the filesystem name in the new mount API
+
+Close a long standing audit blindspot by capturing the filesystem name,
+e.g. "tmpfs", when calling fsopen().
+
+- Split audit's storage of process and file capabilities
+
+Instead of a single structure that stores all possible capability
+information, create a dedicated audit file capabilities struct and
+convert the existing audit capabilities struct into a process
+capabilities struct.  This saves 80 bytes from the per-task
+audit_context on 64-bit systems.
+
+- Ensure that the PROCTITLE record is reset on exec()
+
+This fixes a problem where systemd would set a temporary PROCTITLE string
+after forking a child process before calling exec(), effectively locking
+the PROCTITLE string to the temporary value.  This pull request resets
+the PROCTITLE state on exec() so that newly executed processes can set
+their PROCTITLE correctly.
+
+- Add some missing unlikely() annotations to the audit wrapper functions
+
+- Clean up the audit netlink multicast skb length adjustment
+
+Paul
+
+--
+The following changes since commit a90ee4305c4a5df72c11b31dacfdc76e00fcf78a:
+
+  Linux 7.3-rc6 (2026-10-04 13:45:25 -0700)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/audit.git
+    tags/audit-pr-20261016
+
+for you to fetch changes up to 5d59024a6cc9aa9300da59fbf7e2c29f1f2393c6:
+
+  audit: add FSOPEN record to log filesystem name
+    (2026-10-04 07:33:18 -0400)
+
+----------------------------------------------------------------
+audit/stable-7.4 PR 20261016
+----------------------------------------------------------------
+
+Christian Göttsche (1):
+      audit: separate file and process capability storage
+
+Ricardo Robaina (3):
+      audit: add missing unlikely hint to audit_dummy_context() wrappers
+      audit: use copied skb length in kauditd_send_multicast_skb()
+      audit: add FSOPEN record to log filesystem name
+
+Richard Guy Briggs (1):
+      audit: free proctitle in context so it can be re-set by fork on
+         exec_binprm
+
+Stanislav Kinsburskii (1):
+      audit: Fix filter rule accounting after automatic removal
+
+ fs/fsopen.c                |    3 +
+ include/linux/audit.h      |   16 +++++-
+ include/uapi/linux/audit.h |    1 
+ kernel/audit.c             |    2 
+ kernel/audit.h             |   20 ++++++--
+ kernel/audit_tree.c        |    1 
+ kernel/audit_watch.c       |    2 
+ kernel/auditfilter.c       |   86 ++++++++++++++++++-------------------
+ kernel/auditsc.c           |   17 ++++++-
+ 9 files changed, 93 insertions(+), 55 deletions(-)
+
+--
+paul-moore.com
