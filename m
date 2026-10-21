@@ -1,99 +1,76 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.214.175
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1792514337;
-	b=TRJqUGDpMotOfYOee9RSm2KG4XCS6vRnoY28FWTh18k7EYu63O+GGd9NO98zW5VDFdoj
-	 yLXQucqrR2j2nNTcAQ+vuhUt+99trKx3Hy7ERK91zyfjmy2J3HyixEmeyhDuAGb8evDvT
-	 TQIxlrn/zDdf5OXNdlLAVV8sqNIecPihawvShmPLdXQneudGC6jQu33lQTMgfFGu7NvTQ
-	 mpQdVQXIyflY7FW43AmQTqGuhPI9uboCXh1myYRsppG+bu0uqlYklllTFFljyeCVV9jiV
-	 dbT7TGbMKTzpbmg2CAhM81As2V+KajSwycQouTFS4o0efUgeRyaf5n74qRaBmKq5RkQ==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792514337;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:MIME-Version:References:
-	 In-Reply-To:From:Date:X-Gm-Features:Message-ID:Subject:To:Cc:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=5h6v8PMV52XAIibb0bLKm7PVGjK4muo/m4wCC4Oc5nw=;
-	b=xv73eMxi+KYgVPnlnl2JpjXTE1bCLxAqACCR/M/bXcn3NeBftMy5Q/Hz1kHxhHuB53or
-	 ZTiOGDgpVhIne98xtLOgj18V9dP16UbVFzXSinWe2F/YVB5ywo/do1D1B5TzCpf5lIH+h
-	 ivFTbufHgCwpiC486/iL0uPqosYyLJBH7UoVwyDpf6PGHeaYSUyRU52jqLCy5sbZWM/GS
-	 ce27C6V7+KFUAkTixccg2cE2MUgEmQnmyw+FtRmreizp/MFfcuG3qg7PgREo1h84Di9N8
-	 /a3z3E7JNsZJI7RIbZW7ch14QeWUD7dMLL0KX79eHSErT/L2SCRk7+90xgSYnVI74SQ==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=paul-moore.com;
-	spf=pass smtp.mailfrom=paul-moore.com;
-	dkim=pass header.d=paul-moore.com header.i=@paul-moore.com header.a=rsa-sha256 header.s=google header.b=GwYGVURA;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.214.175
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=173.212.254.19
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1792552532;
+	b=mVdkdy5yEJMiqQex+oUab0nurPZzLG0x8TIz6+JdILr2k7P0oinX5Aj/NyB1t/gk8CwO
+	 COcL+4TzSozMLWstYr0H5dU8fGMVT3fbS65JOOoJK+fK4JyRos0L/40M65+975/bORB4y
+	 YSb8LmL4Jk8s9G58VD7h042AVcMegMz6jojhyAU9toEeZmBOF0X+TqE4DkFZR3wnEBAZv
+	 el7AGt2RE0Mc61IXINB/Rxrmnxom75ZCZbbslELfKh3XSBL/0h6GGvYf6768r4Z29jOuE
+	 7NoKmGPFXXAvBAb/TK7n14g0ERk5U6NG3JNqV57Pd0I4J+anQWCLH5hCzhhBbhHv8UA==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792552532;
+	h=DMARC-Filter:DKIM-Signature:Received:Message-ID:In-Reply-To:
+	 References:From:Subject:To:Cc:Date;
+	bh=2Rr2bO9okDTnKQK7n2lk4waHPtLw2M+XqSbjGvsVjiU=;
+	b=kxJ1KQE/8J0FNYE0omUAQpsrrErDAHQUXyNjbgCjDuGhgYwlxxZeDvJZM5ndKSOJddXA
+	 PSHnh6+DW3Nx9oQIWE4HdCopMxnDgKLwUcymFKjwUIEfNEPJI+tRUSxRKdfDP8xFdZp+b
+	 JSrdYdptZGplT+wMqmLKg7cjUBpPCmeZ5z+4njpO1kB0VbIWw43wtyDFni0qrpY0nFx+7
+	 4YxiFRfRFYNeGOmA15VVESqrLUP6GvxpyQRjdBCEz1DvjlelOhI2iTwNh/FfO64PyZj2A
+	 mxxG+wDbwEGWY3UhTo0KgzXxIzckZKPgBWm7aqbIxzc0dtichn5nZ52ev3j3bApmu/A==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=tuxist.de;
+	spf=fail smtp.mailfrom=tuxist.de;
+	dkim=pass header.d=tuxist.de header.i=@tuxist.de header.a=rsa-sha256 header.s=201705 header.b=G6WTKipf;
+	arc=none smtp.remote-ip=173.212.254.19
+Received: from groupware.tuxist.de (groupware.tuxist.de [173.212.254.19])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0178A60A2635
-	for <audit@vger.kernel.org>; Tue, 20 Oct 2026 16:38:56 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0178A60A2635
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14D25606A31B;
+	Wed, 21 Oct 2026 03:15:29 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 14D25606A31B
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=tuxist.de
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=tuxist.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=paul-moore.com header.i=@paul-moore.com header.a=rsa-sha256 header.s=google header.b=GwYGVURA
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2e8b20a899fso17227895ad.1
-        for <audit@vger.kernel.org>; Tue, 20 Oct 2026 09:38:56 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1792514336; cv=none;
-        d=google.com; s=arc-20260327;
-        b=fShMmWA9ImGBeNLnxQjtobdk8we4eCdwPKUmQMVX27z8IutC6MCOV8hKcJKrjc+rbu
-         7YqPJM51wtbG2DoCJrQlqy9j3V7Rdo7A9xh3GNRIS0hpjzL+bTxYBdL+KQ4Ju9yb5rhR
-         Gicwdr5f1Otjxo1EHkSobSj8uDQyem+uDXlq04Wdfm9tvUM8d6F1a/fzpiZrbgVCYvhw
-         GMxfKUyyRtiizgYol5dIBCEtqXgdRv9yVVsuv1T0HM1pWgjngIV0IjwGzN1npZGmQSW5
-         kZjQNGhy9Ah/Hmm6uKY+vmD3VeujmED8fmR6jGgcGOAuv8OhvJ3noZbQTtdI4+LOSPkj
-         rlnw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=5h6v8PMV52XAIibb0bLKm7PVGjK4muo/m4wCC4Oc5nw=;
-        fh=b8NH310RuesssRCaAmnBQdPTqvz9avNnbX9wpmAPCkU=;
-        b=I1j/poaB0/IvyJACxWM/iaF8hA1/+f3hqrX3kNiOSJXVZOzxfsUHux32r96w93j3Ms
-         BgSXg3Mw1ynpMEvGS0RWgzMtV5k4BMWQrqP4uQPrZebQUVgIbPd9woZQn/ZvJZXZjNOV
-         zdoDtwd4tjNjFqUfDBQ0RjhHMLM+aSJhcRyBwYeDhyO7KDk1WHm/OxibJjQSChxrrz9l
-         glJ2kcmA2wLGcCwj1oSG+7ln8fli0vhINv+oNB2/Zh7gTkpkiCuwBe232h5j0VkjXzDg
-         HdmfyPFSl27gePB2Q2tTgQvPzmZvnKfTAwq3YJOuertNi6sy/+8aefYYvrxjm1z7OdJy
-         Pf/Q==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1792514336; x=1793119136; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=5h6v8PMV52XAIibb0bLKm7PVGjK4muo/m4wCC4Oc5nw=;
-        b=GwYGVURAL7E3Gqp1mE6IbppA5fK/M6QVj3T4+Mu1VqNJAQWSHTCgIBs7lXAHx7VP4b
-         X7Ol6JtjEVwHUVW/UUWijctAKk0S3FIF6sAkL2D0z4+yun1CiPIG05jQakKiuYArY+di
-         qKUZ2JssWHS9PY4Rrbam2j+K8HSVipMYAjJhVwlz0qlw5vC30c9m2oPlM5nOac4bwKsb
-         0iIOeo41vgbotndmbkqO3IW2nEL8EcaGXBwYuALkuaiWKHExqpmpd78k/kVF659++rVb
-         16kcHMvBo17gh+L06xflahlYQXJ+NMSTGDwKIeHcy9Z1IKqewLhKEpxT50Ywi1EBHbtT
-         Ya6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792514336; x=1793119136;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=5h6v8PMV52XAIibb0bLKm7PVGjK4muo/m4wCC4Oc5nw=;
-        b=lCm19hEkUGL8p8ZdkMAvS0vaTknPH/0ZsFhejb0ANd8h/4uHEKH3aF5QNrbl7Rg3bR
-         /CfFn9CefqaqfFOVPG9vNzVIzVoK9B/1LubT25hOO5YmjYqNNprwpg1GN/iRI04UX98Q
-         Fkgu+T5U/S4q090WNvAj1D0ZXhi2yoix01vslxO8KUVh9OY6o/aToeXnw9mMB05zr9Kk
-         mm1u2ESi0nHRi+PipQUsvWATRJuw1lrUePlwTYwbmnyca0QNumPm4jvBAR3fQAzBcHiF
-         V9/dfAfeFN/rbIFwHIr7st5jhgjCEQGxm8YymzRecjPP6VjHEE6qFiiECETaBaTmhxu2
-         tkjw==
-X-Gm-Message-State: AFq9FYJ4BWj2JqP+QM99LW5lpb9sV5iSuG9D9ddpgPw0wZxoqDpwzhdp
-	5GxMzEF8ynFSEmsMvUtUdRmLuNXBY8EsIywaFR9WI6mIB2l32ncX9BP/sk2q+h+pdvDDLl93Ggy
-	cm/dspYYny4/TyiYsMlIGuBdnShnosiZtDOr7fI8m
-X-Gm-Gg: AYBFou1L5CERwcpeNIu5edyYNIz9b7ttbEQ9oKnHLIX4uyT3VvQeU2fwZyKzMM54Nnr
-	O8mUFdRkzd2UB1Bs0jgVIRDyTMV9hY0Ai4Nv69PdnNMvLqU9By4PLnZ3kxJdM0WZHwuxpRPzyl8
-	4wJe0gNII/EL4uZCTuvGTVFbRu2qr9H500eYzNbBOwECkMMo/U+LW7EVZxI9sqSGc1/FoBM9CON
-	WpsC7onjqTvi63+EdiWegUfNmUdzVD91rneBIoSAGDElTOyZ4UrTxyicpKEa6cshVJX0x+NK6Kz
-	E/pOcr191MEnmcIoluM4xZmwtx1v2hsnKeBkYmSQg6E5C9ysjYIOPGefGI2ojEzUrYecH4Rtl1y
-	wAuwlhTUCWLE=
-X-Received: by 2002:a17:903:1111:b0:2e6:dcce:8227 with SMTP id
- d9443c01a7336-2e9a6c1a30dmr99034965ad.37.1792514336247; Tue, 20 Oct 2026
- 09:38:56 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=tuxist.de header.i=@tuxist.de header.a=rsa-sha256 header.s=201705 header.b=G6WTKipf
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tuxist.de; s=201705;
+	t=1792552527; bh=ZfG1SosqlxBe8ziMkADyGjmN09svT+4JHhKhTcpS7n0=;
+	h=In-Reply-To:References:From:Subject:To:Cc:Date:From;
+	b=G6WTKipfrRpsgqmp7VeEQmAz1k+70ZU6flTO7Z4P5DVP0Ogu11+Hvw/c3+wVLm5Mg
+	 Epk9RoKjnjmkOX3ZYMsICS8LmzzMc488Ty4pxYQIzZx24rafgNgb56wp0ehNDWyU8i
+	 x1juHOsrDZThhoYETUw7hdXH14EUWOnEaq3qfoGueNajXZFnneUDlnGNBkpalIXTPe
+	 fYKKbmo1n7O0T1syFNB6V5cD3DVH7hk0ZZELsEeLICiP3OHi3rPPHnXuQM1vEmr8Ok
+	 XUqJltcsbj0ISJGCGgmQgWy0fvQkzPt9KloCgjiA+n63+5ETdXc+77Cn8nTNq8aJdD
+	 vUqP3agDGkZ0Q==
+Received: from [10.1.1.106] (unknown [10.1.2.1])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by groupware.tuxist.de (Postfix) with ESMTPSA id F17EB8A08DF;
+	Wed, 21 Oct 2026 05:15:26 +0200 (CEST)
+Message-ID: <423713b22f1cfa384f3df8cddc91e81d35c52d8a.1792552161.git.jan.koester@tuxist.de>
+In-Reply-To: <cover.1792552161.git.jan.koester@tuxist.de>
+References: <cover.1792552161.git.jan.koester@tuxist.de>
+From: Jan Koester <jan.koester@tuxist.de>
+Subject: [RFC PATCH v2 02/41] uapi: add <linux/uidgid_r.h> for 128 bit capable
+ user and group ids
+To: Christian Brauner <brauner@kernel.org>,
+    Alexander Viro <viro@zeniv.linux.org.uk>,
+    "Serge E. Hallyn" <serge@hallyn.com>
+Cc: Jan Kara <jack@suse.cz>,
+    "Theodore Y. Ts'o" <tytso@mit.edu>,
+    Paul Moore <paul@paul-moore.com>,
+    Arnd Bergmann <arnd@arndb.de>,
+    linux-fsdevel@vger.kernel.org,
+    linux-api@vger.kernel.org,
+    linux-security-module@vger.kernel.org,
+    linux-arch@vger.kernel.org,
+    linux-ext4@vger.kernel.org,
+    linux-nfs@vger.kernel.org,
+    linux-cifs@vger.kernel.org,
+    netdev@vger.kernel.org,
+    audit@vger.kernel.org,
+    keyrings@vger.kernel.org,
+    linux-kernel@vger.kernel.org
+Date: Wed, 21 Oct 2026 05:15:22 +0200
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Post: <mailto:audit@vger.kernel.org>
@@ -102,60 +79,81 @@ List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:audit+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-References: <cover.1790088067.git.rrobaina@redhat.com> <CAHC9VhQ=FFYVNmQdiMsqg+5KDDrSC3SZS+H2=r_GkhfwQox8tg@mail.gmail.com>
- <CAABTaaBL=TScs8Qqu3b8F6KZPGMyvwy6cBC3teDaBL6MGMucNg@mail.gmail.com>
-In-Reply-To: <CAABTaaBL=TScs8Qqu3b8F6KZPGMyvwy6cBC3teDaBL6MGMucNg@mail.gmail.com>
-From: Paul Moore <paul@paul-moore.com>
-Date: Tue, 20 Oct 2026 12:38:41 -0400
-X-Gm-Features: AclHuK9ZakV6IFm9eD67kaqUic0iU1MgVPLS7VN6RgjPgTRZmZP6_X_XOYOX9ZU
-Message-ID: <CAHC9VhROsmzbm+AP63Sm7mqCokgEy6Zu0AVMY0gxp8qY75Pqiw@mail.gmail.com>
-Subject: Re: [PATCH v3 00/14] audit: log all six syscall arguments in the
- SYSCALL record
-To: Ricardo Robaina <rrobaina@redhat.com>
-Cc: audit@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-csky@vger.kernel.org, linux-mips@vger.kernel.org, 
-	linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org, 
-	linux-sh@vger.kernel.org, sparclinux@vger.kernel.org, 
-	linux-um@lists.infradead.org, bpf@vger.kernel.org, eparis@redhat.com, 
-	sgrubb@redhat.com, oleg@redhat.com, richard.henderson@linaro.org, 
-	mattst88@gmail.com, linmag7@gmail.com, linux@armlinux.org.uk, 
-	catalin.marinas@arm.com, will@kernel.org, guoren@kernel.org, monstr@monstr.eu, 
-	tsbogend@alpha.franken.de, jonas@southpole.se, 
-	stefan.kristiansson@saunalahti.fi, shorne@gmail.com, 
-	James.Bottomley@hansenpartnership.com, deller@gmx.de, 
-	ysato@users.sourceforge.jp, dalias@libc.org, glaubitz@physik.fu-berlin.de, 
-	davem@davemloft.net, andreas@gaisler.com, richard@nod.at, 
-	anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net, chris@zankel.net, 
-	jcmvbkbc@gmail.com, tglx@kernel.org, peterz@infradead.org, luto@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Tue, Oct 13, 2026 at 8:36=E2=80=AFAM Ricardo Robaina <rrobaina@redhat.co=
-m> wrote:
-> On Thu, Oct 1, 2026 at 6:06=E2=80=AFPM Paul Moore <paul@paul-moore.com> w=
-rote:
-> > On Tue, Sep 22, 2026 at 3:21=E2=80=AFPM Ricardo Robaina <rrobaina@redha=
-t.com> wrote:
+User and group ids are 32 bit numbers. Identities that come from
+elsewhere -- UUIDs handed out by a directory service, or the GUIDs of a
+Windows domain -- have to be squeezed into that range through mapping
+tables kept in userspace, and the kernel never sees who a process really
+is.
 
-...
+Add a tagged id for a new family of system calls (named after the
+classic ones with an _r suffix): a classic 32 bit id, an RFC 9562
+version 4 UUID, or a Microsoft GUID in the byte order Windows stores it
+in. Type 0 is "no id", so a zero-initialized id is never root, and lets
+the set*id_r() calls express "unchanged" without a magic number.
 
-> > * As pointed out by Sashiko, when you were converting all of the
-> > arches, it looks like you missed alpha.  I took a quick look and it
-> > appears that it should be a pretty straightforward conversion like
-> > most of the others.
->
-> I've actually dropped the alpha patch as per Magnus's request [1].
->
-> [1] https://lore.kernel.org/audit/CA+=3DFv5T4826T2sd0Gbh-nfZsqcWK_phdBKy4=
-BLWOvDTt92t5Eg@mail.gmail.com/
+The struct has no 64 bit members and the same layout on all ABIs, so
+none of the new calls needs a compat entry point.
 
-The problem is that as things stand, this patchset breaks the build on
-Alpha.  Perhaps this gets resolved during the current merge window,
-but as you know we can't break the kernel build ...
+Assisted-by: Claude:claude-opus-5-5
 
-https://lore.kernel.org/oe-kbuild-all/202610041836.6TatRQSm-lkp@intel.com
+Signed-off-by: Jan Koester <jan.koester@tuxist.de>
+---
+ include/uapi/linux/uidgid_r.h | 45 +++++++++++++++++++++++++++++++++++
+ 1 file changed, 45 insertions(+)
+ create mode 100644 include/uapi/linux/uidgid_r.h
 
---=20
-paul-moore.com
+diff --git a/include/uapi/linux/uidgid_r.h b/include/uapi/linux/uidgid_r.h
+new file mode 100644
+index 0000000000..c3b1cb2ae2
+--- /dev/null
++++ b/include/uapi/linux/uidgid_r.h
+@@ -0,0 +1,45 @@
++/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
++/*
++ * User and group ids for the *_r system calls: a classic 32 bit id, a
++ * UUID or a Microsoft GUID.
++ *
++ * The classic system calls (getuid(), chown(), ...) keep their 32 bit
++ * ids; for an id that has no 32 bit form they see the overflow id
++ * (/proc/sys/kernel/overflowuid and overflowgid), like the 16 bit system
++ * calls do for ids above 65535.
++ */
++#ifndef _UAPI_LINUX_UIDGID_R_H
++#define _UAPI_LINUX_UIDGID_R_H
++
++#include <linux/types.h>
++
++/*
++ * Kinds of id (__kernel_uid_r_t.type). An all-zero id is UID_R_NONE, so a
++ * zero-initialized id never stands for root.
++ */
++#define UID_R_NONE	0	/* no id: "unchanged" or "not set" */
++#define UID_R_LEGACY	1	/* classic 32 bit id in .legacy */
++#define UID_R_UUID	2	/* RFC 9562 UUID, version 4, in .uuid */
++#define UID_R_GUID	3	/* Microsoft GUID in .guid */
++
++#define UID_R_SIZE	16	/* bytes of .uuid and .guid */
++
++/*
++ * .uuid holds the UUID in network byte order, as RFC 9562 lays it out.
++ * .guid holds the GUID as Windows stores it: Data1, Data2 and Data3 little
++ * endian, Data4 as is.
++ *
++ * Bytes past the member .type selects are reserved and must be zero.
++ */
++typedef struct __kernel_uid_r {
++	__u32 type;
++	union {
++		__u32 legacy;
++		__u8 uuid[UID_R_SIZE];
++		__u8 guid[UID_R_SIZE];
++	};
++} __kernel_uid_r_t;
++
++typedef __kernel_uid_r_t __kernel_gid_r_t;
++
++#endif /* _UAPI_LINUX_UIDGID_R_H */
+-- 
+2.56.0
+
