@@ -1,99 +1,73 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.218.49
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1792592814;
-	b=3Ur7lfMAZBpWTWg6LEYdsWq6wG2f0ggbYVyMmhBL1kUowMiYNXc0WK73GW5HCPA0GYa8
-	 /9PTl9F61xSKRDc20fPcwWZNVb4DJbyLvBWMk0iaWEcqBhd4uezgky+6fgp+shPWTTGsw
-	 feaaG93TQeTrB8mwOEVvxfc1yoDONifEGMiObzG/Wi0gW/lZ8Se1Dw5jENbNYORuisYqB
-	 dTuaR++zwDk+mj99ogEI2PSfwWaZx08Nopq+5gXPmK8/mX0x38DgkTIIw+V9wkIJ0w1bv
-	 9Q7KcP6PyEaERQNKTl57aJjt+kcMvrVk5D06P49vOLUGn1O3a8I8aqypzg/0CAGcr2g==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792592814;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type;
-	bh=HZWCDTWe8myvVLhLnC3gRwnDw2Z9dfDRU9KvUScIux8=;
-	b=bivc9uSt3uOWURI7Py8IbN67XjPcU6lftABLPpEbobH5a/2pGWQl2jb4JwiHHYKV6mF0
-	 vE6aVc0bwOx9Jw1z9U3cEw2EQpnAew42dGpbqQH/x5FSiKl2Xb561wb5qcGAJqnhv6GrX
-	 5jlkNz40md6Kl3zX8AAMPhmZiqBR0TnGPYIXiyFXYlQ7Sf9V87Kboa+Tv3tbEv9PVzTti
-	 ufASmO6nq3tRkBr+wLKhllYgc13sPIIdvCCPQa5iWg5S362y1OCJaJ8o+SEU0IRaBFgzY
-	 +Rgpw78J0lBF4qkVy3mV1cOr0ggRBe9/62nBrmZ/yl1x0EI+bKLMaivB25/s/1vAwrg==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=BRqHAhOJ;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.218.49
-Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1792604143;
+	b=ErQaywkDOnl9/96yH+YcL5gsz/EfcuJcDiDGyaWL4nHkxpWNUF8CWTl4cpPFsJ9k7QsS
+	 5PfbrXls19P+6PFb1rDvqJ2QrU0mnBfijRFfzrxflokqtynVUVKs8j576++ffxEw9alC8
+	 2xqBEe1GEIyetPbvM7DI1R96f550BKE/IYhvfuVK5tEHVfatRxzgbFy8maSj650QO0EH1
+	 buX9Yqlyc/1OAgRUrACl+cmu0IG/WEynx+3nRffGsts/pFPjIQU/wlQlLd3UD0o/jbQ/s
+	 J+S8yHHbIe+20wFLwC+C2PLKYxzepj4qKaFz0nSSFlT0YfLBVVZADmLYOWg5vSuB21Q==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792604143;
+	h=Received:DKIM-Signature:Received:Received:X-ME-Sender:
+	 X-ME-Proxy-Cause:X-ME-Proxy:Feedback-ID:Received:X-Mailer:
+	 MIME-Version:X-ThreadId:Date:From:To:Cc:Message-Id:In-Reply-To:
+	 References:Subject:Content-Type:Content-Transfer-Encoding;
+	bh=nZQZSw18SACZ1al6YiSFkYg9oVM20D+TpFhKEJVNqeo=;
+	b=LVD/46PfD/Qj5d3j0GuEOFC99PVij7Y+2w3jyoFuqF/zzNCtAhDS1FLGi9Ixp2mmokmu
+	 7prfMofmrVfkv+zJW3CDed6jHMNrZ1ryODLX5mCCPqJQbI/gt8+ZJEdrAbFJi4e8LVvOn
+	 aPRSLHSJuJETN1fsd9Z/Fgs5qmMbkGB7ZOrgWxXcSb2FX3ImgTXQfkV5pE3kdUlnkTZp0
+	 WL7ST+4JBI0oDVKOqEOiSn2ociWYchbrHlgorRjlsxVctua0MCbR9Qe0lEPwZ9o7J8F5Y
+	 ahF1Ombo49ijKToIeUXJf6c6ZQpv2iGlxpe9SZaP1jCb38BS7LY1+HjsJEx9toMM/dQ==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=gtHPyv2D;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F0B4606A324
-	for <audit@vger.kernel.org>; Wed, 21 Oct 2026 14:26:54 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2F0B4606A324
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBE56606A31B;
+	Wed, 21 Oct 2026 17:35:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=BRqHAhOJ
-Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-c418e215671so100590966b.0
-        for <audit@vger.kernel.org>; Wed, 21 Oct 2026 07:26:54 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1792592812; cv=none;
-        d=google.com; s=arc-20260327;
-        b=bpWXvvpeHG0vUdfmXVqBFrBmHEwchDcAytntJD/GtEbg7qgze6u2vl7frOVMavg0Er
-         jAGSPJRI633C1ydcBrOWC+8+mKkTw0VSCzFWawFXbUf7DqY+uHN8Tz7rKhyRz3M2QN9c
-         TRTbGfwO4UAKyYyecjD+ftIWuL4Hp4kcSTrfcdpevEUWmtxF374t3FTTp1ILYGy1qWgZ
-         hPDBYVfdVtoditkNOLpiuSXFk8g6XJq3DvuwU9oelqxGaH+Ugil007nNtC9ohsRqgcS6
-         nHM5rwMeL1nJm18bQWMBJIliYHFKaKdGdYv0euM/f0SvjmDshaxkmc/3lpxp8vjirjIM
-         aggQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=HZWCDTWe8myvVLhLnC3gRwnDw2Z9dfDRU9KvUScIux8=;
-        fh=0/JJPJ884rNS2EX8F2hGOFgk53otFrNkug/YIiXX9XA=;
-        b=dWgkZkUn4pos4hPMzw05iKtX53+M1YLmBpMriigJZjUgMDOroqsIIYCnFwHy8XorP2
-         k3bwyZurJXP7Q+3qnqWuwH3tEIzRqJ664Lt7c9AwPQqVWkyLxsNwlX+7OtRUMuCxv7eN
-         jNYlK5IomFcKdrcDg9l4Kh7l3P0aRA41gLV4syyxhR691Bg2sFnDJukDuZlC9WwnFmoL
-         /dw2KGS/w/iJWdO/xdbSLfX+XVrSJhzHek7qEirAqtqWUZ02WZ9A6DXz2HxNSYJSDwjV
-         w0mO+3x60twKCg7GaKy8QXvq+qygw06cjMNLhC6dq1WYY13YJlAXhm5CTGkJOfX28FrB
-         ML0g==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792592812; x=1793197612; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=HZWCDTWe8myvVLhLnC3gRwnDw2Z9dfDRU9KvUScIux8=;
-        b=BRqHAhOJRFQGCZ0436cerbXsvDGcjOTtcEFCOpJRV+nbVKbSAKMl662tBLFTfb2Sg5
-         NFxQNyHoxxgYHQR13h13k71ankQp/N0fxgwfPZdFZZwD0LZwBvhOQiky2tnvBNcGVE92
-         vpRJ7hzp6lhKrZveGyDGkQ94JZjS5rrim4/SQCOenhyqo5st97RuKWVFwTkWZQ5bTbIw
-         iWX7FjROAHIvHplEaKREmJYGpSp7sUQFKLAPhXVjYlSpM8WQnUK4iSviJf2DCzgxJwf5
-         mmlBS+ISZT3vDsrX9Xx3+f3KYgz6TnHUVdIwJP9bY9OfNIdfJdTh5lFsIo+qwhCRzOmH
-         nAiA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792592812; x=1793197612;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=HZWCDTWe8myvVLhLnC3gRwnDw2Z9dfDRU9KvUScIux8=;
-        b=ix1SSzL3j/azwKP1mk1GdY0oxr1ZPN39dypxBwx/Xs4hiL+qHuEjPep8i7+iDlHJL3
-         pypXThZn7WF8f0D9qh/Jwq6RgdLo0bXqX8rbb2XTt1ojjEnS12R85gDhFaspTks7EY7W
-         z2rK9eNLzurWYywX4YGJa16h4BYnx2XBNI7wnQXEGoGQ82H1FHCu8S5Sta52awE1HmZo
-         pdzbgG8+14K5YcFvWVSF7G/Jg6uwcAnxlvkNx+FMaX2EGpj85d8YBqeceiquZImr+WDO
-         uln4IBeyNtx0V+vjUekSiGTJDtYFuipiobtKNwJYm/98D4hm95yaDihU3sThZCC9P+cP
-         8/9g==
-X-Forwarded-Encrypted: i=1; AKwUvBw/ccgA9a+EZ+ql0P8kQYM6MC1JXEshvu5qDMKuqcPv0dGPrhYT9+yJcF/7jZfBsys8WlGGDA==@vger.kernel.org
-X-Gm-Message-State: AFq9FYI4L20U0TIVZCDEGsflbo7GhRf8lW9K3giHl1aUAxWMNVmfxrTz
-	FWsOI9x25ePry6j5iHX2jB3hTWOM1MLorZr42gsUy4P1Ao2m6lXvX6XC+U62FMYjolkS7WZbdTI
-	keBQRVKlhakOvv6qlvWfbBlM65GCYJoI=
-X-Gm-Gg: AYBFou16MZYznipNPp54OK/hRYmT1gNwirifyfhH76+0EuauqxS5CFSqJkhgQRj6x8U
-	icKk7MGRRd2DJUoet17B5AugM/9lXdbg5fAf5YxZjMFOXYcTFYvrAoZDzFaQhtLfIy85CiPrVm1
-	ivOU6GGdid4kLne4DVnVL4NiKnvuTNvgUWliodUMYzEwkq6cbemUd1DC04EbE194U3J/521gquU
-	8DsZYOv4zuxWvIDBLyBFYhkhEnHjbmoK77ykh/kMZiNp5epYPaoDCgBoIe8alTXubuSz8ni7rfL
-	tRS8ukZM1Fu6bvnLJdP3wnaZvgfnonXxP/ub8lOx0xMucRxSTl3cCfvpPcgCF+6f7zcCFLs6OkJ
-	9eXsTx/V1YZg9sxn3IlI4/VQO8LB7v/TJVynv
-X-Received: by 2002:a17:906:c105:b0:c33:ca5e:8ddb with SMTP id
- a640c23a62f3a-c46796b58cdmr190770166b.28.1792592812271; Wed, 21 Oct 2026
- 07:26:52 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=gtHPyv2D
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA7821F000C8;
+	Wed, 21 Oct 2026 17:35:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1792604142;
+	bh=nZQZSw18SACZ1al6YiSFkYg9oVM20D+TpFhKEJVNqeo=;
+	h=Date:From:To:Cc:In-Reply-To:References:Subject;
+	b=gtHPyv2DytAGwXwqP6AuPtrURaFm2Es6e2+bG+60zzEQjzkkjCH2xhWwDE3vMuH+W
+	 /njNlq5bKa1C0QFRO5yVl3CYVzjJuumbgjChgiKa5cNuoBqQPx3tzAXdWq2jpC+7y4
+	 xfZDP8ctYNyBUsoHqGnqbHyKWFyiydtg2UVaHKz1bxT0eH2yeW7iceeNsx9xDvff0D
+	 d4QWmsRgnZJm8URGCYwD8psqQME5NT4H5VD3SIk89SsgIA6HMZZEAsCYnJEPLVse/v
+	 1178n3snkCX5UTsdJTmWorxjZ/Nm5yhJmvMW7+8VBnvSRDFL7n1GBpZxztin4LJw2Z
+	 dpIDU4fmdMHjg==
+Received: from phl-compute-10.internal (phl-compute-10.internal [10.202.2.50])
+	by mailfauth.phl.internal (Postfix) with ESMTP id 05E1FF40069;
+	Wed, 21 Oct 2026 13:35:41 -0400 (EDT)
+Received: from phl-imap-15 ([10.202.2.104])
+  by phl-compute-10.internal (MEProxy); Wed, 21 Oct 2026 13:35:41 -0400
+X-ME-Sender: <xms:7PfYatFbK3SGvkv1PZ5WJiKqbnltKgPHrFocaFLc9JUp-IAv1dxn3A>
+    <xme:7PfYatKxLinDI60CCDCNz6n-Sj1DQX516hiu7qtOg8hUKZlVb4_0cJO4J4axVu7QJ
+    n1c5qECWdS6ItzXnr6A1UuwHQpES3rw0oSxFPHU6JXFRfYZownwzmuv>
+X-ME-Proxy-Cause: dmFkZTGCRjlnSR8Neg2mpGTDvJvFQ+WyF5lNldIB0q4zon/r5UxQ070SLuVQHGmuL/1IQs
+    hwZ/xhsfszkwm1t5IL5077RE9E1CmNJeGs5M0heUIqhUPsiPorYZOAoMMquElo45vQkPAL
+    5o6E0JGmgCcNf4/b7AK7NvmWD3X8w88YX8WwNKFCy2mAPFdtZUSubNdlIZYjAp45PwEKqJ
+    i3UG1z5Zs2Q6j+WxyzADnx++ZMd9/Av6U2d1l0Maysg4LiGWlPSZs2/UbKUPa/Sl9zQZru
+    JKCpo88uCIHH/dHiqwxA1Rv195n9u+MHvTsKxE7AJcpg1u+K44QfQeHXoE0mwvDOxUQdsz
+    OHmTRf4blfvfR3Bk+u0TWU/xBbokz/9rHk5FCnl/2PEY0GqpE8jafPjgMx2t9fOQOJifyb
+    OvUSDTZHBf0u1XXyfa1kBlP2Boe47OSRAIwc9jb99f+EMW67C7764RfA5PznCwLRSZ9f/o
+    OqZSXZnbCIdxRw/7VnpgCAqdpuDhD+HX6ju96Wrn7XD7EubQVkBsAIh+oYZKgKtNtPPOCs
+    t0TXsHLIYfOm/HdEysB64ZHxkNQcWRBrSFhbbsvaJxnVRZ1lGQHczXsHXxYjzTZbwDN6kx
+    XWhWdnja+2FHBWi51pwBJFQahQp7RP95auTW9R065CD/aDZKZ4I1gRWDnU2w
+X-ME-Proxy: <xmx:7PfYatVD__8wXb41zYEe29XHtozznhOzv0MZZN1eY7p2KicO12w-DA>
+    <xmx:7ffYaqyWNau02205DPQuCdlHluDhf9_AFQPdUjs5A-o56NnLQ2GlIQ>
+    <xmx:7ffYat4ndxHHVQANfVp63WjkU7APGZB5e8ZcmmUrAQOmxScV7dZNNg>
+    <xmx:7ffYash0_tdrm5M8iKwj5F7TeVZI76mm4tQp4HL6Y-vsbGuMimeBwA>
+    <xmx:7ffYaohOZRNYEwZe0HcPVW550R2avMTr5rBAQvWHh4KFch9VYCrntV3W>
+Feedback-ID: ifa6e4810:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id D6715782738; Wed, 21 Oct 2026 13:35:40 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Post: <mailto:audit@vger.kernel.org>
@@ -103,43 +77,66 @@ List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:audit+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+X-ThreadId: AwLsEl3CooH3
+Date: Wed, 21 Oct 2026 13:35:20 -0400
+From: "Chuck Lever" <cel@kernel.org>
+To: "Jan Koester" <jan.koester@tuxist.de>
+Cc: "Christian Brauner" <brauner@kernel.org>,
+ "Alexander Viro" <viro@zeniv.linux.org.uk>,
+ "Serge E. Hallyn" <serge@hallyn.com>, "Jan Kara" <jack@suse.cz>,
+ "Theodore Y. Ts'o" <tytso@mit.edu>, "Paul Moore" <paul@paul-moore.com>,
+ "Arnd Bergmann" <arnd@arndb.de>, linux-fsdevel@vger.kernel.org,
+ linux-api@vger.kernel.org, linux-security-module@vger.kernel.org,
+ linux-arch@vger.kernel.org, linux-ext4@vger.kernel.org,
+ linux-nfs@vger.kernel.org, linux-cifs@vger.kernel.org,
+ netdev@vger.kernel.org, audit@vger.kernel.org, keyrings@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Message-Id: <fd20b840-350e-469c-9fd2-008fa0ded62a@slotpi15m67>
+In-Reply-To: 
+ <f444dffc8e6bf98bf44c02456adc2de40e4ecd95.1792552161.git.jan.koester@tuxist.de>
 References: <cover.1792552161.git.jan.koester@tuxist.de>
-In-Reply-To: <cover.1792552161.git.jan.koester@tuxist.de>
-From: Lionel Cons <lionelcons1972@gmail.com>
-Date: Wed, 21 Oct 2026 16:26:15 +0200
-X-Gm-Features: AclHuK9oo5ZYObAiFZur0ih7xDKEBxlKdO-BvoDx6w0mXhpoTx1_PdEXJcogV54
-Message-ID: <CAPJSo4UJPnhLFAYRXE-_M2_Nin6=Ff02AjayD10cB7946MvJDQ@mail.gmail.com>
-Subject: Adding dreaded Windows SID-style, or. Repeating history, the bad
- chapters. UUID/GUIDRe: [RFC PATCH v2 00/41] UUID and GUID user and group ids
- (*_r system calls)
-To: Jan Koester <jan.koester@tuxist.de>
-Cc: Christian Brauner <brauner@kernel.org>, Alexander Viro <viro@zeniv.linux.org.uk>, 
-	"Serge E. Hallyn" <serge@hallyn.com>, Jan Kara <jack@suse.cz>, "Theodore Y. Ts'o" <tytso@mit.edu>, 
-	Paul Moore <paul@paul-moore.com>, Arnd Bergmann <arnd@arndb.de>, linux-fsdevel@vger.kernel.org, 
-	linux-api@vger.kernel.org, linux-security-module@vger.kernel.org, 
-	linux-arch@vger.kernel.org, linux-ext4@vger.kernel.org, 
-	linux-nfs <linux-nfs@vger.kernel.org>, linux-cifs@vger.kernel.org, 
-	netdev@vger.kernel.org, audit@vger.kernel.org, keyrings@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+ <f444dffc8e6bf98bf44c02456adc2de40e4ecd95.1792552161.git.jan.koester@tuxist.de>
+Subject: Re: [RFC PATCH v2 40/41] nfsd, nfs: carry UUID and GUID owners as their text
+ form
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-On Wed, 21 Oct 2026 at 13:24, Jan Koester <jan.koester@tuxist.de> wrote:
->
-> Hi,
->
-> this RFC series lets a user or group id be a UUID (RFC 9562, version 4)
-> or a Microsoft GUID as well as a classic 32-bit number. Processes can run
-> as such a user, files can be owned by one, and credentials, ACLs, keys,
-> System V IPC, sockets, signals, audit and procfs carry the whole id.
+On 10/20/26 11:16 PM, Jan Koester wrote:
+> Encode such an id as its text form -- "xxxxxxxx-xxxx-xxxx-xxxx-
+> xxxxxxxxxxxx" for a UUID, the same in braces for a GUID -- in both
+> directions on the server and the client, and take such a string (it
+> has no '@', so it can't be a user@domain name) as that id again.
 
-Are you Linnux guys aware that this is just a variation of the
-*DREADED* Windows SID that this patch tries to introduce, just with a
-new name?
-Maybe, before doing this, read about Windows SIDs, and why they are so hated.
+A bare UUID in an owner, owner_group, or ACE 'who' string is a new
+owner-string syntax for NFSv4, one that only Linux would recognize.
+Thus it isn't interoperable with other NFSv4 stacks as proposed
+here.
 
-Secondly, the whole idea of doing 128bit hashes as UUID is not new,
-IBM DFS had it, and had many iterations of security issues via hash
-collision exploits. 40 years later all this horror comes back. Does
-history really have to repeat itself?
+RFC 8881 Section 5.9 says a string without an '@' that is not a
+decimal number means no translation was available and the receiver
+"should not use that string as a basis for translation into its
+own internal format." RFC 8000 Section 6.1 forbids bare numeric
+ids in multi-domain deployments because they collide; the same
+applies to bare UUIDs, and more so to GUIDs.
 
-Lionel
+If you are serious about pursuing this, you'll have to start by
+raising the proposed wire format on nfsv4@ietf.org before the
+Linux kernel's NFS stack commits to it.
+
+With nfs4_disable_idmapping and AUTH_SYS, numeric_name_to_id() and
+encode_ascii_id() handle decimal ids in the kernel because there is
+nothing to look up. Recognizing the text form in that branch only
+would be the natural analogue once the format is agreed. Everything
+else should go through the idmapper: extend the nametoid/idtoname
+channels and the client keyring upcall to carry a 128-bit id, and
+let rpc.idmapd and nfsidmap decide which strings map to which ids.
+As written, the UUID check runs before idmapd for every name and
+auth flavor, bypassing the cache and any site policy.
+
+So my general preference for NFSv4 would be to pass the new format
+up to the user space idmapper instead of handling these in-kernel
+with no opportunity to apply local policy.
+
+
+-- 
+Chuck Lever (Come to NFS bake-a-thon! https://nfsv4bat.org)
