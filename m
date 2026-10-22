@@ -1,48 +1,48 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792639080;
-	b=lac2LxEy//EgdBqNWE5O0Bk+N+gApm+1Dc9KFAnRuLnCQOV2InTNrH3VTAeTny4+d+k8
-	 6JJsewbGy8hm5+2hhEGyOkMIckIUCe8AIYqbRyVaV6RnJzVfpgW+3A19kGa4BlVhhL6sU
-	 IM+ztyLKaIBsR5MXU73J0MZMakrHts7lGFsPxmjMnDcQUnDmE37Fkg0/6vdpf+gXkckeZ
-	 ZaNhQd4ov3Amz0C8kjb5iKQmHN1domUaJEZVuPGepp8EXm7jI6ZC9w5WMVTUNC14IxxJ4
-	 DgCKuG8HY2k2wIOoCbA9GAn3e41uUmDuvJfzjo/5aJxnd3ww+Cz+M1iam8yiFzuxv2g==
+	t=1792639077;
+	b=jHGePk2uLi0sU1/DaYSc86/scEqNK0x5PsBDB1M/Yw49l/7YzIDYmBChB5UqRmC2axrV
+	 iKPznbsurA2ehodJJVbYW975Jd+iJ/BTdBAV9it+Di8JZxdys0SY8HqFnBTcjBbLK3IWL
+	 2t/a7IlNR0urOT3nSjq+mMuwobda8fRwKxntk9Z8I/gZCh9IF4aozfwKugkYE7AM6Bk0J
+	 nUoR/qeE8fI7ZTaGSYJ6ip+DsVEuIJZTNOC+/7xUblbh55Za2S375ooB8Qb94y24faaGw
+	 ww101T3mVkMxjK93Xk3of+y1ydeOYlnlYFRLY6MXcnAJ44iW42dN2vi7q6MoWhPVf1g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792639080;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792639077;
 	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=+vEuYKhn0mWV3xbIBPl+W6FBMkA8CPtPvMkwqt9jkwI=;
-	b=s49A++32F95f1N7ymnR2ooXIHKV64rUh4ztMDVNWM81e84qZqSWSZuuXBocH2jgYwQa+
-	 FERR8v09r4PD9hZr5EwqOVogq21QuDH+BeMJ1OFvCJqW65Uo86RqBtwAY8Tdm/Rrn3ZRW
-	 N3zfiuR4WjbEzWTB/EiVoSSYXPqJrcIHIHi8S4ODi3HHFitC6FYzqtFctqsfVuOu0AItA
-	 9QWSJiKAANysOsc3Y1F2RLcvmECrHZzLzCxtURn+V7WuhK9mOYQdKk7pR4gaWSUzC2kzU
-	 tR9RHrzAAnvnN/A413m/jS7KzsfJNQfdRcCpw5x6a+WymrCgvDvZ+l28sguMBfZXqKA==
+	bh=ZiYFRn2rHT1XmpTx5g5IheWbVndYdrDEgc1wqd5CAl0=;
+	b=bN1fEflTSse7I8o4aEQfn090wTdZ1lJ8kHGdqBtFgMnaMz3EvAie3H677n/QxELGs8QL
+	 ME28hBKBuzjGS4I1IRIHvciZarW6LR3KRpMFA4Ijq9TR+Gn3ItbMe7zPevuYLIyrcWe4Y
+	 ruu9PrBWZNvA6PDD3x3syzie7rGjxYeRctXAeIssmg5D+PEVcvxHLiWfCkWSHolvaNSOj
+	 UNyo8iOm+MDGKp/U3ohAayjVvEgqGWOQwsJbRPWdkfGBtDU9hTNxpD24bSDzSvq0NUdh0
+	 nBvTzc2a/8eWS2BwuhUBGJI6D/gy03UuYS+Kr29Y+p9ob9gExJulenQ1gwjDjlPHbxg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=n3jXziQj;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=TyGGW9lw;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9451A606A32E;
-	Thu, 22 Oct 2026 03:18:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28A3D60A2622;
+	Thu, 22 Oct 2026 03:17:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=n3jXziQj
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A9251F000C2;
-	Thu, 22 Oct 2026 03:17:59 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=TyGGW9lw
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9C8F1F000C4;
+	Thu, 22 Oct 2026 03:17:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792639080;
-	bh=+vEuYKhn0mWV3xbIBPl+W6FBMkA8CPtPvMkwqt9jkwI=;
+	s=k20260515; t=1792639076;
+	bh=ZiYFRn2rHT1XmpTx5g5IheWbVndYdrDEgc1wqd5CAl0=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=n3jXziQjzBLn8ToZRbTyOD4WXafbLdHqKhECwuLcEijl5YQ/WrEqPZ39vc3Enf02K
-	 +8no7frySOe3AVRK6h5RiZPvqUfwOo4LrXG/uD00ww5If01n76JnGHr5Ow+sgRBZe8
-	 U0Rr3IrhJTeuOu9rShHOM+lUykxO+Ecob/JfqHWj9awbGywpc7hBtEtzh7GwjCzh0k
-	 PQ9fBm4J692slKJU3bkq9HoBvzvna9MQRxe0OtHPM1DM+6yG+NgE2Brx6Tt1WiBDxv
-	 zNLepniOkKR5stswJAsg9JadnRyRITk+n3DGGBFWjAFpzDD6Vzjl7/nwtKFX12c/fd
-	 r+ecaeyb4a++g==
-Message-ID: <sashiko-outbox-180933@kernel.org>
+	b=TyGGW9lwHa8f2esgWKZO764k6O/Ug7IgnkLLifxRohZz25CbPl7MEo6dE+hXZ0UA0
+	 BKwtqb5oQ4jBFl7whAZiAbNLnYkIWmHISd6RpB6iSi9A6f4ClgWQ+4F910GfkE2ky5
+	 RxP+XyuL+WosEV+g1asZ6H5X2VDGhkbT0IFNXXz8ndU1t/7MeHuWXXb/LFS/7EJFuf
+	 fZl0s/CzEaq85a23jx/VqYPuRCkoRi/j/Y64+pmQCZVw/Y2OkOTM3zEuLP7tuKeY3C
+	 p6ZS2WDtFaoruT8jD3JEX77k0rHNUXbMPjTM95r5Iv/uZ8RZCjgrsr1VEEa1ZnuMKJ
+	 pU9SkMHcz9CJA==
+Message-ID: <sashiko-outbox-180930@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [RFC PATCH v2 32/41] ext4: let uid_r be turned on while the
- filesystem is mounted
+Subject: Re: [RFC PATCH v2 29/41] signal: report the sender's UUID or GUID
+ uid in si_uid_r
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Jan Koester" <jan.koester@tuxist.de>, "Christian Brauner" <brauner@kernel.org>, "Alexander
  Viro" <viro@zeniv.linux.org.uk>, "Serge E. Hallyn" <serge@hallyn.com>
@@ -50,12 +50,12 @@ Cc: "Jan Kara" <jack@suse.cz>, =?utf-8?b?VGhlb2RvcmUgWS4gVHMnbw==?= <tytso@mit.e
  Moore" <paul@paul-moore.com>, "Arnd Bergmann" <arnd@arndb.de>, linux-security-module@vger.kernel.org, linux-ext4@vger.kernel.org, audit@vger.kernel.org, keyrings@vger.kernel.org, "Chuck
  Lever" <cel@kernel.org>, "Jeff Layton" <jlayton@kernel.org>, "Anna
  Schumaker" <anna@kernel.org>
-In-Reply-To: <79f31ae647269df33f8db7fcbfd063840f37e3fa.1792552161.git.jan.koester@tuxist.de>
+In-Reply-To: <59988b6ac15fa727c7f5d14d5342ceba4d6e595f.1792552161.git.jan.koester@tuxist.de>
 References: <cover.1792552161.git.jan.koester@tuxist.de>
- <79f31ae647269df33f8db7fcbfd063840f37e3fa.1792552161.git.jan.koester@tuxist.de>
+ <59988b6ac15fa727c7f5d14d5342ceba4d6e595f.1792552161.git.jan.koester@tuxist.de>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Thu, 22 Oct 2026 03:17:59 +0000
+Date: Thu, 22 Oct 2026 03:17:55 +0000
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Post: <mailto:audit@vger.kernel.org>
@@ -65,108 +65,207 @@ List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:audit+owner@vger.kernel.org>
 Precedence: list
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
-- [Medium] ext4: ext4_ioctl_set_tune_sb() mishandles uid_r when already set=
- on disk
+- [High] signal: broken userns UID mapping in send_signal_locked() and call=
+ers
+- [Medium] bpf: missing siginfo_set_kernel_uid() call in bpf_send_signal_co=
+mmon()
 --
 
-commit 18ffac15f27841cea0033ca0f9c30bacf945f9ce
+commit 3fc8400fa91445ed3a591553195996d33af32cb3
 Author: Jan Koester <jan.koester@tuxist.de>
 
-ext4: let uid_r be turned on while the filesystem is mounted
+signal: report the sender's UUID or GUID uid in si_uid_r
 
-This commit allows the uid_r feature (SB_I_UID_R) to be enabled on a mounted
-ext4 filesystem during remount or via the EXT4_IOC_SET_TUNE_SB_PARAM ioctl.
-When enabled via the ioctl, it also raises s_want_extra_isize to reserve
-space for the uid_r fields in new inodes.
+This commit adds si_uid_r (__kernel_uid_r_t) at offset 96 in siginfo_t and
+compat_siginfo_t, along with ssi_uid_r in signalfd_siginfo, to report the
+sender's UUID or GUID UID for signals and waitid(). It introduces
+siginfo_set_uid() and siginfo_set_kernel_uid() to populate and translate
+si_uid and si_uid_r across signal generation, delivery, and wait paths.
 
-> diff --git a/fs/ext4/ioctl.c b/fs/ext4/ioctl.c
-> index c8387e6a2c6e9..89bf1d36ec3db 100644
-> --- a/fs/ext4/ioctl.c
-> +++ b/fs/ext4/ioctl.c
-
-[ ... ]
-
-> @@ -1382,6 +1383,13 @@ static void ext4_sb_setparams(struct ext4_sb_info =
-*sbi,
->  		if (params->set_feature_incompat_mask &
->  		    EXT4_FEATURE_INCOMPAT_CSUM_SEED)
->  			es->s_checksum_seed =3D cpu_to_le32(sbi->s_csum_seed);
-> +		/* as tune2fs does: room for the uid_r fields in new inodes */
-> +		if ((params->set_feature_ro_compat_mask &
-> +		     EXT4_FEATURE_RO_COMPAT_UID_R) &&
-> +		    ext4_has_feature_extra_isize(sbi->s_sb) &&
-> +		    le16_to_cpu(es->s_want_extra_isize) < EXT4_EXTRA_ISIZE_UID_R)
-> +			es->s_want_extra_isize =3D
-> +				cpu_to_le16(EXT4_EXTRA_ISIZE_UID_R);
->  	}
->  	if (params->set_flags & EXT4_TUNE_FL_FORCE_FSCK)
->  		es->s_state |=3D cpu_to_le16(EXT4_ERROR_FS);
-
-[ ... ]
-
-> @@ -1461,6 +1470,18 @@ static int ext4_ioctl_set_tune_sb(struct file *fil=
-p,
->  		     ~EXT4_TUNE_CLEAR_RO_COMPAT_SUPP))
->  			return -EOPNOTSUPP;
+> diff --git a/include/linux/signal.h b/include/linux/signal.h
+> index f19816832f055..928e67e283b60 100644
+> --- a/include/linux/signal.h
+> +++ b/include/linux/signal.h
+> @@ -6,6 +6,7 @@
+>  #include <linux/list.h>
+>  #include <linux/signal_types.h>
+>  #include <linux/string.h>
+> +#include <linux/uidgid.h>
 > =20
-> +		/*
-> +		 * uid_r may already be on disk but not in use yet, when it
-> +		 * was set while the filesystem was mounted: take that up too.
-> +		 */
-> +		if (params.set_feature_ro_compat_mask &
-> +		    EXT4_FEATURE_RO_COMPAT_UID_R) {
-> +			if (sbi->s_inode_size < EXT4_GOOD_OLD_INODE_SIZE +
-> +						EXT4_EXTRA_ISIZE_UID_R)
-> +				return -EINVAL;
-> +			enabling_uid_r =3D true;
-> +		}
+>  struct task_struct;
+> =20
+> @@ -23,6 +24,27 @@ static inline void clear_siginfo(kernel_siginfo_t *inf=
+o)
+>  	memset(info, 0, sizeof(*info));
+>  }
+> =20
+> +struct user_namespace;
 > +
->  		/*
->  		 * Filter out the features that are already set from
->  		 * the set_mask.
+> +/*
+> + * Sets si_uid and si_uid_r to @uid as seen from @ns (the receiver's user
+> + * namespace), the overflow id if it has no mapping there.
+> + */
+> +static inline void siginfo_set_uid(kernel_siginfo_t *info,
+> +				   struct user_namespace *ns, kuid_t uid)
+> +{
+> +	info->si_uid =3D from_kuid_munged(ns, uid);
+> +	from_kuid_r_munged(ns, uid, &info->si_uid_r);
+> +}
+> +
+> +/* si_uid and si_uid_r of a signal from the kernel: 0 */
+> +static inline void siginfo_set_kernel_uid(kernel_siginfo_t *info)
+> +{
+> +	info->si_uid =3D 0;
+> +	memset(&info->si_uid_r, 0, sizeof(info->si_uid_r));
+> +	info->si_uid_r.type =3D UID_R_LEGACY;
+> +}
 
 [Severity: Medium]
-In fs/ext4/ioctl.c, ext4_ioctl_set_tune_sb() intends to activate uid_r even
-when EXT4_FEATURE_RO_COMPAT_UID_R is already set in es->s_feature_ro_compat
-on disk.
+Should bpf_send_signal_common() in kernel/trace/bpf_trace.c also call
+siginfo_set_kernel_uid(&info) when sending a signal to a specific task?
 
-However, when the caller passes EXT4_TUNE_FL_FEATURES rather than
-EXT4_TUNE_FL_EDIT_FEATURES, ext4_ioctl_set_tune_sb() derives
-params.set_feature_ro_compat_mask earlier by masking out features already
-present in es->s_feature_ro_compat:
+When a BPF program invokes bpf_send_signal_task() with a non-NULL task,
+bpf_send_signal_common() takes the else branch and initializes info manuall=
+y:
 
-	if (params.set_flags & EXT4_TUNE_FL_FEATURES) {
-		...
-		params.set_feature_ro_compat_mask =3D
-			params.feature_ro_compat &
-			~le32_to_cpu(es->s_feature_ro_compat);
+kernel/trace/bpf_trace.c:bpf_send_signal_common() {
+	if (!task) {
+		task =3D current;
+		siginfo =3D SEND_SIG_PRIV;
+	} else {
+		clear_siginfo(&info);
+		info.si_signo =3D sig;
+		info.si_errno =3D 0;
+		info.si_code =3D SI_KERNEL;
+		info.si_pid =3D 0;
+		info.si_uid =3D 0;
+		info.si_value.sival_ptr =3D (void __user __force *)(unsigned long)value;
+		siginfo =3D &info;
+	}
+}
 
-If EXT4_FEATURE_RO_COMPAT_UID_R is already set in es->s_feature_ro_compat,
-that bit is cleared from params.set_feature_ro_compat_mask before reaching
-the check above, so enabling_uid_r remains false, the sbi->s_inode_size
-check is skipped, and ext4_enable_uid_r(sb) is never called.
-
-Additionally, even when EXT4_TUNE_FL_EDIT_FEATURES is used directly,
-ext4_ioctl_set_tune_sb() clears already-set features from
-params.set_feature_ro_compat_mask immediately after setting enabling_uid_r:
-
-		params.set_feature_ro_compat_mask &=3D
-			~le32_to_cpu(es->s_feature_ro_compat);
-
-When ext4_update_superblocks_fn() then invokes ext4_sb_setparams(),
-params->set_feature_ro_compat_mask no longer has EXT4_FEATURE_RO_COMPAT_UID=
-_R
-set, so es->s_want_extra_isize is not raised to EXT4_EXTRA_ISIZE_UID_R on
-disk in the superblocks.
-
-Does this prevent EXT4_IOC_SET_TUNE_SB_PARAM from enabling uid_r via
-EXT4_TUNE_FL_FEATURES and from updating es->s_want_extra_isize on disk when
-EXT4_FEATURE_RO_COMPAT_UID_R is already set in es->s_feature_ro_compat?
+Because info.si_uid =3D 0 is set directly after clear_siginfo(&info),
+info.si_uid_r remains UID_R_NONE instead of UID_R_LEGACY with uid 0, whereas
+calling bpf_send_signal() or bpf_send_signal_thread() (where task is NULL)
+uses SEND_SIG_PRIV and sets info.si_uid_r via siginfo_set_kernel_uid().
 
 [ ... ]
+
+> diff --git a/ipc/mqueue.c b/ipc/mqueue.c
+> index d1dd36a651b0d..f0a319ed97515 100644
+> --- a/ipc/mqueue.c
+> +++ b/ipc/mqueue.c
+> @@ -802,8 +802,8 @@ static void __do_notify(struct mqueue_inode_info *inf=
+o)
+>  			/* map current pid/uid into info->owner's namespaces */
+>  			sig_i.si_pid =3D task_tgid_nr_ns(current,
+>  						ns_of_pid(info->notify_owner));
+> -			sig_i.si_uid =3D from_kuid_munged(info->notify_user_ns,
+> -						current_uid());
+> +			siginfo_set_uid(&sig_i, info->notify_user_ns,
+> +					current_uid());
+>  			/*
+>  			 * We can't use kill_pid_info(), this signal should
+>  			 * bypass check_kill_permission(). It is from kernel
+
+[ ... ]
+
+> diff --git a/kernel/signal.c b/kernel/signal.c
+> index d31ebcb6ed4db..af0793d04b640 100644
+> --- a/kernel/signal.c
+> +++ b/kernel/signal.c
+
+[ ... ]
+
+> @@ -1229,6 +1228,13 @@ int send_signal_locked(int sig, struct kernel_sigi=
+nfo *info,
+>  			info =3D &rewritten;
+>  			uid =3D make_kuid(current_user_ns(), info->si_uid);
+>  			rewritten.si_uid =3D from_kuid_munged(t_user_ns, uid);
+> +			if (rewritten.si_uid_r.type !=3D UID_R_NONE) {
+> +				kuid_t uid_r =3D make_kuid_r(current_user_ns(),
+> +							   &rewritten.si_uid_r);
+> +
+> +				from_kuid_r_munged(t_user_ns, uid_r,
+> +						   &rewritten.si_uid_r);
+> +			}
+>  		}
+>  		rcu_read_unlock();
+>  #endif
+
+[Severity: High]
+Can this cross-user-namespace translation in send_signal_locked() corrupt
+both si_uid and si_uid_r in several signal delivery paths?
+
+First, in send_signal_locked(), rewritten.si_uid is still derived from the
+32-bit info->si_uid via make_kuid(current_user_ns(), info->si_uid) rather
+than from uid_r. When a process with a UUID or GUID UID in init_user_ns
+signals a task in a child user namespace t_user_ns (via
+prepare_kill_siginfo() in tkill(), tgkill(), or pidfd_send_signal() with
+info =3D=3D NULL, or via rt_sigqueueinfo()), info->si_uid has already been =
+munged
+to overflowuid (65534). make_kuid(&init_user_ns, 65534) then fabricates the
+legacy host UID KUIDT_INIT(65534). If t_user_ns maps legacy host UID 65534 =
+to
+a valid container UID, rewritten.si_uid is set to that container UID instead
+of overflowuid, while rewritten.si_uid_r is munged to overflowuid.
+
+Second, prepare_kill_siginfo() in kernel/signal.c pre-maps current_uid() in=
+to
+current_user_ns() before send_signal_locked() knows the target's user
+namespace:
+
+kernel/signal.c:prepare_kill_siginfo() {
+	clear_siginfo(info);
+	info->si_signo =3D sig;
+	info->si_errno =3D 0;
+	info->si_code =3D (type =3D=3D PIDTYPE_PID) ? SI_TKILL : SI_USER;
+	info->si_pid =3D task_tgid_vnr(current);
+	siginfo_set_uid(info, current_user_ns(), current_uid());
+}
+
+If a task with a UUID or GUID UID enters a child user namespace via
+unshare(CLONE_NEWUSER) or setns() and calls tkill(), tgkill(), or
+pidfd_send_signal() (with info =3D=3D NULL) targeting a task in init_user_n=
+s,
+siginfo_set_uid() in prepare_kill_siginfo() immediately munges info->si_uid=
+_r
+to UID_R_LEGACY / overflowuid because current_user_ns() !=3D &init_user_ns.
+When send_signal_locked() subsequently translates from current_user_ns() to
+t_user_ns (&init_user_ns), the original UUID or GUID has already been lost.
+
+Third, both do_notify_parent_cldstop() in kernel/signal.c and __do_notify()
+in ipc/mqueue.c already translate the sender's kuid_t into the receiver's
+user namespace via siginfo_set_uid(), but then pass the resulting siginfo to
+send_signal_locked():
+
+kernel/signal.c:do_notify_parent_cldstop()
+  -> siginfo_set_uid(&info, task_cred_xxx(parent, user_ns), task_uid(tsk))
+  -> send_signal_locked(SIGCHLD, &info, parent, PIDTYPE_TGID)
+
+ipc/mqueue.c:__do_notify()
+  -> siginfo_set_uid(&sig_i, info->notify_user_ns, current_uid())
+  -> do_send_sig_info(info->notify.sigev_signo, &sig_i, task, PIDTYPE_TGID)
+    -> send_signal_locked(sig, info, p, type)
+
+When current_user_ns() !=3D t_user_ns, send_signal_locked() translates si_u=
+id
+and si_uid_r a second time assuming they were formatted in current_user_ns(=
+).
+For example, if a child or mqueue sender with a UUID or GUID UID is in a
+child user namespace and the parent or notify_owner is in init_user_ns,
+siginfo_set_uid() writes the UUID or GUID into si_uid_r, and
+send_signal_locked() then calls make_kuid_r(current_user_ns(), ...), which
+fails in kid_r_to_128() and returns INVALID_UID, overwriting the valid UUID
+or GUID with overflowuid.
+
+[ ... ]
+
+=E5=AE=8C=E7=BE=8E=EF=BC=81 Let's double check everything before finalizing=
+. Everything adheres strictly to the guidelines.
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/cover.1792552161.gi=
-t.jan.koester@tuxist.de?part=3D32
+t.jan.koester@tuxist.de?part=3D29
