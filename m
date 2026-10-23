@@ -1,73 +1,86 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=18.9.28.11
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.129.124
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792693713;
-	b=Z2uwVGny9hcXlc6yD7PY8hgBTtSHb0yTsff1Ue5YPZqDf736EA+hVlVOh2VgC5CSZBbo
-	 zqq+v4hL+2HTOLr6+qTKHlk7YKEgTq1ECusBPbEwXamA5tqzSH2AztMFgLd3UTEXXZ0Cc
-	 3dU1mnLc6VgOm7V4csACudcpmH3A6p888YA8qhdEeul1TwlWeYMnwTm0eC4Mwk14YgVnk
-	 4ULci6X84R2p2lOHz5m74wNQyf92/gWoIM6M9TJvEv067L7Uff0AAL4y7Mx6exG8F4aTX
-	 Lw1nNB1jFIct4uDW1h0rFov4D8x/8jRlXMsEF6gOi2qLPLDq6yVzTxpWvAtkmJrv6Tg==
+	t=1792759536;
+	b=tEjvlm12y5ipnkhFSjfpgz49TFiC7ps9xvU/Z6QTpGNYD55M59zHDPjCICgzTlqiSNks
+	 mx2aAvSyZ9de0Fcf/NgAYTnksWd+90daGaoWLv1tRACtmhxJ6LLuoVAHSX9ECH9SqmO6k
+	 prPnC4JBFl2RLZXI3E+WP8zbZfWc/grzYkabrsjW6RkC8bj+WKlbAwUc6trfnw9yMcLeO
+	 38Jomcft22sNnNDVghxcNwxgiktu0LZ5W4hzR7c/ee+dl1BuxSAencukf+O/8qrD9lM8F
+	 gomUBVsVpvxgc81K8iTNTYKHMofw9OI54OajX8CB1et2kjkMdOESiLg6muzAHoPkh5A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792693713;
-	h=DMARC-Filter:Received:DKIM-Signature:Received:Date:From:To:Cc:
-	 Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To;
-	bh=JYh+FSmeD5zBdSGmLXfoWsuKx9ehvUO73Rr6qnSc3X8=;
-	b=JAwRsz0+cCtdtOi1wrE2VIIP/0CcvwvAC6ltKk1dwojDFiNUjIqnw6pRhssCW+n53b2U
-	 jD4dftCtPEKP6KS3xKX0GeDQ4t1JZpEVHSR+kKC7Ykhq19gsEoUaT4Szc+D5MSBxcG2eC
-	 D0q+8nHDgO3myqbhZ9Zd8PcNWJPteakojOcTDPD3xiv4mTu9Lre/P46IUyDLgoJ+FqUJj
-	 8qHeRVPJwP2vGpAE5ZTVYr/Rslerr7/LfZEHsbkEKNNJHIFcVtxtKRy1rsFI7X/GWZtPL
-	 s5vWx9svWVKLOy25AcjI8CHIIUcFcjJFvG+TJyvhPz7PeGQZ7MYBt3WqUmOnFG1x/Eg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792759536;
+	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
+	 X-Mimecast-MFC-AGG-ID:Received:X-Google-DKIM-Signature:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:X-Received:MIME-Version:
+	 References:In-Reply-To:From:Date:X-Gm-Features:Message-ID:Subject:To:
+	 Cc:X-Mimecast-Spam-Score:X-Mimecast-MFC-PROC-ID:X-Mimecast-Originator:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=Dw7ixUsZNlBi2ggGvaFZwX+nWP7PGBtWcR/4kzMhp/c=;
+	b=HlDMximYRopQ0qUlqLJraDXCx4kFzqYDyOXOiSwNbJNWMXIJIN266/tXqT13lP3gJinV
+	 5cpjPk5Sc2nNlUyl9sw4QD8nnN20KipKZu8nke45jeiy40gv+awlG/WPRYKEp6rrYHaWQ
+	 trWauwLPovO2ZohIQqGHmMijYmzuEhiqyF52MbRtrit0Fylme3zUPBeP1xNG6J58T4ivy
+	 /53dKyJKaxiZR/ow1f/mK2gQgSjuza311Mcr9EM57+liMqJgt+qpErudkptCep6NbC0dE
+	 8SKyEtKDMUpNyCyakcbBG/QVEOjTMMwNwcmKY0aLgyshUNkZ9rIoYhuvQa6b9K95luQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=mit.edu;
-	spf=pass smtp.mailfrom=mit.edu;
-	dkim=pass header.d=mit.edu header.i=@mit.edu header.a=rsa-sha256 header.s=outgoing header.b=FB4rIzmo;
-	arc=none smtp.remote-ip=18.9.28.11
-Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dmarc=pass header.from=redhat.com;
+	spf=pass smtp.mailfrom=redhat.com;
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=JFCilMtk;
+	arc=none smtp.remote-ip=170.10.129.124
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17138606A319
-	for <audit@vger.kernel.org>; Thu, 22 Oct 2026 18:28:32 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 17138606A319
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mit.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mit.edu
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C55CB606A322
+	for <audit@vger.kernel.org>; Fri, 23 Oct 2026 12:45:35 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C55CB606A322
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=mit.edu header.i=@mit.edu header.a=rsa-sha256 header.s=outgoing header.b=FB4rIzmo
-Received: from macsyma.thunk.org (pool-108-26-156-23.bstnma.fios.verizon.net [108.26.156.23])
-	(authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-	by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 69MIRtlq008340
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 22 Oct 2026 14:27:56 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
-	t=1792693680; bh=JYh+FSmeD5zBdSGmLXfoWsuKx9ehvUO73Rr6qnSc3X8=;
-	h=Date:From:Subject:Message-ID:MIME-Version:Content-Type;
-	b=FB4rIzmodCuc/ai76PzcPn8NKTCLCBgJQn5lG4OsNurD082LpzxvtWFDvX0WpozMi
-	 G5Wxrp5EKZivFppsyR/34R27Liveb8SHZHVPaUoS8ZK0SZqi5QIowbJZ3A3OxbM4VC
-	 T6wusZBLcMx4TA37NCtnpi9VcygARe/ydMqEQL+dUU2EOTWaGTS6Vg7HOcXefp/15T
-	 d7nP4c/UgU10vdDcWJP9aCfO9onPi6Wq2o/TdsUsdoFN9dfgwzIj5Cp6zqZxHaVWNY
-	 x9vDg8JooiFE5P2IxXk6tkIe6BLRPcasmFTfgbGaiWHz4u1SVqCZ6O7DWx0DCQCJGP
-	 /VtU8vRIAggOg==
-Received: by macsyma.thunk.org (Postfix, from userid 15806)
-	id 96FCB22114B9; Thu, 22 Oct 2026 14:26:55 -0400 (EDT)
-Date: Thu, 22 Oct 2026 14:26:55 -0400
-From: "Theodore Tso" <tytso@mit.edu>
-To: Casey Schaufler <casey@schaufler-ca.com>
-Cc: Jan Koester <jan.koester@tuxist.de>,
-        Christian Brauner <brauner@kernel.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        "Serge E. Hallyn" <serge@hallyn.com>, Jan Kara <jack@suse.cz>,
-        Paul Moore <paul@paul-moore.com>, Arnd Bergmann <arnd@arndb.de>,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-nfs@vger.kernel.org,
-        linux-cifs@vger.kernel.org, netdev@vger.kernel.org,
-        audit@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH v2 00/41] UUID and GUID user and group ids (*_r
- system calls)
-Message-ID: <atpNJINlFhQ0M3Y6@mit.edu>
-References: <cover.1792552161.git.jan.koester@tuxist.de>
- <018ca365-ce9b-424c-b600-bd9c8aefc9a1@schaufler-ca.com>
+	dkim=pass (1024-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=JFCilMtk
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1792759534;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Dw7ixUsZNlBi2ggGvaFZwX+nWP7PGBtWcR/4kzMhp/c=;
+	b=JFCilMtkUblpG0se/OsDP8XQNcS0g5CbxN4al/yDpGmYxsKAuaBflAG9Ot1vUdjN4LK9kx
+	6KihEPKO+lHEjYmLhUHLQBXjHW8sH5zxS6puIxjSFzPEXhebnff8clkn5/qJZVNpLCKzd4
+	ANALi0his2JyaJHN1lr2Y9JnHEvtemw=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-303-bggk0TBPPw2xSSb6Z7OwKA-1; Fri, 23 Oct 2026 08:45:33 -0400
+X-MC-Unique: bggk0TBPPw2xSSb6Z7OwKA-1
+X-Mimecast-MFC-AGG-ID: bggk0TBPPw2xSSb6Z7OwKA_1792759532
+Received: by mail-ej1-f72.google.com with SMTP id a640c23a62f3a-c42394d1e41so70590166b.3
+        for <audit@vger.kernel.org>; Fri, 23 Oct 2026 05:45:33 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792759532; x=1793364332;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=Dw7ixUsZNlBi2ggGvaFZwX+nWP7PGBtWcR/4kzMhp/c=;
+        b=Ne+JVWvCkLEgfADshz2DpzTLuuKPq3zxWsZVo9AijwVGdrMRWcd8FjwtKNMu+4YMHJ
+         hDHnRExh+LkbzMeN4KoH/EPvvvUvaZEp1Zj+0U6zF6iIyQDNNX6g4WzJwOfj74cG7Bq8
+         mcG8zcaHzDB6xlh7MXnkbR2RhIGH6j6tjPRZj2vro2OIFG87hihSVzAe31jfRC9SrnCF
+         Kg0BeUMdia5uG51wdP4/HP28FJDwemAROjzgBFLtY1QyQIvMprAJOFtrlO/D5wisZNZZ
+         5VSSGYKGdj7GeAi+8cdaox7h3Kg7zv9LNnGluWUDrCJ0iv1sQAf38EwyyQqTSB9IDLgD
+         ySbQ==
+X-Gm-Message-State: AFq9FYIykCozmD7gQ5JJQlocVj6ZbDLKt1+KtV7rRArJ9nWfdnMZCjI8
+	HHa7Jobnzdin4A2IUrSWk/YvoRTpsuXI01gh1yRnf5ZCf7xov1+xQHlXL5bcIelnnvq2CT7VVt8
+	H0AuC5ETn0DTv/lwIfBKBInevNQAfaCV6Ta2WPzPLpMbf2lIKAetDZs7qwyvmdLgNeIOWk8yVTI
+	3oq3Wesk9j8V/rTOH++zQ6oL7jMI5T6TY=
+X-Gm-Gg: AYBFou31dx66jTbmct+QsroG69J+eCPccB92hLIa4a0uTOqj39qTMZPYfkwC0DeuWC2
+	N40ZcxPXBfBSZOSXaKm7+v0jY68tH/ZqzZncu9fKI/hewXcahDJF8y8nJ+5qwInEjz7zjKXPMpR
+	OeZriWHAbHj9B3YqPrKQqo2uMfYplYfKbPB3HBKl6UAqo+0JkeSYS+JbzluvIoUHpFrBitp51q+
+	7BJ68Z82pw518HCjCsmpPW7jhGjcMo9ZVRzGi2GbELXWd6vClHM0PMosOJ8J5X8DakAtgpC9VCs
+	SKA=
+X-Received: by 2002:a17:907:fd8a:b0:c2e:46d0:b802 with SMTP id a640c23a62f3a-c46a92ae6c0mr328360166b.40.1792759531935;
+        Fri, 23 Oct 2026 05:45:31 -0700 (PDT)
+X-Received: by 2002:a17:907:fd8a:b0:c2e:46d0:b802 with SMTP id
+ a640c23a62f3a-c46a92ae6c0mr328354266b.40.1792759531460; Fri, 23 Oct 2026
+ 05:45:31 -0700 (PDT)
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Post: <mailto:audit@vger.kernel.org>
@@ -77,45 +90,82 @@ List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:audit+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <018ca365-ce9b-424c-b600-bd9c8aefc9a1@schaufler-ca.com>
+References: <cover.1790088067.git.rrobaina@redhat.com> <CAHC9VhQ=FFYVNmQdiMsqg+5KDDrSC3SZS+H2=r_GkhfwQox8tg@mail.gmail.com>
+ <CAABTaaBL=TScs8Qqu3b8F6KZPGMyvwy6cBC3teDaBL6MGMucNg@mail.gmail.com> <CAHC9VhROsmzbm+AP63Sm7mqCokgEy6Zu0AVMY0gxp8qY75Pqiw@mail.gmail.com>
+In-Reply-To: <CAHC9VhROsmzbm+AP63Sm7mqCokgEy6Zu0AVMY0gxp8qY75Pqiw@mail.gmail.com>
+From: Ricardo Robaina <rrobaina@redhat.com>
+Date: Fri, 23 Oct 2026 09:45:20 -0300
+X-Gm-Features: AclHuK-AKUESe6iHVc-VzwOYib6sgRKlK0BCnAtM6wg5S60Ozyo0oOLLHvDr8CI
+Message-ID: <CAABTaaBOrPknzdxc5S6L9hGu7hbFu2e1RZG=Sxjb_B1Cs4Sixw@mail.gmail.com>
+Subject: Re: [PATCH v3 00/14] audit: log all six syscall arguments in the
+ SYSCALL record
+To: Paul Moore <paul@paul-moore.com>
+Cc: audit@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-csky@vger.kernel.org, linux-mips@vger.kernel.org, 
+	linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org, 
+	linux-sh@vger.kernel.org, sparclinux@vger.kernel.org, 
+	linux-um@lists.infradead.org, bpf@vger.kernel.org, eparis@redhat.com, 
+	sgrubb@redhat.com, oleg@redhat.com, richard.henderson@linaro.org, 
+	mattst88@gmail.com, linmag7@gmail.com, linux@armlinux.org.uk, 
+	catalin.marinas@arm.com, will@kernel.org, guoren@kernel.org, monstr@monstr.eu, 
+	tsbogend@alpha.franken.de, jonas@southpole.se, 
+	stefan.kristiansson@saunalahti.fi, shorne@gmail.com, 
+	James.Bottomley@hansenpartnership.com, deller@gmx.de, 
+	ysato@users.sourceforge.jp, dalias@libc.org, glaubitz@physik.fu-berlin.de, 
+	davem@davemloft.net, andreas@gaisler.com, richard@nod.at, 
+	anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net, chris@zankel.net, 
+	jcmvbkbc@gmail.com, tglx@kernel.org, peterz@infradead.org, luto@kernel.org
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: s2VWf9oDu32svlRIHq2uIcYulmsmA_uiRoEGi31thYE_1792759532
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Oct 22, 2026 at 10:00:16AM -0500, Casey Schaufler wrote:
-> 
-> I can't see this being acceptable for a variety of reasons, including
-> but not limited to performance and configuration complexity. It's a
-> general solution for a special case or two, and the impact is significant.
+On Tue, Oct 20, 2026 at 1:39=E2=80=AFPM Paul Moore <paul@paul-moore.com> wr=
+ote:
+>
+> On Tue, Oct 13, 2026 at 8:36=E2=80=AFAM Ricardo Robaina <rrobaina@redhat.=
+com> wrote:
+> > On Thu, Oct 1, 2026 at 6:06=E2=80=AFPM Paul Moore <paul@paul-moore.com>=
+ wrote:
+> > > On Tue, Sep 22, 2026 at 3:21=E2=80=AFPM Ricardo Robaina <rrobaina@red=
+hat.com> wrote:
+>
+> ...
+>
+> > > * As pointed out by Sashiko, when you were converting all of the
+> > > arches, it looks like you missed alpha.  I took a quick look and it
+> > > appears that it should be a pretty straightforward conversion like
+> > > most of the others.
+> >
+> > I've actually dropped the alpha patch as per Magnus's request [1].
+> >
+> > [1] https://lore.kernel.org/audit/CA+=3DFv5T4826T2sd0Gbh-nfZsqcWK_phdBK=
+y4BLWOvDTt92t5Eg@mail.gmail.com/
+>
+> The problem is that as things stand, this patchset breaks the build on
+> Alpha.  Perhaps this gets resolved during the current merge window,
+> but as you know we can't break the kernel build ...
+>
+> https://lore.kernel.org/oe-kbuild-all/202610041836.6TatRQSm-lkp@intel.com
 
-Yeah. I agree it's a non-starter.  For one thing, it requires
-replacing every single system call which uses a 32-bit uid or gid ---
-either as an input parameter, a return value, or in a structure, such
-as, "struct stat".  It also requires making breaking changes into
-on-disk file formats that use a uid --- for example, /etc/passwd,
-/etc/group, utmp/wtmp, etc.  If it will also break compatibility with
-remote file systems that don't use a Windows SID --- e.g., nfsv3, AFS,
-etc.  And that's before we even get to breaking things like tar files, etc.
+Of course, you're absolutely right that we can't break the build. I
+was afraid that this dependency might cause trouble.
 
-I'll also note that customers that are most likely to need to use the
-abominationm of Windows SIDs are also those that are likely to be
-using proprietary third party binaries --- you know, silly things like
-SAP R/3, Oracle Enterprise Database, db2, etc.  And if you use Windows
-SIDs as user id's in your /etc/passwd, then binaries that are still
-using the traditional system calls will get the overflow 32-bit number
---- and break.
+I noticed Magnus posted a pull request a few days ago containing the
+"alpha: enable GENERIC_ENTRY" series [1]. It seems this will get
+resolved during the current merge window.
 
-I suspect it will be much more useful to simply add a supplementary
-user id and group id which is only used by those file systems that
-*care* about Windows SID's, and assume that everything else will use
-true, traditional Unix uids and gids.  I also suspect that we should
-be stashing the supplementary id's as extended attributes for the file
-systems.  That way we can much more quickly and easily add support to
-ext4, xfs, btrfs, etc., as file systems that can be used as backing
-stores for NFSv4 and CIFS for those (few) environments that care about
-Windows SID's.
+For future reference, what's the best way to handle dependencies on
+other subsystem changes like this?
 
-						- Ted
+[1] https://lore.kernel.org/linux-alpha/ataJlL6L7TrS3gWs@z440.darklands.se/
 
-P.S., From my perspective, Windows SID's are actually the legacy
-ID's. especially as more and more people flee Microslop's Windows 11
-and moving to Linux and MacOS.  :-)
+>
+> --
+> paul-moore.com
+>
+
+-Ricardo
+
