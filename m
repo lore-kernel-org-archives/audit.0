@@ -1,96 +1,69 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.179
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=51.159.188.251
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793331208;
-	b=CjGv324H07prSsAi1EAkbrOANe1hnIpxnkr8JYLspieIo422mtmZwOoTqcjXZTOAMfLa
-	 +FF6VDhLRVh5HEfrgbBOaRifxF7ehSMswpRA1EX5uG703XFc8yV7u+X6j6c5kr8Lj8tDW
-	 X8zBH4dUPYyJC6ZdMbIhht1j9P4S86/dpYAopT2lVVUOKHcUDFIBFaIxsvg0NkrcIdDXw
-	 VN9lZhitPTwQyXTPCrSoui/PGngbJJYqdtfcqbr1oQE6LVvydGNR3RL1lGbYrr4cyTVhw
-	 RzG9iyZvwgxFDoMlwxnDd50d4sH0fkk0dqKsGSQh/yqMxXel6fUjB7iA+Qrz2S38zzw==
+	t=1793481361;
+	b=NgvzJq84cxhEuyGoBI6M4u/uCA44hJ/cYpcaOArWpsy2WPhlXXvwRaJoYe7edymGZd5x
+	 GyfKjad7STJSiVTb44SjnL+F0h1wi3FzFOpk9WHGYANos4TD3GdvlpTnb1XydZYcxyx1w
+	 ISzNBU+cc/EOw8cJ8aJC4U2KGzvJohnlpSBGP1w4AtWSz+ddyzMfxTX+EHWmhTiS8BDR0
+	 xrNZda8fyABMGLBEagYKhYuAnlJs9WbnGT2CFQhKuwnOQxuxVcMTPCynMGwgtZTcbtK/H
+	 hW/75HO+/DF1e8bVKLg8dNl1Nr5R6DVT0+vE4/4Tfd3Ctzbk/xp2iOxqh/wzBVLBwhw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793331208;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
-	 MIME-Version:Content-Transfer-Encoding;
-	bh=6rss23bXzihYLvh5XkbaLwnETqaIZS+Fw5w7OvzrICE=;
-	b=cggsJ3l+IlGA6q4NlLQHlJ2BwMCl/s0SANZg+Bm0VCY2/bB8rpkfawDfo7UwgVwCkhKJ
-	 7nwAfA84U7P1w7Yu7SntsMxB5cIa7oXxZUed/MkifVomGXFoIhUBXil9AKZvX+1q3YxgK
-	 xy/dS3YUf9xnZxT13pPxlGn6DXd1WAC+DktF2agJZqvyYDFdWr4lfL5Vgfp+Wl3rbSzSS
-	 fxi6Aq+BWeBOpelK84+E4W9lc5NU01UFQGHzEeEHlhuW+KBlpz6tn6zEV0KS1SdZXRMhA
-	 Un9yuzPgdYTr38fUcZ6Gjt9mXX3Rm4JKo5OoYCTz15nANlO4MPGde4RPlIpFe4/86xA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793481361;
+	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:Date:
+	 Message-ID:X-Mailer:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:X-AntiAbuse:X-AntiAbuse:X-AntiAbuse:
+	 X-AntiAbuse:X-AntiAbuse:X-Get-Message-Sender-Via:
+	 X-Authenticated-Sender:X-Source:X-Source-Args:X-Source-Dir;
+	bh=/ba8KQsZ3EiQOcT65AhgZE+XZiuOVWA08LshL8rUrYw=;
+	b=4CerOia1FhJNFHO3SvreNZzSFt2rpJ3PLXrfse0PpTDU19HIuSHgOvVPt4qul7NMmnQv
+	 756UE+olZhEGm5uJ5hfAhRIu3B0LC0+KJ4GYy2THR/JEC5yUVD6fzkySefiY/7tIz4bL6
+	 xOAYKKmp8uV6X+dDdHZEsTH2779uK2Yh0x9YJ7AV5xmdixvVSV2WmH+IQrvpr2tjnQMvB
+	 TR54FWx8cWNDfI8/fvMvu6j1gBK1B+MGt+wjeU79OLAROFGlDa57J1in2mtaw9zmkElsj
+	 fUOjhlMm4u1Cln3ZeKckiDQmad97/SgYLigWowncqeFPR0AlyPUF//gPZp7H4Wn6QSw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=iQkj2yaq;
-	arc=none smtp.remote-ip=209.85.210.179
-Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=oss.cyber.gouv.fr;
+	spf=pass smtp.mailfrom=oss.cyber.gouv.fr;
+	dkim=pass header.d=oss.cyber.gouv.fr header.i=@oss.cyber.gouv.fr header.a=rsa-sha256 header.s=default header.b=BELv0g6d;
+	arc=none smtp.remote-ip=51.159.188.251
+Received: from oss.cyber.gouv.fr (oss.cyber.gouv.fr [51.159.188.251])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A68B7606A31D
-	for <audit@vger.kernel.org>; Fri, 30 Oct 2026 03:33:27 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A68B7606A31D
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C08B606A31A;
+	Sat, 31 Oct 2026 21:16:00 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3C08B606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.cyber.gouv.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.cyber.gouv.fr
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=iQkj2yaq
-Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-8a06c60065fso109852b3a.1
-        for <audit@vger.kernel.org>; Thu, 29 Oct 2026 20:33:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793331207; x=1793936007; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=6rss23bXzihYLvh5XkbaLwnETqaIZS+Fw5w7OvzrICE=;
-        b=iQkj2yaqagmPOtWMHT45u4esFyGIUD7mtvdDsjB7v2RP15ecu6KRKGVGrwF/zlOAVR
-         pKvg2RWxdTOAfSpVDvgNrWZfI0pIzR6lfZbpAd+vTzp9sJ4xCUjf3Oxps4poHBIms4l6
-         OeZJvlsIhckLi/XCSoQ1XO2LThlzLRGh/kg/O71hHPS9F5htFVTvNb6l9Hf2eDgLlhhw
-         jQM0WzxZet1na56DYjAqupJYnDUQVgzwJAz/zxt+XdKdW6+1+qxmx/SNnze/sPTUnIXA
-         hSItjX8j4R6gzuuufTb/x1d3eSmm5r6t/pPv3jI0pKLghpfP6jbuSxIHdS7vMdzojcu+
-         XL9g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793331207; x=1793936007;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=6rss23bXzihYLvh5XkbaLwnETqaIZS+Fw5w7OvzrICE=;
-        b=xxvTiAM6eCkbvIBdOdar7jh84onQ0JYECojw2+U1gFr9s0ioi9udGEivX9dMQLJu44
-         ejDxvxQ/lvyOf0ISkztXyABlYpC8SEOuhmFnUK6N1GfrCFSVau2gPeRT4WR6FkinvV/K
-         b6kgLozTh7K3B0qgqUJR+Befb1ovmZSzWkKlnBK6/4+BksmWnzlynKJZZYFpojft7x0q
-         xIbBhIYKvYtW0v/btUBCuERFHcuNq6jtIWR2KKkdnwykegzO0YQGdJqtuMXZJGfoPFkR
-         WMqKBpWjRdggaWr/KreSKvOESjP5c0HsBxDdnsa/5DvprUnFhtOcltln3rdAe/QORE00
-         xf5w==
-X-Forwarded-Encrypted: i=1; AKwUvBxXByk9UtnsPl4lRNFy5h5o1+3VwEaHW1yo1Y7wu9Ui5FkodM3mfjWzLwlS3sXRrCd7jxYNzA==@vger.kernel.org
-X-Gm-Message-State: AFq9FYIcPQtaXBm6YflkH7Qf4bX55jo6Xh5w3DteSiXNRZB/QoczkvgL
-	vgqn7KoqFVCGhBUPlk1F4dV/kf4e3LPjgvZgMijpGZwkCtJaWmV5VyFaz14WMW45+e8=
-X-Gm-Gg: AYBFou3PfKMQrrZR+TZ5tNCelD/1MtlwgBRzWkFlD1KvOLDZLfDV3AizvVhJnxy/ztq
-	ZYhSSVBiAuoIajFjRg3vIc5p0JtwbYAj2CaKbfLmI3SyAyX0q7eSWU6c7dRYwQT3EeKMAVgkB2F
-	5uZ9rKdvY4tT2prsno0M51pTspNXonTbR/S64N0Mv838b+nSLgLBI0NtMd/vkA3mrx5TrDTSNeR
-	xBsQ8H0K31lCAkHyocoEtHqEBTxzUeFmDu1TdKO67FepFFHgyxFjusaziRAH70/ZZEYiitMngOS
-	2Smqyeete2VqLpE81toRwmBiGyYjFWb2qPdptRXBEcgyaOFxmE8VpKS/3eWCuLjr4WRF5Hx96of
-	fBbWRo0xyOdGfRCzcBqlCPIZfV03rpyBDDZ6aF4RUPInDHtbwu925+PNPNUHXoUYcUhEOBWS/Ut
-	PKLXEQckA0kh0OQsDJc0co71E4EpC/6QcWLiSGbB24V1wV7OciiYpPG8YKrSWFk6Wxp/g0Hxchm
-	Cf0XIEPAuocg1UfFpPv3u0EjByYbFiquLu+vWPRRVKUQSXNooyODASOREWmYWIYa28WE6Qarib6
-	dF9W8E83TUi4Pi6tCStlJjgJmw==
-X-Received: by 2002:a05:6a00:2d0a:b0:89e:92e:4211 with SMTP id d2e1a72fcca58-8a9bcff6a3dmr946518b3a.16.1793331206869;
-        Thu, 29 Oct 2026 20:33:26 -0700 (PDT)
-Received: from kdev.. ([187.15.154.74])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8a9ecf5665asm196545b3a.7.2026.10.29.20.33.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Oct 2026 20:33:26 -0700 (PDT)
-From: Babanpreet Singh <bbnpreetsingh@gmail.com>
-To: Paul Moore <paul@paul-moore.com>
-Cc: Eric Paris <eparis@redhat.com>,
-	Bradley Morgan <brads@mainlining.org>,
+	dkim=pass (2048-bit key, unprotected) header.d=oss.cyber.gouv.fr header.i=@oss.cyber.gouv.fr header.a=rsa-sha256 header.s=default header.b=BELv0g6d
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=oss.cyber.gouv.fr; s=default; h=Content-Transfer-Encoding:Content-Type:
+	MIME-Version:Message-ID:Date:Subject:Cc:To:From:Reply-To:Sender:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:In-Reply-To:References;
+	bh=/ba8KQsZ3EiQOcT65AhgZE+XZiuOVWA08LshL8rUrYw=; b=BELv0g6d+CXyQ4T50I9WNXSiEm
+	xZ1z/ufpnkaOh6RIBuS3mZv4cYN0z9MrPkyEeqI9Tp7AfORdtXEjr2CvjNjs/SM9vPyWQygAsAWHY
+	qDejpKxe0mZ4W3sIBXKouKvSf+A1vkTuF8zF0j6+P/5QsVmEOAWBkxxQFO9hFutDAgV0LxCKGGj7M
+	k2PMC79g+KjJdP2fBnCFwgRdNuw0pKoV9JRkH2H2xlTPEwtR1pFAEtFwIiP9XEwsbK9wTCrzT0xEP
+	bAIrBUEjKnKCSMZ7A098Cn6gexy4IDwGBpm/T4QMLHAyhvTGmPelYjgywobXday2qclmF3faW7qaf
+	ydv8SldQ==;
+Received: from [151.115.150.205] (port=51266 helo=gepetto..)
+	by pf-012.whm.fr-par.scw.cloud with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.100.1)
+	(envelope-from <Jeremy.Jean@oss.cyber.gouv.fr>)
+	id 1xNGQj-0000000DA0E-3Sis;
+	Sat, 31 Oct 2026 22:15:58 +0100
+From: =?UTF-8?q?J=C3=A9r=C3=A9my=20Jean?= <Jeremy.Jean@oss.cyber.gouv.fr>
+To: Paul Moore <paul@paul-moore.com>,
+	Eric Paris <eparis@redhat.com>
+Cc: Bradley Morgan <brads@mainlining.org>,
 	audit@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	bbnpreetsingh@gmail.com
-Subject: Re: [PATCH v2] audit: annotate the lockless read of the audit control lock owner
-Date: Fri, 30 Oct 2026 03:33:20 +0000
-Message-ID: <20261030033320.7-1-bbnpreetsingh@gmail.com>
+	=?UTF-8?q?J=C3=A9r=C3=A9my=20Jean?= <Jeremy.Jean@oss.cyber.gouv.fr>,
+	stable@vger.kernel.org
+Subject: [PATCH] audit: fix UAF in kauditd_send_queue()
+Date: Sat, 31 Oct 2026 21:12:59 +0000
+Message-ID: <20261031211258.1626829-2-Jeremy.Jean@oss.cyber.gouv.fr>
 X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20261008034403.7-1-bbnpreetsingh@gmail.com>
-References: <20261002011712.7-1-bbnpreetsingh@gmail.com> <20261008034403.7-1-bbnpreetsingh@gmail.com>
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Post: <mailto:audit@vger.kernel.org>
@@ -100,13 +73,79 @@ List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:audit+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - pf-012.whm.fr-par.scw.cloud
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - oss.cyber.gouv.fr
+X-Get-Message-Sender-Via: pf-012.whm.fr-par.scw.cloud: authenticated_id: jeremy.jean@oss.cyber.gouv.fr
+X-Authenticated-Sender: pf-012.whm.fr-par.scw.cloud: jeremy.jean@oss.cyber.gouv.fr
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
 
-Hi Paul,
+kauditd_send_queue() grabs an extra reference to the skb header before
+netlink_unicast() since it may need to retry a failed send. If unicast
+delivery reuses that same header, the receive path stores the
+destination socket in skb->sk without taking a socket reference.
+Consequently, after the receiver consumes the skb and closes the
+socket, the extra reference taken on the skb header makes kauditd
+release a header whose skb->sk points to freed socket storage.
 
-Gentle ping on this v2. It has been three weeks, Bradley gave it a
-Reviewed-by and Tested-by, and I don't see it in audit/dev or audit/next
-yet. If you want something else changed, tell me and I will respin.
+KASAN reports a UAF as:
 
-Thanks,
-Babanpreet
+  BUG: KASAN: slab-use-after-free in sock_rfree+0x44/0x140
+  Write of size 4 at addr ffff888004f94140 by task kauditd/31
+
+Clone the header before netlink_unicast(), then use the clone for
+delivery and keep the original skb only for retries. If cloning fails,
+handle it as -EAGAIN so the send can be retried.
+
+Fixes: f3d357b09295 ("Audit: save audit_backlog_limit audit messages in case auditd comes back")
+Cc: stable@vger.kernel.org
+Signed-off-by: Jérémy Jean <Jeremy.Jean@oss.cyber.gouv.fr>
+---
+ kernel/audit.c | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
+
+diff --git a/kernel/audit.c b/kernel/audit.c
+index 9412af9144bc..5e739fa606be 100644
+--- a/kernel/audit.c
++++ b/kernel/audit.c
+@@ -790,6 +790,7 @@ static int kauditd_send_queue(struct sock *sk, u32 portid,
+ {
+ 	int rc = 0;
+ 	struct sk_buff *skb = NULL;
++	struct sk_buff *skb_to_send;
+ 	struct sk_buff *skb_tail;
+ 	unsigned int failed = 0;
+ 
+@@ -810,9 +811,11 @@ static int kauditd_send_queue(struct sock *sk, u32 portid,
+ 		}
+ 
+ retry:
+-		/* grab an extra skb reference in case of error */
+-		skb_get(skb);
+-		rc = netlink_unicast(sk, skb, portid, 0);
++		/* Keep the original header unowned for retries. */
++		skb_to_send = skb_clone(skb, GFP_KERNEL);
++		/* Preserve the connection on a temporary allocation failure. */
++		rc = skb_to_send ?
++			netlink_unicast(sk, skb_to_send, portid, 0) : -EAGAIN;
+ 		if (rc < 0) {
+ 			/* send failed - try a few times unless fatal error */
+ 			if (++failed >= retry_limit ||
+@@ -827,7 +830,7 @@ retry:
+ 			} else
+ 				goto retry;
+ 		} else {
+-			/* skb sent - drop the extra reference and continue */
++			/* skb sent - consume the original and continue */
+ 			consume_skb(skb);
+ 			failed = 0;
+ 		}
+-- 
+2.47.3
+
