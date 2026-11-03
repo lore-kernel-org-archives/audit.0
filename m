@@ -1,60 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=5.75.144.95
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793491054;
-	b=VN/OkA4eLBKVlAfl1Egai6xbpm2RY206TTAx3s+5S2XfkunI+whAk8clW9wMztFhufHj
-	 H1uuXRkh7VMMVxHoUhrSG2xJ95ZNdATXAV1/lU9+bv/o73bob3bu2PaOU3GZ7pX/nr7Fp
-	 +dM+nrrr96pUEV5O8UiGQyhPEwz2BLCDu7Tix43LWnvMET6v7kp8hmFXwNr7COnng7HFI
-	 2qAw8qD2IQ2wE8d3/YcDK5wc9J0F7yE0NPo3baGqWDUxaTPbeoXwgLllww9oSOnSxzIL0
-	 iP7kpXeg0RTh8FGCnVkX/vhyJxt2FWezAnnP6OspO/5NW3KM3HjFHK9rXY3zkOl6Cwg==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793491054;
-	h=DMARC-Filter:DKIM-Signature:DKIM-Signature:Date:From:To:CC:Subject:
-	 In-Reply-To:References:Message-ID:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=ysWUmcxgVRXv2jQI8n69SegsVOhd/dtKdXxdVfo7JLM=;
-	b=0+QuEWcPXB3zy5nuMiEF3vEmbrujnINYRvOhf9w/jGi8C0xzXJdshdcpZ+0MSDFv53v4
-	 IKOuDn54YtHIW5ZswihBetwDO4SuRDRZE4rpsayWJpYe6okgCyz9FCn1/YaI16/3Prg6D
-	 NgwuE6MZBmwhHtjcsKggzOyEs7aYVZUusU1+E40Sh6S9rkQPPE5uJztHMyd1ZHXVjHb5f
-	 2+mm/VAEcqewAQzgsWGLDXdk+RTSMmuJ0XXqTyIsZRZ0p8MlBZVB9DeZL8NQ14S6MNg15
-	 bosNp6ApwrFBh5JaNryXE7kGd9zkEhaFAl5L1UgFS1CYVdxXPAJUszgk49Li9GreXMg==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=mainlining.org;
-	spf=pass smtp.mailfrom=mainlining.org;
-	dkim=pass header.d=mainlining.org header.i=@mainlining.org header.a=rsa-sha256 header.s=202507r header.b=pB1hre5h;
-	dkim=pass header.d=mainlining.org header.i=@mainlining.org header.a=ed25519-sha256 header.s=202507e header.b=Yd6iqCpX;
-	arc=none smtp.remote-ip=5.75.144.95
-Received: from mail.mainlining.org (mail.mainlining.org [5.75.144.95])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.214.182
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1793739497;
+	b=zsiozarfZeWa2yhpmo3sVwelbMbl5+eWFA0Ra2Ns8s1cku7ZYw0L6se3QYZLKTcFjZle
+	 3RsVDd/ikYqOsBptJlGd5OGzJE+orGDk+ywPl2s15nHObbQA2ER76nqZkMxomrk45bFXa
+	 7E1ndHcZMNO5+tRsI7VhENKHlmebFJUj9gR6h30zSDPqnlnEyx/TFev+dMrUlEY2KNQvp
+	 VP3GdjhM4NgveNwh0i2WDKpJBemDUZs0zIM5qazaSErOcbbmpLRYsfiDZL7Zvgc+gOBUq
+	 AHZitmPhI7cnTrKmJDWlQa6qYcMbhgUbZdSGofXyMebjLqXvxI7/jCqHrycgcaD+fPQ==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793739497;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=xlEVARhdYpI51yqwMKIfAYo+e0yxy9kuj0dDIqLQxSg=;
+	b=QykgIY4/c28wrhEntDdIcZMSwtNjLmEJVBDvqGwBMbkg4UbrUu31lxG/egDdhp8ZnV6q
+	 v3wKKJ4+PBoH6jOZmSCE2l7hvu/yivrQctJnO11eDN7Bqxykqpyl4cdWmXdttdwOBp2dy
+	 ftkmH0MTKklU48O+i8M6tpE4jQLWjOuWJUueroLD2pYJlcKgHKXIJnV77ZPOz6ycH7MJ4
+	 jGtc7cUAgLlUkdrno23AFSzuqlWUFCdiAp18txi3EYhs3WfY7pAmFPavXXWLjGVz/eSzh
+	 rF+tqqcxWXh5RuugYP3/Qud7EgMKNgVQ62ZUzoscXEgz86FOae7DhNvIBJeoyFO5lCA==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=paul-moore.com;
+	spf=pass smtp.mailfrom=paul-moore.com;
+	dkim=pass header.d=paul-moore.com header.i=@paul-moore.com header.a=rsa-sha256 header.s=google header.b=gNjU0kU7;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.214.182
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E895A606A31C;
-	Sat, 31 Oct 2026 23:57:32 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E895A606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mainlining.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mainlining.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53FA3606A324
+	for <audit@vger.kernel.org>; Tue,  3 Nov 2026 20:58:12 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 53FA3606A324
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=mainlining.org header.i=@mainlining.org header.a=rsa-sha256 header.s=202507r header.b=pB1hre5h;
-	dkim=pass header.d=mainlining.org header.i=@mainlining.org header.a=ed25519-sha256 header.s=202507e header.b=Yd6iqCpX
-DKIM-Signature: v=1; a=rsa-sha256; s=202507r; d=mainlining.org; c=relaxed/relaxed;
-	h=Message-ID:Subject:To:From:Date; t=1793491007; bh=ysWUmcxgVRXv2jQI8n69Seg
-	sVOhd/dtKdXxdVfo7JLM=; b=pB1hre5hAAkfc0jGIwgRRWwiOalmOObNdf98xXxeUScj3UJ/oT
-	nyBfIucryEdQF+QGs/OKBvOExqqTRvUz7yAImSr/EXLqFSDWWfuEerCg4CAJRitACX/IjKEDqbg
-	K4HaljVFDt0F8WrnVSaN+w8VQS4fEVHJVmpCSYHOqt2MEcyphXMzVsdZ7AG2o0b04RGiCi5ALQs
-	2pBoOEkE+nJv1YoJ8Pc51X4k9KXueBy+B6n1pZ8UG427kpCzjQheL0H+yUrAgYT2T29vdqgb33R
-	Qc0+H11NtBu47ghZpOZK3Fn6EfuBPudgP68IyG/+XQXVvfX+WeNc3DMX0d+XHa4YRFw==;
-DKIM-Signature: v=1; a=ed25519-sha256; s=202507e; d=mainlining.org; c=relaxed/relaxed;
-	h=Message-ID:Subject:To:From:Date; t=1793491007; bh=ysWUmcxgVRXv2jQI8n69Seg
-	sVOhd/dtKdXxdVfo7JLM=; b=Yd6iqCpX1oOWvqiNIDuB4WCPkf06X8/KvpPF73LxUXzFLJ9bMN
-	9H8TigSMJCeMuYbSS4IqDFB5GJKvKtns84BQ==;
-Date: Sat, 31 Oct 2026 23:56:47 +0000
-From: Bradley Morgan <brads@mainlining.org>
-To: =?ISO-8859-1?Q?J=E9r=E9my_Jean?= <Jeremy.Jean@oss.cyber.gouv.fr>,
- Paul Moore <paul@paul-moore.com>, Eric Paris <eparis@redhat.com>
-CC: audit@vger.kernel.org, linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH] audit: fix UAF in kauditd_send_queue()
-In-Reply-To: <20261031211258.1626829-2-Jeremy.Jean@oss.cyber.gouv.fr>
-References: <20261031211258.1626829-2-Jeremy.Jean@oss.cyber.gouv.fr>
-Message-ID: <6F0EE0A0-10C3-4B96-AD77-A6952672CDB7@mainlining.org>
+	dkim=pass (2048-bit key, unprotected) header.d=paul-moore.com header.i=@paul-moore.com header.a=rsa-sha256 header.s=google header.b=gNjU0kU7
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2e9d1114320so36642225ad.3
+        for <audit@vger.kernel.org>; Tue, 03 Nov 2026 12:58:12 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1793739491; cv=none;
+        d=google.com; s=arc-20260327;
+        b=l9dHb1SIfwcZys+tEHxWL/zohJMUCd7voLGyFi6lCB3cgGcOpRzlUlmSFky2dD2NF0
+         t/b/ybyZ6LJYdrOQdHDmebl+08sZJjocl8JtYiazF/U7nvQBSA7NfmLZFY6i4t6HhjlO
+         2XLSmHHMcj/U/5PToBnkCi424wUDGvDhcuAOR+EBm+vfyh1oRsDnedYfoWBHVgUJrT1W
+         cGSdGNPgcFQjK4d2DszVKiukBQHzWT0Zn4wGi9wpKY9tJ4Cl2fHHXRoItOxGjIzaQNbL
+         qMc5h62tv7GgF8ZEQHjb/KjPyYw3rkFGyjg5S3k7rMpRxZ00V3hWJqEJaZOcCfLfHTh/
+         QcOw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=xlEVARhdYpI51yqwMKIfAYo+e0yxy9kuj0dDIqLQxSg=;
+        fh=UPCfqvbFi/F/SQK4yBN78qqYO0pqb8S8dd6F5KbjcSI=;
+        b=RWmvH2ni5IaXL8CW0PqrGMxPBp1Y2FJgpa0pqGB2sytd9lAsJLQt9QkCpLVjuGi30Z
+         1/x4H92rZpPIT6Y0kTgjuUa2mcmLHWytJKVKf+3uWLivuaUKTB6cLDegSIJ+E8SpBgyJ
+         5GP0iyNYxuMYimzFZoLXPHFElVnSvo1HKPc4XT4/NnWRz+XMafIhUTfcHHc+zBNi2mr2
+         9UPlCq3+BOWThEt1mmltb2FY4Ss+HmgwmrqZZV1FbHDOAxPYkonpMZhLYYoVzuImHSKQ
+         M/l9iEh/Hrra7j7YhhfszX/jpyoeJHr3Uhj4DrHhYcSFUCnbAjALXN+tj+cDXnikdd3S
+         4XIA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1793739491; x=1794344291; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=xlEVARhdYpI51yqwMKIfAYo+e0yxy9kuj0dDIqLQxSg=;
+        b=gNjU0kU7sM8uH5XC2H7b99i0TvtIF03FfKAOB0NH5+8azPBEMvKw0LopoHo9aDtdiz
+         VDyjVtVrUAN//DSQQ5olLEEOAjJMZhga8ZmFPcbKfD2Ft577yKe7V/QcHq6FX9oHF/yn
+         3bCew/1NgBdXPqXDNjd/pB+bgpfklJXpLzQeRdEu1INssd8arH3ktroB3iBaNXq5+ufX
+         l8KdXY9cOuOdz7Ack0IyhbVI7+narclszD/zONZH/1ebAaSxDxVSg3gNl50MRCwl0e2m
+         B4k3pyP+iT+yfzugI1Wl73+2lNHj1HV2Ub4A50Y+lzMd9mZvMR/+dyBS5pq+lnHK5qZV
+         pvWw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793739491; x=1794344291;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=xlEVARhdYpI51yqwMKIfAYo+e0yxy9kuj0dDIqLQxSg=;
+        b=dxOOcLBGc1T2TZV2RGFGGn31GCi7cOOjygxKwU3VIjOQanzZ/zatQG19xzlOgu7wKw
+         HbUyLjmZiCHCHyAyZdpsgs39GoVUlYPKyoRQWLest3tl1KSeMyy5iPPqat2WTQ8C5o99
+         MSNArXyQPo/MoeRaksJcDq9BZ4A+IR9dTPqIP4/rNlVH7TtOn2JqmQuSo4WeSbdvLuRW
+         y6f/8VyvjOjaQnDUgbI1Im84XDd7p0SS0HB88LWNIo5DCEqdOrlNdfS4LLbcgzr9p7IL
+         n222eOxKL3QEHES7xjPgFvqeBDX3FPDVVsvBlwDUU0zkfcJb25VlPb1T670LEl3oKf66
+         OrMA==
+X-Forwarded-Encrypted: i=1; AKwUvBwvjs7PnpWXsXMCzGkXjx38jUXgKe7sekzG8JVOdtl4ggWWfCAEkYBFunuWQeHfWyIHZuTPgA==@vger.kernel.org
+X-Gm-Message-State: APuU4Z9U0zbryLCwy6Fu7kqdqEXTdvXGNLzw4jMKwjpvMgYk9eER23gb
+	hszGsIUia93b18UrMDeOGqSGbcHBLKzNd3qR+wEw39lnSkRCEq+sQdOOr0DbpCpTR15RYopOpqh
+	yqfkmZpX3dAE7d8PHexR0TxFoj3q5FpJuCF1ElQ5J93Ci9taFeUVCKQ==
+X-Gm-Gg: AYBFou2z8x1cAfo013fquTJ2dlqD2ND+kWVimgkGqcm3gKLjACfdk8Bm/v7Zl8XXQfa
+	ioFzM0ugdkJWJXL5A16aNN3+yhnWTO7xEwKTZJKXaxhFYdzmzuEeC7rzvmtHYkn2UNcDK6qBh/c
+	lzd0+r55D65LcoHutrj2KfBM7h4pNC6cOJNpOfueJVf/fEIZ0DOebRk6w5VfBRBWrvx3cClvvOz
+	e4cBfxpQksEMX1G/0Wm+B5c+IVed6G7/8RsdzflZF4FxYcI6wFuvNH/qK/uDQs8G0YWDngh/rg9
+	S5xgyJEt8TL3XKgqINZHW0QpJgKkT/FLSTCzQfe+DUKrqBGQe5BPJlOTLHVSroZls7osmEBS23D
+	4FW3YA4iwpkIwGrb94U5qtfBdz1NLMJoIEWHHuqIhS9Cmpu8infXU3hyk2a2aPdnmhD5B
+X-Received: by 2002:a17:902:ce81:b0:2e5:cb1f:898c with SMTP id
+ d9443c01a7336-2eb364ed0f9mr139787525ad.46.1793739491564; Tue, 03 Nov 2026
+ 12:58:11 -0800 (PST)
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Post: <mailto:audit@vger.kernel.org>
@@ -64,106 +104,35 @@ List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:audit+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 8bit
+References: <20261019222858.1766-1-drifabdelmalekmohamedsaid@gmail.com> <CA+xk8n--qQfYro+xsGu+z7nuCrAJgwzOOyrc+iXuBeSsPOWjhw@mail.gmail.com>
+In-Reply-To: <CA+xk8n--qQfYro+xsGu+z7nuCrAJgwzOOyrc+iXuBeSsPOWjhw@mail.gmail.com>
+From: Paul Moore <paul@paul-moore.com>
+Date: Tue, 3 Nov 2026 15:57:59 -0500
+X-Gm-Features: AclHuK_j1m1BaQJmY5Z4xSDq4UylbUple31snnL4So3-rHmuEym2QzQD59EuRAE
+Message-ID: <CAHC9VhQzeCgCx9mi6pvbQKLH=P8b-o6JuxeUo0QfyebVGPdXGQ@mail.gmail.com>
+Subject: Re: [PATCH] lsm: don't call d_path() when current->fs is NULL
+To: DRIF ABDELMALEK MOHAMED SAID <drifabdelmalekmohamedsaid@gmail.com>
+Cc: jmorris@namei.org, serge@hallyn.com, viro@zeniv.linux.org.uk, 
+	brauner@kernel.org, jack@suse.cz, linux-security-module@vger.kernel.org, 
+	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	syzbot+975ace299d6ba2eb1cea@syzkaller.appspotmail.com, neganhat@gmail.com, 
+	audit@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 31 October 2026 21:12:59 GMT, "Jérémy Jean"
-<Jeremy.Jean@oss.cyber.gouv.fr> wrote:
->kauditd_send_queue() grabs an extra reference to the skb header before
->netlink_unicast() since it may need to retry a failed send. If unicast
->delivery reuses that same header, the receive path stores the
->destination socket in skb->sk without taking a socket reference.
->Consequently, after the receiver consumes the skb and closes the
->socket, the extra reference taken on the skb header makes kauditd
->release a header whose skb->sk points to freed socket storage.
+On Tue, Nov 3, 2026 at 3:18=E2=80=AFPM DRIF ABDELMALEK MOHAMED SAID
+<drifabdelmalekmohamedsaid@gmail.com> wrote:
 >
->KASAN reports a UAF as:
->
->  BUG: KASAN: slab-use-after-free in sock_rfree+0x44/0x140
->  Write of size 4 at addr ffff888004f94140 by task kauditd/31
->
->Clone the header before netlink_unicast(), then use the clone for
->delivery and keep the original skb only for retries. If cloning fails,
->handle it as -EAGAIN so the send can be retried.
->
->Fixes: f3d357b09295 ("Audit: save audit_backlog_limit audit messages in case auditd comes back")
->Cc: stable@vger.kernel.org
+> Hello,
+> Just following up on this patch to see if anyone has had a chance to
+> review it or if any changes are needed since we're at 7.4-rc1.
+> Thanks,
+> Drif Abdelmalek Mohamed Said
 
-What I cant work out from the changelog is where netlink_trim() went.
-With users == 2 it usually clones for you anyway (skb_shared() is just
-users != 1) and then the receiver owns a different struct, so this
-couldnt happen. Unless it took the early return:
+[CC'ing the audit list]
 
-	if (is_vmalloc_addr(skb->head) || delta * 2 < skb->truesize)
-		return skb;
+Not yet, but it is in my queue.  Regardless, thank you for the report
+and the patch!
 
-Which one was it? If its the delta side then its the tightly filled
-records that trip this, which explains 18 years of silence pretty well.
-It also tells us what this costs, where trim would have cloned anyway
-you just moved the clone, otherwise you pay one small slab alloc per
-record.
-
->Signed-off-by: Jérémy Jean <Jeremy.Jean@oss.cyber.gouv.fr>
->---
-> kernel/audit.c | 11 +++++++----
-> 1 file changed, 7 insertions(+), 4 deletions(-)
->
->diff --git a/kernel/audit.c b/kernel/audit.c
->index 9412af9144bc..5e739fa606be 100644
->--- a/kernel/audit.c
->+++ b/kernel/audit.c
->@@ -790,6 +790,7 @@ static int kauditd_send_queue(struct sock *sk, u32 portid,
-> {
-> 	int rc = 0;
-> 	struct sk_buff *skb = NULL;
->+	struct sk_buff *skb_to_send;
-> 	struct sk_buff *skb_tail;
-> 	unsigned int failed = 0;
-> 
->@@ -810,9 +811,11 @@ static int kauditd_send_queue(struct sock *sk, u32 portid,
-> 		}
-> 
-> retry:
->-		/* grab an extra skb reference in case of error */
->-		skb_get(skb);
->-		rc = netlink_unicast(sk, skb, portid, 0);
->+		/* Keep the original header unowned for retries. */
-
-
-A header isnt a skb, and the comment you deleted said skb. Also this
-line is where the why belongs, since the why is the bug itself. e.g,
-
-		/* netlink remembers the sock in skb->sk with no ref,
-		 * so send a clone and keep the original clean
-		 */
-
-
->+		skb_to_send = skb_clone(skb, GFP_KERNEL);
->+		/* Preserve the connection on a temporary allocation failure. */
-
-Well, this one doesnt preserve the connection.. -EAGAIN falls into the
-same bail branch which does sk = NULL and then squashes rc to 0, so
-once the alloc failures hit retry_limit the connection is gone anyway.
-
-It also eats a slot of ++failed for what is really just an ENOMEM and
-not a send failure. Might be fine! but the comment says the opposite of
-the code, can you make it match?
-
->+		rc = skb_to_send ?
->+			netlink_unicast(sk, skb_to_send, portid, 0) : -EAGAIN;
-> 		if (rc < 0) {
-> 			/* send failed - try a few times unless fatal error */
-> 			if (++failed >= retry_limit ||
->@@ -827,7 +830,7 @@ retry:
-> 			} else
-> 				goto retry;
-> 		} else {
->-			/* skb sent - drop the extra reference and continue */
->+			/* skb sent - consume the original and continue */
-> 			consume_skb(skb);
-> 			failed = 0;
-> 		}
->
-
---- Thanks!
+--=20
+paul-moore.com
