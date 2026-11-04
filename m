@@ -1,99 +1,85 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.remote-ip=209.85.210.179
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=fail;
-	t=1793752864;
-	b=Bi/2ojATUFtV9ximFQzly7Aq3OxkqNIs4XHbldiaHNqIo/7nDnf4FNpdIwtUz2zqTC/f
-	 JafXHtRwFcGPoIWOTh0xT9fPlevYpCAWkwc5NWutZTNVbrt0flTKO9yFMdLp/kxeWT2tU
-	 d2bHLLQQUsd707IGdkcBj9L9+jDjcwwmLaDlXtMZGHQhzobZkd+TxdvYdn54xhIl3FwrF
-	 kr97a6J7iff2Hq/U5hPn0I+fBcXkS5nnPjGDX2QhUrawi10p8yU8VNs9FKOykDQo/d2I/
-	 5wxTBbOdZ4x64d3izgiWsCfc3PlnBAGJkSgifXMfgnP7i7sVZWqC3vQLIq9kxD/VzQw==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793752864;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:MIME-Version:References:
-	 In-Reply-To:From:Date:X-Gm-Features:Message-ID:Subject:To:Cc:
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.129.124
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1793799782;
+	b=vbQys+3HFoiBfEjY2GTDYw7fJ5t7qqHwDYRbZKA0mNhlzHrotyd9cfXLx0Ln9J9HoaLp
+	 Te6BtXiHI6yIxX4UHiVFoE4LTB5EYJ7u0mcRvVQGXEPqDLrxgIuoevt0SGo+Y89KPq5Ih
+	 jWOII0vHrR7cUkXKh/5zu1s9adE/J+96gazHDsKQIPbN7Q09uk5CfAe5Vj0U0AaKen4+h
+	 FFuXQwfQG8Mqevuq37zuaKXqTJaTofEYjCfy/4EzltIF6Mr8JVN9pa+jybN1lk+SxFNz1
+	 RKhFgEvdreHkccM1kzSsuYKeXqrT/10ssSvyCygbc3FzHHw0rCrJPKX2A4MT3ldLqPg==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793799782;
+	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
+	 X-Mimecast-MFC-AGG-ID:Received:X-Google-DKIM-Signature:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:X-Received:MIME-Version:
+	 References:In-Reply-To:From:Date:X-Gm-Features:Message-ID:Subject:To:
+	 Cc:X-Mimecast-Spam-Score:X-Mimecast-MFC-PROC-ID:X-Mimecast-Originator:
 	 Content-Type:Content-Transfer-Encoding;
-	bh=fPNnZyQIDXSKNoVkiNoUdoJZWsQu0g4dBkxCnrIJvKA=;
-	b=fsbl24lleMPWi0UitnsusMwxYlx3INVMWRpBusFjdwGhGly3iFA92lbCGo+5ZwKAAwo+
-	 xoBl4ssYC5CPFZ2ydSUtG1vLL3K+vlwi1+zFKg+oSomX5We65XglM9vF8CsPeIXhDbSUR
-	 D/BgHaJ3Lajpy5DAVrIonTy2VL0U0EIIvvLLlyCkyE9nCVAZ+sUVpckXae082VkNup6qm
-	 GxnhbMF3NxGZXG92Fe8hBRhYFHHEnwx8m6EA8SJysqRpHPIVp/PnZawJZXK9xyR72rn3+
-	 qOUHTHcJQpbtdZVH24BubmBeyZuEBZAXJ6Swbey1icjOUhI+jl06GPbbAfkSZuUHUZA==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=paul-moore.com;
-	spf=pass smtp.mailfrom=paul-moore.com;
-	dkim=pass header.d=paul-moore.com header.i=@paul-moore.com header.a=rsa-sha256 header.s=google header.b=PTPniKxw;
-	arc=fail smtp.remote-ip=209.85.210.179
-Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	bh=JLATmvImDg/5VrDBag7NLO/Ra27QQfElNkmu7cHAdiY=;
+	b=hLDPNIePkWbFFTUoxNt7rqdpt7g6dpUf2u/E17KPSU88Sae6r1f1XU3lIRxcOiJ0Zwdy
+	 LMfUpx79mPmyg46bHdSJn0Z6DhzvKZUgPyaTSybAjsapEOYPHkqFeHj6pFeqf9our5hqI
+	 3+QF0ECC7LldqAZHKXy6SAP5cR+oXfs82v7LfAeG2ErTLcJoaC+fMbfQn7MscgYo6RAUd
+	 5xzQ1iIDisDJZfl4dUDNJnOtGWySEMYbPRSo735B81t3Azehwp+4ofS7Hd2AuRCL/vUjh
+	 KFFogDpvgKYurgn/BuRQqdNc79eqfKqZ1mYpE8zxlOY+7sDQV30CoelfDoYl0bhVTeQ==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=redhat.com;
+	spf=pass smtp.mailfrom=redhat.com;
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=apDpBAmV;
+	arc=none smtp.remote-ip=170.10.129.124
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E544D606A32F
-	for <audit@vger.kernel.org>; Wed,  4 Nov 2026 00:41:03 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E544D606A32F
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 896C3606A32F
+	for <audit@vger.kernel.org>; Wed,  4 Nov 2026 13:43:01 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 896C3606A32F
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=paul-moore.com header.i=@paul-moore.com header.a=rsa-sha256 header.s=google header.b=PTPniKxw
-Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-8a064dcfcfdso80815b3a.2
-        for <audit@vger.kernel.org>; Tue, 03 Nov 2026 16:41:03 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1793752863; cv=none;
-        d=google.com; s=arc-20260327;
-        b=h1OGeKwzIunmdMHXqCRVFVD/1XVOES11HvAozPwxcKAqxRuuyJelAhkA6u8jSsQzR1
-         7I9Digff2DPRJCwK5EEmcYTrgLYWAaJezV80MPE5wtt5e/bsvxzM9+C9Dox7VMexWqqH
-         V7azyPUkz2Hz8eUi2dhXjQmuWbCgv05JURkmxAocZ6lop2dNv/Ttt2ftwP1erU1WK6ZD
-         +Nfasim09hPP+91jpuq6S5Q4GtHmstRoLrEUji0MTmvzwBwK8+aLFL/dVlE1GTjWcuxF
-         dKrwcCWtY/3ArlsfCmfuTutJpP4eiCULBz/rROpJeoh9Vrdvgmx820/rLNIDmcYnabNt
-         QZdA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=fPNnZyQIDXSKNoVkiNoUdoJZWsQu0g4dBkxCnrIJvKA=;
-        fh=b8NH310RuesssRCaAmnBQdPTqvz9avNnbX9wpmAPCkU=;
-        b=NSilHOmBLom1zU84KJn2PZc2a6k8UVIWF7h0YI7H7RMgEndfgIsT0B4vz9Z3/5iIk7
-         8FeLCENA+UiBy42Wt+DzUDWxnhjlSqGLT7kH309GoJR0F4fQNICLZgwZ9NJnX+AjEEmB
-         H3xOX541YqIQLLqF3DcdPBBfAHKxlPABo6VLLG/ef7Y9IrS2/XoaDXY75HNvLhNoKvMt
-         Obn7hmZTj7FDVuCqGK25V2lvFlVSB58X4KJNWJu5s+NPbbDpb4oxH0bnhfhjq6xBfmCd
-         sJ+hVDb8Bvq/81hwa/nQQ7dSj9doQYQyNicFhNser/6WBsK/znoOBrhOjhtUq6pbtPaM
-         UtSg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1793752863; x=1794357663; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=fPNnZyQIDXSKNoVkiNoUdoJZWsQu0g4dBkxCnrIJvKA=;
-        b=PTPniKxw8lSLWSxMbmhmXVodXffwfFqC3M3cDEPYPvY1SsBjNOjXXv95CLFg3rVQFu
-         x1tdyRAr0bqYQ6HVqsjHpfPPU10/1FhE3kd/CHXKlKRa2s8Jf9/RWGaRvSd9s3tWp3+h
-         Tji6Btj/3XlTUrwGPe+aphN7moDM3Ujmyews2MtwEsOdhWo9d1B27IQnIAXxeCj/AgoF
-         TwCZd9YYNW98ENSoBC4GvFAhash4XN0WeHulLfX/snYculqtKEVgWcaAWPf68LjYBfvq
-         i5NzGzwAog4kKLckyYK3n2IY4tOHLEWiT5cJSG6dbW9SW1FZ4MjXmEMstZ0yw7BaSVW5
-         5qpg==
+	dkim=pass (1024-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=apDpBAmV
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1793799780;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=JLATmvImDg/5VrDBag7NLO/Ra27QQfElNkmu7cHAdiY=;
+	b=apDpBAmVyHsE8c3Flsxy9Ca82GUT6I+55gzpzWCTdUXVsJI9n3ccEwuf4/Obnn4yWBkAem
+	HqBD5dLRmJdJxj8R2GQC20jDlFRwYnvfSKyGcVECq60ENLzqVljorLRXl3T1yOpIX/xvrC
+	d+bSQqkg0EFxXymI/5arWzTYgt9yAJo=
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
+ [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-107-9oWTYH0bPHOiAjueM-SGnQ-1; Wed, 04 Nov 2026 08:42:59 -0500
+X-MC-Unique: 9oWTYH0bPHOiAjueM-SGnQ-1
+X-Mimecast-MFC-AGG-ID: 9oWTYH0bPHOiAjueM-SGnQ_1793799778
+Received: by mail-ej1-f70.google.com with SMTP id a640c23a62f3a-c42394d1e41so85415966b.3
+        for <audit@vger.kernel.org>; Wed, 04 Nov 2026 05:42:59 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793752863; x=1794357663;
+        d=1e100.net; s=20260707; t=1793799778; x=1794404578;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=fPNnZyQIDXSKNoVkiNoUdoJZWsQu0g4dBkxCnrIJvKA=;
-        b=LlFz2g4OS5NJtMAewP8GOfxhXYq4qHaREdNcr7Jg1ES0I5m2gB4KuGKj0rSPCnfvn0
-         shpgeISuJTbJf7O/mfDqM8MFp+kkD0j1gnWK68TAWE1FnDwqnct20asuevNNMnKsOBZK
-         KLiMca7sWXxPc8ygK0ni6Bl4yv4/FVkzxiNsl4wCK9XdU7H9IzA0VM+bbtxAE1ZtmCCW
-         zhf+u26hgMb1F2c8gERWLjH5s6Mp6Gzgp7tQtSlxQVcx24WmnADCvSuD0Y1LvUrBkb+i
-         Dx8xhWou6gH2kefC5/ffIbLHPfstvi1nEKt1xmiLSzLKpaEElDq1ZNPVrjYSrSC0LpZ0
-         Synw==
-X-Gm-Message-State: APuU4Z8Q2rNf2V+nLd/BxrqMde4Sidbd+J0unJGrCxlfTO7eijbPdI6l
-	JlTu0BnsUN8WpN3jExvyOxcSB6hNVrM85RjN6J35iYQCDCHHlboveYYyIjCwzItVClfOOQe++P4
-	acac7JudO0HiE/2F0IpDfMOAfR/4+0bVlA30VhHkA
-X-Gm-Gg: AYBFou1iTbViYKwwh9DC6NRZlArYMui/p9vKWImBWhgTQwomwXfl1eQs3acktezuRyO
-	PXMkJeRIJ89gUgRWANgSOEei6izbYhwCLl4lbLE//F0iS81BHS/X2vr86nADMd5iODjejHN81Cn
-	WFsd9S/5OyI6SvhZO4mU5Wx6eEssIqExv8uGLWl36fTMOsjfSg/lbxilozB6niyHkhPlJmF+z/x
-	1GPdL6YfKUbTVomDiuL0Draccuz0RnDoESw6ebMSSwAN0UMrKegdxcknGKhCbcBKUHL7/5MF5CU
-	mYqYaUrI2e/AFJGCNM49WFOb/QBUmvssjRNEY8pTjGMgpo6j16kQ1cYeZQ6RHXk4jeuHlinY2rx
-	+jG8dnycI+JEpx5SDtsTFolSQtTb6ZjRV8io3Q06XM3flGpOT20kknIHwwHpO7XzMjM7N
-X-Received: by 2002:a05:6a00:2d96:b0:88d:4b30:1c11 with SMTP id
- d2e1a72fcca58-8a9ba703bc9mr11394030b3a.6.1793752863107; Tue, 03 Nov 2026
- 16:41:03 -0800 (PST)
+        bh=JLATmvImDg/5VrDBag7NLO/Ra27QQfElNkmu7cHAdiY=;
+        b=qe2QcEVaJg8spNat7H8h8FNZsqTO6bsVZ88yOEP2PK5d+iv79T/jV0ItVFkT6vz6RL
+         OIcJbmGyOmMfuIOMMuy/mTGimhpFeKs7zDfbS7So4Xt1i8pTSYT8uS673QyrP3M1gEL8
+         RtXaePtiYMHLBnmoFPXbM0Ff7KipN7d0mTRWb2GUzC/YkbsZKcxZeRJxZgySBO9v3guc
+         2axmNhhFBDfyfNohzUIdSnBHAR3xuOKCSpP1D75wjmrXxroWC/DJWS5XZvanIFQWmK0M
+         wlg16ZysGLXZDH6/V30BEd9pjFPLF5pUT0jgV534kMF97Xw5XILMo1FwoeUn51M5F9Hv
+         x3UQ==
+X-Gm-Message-State: APuU4Z8TWyJXiptQXDW5A6N9X8urj8k/Dr3kwuN9n82eBBXwDAK5UiDt
+	z1Aaq7DSmSmWDZf4NbdXFceV7r7CYQgNrCygkkhXaHcs4ShK0XWzg2uk4TWnCdVQZzSaf9YHdQT
+	FNL6mg4FmPzoOVFyGxjCgZVC/Z+/rK+rkNxHaGsXR0eOdDwwn1yZoCawlLB/7wJSfweUUXZ+q4D
+	Ck/F2YXTrOE6xwqkLbVBD/QgST+IVo1PM=
+X-Gm-Gg: AYBFou1thqv1Wu2FnF1ahaX9cvmoPYrXKrPRSfXXqjVoHM33V1Bo7GnJN5PVPEyw78R
+	ysQu0K56DYV4fEhEKrPB2lozP2ZIdVDd0MhJgCqZTxX5FfLWfXi28z/7kRQ8MwZ/Nwjw5WuC8nw
+	4t36bGVxgsohZB6v50TGc4YxW4LpOkaRcHLf1Dfu3e2UCUekhpl5phUy824wMsNQ60ZjuZiBY7w
+	CMmLTfhxT/4st0GYWmTWGqBEu9++gvSbX48gualXfgJcg==
+X-Received: by 2002:a17:907:1ca4:b0:c24:adf4:5c73 with SMTP id a640c23a62f3a-c4ca795d0cemr1327723266b.1.1793799778146;
+        Wed, 04 Nov 2026 05:42:58 -0800 (PST)
+X-Received: by 2002:a17:907:1ca4:b0:c24:adf4:5c73 with SMTP id
+ a640c23a62f3a-c4ca795d0cemr1327717466b.1.1793799777447; Wed, 04 Nov 2026
+ 05:42:57 -0800 (PST)
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Post: <mailto:audit@vger.kernel.org>
@@ -105,15 +91,16 @@ Precedence: list
 MIME-Version: 1.0
 References: <cover.1790088067.git.rrobaina@redhat.com> <CAHC9VhQ=FFYVNmQdiMsqg+5KDDrSC3SZS+H2=r_GkhfwQox8tg@mail.gmail.com>
  <CAABTaaBL=TScs8Qqu3b8F6KZPGMyvwy6cBC3teDaBL6MGMucNg@mail.gmail.com>
- <CAHC9VhROsmzbm+AP63Sm7mqCokgEy6Zu0AVMY0gxp8qY75Pqiw@mail.gmail.com> <CAABTaaBOrPknzdxc5S6L9hGu7hbFu2e1RZG=Sxjb_B1Cs4Sixw@mail.gmail.com>
-In-Reply-To: <CAABTaaBOrPknzdxc5S6L9hGu7hbFu2e1RZG=Sxjb_B1Cs4Sixw@mail.gmail.com>
-From: Paul Moore <paul@paul-moore.com>
-Date: Tue, 3 Nov 2026 19:40:51 -0500
-X-Gm-Features: AclHuK_mzIhdjHPxjnkTYRthyfMgrzjS55JZuNf6mZPYYsQQvO81kKGlvJUv8_0
-Message-ID: <CAHC9VhQ4U-Z2KkGurfMihJgzGgwD3miWSW4wWAjWvUdDxLpH7Q@mail.gmail.com>
+ <CAHC9VhROsmzbm+AP63Sm7mqCokgEy6Zu0AVMY0gxp8qY75Pqiw@mail.gmail.com>
+ <CAABTaaBOrPknzdxc5S6L9hGu7hbFu2e1RZG=Sxjb_B1Cs4Sixw@mail.gmail.com> <CAHC9VhQ4U-Z2KkGurfMihJgzGgwD3miWSW4wWAjWvUdDxLpH7Q@mail.gmail.com>
+In-Reply-To: <CAHC9VhQ4U-Z2KkGurfMihJgzGgwD3miWSW4wWAjWvUdDxLpH7Q@mail.gmail.com>
+From: Ricardo Robaina <rrobaina@redhat.com>
+Date: Wed, 4 Nov 2026 10:42:46 -0300
+X-Gm-Features: AclHuK9fArBl2NqgMDWGc__kMOSMhBxMeP1FQYdilvQJHUxXbryD-TLWb0XsxW4
+Message-ID: <CAABTaaAYn1oBwHSkoGm0a98c9YUZKf6ie=yUOtR4FQuSjrusjg@mail.gmail.com>
 Subject: Re: [PATCH v3 00/14] audit: log all six syscall arguments in the
  SYSCALL record
-To: Ricardo Robaina <rrobaina@redhat.com>
+To: Paul Moore <paul@paul-moore.com>
 Cc: audit@vger.kernel.org, linux-kernel@vger.kernel.org, 
 	linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
 	linux-csky@vger.kernel.org, linux-mips@vger.kernel.org, 
@@ -130,63 +117,79 @@ Cc: audit@vger.kernel.org, linux-kernel@vger.kernel.org,
 	davem@davemloft.net, andreas@gaisler.com, richard@nod.at, 
 	anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net, chris@zankel.net, 
 	jcmvbkbc@gmail.com, tglx@kernel.org, peterz@infradead.org, luto@kernel.org
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: t8LZJSQNkhULxycbppkChCe0uIXu_JwJSqkx014noJs_1793799778
+X-Mimecast-Originator: redhat.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Oct 23, 2026 at 8:45=E2=80=AFAM Ricardo Robaina <rrobaina@redhat.co=
-m> wrote:
-> On Tue, Oct 20, 2026 at 1:39=E2=80=AFPM Paul Moore <paul@paul-moore.com> =
-wrote:
-> > On Tue, Oct 13, 2026 at 8:36=E2=80=AFAM Ricardo Robaina <rrobaina@redha=
-t.com> wrote:
-> > > On Thu, Oct 1, 2026 at 6:06=E2=80=AFPM Paul Moore <paul@paul-moore.co=
-m> wrote:
-> > > > On Tue, Sep 22, 2026 at 3:21=E2=80=AFPM Ricardo Robaina <rrobaina@r=
-edhat.com> wrote:
-> >
-> > ...
-> >
-> > > > * As pointed out by Sashiko, when you were converting all of the
-> > > > arches, it looks like you missed alpha.  I took a quick look and it
-> > > > appears that it should be a pretty straightforward conversion like
-> > > > most of the others.
-> > >
-> > > I've actually dropped the alpha patch as per Magnus's request [1].
-> > >
-> > > [1] https://lore.kernel.org/audit/CA+=3DFv5T4826T2sd0Gbh-nfZsqcWK_phd=
-BKy4BLWOvDTt92t5Eg@mail.gmail.com/
-> >
-> > The problem is that as things stand, this patchset breaks the build on
-> > Alpha.  Perhaps this gets resolved during the current merge window,
-> > but as you know we can't break the kernel build ...
-> >
-> > https://lore.kernel.org/oe-kbuild-all/202610041836.6TatRQSm-lkp@intel.c=
-om
+On Tue, Nov 3, 2026 at 9:41=E2=80=AFPM Paul Moore <paul@paul-moore.com> wro=
+te:
 >
-> Of course, you're absolutely right that we can't break the build. I
-> was afraid that this dependency might cause trouble.
+> On Fri, Oct 23, 2026 at 8:45=E2=80=AFAM Ricardo Robaina <rrobaina@redhat.=
+com> wrote:
+> > On Tue, Oct 20, 2026 at 1:39=E2=80=AFPM Paul Moore <paul@paul-moore.com=
+> wrote:
+> > > On Tue, Oct 13, 2026 at 8:36=E2=80=AFAM Ricardo Robaina <rrobaina@red=
+hat.com> wrote:
+> > > > On Thu, Oct 1, 2026 at 6:06=E2=80=AFPM Paul Moore <paul@paul-moore.=
+com> wrote:
+> > > > > On Tue, Sep 22, 2026 at 3:21=E2=80=AFPM Ricardo Robaina <rrobaina=
+@redhat.com> wrote:
+> > >
+> > > ...
+> > >
+> > > > > * As pointed out by Sashiko, when you were converting all of the
+> > > > > arches, it looks like you missed alpha.  I took a quick look and =
+it
+> > > > > appears that it should be a pretty straightforward conversion lik=
+e
+> > > > > most of the others.
+> > > >
+> > > > I've actually dropped the alpha patch as per Magnus's request [1].
+> > > >
+> > > > [1] https://lore.kernel.org/audit/CA+=3DFv5T4826T2sd0Gbh-nfZsqcWK_p=
+hdBKy4BLWOvDTt92t5Eg@mail.gmail.com/
+> > >
+> > > The problem is that as things stand, this patchset breaks the build o=
+n
+> > > Alpha.  Perhaps this gets resolved during the current merge window,
+> > > but as you know we can't break the kernel build ...
+> > >
+> > > https://lore.kernel.org/oe-kbuild-all/202610041836.6TatRQSm-lkp@intel=
+.com
+> >
+> > Of course, you're absolutely right that we can't break the build. I
+> > was afraid that this dependency might cause trouble.
+> >
+> > I noticed Magnus posted a pull request a few days ago containing the
+> > "alpha: enable GENERIC_ENTRY" series [1]. It seems this will get
+> > resolved during the current merge window.
 >
-> I noticed Magnus posted a pull request a few days ago containing the
-> "alpha: enable GENERIC_ENTRY" series [1]. It seems this will get
-> resolved during the current merge window.
+> ... and it has, or at least it appears to me to be resolved.  I
+> rebased the audit/dev-staging branch against v7.4-rc1 and Alpha does
+> indeed appear to be using the generic syscall entry/exit code in v7.4.
+> I think we should be all set here wrt Alpha, thanks.
 
-... and it has, or at least it appears to me to be resolved.  I
-rebased the audit/dev-staging branch against v7.4-rc1 and Alpha does
-indeed appear to be using the generic syscall entry/exit code in v7.4.
-I think we should be all set here wrt Alpha, thanks.
+I'm happy to hear it.
 
-> For future reference, what's the best way to handle dependencies on
-> other subsystem changes like this?
+>
+> > For future reference, what's the best way to handle dependencies on
+> > other subsystem changes like this?
+>
+> Generally speaking communication and coordination :)  Talk with the
+> subsystem devs/maintainers to understand what they are doing, let them
+> know what you want to do, and find the best way to order things so
+> that it all lands in Linus' tree without making a mess.  In this
+> particular case, with the syscall arg audit patchset not being ready
+> (missing maintainer ACKs) and the Alpha changes going into v7.4 it
+> turns out to be quite easy, which is an important lesson: sometimes it
+> is better to defer a new feature for a release just to ease the
+> coordination burden, enable better testing, etc.
+>
+> --
+> paul-moore.com
+>
 
-Generally speaking communication and coordination :)  Talk with the
-subsystem devs/maintainers to understand what they are doing, let them
-know what you want to do, and find the best way to order things so
-that it all lands in Linus' tree without making a mess.  In this
-particular case, with the syscall arg audit patchset not being ready
-(missing maintainer ACKs) and the Alpha changes going into v7.4 it
-turns out to be quite easy, which is an important lesson: sometimes it
-is better to defer a new feature for a release just to ease the
-coordination burden, enable better testing, etc.
+Thanks, Paul!
 
---=20
-paul-moore.com
