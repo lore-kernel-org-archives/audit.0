@@ -1,85 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=82.67.198.80
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793799782;
-	b=vbQys+3HFoiBfEjY2GTDYw7fJ5t7qqHwDYRbZKA0mNhlzHrotyd9cfXLx0Ln9J9HoaLp
-	 Te6BtXiHI6yIxX4UHiVFoE4LTB5EYJ7u0mcRvVQGXEPqDLrxgIuoevt0SGo+Y89KPq5Ih
-	 jWOII0vHrR7cUkXKh/5zu1s9adE/J+96gazHDsKQIPbN7Q09uk5CfAe5Vj0U0AaKen4+h
-	 FFuXQwfQG8Mqevuq37zuaKXqTJaTofEYjCfy/4EzltIF6Mr8JVN9pa+jybN1lk+SxFNz1
-	 RKhFgEvdreHkccM1kzSsuYKeXqrT/10ssSvyCygbc3FzHHw0rCrJPKX2A4MT3ldLqPg==
+	t=1793818341;
+	b=A4yHRS09wAxcwmEc5lI3aijvFEJ7BKn3T+9u7+IEVYqW50ERjpmTX9JUWJIt75BFiFRb
+	 WxP0inJ1kssLmlTrS5pG+I7V5cteEa+rY98uU1L6YXpVmEC+wnuLActDoNecm51lgOQZF
+	 oG+eHaG4XDvxhbQtM44rd2ZEIhvfvwgSc9PY0DqbpM9qxAn+NiJg+WLqfVX3m46cMhOcH
+	 hWPLt0gREBViN0muuxi20LoSp8EcmXey3qyuVRuNHWxTq13/ukIYcjGQtEbmuoPS32+xQ
+	 ywmB37NULF115WrueSRLz9oX3JTmLOepLf1HHQUHOWjL6JuSgSDY91x9rmjzfqukj3w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793799782;
-	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
-	 X-Mimecast-MFC-AGG-ID:Received:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:X-Received:MIME-Version:
-	 References:In-Reply-To:From:Date:X-Gm-Features:Message-ID:Subject:To:
-	 Cc:X-Mimecast-Spam-Score:X-Mimecast-MFC-PROC-ID:X-Mimecast-Originator:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=JLATmvImDg/5VrDBag7NLO/Ra27QQfElNkmu7cHAdiY=;
-	b=hLDPNIePkWbFFTUoxNt7rqdpt7g6dpUf2u/E17KPSU88Sae6r1f1XU3lIRxcOiJ0Zwdy
-	 LMfUpx79mPmyg46bHdSJn0Z6DhzvKZUgPyaTSybAjsapEOYPHkqFeHj6pFeqf9our5hqI
-	 3+QF0ECC7LldqAZHKXy6SAP5cR+oXfs82v7LfAeG2ErTLcJoaC+fMbfQn7MscgYo6RAUd
-	 5xzQ1iIDisDJZfl4dUDNJnOtGWySEMYbPRSo735B81t3Azehwp+4ofS7Hd2AuRCL/vUjh
-	 KFFogDpvgKYurgn/BuRQqdNc79eqfKqZ1mYpE8zxlOY+7sDQV30CoelfDoYl0bhVTeQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793818341;
+	h=DMARC-Filter:Received:DKIM-Signature:From:To:Subject:Date:Message-ID:
+	 User-Agent:MIME-Version:Content-Type:Lines:
+	 X-Last-TLS-Session-Version;
+	bh=L6DOQvCWsFl2rdEGgj10GJbDJ4G/LaHHD2IQKLl8pjk=;
+	b=MVJOH9zo4juhRz853f6bC+4j2bBChR9zvSBWmXpYekuyLD1kySOTFWjhfTZOkc7wsN8B
+	 JVGUng3/w7h8/TzxHICG1PzlqEiLnpYhGP4W1YActgbhAnB+fdBhkFjP9qS/KxpWvbDde
+	 2+cw9pzmGRyL/qDbaE4TARKq3gwU258lFU/ivoPNUw4hIH5l+KHK73Rz73zmh5zERLzJT
+	 OWgfabG2ddCcK8wg88DxNUtvvRWJxGSY3qaLdXIdtUj18lBPa3qxJgK+9znPzF0OeDgZG
+	 emy+GiSyAOL/99WyY+wMIrTWrRiTV46sPsvz6U5I3sslDi5REpqJfqTXLqxZnqjT5TA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=redhat.com;
-	spf=pass smtp.mailfrom=redhat.com;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=apDpBAmV;
-	arc=none smtp.remote-ip=170.10.129.124
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	dmarc=pass header.from=soulintheshell.com;
+	spf=pass smtp.mailfrom=soulintheshell.com;
+	dkim=pass header.d=soulintheshell.com header.i=@soulintheshell.com header.a=rsa-sha256 header.s=dkim header.b=AEoh+NI3;
+	arc=none smtp.remote-ip=82.67.198.80
+Received: from mail.soulintheshell.com (mail.soulintheshell.com [82.67.198.80])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 896C3606A32F
-	for <audit@vger.kernel.org>; Wed,  4 Nov 2026 13:43:01 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 896C3606A32F
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86C79606A32C
+	for <audit@vger.kernel.org>; Wed,  4 Nov 2026 18:52:20 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 86C79606A32C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soulintheshell.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=soulintheshell.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=apDpBAmV
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1793799780;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=JLATmvImDg/5VrDBag7NLO/Ra27QQfElNkmu7cHAdiY=;
-	b=apDpBAmVyHsE8c3Flsxy9Ca82GUT6I+55gzpzWCTdUXVsJI9n3ccEwuf4/Obnn4yWBkAem
-	HqBD5dLRmJdJxj8R2GQC20jDlFRwYnvfSKyGcVECq60ENLzqVljorLRXl3T1yOpIX/xvrC
-	d+bSQqkg0EFxXymI/5arWzTYgt9yAJo=
-Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
- [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-107-9oWTYH0bPHOiAjueM-SGnQ-1; Wed, 04 Nov 2026 08:42:59 -0500
-X-MC-Unique: 9oWTYH0bPHOiAjueM-SGnQ-1
-X-Mimecast-MFC-AGG-ID: 9oWTYH0bPHOiAjueM-SGnQ_1793799778
-Received: by mail-ej1-f70.google.com with SMTP id a640c23a62f3a-c42394d1e41so85415966b.3
-        for <audit@vger.kernel.org>; Wed, 04 Nov 2026 05:42:59 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793799778; x=1794404578;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=JLATmvImDg/5VrDBag7NLO/Ra27QQfElNkmu7cHAdiY=;
-        b=qe2QcEVaJg8spNat7H8h8FNZsqTO6bsVZ88yOEP2PK5d+iv79T/jV0ItVFkT6vz6RL
-         OIcJbmGyOmMfuIOMMuy/mTGimhpFeKs7zDfbS7So4Xt1i8pTSYT8uS673QyrP3M1gEL8
-         RtXaePtiYMHLBnmoFPXbM0Ff7KipN7d0mTRWb2GUzC/YkbsZKcxZeRJxZgySBO9v3guc
-         2axmNhhFBDfyfNohzUIdSnBHAR3xuOKCSpP1D75wjmrXxroWC/DJWS5XZvanIFQWmK0M
-         wlg16ZysGLXZDH6/V30BEd9pjFPLF5pUT0jgV534kMF97Xw5XILMo1FwoeUn51M5F9Hv
-         x3UQ==
-X-Gm-Message-State: APuU4Z8TWyJXiptQXDW5A6N9X8urj8k/Dr3kwuN9n82eBBXwDAK5UiDt
-	z1Aaq7DSmSmWDZf4NbdXFceV7r7CYQgNrCygkkhXaHcs4ShK0XWzg2uk4TWnCdVQZzSaf9YHdQT
-	FNL6mg4FmPzoOVFyGxjCgZVC/Z+/rK+rkNxHaGsXR0eOdDwwn1yZoCawlLB/7wJSfweUUXZ+q4D
-	Ck/F2YXTrOE6xwqkLbVBD/QgST+IVo1PM=
-X-Gm-Gg: AYBFou1thqv1Wu2FnF1ahaX9cvmoPYrXKrPRSfXXqjVoHM33V1Bo7GnJN5PVPEyw78R
-	ysQu0K56DYV4fEhEKrPB2lozP2ZIdVDd0MhJgCqZTxX5FfLWfXi28z/7kRQ8MwZ/Nwjw5WuC8nw
-	4t36bGVxgsohZB6v50TGc4YxW4LpOkaRcHLf1Dfu3e2UCUekhpl5phUy824wMsNQ60ZjuZiBY7w
-	CMmLTfhxT/4st0GYWmTWGqBEu9++gvSbX48gualXfgJcg==
-X-Received: by 2002:a17:907:1ca4:b0:c24:adf4:5c73 with SMTP id a640c23a62f3a-c4ca795d0cemr1327723266b.1.1793799778146;
-        Wed, 04 Nov 2026 05:42:58 -0800 (PST)
-X-Received: by 2002:a17:907:1ca4:b0:c24:adf4:5c73 with SMTP id
- a640c23a62f3a-c4ca795d0cemr1327717466b.1.1793799777447; Wed, 04 Nov 2026
- 05:42:57 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=soulintheshell.com header.i=@soulintheshell.com header.a=rsa-sha256 header.s=dkim header.b=AEoh+NI3
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 1E2C42894B;
+	Wed, 04 Nov 2026 19:52:11 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=soulintheshell.com;
+	s=dkim; t=1793818332; h=from:subject:date:message-id:to:mime-version:content-type;
+	bh=L6DOQvCWsFl2rdEGgj10GJbDJ4G/LaHHD2IQKLl8pjk=;
+	b=AEoh+NI3CZzf6wa7kDKWxnOAM9CpZ866CTm7r3QDxdOhAhTBiL9Cu6ICVwZ3HYsfvaH5fw
+	VibxuDGGza4F8WV0uVH1CprJr2imlzGpozj+DOEgzwXqMlBl2acYPIaBti7v+toOl8IuZv
+	LaLeE0JKN5L8OHa81oeqYbkW5EXNP327+HTtTDtEjhHQFhMh+u2xnT8hs2FMUlhxZYS48Q
+	GJEUi2eM2uB/dQB0YGwjdHvkfD4JSrGgYNVjpHipw4qnAk+OSR7FnpXKRda4uBEAUSdd1Y
+	TNiSO1ZenToxMzSpKchIX4k2ngFdJ5cJ96JnRq8jYxWhwC6wMUS/nLP9OgdmfQ==
+From: seth@soulintheshell.com
+To: audit@vger.kernel.org, Steve Grubb <sgrubb@redhat.com>
+Subject: Failure to set a watch on a non existing directory
+Date: Wed, 04 Nov 2026 19:50:15 +0100
+Message-ID: <8733tgfn2w.fsf@soulintheshell.com>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Post: <mailto:audit@vger.kernel.org>
@@ -89,107 +58,130 @@ List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:audit+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <cover.1790088067.git.rrobaina@redhat.com> <CAHC9VhQ=FFYVNmQdiMsqg+5KDDrSC3SZS+H2=r_GkhfwQox8tg@mail.gmail.com>
- <CAABTaaBL=TScs8Qqu3b8F6KZPGMyvwy6cBC3teDaBL6MGMucNg@mail.gmail.com>
- <CAHC9VhROsmzbm+AP63Sm7mqCokgEy6Zu0AVMY0gxp8qY75Pqiw@mail.gmail.com>
- <CAABTaaBOrPknzdxc5S6L9hGu7hbFu2e1RZG=Sxjb_B1Cs4Sixw@mail.gmail.com> <CAHC9VhQ4U-Z2KkGurfMihJgzGgwD3miWSW4wWAjWvUdDxLpH7Q@mail.gmail.com>
-In-Reply-To: <CAHC9VhQ4U-Z2KkGurfMihJgzGgwD3miWSW4wWAjWvUdDxLpH7Q@mail.gmail.com>
-From: Ricardo Robaina <rrobaina@redhat.com>
-Date: Wed, 4 Nov 2026 10:42:46 -0300
-X-Gm-Features: AclHuK9fArBl2NqgMDWGc__kMOSMhBxMeP1FQYdilvQJHUxXbryD-TLWb0XsxW4
-Message-ID: <CAABTaaAYn1oBwHSkoGm0a98c9YUZKf6ie=yUOtR4FQuSjrusjg@mail.gmail.com>
-Subject: Re: [PATCH v3 00/14] audit: log all six syscall arguments in the
- SYSCALL record
-To: Paul Moore <paul@paul-moore.com>
-Cc: audit@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-csky@vger.kernel.org, linux-mips@vger.kernel.org, 
-	linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org, 
-	linux-sh@vger.kernel.org, sparclinux@vger.kernel.org, 
-	linux-um@lists.infradead.org, bpf@vger.kernel.org, eparis@redhat.com, 
-	sgrubb@redhat.com, oleg@redhat.com, richard.henderson@linaro.org, 
-	mattst88@gmail.com, linmag7@gmail.com, linux@armlinux.org.uk, 
-	catalin.marinas@arm.com, will@kernel.org, guoren@kernel.org, monstr@monstr.eu, 
-	tsbogend@alpha.franken.de, jonas@southpole.se, 
-	stefan.kristiansson@saunalahti.fi, shorne@gmail.com, 
-	James.Bottomley@hansenpartnership.com, deller@gmx.de, 
-	ysato@users.sourceforge.jp, dalias@libc.org, glaubitz@physik.fu-berlin.de, 
-	davem@davemloft.net, andreas@gaisler.com, richard@nod.at, 
-	anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net, chris@zankel.net, 
-	jcmvbkbc@gmail.com, tglx@kernel.org, peterz@infradead.org, luto@kernel.org
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: t8LZJSQNkhULxycbppkChCe0uIXu_JwJSqkx014noJs_1793799778
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
+X-Last-TLS-Session-Version: TLSv1.3
 
-On Tue, Nov 3, 2026 at 9:41=E2=80=AFPM Paul Moore <paul@paul-moore.com> wro=
-te:
->
-> On Fri, Oct 23, 2026 at 8:45=E2=80=AFAM Ricardo Robaina <rrobaina@redhat.=
-com> wrote:
-> > On Tue, Oct 20, 2026 at 1:39=E2=80=AFPM Paul Moore <paul@paul-moore.com=
-> wrote:
-> > > On Tue, Oct 13, 2026 at 8:36=E2=80=AFAM Ricardo Robaina <rrobaina@red=
-hat.com> wrote:
-> > > > On Thu, Oct 1, 2026 at 6:06=E2=80=AFPM Paul Moore <paul@paul-moore.=
-com> wrote:
-> > > > > On Tue, Sep 22, 2026 at 3:21=E2=80=AFPM Ricardo Robaina <rrobaina=
-@redhat.com> wrote:
-> > >
-> > > ...
-> > >
-> > > > > * As pointed out by Sashiko, when you were converting all of the
-> > > > > arches, it looks like you missed alpha.  I took a quick look and =
-it
-> > > > > appears that it should be a pretty straightforward conversion lik=
-e
-> > > > > most of the others.
-> > > >
-> > > > I've actually dropped the alpha patch as per Magnus's request [1].
-> > > >
-> > > > [1] https://lore.kernel.org/audit/CA+=3DFv5T4826T2sd0Gbh-nfZsqcWK_p=
-hdBKy4BLWOvDTt92t5Eg@mail.gmail.com/
-> > >
-> > > The problem is that as things stand, this patchset breaks the build o=
-n
-> > > Alpha.  Perhaps this gets resolved during the current merge window,
-> > > but as you know we can't break the kernel build ...
-> > >
-> > > https://lore.kernel.org/oe-kbuild-all/202610041836.6TatRQSm-lkp@intel=
-.com
-> >
-> > Of course, you're absolutely right that we can't break the build. I
-> > was afraid that this dependency might cause trouble.
-> >
-> > I noticed Magnus posted a pull request a few days ago containing the
-> > "alpha: enable GENERIC_ENTRY" series [1]. It seems this will get
-> > resolved during the current merge window.
->
-> ... and it has, or at least it appears to me to be resolved.  I
-> rebased the audit/dev-staging branch against v7.4-rc1 and Alpha does
-> indeed appear to be using the generic syscall entry/exit code in v7.4.
-> I think we should be all set here wrt Alpha, thanks.
 
-I'm happy to hear it.
+Hello,
 
->
-> > For future reference, what's the best way to handle dependencies on
-> > other subsystem changes like this?
->
-> Generally speaking communication and coordination :)  Talk with the
-> subsystem devs/maintainers to understand what they are doing, let them
-> know what you want to do, and find the best way to order things so
-> that it all lands in Linus' tree without making a mess.  In this
-> particular case, with the syscall arg audit patchset not being ready
-> (missing maintainer ACKs) and the Alpha changes going into v7.4 it
-> turns out to be quite easy, which is an important lesson: sometimes it
-> is better to defer a new feature for a release just to ease the
-> coordination burden, enable better testing, etc.
->
-> --
-> paul-moore.com
->
+I reported a behavior that seemed anormal to the auditd maintainer:
 
-Thanks, Paul!
+https://lists.linux-audit.osci.io/archives/list/linux-audit@lists.linux-audit.osci.io/thread/KOPL2QPINU6F6WVSKN7U3LRLVIXEQYLZ/
 
+The behavior is the impossibility to make a watch on a directory with
+`auditctl -F dir=$path` while it is possible with `auditctl -w $path`.
+
+This is problematic as directories may not exists yet when auditd is
+initialized (eg: from kernel command line), and the `-w` rules are
+marked as deprecated by auditctl.
+
+Here a few tests that illustrate the problem:
+
+- nonexisting path
+
+#+begin_src bash
+auditctl -a always,exit -F arch=b64 -F path=/nonexisting_path -F perm=wa
+auditctl -a always,exit -F path=/nonexisting_path -F perm=wa
+auditctl -l
+#+end_src
+
+#+RESULTS:
+: perm used without an arch is slower
+: perm used without an arch is slower
+: -a always,exit -F arch=b64 -S open,bind,truncate,ftruncate,rename,mkdir,rmdir,creat,link,unlink,symlink,chmod,fchmod,chown,fchown,lchown,mknod,acct,swapon,quotactl,setxattr,lsetxattr,fsetxattr,removexattr,lremovexattr,fremovexattr,openat,mkdirat,mknodat,fchownat,unlinkat,renameat,linkat,symlinkat,fchmodat,fallocate,renameat2,openat2 -F path=/nonexisting_path -F perm=wa
+: -w /nonexisting_path -p wa
+
+- nonexisting_dir
+
+This will error:
+
+#+begin_src bash
+auditctl -a always,exit -F dir=/nonexisting_dir -F perm=wa -k nonexisting
+#+end_src
+
+#+RESULTS:
+: perm used without an arch is slower
+: perm used without an arch is slower
+: Error sending add rule data request (No such file or directory)
+: There was an error while processing parameters
+
+#+begin_src bash
+auditctl -a always,exit -F arch=b64 -F dir=/nonexisting_dir -F perm=wa -k nonexisting_dir
+auditctl -l
+#+end_src
+
+#+RESULTS:
+: Error sending add rule data request (No such file or directory)
+: There was an error while processing parameters
+
+Steve Grubb suggested that the issue may be to watch at /, but I don't think so:
+
+#+begin_src bash
+auditctl -a always,exit -F arch=b64 -F dir=/root/.config/nonexisting_dir -F perm=wa -k nonexisting_dir
+#+end_src
+
+#+RESULTS:
+: Error sending add rule data request (No such file or directory)
+: There was an error while processing parameters
+
+This will not error:
+
+#+begin_src bash
+auditctl -w /root/.config/nonexisting_dir -F perm=wa -k nonexisting_dir
+#+end_src
+
+#+RESULTS:
+: Old style watch rules are slower
+: perm used without an arch is slower
+: perm used without an arch is slower
+: -w /root/.config/nonexisting_dir -p rwxa -p wa -k nonexisting_dir
+
+
+Additionally here is quote from Steve Grubb about tracing the execution
+of auditctl:
+
+#+begin_quote
+rule goes into the kernel:
+sendto(4, [{nlmsg_len=1080, nlmsg_type=AUDIT_ADD_RULE, 
+nlmsg_flags=NLM_F_REQUEST|NLM_F_ACK, nlmsg_seq=2, nlmsg_pid=0}, 
+"\x04\x00\x00\x00\x02\x00\x00\x00\x03\x00\x00\x00\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff"...], 
+1080, 0, {sa_family=AF_NETLINK, nl_pid=0, nl_groups=00000000}, 12) = 1080
+
+Answer back:
+recvfrom(4, [{nlmsg_len=1100, nlmsg_type=NLMSG_ERROR, nlmsg_flags=0, 
+nlmsg_seq=2, nlmsg_pid=270500}, {error=-ENOENT, msg=[{nlmsg_len=1080, 
+nlmsg_type=AUDIT_ADD_RULE, nlmsg_flags=NLM_F_REQUEST|NLM_F_ACK, nlmsg_seq=2, 
+nlmsg_pid=0}, 
+"\x04\x00\x00\x00\x02\x00\x00\x00\x03\x00\x00\x00\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff"...]}], 
+8988, MSG_PEEK|MSG_DONTWAIT, {sa_family=AF_NETLINK, nl_pid=0, 
+nl_groups=00000000}, [12]) = 1100
+
+Message the user:
+write(2, "Error sending add rule data requ"..., 63Error sending add rule data 
+request (No such file or directory)) = 63
+
+The kernel is returning ENOENT. It doesn't matter which form of watch. But 
+what I tested yesterday is different:
+
+auditctl -a always,exit -F path=/tmp/nonexitent -F perm=wa -k nonexistent
+
+into the kernel:
+sendto(4, [{nlmsg_len=1084, nlmsg_type=AUDIT_ADD_RULE, 
+nlmsg_flags=NLM_F_REQUEST|NLM_F_ACK, nlmsg_seq=2, nlmsg_pid=0}, 
+"\x04\x00\x00\x00\x02\x00\x00\x00\x03\x00\x00\x00\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff"...], 
+1084, 0, {sa_family=AF_NETLINK, nl_pid=0, nl_groups=00000000}, 12) = 1084
+
+Answer back no error
+recvfrom(4, [{nlmsg_len=36, nlmsg_type=NLMSG_ERROR, nlmsg_flags=NLM_F_CAPPED, 
+nlmsg_seq=2, nlmsg_pid=271266}, {error=0, msg={nlmsg_len=1084, 
+nlmsg_type=AUDIT_ADD_RULE, nlmsg_flags=NLM_F_REQUEST|NLM_F_ACK, nlmsg_seq=2, 
+nlmsg_pid=0}}], 8988, MSG_PEEK|MSG_DONTWAIT, {sa_family=AF_NETLINK, nl_pid=0, 
+nl_groups=00000000}, [12]) = 36
+
+It does take paths that do not exist. So, there is a difference in behavior 
+based on whether it is a path or directory. That might be worth the kernel 
+folks looking deeper into.
+#+end_quote
+
+
+-Seth
