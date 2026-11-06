@@ -1,61 +1,56 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=168.119.48.163
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
 	t=1793977447;
-	b=a45imXqi1UCisJRC0nb86d7KbOqZjnLB1RoupYOO5tWFEHy+L344BevQKTweAveb/gMr
-	 xORPB40uzhsfkRypzI+DjBBuV3CQh9JikcIQ5kyfW3Yy7532fo90jBwek7JVpzbTefqJC
-	 b7FN0cISrMGv4fitriV7OCleIVJ/k2tbjB59CuA4Begmg2QxSMQreg/7K+tH5hJBuGGaW
-	 NF7jtXp2lPlzxSXDAoJG9al7AqjXvztbDzCTAr/oAp6GFYuwzeyTkO/bAaFkKcfAfLR96
-	 3DwE3B2mMzuvdWHL7FowTm6vXZShN9tS37aobWfiIqdQp75/lKd6F+9hpKU41lByXxw==
+	b=5PvBD+MLGNZiUiTS1VtbAADqRuN5kmtmqbgZqeGGwcFuVfgX9uU96DoS6SZyB5FTmMRj
+	 LoTPyAj/2g3eRYILFQao55JysAS90kLIiTWMrjSgGCT0bA9lH94mU61CgoA/hXOyEjYVk
+	 3d5YkP58NcCR5J4Y2bMnhT/jRzJ9J1BU0SWNEtVug1TOkbs3vAyAv0Zdl4X7l0BQgKwG6
+	 7P6nrYwaoO2BXq4f+R0iWTB3Fye0rf1/MBDSMxNJJRlvWclCl41l0bZJoQvnNstMsQxjV
+	 60Jbhrrz1oB/DYAokN1NjZcW7+dVAd1ihQuvdKtQM5yMnkcaMNBFyzzin7mbvlGoGDw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
 	a=rsa-sha256; c=relaxed/relaxed; t=1793977447;
 	h=DMARC-Filter:From:DKIM-Signature:To:Cc:Subject:Date:Message-ID:
-	 In-Reply-To:References:Reply-To:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=X3FwBj/ufz9KFwM+g9HQy4eo/6u7CBtC0GICumJm7o4=;
-	b=ZJsqz+041pNIQHcWMd1UeHCitQdLJke/7ErFrK0w9bkVNJRR++uzCDGM741+biY8Uy1U
-	 pL45oZrlqaZ57boTXvScHI9TQvKlEwZt8mmphTaHYXzExUrXP5TApsZy0PcD6Jx53BWgy
-	 Cuyki1SG3TBjEiRjELG8v29TZeI4INchE1/tP9qc/3SZVJue0Da7nO0wToDJtUFe/KeBl
-	 7m3aaC+g2OX4RyC/T5JqAcmhewUpv/uI29sy9uoviNjvaf+98nwH3IUS7S3ulc/ARV5lh
-	 92Gzr9sgB/jCU+2FISjgBPnrNqZfMN7kswEHeNp2Xy3QTQ9qDGyaZ9okjrY1nUu/ngA==
+	 Reply-To:MIME-Version:Content-Type:Content-Transfer-Encoding;
+	bh=OFFqQmZJZbdaHYXS8KsGvp3Nr5z3a6FCHdTPdWLIjKY=;
+	b=yQDx2EPfA0xRywdI8oY1RFM08uaaxxvPRicCXxKp8qRwHBKSbhTlMa6/YghA6++rxrqa
+	 gNEwv+7nr6N4XxgRq85JdXN/LzISNAApmGw8oC/PSWGVOVPC5Sg5yFt+8nS33pR3PcQam
+	 UW2NnNB8T5b2Dxce9guie4nmNNb9oiYIEwMLWeJWAjLqE+hXitg2jEnIZ5vR6iRoo4R4K
+	 z5gAJ9dTx5hL+F++PUSZ0U1hfYBGZ2CguS0MW/c/pfcVyGTh5nrxZHhPemYxv6LGbDDu4
+	 gcNXzEpwBi1rmAcC2c/pJYLbP4pDtnx+DrWx/VA9OG1o38mpVRA6wgQ6ErIWlrGkzzQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=seltendoof.de;
 	spf=pass smtp.mailfrom=seltendoof.de;
-	dkim=pass header.d=seltendoof.de header.i=@seltendoof.de header.a=rsa-sha256 header.s=2023072701 header.b=gvoqr3u0;
+	dkim=pass header.d=seltendoof.de header.i=@seltendoof.de header.a=rsa-sha256 header.s=2023072701 header.b=B0DvwgLU;
 	arc=none smtp.remote-ip=168.119.48.163
 Received: from server02.seltendoof.de (server02.seltendoof.de [168.119.48.163])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 521ED606A329
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5226D606A32C
 	for <audit@vger.kernel.org>; Fri,  6 Nov 2026 15:04:06 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 521ED606A329
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5226D606A32C
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=seltendoof.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=seltendoof.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=seltendoof.de header.i=@seltendoof.de header.a=rsa-sha256 header.s=2023072701 header.b=gvoqr3u0
+	dkim=pass (2048-bit key, unprotected) header.d=seltendoof.de header.i=@seltendoof.de header.a=rsa-sha256 header.s=2023072701 header.b=B0DvwgLU
 From: =?UTF-8?q?Christian=20G=C3=B6ttsche?= <cgoettsche@seltendoof.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seltendoof.de;
 	s=2023072701; t=1793977444;
 	h=from:from:reply-to:reply-to:subject:subject:date:date:
 	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-	 content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=X3FwBj/ufz9KFwM+g9HQy4eo/6u7CBtC0GICumJm7o4=;
-	b=gvoqr3u0l9X9BQquNZ5S7nLZSeZE6zniqJ3p0fz7+okO14F+2yb4XiJlNZSUUgFEAN/MHP
-	AlZnEMIcVK3NbQKZQW7DplLJpUzsmOJFMdhkn2+KEqvyeSWVJMjVQRg/tLqBWuNGlo3RYa
-	6ZxY5O/P4Igu1HApNGZ8YKLo4Q1+6HS3HFPBpOie4nAVUI/Km+RIuZpKuN1DPYhNfM2TrY
-	3JJ784gXjhJIqHlwxuHsTVnlzxHcytPMTRpg4MOZNCr+mPWRR1Bx+T2NTjTz/hZ+dw5UMq
-	acRPPU0teW5FcNormN2sjeB+fSt+LZjQbQgbkBxgqwYwd8xp0L2PHYLky4a6mA==
+	 content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
+	bh=OFFqQmZJZbdaHYXS8KsGvp3Nr5z3a6FCHdTPdWLIjKY=;
+	b=B0DvwgLUaP9KB9/f/Fnb8j3+dDDy1+LEMP0HDUFP1QRGeEPfe+q/pYNJ4A0cW2Z3DL7MTe
+	LKB0zZ+oEzlSiOXjwh2dtzoom3G4p1f6OCpuWtgKbb/wZpue1nsaRzYytef+ZTJ+e9C3im
+	vxyBGlpp7lTHRnfOol68lUchIfyRrfYXci4kakjVACgUIxSajNxQNAFZ5BrD8ItppLKmRv
+	QQPVCsI5/6aSULqrUDoGmTzdCaDuDwCV4gOdBylSYrpm1BbUVqUoF2Gx9ieRV1Si01BYjv
+	KT6T41tt20O5FjcdkRPLhw4ENch1CNV85BJkHSIpNVH2lZgj7yfoIUKfQXIbrQ==
 To: audit@vger.kernel.org
 Cc: Paul Moore <paul@paul-moore.com>,
 	Eric Paris <eparis@redhat.com>,
 	=?UTF-8?q?Christian=20G=C3=B6ttsche?= <cgzones@googlemail.com>
-Subject: [PATCH v2 2/3] audit: return the collected entry from __audit_inode()
-Date: Fri,  6 Nov 2026 16:03:41 +0100
-Message-ID: <20261106150342.670199-2-cgoettsche@seltendoof.de>
-In-Reply-To: <20261106150342.670199-1-cgoettsche@seltendoof.de>
-References: <20261106150342.670199-1-cgoettsche@seltendoof.de>
+Subject: [PATCH v2 1/3] audit: compact name entries and context fields
+Date: Fri,  6 Nov 2026 16:03:40 +0100
+Message-ID: <20261106150342.670199-1-cgoettsche@seltendoof.de>
 Reply-To: =?UTF-8?q?Christian=20G=C3=B6ttsche?= <cgzones@googlemail.com>
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
@@ -71,99 +66,88 @@ Content-Transfer-Encoding: 8bit
 
 From: Christian Göttsche <cgzones@googlemail.com>
 
-Return the selected audit_names entry, or NULL when collection is
-skipped or fails, so audit_file() can attach descriptor-specific
-information reliably. The existing audit_inode() and
-audit_inode_parent_hidden() wrappers ignore the result, and collection
-behavior is unchanged.
+Group the inode metadata and the small scalar fields of audit_names to
+remove padding, while keeping the pathname next to its length and the
+file capability revision next to the file capabilities. Store the
+per-name file capability revision in s16: it must represent both the
+eight-bit on-disk revision and the -1 AUDIT_INODE_NOEVAL sentinel. Keep
+the existing formatter and its unknown-capability output unchanged.
+
+Move name_count ahead of the embedded name slots to remove two alignment
+holes, and place personality before the task credential scalars.
+Preserve the first int dummy member required by audit_dummy_context(),
+all five embedded name slots, and the existing allocation and reference
+lifetimes.
+
+On x86_64 with SELinux this reduces audit_context from 928 to 880 bytes,
+leaving room for descriptor paths while staying below 1 KiB. On the tested
+arm64 configuration without property-bearing LSMs it falls to 872 bytes.
 
 Signed-off-by: Christian Göttsche <cgzones@googlemail.com>
 ---
-v2: return the entry from __audit_inode() instead of adding a private
-    helper
+v2:
+- keep name next to name_len and fcap_ver next to fcap
+- move name_count below the names_list comment
 ---
- include/linux/audit.h |  6 ++++--
- kernel/auditsc.c      | 14 +++++++++-----
- 2 files changed, 13 insertions(+), 7 deletions(-)
+ kernel/audit.h | 15 +++++++--------
+ 1 file changed, 7 insertions(+), 8 deletions(-)
 
-diff --git a/include/linux/audit.h b/include/linux/audit.h
-index 767e349d4834..1f456f954c2e 100644
---- a/include/linux/audit.h
-+++ b/include/linux/audit.h
-@@ -35,6 +35,7 @@ struct audit_sig_info {
+diff --git a/kernel/audit.h b/kernel/audit.h
+index 7640d2c0fba4..614afa1cfa14 100644
+--- a/kernel/audit.h
++++ b/kernel/audit.h
+@@ -77,17 +77,14 @@ struct audit_names {
  
- struct audit_buffer;
- struct audit_context;
-+struct audit_names;
- struct inode;
- struct netlink_skb_parms;
- struct path;
-@@ -327,8 +328,9 @@ extern void __audit_syscall_entry(int major, unsigned long a0, unsigned long a1,
- 				  unsigned long a2, unsigned long a3);
- extern void __audit_syscall_exit(int ret_success, long ret_value);
- extern void __audit_getname(struct filename *name);
--extern void __audit_inode(struct filename *name, const struct dentry *dentry,
--				unsigned int flags);
-+extern struct audit_names *__audit_inode(struct filename *name,
-+					 const struct dentry *dentry,
-+					 unsigned int flags);
- extern void __audit_file(const struct file *);
- extern void __audit_inode_child(struct inode *parent,
- 				const struct dentry *dentry,
-diff --git a/kernel/auditsc.c b/kernel/auditsc.c
-index 552ba9f4fb0a..b740e056cd80 100644
---- a/kernel/auditsc.c
-+++ b/kernel/auditsc.c
-@@ -2242,9 +2242,12 @@ static void audit_copy_inode(struct audit_names *name,
-  * @name: name being audited
-  * @dentry: dentry being audited
-  * @flags: attributes for this particular entry
-+ *
-+ * Return: the collected entry, or NULL if collection was skipped or failed.
-  */
--void __audit_inode(struct filename *name, const struct dentry *dentry,
--		   unsigned int flags)
-+struct audit_names *__audit_inode(struct filename *name,
-+				  const struct dentry *dentry,
-+				  unsigned int flags)
- {
- 	struct audit_context *context = audit_context();
- 	struct inode *inode = d_backing_inode(dentry);
-@@ -2255,7 +2258,7 @@ void __audit_inode(struct filename *name, const struct dentry *dentry,
- 	int i;
+ 	struct filename		*name;
+ 	int			name_len;	/* number of chars to log */
+-	bool			hidden;		/* don't log this record */
+-
+-	u64			ino;
+ 	dev_t			dev;
+-	umode_t			mode;
++	u64			ino;
+ 	kuid_t			uid;
+ 	kgid_t			gid;
+ 	dev_t			rdev;
+ 	struct lsm_prop		oprop;
+-	struct audit_file_caps	fcap;
+-	unsigned int		fcap_ver;
++	umode_t			mode;
++	bool			hidden;		/* don't log this record */
+ 	unsigned char		type;		/* record type */
+ 	/*
+ 	 * This was an allocated audit_names and not from the array of
+@@ -95,6 +92,8 @@ struct audit_names {
+ 	 * should be freed on syscall exit.
+ 	 */
+ 	bool			should_free;
++	s16			fcap_ver;	/* 8-bit revision, or -1 for NOEVAL */
++	struct audit_file_caps	fcap;
+ };
  
- 	if (context->context == AUDIT_CTX_UNUSED)
--		return;
-+		return NULL;
+ struct audit_proctitle {
+@@ -132,8 +131,8 @@ struct audit_context {
+ 	 * through the preallocated_names array and should only be found/used
+ 	 * by running the names_list.
+ 	 */
+-	struct audit_names  preallocated_names[AUDIT_NAMES];
+ 	int		    name_count; /* total records in names_list */
++	struct audit_names  preallocated_names[AUDIT_NAMES];
+ 	struct list_head    names_list;	/* struct audit_names->list anchor */
+ 	char		    *filterkey;	/* key for rule that triggered record */
+ 	struct path	    pwd;
+@@ -142,10 +141,10 @@ struct audit_context {
+ 	struct sockaddr_storage *sockaddr;
+ 	size_t sockaddr_len;
+ 	/* Save things to print about task_struct */
++	unsigned long	    personality;
+ 	pid_t		    ppid;
+ 	kuid_t		    uid, euid, suid, fsuid;
+ 	kgid_t		    gid, egid, sgid, fsgid;
+-	unsigned long	    personality;
+ 	int		    arch;
  
- 	rcu_read_lock();
- 	list_for_each_entry_rcu(e, list, list) {
-@@ -2267,7 +2270,7 @@ void __audit_inode(struct filename *name, const struct dentry *dentry,
- 						f->op, f->val)
- 			    && e->rule.action == AUDIT_NEVER) {
- 				rcu_read_unlock();
--				return;
-+				return NULL;
- 			}
- 		}
- 	}
-@@ -2321,7 +2324,7 @@ void __audit_inode(struct filename *name, const struct dentry *dentry,
- 	/* unable to find an entry with both a matching name and type */
- 	n = audit_alloc_name(context, AUDIT_TYPE_UNKNOWN);
- 	if (!n)
--		return;
-+		return NULL;
- 	if (name) {
- 		n->name = name;
- 		name->refcnt++;
-@@ -2339,6 +2342,7 @@ void __audit_inode(struct filename *name, const struct dentry *dentry,
- 	}
- 	handle_path(dentry);
- 	audit_copy_inode(n, dentry, inode, flags & AUDIT_INODE_NOEVAL);
-+	return n;
- }
- 
- void __audit_file(const struct file *file)
+ 	pid_t		    target_pid;
 -- 
 2.55.0
 
