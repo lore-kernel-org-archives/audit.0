@@ -1,56 +1,62 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=51.159.188.251
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=168.119.48.163
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793907857;
-	b=CdfLFusJg6Qa0baS9gqo/2FwbqqMqusNNnVh/PlibY+a9zkmok1fuGzXn/zZzcl2VjTY
-	 v0oH9kbZpLE3lD0BIT1YzD6Ek2OwX567SjEtcQpsoDBtM59U31oy+IW7pAatURnRT2jGH
-	 C/5A1661GnOgAQWiniDs7jUfppQjAG4D2Q2VMsof6ce4iLV1HNbZACUr4KC59bJkBY1Mm
-	 jp4SIm623uxDrIojI0PoyuNidxyeAOeyssRD5gPekMFWKC+iG5EIOrHi5MTll7IQZWbQp
-	 i0ZJh6tYjyizNAaxuEwuCHa760RVvBYVQvp0DexhsnD2VVD3lj8yHN9rzcYg1hLI4tQ==
+	t=1793977447;
+	b=FyIIkZMVTzbUBWaApWVl0eVEnF9vGd1aUYQj0oApxqohMF0Be6pKpO9j5m/fmUDxkoix
+	 FGFi8msom6zkLHs59X3Ky6oWr4ZqimQMszCOpK2oBn2rFLVfrSqUWwLJVW+4KKDC4u2zi
+	 Pc2hndUbZx0EPqy/nNRfYRxkV30bZ+x6GLqERPCspd+36T64Y0ADK5pU2pXDq2ZHhPlF6
+	 cpmNfNDRivoHtWg2BrquK9R1f5Dd9l/ENFitNzUI4Fom0up37zUYpq1HsAYFXb7wd6ykw
+	 OWZVsO5BJNH+E97ngTTgcunqYoRKSX/RLP6qYuAilDACcyUrsooRw4h8rVYjkw8leTQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793907857;
-	h=DMARC-Filter:DKIM-Signature:Received:MIME-Version:Date:From:To:Cc:
-	 Subject:In-Reply-To:References:User-Agent:Message-ID:X-Sender:
-	 Content-Type:Content-Transfer-Encoding:X-AntiAbuse:X-AntiAbuse:
-	 X-AntiAbuse:X-AntiAbuse:X-AntiAbuse:X-Get-Message-Sender-Via:
-	 X-Authenticated-Sender:X-Source:X-Source-Args:X-Source-Dir;
-	bh=bBEAv3UO3ZxF4T+NmNpnI6CeqCaeMtA6CzKXaO3Q5og=;
-	b=N2MeyFk1F73S5Ajryhqjp5hH2cfgoiKCZz+mXeQVIn2xhzLhmtZ4p3EejB/z5j9Z+Wby
-	 fBdRcweWt+3K0HAPZ9QJngzR/zSHfgYLDVwSxc3s0nnL1HQw5NqqRAXhXUcUb5RtarPQh
-	 ljj2kIAoy/uDEdL1F6/+XsXaecGYTOmrwCOh3k277CiyxpsfhMnhJ2nSXpaNiusKnzwkF
-	 GUc5356BB21SQqKSeBnh3h9WWlL5Oe0cKN4Y787beOT3FMZlR9dT3UPDR+MwkbW0KlsSR
-	 qBGgQ2xUjtTIhPNxRXBRAM+y3X37GWxFIQJDTF2xaZC0UyFRdyeUa60ulPDzjcA6NfQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793977447;
+	h=DMARC-Filter:From:DKIM-Signature:To:Cc:Subject:Date:Message-ID:
+	 In-Reply-To:References:Reply-To:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=1tTKTwRGeRjexoJc2YdTu6b3DVwuY28BJcq/ooAnLLA=;
+	b=BpZ6wLFnRfGXpFZM4IBuwoCc3n/Zi3euVZ17XNhtyYdGU3+S3cYPVQh0NKjJDyNKSG2Y
+	 HQo7fmWAlrGYad1i3BEBGTgObmbCRKd5Jri++30/Bks8/98f4srfnp0rp5ie6mHPMxnbA
+	 +baE1ehMf/7ScijjhojFCbwBwWnjzesTZusQ4qO5cupAXfua5O7kt6II4sxLZeF3K3aBl
+	 CWA+PfMv52saJMYwWydR5/7Fae59XRaq4yJuPXgfRVAKzImKayu5hY4NBzAqtVwy7ZnhJ
+	 eoxPs87qj3lyBpUDVxubK/7XaeMRQuX5GPSvyQC8rL7ZOlsQ5duIpKeOKSqqUQ+39Cw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=oss.cyber.gouv.fr;
-	spf=pass smtp.mailfrom=oss.cyber.gouv.fr;
-	dkim=pass header.d=oss.cyber.gouv.fr header.i=@oss.cyber.gouv.fr header.a=rsa-sha256 header.s=default header.b=Jyi4g1Qe;
-	arc=none smtp.remote-ip=51.159.188.251
-Received: from oss.cyber.gouv.fr (oss.cyber.gouv.fr [51.159.188.251])
+	dmarc=pass header.from=seltendoof.de;
+	spf=pass smtp.mailfrom=seltendoof.de;
+	dkim=pass header.d=seltendoof.de header.i=@seltendoof.de header.a=rsa-sha256 header.s=2023072701 header.b=AxLWfcPp;
+	arc=none smtp.remote-ip=168.119.48.163
+Received: from server02.seltendoof.de (server02.seltendoof.de [168.119.48.163])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F4056606A6C2;
-	Thu,  5 Nov 2026 19:44:15 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org F4056606A6C2
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.cyber.gouv.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.cyber.gouv.fr
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C5D8606A32D
+	for <audit@vger.kernel.org>; Fri,  6 Nov 2026 15:04:06 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5C5D8606A32D
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=seltendoof.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=seltendoof.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=oss.cyber.gouv.fr header.i=@oss.cyber.gouv.fr header.a=rsa-sha256 header.s=default header.b=Jyi4g1Qe
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=oss.cyber.gouv.fr; s=default; h=Content-Transfer-Encoding:Content-Type:
-	Message-ID:References:In-Reply-To:Subject:Cc:To:From:Date:MIME-Version:
-	Reply-To:Sender:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=bBEAv3UO3ZxF4T+NmNpnI6CeqCaeMtA6CzKXaO3Q5og=; b=Jyi4g1QetjEvOrlqt8id4ElKvb
-	dowv/IcXcedK74YGJbecI1hIHe3uBFFM6/Hmzy37aFHs+uLcJzC7y3kCHVtyOKns0ojJCrIn2aHOT
-	H4RBo1tUoCh1NQu1hC2QoVGBZ/39k6h79qkzrrFDX0obUtTL71ZkRa6VnNXgwERdIXv9YYmMuJbXw
-	YPYvG5AlCYy2ZyVrFD+sUDgl/dG4xTAKbp+KvPajmV87gXflWINJAZDpXguElZHiOF4wTOU+G5+ub
-	cOTpU96i8INWNEGcjd8F4367d9Yq+jyHKJiccO0pR+Aqh8z7EkygCj0J79Iu9AR5BRddQ9sAa1YlG
-	5mEl2w9g==;
-Received: from [::1] (port=36730 helo=pf-012.whm.fr-par.scw.cloud)
-	by pf-012.whm.fr-par.scw.cloud with esmtpa (Exim 4.100.1)
-	(envelope-from <jeremy.jean@oss.cyber.gouv.fr>)
-	id 1xP3Na-00000009EsF-3Ace;
-	Thu, 05 Nov 2026 20:44:08 +0100
+	dkim=pass (2048-bit key, unprotected) header.d=seltendoof.de header.i=@seltendoof.de header.a=rsa-sha256 header.s=2023072701 header.b=AxLWfcPp
+From: =?UTF-8?q?Christian=20G=C3=B6ttsche?= <cgoettsche@seltendoof.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seltendoof.de;
+	s=2023072701; t=1793977444;
+	h=from:from:reply-to:reply-to:subject:subject:date:date:
+	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+	 content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=1tTKTwRGeRjexoJc2YdTu6b3DVwuY28BJcq/ooAnLLA=;
+	b=AxLWfcPpdUNc39wOovDC3qCc14AVl/dIFS+3eJSL5GA1W7E9pbAGYJ5Ybxwmszl0y/enoW
+	nKkBU7SIRe0fzaE25lLMqzKeWaAWVWQbVQjXGKhNwjJKI2uWLQGi0Ot/VQXg6oofAIAnqk
+	NiEb+faONVpQSxTvoev0Se2z5MN/CNmQ930j4BWuV8zmV7MWObEAWCB4v2UE3hUuGhFnzE
+	yMcIqMQpu3vZv1NqO+sDDBjA8K/1efmXV3kMlxcujzzRygb7hp9dBaZLUAZY8umoLstiYe
+	MHOsBbdrZBZLbY9OnRG80bHndFPK/exDefYS/qSrDwziDhXgteMNpC0XwavABQ==
+To: audit@vger.kernel.org
+Cc: Paul Moore <paul@paul-moore.com>,
+	Eric Paris <eparis@redhat.com>,
+	=?UTF-8?q?Christian=20G=C3=B6ttsche?= <cgzones@googlemail.com>
+Subject: [PATCH v2 3/3] audit: retain file paths for descriptor PATH records
+Date: Fri,  6 Nov 2026 16:03:42 +0100
+Message-ID: <20261106150342.670199-3-cgoettsche@seltendoof.de>
+In-Reply-To: <20261106150342.670199-1-cgoettsche@seltendoof.de>
+References: <20261106150342.670199-1-cgoettsche@seltendoof.de>
+Reply-To: =?UTF-8?q?Christian=20G=C3=B6ttsche?= <cgzones@googlemail.com>
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Post: <mailto:audit@vger.kernel.org>
@@ -60,110 +66,95 @@ List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:audit+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Date: Thu, 05 Nov 2026 20:44:08 +0100
-From: =?UTF-8?Q?J=C3=A9r=C3=A9my_Jean?= <jeremy.jean@oss.cyber.gouv.fr>
-To: Paul Moore <paul@paul-moore.com>, Bradley Morgan <brads@mainlining.org>
-Cc: Eric Paris <eparis@redhat.com>, audit@vger.kernel.org,
- linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH] audit: fix UAF in kauditd_send_queue()
-In-Reply-To: <b446cedf8a7977337389f8cdc1e5acce@paul-moore.com>
-References: <20261031211258.1626829-2-Jeremy.Jean@oss.cyber.gouv.fr>
- <b446cedf8a7977337389f8cdc1e5acce@paul-moore.com>
-User-Agent: Roundcube Webmail/1.6.20
-Message-ID: <341401a3fa5863542319566051bde1ea@oss.cyber.gouv.fr>
-X-Sender: jeremy.jean@oss.cyber.gouv.fr
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - pf-012.whm.fr-par.scw.cloud
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - oss.cyber.gouv.fr
-X-Get-Message-Sender-Via: pf-012.whm.fr-par.scw.cloud: authenticated_id: jeremy.jean@oss.cyber.gouv.fr
-X-Authenticated-Sender: pf-012.whm.fr-par.scw.cloud: jeremy.jean@oss.cyber.gouv.fr
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
 
-On 2026-11-04 21:36, Paul Moore wrote:
-> On Oct 31, 2026 Bradley Morgan <brads@mainlining.org> wrote:
->> 
->> kauditd_send_queue() grabs an extra reference to the skb header before
->> netlink_unicast() since it may need to retry a failed send. If unicast
->> delivery reuses that same header, the receive path stores the
->> destination socket in skb->sk without taking a socket reference.
->> Consequently, after the receiver consumes the skb and closes the
->> socket, the extra reference taken on the skb header makes kauditd
->> release a header whose skb->sk points to freed socket storage.
->> 
->> KASAN reports a UAF as:
->> 
->>   BUG: KASAN: slab-use-after-free in sock_rfree+0x44/0x140
->>   Write of size 4 at addr ffff888004f94140 by task kauditd/31
->> 
->> Clone the header before netlink_unicast(), then use the clone for
->> delivery and keep the original skb only for retries. If cloning fails,
->> handle it as -EAGAIN so the send can be retried.
->> 
->> Fixes: f3d357b09295 ("Audit: save audit_backlog_limit audit messages 
->> in case auditd comes back")
->> Cc: stable@vger.kernel.org
->> Signed-off-by: Jérémy Jean <Jeremy.Jean@oss.cyber.gouv.fr>
->> ---
->>  kernel/audit.c | 11 +++++++----
->>  1 file changed, 7 insertions(+), 4 deletions(-)
->> 
->> diff --git a/kernel/audit.c b/kernel/audit.c
->> index 9412af9144bc..5e739fa606be 100644
->> --- a/kernel/audit.c
->> +++ b/kernel/audit.c
->> @@ -790,6 +790,7 @@ static int kauditd_send_queue(struct sock *sk, u32 
->> portid,
->>  {
->>  	int rc = 0;
->>  	struct sk_buff *skb = NULL;
->> +	struct sk_buff *skb_to_send;
->>  	struct sk_buff *skb_tail;
->>  	unsigned int failed = 0;
->> 
->> @@ -810,9 +811,11 @@ static int kauditd_send_queue(struct sock *sk, 
->> u32 portid,
->>  		}
->> 
->>  retry:
->> -		/* grab an extra skb reference in case of error */
->> -		skb_get(skb);
->> -		rc = netlink_unicast(sk, skb, portid, 0);
->> +		/* Keep the original header unowned for retries. */
->> +		skb_to_send = skb_clone(skb, GFP_KERNEL);
-> 
-> As Bradley pointed out, this appears a little confusing as the existing
-> approach of skb_get()+netlink_unicast() should end up doing something
-> very similar to what you are proposing due to netlink_unicast() calling
-> into netlink_trim() which in this case should always end up doing a
-> skb_clone().  I'm sure I'm missing something, can you help me 
-> understand
-> why this proposed patch is different and solves the problem?
-> 
-> Also, do you have a reproducer for this?
+From: Christian Göttsche <cgzones@googlemail.com>
 
-Dear Bradley and Paul,
+fchown() and the other audit_file() callers collect inode metadata but
+emit name=(null), even though file->f_path is available.
 
-Thanks for the comments. The fix is closely related to the current
-code but the main difference is that netlink_trim() does not always
-reach its skb_shared() clone path. Moving the clone earlier in the
-execution avoids the UAF.
+Retain the path with balanced dentry and mount references, and use the
+existing audit_log_d_path() formatter when no filename was collected.
+Release the references on context cleanup. Descriptor entries carry no
+filename, so they can only be reused by a later lookup that matches the
+same inode; keep the retained path then instead of falling back to
+name=(null). Filesystem exclusions continue to skip entry creation.
 
-I do have a reproducer, which as Bradley pointed out, triggers the UAF
-by indeed taking the early abort path with the delta * 2 < skb->truesize
-condition in netlink_trim(). This makes netlink_trim() returns the
-original shared skb, and this path does not reach clone of skb a few
-lines later in netlink_trim(). In the fix, by calling skb_clone()
-explicitely before the call to netlink_unicast(), audit keeps the
-original skb, the clone is given to netlink, and the UAF is avoided.
+The name reflects d_path() at event emission: concurrent renames and
+unlinks can affect it. Original lookup names retain precedence.
 
-I hope this clarifies.
+This adds sizeof(struct path) to each audit_names. With the preceding
+capability and layout changes, audit_context grows from 880 to 960 bytes
+on the tested x86_64 SELinux configuration and remains in the 1 KiB
+kmalloc class. Other LSM configurations can have different object sizes.
 
-Regards,
-Jérémy
+Signed-off-by: Christian Göttsche <cgzones@googlemail.com>
+---
+v2:
+- reset fd_path after path_put() in audit_free_names()
+- keep fd_path when a later lookup reuses the entry for the same inode,
+  instead of dropping it in audit_copy_inode()
+- place fd_path ahead of name
+- use the entry returned by __audit_inode()
+---
+ kernel/audit.h   |  1 +
+ kernel/auditsc.c | 16 ++++++++++++++--
+ 2 files changed, 15 insertions(+), 2 deletions(-)
+
+diff --git a/kernel/audit.h b/kernel/audit.h
+index 614afa1cfa14..476821dbed64 100644
+--- a/kernel/audit.h
++++ b/kernel/audit.h
+@@ -75,6 +75,7 @@ struct audit_cap_data {
+ struct audit_names {
+ 	struct list_head	list;		/* audit_context->names_list */
+ 
++	struct path		fd_path;	/* owned audit_file() fallback */
+ 	struct filename		*name;
+ 	int			name_len;	/* number of chars to log */
+ 	dev_t			dev;
+diff --git a/kernel/auditsc.c b/kernel/auditsc.c
+index b740e056cd80..31c45f681b13 100644
+--- a/kernel/auditsc.c
++++ b/kernel/auditsc.c
+@@ -936,6 +936,8 @@ static inline void audit_free_names(struct audit_context *context)
+ 		list_del(&n->list);
+ 		if (n->name)
+ 			putname(n->name);
++		path_put(&n->fd_path);
++		n->fd_path = (struct path) { };
+ 		if (n->should_free)
+ 			kfree(n);
+ 	}
+@@ -1531,7 +1533,9 @@ static void audit_log_name(struct audit_context *context, struct audit_names *n,
+ 			audit_log_n_untrustedstring(ab, n->name->name,
+ 						    n->name_len);
+ 		}
+-	} else
++	} else if (n->fd_path.dentry)
++		audit_log_d_path(ab, " name=", &n->fd_path);
++	else
+ 		audit_log_format(ab, " name=(null)");
+ 
+ 	if (n->ino != AUDIT_INO_UNSET)
+@@ -2347,7 +2351,15 @@ struct audit_names *__audit_inode(struct filename *name,
+ 
+ void __audit_file(const struct file *file)
+ {
+-	__audit_inode(NULL, file->f_path.dentry, 0);
++	struct audit_names *n;
++
++	n = __audit_inode(NULL, file->f_path.dentry, 0);
++	if (!n)
++		return;
++
++	/* Resolve at event emission, so renames and unlinks can affect the name. */
++	n->fd_path = file->f_path;
++	path_get(&n->fd_path);
+ }
+ 
+ /**
+-- 
+2.55.0
+
