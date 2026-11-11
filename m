@@ -1,59 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=51.178.41.114
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794411271;
-	b=lToBvruOVxrRa/a+fLdae+d0TmsQD98YEcHbsMX6lxY2E3ooLpoDR58gjxSoeJ4uPILk
-	 Ah5TG8clQr5D28cbqKOALknFKa6UP02/FJmrRz5UPKcqRY8gEtuDo3UW472UrBgASh0TJ
-	 uQTlmxqzhns26gBxTZsgt+BnbsYUZ8lEiSn5x/3l8QcrN2+h8yKJMd8MzMMLBjFjqN+70
-	 +ov2+AUEqWou7Csr1EJ9A7I1PqWwLcTFx63BcYqnrZWrmxouTcPIN2QwaUkz7AhC+x5JV
-	 O8wyqJK3cixgx+GuZGQoVwuoer2yvYgC5Me/PLsLBk4K4/XrlWGrWr3LrxoUD/NR/qw==
+	t=1794414439;
+	b=QEpUMZcWE/pRNsvukd+7gO1j3/6qcXG9/yGepH20WQNlt+pcQyZFt0bgAyvzMsT6LaSp
+	 aYkirh+TQborXkEoAYYbtQp8CYL1n5W1Bb/2nTr6NMchkZSwV9FQLGGwEsaVI7U7SO0xm
+	 CMr07pCama/P3i6zdk9ufwtRrCXgkVwX3Zap/T1iOA3oGBwaAR2bGSKlgcjEve9c0vhA6
+	 FyYvfwmLOFZyXhjsQNwOoFOPvo/dUMLOwKvD8jOZGPUWMZ/sI4oQNy531I6O0gda2mvPC
+	 Ux8dC+nHTpIhol/4rc8GGJEHKiDS+N+awu48A4bHdH+zbTBv808dlIp9MbBCmtLSqIA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794411271;
-	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:Date:
-	 Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
-	bh=MC35NwvYHbQmTMFdIYuy0TI1TVZGM/Iyjc/cBErfQM4=;
-	b=IeO24YXFpv1TpVTNP5G26ubEX76qYW6TkuYf6M13QzVBXW5HQleMEHBS6FubilwN8RUZ
-	 QbI7wDAP+Y7rz/34LgU8rWCcVTliXui0g+Obi8odoDBmrgNPCdJclINas9oGHzej2A3LH
-	 +dfwRkLWiFX31HA+1RRIXbnuxE+AtneA5nyQneNg7sK3TbnJlOlH86TcwxY3KjIlNuK8i
-	 YAn6NcarPbugKgjUrptC9c5cKpjVWf29diOLQw4fxgXitxOLeWtYtLJ/FMRCekDYF1iCq
-	 K/KeOBXAE70/2tcdDC5Xo6ji8vs3JMb2zAx6wQc+8ULWb9WzV0o07qpphDLfsrGvZXg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794414439;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=19L6lY+Nj3bXDc4fkgOTMmZjbFzRGMFBM9Lv01QBabY=;
+	b=YVbTcqrhqeXgb8kIbm7qih3XlcdSxFU5vzMKGsVvlcF2sq5v5T2/kvW4ztL2Pc+oFxUU
+	 0qU/KWCOpZuy+lAVNK6tetpOb8MbZoUFJhVuzK1pBXFehORsXfRCG2nxh0k+AKvT2DOyG
+	 OzUxupZPIaoEFqbUlT6gv6oa0iAzg0Sosr2NyGfGgJCRN8r2vWs4/uN7F83YS+fjKJrp6
+	 NMXTSdU2nogpO0ZJl0oqMap7dA+uXeXC+MpNbWO+r8wFX4jPIZhVqxglVH96ngDw+iLt1
+	 XTTzqTblsBHkpyPFAo+t0muD1s6Fe7u7bTdZP77MQ1O/tgMTGdrSETaYwuYy2yR1gHw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=bencteux.fr;
-	spf=pass smtp.mailfrom=bencteux.fr;
-	dkim=pass header.d=bencteux.fr header.i=@bencteux.fr header.a=rsa-sha256 header.s=mail header.b=uI0l03g5;
-	arc=none smtp.remote-ip=51.178.41.114
-Received: from beta.bencteux.fr (114.ip-51-178-41.eu [51.178.41.114])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=mZLeiyx1;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16C3E606A321;
-	Wed, 11 Nov 2026 15:34:29 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 16C3E606A321
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bencteux.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bencteux.fr
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 010E2606A326
+	for <audit@vger.kernel.org>; Wed, 11 Nov 2026 16:27:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=bencteux.fr header.i=@bencteux.fr header.a=rsa-sha256 header.s=mail header.b=uI0l03g5
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=bencteux.fr; s=mail;
-	t=1794411088; bh=gXW8SyVARUoohB2SsNyiHx3TvB4I/8N9VeiFAUqba0w=;
-	h=From:To:Cc:Subject:Date:From;
-	b=uI0l03g5k++BJxlUcQmhttMm2ydWQ/DRfvZB0v8KvXsKf6jX3Jesx6NkQw0ehPiME
-	 7lPZPBBaaU+ACrAmw04wR64q5e4Xgceh1tfxvc16OBSSqM6vOwl7OYSY4hSoiKa10M
-	 Zur8SkpovVpvPitlnNfVBQYnxgKPWnFdG83KrJ+Y=
-Received: from localhost (unknown [146.70.188.209])
-	by beta.bencteux.fr (Postfix) with ESMTPSA id B654C4029F;
-	Wed, 11 Nov 2026 16:31:28 +0100 (CET)
-From: Jeffrey Bencteux <jeff@bencteux.fr>
-To: paul@paul-moore.com,
-	eparis@redhat.com,
-	arnd@arndb.de,
-	audit@vger.kernel.org
-Cc: linux-arch@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	jeff@bencteux.fr,
-	rrobaina@redhat.com
-Subject: [PATCH v2] audit: add missing syscalls to signal class
-Date: Wed, 11 Nov 2026 16:20:51 +0100
-Message-ID: <20261111152057.59798-2-jeff@bencteux.fr>
-X-Mailer: git-send-email 2.56.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=mZLeiyx1
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66B0B1F00A05
+	for <audit@vger.kernel.org>; Wed, 11 Nov 2026 16:27:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794414438;
+	bh=19L6lY+Nj3bXDc4fkgOTMmZjbFzRGMFBM9Lv01QBabY=;
+	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
+	b=mZLeiyx1ZMjd8P3/3+19UXkSApkaWReia4fuhBQFo/J8CrqOgIGXxOg53KmTdVvU4
+	 Mdj0M/FSEyiaqR6JahTmnxe8tVnNyxzmk8+wQ/AKkdzHZSmiqkwqnA7e23HbJfnWaY
+	 4gMgymWEhZRt8Pmvw/x9H4b7mKJXZBd4FLRYaZArJajDKwEsZGM8q4H1zALM9E9lyM
+	 GPv4iXGXBVUegDaS8vD2pTTKNwtrUskUkFPunpgCrkuCV/VDBxwIpfD8nTvEvTqG7+
+	 PGZcjMqEPTyaD/ZH9x3u2jyW7Hp/Gbel16yCZdvLI724i+P2+fiHprJnacbku8ZQNc
+	 kG/AvesdYUypQ==
+Message-ID: <sashiko-outbox-209282@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v2] audit: add missing syscalls to signal class
+Reply-To: sashiko-reviews@lists.linux.dev
+To: audit@vger.kernel.org
+In-Reply-To: <20261111152057.59798-2-jeff@bencteux.fr>
+References: <20261111152057.59798-2-jeff@bencteux.fr>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 11 Nov 2026 16:27:17 +0000
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Post: <mailto:audit@vger.kernel.org>
@@ -62,43 +57,25 @@ List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:audit+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-The pidfd_send_signal(), rt_sigqueueinfo() and rt_tgsigqueueinfo()
-system calls are missing from the AUDIT_CLASS_SIGNAL* class. It seems
-to be used only in kernel/auditfilter.c to increment the audit_signals
-counter.
+> The pidfd_send_signal(), rt_sigqueueinfo() and rt_tgsigqueueinfo()
+> system calls are missing from the AUDIT_CLASS_SIGNAL* class. It seems
+> to be used only in kernel/auditfilter.c to increment the audit_signals
+> counter.
+>=20
+> This counter is used to determine if information related to a target
+> process of a syscall audit rule using signals, such as its pid,
+> should be logged (e54dc2431d740a79a6bd013babade99d71b1714f).
+>=20
+> Information related to signals sent via these system calls are
+> currently not correctly logged. The current patch adds it to the
+> AUDIT_CLASS_SIGNAL* class.
+>=20
+> Signed-off-by: Jeffrey Bencteux <jeff@bencteux.fr>
 
-This counter is used to determine if information related to a target
-process of a syscall audit rule using signals, such as its pid,
-should be logged (e54dc2431d740a79a6bd013babade99d71b1714f).
+Sashiko has reviewed this patch and found no issues.
 
-Information related to signals sent via these system calls are
-currently not correctly logged. The current patch adds it to the
-AUDIT_CLASS_SIGNAL* class.
-
-Signed-off-by: Jeffrey Bencteux <jeff@bencteux.fr>
----
-Changes in v2:
-- Removal of unneeded #ifdef guards
-
- include/asm-generic/audit_signal.h | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/include/asm-generic/audit_signal.h b/include/asm-generic/audit_signal.h
-index 6feab7f18a53..c02edbee3311 100644
---- a/include/asm-generic/audit_signal.h
-+++ b/include/asm-generic/audit_signal.h
-@@ -1,3 +1,6 @@
- __NR_kill,
- __NR_tgkill,
- __NR_tkill,
-+__NR_rt_sigqueueinfo,
-+__NR_rt_tgsigqueueinfo,
-+__NR_pidfd_send_signal,
-
-base-commit: 6614d4c05c7a661a925b3d8dbf9c70faac3bd2da
--- 
-2.56.0
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261111152057.5979=
+8-2-jeff@bencteux.fr?part=3D1
 
