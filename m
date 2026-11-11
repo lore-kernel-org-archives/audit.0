@@ -1,85 +1,90 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=34.2.82.16
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794426709;
-	b=2DuZspFuM6r7YilUGhwLSMoXBCBwzrY3cButrEnCzcSW+YghSCDVnT5+bSZ5PVT9f2wa
-	 1t9jGxaaluL/pjT6Wba0bF7eX41HzTy2+vKxp6uUDvwN80mA/fG6iKrOUzCRXDCCZuKxZ
-	 r87RU7W/kYleR3Vubw+um7+/NFw7a9hgNGZatt0Rx+DxlvwKAKgSRnK1tfuV1VxHT5QD4
-	 W1P4hNNO1YrHSsh+Z4lFKGZSMQK6m7iUxCyiFvJSMXbaFrBznitLeos7yal6Shti6pxhA
-	 2W/DF/uX4K3gWc+unrT06Uri1eoUbln8hTmPwZtKuG0ZhGLm3ST5MTrQUby7+yvnDJA==
+	t=1794431852;
+	b=qMTbX1v6wrU/d1IGngqXDUvrD5w43Nq4DAqDTi55WTGh++P7MmGZvbKSHvU3wm4ETYS9
+	 09uGkn0ZfjmB/p7LuRkxB6jrNAxXAK3SzePQK3Zel6bDd2toAURRfpj8IVxspUsQmZfna
+	 SyAad48U0QrFydThKlhSsBVyC8vpIeoPYB0TSuUVOYNz64E2BjgSLeNAXRHP3v0DhIamW
+	 AXdVizHThBCMlNbxiqC0aiJwfmKL3DcUYO9A/MB2DtWNaQ/wneEQxqRdXgneJeGZB+LUj
+	 zYcT46mKQdvQh/kX5I87pDfzgyD9p/aXb862MAX9jpmUzv4Zo9wEa7AVvYNvB84/FDA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794426709;
-	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
-	 X-Mimecast-MFC-AGG-ID:Received:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:X-Received:MIME-Version:
-	 References:In-Reply-To:From:Date:X-Gm-Features:Message-ID:Subject:To:
-	 Cc:X-Mimecast-Spam-Score:X-Mimecast-MFC-PROC-ID:X-Mimecast-Originator:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=13YqSnIhjrSGBdnncrmkRLcLAqs3gUqrk+ICDgkhd5A=;
-	b=PWOtwrXCc5HUcUPXJ+RH7HghgGdIuaT132vcOLmGDsV+XjX4aS2S63KgY+4ZdZAH5obq
-	 oZv0dhBH1N4tPyxitzAexEt6yD76fpgEQko4nURR4/q7aj4e4VLSDIvvIO07xSxFQyrMv
-	 vUf8cfO260pLRJxDr9rE63ZDvsy8pqWuAiIN6MiihI+nUv7yr9Mbda6lrLy8iwRA7qa4v
-	 aCpMmnmevlbdizukJUNWmIt0/wi4lFU3H/vJUp50SPHiQrH1ZpiUhrmyOUX3R3btxLFW3
-	 r6aNtfQb8w4yKGHwNuapMAgh4cl6vk/91fMMASqfVtjEN4w9obB7m4k/BkXniBWylig==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794431852;
+	h=DMARC-Filter:DKIM-Signature:X-SONIC-DKIM-SIGN:X-YMail-OSG:X-Sonic-MF:
+	 X-Sonic-ID:Received:Received:From:To:Cc:Subject:Date:Message-ID:
+	 X-Mailer:In-Reply-To:References:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=qUXUZqf9F6yEmce0lKvAbXv9BHFDkZZ+T87BE+Gogsc=;
+	b=gw/dqcudU7ZqKDvDr8bTf10oJSfzJhMQLDGx1/QnesEISE7Q7TSeEWb+C7Ojzwd6uzYz
+	 cPqFlTqisBNEa04XzbvBNA6YmIvvfCdOwdSFVdhgRUQoBdlmLFY8pUUDpp84mKnfMTJWj
+	 vNhEaTSdWsE4SGr9WgfYP2BDHE6sSL6VFw9GCq3D6CBjjhvMXVdh3D46i4p3QG3g8KAtQ
+	 S/Gx2PPPez/Og6g5BMVndY49FGHDb5jcphKsKh0KHFjlGQfl0pC43gjNk/rySJ96keu79
+	 e3OLzHW1KbRmEdSLNL/EtloGNqouuFL0dEMB3LZ7g1nwpr8Cs06+ayBo3o2duCZspVg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=redhat.com;
-	spf=pass smtp.mailfrom=redhat.com;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=bR14ee2s;
-	arc=none smtp.remote-ip=170.10.133.124
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=yahoo.pl;
+	spf=pass smtp.mailfrom=yahoo.pl;
+	dkim=pass header.d=yahoo.pl header.i=@yahoo.pl header.a=rsa-sha256 header.s=s2048 header.b=JZB0nEJ3;
+	arc=none smtp.remote-ip=34.2.82.16
+Received: from sonic.asd.mail.yahoo.com (sonic-euwe1-0017.asd.mail.yahoo.com [34.2.82.16])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAE5F606A31C
-	for <audit@vger.kernel.org>; Wed, 11 Nov 2026 19:51:48 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CAE5F606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF1E7606A327
+	for <audit@vger.kernel.org>; Wed, 11 Nov 2026 21:17:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org AF1E7606A327
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=yahoo.pl
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=yahoo.pl
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=bR14ee2s
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1794426707;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=13YqSnIhjrSGBdnncrmkRLcLAqs3gUqrk+ICDgkhd5A=;
-	b=bR14ee2sTML+z8wHq+6wWOLy8acuyvOGPOTb7ymXIohTEedoRiq7I33vrSuCCJeWEAnloe
-	yw6BaEvmvrlspRVpc+BkEpEG54PALjZk1UXOBR7aBvta9q/ZmWT+VoZ7dBE5jTLb2vFQ7I
-	+OruPCCkxPjCWcdpEtf6x2TXYYBlkDQ=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-586-LJ7bjTSFNxCWRrwAfjJH-A-1; Wed, 11 Nov 2026 14:51:46 -0500
-X-MC-Unique: LJ7bjTSFNxCWRrwAfjJH-A-1
-X-Mimecast-MFC-AGG-ID: LJ7bjTSFNxCWRrwAfjJH-A_1794426705
-Received: by mail-ed1-f69.google.com with SMTP id 4fb4d7f45d1cf-6b76329afcdso2079530a12.2
-        for <audit@vger.kernel.org>; Wed, 11 Nov 2026 11:51:46 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794426705; x=1795031505;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=13YqSnIhjrSGBdnncrmkRLcLAqs3gUqrk+ICDgkhd5A=;
-        b=wh+QNBrs5D0W6tPOckFXOPsVOTloOcPT5ohu71zQ4jjPi2AyAVIvFymS9U4T2xLECW
-         aRWdfWbkxR+MvviQEyh+attytlAHFke6N9t+B/K/8/Cec5IzhTfblTFk69Y7VFy6qHBl
-         8XO14Co805w3/gT46LMgORu7ehWS5WkEKnoEH6JIukgc28myaQol1c0SNcrwfAS5UXuP
-         uaKQ3Pk9UGuSgohX6Oek6p5zeiLoA6fkwIq0ZXYoAdL0pbXqdijO3S0E59gVc1nahecr
-         HoJQ3QsEm3JE9V0PvWzqgML98c93MWcqNF+PkdwkIP+85TFjiGEUQBKqmB0a/eLav7SW
-         rDUg==
-X-Gm-Message-State: APuU4Z8HkPLTXdh0zi5m6xY7/9OYN/MLmYDDU5j1FRMs+WFOjVauGAio
-	B7W/pf7KTZlsAbhjltDb0YJDUmECx0K3CqeY1uSDzT3O5K18fVIYDGEF3yRPv+BVnU2tnCi99Fw
-	Z9aPAJT8e9oLytSIA5i8L7s/Cn7JvV8R4lSIZDaudQIV5+6Y0NrgRP80jOGDFqeGEUslmUJjoS0
-	d+2FAhFakR1dN+A0U2dnDHolE86SAn6OdCNQSBkSAW2g==
-X-Gm-Gg: AYBFou3cebEFe/33qCuwhjHkZ45pruDpJPrqskKY/8kveXFj6ZqdvzxVNx6brAsgBnS
-	Bg+llN3u4byimEecKeBJBpO0G3v6JaZOR+HAWz62CT3YETwmY57cuVu3zzkj+82yzSMEpdy/BJI
-	iB+5ydIgK4MEEXmmvAoBEEE6nAx2YGaS2uvi3ZQlEoDr+rpxlNeZD2+GY1Stw408gILy1xDreRB
-	L0hOYp88m9GP/lSX35o/IchDqaz3R0mq0TpGFpP7G1o7g==
-X-Received: by 2002:a17:907:ea8e:b0:c46:ca3a:10d5 with SMTP id a640c23a62f3a-c5066cc8684mr274077366b.45.1794426705309;
-        Wed, 11 Nov 2026 11:51:45 -0800 (PST)
-X-Received: by 2002:a17:907:ea8e:b0:c46:ca3a:10d5 with SMTP id
- a640c23a62f3a-c5066cc8684mr274075766b.45.1794426704946; Wed, 11 Nov 2026
- 11:51:44 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=yahoo.pl header.i=@yahoo.pl header.a=rsa-sha256 header.s=s2048 header.b=JZB0nEJ3
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.pl; s=s2048; t=1794431849; bh=qUXUZqf9F6yEmce0lKvAbXv9BHFDkZZ+T87BE+Gogsc=; h=From:To:Cc:Subject:Date:In-Reply-To:References:From:Subject:Reply-To; b=JZB0nEJ3ByjHPn++GKPuaC+KLA5/yhSsjERIQWA4UzbTBN8wB68EM6N+MblQez1yGQfL4P22dWxF/RO+NJYRMx8Xm6/iX53p0OlInRNA2YPOROfu36n4MPjHqBA+70QeT0OEtSksfOdo5nvmI+Fdfps7eMONmGnsMJbs8PoOklv/pdH5WI5nRSfNnFus6D/pdQoXvmp40dXAG02lp1IxO8dBWTGGmJLnF0YWCwC9sox/gJEmuPzFuBUwONpqxplBHA5+SptTs49cN8Z2SWNiri1Mg1nuEadY/DpLesgjGAsQCu4I0fWDCa8FFSPsRwbVJaPY9cxbDdmljwKIspcflg==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1794431849; bh=ZxICgkbLIgjxN3MSLSYwZHx7SJLDhy9/C15ZzG7QjFG=; h=X-Sonic-MF:From:To:Subject:Date:From:Subject; b=JS9Hta9FpTmgDUtWoGQ4hehltgfKz3qwBmU84KrkpWIgMeWTeq2DB4ZBjXLi0zcmnS0WGjh0k9nPsP/JU6aoNj/6Ekv+vQdb+tYI2LFQbfwEtKtIhxO/29i9Hy4RwK31Hsa3p3uQ8HzzdRTmbU7MwxhxquybcKzVyDbyaGLCCbeEuxwkxJc2EE9tguo48+wIBm2y2zKtxCw3L30oQqygxN2yDfmaDBsvmoKxDezIOtngFr+bCaGbB8P5spO6jbL7f2XZBuJ/NBwXLP2/aiduAAZKrpgMsRzJKxsyWJfscC3dCZ61TxAajhErz6ItznefoD+P9Cr7WdpXBUE7aBC5pA==
+X-YMail-OSG: 2xiqf.cVM1lnvOJp.YssY2sqnMttmHvcJdNiSN_1qoGocSOF.d0okYWNCsbonx9
+ ozDyuEEapF6FcWVmd0C24Ql5cFeEvDFf6sxtFSlJCXLWj7DPH5dcNJowUXEY_Mhtoi.Wpv6v0UGV
+ C.0RvG5zNnUXgkky3Z0q9svDH7NPqde40BZB4eaWC9BShMfrtIQnsg8C6k.VkaFsg8I3b6UhgrBF
+ jpoAALqV3TuCun2KoprN_rXfztyjTPulbYitvPYdO3f4KqCaLy5UouC11HXRkrUVkAx8ll3T_4KD
+ GXi8R3Rp2df7HHh8IjgSro4bShMSV3t7qOy4_cZcLfYhWcTQCmX3x25zzUVkPwg7KUKuzYNnA7nQ
+ 5T1A2AbSk1IThdaxBp6iP.FqPutwLqgVgFeSP_rx.W.oiYimzC7_dFSBSGhPNNLUi3GocSZvqUOj
+ w8OYj8VzWDZNP3YBB3i2jdI6Yak1jJSlBqLaBxvokVM_9WZRNKXdXPGkF2qBZxoiMqCCu4ZnvL2Z
+ dZKUFAuYFI2vkhUAxLVXPsjefCDJzcLB9vEh0c.Rjn5By78t3OF10qahxpeOgOw.njJxYEk2VXA6
+ BFdPcJzfCHLVe7xetAW_dWkCIbpXZpyJ930EywVPFMITGCVz7mKY66QZKl6eXXHrePt_rh0bLTuW
+ uW.4wZgYyZW.f.6yg37uC2dMvog3UhyoXHO3yiXkZoxBZKAXOzlmKXs1DKqbzLsNXmKzrbmEAUQY
+ DLcN0lgGSr07mm6qUofyWXcQd50Hi8APyuB_mRJs.hbCBFyiFCuWYBZQ5dkHaB6165u_gyzkYZzq
+ .7hs0nVehzQFxrvloulZrxHAvy9UsaMfTH.JwWTbLL4NK2KyivePI_vY7ak84Ca_hqH9tWv34giQ
+ W.YwE4_GksNBTKNHPrjDl0KG1llWZuoMEzN8xgRoUTHl6_lgmW7lwOTPRFPJ8gbroJotTu_4LxAU
+ 2Do1TtcCo2Qw2.iFyiUZkW8DAwvT1hn6P5vpDyK2ThXh6pDwFCyPOtnJ9DDVS0cdRtKCuEVzATf7
+ hqGZw40yEvDTdiUvOiu7CS2PRLKPDCZvm6E3yqCkQ6lGnfiVAlLQxeY.GbBSb1cqDosR6VAj.eyV
+ maFv5JkR93Djyny9akcVGBYnhJkJ9o5SS8MEM9sa9PZAUhE.vEjdPoh8zQrjmGGE4bh5mfEhVQbi
+ IjtnqvpqIsnJAHEiFfxtVXUD.FpOR.A73RtLuDh36l1PyHKuH3szdsKPtdH769qMp3tP3g3oLJcK
+ x6WmzekABFmFrUlBuUaXTwDjzkLUmQ5PQ9otRj5zDM9bpz4TOoMQAD54_cV9xHGtjcwxs.4ESuMD
+ s54xybmIIKRoiHpzJchVlV2ii1yxxx624MdmHC3a909BHAusHnhikaiT3fvCeC4U5Mnee7lSp9yj
+ BVmQoufBJFMBNc.j3dA1u8eYhP6Rwe1eMZ4z.j.X3ees9L4pBIqx2tMh0KGbChKQXyXUsrjbrAuO
+ uytZvYHV2D5n5kR_6NcKoVU1NA7_ZhxeX2i.96BvRONPAB7sdxQmiLmM.bQHDhd04C0jcjKuTKph
+ 3c2N4CYRQwurNFs7MD73ZUWed9JfBEO_jua6dzY4fPAN.ANGhXxKOt4WiZ_JTa7stokEjLaJdtSX
+ h53_ddgxL4pj2S6Xl9lxTL2EHG_zMDrj4DCXORXxrI6gqSNYQULDwUVZvS51qZvPiPl.CoHOCl.P
+ xkFP8vKVbzKpE0X29QFUsWENyqQjQ_yDTvNX0FLgdWqIaWfA5QR7FxTEAtPmNmhBWsr5RSFkM29o
+ INyD23VQTiiHHnz1L.T4NZk0usXL1QZzUCTKWOIKPL8qhGHtDfbLmpG8tg4OpMCBywdMJbQimksY
+ 5JjvxsTzw8Benk6gfxax37Sdgkq5vIpTt.lnHqoS3z1FlZXITFSAv1ceG5xfnXj5z_rpcebiX4eP
+ FB1MZCuat4cNOhQSkszJhsjE8xIn_9lNAp3nSTdVTg5PW9GvsBNmXqHH1boow48bSva5xsn0rabY
+ guMXvrN0zAG6sghAJ8P3HS8E.FviCOZP4Pg--
+X-Sonic-MF: <tomasz.unger@yahoo.pl>
+X-Sonic-ID: f54cd00e-3367-4f5a-b5c9-e5b87e00e58f
+Received: from sonic.gate.mail.ne1.yahoo.com by mail-asdoutdeli-p-cin-euwe1-prod-sonicconsumer-svc-102 with HTTP; Wed, 11 Nov 2026 21:17:29 +0000
+Received: from dip196.lsn.ir2.yahoo.com ([87.248.99.205])
+          by hello (SMTP) with SMTP ID 8692ef5179a07c2da106afbe2bec9893;
+          Wed, 11 Nov 2026 21:17:24 +0000 (UTC)
+From: Tomasz Unger <tomasz.unger@yahoo.pl>
+To: Sebastian Bockholt <sebastian.bockholt@bevuta.com>
+Cc: linux-security-module@vger.kernel.org,
+	paul@paul-moore.com,
+	casey@schaufler-ca.com,
+	serge@hallyn.com,
+	jmorris@namei.org,
+	audit@vger.kernel.org,
+	John Johansen <john.johansen@canonical.com>
+Subject: Re: [PATCH] LSM: check if lsmprop_to_secctx call is supported by LSM
+Date: Wed, 11 Nov 2026 22:17:22 +0100
+Message-ID: <20261111211722.69639-1-tomasz.unger@yahoo.pl>
+X-Mailer: git-send-email 2.56.0
+In-Reply-To: <20260619171945.1617498-1-sebastian.bockholt@mail.networkname.de>
+References: <20260619171945.1617498-1-sebastian.bockholt@mail.networkname.de>
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Post: <mailto:audit@vger.kernel.org>
@@ -89,47 +94,98 @@ List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:audit+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261111152057.59798-2-jeff@bencteux.fr> <sashiko-outbox-209282@kernel.org>
-In-Reply-To: <sashiko-outbox-209282@kernel.org>
-From: Ricardo Robaina <rrobaina@redhat.com>
-Date: Wed, 11 Nov 2026 16:51:33 -0300
-X-Gm-Features: AclHuK-8KRi28-wO7lCotvLzx3R8YClP1yWzaHbkuRqhTMvlvvdXcMtNFCDLN6M
-Message-ID: <CAABTaaB9zXgaM2uUMQ3h4nc0rERCDf1_OmSR5mfkxid3bFFNfg@mail.gmail.com>
-Subject: Re: [PATCH v2] audit: add missing syscalls to signal class
-To: sashiko-reviews@lists.linux.dev
-Cc: audit@vger.kernel.org
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: NAeRPt4uMF5dYvJi_ls9vHtcWixLOMhhB9PF5HYFb4w_1794426705
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Wed, Nov 11, 2026 at 1:36=E2=80=AFPM <sashiko-bot@kernel.org> wrote:
->
-> > The pidfd_send_signal(), rt_sigqueueinfo() and rt_tgsigqueueinfo()
-> > system calls are missing from the AUDIT_CLASS_SIGNAL* class. It seems
-> > to be used only in kernel/auditfilter.c to increment the audit_signals
-> > counter.
-> >
-> > This counter is used to determine if information related to a target
-> > process of a syscall audit rule using signals, such as its pid,
-> > should be logged (e54dc2431d740a79a6bd013babade99d71b1714f).
-> >
-> > Information related to signals sent via these system calls are
-> > currently not correctly logged. The current patch adds it to the
-> > AUDIT_CLASS_SIGNAL* class.
-> >
-> > Signed-off-by: Jeffrey Bencteux <jeff@bencteux.fr>
->
-> Sashiko has reviewed this patch and found no issues.
->
-> --
-> Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261111152057.59=
-798-2-jeff@bencteux.fr?part=3D1
->
->
+On Fri, 19 Jun 2026 19:19:45 +0200, Sebastian Bockholt wrote:
+> In include/linux/lsm_hook_defs.h, lsmprop_to_secctx is defined with
+> a default return value of -EOPNOTSUPP.
+> The function bpf_lsm_lsmprop_to_secctx, defined in
+> security/bpf/hooks.c, returns the hook's default value. Therefore,
+> directly returning the result of the bpf_lsm_lsmprop_to_secctx call
+> propagates an unchecked EOPNOTSUPP error.
 
-Looks good to me.
+[...]
 
-Reviewed-by: Ricardo Robaina <rrobaina@redhat.com>
+> -		return scall->hl->hook.lsmprop_to_secctx(prop, cp);
+> +		error = scall->hl->hook.lsmprop_to_secctx(prop, cp);
+> +		if (error == -EOPNOTSUPP)
+> +			continue;
+> +		return error;
 
+Hi,
+
+I ran into the same problem independently and would like to revive this
+patch. It fixes a regression that is still present in v7.4-rc2, in
+next-20261111 and in the current audit and lsm dev branches.
+
+Symptom
+
+On an Arch Linux system (7.2.15, AppArmor and auditd active, LSM order
+"capability,landlock,lockdown,yama,bpf,apparmor") the log is flooded with
+
+  audit: error in audit_log_subj_ctx
+
+about five times per sudo invocation, and the affected audit records are
+emitted without their subj= field. No BPF LSM program is loaded. It is
+enough that CONFIG_BPF_LSM is built in and "bpf" is listed before the LSM
+that provides security contexts. So this is not only log noise: audit
+records silently lose the subject label.
+
+Cause
+
+Before commit a59076f2669e ("lsm: security_lsmblob_to_secctx module
+selection") security_lsmprop_to_secctx() used call_int_hook(), which
+skips a hook that returns the hook's default value. Since that commit
+the function returns the result of the first registered hook when it is
+called with LSM_ID_UNDEF. The BPF LSM registers a stub for every hook,
+and the stub returns the default, -EOPNOTSUPP, so the LSM that really
+provides the context is never asked. audit_log_subj_ctx(),
+audit_log_obj_ctx() and the AUDIT_SIGNAL_INFO handler all pass
+LSM_ID_UNDEF. On the affected system a kretprobe shows
+bpf_lsm_lsmprop_to_secctx() returning -95 and
+apparmor_lsmprop_to_secctx() never being called.
+
+The patch restores the old behaviour for this case, so I think it is a
+fix for the commit above rather than a step towards BPF supporting
+security contexts.
+
+Testing
+
+I applied the patch on top of 067c5c24cef2 (v7.4-rc2-92), where it
+applies with an offset only, and booted the kernel in QEMU with audit=1,
+without and with the patch. A write to /proc/self/loginuid was used to
+generate AUDIT_LOGIN and AUDIT_SYSCALL records. No LSM policy was
+loaded.
+
+  lsm=            without the patch        with the patch
+  bpf,apparmor    error, no subj=          subj=unconfined
+  apparmor,bpf    subj=unconfined          subj=unconfined
+  bpf,selinux     error, no subj=          subj=kernel
+  bpf,smack       error, no subj=          subj=_
+
+With the patch there is no "error in audit_log_subj_ctx" message in any
+of the four configurations, including the netlabel records logged during
+boot. The problem is therefore not specific to AppArmor: SELinux and
+Smack are affected in the same way when bpf comes first.
+
+Not covered by this test: the obj= path (audit_log_obj_ctx()) and
+AUDIT_SIGNAL_INFO. They use the same call, but no such record was
+generated here.
+
+The analysis and the QEMU runs were done with the help of an assistant
+(Claude Code). I checked the logs and the results myself.
+
+Suggestions for the commit message
+
+  - mention the audit symptom ("error in audit_log_subj_ctx", missing
+    subj=) so that people who hit it can find the fix,
+  - add
+      Fixes: a59076f2669e ("lsm: security_lsmblob_to_secctx module selection")
+    The commit is in v6.18-rc1, so this probably also wants to go to
+    stable.
+
+Sebastian, do you plan to send a v2? If you do not have the time, I can
+resend the patch with your authorship kept and the description extended
+as above.
+
+Tested-by: Tomasz Unger <tomasz.unger@yahoo.pl>
