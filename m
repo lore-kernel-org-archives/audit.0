@@ -1,54 +1,57 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=51.178.41.114
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794396161;
-	b=LGdgvxKf2nsrhIyLVAe0D+dt7pgiSkRCmezPOrewVDuOwUI6X8+sCScxGQ02e0LHm+BJ
-	 L7kLrpBm5fHFomCUETklOauvCEe0y3G5edLGJfwZ50d4ALLlQoGGU7kd0GF5GZnvyayV2
-	 xb6SsOAeKb0xASbPVjgoWfr99nq6smK6kUNPkpwLrRPhOjBa8LVZ98vPBkgkuOLPzhmp6
-	 0QzvkdvnTWuLPigAVZKZH0+Ub8L5plZtatqQizx1XM9YGpuGMtEXDf6DlqbZ/x5WJMdrw
-	 g0SyAYxcr/8M6nxTEm6ipQ6oLrcLb8LiDGQxwfJDMDlt7YeNndwAxP6VixVTPqCXeLQ==
+	t=1794405913;
+	b=wxBAijqjS13nPRe+Y+Hj0sJCThytrq4FSDXvVF/eLsVkjXq6G45qjImgdl6GZt/EFqh+
+	 YFx1IPzyQfShleDI0Oq5KqotijuLSEc0gvWb76Z4yvcyuks2LGx2L5MY9nwG9QZWwagum
+	 H3Bx9FA0wMP3KpnKndYxjepMZyh0lxeZpH9fvwFNzb7IQ3xGHf6GuZhPo5BG5xLz9V3r9
+	 CGFdMyfvzUIgskR04OoWGsQlwj6+tH6mkOgZNR+Ue68hnJLhQEfb6V7POOfBiLIBU9Zi9
+	 oBbO1/FYctnjhNFWSzzWRK7Jwt7PToYtSLu/tYhVyGXEQguc11DJD7CtoXN7Xq79QKQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794396161;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=wjXPsmvTmMUd56ZLgunUdCRnK2sAAwUdN2O5QvH8JaA=;
-	b=K98XutSP43kGAS31HA1edJEeZ3M6EweLze2Yj6LWG57Lo4cP5mIpebGjOasj1oEzwoQU
-	 Nt0updWBoqmWPrheh+cKoATtkdYIg0MHkmb/lHW0Nu8p6JaDS/FzMU679K4FcpGJey8vl
-	 dR5RRZKPkSZlYelPxOsii75VZOabu2eqYoPnmzN5DJ6F3DniAhAZWEuvxKn2iE5RkfFSO
-	 dUjkWrFKPhGOHo3s+2AJvtxEXnWtYMc0xJiCQuAmqYnVK41Dxwydbl7cOA/+x+/UPEJ0V
-	 Bh8WLJvw1IES/EEJh3BUGGdY62e44T6WmBLt3wgSnIX3+K5Iuirf/3u+vERitbXmRhQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794405913;
+	h=DMARC-Filter:DKIM-Signature:Received:Date:From:To:Cc:Subject:
+	 Message-ID:References:MIME-Version:Content-Type:Content-Disposition:
+	 In-Reply-To;
+	bh=4zxPu5ZFrczIb7F9QZwQYCqVqTbPXVe+sCS7b2ba3zg=;
+	b=ETLPCfPviqNAXn5xqa0Q/gdcAQyqRqLLYPCcL2NqzwKPtoBHH020xNPGdQSXDMCOz3wc
+	 WoaqJUR0t9o8uwBO253O+8suyVS73TudPYBsSOBPlK+haNZfXw4ygt0OyssV6tQaI6eih
+	 U/X7w6gfkGn2v6E5nPQb2UiARjo/4K0fYs62x6XDnEQweVfnRRJj+qJY8a/1d5cA+9vaA
+	 Ic+jBuBXK0xKBXRlM5Dm20jHlfYh3Vy8Sc6YvrZOWVgO/pOD43sieZ/IJpwErdVc3H36W
+	 2KvuZZkdY08Ck5cL2a6msatM0dfjOglj6j/HQfPCgyj9cirb3IVjjvwMLRGjssgOOyA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="Qzo/TMZR";
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=pass header.from=bencteux.fr;
+	spf=pass smtp.mailfrom=bencteux.fr;
+	dkim=pass header.d=bencteux.fr header.i=@bencteux.fr header.a=rsa-sha256 header.s=mail header.b=JvMd+oNw;
+	arc=none smtp.remote-ip=51.178.41.114
+Received: from beta.bencteux.fr (114.ip-51-178-41.eu [51.178.41.114])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02702606A31C
-	for <audit@vger.kernel.org>; Wed, 11 Nov 2026 11:22:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08F65606A327;
+	Wed, 11 Nov 2026 14:05:11 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 08F65606A327
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bencteux.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bencteux.fr
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Qzo/TMZR
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 786551F00A05
-	for <audit@vger.kernel.org>; Wed, 11 Nov 2026 11:22:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794396160;
-	bh=wjXPsmvTmMUd56ZLgunUdCRnK2sAAwUdN2O5QvH8JaA=;
-	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
-	b=Qzo/TMZR6oMzwWAh/eF5+3e6R0AJzJa9QgxXvsUddkPTh8ayyKQucCkhRq1nAmYfx
-	 bnMR3jiKx3UMP157fm5DKBRdEaLp3cjpN1WXAPATCJshKDjbL4wGmHnSJepNAwjq5G
-	 qswVZ0BiaDRecQK9Ol/4t0fjqKo7JbpWbYWwlHJhTa0XSNjWJ/trgNifjBey7G9IJt
-	 MuEyN1jXPqGN6VVgudU6T3C4znb9/llun6sEgGKF3y3BYJHriz07ZT3UbgXZVKV8EC
-	 e9rf2GZ3YnMdTd9x7vo8qIGiX2uJge/yo2RBSGUSqvxZHbMVKn/1+KKLzrCVrfMeh5
-	 QzmqVRCyvzeTA==
-Message-ID: <sashiko-outbox-208865@kernel.org>
-From: sashiko-bot@kernel.org
+	dkim=pass (1024-bit key, unprotected) header.d=bencteux.fr header.i=@bencteux.fr header.a=rsa-sha256 header.s=mail header.b=JvMd+oNw
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=bencteux.fr; s=mail;
+	t=1794405730; bh=4zxPu5ZFrczIb7F9QZwQYCqVqTbPXVe+sCS7b2ba3zg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=JvMd+oNw8+qLpLyemswhjMpYvynjrucqvWYmvMAyS+R09/pPBaGiGiSFADhBOdo9T
+	 fcBZh200U6g6jTe9npE/trcVHZFAKxbNG1Ov0c/ILBNYjAhJHPkIVzacW+ebvr8T3/
+	 +5O7qaB4YEjKsC0VnNLwh3ItZPAPbCgVwlvUvJcE=
+Received: from localhost (unknown [146.70.188.209])
+	by beta.bencteux.fr (Postfix) with ESMTPSA id 3B09C4029F;
+	Wed, 11 Nov 2026 15:02:10 +0100 (CET)
+Date: Wed, 11 Nov 2026 14:52:41 +0100
+From: Jeffrey Bencteux <jeff@bencteux.fr>
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: Paul Moore <paul@paul-moore.com>, Eric Paris <eparis@redhat.com>,
+	audit@vger.kernel.org, Linux-Arch <linux-arch@vger.kernel.org>,
+	linux-kernel@vger.kernel.org
 Subject: Re: [PATCH] audit: add missing syscalls to signal class
-Reply-To: sashiko-reviews@lists.linux.dev
-To: audit@vger.kernel.org
-In-Reply-To: <20261111110200.30415-1-jeff@bencteux.fr>
+Message-ID: <avRzKRB2f_dP-xEv@ultrabook.localdomain>
 References: <20261111110200.30415-1-jeff@bencteux.fr>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 11 Nov 2026 11:22:40 +0000
+ <e817126f-83b7-4450-a893-ac4e59460ae1@app.fastmail.com>
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Post: <mailto:audit@vger.kernel.org>
@@ -57,25 +60,12 @@ List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:audit+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e817126f-83b7-4450-a893-ac4e59460ae1@app.fastmail.com>
 
-> The pidfd_send_signal(), rt_sigqueueinfo() and rt_tgsigqueueinfo()
-> system calls are missing from the AUDIT_CLASS_SIGNAL* class. It seems
-> to be used only in kernel/auditfilter.c to increment the audit_signals
-> counter.
->=20
-> This counter is used to determine if information related to a target
-> process of a syscall audit rule using signals, such as its pid,
-> should be logged (e54dc2431d740a79a6bd013babade99d71b1714f).
->=20
-> Information related to signals sent via these system calls are
-> currently not correctly logged. The current patch adds it to the
-> AUDIT_CLASS_SIGNAL* class.
->=20
-> Signed-off-by: Jeffrey Bencteux <jeff@bencteux.fr>
+On Wed, Nov 11, 2026 at 12:18:01PM +0100, Arnd Bergmann wrote:
+> Why the #ifdef checks? These should be available on all architectures.
 
-Sashiko has reviewed this patch and found no issues.
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261111110200.3041=
-5-1-jeff@bencteux.fr?part=3D1
-
+I included them as convention, should they be removed?
