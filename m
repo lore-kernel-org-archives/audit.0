@@ -1,80 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=66.163.184.207
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794680096;
-	b=CG2PlVZyAPWrqHXcrlldCmnO8TiOQIVucgB1Q4wb5RHtFnF6Jq5Qj5YhtEjHOvmGvp5F
-	 eFj3QMPdXmzNzg6l4+fP7YCmr4xvx6UCAsr98pp7aQkVknTxM2nIQexocP+L/Nvla0v3R
-	 JrOHLVjArEiefymAo1S0o4+S9kCWj3WeQYfS/PVQyKQbpLo9mFjrxO/+5hLbEoX4O8/kV
-	 dhLr4Yp8Cj0IAjQ0KZ2yQz0lU9eG2/f389B4f+p6gErFcKu9m6p1cBRgg0VzGFIjOFlaU
-	 bjK+4qfOlKXVOpUmNeqG1y+ShZswvaTAV1Mza32aX146fNjt8CZSi9D/r/U+rsAEZhg==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794680096;
-	h=DMARC-Filter:DKIM-Signature:X-SONIC-DKIM-SIGN:X-YMail-OSG:X-Sonic-MF:
-	 X-Sonic-ID:Received:Received:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding:X-Mailer;
-	bh=BleYk407yT9mH7kAH7nAMJTsO4RLTrDZOb9d/32h1tE=;
-	b=GyjTTCASJmByS83GcQRgiAXrFeujkLiDUUut7W1VNnwhQtyBvxjZQrqEh1kozrWImEQA
-	 UE7kgUlwIfpid2ynRAtba1lNqWp4sK3TCkohYpzia06jSKNu02wDjmrFuAaEqP3yupkZV
-	 T4wWZeFhJVUDfPFBNrkFJVbEBT3PsDQDVznpDlJXsEXKe2RLCdhhhlQAjO4bTINTVW5IX
-	 uY96CrLBdzxN4nbsHZJ26dmJ1ixujVM5Qfw79xfTcm7jXmKwX2AJ+QGtFvONJ1PJc/ry5
-	 Ai+DmVcRrYttx2ODx5NW8A3i7lUaXxL8vosXRRAK2fDEDvplfDdzzlJINnIt9Rc/ZRw==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=schaufler-ca.com;
-	spf=pass smtp.mailfrom=schaufler-ca.com;
-	dkim=pass header.d=yahoo.com header.i=@yahoo.com header.a=rsa-sha256 header.s=s2048 header.b=NIfahSOe;
-	arc=none smtp.remote-ip=66.163.184.207
-Received: from sonic301-38.consmr.mail.ne1.yahoo.com (sonic301-38.consmr.mail.ne1.yahoo.com [66.163.184.207])
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.210.177
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1794858269;
+	b=Lh4q0rf35KCQIDH+BPIlMte7W/FUmOtAytjnEEvxW7I+LVj0fJzh+9UJ0F7V1qP1tfjj
+	 cLIghvcEdU53pOxreNLo6hxI/zq8ik/Y/49tUOFEx8nSdpm7SgD0mG/ktMG2yqFcvzVye
+	 OWnw4IDhwp8z3X9NYR77oOPhGo8CW2u5ZDwnjNwaybltC1qG9FfeiamuK94IR0c8xICvq
+	 9qpj+TNu5VbbUszsdR2mmGGuYGtBSVB7D0kZGdu35++phmEPK4fP7ArkgkhjTbQSpLDuZ
+	 M0lb6P86VcQBrOG06u6y9YwasX5joqwhQluZ6nlH8V193EWMwZAql4qMG5HKa3YS43Q==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794858269;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=0GXAZLfuLwKR837KM8+lDytn2Dxn6IUb2Zze7LoZlrA=;
+	b=ujDz91/fz8aGp3HGyUHRwphh0dLMzvLuebmuXJXwcS+22hVbAtuSYeXNWBvwyblS1Z/F
+	 xswKaPWJEhYkHbiSMDSmkIIQRK0VxVWQlLU7qgvoxUqnIn9FZBKaTwcJNnDwrc1wxQ/en
+	 R1gF97vCHUH4vViyvftH24UZvXvtv8JD+FdoDg/rUp3oakOKmK0CXFa8KId6PlpV2VyNJ
+	 4Cp8d7g1vXSiwS+oShPVWk47i+WecCiN8fybYuJ8iLwWJMhf1hpFEdZYqYCbu7AbExZt2
+	 bvUrC0F3WTdKQ7bNX5zVJ1wIYWywdE0gfp1kQcrEmSV7eKzdd62QyDI+X1efabgNcLA==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=paul-moore.com;
+	spf=pass smtp.mailfrom=paul-moore.com;
+	dkim=pass header.d=paul-moore.com header.i=@paul-moore.com header.a=rsa-sha256 header.s=google header.b=BB273hOl;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.210.177
+Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09098606A323
-	for <audit@vger.kernel.org>; Sat, 14 Nov 2026 18:14:55 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 09098606A323
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=schaufler-ca.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=schaufler-ca.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88904606A31C
+	for <audit@vger.kernel.org>; Mon, 16 Nov 2026 19:44:28 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 88904606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.a=rsa-sha256 header.s=s2048 header.b=NIfahSOe
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1794680095; bh=BleYk407yT9mH7kAH7nAMJTsO4RLTrDZOb9d/32h1tE=; h=Date:Subject:To:Cc:References:From:In-Reply-To:Content-Type:From:Subject:Reply-To:Content-Type; b=NIfahSOeSP4llq4FDwqsWp7toBqK+uLIN+4XdTnK5YvFZKGfS2khmPygy+ALsjWyO3C4/FZGtqGy7SYEAeoUC2vhyOvGhpLnbbprNd6SiStKpk45n7mVSE5UO62kcHcnW0aaWwAjs7+F3M3ncNnVdtY7XXcu0Jt2lr14r2SmwokPT5izVqgaCO7g9aXsgzaAs4q8Z9oKoby4EI5r6y/NrUtfTmy6BmsFczOFk/QaokmnqugE9mvd22TtR+U8FgibbEYOgaIEOgT7eqMAE6OlIymrbH3hguZnidd2lvS1obBFPeVTLLQzDHxkVH0LY0iWpuA9Yk1KD//6+baPR1Yn+Q==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1794680095; bh=mOIFE8fX/Gl137wkql/ygLaP/xBkJLcSPKXEuc9rl8h=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=PIznIOLXqv5+vuvIT9e5jp7WkNumn8N9u5uSxLnGOqKYUlxpGUJ88cAMgvK8Hd6imt8NIDLBq18MyrgsQg2A2sKkvY4Ji6PRFfD1M2tSWgc8w5On+b0Z1NnIE9HWUwSxzdo+KyhlVCta+GxJpJPdts4jogCnGIYtLt2YapPHrsTmQ/O2w6fTbJhXpKhR1MchOnp0LibO55VtV4BFcb7Ncz7aXA1HHD+k3+3emUBF8AqQM4jyaC/jV0N5V3XujxNdlC9h2ieQKQNUpSj5ErAM9pQrKwM/junBiQ2qnSY8cL4/Y4cvi1aXV6A0wYeuO4sLs9sRf1jxJm8Cg6fS2IWidQ==
-X-YMail-OSG: YE7jjKAVM1nOAp.RVJwdTtj8.3XQMUJjefbPhiV4FP5SdLjDqAR2iJHN_kUY2s5
- 6veYkZ83WZ_OtTAwAM.2LLQO47t7WhsQREIYOCcXG42SCvraxZGkoLYyHABRWlya5NWFMwSs25X1
- bdKiO3mRySWW4BH7sryxWRTMRVpv2tylfjtNA6KIA7_bgjxjYkLiORpWTJa2mWcHkfcodz947EmG
- zmvMUA9t34X.3pyDriRCr_i6O6HAOrV_Z1aIzoJG4Zjr_N9Vd7sOynwEVqByEyK7Vl5hwuiXosmR
- d.cu22r2YDCihuu.EPj1ZCKuzYqht9Dn28AbXgrBdjmQRJUt7OgnIbzvZKh3tL8IvnM.qU5rWbCy
- aI0bZek21VChUo3wEmVwY6gt1O1XsNC.zgQMXYkpMwkOf.Jl3Jdo3wHu2R.01WtxxcIhqH4A3VI.
- PZoPKroROEbuEub8iyNqJsSPB5WIA99JoyOCdvlsZooS5xdPV8mAscffAYKxKsYXgRCRe1J1fIaz
- .1SPP.h7CIgRU0qmHfgzlrDuQjncWiEbOcK2rN9NdeiN7jDtJwBBbriSvgbmDF3WOEksmEy1TKe6
- 5IbMiO4BQOgFqFkwRaE91L5AH3qbrrUlPWbxfrccx0X4HeNj_OPPHVxXFOtFZC1CjSlydzFBrH4q
- _OF8tp6WGXOFCvAoc5DuWgJfG77Io9T7gvyK1hoCam91nzsOM2KYDKcD.3srNgpm.dMrNjzkBQxn
- 85M75vg4bJ8HYx9VabF9FabIpUmRxEzJeQSTb.z2gVAhYGHvz7YjJfqFabTICVSxnTo9uoInrxW3
- cScmTgj_8WOXFrIw.7VT.ZCvq5vNJ25.KPQqUfZ6uYADlvFsMUAn8PRPoPxuvmI5qx2PIr1dDlSg
- 45TrIE_zkU9YyZrERqtgdynHztlbOnK36GmDA8wTE0qBco9xQ7TS9DVAJRXpQdHa5SSKUgdxub9m
- Xbdd5ZhhWYR6MM0zIjF3pnMCey1Xa9UmcFbzOy29v_pmVLEkyjfxO0QgY3y4hrIwSnV.TtmlKJ00
- 6qmUeZ5rrdr6rNm3xcyvjdni0NqlFB1Ei3_cMvYWk_g7HdHhySSwKy9ccMlo6eIQ1F6z1zJbWjAx
- _rJ6ME2vEL9ABOfyxXDvbHnTUbAFyw5IPxSxPCo8Png0Y6xzpFX3k7U1e3QlAxdNUCw3IPRTeOJf
- bG8blKVniS77v248rHne6Fv5b_ul1.uI9smPAW3DOiTDm2OVFsEzNBI6rZ3zkuL356efZfbSIXKZ
- JHj8ZfJPyoKS4TU2ndmwOLQwZHtKWIM_x2N6TbXmW2gXSA6wYwngmehCo8DVgWkFEmI4wSth6h9b
- 79JaGEQSuRSOmDgFw08LLjPH162COnlz1MNWdk7AyCQh_71PgseAkbLl3IdUiwsGjKL97fS3BUvm
- MxoYGZCGC7PXxInwO31.QwwHefqbH.jtVqMH8WM8LopHp5dR_V.tJD9w3uRpj5awq55pxAwxm.L4
- ARKRoBMKdBczNyTzvByFpe_pUUEJXBUKG16YjRPV5KcRYLYs.9Xsp_krgey1_9gVf5QKuzOKPkkk
- kB.4WfXA5p9hxPy6GrUif6eQSMi_HCUAq2IAMvnqvIwueQx6zn9BehppWe2j5ZiXe4rcsZyDrEzt
- Dch7j4J0McZbsJGq_L4I2ZJWXm6ljC9YMmwGzjrge8.nicJTfjAk8QtqqxY_a4ambjg8RQjOL9Dc
- 8EzkZw4CVKzyY0Ea2Bcn5VIe3TTxkDB1UtUIsS3U06CtwPI1ehNAQZFecbYD5pNULkNHKU6fsZlr
- bVUmp._ZqtZYqW2EKb3WFFn0etATQYHgerTpV_eRtKTcHAKm4mzmfcECmSfGObPlf_UH.xllCx9.
- X714L_Rn_6WqkSR1U0ZbT9nMUP335C6B5uXjxssHiixfNPb6q65QyPHwa8PQp1MX6yZsvJsRUfGL
- plLoE4LlJQ88iCL65q9zgsD0L7CEXHHjfy0GXaKvcfUlwzS9X7oH20DMscbgWuDn5LufThMXMlKR
- 9BmsraA7fwuPGfoSeoGSanyxg7_kMjXu1AaAwdfzH56qgwKP4VOfXzsrRuyQ7.LmnuCqseX9OGas
- y2bD8dWpMeTjGoGmEYevO_zEf8R4kPJIjnY54CVptnVgTQthgziEUstCpmmxcki1nZaPes4k3kFO
- Rvm_ZRwSDETICrVMaBmaG6HWMncQQuN6cuNNCCfQefzsmKWAxsNDLGZTzts7BU6OUnklhB0fzHYj
- pBsfA_0NZJUBCLXP.66c.8hhxxN69zZcPCdNW3_vYc0N2vmW9nxJMRav072zAHbWT8eOvUfGAGvq
- AlJOcf.lTolyRxiez0EKltmSHjA--
-X-Sonic-MF: <casey@schaufler-ca.com>
-X-Sonic-ID: 6bbeab83-61d7-44aa-ba66-e13ae870518d
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic301.consmr.mail.ne1.yahoo.com with HTTP; Sat, 14 Nov 2026 18:14:55 +0000
-Received: by hermes--production-gq1-fd7994565-ftb5j (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 93152b98dffd162510b663d2c83ea3b9;
-          Sat, 14 Nov 2026 18:14:49 +0000 (UTC)
-Message-ID: <58bb5c0e-6627-488f-a400-bf9cd5b60b22@schaufler-ca.com>
-Date: Sat, 14 Nov 2026 10:14:46 -0800
+	dkim=pass (2048-bit key, unprotected) header.d=paul-moore.com header.i=@paul-moore.com header.a=rsa-sha256 header.s=google header.b=BB273hOl
+Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-8b3577deeb0so1920062b3a.3
+        for <audit@vger.kernel.org>; Mon, 16 Nov 2026 11:44:28 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1794858268; cv=none;
+        d=google.com; s=arc-20260327;
+        b=HMy6MAqLqQBftPsXe0gXHpHGWCOYdgadGhDxAgOGpenS/XcOI0TsIw3w9/KFiZ+q6q
+         80KvCF9jZZRJGXYl53UOY4IOsQhbgTr0yb78x6tIWrUsRS11i5w2Qhqj2YHXigq4ORTK
+         /5hF0kT9opti6V1NxdshEYLYw0fElQGgIILwSRkJvfdK+5iBxzRTV4TJX/7BIvRaHxzQ
+         QcAznhx+1hrzxPe8tFU3IvXX+HZTv5eZth4aIMpzb/g6CQBX1IbQRwipKempyLJpbKI7
+         /oH4dA7cE7b1KWVcZ/5uuermiNMGaMyxHheIU/gAvpO0SCi2oQKIDJZJz5wHHkYj47tR
+         ATNw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=0GXAZLfuLwKR837KM8+lDytn2Dxn6IUb2Zze7LoZlrA=;
+        fh=e+VaDo8tboQkQBO6WXmb0g46/5t4AC7IQN67zgIwMBI=;
+        b=nhgQXrozsEq4em77QJpe6ldsiGneKQGkEivCglaHlzazvJaDFcewki0Gs8aPvar9Ee
+         jQNuiNk7dn3cVCAZAEkvqrimakg1uGZ2dyBGdbzY16a444udhcKB6qCp4/57e2sUNKIX
+         Sp8LLSrRUcgJ4YuEhUxpZBPyM8/PSEMYcfcaTjicz+N84mLjYVc3cBE1Z0CxrCJcOk/U
+         wZZ2i/3NRUUWNpkEhSwo+GIK96cwFUjYhWJh1ybpANMLL64JoEK6WAUi4O9467oUV1k3
+         8V/ZuCiEap8WcAMIMPjkPP6PhTUDal8lugm6HzhO8Z3Yicagj/1AyidOWspHgZB4pEfx
+         xdOg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1794858268; x=1795463068; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=0GXAZLfuLwKR837KM8+lDytn2Dxn6IUb2Zze7LoZlrA=;
+        b=BB273hOlp1RHicNqOSt1vyZZx7QGtqLiqUQwym4iCeGlGbQ5Sucmn3aYqnXXfAAaCr
+         pZvtAbeGyk6DSrDkYP8/v/Cxb7IAtTfhWbJ/nG8+19tmQLa/QUYN0ms2XUzO9EOwR06p
+         3jjf5Whzo9aT1swlNxQJx2BG6riCNowTM2BDcS0OO6PzQCyP8+uQcyUz1kBpXmxYbCOT
+         xxF9uJ5+bd75IHiD1qou/Tw9FSDQfCyhT19/r7mJmbXBROb4dTmn+tAkmpLEJG/U9CYv
+         Ky2sx9gEwcEhlCROugPhttKTwKUj4xI8DIyjit1a30pVEgN+O6HhBEtzu+O4tq3t0F4Y
+         ZXqg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794858268; x=1795463068;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=0GXAZLfuLwKR837KM8+lDytn2Dxn6IUb2Zze7LoZlrA=;
+        b=tEDz6y3YwLhE5/wT1lX5S+Hjfarse0mpLpxHShqFhYQBExagzHrt0Qr0d2YAt9A/K5
+         UE7fxRRVj3JK2ZmYP+dQgukg9DHaII68xfOeEMM7RPSxPuquWEF5PVg74JwufwU0MH6P
+         2ZEOsb5atFUnfQEqzfZmRcSgz667cRRpdMUTRVopsi2rONsMimE/VrqJZRGTETmmkCAr
+         GbTO+GBbN5Kd2WKkH5isIPLGo1ZRi9Q5hoGGxKrZtxrnc7FZvgyhfrsjyGxnTGK9QSiZ
+         +Vauk/JTIrkROlgCLT92az8flFviKP+IMrmeruxvX7+/BGMJ3DfJ7DnnauOlCS78RI3z
+         UHtA==
+X-Forwarded-Encrypted: i=1; AL+hErGzNoXNad326YQum8NOzl3PnpDdL7Idz10ucZl+/CqM0xxz5RHnqpw136ON7F7Yfw0sWnU1HA==@vger.kernel.org
+X-Gm-Message-State: APuU4Z94e3kak6SauBPnUdQVTL0XS1uwEhecWWhSON6qLRCmG4lWDgk3
+	RiWdXQV7NNErVYtzYUQqR0sOe4HoYqU3j1kTZtYjyQjMKfVJFCGBdnFO9K+bqbGPEbnbY4WK/J+
+	8HDMEeXEUio3wGfwnTb78Ed8i0+PUDgA0Zxxqy3V2
+X-Gm-Gg: AZFdTZeNhEvJZeT/WmJ9OZ7aG+byJUHWTS+LEhxOqjUhiC8FDWZDII4jqgOwvBbHR+l
+	80eEOvdFi2GmCqmMsQvubCQ4eAXtLsKmA8wwo+Qw3PMHBJOn/Ji6uHubFIyFn8iRPyKOtVo4A/a
+	j+G1TpxOfwDD5zUkjn+HEw9WGPUh9apepLmqmsbRkiM8CjoO0Q21XbX7vvYAUDwjaWG2Y0m1nzm
+	uli4gpjXNtUCnnAqHdSy8hm4x2om2vDgu2DeCYrzYt8rKfireGoiE+3qxuu+y5Jw+zGHO2/kWrW
+	R/RJM3QlwFFfZ+x7NM8COEwiEBof2MJDCgERB5CHlPgxDgLmKP1qJFQcrCO+QfqDInEZMQfQV2E
+	wwPXDuflle7Q2XIcfghfmZuMzkUwJsRydcsDC02VUxeT8/tjgEWK4mK/NqLLE3Yx4yqJd
+X-Received: by 2002:a17:90b:28cf:b0:3ac:8dfe:8ec9 with SMTP id
+ 98e67ed59e1d1-3b1b0b47416mr9502656a91.47.1794858267644; Mon, 16 Nov 2026
+ 11:44:27 -0800 (PST)
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Post: <mailto:audit@vger.kernel.org>
@@ -84,58 +104,109 @@ List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:audit+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] LSM: check if lsmprop_to_secctx call is supported by LSM
-To: Tomasz Unger <tomasz.unger@yahoo.pl>,
- Sebastian Bockholt <sebastian.bockholt@bevuta.com>
-Cc: linux-security-module@vger.kernel.org, paul@paul-moore.com,
- serge@hallyn.com, jmorris@namei.org, audit@vger.kernel.org,
- John Johansen <john.johansen@canonical.com>,
- Casey Schaufler <casey@schaufler-ca.com>
-References: <20260619171945.1617498-1-sebastian.bockholt@mail.networkname.de>
- <20261111211722.69639-1-tomasz.unger@yahoo.pl>
-Content-Language: en-US
-From: Casey Schaufler <casey@schaufler-ca.com>
-In-Reply-To: <20261111211722.69639-1-tomasz.unger@yahoo.pl>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Mailer: WebService/1.1.27017 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
+References: <20261031211258.1626829-2-Jeremy.Jean@oss.cyber.gouv.fr>
+ <b446cedf8a7977337389f8cdc1e5acce@paul-moore.com> <341401a3fa5863542319566051bde1ea@oss.cyber.gouv.fr>
+In-Reply-To: <341401a3fa5863542319566051bde1ea@oss.cyber.gouv.fr>
+From: Paul Moore <paul@paul-moore.com>
+Date: Mon, 16 Nov 2026 14:44:15 -0500
+X-Gm-Features: AclHuK9Yi3vY1OnQknBBHtyXXbTvT6zYozVYLT34YTLRhSFwwbQtKY8uTdDr2v0
+Message-ID: <CAHC9VhQECaSwpjUgSoCgZAgEphEk2jKnZFESn4ivM6JAjrC7HQ@mail.gmail.com>
+Subject: Re: [PATCH] audit: fix UAF in kauditd_send_queue()
+To: =?UTF-8?B?SsOpcsOpbXkgSmVhbg==?= <jeremy.jean@oss.cyber.gouv.fr>
+Cc: Bradley Morgan <brads@mainlining.org>, Eric Paris <eparis@redhat.com>, audit@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 11/11/2026 1:17 PM, Tomasz Unger wrote:
-> On Fri, 19 Jun 2026 19:19:45 +0200, Sebastian Bockholt wrote:
->> In include/linux/lsm_hook_defs.h, lsmprop_to_secctx is defined with
->> a default return value of -EOPNOTSUPP.
->> The function bpf_lsm_lsmprop_to_secctx, defined in
->> security/bpf/hooks.c, returns the hook's default value. Therefore,
->> directly returning the result of the bpf_lsm_lsmprop_to_secctx call
->> propagates an unchecked EOPNOTSUPP error.
-> [...]
+On Thu, Nov 5, 2026 at 2:44=E2=80=AFPM J=C3=A9r=C3=A9my Jean
+<jeremy.jean@oss.cyber.gouv.fr> wrote:
+> On 2026-11-04 21:36, Paul Moore wrote:
+> > On Oct 31, 2026 Bradley Morgan <brads@mainlining.org> wrote:
+> >>
+> >> kauditd_send_queue() grabs an extra reference to the skb header before
+> >> netlink_unicast() since it may need to retry a failed send. If unicast
+> >> delivery reuses that same header, the receive path stores the
+> >> destination socket in skb->sk without taking a socket reference.
+> >> Consequently, after the receiver consumes the skb and closes the
+> >> socket, the extra reference taken on the skb header makes kauditd
+> >> release a header whose skb->sk points to freed socket storage.
+> >>
+> >> KASAN reports a UAF as:
+> >>
+> >>   BUG: KASAN: slab-use-after-free in sock_rfree+0x44/0x140
+> >>   Write of size 4 at addr ffff888004f94140 by task kauditd/31
+> >>
+> >> Clone the header before netlink_unicast(), then use the clone for
+> >> delivery and keep the original skb only for retries. If cloning fails,
+> >> handle it as -EAGAIN so the send can be retried.
+> >>
+> >> Fixes: f3d357b09295 ("Audit: save audit_backlog_limit audit messages
+> >> in case auditd comes back")
+> >> Cc: stable@vger.kernel.org
+> >> Signed-off-by: J=C3=A9r=C3=A9my Jean <Jeremy.Jean@oss.cyber.gouv.fr>
+> >> ---
+> >>  kernel/audit.c | 11 +++++++----
+> >>  1 file changed, 7 insertions(+), 4 deletions(-)
+> >>
+> >> diff --git a/kernel/audit.c b/kernel/audit.c
+> >> index 9412af9144bc..5e739fa606be 100644
+> >> --- a/kernel/audit.c
+> >> +++ b/kernel/audit.c
+> >> @@ -790,6 +790,7 @@ static int kauditd_send_queue(struct sock *sk, u32
+> >> portid,
+> >>  {
+> >>      int rc =3D 0;
+> >>      struct sk_buff *skb =3D NULL;
+> >> +    struct sk_buff *skb_to_send;
+> >>      struct sk_buff *skb_tail;
+> >>      unsigned int failed =3D 0;
+> >>
+> >> @@ -810,9 +811,11 @@ static int kauditd_send_queue(struct sock *sk,
+> >> u32 portid,
+> >>              }
+> >>
+> >>  retry:
+> >> -            /* grab an extra skb reference in case of error */
+> >> -            skb_get(skb);
+> >> -            rc =3D netlink_unicast(sk, skb, portid, 0);
+> >> +            /* Keep the original header unowned for retries. */
+> >> +            skb_to_send =3D skb_clone(skb, GFP_KERNEL);
+> >
+> > As Bradley pointed out, this appears a little confusing as the existing
+> > approach of skb_get()+netlink_unicast() should end up doing something
+> > very similar to what you are proposing due to netlink_unicast() calling
+> > into netlink_trim() which in this case should always end up doing a
+> > skb_clone().  I'm sure I'm missing something, can you help me
+> > understand
+> > why this proposed patch is different and solves the problem?
+> >
+> > Also, do you have a reproducer for this?
 >
->> -		return scall->hl->hook.lsmprop_to_secctx(prop, cp);
->> +		error = scall->hl->hook.lsmprop_to_secctx(prop, cp);
->> +		if (error == -EOPNOTSUPP)
->> +			continue;
->> +		return error;
-> Hi,
+> Dear Bradley and Paul,
 >
-> I ran into the same problem independently and would like to revive this
-> patch. It fixes a regression that is still present in v7.4-rc2, in
-> next-20261111 and in the current audit and lsm dev branches.
+> Thanks for the comments. The fix is closely related to the current
+> code but the main difference is that netlink_trim() does not always
+> reach its skb_shared() clone path. Moving the clone earlier in the
+> execution avoids the UAF.
 
-As currently implemented the LSM infrastructure supports only one
-LSM providing conversions between the LSM security state (lsmprop or secid)
-and the security context (secctx). I have been working on removing
-this restriction for the past 16 years. It isn't done, and every time
-someone tries to do something that expects otherwise it breaks. The
-BPF LSM registers hooks that do nothing for (most) every case. That
-only works if the BPF LSM is registered after any LSM that provides
-real hooks. We've told y'all that many times.
+Thanks for the detail.  With that in mind, I think doing our own
+clone() is okay, but the ternary operator for error handling is a
+little uglier than I would like in this case.  Removing that, tweaking
+some variable names and comments, how about something like this:
 
-If you really want the BPF LSM to stack properly you have options.
-You can stop registering hooks that can't function properly in the
-stack you want to use. You can help with getting the stacking complete.
-You can continue to ask for individual tweeks each time they come up.
+  /* clone the skb for retries in case of error */
+  skb_clone =3D skb_clone(...);
+  if (skb_clone)
+    rc =3D netlink_unicast(...);
+  else
+    rc =3D -EAGAIN;
+  if (rc < 0) {
+    ...
+  } else {
+    /* consume the clone and continue */
+    consume_skb(skb_clone);
+    failed =3D 0;
+  }
 
-Maybe taking this change is the best we can hope for. My frustration
-level is getting pretty high with the whole situation.
-
+--=20
+paul-moore.com
