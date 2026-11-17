@@ -1,56 +1,58 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=51.159.188.251
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=113.46.200.225
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794911782;
-	b=F+2ELV3n6ievyKYKvHhT/0i1AYOJvpbfvUs5o1gY29h4mwH6l4W2YcEi4DKHQ3dcS4VR
-	 l1W/6BGCSsNFVvLmvmFssclAU4VBzPc4vCjefHLwb1G3mQyuIqLcfRHZYLS2gbunub/QU
-	 UpAjN09ill+d+mk3gP7sfk9BUQe+DNX5eOJz+LFBstejeSvktPejHbbnefp2BiryXhYn3
-	 Gf9DjjingGgdAgAkShQhAJEVAJ7IKltYLQ5KeideitYUtEeY3cr99I77tkdEjlNGC/QBF
-	 J4AY1ZMhlqu4rm942QXWgPX4uwwzdx20xQgYcQdnMSOqFUF09Jm8di0zdbfYEd1RGzQ==
+	t=1794922504;
+	b=pTGKeVOT84BrRgE+W0FRhVd70qoPbB5pf0UvqkTJ0Pn6PkDV82d+0mY0bQIE6zKHt7LN
+	 k5vJTaRNO1al8oYYZOA2zC0c9oHkyKK5WqlRnh7Us6Yf65+jI1n3bf1BcPvs870vynctr
+	 YuuO/lmufaFEdqaKua4WHZ/9GZGKNnbqjpwSrQkXetRXIrueyS+W44a6Vmx+nXcpPbetD
+	 UWmA2yy0K+dgXMtgJMrIw7MN9Jdt+iNQgc+7J4mXopUdaL5jAWpVbqLnJ6lrp2FloOsCR
+	 mi+AL5hbAqzlm0gdTKUwFTDZK6nch8lRBeazG97Hwju1D1ov4C4C88llBBVbwv1l/ZA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794911782;
-	h=DMARC-Filter:DKIM-Signature:Received:MIME-Version:Date:From:To:Cc:
-	 Subject:In-Reply-To:References:User-Agent:Message-ID:X-Sender:
-	 Content-Type:Content-Transfer-Encoding:X-AntiAbuse:X-AntiAbuse:
-	 X-AntiAbuse:X-AntiAbuse:X-AntiAbuse:X-Get-Message-Sender-Via:
-	 X-Authenticated-Sender:X-Source:X-Source-Args:X-Source-Dir;
-	bh=Du4p69xKr9+AmnSRpFKYJ25KgktaivwBhjM59KvpxlI=;
-	b=eJm2l6h3l9Ah2ohfsOT9l1NIwyHyj5vV0wq+8uvGqiW7S5ZQyoZIp6wT+pQgj7LU1aTY
-	 mT48b6yU1iL84q2ysmIEXAvuCh6CWLokeftMHKNaPWUYSPp63xZsS/HrY1wNf7XpWMOva
-	 slqvMu5x1G0oW4Lnmp+tz5xrzwDvbKIdVWOpTZuCwrvkFivNALrCixwJ9ixHIYxNXDMar
-	 kJ5uvrhGQ2P0wxfxsvhAmYqPWd03U7I/Qkxa6wu0+7Mexv0GyzoqyqsOxiPxAzGwf2Wk3
-	 NCfod96IaQ01m6pLX3GZaxIOrjPhHqxshLILT/gz2vZac0PcoVz23axIsWjTz8sh63A==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794922504;
+	h=DMARC-Filter:dkim-signature:Received:Received:Received:Message-ID:
+	 Date:MIME-Version:User-Agent:Subject:To:CC:References:
+	 Content-Language:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding:X-Originating-IP:X-ClientProxiedBy;
+	bh=km13M/R7MtWwUTRfoPj3IOtgS+WhJstvma3kfUvt5g0=;
+	b=aqsbUq2gwnEs80pFd9C24VHETN7EDJ0GVTn8AOI8NJDXuxoMbV2+sVQOqkc2suhrNG0Y
+	 vOMk8K1fI4XM+zR5XxsNBDi+c8j/Es8Avx0SBM5aJvBdr12CMgl7FTRnHhsqDI1p3YMT7
+	 XYwxTyHRBgQnfpx1kB6vh+UDN/VsdBEPMsh3+MfkpHQBMXR27KrUcc+dc2sYiSQITjZCg
+	 ocT+XHovoADPK4jn/oCYT5tz/pGwb0UJNfwUhlRXyVWusj51i4GQgkUdXXwKp4qeQIOrg
+	 mgl5t0pfMfxjE7txHxpNIBCjYtfPMtnsH8z62CcEd7JEVoSDgNVT/uIwT2u7Q9pNSTw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=oss.cyber.gouv.fr;
-	spf=pass smtp.mailfrom=oss.cyber.gouv.fr;
-	dkim=pass header.d=oss.cyber.gouv.fr header.i=@oss.cyber.gouv.fr header.a=rsa-sha256 header.s=default header.b=KR+fCUHu;
-	arc=none smtp.remote-ip=51.159.188.251
-Received: from oss.cyber.gouv.fr (oss.cyber.gouv.fr [51.159.188.251])
+	dmarc=pass header.from=huawei.com;
+	spf=pass smtp.mailfrom=huawei.com;
+	dkim=pass header.d=huawei.com header.i=@huawei.com header.a=rsa-sha256 header.s=dkim header.b=hDxobDHF;
+	arc=none smtp.remote-ip=113.46.200.225
+Received: from canpmsgout10.his.huawei.com (canpmsgout10.his.huawei.com [113.46.200.225])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9445606A31C;
-	Tue, 17 Nov 2026 10:36:21 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C9445606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.cyber.gouv.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.cyber.gouv.fr
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5741A606A31C;
+	Tue, 17 Nov 2026 13:35:01 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5741A606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=oss.cyber.gouv.fr header.i=@oss.cyber.gouv.fr header.a=rsa-sha256 header.s=default header.b=KR+fCUHu
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=oss.cyber.gouv.fr; s=default; h=Content-Transfer-Encoding:Content-Type:
-	Message-ID:References:In-Reply-To:Subject:Cc:To:From:Date:MIME-Version:
-	Reply-To:Sender:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=Du4p69xKr9+AmnSRpFKYJ25KgktaivwBhjM59KvpxlI=; b=KR+fCUHuTSr0QuKIvPJNzKc9N4
-	/wPHeFctJ7tPjs3IYYPaRv8Jc5m4a/diEFghdBPeZ3rQkJ+0f4aw3LYhJsHZoeSo7HXVyBHfigKYM
-	1N6gUNJdLO6YFdstE3Y80qT89dSHTb4midjKMJMukiLXxB6Zmv/uVMfSI3W0a7oTPuJgRPuifRX+l
-	0U41+lMRI0+AHlEO2i0AEDA19DBnUAdEAmk9nOLHhpCWqS/DHc287GllMo1Lso7AxWY6KHLqrNEYh
-	4fA2+KfsEBw46LchX873bFrjb/NA3oyg4MWGBQTClkx9FLtkr75yRbwdJ+OOfI+SQd0O6fePwuq2w
-	3ycHXtcA==;
-Received: from [::1] (port=35722 helo=pf-012.whm.fr-par.scw.cloud)
-	by pf-012.whm.fr-par.scw.cloud with esmtpa (Exim 4.100.1)
-	(envelope-from <jeremy.jean@oss.cyber.gouv.fr>)
-	id 1xTGY1-00000005qNO-1NB8;
-	Tue, 17 Nov 2026 11:36:19 +0100
+	dkim=pass (1024-bit key, unprotected) header.d=huawei.com header.i=@huawei.com header.a=rsa-sha256 header.s=dkim header.b=hDxobDHF
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=km13M/R7MtWwUTRfoPj3IOtgS+WhJstvma3kfUvt5g0=;
+	b=hDxobDHFEtCP4tvrJnX8VNTk1aTNP5hPXrTGuFqIF4WB9mp+vmzYua3yhTbr8c14Z45yLsIdp
+	n+4dLz2fh3BG2id+KeJoMCmULG9Hx0xEyuwHPqOiypHzlVS8WyFN4Jdu4sAf+HaUpG3pZL4nUaV
+	bs2+uw99pBZf9A+SU1Lpeu4=
+Received: from mail.maildlp.com (unknown [172.19.163.200])
+	by canpmsgout10.his.huawei.com (SkyGuard) with ESMTPS id 4jTQh44MK1z1K98f;
+	Tue, 17 Nov 2026 21:34:44 +0800 (CST)
+Received: from whupemp200008.china.huawei.com (unknown [7.152.184.21])
+	by mail.maildlp.com (Postfix) with ESMTPS id B4CA440563;
+	Tue, 17 Nov 2026 21:34:57 +0800 (CST)
+Received: from [10.174.176.113] (10.174.176.113) by
+ whupemp200008.china.huawei.com (7.152.184.21) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.45; Tue, 17 Nov 2026 21:34:56 +0800
+Message-ID: <b15eb6b1-6b6e-44f4-b2ac-e348a8aa5121@huawei.com>
+Date: Tue, 17 Nov 2026 21:34:29 +0800
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Post: <mailto:audit@vger.kernel.org>
@@ -60,191 +62,147 @@ List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:audit+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Date: Tue, 17 Nov 2026 11:36:19 +0100
-From: =?UTF-8?Q?J=C3=A9r=C3=A9my_Jean?= <jeremy.jean@oss.cyber.gouv.fr>
-To: Paul Moore <paul@paul-moore.com>
-Cc: Bradley Morgan <brads@mainlining.org>, Eric Paris <eparis@redhat.com>,
- audit@vger.kernel.org, linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH] audit: fix UAF in kauditd_send_queue()
-In-Reply-To: <CAHC9VhQECaSwpjUgSoCgZAgEphEk2jKnZFESn4ivM6JAjrC7HQ@mail.gmail.com>
-References: <20261031211258.1626829-2-Jeremy.Jean@oss.cyber.gouv.fr>
- <b446cedf8a7977337389f8cdc1e5acce@paul-moore.com>
- <341401a3fa5863542319566051bde1ea@oss.cyber.gouv.fr>
- <CAHC9VhQECaSwpjUgSoCgZAgEphEk2jKnZFESn4ivM6JAjrC7HQ@mail.gmail.com>
-User-Agent: Roundcube Webmail/1.6.20
-Message-ID: <a9f7228c3ab1989bc1b26a0f4e686293@oss.cyber.gouv.fr>
-X-Sender: jeremy.jean@oss.cyber.gouv.fr
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 8bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - pf-012.whm.fr-par.scw.cloud
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - oss.cyber.gouv.fr
-X-Get-Message-Sender-Via: pf-012.whm.fr-par.scw.cloud: authenticated_id: jeremy.jean@oss.cyber.gouv.fr
-X-Authenticated-Sender: pf-012.whm.fr-par.scw.cloud: jeremy.jean@oss.cyber.gouv.fr
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] audit: fix incomplete NETFILTER_PKT records and return
+ void
+To: Pablo Neira Ayuso <pablo@netfilter.org>
+CC: Paul Moore <paul@paul-moore.com>, <audit@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, Eric Paris <eparis@redhat.com>, Ricardo
+ Robaina <rrobaina@redhat.com>, Florian Westphal <fw@strlen.de>,
+	<netfilter-devel@vger.kernel.org>, <coreteam@netfilter.org>,
+	<zhangchangzhong@huawei.com>
+References: <20261110122939.45373-1-jiangjiehua1@huawei.com>
+ <avMXzjF9hIcTVc9c@chamomile>
+Content-Language: en-US
+From: "jiangjiehua (A)" <jiangjiehua1@huawei.com>
+In-Reply-To: <avMXzjF9hIcTVc9c@chamomile>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: kwepems100002.china.huawei.com (7.221.188.206) To
+ whupemp200008.china.huawei.com (7.152.184.21)
 
-On 2026-11-16 20:44, Paul Moore wrote:
-> On Thu, Nov 5, 2026 at 2:44 PM Jérémy Jean
-> <jeremy.jean@oss.cyber.gouv.fr> wrote:
->> On 2026-11-04 21:36, Paul Moore wrote:
->> > On Oct 31, 2026 Bradley Morgan <brads@mainlining.org> wrote:
->> >>
->> >> kauditd_send_queue() grabs an extra reference to the skb header before
->> >> netlink_unicast() since it may need to retry a failed send. If unicast
->> >> delivery reuses that same header, the receive path stores the
->> >> destination socket in skb->sk without taking a socket reference.
->> >> Consequently, after the receiver consumes the skb and closes the
->> >> socket, the extra reference taken on the skb header makes kauditd
->> >> release a header whose skb->sk points to freed socket storage.
->> >>
->> >> KASAN reports a UAF as:
->> >>
->> >>   BUG: KASAN: slab-use-after-free in sock_rfree+0x44/0x140
->> >>   Write of size 4 at addr ffff888004f94140 by task kauditd/31
->> >>
->> >> Clone the header before netlink_unicast(), then use the clone for
->> >> delivery and keep the original skb only for retries. If cloning fails,
->> >> handle it as -EAGAIN so the send can be retried.
->> >>
->> >> Fixes: f3d357b09295 ("Audit: save audit_backlog_limit audit messages
->> >> in case auditd comes back")
->> >> Cc: stable@vger.kernel.org
->> >> Signed-off-by: Jérémy Jean <Jeremy.Jean@oss.cyber.gouv.fr>
->> >> ---
->> >>  kernel/audit.c | 11 +++++++----
->> >>  1 file changed, 7 insertions(+), 4 deletions(-)
->> >>
->> >> diff --git a/kernel/audit.c b/kernel/audit.c
->> >> index 9412af9144bc..5e739fa606be 100644
->> >> --- a/kernel/audit.c
->> >> +++ b/kernel/audit.c
->> >> @@ -790,6 +790,7 @@ static int kauditd_send_queue(struct sock *sk, u32
->> >> portid,
->> >>  {
->> >>      int rc = 0;
->> >>      struct sk_buff *skb = NULL;
->> >> +    struct sk_buff *skb_to_send;
->> >>      struct sk_buff *skb_tail;
->> >>      unsigned int failed = 0;
->> >>
->> >> @@ -810,9 +811,11 @@ static int kauditd_send_queue(struct sock *sk,
->> >> u32 portid,
->> >>              }
->> >>
->> >>  retry:
->> >> -            /* grab an extra skb reference in case of error */
->> >> -            skb_get(skb);
->> >> -            rc = netlink_unicast(sk, skb, portid, 0);
->> >> +            /* Keep the original header unowned for retries. */
->> >> +            skb_to_send = skb_clone(skb, GFP_KERNEL);
->> >
->> > As Bradley pointed out, this appears a little confusing as the existing
->> > approach of skb_get()+netlink_unicast() should end up doing something
->> > very similar to what you are proposing due to netlink_unicast() calling
->> > into netlink_trim() which in this case should always end up doing a
->> > skb_clone().  I'm sure I'm missing something, can you help me
->> > understand
->> > why this proposed patch is different and solves the problem?
->> >
->> > Also, do you have a reproducer for this?
->> 
->> Dear Bradley and Paul,
->> 
->> Thanks for the comments. The fix is closely related to the current
->> code but the main difference is that netlink_trim() does not always
->> reach its skb_shared() clone path. Moving the clone earlier in the
->> execution avoids the UAF.
+Thanks for the review.
+
+On 11/10/2026 9:10 PM, Pablo Neira Ayuso wrote:
+> Hi,
 > 
-> Thanks for the detail.  With that in mind, I think doing our own
-> clone() is okay, but the ternary operator for error handling is a
-> little uglier than I would like in this case.  Removing that, tweaking
-> some variable names and comments, how about something like this:
+> On Tue, Nov 10, 2026 at 08:29:39PM +0800, JiangJieHua wrote:
+>> Commit f19590b07cb6 ("audit: add audit_log_nf_skb helper function") and
+>> commit 15b0c43aa621 ("audit: include source and destination ports to
+>> NETFILTER_PKT") introduced audit_log_nf_skb() and its transport header
+>> parsing.
 > 
->   /* clone the skb for retries in case of error */
->   skb_clone = skb_clone(...);
->   if (skb_clone)
->     rc = netlink_unicast(...);
->   else
->     rc = -EAGAIN;
->   if (rc < 0) {
->     ...
->   } else {
->     /* consume the clone and continue */
->     consume_skb(skb_clone);
->     failed = 0;
->   }
+> I guess conntrack is not enough in your scenario. How does your
+> ruleset look like?
+> 
 
-Hello Paul,
+The main scenario is conntrack not being enabled. The ruleset is:
 
-Thanks for the answer and the suggestion. Here is a rework of the
-code to follow the overall structure you suggested.
+     Bridge table: nat
+     Bridge chain: PREROUTING, entries: 1, policy: ACCEPT
+     -j AUDIT
 
-I have added a call to skb_queue_head() on the skb_clone() failure
-path to return the unsent skb to its queue to retry sending later.
+     table inet filter {
+             chain output {
+                  type filter hook output priority filter; policy accept;
+                  log level audit
+             }
+     }
 
-If this looks good enough to you, I can submit a v2.
+Even with conntrack enabled, two cases are still affected:
+- The bridge nat PREROUTING hook runs at priority -300, before conntrack 
+    at -200.AUDIT sees the packet before conntrack has validated, 
+trimmed, or defragged it.
+- Normal IPv6 packets with extension headers. ip6_rcv_core() sets 
+transport_header to the first extension header, and conntrack does not 
+update it. This makes skb_transport_offset() incorrect, so we read ports 
+from the wrong location.
 
-Regards,
-Jérémy
+> More comments below.
+> 
+>> The helper returned early with -ENOMEM when skb_header_pointer() failed for
+>> the network header, and the later port parsing did the same for the
+>> transport header.  Such an early return skips the remaining fields, so the
+>> NETFILTER_PKT record is emitted with only "mark=" and without the address
+>> and protocol fields.
+>> 
+>> Log the address and protocol once the network header is available, and
+>> route the error paths through placeholder logging: a missing network header
+>> logs "saddr=? daddr=? proto=-1", as the pre-refactoring callers did, and a
+>> transport header that cannot be read where one is expected logs
+>> "sport=? dport=?".  The same "proto=-1" placeholder is used for an
+>> unknown bridge ethertype and an unknown nfproto, which previously printed
+>> "proto=?".
+>> 
+>> Validate the IP version and the IPv4 header length, since bridge packets
+>> can reach the audit hook without the receive path validating them.  Locate
+>> the transport header from the network header instead of relying on
+>> skb_transport_offset(), which is not guaranteed to point at the transport
+>> header.  For IPv4, a non-first fragment or an unreadable transport header
+>> logs unknown ports; protocols without ports are unaffected.  For IPv6, a
+>> non-first fragment leaves proto at IPPROTO_FRAGMENT (44) and a negative
+>> offset from ipv6_skip_exthdr() means the extension header chain cannot be
+>> parsed; in both cases the transport header is not available, so keep the
+>> addresses and protocol and do not log ports.
+>> 
+>> Both callers ignore the return value (net/netfilter/nft_log.c and
+>> net/netfilter/xt_AUDIT.c), so make the helper return void instead of
+>> inventing error codes for a value nobody consumes.
+>> 
+>> A packet whose network header cannot be read now logs:
+>> 
+>>   before: mark=0x0
+>>   after:  mark=0x0 saddr=? daddr=? proto=-1
+> [...]
+>> diff --git a/kernel/audit.c b/kernel/audit.c
+>> index 631d6d4a23cf..c5997077a46b 100644
+>> --- a/kernel/audit.c
+>> +++ b/kernel/audit.c
+>> @@ -2511,8 +2511,8 @@ void audit_log_path_denied(int type, const char *operation)
+>>  	audit_log_end(ab);
+>>  }
+>>  
+>> -int audit_log_nf_skb(struct audit_buffer *ab,
+>> -		     const struct sk_buff *skb, u8 nfproto)
+>> +void audit_log_nf_skb(struct audit_buffer *ab,
+>> +		      const struct sk_buff *skb, u8 nfproto)
+>>  {
+>>  	/* find the IP protocol in the case of NFPROTO_BRIDGE */
+>>  	if (nfproto == NFPROTO_BRIDGE) {
+>> @@ -2532,24 +2532,32 @@ int audit_log_nf_skb(struct audit_buffer *ab,
+>>  	case NFPROTO_IPV4: {
+>>  		struct iphdr iph;
+>>  		const struct iphdr *ih;
+>> +		int thoff;
+>> +		bool frag;
+>>  
+>>  		ih = skb_header_pointer(skb, skb_network_offset(skb),
+>>  					sizeof(iph), &iph);
+>>  		if (!ih)
+>> -			return -ENOMEM;
+>> +			goto unknown_proto;
+>> +		if (ih->version != 4 || ih->ihl < 5)
+>> +			goto unknown_proto;
+>> +
+>> +		thoff = skb_network_offset(skb) + ih->ihl * 4;
+>> +		frag = ntohs(ih->frag_off) & IP_OFFSET;
+> 
+> Are we going to add all these validations everywhere in the code?
+> 
+> So we will have to validate that the IPv4 header is well-formed over
+> and over again?
 
-diff --git a/kernel/audit.c b/kernel/audit.c
-index 9412af9..ed050f1 100644
---- a/kernel/audit.c
-+++ b/kernel/audit.c
-@@ -790,6 +790,7 @@ static int kauditd_send_queue(struct sock *sk, u32 
-portid,
-  {
-         int rc = 0;
-         struct sk_buff *skb = NULL;
-+       struct sk_buff *skb_retry;
-         struct sk_buff *skb_tail;
-         unsigned int failed = 0;
+The version/ihl checks were added to handle malformed headers seen by 
+bridge hooks. Should we drop these checks, or move the validation into a 
+common helper as Florian suggested?
 
-@@ -810,10 +811,24 @@ static int kauditd_send_queue(struct sock *sk, u32 
-portid,
-                 }
+For normal packets, I think we should keep the fixes for non-first 
+fragments and transport offset calculation, since those are unrelated to 
+malformed headers.
 
-  retry:
--               /* grab an extra skb reference in case of error */
--               skb_get(skb);
--               rc = netlink_unicast(sk, skb, portid, 0);
-+               /* clone the skb for retries in case of error */
-+               skb_retry = skb_clone(skb, GFP_KERNEL);
-+               if (skb_retry)
-+                       rc = netlink_unicast(sk, skb, portid, 0);
-+               else
-+                       rc = -EAGAIN;
-                 if (rc < 0) {
-+                       if (!skb_retry) {
-+                               /* No send was attempted, so return the 
-skb for a later pass. */
-+                               skb_queue_head(queue, skb);
-+                               rc = 0;
-+                               break;
-+                       }
-+
-+                       if (skb == skb_tail)
-+                               skb_tail = skb_retry;
-+                       skb = skb_retry;
-+
-                         /* send failed - try a few times unless fatal 
-error */
-                         if (++failed >= retry_limit ||
-                             rc == -ECONNREFUSED || rc == -EPERM) {
-@@ -827,8 +842,8 @@ retry:
-                         } else
-                                 goto retry;
-                 } else {
--                       /* skb sent - drop the extra reference and 
-continue */
--                       consume_skb(skb);
-+                       /* consume the clone and continue */
-+                       consume_skb(skb_retry);
-                         failed = 0;
-                 }
-         }
+Separately, I changed the unknown protocol placeholder from "?" to "-1" 
+because ausearch parses proto=? as proto=ip (strtoul("?") returns 0, and 
+protocol 0 is "ip").
+
+Thanks,
+JiangJieHua
