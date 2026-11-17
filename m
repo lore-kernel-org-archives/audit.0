@@ -1,88 +1,67 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.219.44
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=84.16.66.173
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794867108;
-	b=h8AIPAvvg0Mc6M661V4YKLkN0UxVB/bllilP2f/1guL5Vbzh38sxs3fQwVMKS7zEdPZS
-	 H20uoR7vQlAYi+2pdDaG+r0KnZcxRxoLCAUEn7/dcXjNnpebbHYVHNfwZrwMM4mlvMTWv
-	 /PLtfebOmA7LXGJ84YExU5zahL9+4is8AqUHFhG2gv9o1/10AcKAtsayBzwY2gpf6qS4j
-	 mWHyxiVt2pjwu2AmpIdWMnjlhP6LQuMgucX62gPWQ/jKaIIWgDq2I+A/+DD3p1mkIUnLd
-	 Kc19VTOZ0OCdVLW2+8DfUTugvxqMU+8Nr3TrpLyFVQ+1F4VcKsZVoB65t10/8GuW7Sw==
+	t=1794910883;
+	b=TqfoaGcvQ/wGzp8K956j1VmJrx5FIjSjf6GAZxP/N/etKIftNGlAnT8fj6f/T6HowoCB
+	 9RcXgaHIwdcArznTkX1+tSayFSFe6orS6jBhhOz4ZuWZjAXUHwD+p1pwKwnwMbxyICFb+
+	 bluzHbXXacpBfFpPRmFh5Dnlf7c4MOeNsO1+cfOGcmPa6I3xCv1b8r1OQs/aGVA/SQ22f
+	 aR2R7XiMmMTRLL8+0RoM0DQHUWLeEqpxpXVITn4SIFBZcvKMxbznSh4rI7MSqYkq/9Bu1
+	 Mxg2eJjk7xQvlMbEUmASEmlW2HIvtqHhe+m+wAYMR70SlMZXmChv1dN/XW0eCr0JGrQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794867108;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Date:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	 X-Mailer:From:To:Subject:References:In-Reply-To;
-	bh=zQCKrk04z8HiyEK2+mQt2z6FOfzuq/IEX/OFmVwtW+Q=;
-	b=XIGsYoZ65aumvDZj8H2ui/xQJ7b3QzkqTNhxGjc9Cyk/kubsDedbItO8JNnULDEhaj71
-	 RH8q7yEpgZo92wVZklt58t30a7iOq7v63cODkVuPUbIeiHapZZqkpdX+ERlozyQvFdX3E
-	 Aq1+lItY7vFzwd+lJwSxJCCar6Fs6VHSRgjciedA0ZVNbRwiH1YSQ0P4NFibC5oznO+/x
-	 pRg7c5w7mfLvB7JSYStLxupenL2Y+cuzdN7j57xV352sk6kbx4a+h9yqkfBD/NZtPnHAE
-	 nkTnldtOdNZiR4B/J980iVrxxdFyq5egP961luDjsEGqNQpS5TyCzwtDpNqgMoguRWw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794910883;
+	h=DMARC-Filter:Received:DKIM-Signature:Received:From:To:Cc:Subject:
+	 Date:Message-ID:In-Reply-To:References:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:X-Infomaniak-Routing;
+	bh=tg8FlYB50zB5hXH7HwYS1/iWqoRpxATYxZpYu9D+G7M=;
+	b=SlzZYhNY7iUsBORaxy2/oLa6l0Zio8XMLKxo/pBOllYFX2nUpqJ7SObDgYIh/krYAk/0
+	 girn0F1GXp8teuNmVUdhJrssAt0hw8Sn2uBUqStImZf3XiWiwVoQmdfvkUSWO/i+YwyYk
+	 4dnaaw/k3Wv52VuDX+wJKKQ2slAfhCxJg8qO7IsOxVVzXBjkv7g4YP5vyeN+1rTfXbph6
+	 dw12FcnnIGDVVcLEBWmhxXi6x7Eru6uAqSfAGCfhVcjU9O1PBZUcO2f7ni4VAw7ugZGfz
+	 S/HuM70vcTr3xMFJ/f+MxQmATBLuW0Grhmkwb6GtjPn8dGjD2BUVpIxjiYDnM/Wc2WQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=paul-moore.com;
-	spf=pass smtp.mailfrom=paul-moore.com;
-	dkim=pass header.d=paul-moore.com header.i=@paul-moore.com header.a=rsa-sha256 header.s=google header.b=TM5Ybia6;
-	arc=none smtp.remote-ip=209.85.219.44
-Received: from mail-qv1-f44.google.com (mail-qv1-f44.google.com [209.85.219.44])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dmarc=none header.from=digikod.net;
+	spf=pass smtp.mailfrom=digikod.net;
+	dkim=pass header.d=digikod.net header.i=@digikod.net header.a=rsa-sha256 header.s=20191114 header.b=EPNo++yF;
+	arc=none smtp.remote-ip=84.16.66.173
+Received: from smtp-42ad.mail.infomaniak.ch (smtp-42ad.mail.infomaniak.ch [84.16.66.173])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFFA1606A31C
-	for <audit@vger.kernel.org>; Mon, 16 Nov 2026 22:11:47 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DFFA1606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5690606A330
+	for <audit@vger.kernel.org>; Tue, 17 Nov 2026 10:21:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C5690606A330
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.a=rsa-sha256 header.s=google header.b=TM5Ybia6
-Received: by mail-qv1-f44.google.com with SMTP id 6a1803df08f44-91ccfb88e4dso62705106d6.0
-        for <audit@vger.kernel.org>; Mon, 16 Nov 2026 14:11:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1794867107; x=1795471907; darn=vger.kernel.org;
-        h=in-reply-to:references:subject:to:from:content-transfer-encoding
-         :content-type:mime-version:message-id:date:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=zQCKrk04z8HiyEK2+mQt2z6FOfzuq/IEX/OFmVwtW+Q=;
-        b=TM5Ybia6zRZquZ8IZzrluUlOtRyaz5L+HymrxirXRV0j+GWALzaGE79eSOzQ6yvIVy
-         9iwaheVFpnTKYpuGoife7qlBj37dBwDWgfHZWNPIK/YhKtAs60j+qRzB7tRRvjA98x3A
-         7URI4/4+6dZI1TRfc5uYQvg5ekClB8d5p+iy20n8Z0xXyf6rE6ygDAdmggESG1EWXtL0
-         WPyavOllXF+UNKwayDi3FEB2TlLtJBV90sW0bFr9vXsSrLaPkqjC7zBI4ozAh3H0+pGl
-         jb/qoWUxvyjXPArlTOq9rhEAhatqgW8x5+kGiS8hE1LwpBa/85vK6XvqZdHcajE4zLE1
-         DxsQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794867107; x=1795471907;
-        h=in-reply-to:references:subject:to:from:content-transfer-encoding
-         :content-type:mime-version:message-id:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=zQCKrk04z8HiyEK2+mQt2z6FOfzuq/IEX/OFmVwtW+Q=;
-        b=injKMdL85OQfuaCC4N6YxepnFhbrlxW3vWIxYv2HtCCBwtmgXUtG1hTzUaE3IeXVx2
-         mwwpvyDi2uM1a+RijjV3FvJfXCj3duPXiX3V99SdvjyJVcHlK7jLVFA0msfYWfOlS3ZI
-         IsYTNu0f9ng0altsqQURSm3rojez7oKRFXpBcjbT7Dh/6zhX4yLIrJW0rxWlRbkqmvDv
-         CZcKrXvSHYJFg/MmieoFfCV1Vs3LHEvmD1e58dpVkib5f+mh+fdifwR/n6T42TF5c+Kx
-         xwPFjS9kplwhYmHVTUfqYEwRzPoUL6Ou3lDDQDq+/G8xK9VoDY5D0RMfQXpXRJfo3U6t
-         gQjQ==
-X-Forwarded-Encrypted: i=1; AL+hErGx2WqaIWUvOCN3P2XddaSBD63BAhzg8izzreXNFmgDwxFtqUVsKWTbm1lcNgNScYzh03BC5A==@vger.kernel.org
-X-Gm-Message-State: APuU4Z/G8TVre2HkScTikCl+ft7dDh5WAE6s4cFtyYelsl3Qi4GIyvMI
-	9gzl9U5Op/WjjNCYXJddsfdqXMj1SwrOSIsTlHkFDH05SoPeJMgVwlLrA/66qfmH0kA4MPCM7iM
-	TysE=
-X-Gm-Gg: AZFdTZdHXKTxc7bmM0qeo0VrmXQIGX0zS3zMqqm0DEXXVPvcOzJ2gtb1GPA1NU9XVHZ
-	huUXcHmYihsQFKe3knb/eFWp+Zna8gAvBo7HV7k2Fb16+Ulbz/mtMgAtEdF3l2WszLblBybgod9
-	G+P3Uwg7WwiMsHhhdKLZv3OdW7cyM73ayfDIIXZJSLkDZmd86VQv8KpmQXuYr3rolPdfsBzl3vp
-	GXKlN3AkYeSyY+1CTD1BTxVFeRwAkahE4A/VHrh2LJNln6ZjeUY0GG2BqAiFhuDp9TWVCp0MSmc
-	7oOdHLl79wzkORToBq1JS5XYxVhJN3dqhlZwBcFl/IUG8YQf9Qm4Jhh9FhCGpo7l9ifckRguNvW
-	/9LzxYN6PpBEUjF2ZdA2CfNK1Xa+6c0lUnuKxcAl27DsG80IMeFaaftijMju7U1qfBAS+RtDiwH
-	T+ZNQuHBMSm+neF4OW+6nGoDuML6O8cGoyVWIyWPr89AjVnFU5BmyW49ZgMUPoCgIACGYoN4shM
-	1EEjze0JFMvqrtCc2/+OY5ofgWBO+zMYaTbAbx7/f7G7dMo2jgd04rn5hNCuP4zxrCeyKW57uI2
-	57nl+AYw7G9wFtzDIkKurtXymsBoSTrUByYsSa6i4aV8VPsNZ2b/OW3C1feQQ7wcnVJRA/goo4N
-	aDLNj/r89zVkguTEp21+qhIHK9T1tkQ==
-X-Received: by 2002:ad4:5744:0:b0:91f:1525:71aa with SMTP id 6a1803df08f44-91f2412be16mr202121736d6.19.1794867106920;
-        Mon, 16 Nov 2026 14:11:46 -0800 (PST)
-Received: from localhost (pool-71-126-255-178.bstnma.fios.verizon.net. [71.126.255.178])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-91f23d456b2sm96757216d6.12.2026.11.16.14.11.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Nov 2026 14:11:45 -0800 (PST)
-Date: Mon, 16 Nov 2026 17:11:44 -0500
-Message-ID: <2f79b24aed5483ed9a16953c4efedc02@paul-moore.com>
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.a=rsa-sha256 header.s=20191114 header.b=EPNo++yF
+Received: from smtp-4-0000.mail.infomaniak.ch (smtp-4-0000.mail.infomaniak.ch [10.7.10.107])
+	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4jTLNx1txKzW0V;
+	Tue, 17 Nov 2026 11:21:21 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
+	s=20191114; t=1794910881;
+	bh=tg8FlYB50zB5hXH7HwYS1/iWqoRpxATYxZpYu9D+G7M=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=EPNo++yFjHpieX1q1GHnRwRD3OB+G43yEQxDEyeoObkKtzGFLtNwtIZisB1FGShKy
+	 Br2JSzbmHBluj7s6Z+J3nmhhSmYg+yo1jJCPWof+1XKDHyIIggz3xN+MaWPNYAQWiJ
+	 9isVGQPBIc2RfnJERovaNV10jJA4osRxzIdn020g=
+Received: from unknown by smtp-4-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4jTLNv0xwzzNy2;
+	Tue, 17 Nov 2026 11:21:19 +0100 (CET)
+From: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
+To: =?UTF-8?q?G=C3=BCnther=20Noack?= <gnoack@google.com>
+Cc: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
+	Christian Brauner <brauner@kernel.org>,
+	Eric Paris <eparis@redhat.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Paul Moore <paul@paul-moore.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	audit@vger.kernel.org,
+	linux-security-module@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org
+Subject: [PATCH 1/4] landlock: Distinguish namespace creation and entry denials
+Date: Tue, 17 Nov 2026 11:21:04 +0100
+Message-ID: <20261117102110.2524197-2-mic@digikod.net>
+In-Reply-To: <20261117102110.2524197-1-mic@digikod.net>
+References: <20261117102110.2524197-1-mic@digikod.net>
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Post: <mailto:audit@vger.kernel.org>
@@ -91,41 +70,304 @@ List-Subscribe: <mailto:audit+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:audit+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0 
-Content-Type: text/plain; charset=UTF-8 
-Content-Transfer-Encoding: 8bit 
-X-Mailer: pstg-pwork:20261116_1350/pstg-lib:20261116_1227/pstg-pwork:20261116_1350
-From: Paul Moore <paul@paul-moore.com>
-To: sashiko-bot@kernel.org, audit@vger.kernel.org
-Subject: Re: [PATCH v2] audit: add missing syscalls to signal class
-References: <20261111152057.59798-2-jeff@bencteux.fr>
-In-Reply-To: <20261111152057.59798-2-jeff@bencteux.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Infomaniak-Routing: alpha
 
-On Nov 11, 2026 sashiko-bot@kernel.org wrote:
-> 
-> The pidfd_send_signal(), rt_sigqueueinfo() and rt_tgsigqueueinfo()
-> system calls are missing from the AUDIT_CLASS_SIGNAL* class. It seems
-> to be used only in kernel/auditfilter.c to increment the audit_signals
-> counter.
-> 
-> This counter is used to determine if information related to a target
-> process of a syscall audit rule using signals, such as its pid,
-> should be logged (e54dc2431d740a79a6bd013babade99d71b1714f).
-> 
-> Information related to signals sent via these system calls are
-> currently not correctly logged. The current patch adds it to the
-> AUDIT_CLASS_SIGNAL* class.
-> 
-> Signed-off-by: Jeffrey Bencteux <jeff@bencteux.fr>
-> Reviewed-by: Ricardo Robaina <rrobaina@redhat.com>
-> ---
-> Changes in v2:
-> - Removal of unneeded #ifdef guards
-> 
->  include/asm-generic/audit_signal.h | 3 +++
->  1 file changed, 3 insertions(+)
+Landlock reports denied namespace creation and entry with the same
+internal request type.  Before commit 08471914d6bb ("ns: allocate the
+namespace id before the namespace_init hook"), denied creation carried
+ID zero and could be distinguished from entry by ID alone.  That commit
+moved ID allocation before namespace_init(), so creation now carries the
+ID of an unreachable new namespace while entry carries the existing
+target ID.  Namespace IDs are object context, not operation
+discriminators.
 
-Merged into audit/dev, thanks!
+Split the request type into creation and entry.  Keep the two namespace
+values together before capability; this renumbers the unreleased
+capability request in raw and typed trace context.  Report
+namespace_op=create or namespace_op=enter immediately after blockers in
+namespace audit records and trace event text.  Placing the operation
+before namespace_type and namespace_id lets consumers establish the
+semantics before interpreting the following namespace context,
+especially whether namespace_id is the creation-time value or identifies
+an existing entry target.
 
---
-paul-moore.com
+Keep namespace.use as the policy blocker: the new value only describes
+the semantic hook context and does not add a policy control.
+
+The creation value covers namespace_init(), including clone(2),
+clone3(2), unshare(2), open_tree(2), and fsmount(2) paths.  The entry
+value covers namespace_install(), currently reached through setns(2).
+
+Cc: Günther Noack <gnoack@google.com>
+Fixes: 15dd86021b57 ("landlock: Enforce namespace use restrictions")
+Signed-off-by: Mickaël Salaün <mic@digikod.net>
+---
+ include/trace/events/landlock.h            | 25 ++++++++++++++--------
+ security/landlock/audit.c                  | 10 +++++++--
+ security/landlock/log.c                    |  6 ++++--
+ security/landlock/log.h                    |  3 ++-
+ security/landlock/ns.c                     | 10 +++++----
+ security/landlock/trace.c                  |  3 ++-
+ tools/testing/selftests/landlock/ns_test.c | 18 +++++++++++-----
+ tools/testing/selftests/landlock/trace.h   |  1 +
+ 8 files changed, 52 insertions(+), 24 deletions(-)
+
+diff --git a/include/trace/events/landlock.h b/include/trace/events/landlock.h
+index b6fdc6e2eef8..9b3e24a613d8 100644
+--- a/include/trace/events/landlock.h
++++ b/include/trace/events/landlock.h
+@@ -36,7 +36,8 @@ static_assert(sizeof(access_mask_t) <= sizeof(u64));
+ TRACE_DEFINE_ENUM(LANDLOCK_REQUEST_FS_CHANGE_TOPOLOGY);
+ TRACE_DEFINE_ENUM(LANDLOCK_REQUEST_FS_ACCESS);
+ TRACE_DEFINE_ENUM(LANDLOCK_REQUEST_NET_ACCESS);
+-TRACE_DEFINE_ENUM(LANDLOCK_REQUEST_NAMESPACE);
++TRACE_DEFINE_ENUM(LANDLOCK_REQUEST_NAMESPACE_CREATE);
++TRACE_DEFINE_ENUM(LANDLOCK_REQUEST_NAMESPACE_ENTER);
+ TRACE_DEFINE_ENUM(LANDLOCK_REQUEST_CAPABILITY);
+ 
+ #ifdef CREATE_TRACE_POINTS
+@@ -990,7 +991,8 @@ TRACE_EVENT(landlock_deny_access_net,
+  * @namespace_id: Namespace ID, not directly visible from user space when
+  *                creation was denied.
+  *
+- * Emitted when a Landlock domain denies namespace use.
++ * Emitted when a Landlock domain denies namespace creation or entry.  The
++ * namespace_op field distinguishes these operations.
+  */
+ TRACE_EVENT(landlock_deny_permission_namespace,
+ 
+@@ -1021,13 +1023,18 @@ TRACE_EVENT(landlock_deny_permission_namespace,
+ 		__entry->namespace_id	= namespace_id;
+ 	),
+ 
+-	TP_printk("domain=%llx same_exec=%d logged=%d blockers=%s namespace_type=0x%x namespace_id=%llu",
+-		__entry->domain_id, __entry->same_exec, __entry->logged,
+-		__entry->blockers_type == LANDLOCK_REQUEST_NAMESPACE ?
+-			__print_flags(__entry->blockers_access, "|",
+-				      _LANDLOCK_PERMISSION_BLOCKER_NAMES) :
+-			"unknown",
+-		__entry->namespace_type, __entry->namespace_id)
++	TP_printk("domain=%llx same_exec=%d logged=%d blockers=%s namespace_op=%s namespace_type=0x%x namespace_id=%llu",
++		  __entry->domain_id, __entry->same_exec, __entry->logged,
++		  (__entry->blockers_type == LANDLOCK_REQUEST_NAMESPACE_CREATE ||
++		   __entry->blockers_type == LANDLOCK_REQUEST_NAMESPACE_ENTER) ?
++			  __print_flags(__entry->blockers_access, "|",
++					_LANDLOCK_PERMISSION_BLOCKER_NAMES) :
++			  "unknown",
++		  __entry->blockers_type == LANDLOCK_REQUEST_NAMESPACE_CREATE ?
++			  "create" :
++		  __entry->blockers_type == LANDLOCK_REQUEST_NAMESPACE_ENTER ?
++			  "enter" : "unknown",
++		  __entry->namespace_type, __entry->namespace_id)
+ );
+ 
+ /**
+diff --git a/security/landlock/audit.c b/security/landlock/audit.c
+index be49ef47b4ea..6d9e54f5deed 100644
+--- a/security/landlock/audit.c
++++ b/security/landlock/audit.c
+@@ -80,7 +80,8 @@ get_blocker(const enum landlock_request_type type,
+ 		WARN_ON_ONCE(access_bit != -1);
+ 		return scope_strings[BIT_INDEX(LANDLOCK_SCOPE_SIGNAL)];
+ 
+-	case LANDLOCK_REQUEST_NAMESPACE:
++	case LANDLOCK_REQUEST_NAMESPACE_CREATE:
++	case LANDLOCK_REQUEST_NAMESPACE_ENTER:
+ 	case LANDLOCK_REQUEST_CAPABILITY:
+ 		if (WARN_ON_ONCE(access_bit >= ARRAY_SIZE(permission_strings)))
+ 			return "unknown";
+@@ -115,7 +116,8 @@ blocker_prefix(const enum landlock_request_type type)
+ 	case LANDLOCK_REQUEST_SCOPE_SIGNAL:
+ 		return "scope.";
+ 
+-	case LANDLOCK_REQUEST_NAMESPACE:
++	case LANDLOCK_REQUEST_NAMESPACE_CREATE:
++	case LANDLOCK_REQUEST_NAMESPACE_ENTER:
+ 		return _LANDLOCK_PERMISSION_NAMESPACE_NAME ".";
+ 
+ 	case LANDLOCK_REQUEST_CAPABILITY:
+@@ -212,6 +214,10 @@ void landlock_audit_denial(const struct landlock_request *const request,
+ 
+ 	audit_log_format(ab, "domain=%llx blockers=", youngest_denied->id);
+ 	log_blockers(ab, request->type, missing);
++	if (request->type == LANDLOCK_REQUEST_NAMESPACE_CREATE)
++		audit_log_format(ab, " namespace_op=create");
++	else if (request->type == LANDLOCK_REQUEST_NAMESPACE_ENTER)
++		audit_log_format(ab, " namespace_op=enter");
+ 	audit_log_lsm_data(ab, &request->audit);
+ 	audit_log_end(ab);
+ 
+diff --git a/security/landlock/log.c b/security/landlock/log.c
+index 43efbb95725c..c132b343f0ee 100644
+--- a/security/landlock/log.c
++++ b/security/landlock/log.c
+@@ -388,7 +388,8 @@ static bool is_valid_request(const struct landlock_request *const request)
+ 		return false;
+ 
+ 	switch (request->type) {
+-	case LANDLOCK_REQUEST_NAMESPACE:
++	case LANDLOCK_REQUEST_NAMESPACE_CREATE:
++	case LANDLOCK_REQUEST_NAMESPACE_ENTER:
+ 		if (WARN_ON_ONCE(request->permission !=
+ 				 LANDLOCK_PERMISSION_NAMESPACE_USE) ||
+ 		    WARN_ON_ONCE(request->audit.type != LSM_AUDIT_DATA_NS))
+@@ -485,7 +486,8 @@ is_denial_quieted(const struct landlock_request *const request,
+ 	case LANDLOCK_REQUEST_SCOPE_ABSTRACT_UNIX_SOCKET:
+ 		return !!(youngest_denied->quiet_access.scope &
+ 			  LANDLOCK_SCOPE_ABSTRACT_UNIX_SOCKET);
+-	case LANDLOCK_REQUEST_NAMESPACE:
++	case LANDLOCK_REQUEST_NAMESPACE_CREATE:
++	case LANDLOCK_REQUEST_NAMESPACE_ENTER:
+ 		return !!(youngest_denied->quiet_permission.ns_types &
+ 			  landlock_ns_type_to_bit(request->audit.u.ns.ns_type));
+ 	case LANDLOCK_REQUEST_CAPABILITY:
+diff --git a/security/landlock/log.h b/security/landlock/log.h
+index 596feeeb7aa6..641a2c3c78ed 100644
+--- a/security/landlock/log.h
++++ b/security/landlock/log.h
+@@ -25,7 +25,8 @@ enum landlock_request_type {
+ 	LANDLOCK_REQUEST_NET_ACCESS,
+ 	LANDLOCK_REQUEST_SCOPE_ABSTRACT_UNIX_SOCKET,
+ 	LANDLOCK_REQUEST_SCOPE_SIGNAL,
+-	LANDLOCK_REQUEST_NAMESPACE,
++	LANDLOCK_REQUEST_NAMESPACE_CREATE,
++	LANDLOCK_REQUEST_NAMESPACE_ENTER,
+ 	LANDLOCK_REQUEST_CAPABILITY,
+ };
+ 
+diff --git a/security/landlock/ns.c b/security/landlock/ns.c
+index 06d9784746fe..3d443599b16f 100644
+--- a/security/landlock/ns.c
++++ b/security/landlock/ns.c
+@@ -90,6 +90,7 @@ static const struct access_masks ns_permission = {
+  * check_ns_type - Check namespace use permission
+  *
+  * @ns: The namespace being allocated or installed.
++ * @request_type: Namespace operation reported on denial.
+  *
+  * Shared check for namespace_init (creation via clone(2), unshare(2),
+  * open_tree(2), or fsmount(2)) and namespace_install (use via setns(2)): denies
+@@ -99,7 +100,8 @@ static const struct access_masks ns_permission = {
+  *
+  * Return: 0 if allowed, -EPERM if denied.
+  */
+-static int check_ns_type(struct ns_common *const ns)
++static int check_ns_type(struct ns_common *const ns,
++			 const enum landlock_request_type request_type)
+ {
+ 	const struct landlock_cred_security *subject;
+ 	size_t denied_layer;
+@@ -117,7 +119,7 @@ static int check_ns_type(struct ns_common *const ns)
+ 
+ 	landlock_log_denial(subject,
+ 			    &(struct landlock_request){
+-				    .type = LANDLOCK_REQUEST_NAMESPACE,
++				    .type = request_type,
+ 				    .audit.type = LSM_AUDIT_DATA_NS,
+ 				    .permission =
+ 					    LANDLOCK_PERMISSION_NAMESPACE_USE,
+@@ -130,13 +132,13 @@ static int check_ns_type(struct ns_common *const ns)
+ 
+ static int hook_namespace_init(struct ns_common *const ns)
+ {
+-	return check_ns_type(ns);
++	return check_ns_type(ns, LANDLOCK_REQUEST_NAMESPACE_CREATE);
+ }
+ 
+ static int hook_namespace_install(const struct nsset *const nsset,
+ 				  struct ns_common *const ns)
+ {
+-	return check_ns_type(ns);
++	return check_ns_type(ns, LANDLOCK_REQUEST_NAMESPACE_ENTER);
+ }
+ 
+ static struct security_hook_list landlock_hooks[] __ro_after_init = {
+diff --git a/security/landlock/trace.c b/security/landlock/trace.c
+index 995c6b948e16..00cb497eaffb 100644
+--- a/security/landlock/trace.c
++++ b/security/landlock/trace.c
+@@ -81,7 +81,8 @@ void landlock_trace_denial(
+ 	const access_mask_t missing, const bool same_exec, const bool logged)
+ {
+ 	switch (request->type) {
+-	case LANDLOCK_REQUEST_NAMESPACE:
++	case LANDLOCK_REQUEST_NAMESPACE_CREATE:
++	case LANDLOCK_REQUEST_NAMESPACE_ENTER:
+ 		if (trace_landlock_deny_permission_namespace_enabled()) {
+ 			const struct landlock_blockers blockers = {
+ 				.access = missing,
+diff --git a/tools/testing/selftests/landlock/ns_test.c b/tools/testing/selftests/landlock/ns_test.c
+index 8f387fc47e21..d4a85cbebeae 100644
+--- a/tools/testing/selftests/landlock/ns_test.c
++++ b/tools/testing/selftests/landlock/ns_test.c
+@@ -1897,11 +1897,14 @@ TEST(setns_inherited_fd)
+ 
+ /* Audit tests */
+ 
++#define REGEX_LANDLOCK_NS_CREATE \
++	REGEX_LANDLOCK_PREFIX " blockers=namespace\\.use namespace_op=create"
++
+ static int matches_log_ns_create(int audit_fd, __u64 ns_type)
+ {
+ 	/* A denied creation logs the ID allocated for the new namespace. */
+-	static const char log_template[] = REGEX_LANDLOCK_PREFIX
+-		" blockers=namespace\\.use namespace_type=0x%x namespace_id=[1-9][0-9]*$";
++	static const char log_template[] = REGEX_LANDLOCK_NS_CREATE
++		" namespace_type=0x%x namespace_id=[1-9][0-9]*$";
+ 	char log_match[sizeof(log_template) + 10];
+ 	int log_match_len;
+ 
+@@ -1917,12 +1920,12 @@ static int matches_log_ns_create(int audit_fd, __u64 ns_type)
+ static int matches_log_ns_setns(int audit_fd, __u64 ns_type, __u64 ns_id)
+ {
+ 	static const char log_template[] = REGEX_LANDLOCK_PREFIX
+-		" blockers=namespace\\.use namespace_type=0x%x namespace_id=%llu$";
++		" blockers=namespace\\.use namespace_op=%s namespace_type=0x%x namespace_id=%llu$";
+ 	char log_match[sizeof(log_template) + 32];
+ 	int log_match_len;
+ 
+ 	log_match_len = snprintf(log_match, sizeof(log_match), log_template,
+-				 (unsigned int)ns_type,
++				 "enter", (unsigned int)ns_type,
+ 				 (unsigned long long)ns_id);
+ 	if (log_match_len >= sizeof(log_match))
+ 		return -E2BIG;
+@@ -1958,7 +1961,7 @@ FIXTURE_TEARDOWN(ns_audit)
+ 
+ /*
+  * Verifies that a denied namespace creation produces the expected audit record
+- * with the namespace.use blocker string and namespace_type.
++ * with the namespace.use blocker string, namespace type, and create operation.
+  */
+ TEST_F(ns_audit, create_denied)
+ {
+@@ -2542,6 +2545,11 @@ static void test_ns_trace_denial(struct __test_metadata *const _metadata,
+ 	EXPECT_STRNE("0", field);
+ 	if (use_setns)
+ 		EXPECT_EQ(expected_ns_id, strtoull(field, NULL, 10));
++	ret = tracefs_extract_field(buf,
++				    REGEX_DENY_PERMISSION_NAMESPACE(TRACE_TASK),
++				    "namespace_op", field, sizeof(field));
++	ASSERT_EQ(0, ret);
++	EXPECT_STREQ(use_setns ? "enter" : "create", field);
+ 
+ 	free(buf);
+ }
+diff --git a/tools/testing/selftests/landlock/trace.h b/tools/testing/selftests/landlock/trace.h
+index 36e8f16171b0..e67f239a8507 100644
+--- a/tools/testing/selftests/landlock/trace.h
++++ b/tools/testing/selftests/landlock/trace.h
+@@ -185,6 +185,7 @@
+ 	"same_exec=[01] "                      \
+ 	"logged=[01] "                         \
+ 	"blockers=[a-z_|]* "                   \
++	"namespace_op=\\(create\\|enter\\) "   \
+ 	"namespace_type=0x[0-9a-f]\\+ "        \
+ 	"namespace_id=[0-9]\\+$"
+ 
+-- 
+2.56.0
+
