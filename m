@@ -1,50 +1,50 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=185.125.25.8
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795019595;
-	b=r9tAiVJSWIUz+M3BS39/Zv/5SAbr6jpWZWypdIXdAio2LUlsog9wapC+pQIKdJGqrkxp
-	 Cf0GUsNiHdkIrk71LZPXrzM7gkBxtTC/K6VL1tTOEtmBJeYkUpaTilydxNOcQ2+oJR8Hi
-	 Iik7AWZ3VBeExoykeQPlquvU5yM7kBs/UCN73VuAGDcxp7jMpN1PuA16xU7lpMtQWzB/P
-	 wfyHS/oBM7710JEjeJl6UDovd6V+tdj++bSM/BNiE0tm61VqJsiMRFBC7899lXvMgDhIg
-	 u14U+lKn2UO5wiiphR2K5FGu/INIIe4h5V7expB4zbGiWp+Vr1PFtOtqNif6MGjNl2Q==
+	t=1795019597;
+	b=scUgf7tGGiIJ3EGYtwxb6MTqZINfpHHqH+z23gcg/W6+STgXN+7eLB6Toc+tKpk0Ti0Z
+	 +yGzbAG9Hux0tcTpvxR9ReJum1KDnxD5BNPyKcFjYNZ8hIwY4Mb2oU4vuBJ6610DY2bJ9
+	 0gInI4nNlm95ZJLgEXc4Qc7UBsKWdaSTvL9B1hDtkoN1w4kLg/AbO/QFOO0DF8EXFgLrM
+	 XJUwjnO/L3/nMF0aALsxC1d5NgSR7LkrCQXVSpHM47R/euG6XZWRP6u+wI2ZtWAOAEPHc
+	 p2MmUXqgyXAsCVybYJ6wqEbeHLYZfRe072aa8nJcqIUT2rKL09rmhW+dO5gXCZMBBTw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795019595;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795019597;
 	h=DMARC-Filter:Received:DKIM-Signature:Received:From:To:Cc:Subject:
-	 Date:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	 X-Infomaniak-Routing;
-	bh=GUvkIMyrKY8gi6gwt0x0y57vbSmJHe3gNr8Xn9n2TdY=;
-	b=c7yPHo32BmEYXvca/HQe8BUod7U49dpKXWAroOwZPE0+gTJOkrr8Bugu6ruUZXrPmNQZ
-	 0jY79DqfTZMhxOtaPOCH5x/a8oxa4b77nd1ZMwedLWdU66S7hM2jONUtbmX3zPg+MSJVP
-	 3vJMz0aPSLQ8OGCMQP+iEahBllvxmeklNJIN+Mazo3nidh05CNsUN2jkBQemqU7KvlNy6
-	 VwyfGcEDwT1CzlYZOhJ1Z6YYgU1wlWmZ+t6MJyINqHMTrgqcTnCOEXcR+WlBT/UKQ6uOZ
-	 qHyW08GtBjRhdmgW2WJVo5kqbgF6Nv8E5DXZj4zOKJPb4aq3Vu1W1Yg3XtmlxkiIPKA==
+	 Date:Message-ID:In-Reply-To:References:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:X-Infomaniak-Routing;
+	bh=ntwRtha26cu9+6nMcPdfX0yLKMxHwh5Vp3GAIdX+Bhs=;
+	b=q94EpjXlWVyWa4A1iveNR/7HTvGOubIGnBiufnSgBdibsQipEKgSB2tnZ9LZrF623dD0
+	 WwINDrj6qx/tw0m7v4qWgKz/Gdnk2+j54mkoWb6XKUNrrgCKftVH16+6AbPmSV2crODxN
+	 axfsF21OAj2q4607qostcGIh3ZYHlPQQLyDNWppDT5HKXVX96C4aMLNZ3nmh3rTt0bmBd
+	 Q8Zw9CoQ47LNP+NKjUlxyZM/Ed0ttVrX9E7cny885Duotn1ZJ6MrpgdWu0xk7sCPRi+Ec
+	 XIf5PRG2bEdoi1dxpLo3JTLjHKfqH2dxUqCUy5VtsPL5e6grNzDnLw8xT5gcfKJ6tpA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=none header.from=digikod.net;
 	spf=pass smtp.mailfrom=digikod.net;
-	dkim=pass header.d=digikod.net header.i=@digikod.net header.a=rsa-sha256 header.s=20191114 header.b=ZJBw78gD;
+	dkim=pass header.d=digikod.net header.i=@digikod.net header.a=rsa-sha256 header.s=20191114 header.b=02jqntJq;
 	arc=none smtp.remote-ip=185.125.25.8
 Received: from smtp-1908.mail.infomaniak.ch (smtp-1908.mail.infomaniak.ch [185.125.25.8])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72E01606A336
-	for <audit@vger.kernel.org>; Wed, 18 Nov 2026 16:33:12 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 72E01606A336
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42402606A7F9
+	for <audit@vger.kernel.org>; Wed, 18 Nov 2026 16:33:15 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 42402606A7F9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.a=rsa-sha256 header.s=20191114 header.b=ZJBw78gD
-Received: from smtp-4-0001 (smtp-4-0001.mail.infomaniak.ch [10.7.10.108])
-	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4jV6bP05j3zZMJ;
-	Wed, 18 Nov 2026 17:33:05 +0100 (CET)
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.a=rsa-sha256 header.s=20191114 header.b=02jqntJq
+Received: from smtp-4-0000.mail.infomaniak.ch (unknown [IPv6:2001:1600:7:10::a6b])
+	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4jV6bR6fvGzXmx;
+	Wed, 18 Nov 2026 17:33:07 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
-	s=20191114; t=1795019584;
-	bh=GUvkIMyrKY8gi6gwt0x0y57vbSmJHe3gNr8Xn9n2TdY=;
-	h=From:To:Cc:Subject:Date:From;
-	b=ZJBw78gDl5RWce75YL5/mmYtzdl98QATVTf1EbLPSO87WYQozbaa00QJX9xreERP/
-	 LIqlSGQf2/5vQfrQDevWCb+8cAa8CRaDSlNEg7Cru9Tj7GgEdWM5riEZODH6ija9BX
-	 zY7W6q+dWaxMsn8rD6n13hQWF7kFXzt9E/foIP7E=
-Received: from unknown by smtp-4-0001 (Postfix) with ESMTPA id 4jV6bM2xK5zbWl;
-	Wed, 18 Nov 2026 17:33:03 +0100 (CET)
+	s=20191114; t=1795019587;
+	bh=ntwRtha26cu9+6nMcPdfX0yLKMxHwh5Vp3GAIdX+Bhs=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=02jqntJqgfacC2Kq/A6IhDNSFxUEmfWsB1ErvG2FLsJHTFx+FZpNDlbXwbFoP9TMk
+	 VaKoIfh5Gb3VO+THe2l21WtJrC42+2s+U8XQX8RUTnYYvi1nlRxYZL9U6OxaZHyQHj
+	 jpBWToMznhS6/3BCkkQac7cE9iZdCNm2KITj/mbE=
+Received: from unknown by smtp-4-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4jV6bQ3tfnzktj;
+	Wed, 18 Nov 2026 17:33:06 +0100 (CET)
 From: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
 To: =?UTF-8?q?G=C3=BCnther=20Noack?= <gnoack@google.com>
 Cc: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
@@ -58,9 +58,11 @@ Cc: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
 	kernel-team@cloudflare.com,
 	linux-security-module@vger.kernel.org,
 	linux-trace-kernel@vger.kernel.org
-Subject: [PATCH v2 0/4] Landlock: Fix namespace and capability denials
-Date: Wed, 18 Nov 2026 17:32:48 +0100
-Message-ID: <20261118163254.2554413-1-mic@digikod.net>
+Subject: [PATCH v2 2/4] landlock: Add capability objects to denial tracing
+Date: Wed, 18 Nov 2026 17:32:50 +0100
+Message-ID: <20261118163254.2554413-3-mic@digikod.net>
+In-Reply-To: <20261118163254.2554413-1-mic@digikod.net>
+References: <20261118163254.2554413-1-mic@digikod.net>
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Post: <mailto:audit@vger.kernel.org>
@@ -74,86 +76,292 @@ Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Infomaniak-Routing: alpha
 
-Hi,
+The capability denial tracepoint identifies the capability number but
+not the credentials or user namespace against which it was checked.
+Typed BPF consumers therefore cannot reconstruct the authoritative hook
+context, especially when a check targets a user namespace other than the
+caller's current namespace.
 
-Landlock namespace denial records identify the namespace type and ID but
-do not say whether the hook denied creation or entry.  The ID is object
-context rather than an operation discriminator: after allocating IDs
-before the namespace_init hook, construction carries an ID for a new
-namespace that never becomes reachable, whereas entry carries the
-existing target ID.
+Carry the exact cred and user_ns used by each commoncap check through
+check_cap() to the tracepoint's BTF prototype.  The capable hook
+forwards its arguments.  Other callers mirror old->user_ns for
+CAP_SETPCAP, and init_user_ns for CAP_SYS_RAWIO and CAP_SYS_ADMIN.  The
+latter checks protect global hardening and the global admin memory
+reserve, so nested user-namespace capabilities must not authorize them.
 
-Capability denial tracepoints have the complementary problem.  They
-report the capability number but omit the exact credentials and target
-user namespace used by commoncap's capability check.  Either argument
-can differ from current state, so reconstructing them from the tracing
-task can misidentify the security relationship being checked.
+Keep these pointers out of TP_STRUCT__entry and TP_printk so the raw
+ring-buffer layout and textual format remain unchanged.  They provide
+context only and do not participate in Landlock's verdict.
 
-Fix both denial interfaces without changing Landlock policy or UAPI.
-Namespace denials gain distinct internal CREATE and ENTER request tags
-and print namespace_op=create or namespace_op=enter after the common
-blockers field and before the namespace type and ID.  Both operations
-remain context for the same namespace.use blocker and describe semantic
-hooks rather than exact syscall provenance.
+Do not carry the capability options.  CAP_OPT_NOAUDIT already suppresses
+the complete denial record, and the remaining option bits do not explain
+the checked security relationship.
 
-Capability denial tracepoints gain the authoritative checked cred and
-target user_ns as synchronous BTF-only arguments.  They are not copied
-into the raw ring buffer, printed, audited, retained, or used for the
-Landlock verdict.  Capability options remain omitted: CAP_OPT_NOAUDIT
-suppresses the denial record, while the remaining bits do not explain a
-Landlock decision.
+Cc: Günther Noack <gnoack@google.com>
+Fixes: 97c8386f1d74 ("landlock: Enforce capability restrictions")
+Signed-off-by: Mickaël Salaün <mic@digikod.net>
 
-Paul and Eric, please review the audit record addition and field
-ordering.  The new namespace_op field is Landlock-local because Landlock
-is currently the only LSM_AUDIT_DATA_NS emitter; it can move to the
-generic formatter if another LSM later needs the same contract.
-
-The base includes Christian's namespace-ID allocation fix.  Patch 1
-distinguishes namespace creation and entry in audit and trace output.
-Patch 2 supplies the checked capability objects to typed trace
-consumers.  Patch 3 completes quiet ENTER coverage in the Landlock
-selftests.  Patch 4 documents the namespace operation field.
+---
 
 Changes since v1:
-https://patch.msgid.link/20261117102110.2524197-1-mic@digikod.net
-- Rebase on the commoncap-check fixes, forward their exact user
-  namespace context, and document why global checks target the initial
-  user namespace.
-- List the new standard BTF objects, correct capable-hook-only wording,
-  and trim duplicate commit-message narration.
+https://patch.msgid.link/20261117102110.2524197-3-mic@digikod.net
+- Adapt check_cap() callers on landlock-next to forward the exact target
+  user namespace used by commoncap.
+- Document why global checks target init_user_ns and identify the new
+  standard BTF objects as commoncap check context.
+---
+ Documentation/trace/events-landlock.rst |  6 ++--
+ include/trace/events/landlock.h         | 11 ++++--
+ security/landlock/cap.c                 | 45 ++++++++++++++++++-------
+ security/landlock/log.h                 |  9 +++++
+ security/landlock/trace.c               |  9 ++++-
+ 5 files changed, 61 insertions(+), 19 deletions(-)
 
-This series depends on the commoncap-check fixes:
-https://patch.msgid.link/20261118145217.2551053-1-mic@digikod.net
-
-Regards,
-
-Mickaël Salaün (4):
-  landlock: Distinguish namespace creation and entry denials
-  landlock: Add capability objects to denial tracing
-  selftests/landlock: Test namespace denial operations
-  landlock: Document namespace denial operations
-
- Documentation/admin-guide/LSM/landlock.rst | 21 +++++-----
- Documentation/trace/events-landlock.rst    | 26 ++++++++-----
- include/trace/events/landlock.h            | 36 +++++++++++------
- security/landlock/audit.c                  | 10 ++++-
- security/landlock/cap.c                    | 45 +++++++++++++++-------
- security/landlock/log.c                    |  6 ++-
- security/landlock/log.h                    | 12 +++++-
- security/landlock/ns.c                     | 10 +++--
- security/landlock/trace.c                  | 12 +++++-
- tools/testing/selftests/landlock/ns_test.c | 25 +++++++++---
- tools/testing/selftests/landlock/trace.h   |  1 +
- 11 files changed, 145 insertions(+), 59 deletions(-)
-
-
-base-commit: aebb7274476403040d582c61478df8f4a7bf9cd3
-prerequisite-patch-id: 365071039dd2be439f67707944d12edbe1422d60
-prerequisite-patch-id: 021705fb5147cdc8edcac9dbe53c06b854cf976a
-prerequisite-patch-id: ddc6687ae87f8f782ed8ad5b005834f242aec2fb
-prerequisite-patch-id: 0bf745b08b99168d266461ef5b0b943a2b71eceb
-prerequisite-patch-id: 03ec09be2416d4cc932b07dfb0e7450f15c22804
-prerequisite-patch-id: 383fa2ce8a4ed44e4b5c828c99c5be5ee75048af
+diff --git a/Documentation/trace/events-landlock.rst b/Documentation/trace/events-landlock.rst
+index dc5f05a17c2c..1ddc123df59e 100644
+--- a/Documentation/trace/events-landlock.rst
++++ b/Documentation/trace/events-landlock.rst
+@@ -303,9 +303,9 @@ event prototypes in `Event reference`_ document their argument layouts.
+ The arguments include both standard kernel objects and Landlock-internal
+ objects:
+ 
+-- Standard kernel objects (``struct task_struct``, ``struct sock``,
+-  ``struct path``, ``struct dentry``) can be used with existing BPF
+-  helpers.
++- Standard kernel objects (for example ``struct task_struct``, ``struct cred``,
++  ``struct user_namespace``, ``struct sock``, ``struct path``, and
++  ``struct dentry``) can be used with existing BPF helpers.
+ - Landlock-internal objects (``struct landlock_domain``,
+   ``struct landlock_ruleset``, ``struct landlock_rule``,
+   ``struct landlock_hierarchy``) can be read via ``BPF_CORE_READ``.
+diff --git a/include/trace/events/landlock.h b/include/trace/events/landlock.h
+index 9b3e24a613d8..09e90e4a9cd7 100644
+--- a/include/trace/events/landlock.h
++++ b/include/trace/events/landlock.h
+@@ -21,6 +21,7 @@
+ #include <net/af_unix.h>
+ 
+ enum landlock_request_type;
++struct cred;
+ struct dentry;
+ struct landlock_blockers;
+ struct landlock_domain;
+@@ -30,6 +31,7 @@ struct landlock_ruleset;
+ struct path;
+ struct sock;
+ struct task_struct;
++struct user_namespace;
+ 
+ static_assert(sizeof(access_mask_t) <= sizeof(u64));
+ 
+@@ -1046,6 +1048,9 @@ TRACE_EVENT(landlock_deny_permission_namespace,
+  * @logged: Whether this denial was selected for audit logging.
+  * @blockers: Request type and final missing permission subset (never NULL).
+  * @capability: CAP_* number that was denied.
++ * @cred: Credentials used by commoncap's capability check (never NULL).
++ * @user_ns: Target user namespace used by commoncap's capability check (never
++ *           NULL).
+  *
+  * Emitted when a Landlock domain denies capability use, except for checks
+  * made with CAP_OPT_NOAUDIT, which are denied without emitting this event.
+@@ -1054,9 +1059,11 @@ TRACE_EVENT(landlock_deny_permission_capability,
+ 
+ 	TP_PROTO(const struct landlock_hierarchy *hierarchy, bool same_exec,
+ 		 bool logged, const struct landlock_blockers *blockers,
+-		 int capability),
++		 int capability, const struct cred *cred,
++		 const struct user_namespace *user_ns),
+ 
+-	TP_ARGS(hierarchy, same_exec, logged, blockers, capability),
++	TP_ARGS(hierarchy, same_exec, logged, blockers, capability, cred,
++		user_ns),
+ 
+ 	TP_STRUCT__entry(
+ 		__field(	u64,		domain_id	)
+diff --git a/security/landlock/cap.c b/security/landlock/cap.c
+index caf514be3df0..ae3acd13a367 100644
+--- a/security/landlock/cap.c
++++ b/security/landlock/cap.c
+@@ -28,6 +28,10 @@ static const struct access_masks cap_permission = {
+  * check_cap - Check a capability use against the domain of @cred
+  *
+  * @cred: Credentials being checked.
++ * @ns: Target user namespace used by commoncap's capability check, which is
++ *      not necessarily @cred->user_ns.  It is forwarded unchanged to typed
++ *      trace context but is not used for the verdict (policy depends on @cred
++ *      and @cap).
+  * @cap: Capability number (CAP_*).
+  * @opts: Capability check options.  CAP_OPT_NOAUDIT skips the denial record:
+  *        no audit record, no trace event, and no denial count.
+@@ -38,7 +42,8 @@ static const struct access_masks cap_permission = {
+  *
+  * Return: 0 if allowed, -EPERM if capability use is denied.
+  */
+-static int check_cap(const struct cred *const cred, const int cap,
++static int check_cap(const struct cred *const cred,
++		     struct user_namespace *const ns, const int cap,
+ 		     const unsigned int opts)
+ {
+ 	const struct landlock_cred_security *subject;
+@@ -64,6 +69,13 @@ static int check_cap(const struct cred *const cred, const int cap,
+ 				.permission =
+ 					LANDLOCK_PERMISSION_CAPABILITY_USE,
+ 				.layer_plus_one = denied_layer,
++#ifdef CONFIG_TRACEPOINTS
++				.trace_cap =
++					&(struct landlock_cap_trace){
++						.cred = cred,
++						.user_ns = ns,
++					},
++#endif /* CONFIG_TRACEPOINTS */
+ 			});
+ 
+ 	return -EPERM;
+@@ -73,8 +85,7 @@ static int check_cap(const struct cred *const cred, const int cap,
+  * hook_capable - Deny capability use for Landlock-sandboxed processes
+  *
+  * @cred: Credentials being checked.
+- * @ns: Target user namespace (intentionally ignored; policy depends on the
+- *      acting credentials and @cap, not namespace ownership).
++ * @ns: Target user namespace, used only as typed trace context.
+  * @cap: Capability number (CAP_*).
+  * @opts: Capability check options, see check_cap().
+  *
+@@ -88,7 +99,7 @@ static int check_cap(const struct cred *const cred, const int cap,
+ static int hook_capable(const struct cred *cred, struct user_namespace *ns,
+ 			int cap, unsigned int opts)
+ {
+-	return check_cap(cred, cap, opts);
++	return check_cap(cred, ns, cap, opts);
+ }
+ 
+ /**
+@@ -118,7 +129,7 @@ static int hook_capset(struct cred *new, const struct cred *old,
+ 			 cap_combine(old->cap_inheritable, old->cap_permitted)))
+ 		return 0;
+ 
+-	return check_cap(old, CAP_SETPCAP, CAP_OPT_NONE);
++	return check_cap(old, old->user_ns, CAP_SETPCAP, CAP_OPT_NONE);
+ }
+ 
+ /**
+@@ -127,8 +138,11 @@ static int hook_capset(struct cred *new, const struct cred *old,
+  * @addr: Address of the new mapping.
+  *
+  * cap_mmap_addr() requires CAP_SYS_RAWIO to map below dac_mmap_min_addr, but
+- * calls cap_capable() directly, which skips hook_capable().  Check the same
+- * condition against the domain.  commoncap runs first, so this only sees
++ * calls cap_capable() directly, which skips hook_capable().  It checks the
++ * acting task's credentials against init_user_ns because this global limit must
++ * not be bypassed with a capability only held in a nested user namespace.
++ * Mirror the condition, using the same credential for the domain check and both
++ * objects for typed trace context.  commoncap runs first, so this only sees
+  * mappings that commoncap allowed.
+  *
+  * Return: 0 if allowed, -EPERM if CAP_SYS_RAWIO use is denied.
+@@ -138,7 +152,8 @@ static int hook_mmap_addr(unsigned long addr)
+ 	if (addr >= dac_mmap_min_addr)
+ 		return 0;
+ 
+-	return check_cap(current_cred(), CAP_SYS_RAWIO, CAP_OPT_NONE);
++	return check_cap(current_cred(), &init_user_ns, CAP_SYS_RAWIO,
++			 CAP_OPT_NONE);
+ }
+ 
+ /**
+@@ -148,10 +163,13 @@ static int hook_mmap_addr(unsigned long addr)
+  * @pages: Number of pages being charged (unused).
+  *
+  * cap_vm_enough_memory() lets CAP_SYS_ADMIN use the vm.admin_reserve_kbytes
+- * reserve, but calls cap_capable() directly, which skips hook_capable().  Check
+- * the same capability against the domain.  commoncap runs first, so this only
+- * sees tasks that commoncap let use the reserve.  Like commoncap, do not log
+- * denials: this only selects a memory limit.
++ * reserve, but calls cap_capable() directly, which skips hook_capable().  It
++ * checks the acting task's credentials against init_user_ns because a
++ * capability only held in a nested user namespace must not grant access to the
++ * global reserve.  Mirror the check, using the same credential for the domain
++ * check and both objects for typed trace context.  commoncap runs first, so
++ * this only sees tasks that commoncap let use the reserve.  Like commoncap, do
++ * not log denials: this only selects a memory limit.
+  *
+  * Return: 0 if the domain does not withhold the reserve, -EPERM if
+  * CAP_SYS_ADMIN use is denied.  An error does not fail the allocation by
+@@ -159,7 +177,8 @@ static int hook_mmap_addr(unsigned long addr)
+  */
+ static int hook_vm_enough_memory(struct mm_struct *mm, long pages)
+ {
+-	return check_cap(current_cred(), CAP_SYS_ADMIN, CAP_OPT_NOAUDIT);
++	return check_cap(current_cred(), &init_user_ns, CAP_SYS_ADMIN,
++			 CAP_OPT_NOAUDIT);
+ }
+ 
+ static struct security_hook_list landlock_hooks[] __ro_after_init = {
+diff --git a/security/landlock/log.h b/security/landlock/log.h
+index 641a2c3c78ed..5ca87870c7b7 100644
+--- a/security/landlock/log.h
++++ b/security/landlock/log.h
+@@ -13,10 +13,12 @@
+ 
+ #include "access.h"
+ 
++struct cred;
+ struct landlock_cred_security;
+ struct landlock_hierarchy;
+ struct sockaddr;
+ struct task_struct;
++struct user_namespace;
+ 
+ enum landlock_request_type {
+ 	LANDLOCK_REQUEST_PTRACE = 1,
+@@ -54,6 +56,11 @@ struct landlock_signal_trace {
+ 	int signal;
+ };
+ 
++struct landlock_cap_trace {
++	const struct cred *cred;
++	const struct user_namespace *user_ns;
++};
++
+ #endif /* CONFIG_TRACEPOINTS */
+ 
+ /*
+@@ -104,6 +111,8 @@ struct landlock_request {
+ 		const struct landlock_ptrace_trace *trace_ptrace;
+ 		/* Synchronous context for a signal denial. */
+ 		const struct landlock_signal_trace *trace_signal;
++		/* Synchronous context for a capability denial. */
++		const struct landlock_cap_trace *trace_cap;
+ 	};
+ #endif /* CONFIG_TRACEPOINTS */
+ };
+diff --git a/security/landlock/trace.c b/security/landlock/trace.c
+index 00cb497eaffb..a47fb10dec45 100644
+--- a/security/landlock/trace.c
++++ b/security/landlock/trace.c
+@@ -97,14 +97,21 @@ void landlock_trace_denial(
+ 		break;
+ 	case LANDLOCK_REQUEST_CAPABILITY:
+ 		if (trace_landlock_deny_permission_capability_enabled()) {
++			const struct landlock_cap_trace *const trace_cap =
++				request->trace_cap;
+ 			const struct landlock_blockers blockers = {
+ 				.access = missing,
+ 				.type = request->type,
+ 			};
+ 
++			if (WARN_ON_ONCE(!trace_cap || !trace_cap->cred ||
++					 !trace_cap->user_ns))
++				return;
++
+ 			trace_landlock_deny_permission_capability(
+ 				youngest_denied, same_exec, logged, &blockers,
+-				request->audit.u.cap);
++				request->audit.u.cap, trace_cap->cred,
++				trace_cap->user_ns);
+ 		}
+ 		break;
+ 	case LANDLOCK_REQUEST_FS_ACCESS:
 -- 
 2.56.0
 
