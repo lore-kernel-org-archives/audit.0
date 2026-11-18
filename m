@@ -1,58 +1,68 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=84.16.66.173
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795012667;
-	b=TOpHp0B01jp3NDinsU1hUJ+xbHzp48/+HJvNECf1mKiWLUcfRJS4TwksN5nNwd12lVbY
-	 xrsr9Nv1u6jQsH5gBYXQ9KyUouniyrm4l+DvD9YEy5HdCMxeuWfYNUhz2Olrx19bXyDrV
-	 XwE1YiANurh+42cpjd/SzJoBFL22n0EiWs6KJWxDM4NsUmZtIgzZiaSuiagTpgHindUaJ
-	 okCjl9QbXAwi2EkdNDtRT30542wP5gwRQmgDhoeQLDErm8q9toBlBe1sxlYIPushUK4C0
-	 6wB7t4jeZetsolqsRvSCjXDeLKkbW7dHRfof7YviOSg1ZtSOAjPklTuNaVFLtpAzJYw==
+	t=1795019593;
+	b=fQfUMA6V3sEZhZP0ewMaOEx9BfsQJNoh9uRgvF9KwEIXwrthuMx+8SQckaKBB019L/i8
+	 nKH46VsHbP4ynaVZ6HIJPjlpXJklapUDuA5Mnq1hF6699vRA+ZjiX6qr5aSKJOvQQ1eA7
+	 XJ4M7VRdOfuxnHkxxjJNvgc2iIH8agndQKAEUq6CmRCRNY6XJFCtrmFLs00xZNGonGX8i
+	 sDLvyu1jrADoG/X4InShJdihWz1BSFRWLkMmpObVKtwMzfbprhCDaqiV8hWsBQ+o9a67K
+	 KuD75xE/iRb5801YpA91JEj+t26hLfJVlYzm5ZBsOqnqkOJmugGF00eNz206YGfQdhQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795012667;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=TGCJR4zjTobiyQoKxWsb3iZGFyjLJLrqRE8qO4niVBM=;
-	b=GFzga564wFX4Uhi/oeojPR76z4wydXkAt0SfjCs1GY6d7/pB+RGI3TUNNbWZx8cZbxPC
-	 p+VEHHNxB02eJyq2yHK24DuCxzyedWVJfBMKMETkqXOZS1szN7mEwfH96ETiKfHYDOr0J
-	 afSBhlzCymy0pfOqOjDQNT4Zvq5uFc4Bf/qHn88WqWJ5P4Z6M7Wk9TmqwlEcJMUq1Qeo+
-	 KG9s6ovUPMM6hTvuSmruCGw4/s1xuhQ1hi8KZQeTOXBBnVN4YDAoEJ7SvTMqGC+uIdPQd
-	 KdwO+9kP4lXGTs562LaJ6l1FIKlfBtVF7GxXrCcibzhC5Y5HkP2GsdwV9TgvWGmga6A==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795019593;
+	h=DMARC-Filter:Received:DKIM-Signature:Received:From:To:Cc:Subject:
+	 Date:Message-ID:In-Reply-To:References:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:X-Infomaniak-Routing;
+	bh=I+Dbrs3QptBZJl4e2yqTfL5XvkVcnY9GdfhfJ4l0xYg=;
+	b=ZIERrKXrxYaWG9d/Ts7m63NS6H8cVmvPDpsy1df6CjY/cXMQZl/l4Udx9skjXsaaBrED
+	 o37pwGGo1QqKO7WyHTaUZ58qs2u0GgqRlMaZUe0goBC8Zqz/E51na+JraNxzrl2N/HUCV
+	 LtAv2/WS2u/oLgsYhaawpr10E/o4M1ymS//4q6xE+6kDt4AYPj99l3K8atjFoMrYoUNAk
+	 bbIyKOO8hOORIDFsmnwowFVnEyBvEqtiUROiyIR8C5ttGTVQAsgzt/paeogtxPUBm2dlX
+	 6N6Sw8kfRERUF/WVOlpqXJNUZnIiTV4cnm0Ianqe4QR92/M5uKXqZq6TE9duWUOhL1g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=oDYEomrR;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=none header.from=digikod.net;
+	spf=pass smtp.mailfrom=digikod.net;
+	dkim=pass header.d=digikod.net header.i=@digikod.net header.a=rsa-sha256 header.s=20191114 header.b=kICNzX1k;
+	arc=none smtp.remote-ip=84.16.66.173
+Received: from smtp-42ad.mail.infomaniak.ch (smtp-42ad.mail.infomaniak.ch [84.16.66.173])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 466C2606A33A;
-	Wed, 18 Nov 2026 14:37:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44C7B606A33F
+	for <audit@vger.kernel.org>; Wed, 18 Nov 2026 16:33:11 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 44C7B606A33F
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=oDYEomrR
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C93221F000C5;
-	Wed, 18 Nov 2026 14:37:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795012667;
-	bh=TGCJR4zjTobiyQoKxWsb3iZGFyjLJLrqRE8qO4niVBM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=oDYEomrR5K3bZcWLm0BHnYdfLDrjEtOk4qUHQdu5CunnSlo0oFC3UsTYO8jE6lSD9
-	 F76UQG9vImqYqTbWD4XFluTG9540X3UfSEV7J1IT64rV791qG1V2aqHWpj2eEEXC80
-	 iFydZyWoqcURurJ29XPW1uomDD2wxiQwUKBkJ5jfol0bPu8oLrFNC363+LZZX2JFlu
-	 0lXrP6f+PZS9e0YXf/Q420vdQpjiKNUXdG+Xv74ttt6RcsPu1J2bvoCEeueGIWZQCF
-	 tlV858zc2JvxAAm2a7OE3YiHHYM8K2EvdjxcZ3zacFENgUmwAKsSqNYpQkGHkF2c4l
-	 yOe5ZJiJNSy0g==
-Date: Wed, 18 Nov 2026 15:37:40 +0100
-From: Christian Brauner <brauner@kernel.org>
-To: Jan Koester <jan.koester@tuxist.de>, 
-	Alexander Viro <viro@zeniv.linux.org.uk>, "Serge E. Hallyn" <serge@hallyn.com>
-Cc: Jan Kara <jack@suse.cz>, "Theodore Y. Ts'o" <tytso@mit.edu>, 
-	Paul Moore <paul@paul-moore.com>, Arnd Bergmann <arnd@arndb.de>, linux-fsdevel@vger.kernel.org, 
-	linux-api@vger.kernel.org, linux-security-module@vger.kernel.org, 
-	linux-arch@vger.kernel.org, linux-ext4@vger.kernel.org, linux-nfs@vger.kernel.org, 
-	linux-cifs@vger.kernel.org, netdev@vger.kernel.org, audit@vger.kernel.org, 
-	keyrings@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH v2 00/41] UUID and GUID user and group ids (*_r
- system calls)
-Message-ID: <20261118-erleuchten-mitmischen-vorrecht-254c957863e1@brauner>
-References: <cover.1792552161.git.jan.koester@tuxist.de>
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.a=rsa-sha256 header.s=20191114 header.b=kICNzX1k
+Received: from smtp-4-0000.mail.infomaniak.ch (smtp-4-0000.mail.infomaniak.ch [10.7.10.107])
+	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4jV6bT4t9czHjL;
+	Wed, 18 Nov 2026 17:33:09 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
+	s=20191114; t=1795019589;
+	bh=I+Dbrs3QptBZJl4e2yqTfL5XvkVcnY9GdfhfJ4l0xYg=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=kICNzX1kK7IiAgHTL36Xgr6DvPKszhtRb03xo0J+LaYNC42ZNEHnT6M2/LRRHFGqf
+	 5EkEW5PQJAFAxCaoDNV7SSQb0TBkVoA84IMm07D0dbMD6zkcV7oeiGZmig8VGDAESN
+	 SUec52Rfq0w/Hugffd7WyJpUmMGIiUTCJU0VSj6o=
+Received: from unknown by smtp-4-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4jV6bS1WfXzmJH;
+	Wed, 18 Nov 2026 17:33:08 +0100 (CET)
+From: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
+To: =?UTF-8?q?G=C3=BCnther=20Noack?= <gnoack@google.com>
+Cc: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
+	Christian Brauner <brauner@kernel.org>,
+	Eric Paris <eparis@redhat.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Paul Moore <paul@paul-moore.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	audit@vger.kernel.org,
+	kernel-team@cloudflare.com,
+	linux-security-module@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org
+Subject: [PATCH v2 3/4] selftests/landlock: Test namespace denial operations
+Date: Wed, 18 Nov 2026 17:32:51 +0100
+Message-ID: <20261118163254.2554413-4-mic@digikod.net>
+In-Reply-To: <20261118163254.2554413-1-mic@digikod.net>
+References: <20261118163254.2554413-1-mic@digikod.net>
 X-Mailing-List: audit@vger.kernel.org
 List-Id: <audit.vger.kernel.org>
 List-Post: <mailto:audit@vger.kernel.org>
@@ -62,18 +72,43 @@ List-Unsubscribe: <mailto:audit+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:audit+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <cover.1792552161.git.jan.koester@tuxist.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Infomaniak-Routing: alpha
 
-On Wed, Oct 21, 2026 at 05:15:20AM +0200, Jan Koester wrote:
-> - kuid_t and kgid_t become a tagged union (legacy number, UUID, GUID)
->   instead of a u32.
+The namespace trace tests cover creation and entry denials, but only
+creation exercises the quiet path.  This leaves the new ENTER request
+tag untested through quiet selection and trace dispatch when audit
+logging is suppressed.
 
-Oh boy, I'm not sure this is going to happen.
+Add the missing quiet setns(2) case.  Together with the existing cases,
+this exercises all four combinations of CREATE and ENTER with logged and
+quieted denials, including each exact namespace_op value.
 
-We are going to extend kuid_t to 64 bit for cells and isolated
-idmappings. But it stays a plain integer type though. Turning kuid_t and
-kgid_t into 20-byte tagged unions, adding a parallel *_r syscall family,
-a new POSIX ACL xattr format and new procfs fields seems very very
-unlikely.
+Cc: Günther Noack <gnoack@google.com>
+Signed-off-by: Mickaël Salaün <mic@digikod.net>
+---
+ tools/testing/selftests/landlock/ns_test.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/tools/testing/selftests/landlock/ns_test.c b/tools/testing/selftests/landlock/ns_test.c
+index d4a85cbebeae..52206ad94eca 100644
+--- a/tools/testing/selftests/landlock/ns_test.c
++++ b/tools/testing/selftests/landlock/ns_test.c
+@@ -2575,6 +2575,13 @@ TEST_F(ns_trace, deny_setns)
+ 	test_ns_trace_denial(_metadata, true, false);
+ }
+ 
++TEST_F(ns_trace, deny_setns_quiet)
++{
++	if (!self->tracefs_ok)
++		SKIP(return, "tracefs not available");
++	test_ns_trace_denial(_metadata, true, true);
++}
++
+ /* clang-format off */
+ FIXTURE(ns_proc_open) {
+ 	/* clang-format on */
+-- 
+2.56.0
+
